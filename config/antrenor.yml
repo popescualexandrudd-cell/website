@@ -5,15 +5,50 @@
 # Valorile marcate „opțional" sau „url sau gol" rămân simplu goale dacă nu le completezi.
 
 antrenor:
-  nume: "[Prenume Nume]"
-  titulatura: "Antrenor de tenis"
-  ani_experienta: "[ex. 12]"
+  nume: "Alexandru Daniel Popescu"
+  titulatura:
+    ro: "Antrenor de tenis"
+    en: "Tennis coach"
+  ani_experienta: 4
+  # Fiecare certificare: titlul (ro/en), emitentul și, opțional, anul.
   certificari:
-    - "[ex. Licență de antrenor, Federația Română de Tenis]"
-    - "[ex. ITF Coaching Course, Level 2]"
+    - titlu:
+        ro: "Licență în performanță sportivă, specializarea tenis și performanță motrică"
+        en: "Bachelor's degree in sports performance, specialising in tennis and motor performance"
+      emitent: "Universitatea Națională de Educație Fizică și Sport (UNEFS)"
+      an: "[anul absolvirii]"
+    - titlu:
+        ro: "Master în management și marketing în structuri sportive (în curs)"
+        en: "Master's in management and marketing of sports organisations (in progress)"
+      emitent: "Universitatea Națională de Educație Fizică și Sport (UNEFS)"
+      an: ""
+    - titlu:
+        ro: "Arbitru național de tenis"
+        en: "National tennis umpire"
+      emitent: "Federația Română de Tenis"
+      an: "[anul certificării]"
+    - titlu:
+        ro: "Program de formare psihopedagogică, cu atestat pentru activitatea didactică"
+        en: "Teacher training programme in psychology and pedagogy, certified to teach"
+      emitent: "[instituția care a eliberat atestatul]"
+      an: "[anul absolvirii]"
   limbi_vorbite: ["română", "engleză"]
-  parcurs: "[3–5 fraze: cum ai ajuns la tenis, ce te definește ca antrenor]"
-  rezultate_elevi: "[opțional: rezultate reale ale elevilor, doar cu acordul lor]"
+  parcurs:
+    ro: |-
+      Formarea mea a început ca sportiv, într-un liceu cu program sportiv, și a continuat la Universitatea Națională de Educație Fizică și Sport din București, unde am obținut licența în performanță sportivă, cu specializarea tenis și performanță motrică. În prezent urmez masterul de management și marketing în structuri sportive, tot în cadrul UNEFS.
+
+      Sunt arbitru național de tenis, certificat de Federația Română de Tenis. Cunoașterea din interior a regulamentului și a dinamicii competiției se regăsește direct în pregătirea sportivilor pentru turnee. Am absolvit programul de formare psihopedagogică și dețin atestat pentru activitatea didactică, așa că fiecare ședință pornește de la obiective operaționale clare, cu dozarea progresivă a efortului și evaluare constantă.
+
+      Am patru ani de activitate ca antrenor de tenis, cu sportivi de toate vârstele și nivelurile. În prezent sunt antrenor la Elite Tennis Club, unde acopăr și coordonez toate palierele de pregătire, de la inițiere până la înalta performanță.
+    en: |-
+      My development began as an athlete, at a sports high school, and continued at the National University of Physical Education and Sport in Bucharest, where I earned a bachelor's degree in sports performance, specialising in tennis and motor performance. I am currently completing a master's in management and marketing of sports organisations, also at UNEFS.
+
+      I am a national tennis umpire certified by the Romanian Tennis Federation. Knowing the rules and the dynamics of competition from the inside feeds directly into how I prepare players for tournaments. I have completed the teacher training programme in psychology and pedagogy and hold a teaching certificate, so every session starts from clear operational objectives, with progressive loading and constant assessment.
+
+      I have four years of experience as a tennis coach, working with players of every age and level. I currently coach at Elite Tennis Club, where I cover and coordinate every stage of development, from beginners to high performance.
+  rezultate_elevi:
+    ro: "Am pregătit copii care au obținut performanțe notabile la nivel național și european, inclusiv campioni ai României."
+    en: "I have coached children who achieved notable results at national and European level, including Romanian champions."
 
 contact:
   telefon: "[+40 7xx xxx xxx]"
@@ -24,7 +59,7 @@ contact:
   tiktok: "[url sau gol]"
 
 locatii:
-  - nume: "[Numele bazei sportive / clubului]"
+  - nume: "Elite Tennis Club"
     adresa: "[Stradă, număr, localitate, județ]"
     localitate: "[Localitatea]"
     coordonate: "[lat, lng]"

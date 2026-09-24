@@ -15,16 +15,17 @@ import {
 } from "react-email";
 
 const colors = {
-  pergament: "#ECE3CF",
-  paper: "#F6F0E2",
-  cerneala: "#1D1A15",
-  cerneala2: "#4A4338",
-  ultramarin: "#1846C4",
-  linie: "#D8CBAE",
+  nisip: "#F6EFE6",
+  paper: "#FCF8F3",
+  cerneala: "#2A1A12",
+  cerneala2: "#5E4638",
+  zgura: "#B94C22",
+  zguraAdanc: "#9A3D19",
+  linie: "#E6D6C2",
 };
 
-const serif = "'Cormorant Garamond', Georgia, 'Times New Roman', serif";
-const sans = "'Hanken Grotesk', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif";
+const display = "'Barlow Condensed', 'Arial Narrow', Arial, sans-serif";
+const sans = "Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif";
 
 export function EmailLayout(props: {
   lang: string;
@@ -41,7 +42,7 @@ export function EmailLayout(props: {
       <Preview>{props.preview}</Preview>
       <Body
         style={{
-          backgroundColor: colors.pergament,
+          backgroundColor: colors.nisip,
           margin: 0,
           padding: "32px 0",
           fontFamily: sans,
@@ -54,6 +55,7 @@ export function EmailLayout(props: {
             backgroundColor: colors.paper,
             padding: "40px 36px",
             border: `1px solid ${colors.linie}`,
+            borderTop: `6px solid ${colors.zgura}`,
           }}
         >
           <Img
@@ -66,12 +68,13 @@ export function EmailLayout(props: {
           <Heading
             as="h1"
             style={{
-              fontFamily: serif,
-              fontWeight: 400,
-              fontSize: 32,
-              lineHeight: "1.1",
+              fontFamily: display,
+              fontWeight: 700,
+              fontSize: 34,
+              lineHeight: "1",
               margin: "0 0 20px",
-              letterSpacing: "-0.01em",
+              letterSpacing: "0.01em",
+              textTransform: "uppercase",
             }}
           >
             {props.title}
@@ -126,12 +129,14 @@ export function PrimaryButton({ href, children }: { href: string; children: Reac
     <Button
       href={href}
       style={{
-        backgroundColor: colors.cerneala,
-        color: colors.pergament,
-        fontSize: 15,
-        fontWeight: 500,
-        padding: "13px 22px",
-        borderRadius: 2,
+        backgroundColor: colors.zgura,
+        color: "#FFF7EE",
+        fontSize: 14,
+        fontWeight: 700,
+        letterSpacing: "0.06em",
+        textTransform: "uppercase",
+        padding: "14px 22px",
+        borderRadius: 4,
         textDecoration: "none",
         display: "inline-block",
         margin: "0 8px 12px 0",
@@ -149,11 +154,13 @@ export function SecondaryButton({ href, children }: { href: string; children: Re
       style={{
         backgroundColor: "transparent",
         color: colors.cerneala,
-        border: `1px solid ${colors.cerneala}`,
-        fontSize: 15,
-        fontWeight: 500,
-        padding: "12px 21px",
-        borderRadius: 2,
+        border: `2px solid ${colors.cerneala}`,
+        fontSize: 14,
+        fontWeight: 700,
+        letterSpacing: "0.06em",
+        textTransform: "uppercase",
+        padding: "12px 20px",
+        borderRadius: 4,
         textDecoration: "none",
         display: "inline-block",
         margin: "0 8px 12px 0",
@@ -168,7 +175,7 @@ export function QuietLink({ href, children }: { href: string; children: ReactNod
   return (
     <Link
       href={href}
-      style={{ color: colors.ultramarin, textDecoration: "underline", fontSize: 15 }}
+      style={{ color: colors.zguraAdanc, textDecoration: "underline", fontSize: 15 }}
     >
       {children}
     </Link>

@@ -4,32 +4,23 @@ import { ImageResponse } from "next/og";
 import { db } from "@/lib/db";
 import { isFilled, t } from "@/lib/i18n-content";
 
-const FONT_DIR = join(process.cwd(), "node_modules", "@fontsource", "cormorant-garamond", "files");
+const FONT_DIR = join(process.cwd(), "node_modules", "@fontsource", "barlow-condensed", "files");
 const LEGAL: Record<string, "CONFIDENTIALITATE" | "TERMENI" | "COOKIES"> = {
   confidentialitate: "CONFIDENTIALITATE",
   termeni: "TERMENI",
   cookies: "COOKIES",
 };
 
-let fonts: Promise<
-  { name: string; data: Buffer; weight: 400 | 500; style: "normal" | "italic" }[]
-> | null = null;
+let fonts: Promise<{ name: string; data: Buffer; weight: 700; style: "normal" }[]> | null = null;
 
 function loadFonts() {
   fonts ??= Promise.all(
-    (
-      [
-        ["latin", 500, "normal"],
-        ["latin-ext", 500, "normal"],
-        ["latin", 400, "italic"],
-        ["latin-ext", 400, "italic"],
-      ] as const
-    ).map(async ([subset, weight, style]) => ({
+    (["latin", "latin-ext"] as const).map(async (subset) => ({
       // Separate names per subset: Satori falls back glyph by glyph across the family list.
-      name: subset === "latin" ? "Cormorant" : "CormorantExt",
-      data: await readFile(join(FONT_DIR, `cormorant-garamond-${subset}-${weight}-${style}.woff`)),
-      weight,
-      style,
+      name: subset === "latin" ? "Barlow" : "BarlowExt",
+      data: await readFile(join(FONT_DIR, `barlow-condensed-${subset}-700-normal.woff`)),
+      weight: 700 as const,
+      style: "normal" as const,
     })),
   );
   return fonts;
@@ -74,7 +65,7 @@ function clip(text: string, max: number): string {
   return clean.length > max ? `${clean.slice(0, max - 1).replace(/\s+\S*$/, "")}…` : clean;
 }
 
-/** Open Graph image (1200×630) for social previews: typographic, with the golden ball. */
+/** Open Graph image (1200×630) for social previews: condensed capitals on clay, a tennis ball. */
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const path = (url.searchParams.get("path") ?? "/").slice(0, 200);
@@ -87,12 +78,23 @@ export async function GET(request: Request) {
         width: "100%",
         height: "100%",
         display: "flex",
-        background: "#ECE3CF",
-        color: "#1D1A15",
-        fontFamily: "CormorantExt, Cormorant",
-        padding: 40,
+        background: "linear-gradient(135deg, #C8693C 0%, #B94C22 55%, #7A2C14 100%)",
+        color: "#FFF7EE",
+        fontFamily: "BarlowExt, Barlow",
+        padding: "64px 72px",
+        position: "relative",
       }}
     >
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 14,
+          background: "#F2B134",
+        }}
+      />
       <div
         style={{
           display: "flex",
@@ -100,55 +102,56 @@ export async function GET(request: Request) {
           justifyContent: "space-between",
           width: "100%",
           height: "100%",
-          border: "1px solid rgba(29,26,21,0.35)",
-          padding: "56px 64px",
-          position: "relative",
         }}
       >
         <div
           style={{
             display: "flex",
-            fontSize: 26,
-            letterSpacing: 4,
+            fontSize: 30,
+            letterSpacing: 5,
             textTransform: "uppercase",
-            color: "#4A4338",
+            color: "#FBD98A",
           }}
         >
           {clip(brand, 60)}
         </div>
-        <div style={{ display: "flex", flexDirection: "column", maxWidth: 820 }}>
-          <div style={{ fontSize: title.length > 60 ? 64 : 80, fontWeight: 500, lineHeight: 1.05 }}>
+        <div style={{ display: "flex", flexDirection: "column", maxWidth: 860 }}>
+          <div
+            style={{
+              fontSize: title.length > 60 ? 76 : 96,
+              lineHeight: 0.95,
+              textTransform: "uppercase",
+            }}
+          >
             {clip(title, 110)}
           </div>
           {subtitle ? (
             <div
               style={{
-                marginTop: 24,
-                fontSize: 32,
-                fontStyle: "italic",
-                fontWeight: 400,
-                color: "#4A4338",
-                lineHeight: 1.25,
+                marginTop: 28,
+                fontSize: 34,
+                lineHeight: 1.2,
+                color: "rgba(255,247,238,0.88)",
               }}
             >
               {clip(subtitle, 140)}
             </div>
           ) : null}
         </div>
-        <div
-          style={{
-            position: "absolute",
-            right: 72,
-            bottom: 72,
-            width: 132,
-            height: 132,
-            borderRadius: 66,
-            backgroundImage:
-              "radial-gradient(circle at 36% 32%, #FFF6CF 0%, #F4DC8A 20%, #C9A13B 58%, #6E5214 100%)",
-            boxShadow: "0 18px 40px rgba(110,82,20,0.35)",
-          }}
-        />
       </div>
+      <div
+        style={{
+          position: "absolute",
+          right: 80,
+          top: 72,
+          width: 120,
+          height: 120,
+          borderRadius: 60,
+          backgroundImage:
+            "radial-gradient(circle at 35% 30%, #F5F9C4 0%, #D9E453 55%, #9FAA2A 100%)",
+          boxShadow: "0 18px 40px rgba(42,19,11,0.45)",
+        }}
+      />
     </div>,
     {
       width: 1200,

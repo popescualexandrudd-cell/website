@@ -16,8 +16,6 @@ import type { MediaThumb } from "@/lib/admin/media";
 import { MarkdownField } from "./MarkdownField";
 import { MediaPicker } from "./MediaPicker";
 
-export type ArtOption = Option & { url: string };
-
 type Props = {
   resourceKey: string;
   id: string | null;
@@ -27,7 +25,6 @@ type Props = {
   values: Record<string, FieldValue>;
   media: Record<string, MediaThumb | null>;
   relations: Partial<Record<RelationSource, Option[]>>;
-  art: ArtOption[];
   canDelete: boolean;
   previewHref: string | null;
 };
@@ -61,7 +58,6 @@ export function ResourceForm(props: Props) {
     values,
     media,
     relations,
-    art,
     canDelete,
     previewHref,
   } = props;
@@ -93,7 +89,6 @@ export function ResourceForm(props: Props) {
                 value={values[field.name]}
                 media={media[field.name] ?? null}
                 options={field.kind === "relation" ? (relations[field.source] ?? []) : []}
-                art={art}
                 error={errors[field.name]}
               />
             ))}
@@ -179,11 +174,10 @@ type ControlProps = {
   value: FieldValue | undefined;
   media: MediaThumb | null;
   options: Option[];
-  art: ArtOption[];
   error?: string;
 };
 
-function FieldControl({ field, value, media, options, art, error }: ControlProps) {
+function FieldControl({ field, value, media, options, error }: ControlProps) {
   const uid = useId();
   const inputId = `${uid}-input`;
   const labelId = `${uid}-label`;
@@ -372,20 +366,6 @@ function FieldControl({ field, value, media, options, art, error }: ControlProps
         </div>
       );
 
-    case "art":
-      return (
-        <ArtControl
-          name={name}
-          label={label}
-          inputId={inputId}
-          art={art}
-          initial={asString(value)}
-          allowEmpty={!field.required}
-          foot={foot}
-          common={common}
-        />
-      );
-
     case "enum":
     case "relation":
     case "weekday":
@@ -489,55 +469,6 @@ function FieldControl({ field, value, media, options, art, error }: ControlProps
       );
     }
   }
-}
-
-function ArtControl(props: {
-  name: string;
-  label: React.ReactNode;
-  inputId: string;
-  art: ArtOption[];
-  initial: string;
-  allowEmpty: boolean;
-  foot: React.ReactNode;
-  common: Record<string, unknown>;
-}) {
-  const [current, setCurrent] = useState(props.initial);
-  const preview = props.art.find((a) => a.value === current);
-  return (
-    <div className="field">
-      <label htmlFor={props.inputId} className="field-label">
-        {props.label}
-      </label>
-      <div className="flex flex-wrap items-center gap-3">
-        <select
-          id={props.inputId}
-          name={props.name}
-          value={current}
-          onChange={(e) => setCurrent(e.target.value)}
-          className="input max-w-md"
-          {...props.common}
-        >
-          {props.allowEmpty || !current ? <option value="">— fără —</option> : null}
-          {props.art.map((o) => (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
-          ))}
-        </select>
-        {preview ? (
-          // eslint-disable-next-line @next/next/no-img-element -- small preview of the chosen artwork
-          <img
-            src={preview.url}
-            alt=""
-            width={120}
-            height={68}
-            className="h-[68px] w-[120px] object-cover"
-          />
-        ) : null}
-      </div>
-      {props.foot}
-    </div>
-  );
 }
 
 function HoursControl(props: {

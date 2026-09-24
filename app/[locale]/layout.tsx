@@ -12,14 +12,13 @@ import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { MobileBar } from "@/components/site/MobileBar";
 import { PreviewBanner } from "@/components/site/PreviewBanner";
-import { PageAttributes } from "@/components/site/PageAttributes";
 import { telLink, whatsappLink } from "@/lib/format";
 import { appUrl } from "@/lib/paths";
 
 export const dynamic = "force-dynamic";
 
 export const viewport: Viewport = {
-  themeColor: "#ECE3CF",
+  themeColor: "#2A130B",
   colorScheme: "light",
   width: "device-width",
   initialScale: 1,
@@ -60,25 +59,13 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   const settings = localizedSettings(settingsRow, locale);
   const requestHeaders = await headers();
   const nonce = requestHeaders.get("x-nonce") ?? undefined;
-  const path = requestHeaders.get("x-pathname") ?? "";
-  const isHome = path === "/" || path === "/en" || path === "/en/";
   const umamiUrl = process.env.UMAMI_SCRIPT_URL;
   const umamiId = process.env.UMAMI_WEBSITE_ID;
 
   return (
-    <html
-      lang={locale}
-      className={fontVariables}
-      data-tone="dark"
-      data-page={isHome ? "home" : "inner"}
-      suppressHydrationWarning
-    >
+    <html lang={locale} className={fontVariables} suppressHydrationWarning>
       <body>
-        <noscript>
-          <style>{`.stage{display:none!important}.scene-static{display:block!important}.scene{height:auto!important}`}</style>
-        </noscript>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <PageAttributes />
           <a href="#continut" className="skip-link">
             {t("skipToContent")}
           </a>

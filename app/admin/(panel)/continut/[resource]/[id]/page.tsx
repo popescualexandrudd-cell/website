@@ -58,7 +58,6 @@ export default async function ResourceEditPage({
         values={editor.values}
         media={editor.media}
         relations={editor.relations}
-        art={editor.art}
         canDelete={Boolean(resource.canDelete)}
         previewHref={row ? (resource.publicPath?.(row) ?? null) : null}
       />

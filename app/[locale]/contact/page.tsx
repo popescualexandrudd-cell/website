@@ -43,7 +43,7 @@ export default async function ContactPage({ params }: PageProps<"/[locale]/conta
       <PageHero
         title={header.title}
         intro={header.intro}
-        art={header.art}
+        image={header.image}
         imageAlt={header.imageAlt}
       />
       <PageSection>

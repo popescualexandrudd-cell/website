@@ -6,16 +6,22 @@ import { z } from "zod";
 export const TODO = "[DE COMPLETAT]";
 
 const scalar = z.union([z.string(), z.number(), z.boolean()]).nullable().optional();
+/** A text given once (Romanian) or in both languages: { ro: "…", en: "…" }. */
+const localized = z.union([scalar, z.object({ ro: scalar, en: scalar })]);
+const certification = z.union([
+  scalar,
+  z.object({ titlu: localized, emitent: scalar, an: scalar }),
+]);
 
 const configSchema = z.object({
   antrenor: z.object({
     nume: scalar,
-    titulatura: scalar,
+    titulatura: localized,
     ani_experienta: scalar,
-    certificari: z.array(scalar).default([]),
+    certificari: z.array(certification).default([]),
     limbi_vorbite: z.array(scalar).default([]),
-    parcurs: scalar,
-    rezultate_elevi: scalar,
+    parcurs: localized,
+    rezultate_elevi: localized,
   }),
   contact: z.object({
     telefon: scalar,
@@ -72,6 +78,8 @@ const configSchema = z.object({
 
 export type RawConfig = z.infer<typeof configSchema>;
 type Scalar = z.infer<typeof scalar>;
+export type Localized = z.infer<typeof localized>;
+export type CertificationEntry = z.infer<typeof certification>;
 
 export function loadConfig(path = join(process.cwd(), "config", "antrenor.yml")): RawConfig {
   const text = readFileSync(path, "utf8");
@@ -95,6 +103,23 @@ function isOptionalPlaceholder(value: Scalar): boolean {
 /** Text with a visible [DE COMPLETAT] marker when missing. */
 export function text(value: Scalar): string {
   return isPlaceholder(value) ? TODO : String(value).trim();
+}
+
+/** A localized config value as { ro, en }; English falls back to the Romanian text. */
+export function localizedText(value: Localized, fallbackEn?: string): { ro: string; en: string } {
+  if (value !== null && typeof value === "object") {
+    const ro = text(value.ro);
+    return { ro, en: isPlaceholder(value.en) ? (fallbackEn ?? ro) : String(value.en).trim() };
+  }
+  const ro = text(value);
+  return { ro, en: fallbackEn ?? ro };
+}
+
+/** Optional localized text: null when the Romanian value is an optional placeholder. */
+export function optionalLocalized(value: Localized): { ro: string; en: string } | null {
+  const ro = value !== null && typeof value === "object" ? value.ro : value;
+  if (isOptionalPlaceholder(ro)) return null;
+  return localizedText(value);
 }
 
 /** Text that stays empty (null) when missing and optional. */

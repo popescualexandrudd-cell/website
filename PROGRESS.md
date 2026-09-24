@@ -14,6 +14,7 @@ Fiecare fază se încheie cu verificări și un commit. Dacă lucrul se întreru
 | 8. SEO, GDPR, securitate, performanță, accesibilitate | gata |
 | 9. Deploy | gata |
 | 10. QA final | gata |
+| 11. Redesign: paleta de zgură, tipografie de academie, scene 3D, conținutul antrenorului | gata |
 
 ## Faza 2: Fundație
 
@@ -166,3 +167,43 @@ Fiecare fază se încheie cu verificări și un commit. Dacă lucrul se întreru
   caracterele căutate.
 
 Proiectul e complet. Ce rămâne de completat de antrenor: `CONTENT-TODO.md`.
+
+## Faza 11: Redesign (zgură, 3D, conținut, audit)
+
+Cererea antrenorului: paleta terenului de zgură, fonturi moderne ca la marile academii, animații
+3D realiste în locul picturilor, o secțiune personală pentru fotografia de pe teren, texte de
+specialitate despre Alexandru Daniel Popescu și un audit al codului. Deciziile: `DECISIONS.md`,
+partea a III-a (61–74).
+
+- **Design**: paletă nouă (nisip, zgură, cărămidă, galben cald), Barlow Condensed + Inter (ă â î ș ț
+  verificate în fișierele fontului), antet închis cu navigație, hero pe tot ecranul cu patru
+  repere, secțiuni alternante, carduri de program, pagini interioare cu antet de zgură și terenul
+  desenat la scară, 404 „Out”. Emailurile, imaginea Open Graph, pictograma și panoul de
+  administrare folosesc aceeași paletă.
+- **3D** (three.js, fișier separat de ≈ 160 KB gzip): meci pe zgură cu fizică reală a mingii
+  (rezistența aerului, efect Magnus, ricoșeu cu frecare, urme și praf), jucători biomecanici cu
+  cinematică inversă (dreapta, rever cu două mâini, serviciu, split-step, deplasare spre minge),
+  laborator tehnic cu fazele loviturilor, încetinitor, cursor și patru unghiuri de cameră.
+  Încărcare după afișarea paginii, afiș static fără WebGL, la randare software sau „economisire
+  date”, cadru fix la „reduced motion”, rezoluție adaptivă și oprire pe dispozitive lente.
+- **Conținut**: profil, parcurs, filozofie, rezultate și patru calificări (RO + EN) doar din
+  informațiile date; secțiunile paginii principale și programele rescrise în registru de
+  specialitate. Rămân de completat: fotografia, anii diplomelor, emitentul atestatului
+  psihopedagogic, adresa clubului (lista: `CONTENT-TODO.md`).
+- **Date**: migrarea `redesign_3d` (17 coloane și 3 enumerări ale picturilor eliminate, chei de
+  secțiuni redenumite fără pierderi de text); `config/antrenor.yml` acceptă texte RO/EN.
+- **Audit**: `turbopack.root` / `outputFileTracingRoot` (avertismentul despre `package-lock.json`
+  din folderul utilizatorului), cod mort eliminat (GSAP, Lenis, halftone, regizorul cinematic,
+  compozițiile SVG, manifestul de picturi, câmpul „pictură”, `data-page`, `x-pathname`),
+  contrastul etichetelor pe zgură și numele accesibil al linkului din antet.
+- **Verificări pe build-ul de producție**: `npm run lint`, `npm run typecheck`, Prettier: fără
+  erori. `npm test`: 58 de teste (noi: fizica mingii, precizia țintirii, animația loviturilor).
+  `npm run test:e2e`: 10 teste (noi: pagina principală și laboratorul, pagina fără WebGL; axe
+  WCAG 2.2 AA pe toate paginile publice, cu și fără „reduced motion”, și pe admin). Verificarea
+  diacriticelor: nimic în fișierele text.
+- **Lighthouse** (simulare, server local): desktop 100 la toate categoriile pe pagina principală,
+  Despre, Programe și Prețuri; mobil: performanță 89–93, accesibilitate, bune practici și SEO 100,
+  CLS 0. JavaScript-ul inițial specific paginii principale: 4,6 KB gzip.
+- Scena 3D a fost verificată vizual în Chromium (desktop și telefon) și în build-ul de producție,
+  cu politica CSP activă.
+

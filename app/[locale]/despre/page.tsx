@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
-import { getCoach, getGallery, getPageHeader, getSettings, localizedSettings } from "@/lib/content";
+import {
+  getCoach,
+  getGallery,
+  getPageHeader,
+  getScenes,
+  getSettings,
+  localizedSettings,
+} from "@/lib/content";
 import { TODO_MARK } from "@/lib/i18n-content";
 import { localizedUrl, pageMetadata } from "@/lib/seo";
 import { personLd } from "@/lib/structured-data";
@@ -9,7 +16,8 @@ import { PageHero, PageSection } from "@/components/pages/PageHero";
 import { JsonLd } from "@/components/pages/JsonLd";
 import { Markdown } from "@/components/site/Markdown";
 import { TodoText } from "@/components/site/TodoText";
-import { ArtPicture } from "@/components/ui/ArtPicture";
+import { Picture } from "@/components/ui/Picture";
+import { CoachPortrait } from "@/components/home/CoachPortrait";
 
 export async function generateMetadata({
   params,
@@ -27,15 +35,18 @@ export async function generateMetadata({
 export default async function AboutPage({ params }: PageProps<"/[locale]/despre">) {
   const locale = (await params).locale as Locale;
   setRequestLocale(locale);
-  const [header, coach, gallery, settingsRow, t] = await Promise.all([
+  const [header, coach, gallery, settingsRow, scenes, t] = await Promise.all([
     getPageHeader("despre", locale),
     getCoach(locale),
     getGallery(locale),
     getSettings(),
+    getScenes(locale),
     getTranslations(),
   ]);
   const settings = localizedSettings(settingsRow, locale);
   const photos = gallery.slice(0, 6);
+  // The same note as the home page's portrait frame, until the photo is uploaded.
+  const photoNote = scenes.find((s) => s.key === "antrenorul")?.extra.photoNote ?? "";
 
   return (
     <>
@@ -43,47 +54,47 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/despre"
       <PageHero
         title={header.title}
         intro={header.intro}
-        art={header.art}
+        image={header.image}
         imageAlt={header.imageAlt}
       >
-        <p className="mt-6 font-display text-h3 leading-tight">
+        <p className="about-name">
           <TodoText value={coach.name} />
-          <span className="block font-sans text-body text-cerneala-2">{coach.title}</span>
+          <span className="about-role">{coach.title}</span>
         </p>
       </PageHero>
 
-      <PageSection id="parcurs" title={t("about.story")} className="page-section--narrow">
-        <div className="about-story">
-          {coach.photo ? (
-            <figure className="about-photo">
-              <ArtPicture
-                art={coach.photo}
-                alt={coach.photoAlt}
-                sizes="(min-width: 1024px) 18rem, 60vw"
-              />
-            </figure>
-          ) : null}
+      <section className="about-story" aria-labelledby="parcurs-title" id="parcurs">
+        <CoachPortrait
+          photo={coach.photo}
+          alt={coach.photoAlt || t("home.coachPhotoAlt", { name: coach.name })}
+          note={photoNote}
+          priority
+        />
+        <div className="about-story-copy">
+          <h2 id="parcurs-title" className="section-title">
+            {t("about.story")}
+          </h2>
           <Markdown source={coach.story} />
+          <dl className="fact-list mt-10">
+            <div>
+              <dt>{t("about.experience")}</dt>
+              <dd>
+                <TodoText
+                  value={
+                    coach.yearsExperience === null
+                      ? TODO_MARK
+                      : t("about.experienceYears", { count: coach.yearsExperience })
+                  }
+                />
+              </dd>
+            </div>
+            <div>
+              <dt>{t("about.languages")}</dt>
+              <dd>{coach.languages.join(", ")}</dd>
+            </div>
+          </dl>
         </div>
-        <dl className="fact-list mt-10">
-          <div>
-            <dt>{t("about.experience")}</dt>
-            <dd>
-              <TodoText
-                value={
-                  coach.yearsExperience === null
-                    ? TODO_MARK
-                    : t("about.experienceYears", { count: coach.yearsExperience })
-                }
-              />
-            </dd>
-          </div>
-          <div>
-            <dt>{t("about.languages")}</dt>
-            <dd>{coach.languages.join(", ")}</dd>
-          </div>
-        </dl>
-      </PageSection>
+      </section>
 
       <PageSection id="filozofie" title={t("about.philosophy")} className="page-section--narrow">
         <Markdown source={coach.philosophy} />
@@ -100,7 +111,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/despre"
               <li key={c.id} className={`ed-row ${c.image ? "" : "ed-row--no-image"}`}>
                 {c.image ? (
                   <span className="ed-row-image">
-                    <ArtPicture art={c.image} alt={c.imageAlt} sizes="9rem" />
+                    <Picture image={c.image} alt={c.imageAlt} sizes="9rem" />
                   </span>
                 ) : null}
                 <div>
@@ -129,8 +140,8 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/despre"
           <ul className="gallery-grid">
             {photos.map((photo) => (
               <li key={photo.id} className="gallery-item">
-                <ArtPicture
-                  art={photo.image}
+                <Picture
+                  image={photo.image}
                   alt={photo.alt}
                   sizes="(min-width: 1024px) 30vw, 50vw"
                 />

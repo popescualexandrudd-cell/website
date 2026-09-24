@@ -16,15 +16,23 @@ const securityHeaders = [
   { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
 ];
 
+// The project folder is the workspace root, even when a stray lockfile sits in a parent folder
+// (for example package-lock.json in the user's home directory on Windows).
+const projectRoot = process.cwd();
+
 const nextConfig: NextConfig = {
   output: "standalone",
+  outputFileTracingRoot: projectRoot,
+  turbopack: { root: projectRoot },
   poweredByHeader: false,
   agentRules: false,
   reactStrictMode: true,
   serverExternalPackages: ["@node-rs/argon2", "sharp", "pg"],
   // Fonts read from disk by the Open Graph image route (not imported, so not traced automatically).
   outputFileTracingIncludes: {
-    "/api/og": ["./node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin*-{400,500}-*.woff"],
+    "/api/og": [
+      "./node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin*-700-normal.woff",
+    ],
   },
   experimental: {
     serverActions: {
@@ -32,17 +40,7 @@ const nextConfig: NextConfig = {
     },
   },
   async headers() {
-    return [
-      { source: "/:path*", headers: securityHeaders },
-      {
-        source: "/art/generated/:path*",
-        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
-      },
-      {
-        source: "/art/placeholders/:path*",
-        headers: [{ key: "Cache-Control", value: "public, max-age=86400" }],
-      },
-    ];
+    return [{ source: "/:path*", headers: securityHeaders }];
   },
 };
 

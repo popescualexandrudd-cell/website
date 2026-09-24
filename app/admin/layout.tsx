@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export const viewport: Viewport = { themeColor: "#ECE3CF", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { themeColor: "#F6EFE6", width: "device-width", initialScale: 1 };
 
 /** The admin is Romanian only; it shares the form components (and their messages) with the site. */
 export default function AdminRootLayout({ children }: LayoutProps<"/admin">) {

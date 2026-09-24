@@ -56,7 +56,6 @@ export default async function SettingsPage({ searchParams }: PageProps<"/admin/s
           values={editor.values}
           media={editor.media}
           relations={editor.relations}
-          art={editor.art}
           canDelete={false}
           previewHref="/"
         />

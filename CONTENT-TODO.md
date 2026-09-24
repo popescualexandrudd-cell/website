@@ -13,16 +13,21 @@ Coloana „În admin” spune unde găsești fiecare lucru.
 
 ## 1. Date despre tine
 
+Numele, titulatura, experiența (4 ani), parcursul, filozofia de lucru, rezultatele elevilor și
+cele patru calificări sunt deja completate, în română și engleză, doar cu informațiile pe care
+le-ai dat. Au rămas:
+
 | Ce | Unde apare | În admin | În `antrenor.yml` |
 | --- | --- | --- | --- |
-| Numele tău | antet, pagina Despre, prima scenă, emailuri, date structurate Google | Setări → Numele afișat; Conținut → Profilul antrenorului → Nume | `antrenor.nume` |
-| Inițialele (monograma) | antet | Setări → Monograma | se calculează din nume |
-| Anii de experiență | pagina Despre | Conținut → Profilul antrenorului | `antrenor.ani_experienta` |
-| Parcursul tău (3–5 fraze) | pagina Despre | Conținut → Profilul antrenorului → Parcursul tău | `antrenor.parcurs` |
-| Certificările: denumirea exactă, emitentul, anul (2 intrări) | pagina Despre | Conținut → Certificări și diplome | `antrenor.certificari` |
-| Rezultate ale elevilor (opțional, doar reale și cu acordul lor) | pagina Despre | Conținut → Profilul antrenorului | `antrenor.rezultate_elevi` |
-| Fotografia ta | pagina Despre | Conținut → Profilul antrenorului → Fotografia ta | — |
-| Textul primei scene („[nume], antrenor de tenis… la [localitate]”) | pagina principală, scena 1 | Conținut → Scenele paginii principale → Deschiderea | se completează din nume și localitate |
+| **Fotografia ta pe teren** (vertical 4:5, sfaturi în `docs/DIRECTIE-ARTISTICA.md`) | pagina principală (secțiunea „Antrenorul”), „Despre mine” | Conținut → Profilul antrenorului → Fotografia ta | — |
+| Instituția care a eliberat atestatul de formare psihopedagogică | „Antrenorul”, „Despre mine” | Conținut → Certificări și diplome | `antrenor.certificari[3].emitent` |
+| Anii: licența UNEFS, certificarea de arbitru FRT, atestatul psihopedagogic (opțional; dacă îi lași goi nu apar) | lista de calificări | Conținut → Certificări și diplome → Anul | `antrenor.certificari[].an` |
+| Imaginile diplomelor (opțional) | „Despre mine” | Conținut → Certificări și diplome → Imaginea documentului | — |
+| Numele liceului (opțional; acum textul spune „un liceu cu program sportiv”) | „Despre mine” | Conținut → Profilul antrenorului → Parcursul tău | `antrenor.parcurs` |
+| Detalii despre rezultatele elevilor (competiții, categorii de vârstă), doar cu acordul lor | „Despre mine” | Conținut → Profilul antrenorului → Rezultate ale elevilor | `antrenor.rezultate_elevi` |
+
+Nota „[DE COMPLETAT] Fotografia ta pe teren” din ramă dispare singură când încarci fotografia; o
+poți schimba din Conținut → Secțiunile paginii principale → Antrenorul.
 
 ## 2. Contact
 
@@ -37,7 +42,7 @@ Coloana „În admin” spune unde găsești fiecare lucru.
 
 | Ce | În admin | În `antrenor.yml` |
 | --- | --- | --- |
-| Numele bazei sportive, adresa, localitatea | Conținut → Locații | `locatii[].nume`, `adresa`, `localitate` |
+| Adresa și localitatea pentru Elite Tennis Club (numele e completat) | Conținut → Locații | `locatii[].adresa`, `localitate` |
 | Coordonatele pentru hartă (latitudine, longitudine) | Conținut → Locații | `locatii[].coordonate` |
 | Cum ajungi (parcare, transport) | Conținut → Locații → Cum ajungi | — |
 | Numărul de terenuri pe zgură și pe hard | Conținut → Terenuri | `terenuri[].numar` |
@@ -84,10 +89,9 @@ Două răspunsuri depind de situația ta:
 
 | Ce | Detalii |
 | --- | --- |
-| **Picturile finale** pentru cele 10 scene, 6 programe, textura de pergament și 5 nori | Prompturile, numele fișierelor, dimensiunile și punctele focale: `docs/DIRECTIE-ARTISTICA.md`. Până atunci, site-ul folosește compozițiile provizorii. |
-| Fotografia ta (portret) | Conținut → Profilul antrenorului |
+| Fotografia ta pe teren | vezi secțiunea 1; formatul și lumina: `docs/DIRECTIE-ARTISTICA.md` |
 | Fotografii pentru galerie (lecții, grupe, turnee, terenuri) | Conținut → Galerie. Cele cu copii doar cu acordul scris al părinților. |
-| Opțional: fotografii pentru programe, facilități, articole | câmpul „Fotografie” din fiecare |
+| Opțional: fotografii pentru programe (16:10), antetele paginilor (3:2), facilități, articole | câmpul „Fotografie” din fiecare; fără fotografie, locul lor arată terenul desenat în linii |
 
 ## 9. Recenzii și articole
 

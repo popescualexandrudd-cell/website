@@ -7,7 +7,7 @@ type Props = { openLabel: string; closeLabel: string; children: ReactNode };
 
 /**
  * Full-screen menu built on the native <dialog>: focus is trapped, Escape closes it and the
- * page behind becomes inert. Smooth scrolling is paused while it is open.
+ * page behind becomes inert; the page does not scroll while it is open.
  */
 export function MenuDialog({ openLabel, closeLabel, children }: Props) {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -25,7 +25,6 @@ export function MenuDialog({ openLabel, closeLabel, children }: Props) {
 
   useEffect(() => {
     document.documentElement.classList.toggle("menu-open", open);
-    window.dispatchEvent(new CustomEvent("site:menu", { detail: { open } }));
   }, [open]);
 
   // Close after navigating to another page.

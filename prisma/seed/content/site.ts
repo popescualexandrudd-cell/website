@@ -6,8 +6,6 @@ export const pageHeaderContent: {
   key: string;
   title: T;
   intro: T;
-  artKey: string;
-  imageAlt: T;
   seoTitle?: T;
   seoDescription: T;
 }[] = [
@@ -17,11 +15,6 @@ export const pageHeaderContent: {
     intro: {
       ro: "Lecții individuale, lecții în doi, grupe pe vârste și niveluri, pregătire pentru competiție. Fiecare program pornește de la o evaluare și are un plan scris.",
       en: "Private lessons, lessons for two, groups by age and level, competition training. Every programme starts with an assessment and has a written plan.",
-    },
-    artKey: "04-schele",
-    imageAlt: {
-      ro: "Frescă: meșteri pe schele de lemn construiesc o minge de tenis aurie uriașă.",
-      en: "Fresco: craftsmen on wooden scaffolding build a giant gold tennis ball.",
     },
     seoDescription: {
       ro: "Lecții de tenis individuale și în doi, mini-tenis, grupe pentru copii, juniori și adulți, performanță și analiză video.",
@@ -35,11 +28,6 @@ export const pageHeaderContent: {
       ro: "Terenurile, dotările bazei și ce aduc eu în plus la fiecare lecție, de la rachete de împrumut la analiza video.",
       en: "The courts, the venue's amenities and what I bring to every lesson, from loan racquets to video analysis.",
     },
-    artKey: "06b-mozaic",
-    imageAlt: {
-      ro: "Curte-mozaic renascentistă văzută de sus, în tonuri de zgură și linii de fildeș.",
-      en: "A Renaissance mosaic courtyard seen from above, in clay tones with ivory lines.",
-    },
     seoDescription: {
       ro: "Terenuri de zgură și hard, nocturnă, vestiare, parcare, rachete de împrumut, mașină de mingi și analiză video.",
       en: "Clay and hard courts, floodlights, changing rooms, parking, loan racquets, ball machine and video analysis.",
@@ -49,13 +37,8 @@ export const pageHeaderContent: {
     key: "despre",
     title: { ro: "Despre mine", en: "About me" },
     intro: {
-      ro: "Cum am ajuns la tenis, cum lucrez și ce urmăresc la fiecare elev.",
-      en: "How I came to tennis, how I work and what I look for in every student.",
-    },
-    artKey: "02-impreuna",
-    imageAlt: {
-      ro: "Pictură: o mână matură și una tânără își trec o minge de tenis aurie.",
-      en: "Painting: an older hand and a young hand passing a gold tennis ball.",
+      ro: "Formarea mea sportivă și universitară, metoda de lucru și rezultatele sportivilor pe care i-am pregătit.",
+      en: "My sporting and university background, the way I work and the results of the players I have coached.",
     },
     seoDescription: {
       ro: "Parcursul, certificările și filozofia de antrenament.",
@@ -69,11 +52,6 @@ export const pageHeaderContent: {
       ro: "Tarifele pe program, pachetele de lecții și regulile de anulare și plată, pe scurt și fără surprize.",
       en: "Prices per programme, lesson packages and the cancellation and payment rules, briefly and without surprises.",
     },
-    artKey: "04b-pergament",
-    imageAlt: {
-      ro: "Pictură: un personaj clasic desfășoară un pergament cu planul unui teren de tenis.",
-      en: "Painting: a classical figure unrolls a parchment with the plan of a tennis court.",
-    },
     seoDescription: {
       ro: "Prețuri pentru lecții de tenis individuale, în doi și grupe, pachete și politica de anulare.",
       en: "Prices for private, shared and group tennis lessons, packages and the cancellation policy.",
@@ -85,11 +63,6 @@ export const pageHeaderContent: {
     intro: {
       ro: "Alegi programul, vezi orele libere și îți lași datele. Durează două minute.",
       en: "Choose a programme, see the free times and leave your details. It takes two minutes.",
-    },
-    artKey: "10-constelatie",
-    imageAlt: {
-      ro: "Cer de noapte cu o constelație care desenează traiectoria unei mingi.",
-      en: "A night sky with a constellation tracing the arc of a ball.",
     },
     seoDescription: {
       ro: "Rezervă online o lecție de tenis sau o ședință de probă la grupă, cu orele libere în timp real.",
@@ -103,11 +76,6 @@ export const pageHeaderContent: {
       ro: "Fotografii de la lecții, grupe, turnee și de pe terenuri. Publicate doar cu acordul celor din imagini.",
       en: "Photos from lessons, groups, tournaments and the courts. Published only with the consent of the people in them.",
     },
-    artKey: "09b-ramuri",
-    imageAlt: {
-      ro: "Ramuri dese cu mingi aurii printre frunze.",
-      en: "Dense branches with gold balls among the leaves.",
-    },
     seoDescription: {
       ro: "Fotografii de la lecțiile și grupele de tenis.",
       en: "Photos from tennis lessons and groups.",
@@ -119,11 +87,6 @@ export const pageHeaderContent: {
     intro: {
       ro: "Articole scurte despre echipament, tehnică și primii pași în tenis, pentru jucători și pentru părinți.",
       en: "Short articles on equipment, technique and first steps in tennis, for players and for parents.",
-    },
-    artKey: "06-schita-teren",
-    imageAlt: {
-      ro: "Schiță sepia a unui teren de tenis văzut de sus, pe pergament.",
-      en: "A sepia sketch of a tennis court seen from above, on parchment.",
     },
     seoDescription: {
       ro: "Sfaturi practice de tenis: rachete pentru copii, pantofi pentru zgură, primele luni ca adult.",
@@ -137,11 +100,6 @@ export const pageHeaderContent: {
       ro: "Răspunsuri la ce se întreabă cel mai des înainte de prima lecție. Dacă nu găsești ce cauți, scrie-mi.",
       en: "Answers to what people ask most often before the first lesson. If you cannot find what you need, write to me.",
     },
-    artKey: "09-curcubeu",
-    imageAlt: {
-      ro: "O minge aurie sub un curcubeu pe cer albastru-pal.",
-      en: "A gold ball under a rainbow in a pale blue sky.",
-    },
     seoDescription: {
       ro: "Echipament, vârsta de început, vreme, anulare, plată, turnee: răspunsuri la întrebările frecvente.",
       en: "Equipment, starting age, weather, cancellation, payment, tournaments: answers to common questions.",
@@ -154,11 +112,6 @@ export const pageHeaderContent: {
       ro: "Pentru o rezervare rapidă, folosește pagina de rezervare. Pentru orice altceva, scrie-mi aici, sună sau lasă un mesaj pe WhatsApp.",
       en: "For a quick booking, use the booking page. For anything else, write to me here, call or leave a WhatsApp message.",
     },
-    artKey: "03-cer",
-    imageAlt: {
-      ro: "Cer ultramarin cu nori albi.",
-      en: "Ultramarine sky with white clouds.",
-    },
     seoDescription: {
       ro: "Telefon, WhatsApp, email, adresa terenurilor și programul de lucru.",
       en: "Phone, WhatsApp, email, the courts' address and opening hours.",
@@ -170,11 +123,6 @@ export const pageHeaderContent: {
     intro: {
       ro: "Lasă-ți datele și preferințele de orar. Îți scriu când se eliberează un loc în programul care te interesează.",
       en: "Leave your details and preferred times. I will write to you when a place opens up in the programme you want.",
-    },
-    artKey: "08-pom",
-    imageAlt: {
-      ro: "O tânără culege mingi aurii dintr-un pom.",
-      en: "A young woman picking gold balls from a tree.",
     },
     seoDescription: {
       ro: "Înscrie-te pe lista de așteptare pentru lecții și grupe de tenis.",
@@ -274,14 +222,18 @@ export const exampleTestimonials: { id: string; author: string; role: T; text: T
 ];
 
 export const coachPhilosophy: T = {
-  ro: `Cred că tenisul se învață bine doar pe bucăți mici, puse una peste alta cu răbdare. Nu încerc să schimb totul într-o lecție. Aleg un singur lucru, îl lucrăm până se așază, și abia apoi trecem la următorul.
+  ro: `Tenisul de performanță se construiește metodic. Pornesc de la evaluarea inițială a nivelului tehnic, a calităților motrice și a obiectivelor sportivului, iar pe baza ei stabilesc un plan periodizat, cu obiective clare pentru fiecare etapă.
 
-Lucrez cu un plan scris, pe care îl vezi și tu. Știi ce urmărim în următoarele săptămâni și de ce, iar la final verificăm împreună, în joc și pe înregistrări, dacă am ajuns acolo.
+Lucrez după principiile didacticii sportive: accesibilitate, sistematizare, progresivitate și individualizare. Învățarea tehnicii urmează etapele învățării motrice: demonstrație și explicație, exersare dirijată, feedback imediat, apoi transfer în situații de joc și de competiție.
 
-Pentru copii, tenisul trebuie să rămână un joc. Terenul, mingea și racheta se potrivesc vârstei lor, iar progresul se măsoară în bucuria de a reveni pe teren săptămâna următoare.`,
-  en: `I believe tennis is learned well only in small pieces, patiently put one on top of another. I do not try to change everything in one lesson. I choose one thing, we work on it until it settles, and only then move on to the next.
+Pregătirea tehnico-tactică se completează cu pregătirea fizică specifică (viteză de reacție și deplasare, forță explozivă, rezistență, mobilitate, prevenirea accidentărilor) și cu pregătirea psihologică: concentrarea, gestionarea presiunii și rutinele dintre puncte.
 
-I work with a written plan that you see too. You know what we are aiming for in the coming weeks and why, and at the end we check together, in play and on video, whether we got there.
+La copii, dozarea efortului respectă particularitățile de vârstă, iar jocul rămâne principalul mijloc de învățare. La juniorii de performanță, fiecare ciclu de pregătire este legat de calendarul competițional.`,
+  en: `Performance tennis is built methodically. I start from an initial assessment of the player's technique, motor abilities and goals, and from it I draw up a periodised plan with clear objectives for each stage.
 
-For children, tennis has to stay a game. The court, the ball and the racquet match their age, and progress is measured by how happy they are to come back on court the following week.`,
+I work to the principles of sports pedagogy: accessibility, systematic progression, gradual loading and individualisation. Technique is learned through the stages of motor learning: demonstration and explanation, guided practice, immediate feedback, then transfer to match and competition situations.
+
+Technical and tactical work is complemented by sport-specific conditioning (reaction and movement speed, explosive strength, endurance, mobility, injury prevention) and by mental preparation: focus, handling pressure and between-point routines.
+
+With children, training loads respect their stage of development and play remains the main way of learning. With performance juniors, every training cycle is tied to the competition calendar.`,
 };

@@ -66,7 +66,7 @@ export function MediaPicker({ name, label, initial, required, describedBy, inval
           />
         ) : (
           <span className="text-note text-cerneala-2">
-            {required ? "Nicio imagine aleasă." : "Nicio imagine (se folosește pictura)."}
+            {required ? "Nicio imagine aleasă." : "Nicio imagine (se folosește grafica implicită)."}
           </span>
         )}
         <div className="flex flex-wrap gap-2">

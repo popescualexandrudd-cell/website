@@ -1,22 +1,10 @@
 import "server-only";
-import { artEntries } from "../art";
 import { db } from "../db";
 import { t } from "../i18n-content";
 import { mediaIds, toFormValue } from "./form-values";
 import { toThumb, type MediaThumb } from "./media";
 import { visibleFields, type Resource, type Row } from "./resources";
 import type { FieldValue, Option, RelationSource } from "./fields";
-
-type ArtOption = Option & { url: string };
-
-/** Paintings and program illustrations from the image set, with a small preview. */
-function artOptions(): ArtOption[] {
-  return artEntries(["scene", "program"]).map((a) => ({
-    value: a.key,
-    label: a.key.replace(/-/g, " "),
-    url: a.preview,
-  }));
-}
 
 async function relationOptions(
   sources: Set<RelationSource>,
@@ -73,7 +61,6 @@ export async function loadEditorProps(resource: Resource, row: Row | null) {
     values,
     media,
     relations: await relationOptions(sources),
-    art: fields.some((f) => f.kind === "art") ? artOptions() : [],
   };
 }
 

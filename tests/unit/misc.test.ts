@@ -11,7 +11,6 @@ import {
 import { fillLegalTemplate } from "@/lib/legal";
 import { formatPrice, whatsappLink } from "@/lib/format";
 import { t, tList, isFilled } from "@/lib/i18n-content";
-import { arcBetween, coverPoint, hopAlong, segment } from "@/components/motion/geometry";
 import { orderedListItems, renderMarkdown } from "@/lib/markdown";
 
 describe("free cancellation limit", () => {
@@ -116,26 +115,5 @@ describe("content helpers", () => {
       { title: "Evaluare", text: "La prima lecție." },
       { title: "", text: "Plan" },
     ]);
-  });
-});
-
-describe("travelling ball geometry", () => {
-  it("places painting coordinates on screen like object-fit: cover", () => {
-    // 16:9 painting in a 1440×900 viewport: scaled to 1600×900, 80 px cropped on each side.
-    const p = coverPoint(0.5, 0.5, 0.05, 1440, 900, 16 / 9);
-    expect(p.x).toBeCloseTo(720);
-    expect(p.y).toBeCloseTo(450);
-    expect(p.size).toBeCloseTo(80);
-    expect(coverPoint(0, 0, 0, 1440, 900, 16 / 9).x).toBeCloseTo(-80);
-  });
-
-  it("interpolates along an arc and between anchors", () => {
-    const a = { x: 0, y: 100, size: 10, opacity: 1 };
-    const b = { x: 100, y: 100, size: 30, opacity: 0 };
-    expect(arcBetween(a, b, 0)).toMatchObject({ x: 0, y: 100 });
-    expect(arcBetween(a, b, 1)).toMatchObject({ x: 100, y: 100, size: 30 });
-    expect(arcBetween(a, b, 0.5).y).toBeLessThan(100);
-    expect(hopAlong([a, b], 1)).toMatchObject({ x: 100 });
-    expect(segment(0.5, 0.25, 0.75)).toBe(0.5);
   });
 });

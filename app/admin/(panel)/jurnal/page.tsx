@@ -57,7 +57,7 @@ const ACTIONS: Record<string, string> = {
 };
 
 const ENTITIES: Record<string, string> = {
-  Scene: "scenă",
+  Scene: "secțiune a paginii principale",
   Program: "program",
   PricingPlan: "preț",
   GroupSchedule: "grupă",
@@ -174,7 +174,7 @@ export default async function JournalPage({ searchParams }: PageProps<"/admin/ju
                 {e.diff && JSON.stringify(e.diff) !== "{}" ? (
                   <details className="mt-1">
                     <summary className="cursor-pointer text-note">Detalii</summary>
-                    <pre className="mt-2 max-h-80 overflow-auto bg-pergament p-3 text-[0.8rem] whitespace-pre-wrap">
+                    <pre className="mt-2 max-h-80 overflow-auto bg-nisip p-3 text-[0.8rem] whitespace-pre-wrap">
                       {JSON.stringify(e.diff, null, 2)}
                     </pre>
                   </details>

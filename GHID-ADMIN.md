@@ -112,7 +112,7 @@ locurile rămase.
 
 <img src="docs/capturi/09-continut.svg" width="300" alt="Secțiunile de conținut">
 
-Orice text sau imagine de pe site se schimbă de aici, fără cod: scenele paginii principale,
+Orice text sau imagine de pe site se schimbă de aici, fără cod: secțiunile paginii principale,
 antetele paginilor, profilul tău, certificările, programele, prețurile și pachetele, orarul
 grupelor, locațiile, terenurile, facilitățile, întrebările frecvente, recenziile, galeria,
 articolele și paginile legale. Eticheta **„de completat”** arată unde mai e `[DE COMPLETAT]`.
@@ -146,12 +146,22 @@ Apasă **Previzualizare** ca să vezi textul exact cum apare pe site.
 nepublicate, programe inactive). O bandă sus îți amintește că ești în previzualizare; o închizi de
 acolo.
 
-<img src="docs/capturi/13-scena-minge.svg" width="300" alt="Reglajele unei scene">
+<img src="docs/capturi/13-sectiune.svg" width="300" alt="Editarea unei secțiuni a paginii principale">
 
-**Scenele paginii principale** au în plus: pictura (sau o fotografie încărcată de tine, separat
-pentru ecran mare și pentru telefon), poziția textului, culoarea textului (închisă pe imagini
-luminoase, deschisă pe imagini întunecate), un voal discret dacă textul se citește greu, poziția și
-mărimea **mingii aurii** (între 0 și 1) și tranziția către scena următoare.
+**Secțiunile paginii principale** (Conținut → Secțiunile paginii principale) au eticheta mică de
+deasupra titlului, titlul, textul și butonul. Unele au și texte proprii:
+
+- **prima secțiune**: cele patru repere de sub titlu (de exemplu „4 ani” + „de activitate ca
+  antrenor”), textul celui de-al doilea buton și descrierea animației 3D pentru cititoarele de
+  ecran;
+- **Antrenorul**: titlul listei de calificări și nota din ramă, afișată până încarci fotografia;
+- **Metoda**: titlul și textul laboratorului tehnic 3D;
+- **Locuri**: textele pentru locurile libere și lista de așteptare.
+
+În textul secțiunilor „Metoda” și „Palierele de pregătire”, o listă numerotată
+(`1. **Titlu.** text`) devine pașii afișați pe site. Animațiile 3D nu se reglează: se potrivesc
+singure. **Fotografia ta pe teren** se încarcă în **Conținut → Profilul antrenorului → Fotografia
+ta** (format vertical 4:5; sfaturi în `docs/DIRECTIE-ARTISTICA.md`).
 
 **Articolele** (Sfaturi) rămân ciorne până alegi „Publicat”. **Paginile legale** primesc automat o
 versiune nouă (data zilei) când le schimbi textul, pentru că fiecare acord salvat la rezervări și
@@ -168,7 +178,8 @@ mesaje păstrează versiunea politicii în vigoare.
   Google (de exemplu „Elevă de 10 ani lovind un forehand pe zgură”);
 - fotografia se micșorează pentru telefon, se convertește în formate moderne și se **curăță de
   datele ascunse** (locația GPS, modelul telefonului);
-- bifa **„Aplică tratamentul cald”** potrivește culorile cu picturile site-ului.
+- bifa **„Aplică tratamentul cald”** dă fotografiilor culori ușor mai calde și granulație fină, ca
+  să arate unitar pe paleta de zgură (nu o folosi pe fotografii deja editate).
 
 O fotografie folosită undeva pe site nu se poate șterge până nu o înlocuiești acolo.
 

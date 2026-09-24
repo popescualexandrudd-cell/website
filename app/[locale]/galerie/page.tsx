@@ -33,7 +33,7 @@ export default async function GalleryPage({ params }: PageProps<"/[locale]/galer
       <PageHero
         title={header.title}
         intro={header.intro}
-        art={header.art}
+        image={header.image}
         imageAlt={header.imageAlt}
       />
       <PageSection>

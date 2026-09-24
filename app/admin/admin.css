@@ -1,14 +1,14 @@
 /* Admin panel: mobile first (the coach uses it on the phone, on court). Same tokens as the site. */
 
 .admin-body {
-  background: var(--color-pergament-deschis);
+  background: var(--color-nisip-deschis);
   font-size: 1rem;
 }
 .admin-title {
   font-family: var(--font-display);
-  font-size: 2.1rem;
-  line-height: 1.1;
-  font-weight: 400;
+  font-size: 2.25rem;
+  line-height: 1;
+  font-weight: 700;
 }
 .admin-h2 {
   font-family: var(--font-display);
@@ -17,9 +17,11 @@
   margin-bottom: 0.75rem;
 }
 .admin-h3 {
-  font-weight: 500;
+  font-family: var(--font-sans);
+  font-weight: 600;
   font-size: 1.05rem;
   margin-bottom: 0.5rem;
+  text-transform: none;
 }
 
 /* Login */
@@ -28,12 +30,12 @@
   place-items: center;
   min-height: 100dvh;
   padding: 1.25rem;
-  background: var(--color-pergament);
+  background: var(--color-nisip);
 }
 .admin-login-card {
   width: min(26rem, 100%);
   padding: 2rem 1.5rem;
-  background: var(--color-pergament-deschis);
+  background: var(--color-nisip-deschis);
   border: 1px solid var(--color-linie);
 }
 
@@ -60,7 +62,7 @@
   grid-auto-columns: 1fr;
   padding-bottom: env(safe-area-inset-bottom);
   background: var(--color-cerneala);
-  color: var(--color-pergament);
+  color: var(--color-nisip);
 }
 .admin-tabbar a,
 .admin-tabbar button {
@@ -79,7 +81,7 @@
   border: 0;
 }
 .admin-tabbar a[aria-current="page"] {
-  box-shadow: inset 0 3px 0 var(--color-aur);
+  box-shadow: inset 0 3px 0 var(--color-galben);
 }
 .admin-drawer {
   position: fixed;
@@ -87,7 +89,7 @@
   z-index: 39;
   overflow-y: auto;
   padding: 1.25rem 1rem;
-  background: var(--color-pergament);
+  background: var(--color-nisip);
 }
 .admin-nav-list {
   display: grid;
@@ -103,11 +105,11 @@
   text-decoration: none;
 }
 .admin-nav-list a:hover {
-  background: rgb(29 26 21 / 0.06);
+  background: rgb(42 26 18 / 0.06);
 }
 .admin-nav-list a[aria-current="page"] {
   background: var(--color-cerneala);
-  color: var(--color-pergament);
+  color: var(--color-nisip);
 }
 .admin-badge {
   display: inline-grid;
@@ -116,7 +118,7 @@
   height: 1.35rem;
   padding: 0 0.35rem;
   border-radius: 999px;
-  background: var(--color-aur);
+  background: var(--color-galben);
   color: var(--color-cerneala);
   font-size: 0.75rem;
   font-weight: 500;
@@ -157,7 +159,7 @@
     height: 100dvh;
     overflow-y: auto;
     padding: 1.5rem 0.75rem;
-    background: var(--color-pergament);
+    background: var(--color-nisip);
     border-right: 1px solid var(--color-linie);
   }
   .admin-tabbar,
@@ -216,7 +218,7 @@
   font-family: var(--font-display);
   font-size: 2.25rem;
   line-height: 1;
-  font-weight: 400;
+  font-weight: 700;
   font-variant-numeric: lining-nums;
 }
 .admin-stat span {
@@ -225,8 +227,8 @@
 }
 .admin-warning {
   padding: 0.75rem 1rem;
-  border-left: 3px solid var(--color-aur);
-  background: rgb(201 161 59 / 0.12);
+  border-left: 3px solid var(--color-galben);
+  background: rgb(242 177 52 / 0.12);
 }
 .admin-warning + .admin-warning {
   margin-top: 0.5rem;
@@ -280,10 +282,10 @@
   font-size: 0.8rem;
   font-weight: 500;
   white-space: nowrap;
-  background: rgb(29 26 21 / 0.08);
+  background: rgb(42 26 18 / 0.08);
 }
 .status--IN_ASTEPTARE {
-  background: rgb(201 161 59 / 0.3);
+  background: rgb(242 177 52 / 0.3);
 }
 .status--CONFIRMATA {
   background: rgb(47 93 52 / 0.16);
@@ -295,8 +297,8 @@
   color: #7a1616;
 }
 .status--EFECTUATA {
-  background: rgb(24 70 196 / 0.12);
-  color: var(--color-ultramarin-adanc);
+  background: rgb(185 76 34 / 0.12);
+  color: var(--color-zgura-adanc);
 }
 
 .btn-small {
@@ -396,7 +398,7 @@
   flex-wrap: wrap;
   gap: 0.6rem;
   padding: 0.75rem 0;
-  background: linear-gradient(to top, var(--color-pergament-deschis) 70%, rgb(244 238 225 / 0));
+  background: linear-gradient(to top, var(--color-nisip-deschis) 70%, rgb(252 248 243 / 0));
 }
 @media (min-width: 900px) {
   .admin-sticky-actions {
@@ -407,7 +409,7 @@
   min-height: 8rem;
   padding: 0.75rem 0.9rem;
   border: 1px dashed var(--color-linie);
-  background: var(--color-pergament);
+  background: var(--color-nisip);
 }
 .admin-tabs {
   display: flex;
@@ -422,7 +424,7 @@
 }
 .admin-tabs button[aria-pressed="true"] {
   background: var(--color-cerneala);
-  color: var(--color-pergament);
+  color: var(--color-nisip);
 }
 
 /* Sortable lists */
@@ -433,12 +435,12 @@
   align-items: center;
   padding: 0.6rem 0.25rem;
   border-bottom: 1px solid var(--color-linie);
-  background: var(--color-pergament-deschis);
+  background: var(--color-nisip-deschis);
 }
 .sortable-item[data-dragging="true"] {
   position: relative;
   z-index: 2;
-  box-shadow: 0 0.5rem 1.5rem rgb(29 26 21 / 0.2);
+  box-shadow: 0 0.5rem 1.5rem rgb(42 26 18 / 0.2);
 }
 .drag-handle {
   display: grid;
@@ -479,8 +481,8 @@
   background: #fffaf0;
 }
 .week-day[data-today="true"] {
-  border-color: var(--color-aur);
-  box-shadow: inset 0 3px 0 var(--color-aur);
+  border-color: var(--color-galben);
+  box-shadow: inset 0 3px 0 var(--color-galben);
 }
 .week-day h3 {
   font-size: 0.85rem;
@@ -492,15 +494,15 @@
   margin-bottom: 0.35rem;
   padding: 0.35rem 0.45rem;
   border-left: 3px solid var(--color-cerneala);
-  background: var(--color-pergament);
+  background: var(--color-nisip);
   font-size: 0.8125rem;
   text-decoration: none;
 }
 .week-item[data-status="IN_ASTEPTARE"] {
-  border-left-color: var(--color-aur);
+  border-left-color: var(--color-galben);
 }
 .week-item[data-kind="group"] {
-  border-left-color: var(--color-ultramarin);
+  border-left-color: var(--color-zgura);
 }
 .week-item[data-kind="rule"] {
   border-left-color: rgb(47 93 52 / 0.6);
@@ -522,10 +524,10 @@
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
-  background: var(--color-pergament-adanc);
+  background: var(--color-nisip-adanc);
 }
 .media-tile button[aria-pressed="true"] img {
-  outline: 3px solid var(--color-ultramarin);
+  outline: 3px solid var(--color-zgura);
   outline-offset: 2px;
 }
 .media-picker-dialog {
@@ -533,10 +535,10 @@
   max-height: 90dvh;
   padding: 1rem;
   border: 1px solid var(--color-linie);
-  background: var(--color-pergament-deschis);
+  background: var(--color-nisip-deschis);
 }
 .media-picker-dialog::backdrop {
-  background: rgb(29 26 21 / 0.4);
+  background: rgb(42 26 18 / 0.4);
 }
 .bar-chart {
   display: grid;
@@ -551,7 +553,7 @@
 }
 .bar-chart-track {
   height: 0.85rem;
-  background: rgb(29 26 21 / 0.08);
+  background: rgb(42 26 18 / 0.08);
 }
 .bar-chart-fill {
   height: 100%;
@@ -580,7 +582,7 @@
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
-  background: var(--color-pergament-adanc);
+  background: var(--color-nisip-adanc);
 }
 .media-library {
   display: grid;

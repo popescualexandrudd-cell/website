@@ -1,34 +1,26 @@
 import type { ReactNode } from "react";
-import type { ArtSet } from "@/lib/art";
-import { ArtPicture } from "@/components/ui/ArtPicture";
+import type { ResolvedImage } from "@/lib/media-shared";
+import { Picture } from "@/components/ui/Picture";
+import { CourtMark } from "@/components/ui/CourtMark";
 import { TodoText } from "@/components/site/TodoText";
 
 type Props = {
   title: string;
   intro?: string;
-  art: ArtSet | null;
+  image: ResolvedImage | null;
   imageAlt?: string;
   children?: ReactNode;
   eyebrow?: ReactNode;
 };
 
-/** Interior page header: one painting, then the title and a short introduction. */
-export function PageHero({ title, intro, art, imageAlt = "", children, eyebrow }: Props) {
+/**
+ * Interior page header: a dark clay-brick band with the title in condensed capitals, the
+ * introduction, and either the page's photo (uploaded from the admin) or a court drawn in lines.
+ */
+export function PageHero({ title, intro, image, imageAlt = "", children, eyebrow }: Props) {
   return (
-    <header className="page-hero">
-      {art ? (
-        <figure className="page-hero-figure">
-          <ArtPicture
-            art={art}
-            alt={imageAlt}
-            priority
-            desktopOnly
-            className="page-hero-picture"
-            imgClassName="page-hero-img"
-          />
-        </figure>
-      ) : null}
-      <div className="grid-page page-hero-text">
+    <header className="page-hero tone-dark">
+      <div className="page-hero-inner">
         <div className="page-hero-copy">
           {eyebrow}
           <h1 className="page-title">
@@ -41,6 +33,20 @@ export function PageHero({ title, intro, art, imageAlt = "", children, eyebrow }
           ) : null}
           {children}
         </div>
+        {image ? (
+          <figure className="page-hero-figure">
+            <Picture
+              image={image}
+              alt={imageAlt}
+              priority
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              className="page-hero-picture"
+              imgClassName="page-hero-img"
+            />
+          </figure>
+        ) : (
+          <CourtMark className="page-hero-court" />
+        )}
       </div>
     </header>
   );

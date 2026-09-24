@@ -1,6 +1,6 @@
 import type { ProgramView } from "@/lib/content";
 import type { BookableProgram } from "./BookingFlow";
-import { programMeta } from "@/components/scenes/programMeta";
+import { programMeta } from "@/components/home/programMeta";
 
 type T = (key: string, values?: Record<string, string | number>) => string;
 

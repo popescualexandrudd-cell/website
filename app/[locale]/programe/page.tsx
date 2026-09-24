@@ -6,9 +6,10 @@ import { getPageHeader, getPrograms } from "@/lib/content";
 import { formatPrice } from "@/lib/format";
 import { pageMetadata } from "@/lib/seo";
 import { PageHero, PageSection } from "@/components/pages/PageHero";
-import { ArtPicture } from "@/components/ui/ArtPicture";
+import { Picture } from "@/components/ui/Picture";
+import { CourtMark } from "@/components/ui/CourtMark";
 import { TodoText } from "@/components/site/TodoText";
-import { GROUP_ORDER, programGroup, programMeta } from "@/components/scenes/programMeta";
+import { GROUP_ORDER, programGroup, programMeta } from "@/components/home/programMeta";
 
 export async function generateMetadata({
   params,
@@ -41,7 +42,7 @@ export default async function ProgramsPage({ params }: PageProps<"/[locale]/prog
       <PageHero
         title={header.title}
         intro={header.intro}
-        art={header.art}
+        image={header.image}
         imageAlt={header.imageAlt}
       />
       {groups.map((group) => (
@@ -59,9 +60,11 @@ export default async function ProgramsPage({ params }: PageProps<"/[locale]/prog
                   tabIndex={-1}
                   aria-hidden="true"
                 >
-                  {program.art ? (
-                    <ArtPicture art={program.art} alt="" desktopOnly sizes="9rem" />
-                  ) : null}
+                  {program.image ? (
+                    <Picture image={program.image} alt="" sizes="10rem" />
+                  ) : (
+                    <CourtMark variant="plan" />
+                  )}
                 </Link>
                 <div>
                   <h3 className="ed-row-title">

@@ -50,7 +50,7 @@ export default async function FaqPage({ params }: PageProps<"/[locale]/intrebari
       <PageHero
         title={header.title}
         intro={header.intro}
-        art={header.art}
+        image={header.image}
         imageAlt={header.imageAlt}
       />
       {groups.map((group) => (

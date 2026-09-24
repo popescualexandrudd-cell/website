@@ -6,7 +6,7 @@ import { getPageHeader, getPosts } from "@/lib/content";
 import { formatDate } from "@/lib/format";
 import { pageMetadata } from "@/lib/seo";
 import { PageHero, PageSection } from "@/components/pages/PageHero";
-import { ArtPicture } from "@/components/ui/ArtPicture";
+import { Picture } from "@/components/ui/Picture";
 
 export async function generateMetadata({
   params,
@@ -34,7 +34,7 @@ export default async function TipsPage({ params }: PageProps<"/[locale]/sfaturi"
       <PageHero
         title={header.title}
         intro={header.intro}
-        art={header.art}
+        image={header.image}
         imageAlt={header.imageAlt}
       />
       <PageSection className="page-section--narrow">
@@ -46,7 +46,7 @@ export default async function TipsPage({ params }: PageProps<"/[locale]/sfaturi"
               <li key={post.id} className={`ed-row ${post.cover ? "" : "ed-row--no-image"}`}>
                 {post.cover ? (
                   <span className="ed-row-image">
-                    <ArtPicture art={post.cover} alt="" sizes="9rem" />
+                    <Picture image={post.cover} alt="" sizes="9rem" />
                   </span>
                 ) : null}
                 <div>

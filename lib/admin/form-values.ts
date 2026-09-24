@@ -2,7 +2,6 @@ import "server-only";
 import { formatInTimeZone } from "date-fns-tz";
 import { Prisma } from "../generated/prisma/client";
 import { zonedInstant } from "../availability";
-import { resolveArt } from "../art";
 import { TODO_MARK } from "../i18n-content";
 import type { FieldDef, FieldValue, HoursRow, I18nValue } from "./fields";
 import type { Row } from "./resources";
@@ -263,15 +262,6 @@ export function parseForm(fields: FieldDef[], form: FormData, tz: string): Parse
             fail(name, field.kind === "media" ? "Alege o imagine." : "Alege o opțiune din listă.");
           else data[name] = null;
         } else if (!/^[a-z0-9]{8,40}$/i.test(value)) fail(name, "Valoare necunoscută.");
-        else data[name] = value;
-        break;
-      }
-      case "art": {
-        const value = read(form, key);
-        if (!value) {
-          if (field.required) fail(name, "Alege o pictură.");
-          else data[name] = null;
-        } else if (!resolveArt(value)) fail(name, "Pictura aleasă nu există în setul de imagini.");
         else data[name] = value;
         break;
       }

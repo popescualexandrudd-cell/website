@@ -16,6 +16,8 @@ import {
   integer,
   isPlaceholder,
   loadConfig,
+  localizedText,
+  optionalLocalized,
   optionalText,
   phoneDigits,
   text,
@@ -127,7 +129,7 @@ async function main(): Promise<void> {
       id: 1,
       brandName: coachName,
       monogram: initials(coachName),
-      tagline: { ro: text(config.antrenor.titulatura), en: "Tennis coach" },
+      tagline: localizedText(config.antrenor.titulatura, "Tennis coach"),
       phone: text(config.contact.telefon),
       whatsapp: phoneDigits(config.contact.whatsapp) ?? TODO,
       email: text(config.contact.email),
@@ -167,17 +169,17 @@ async function main(): Promise<void> {
 
   // ── Coach profile & certifications ────────────────────────────────────────
   const coachExisting = await db.coachProfile.findUnique({ where: { id: 1 } });
-  const results = optionalText(config.antrenor.rezultate_elevi);
+  const results = optionalLocalized(config.antrenor.rezultate_elevi);
   await db.coachProfile.upsert({
     where: { id: 1 },
     update: {},
     create: {
       id: 1,
       name: coachName,
-      title: { ro: text(config.antrenor.titulatura), en: "Tennis coach" },
-      story: isPlaceholder(config.antrenor.parcurs) ? todoT : { ro: text(config.antrenor.parcurs) },
+      title: localizedText(config.antrenor.titulatura, "Tennis coach"),
+      story: localizedText(config.antrenor.parcurs),
       philosophy: coachPhilosophy,
-      results: results ? { ro: results } : Prisma.DbNull,
+      results: results ?? Prisma.DbNull,
       yearsExperience: integer(config.antrenor.ani_experienta),
       languages: config.antrenor.limbi_vorbite
         .filter((lang) => !isPlaceholder(lang))
@@ -193,18 +195,27 @@ async function main(): Promise<void> {
   for (const [index, certification] of config.antrenor.certificari.entries()) {
     const id = `seed-cert-${String(index + 1).padStart(2, "0")}`;
     const exists = await db.certification.findUnique({ where: { id } });
-    const raw = text(certification);
-    const [title, ...issuerParts] = raw === TODO ? [TODO] : raw.split(",");
-    await db.certification.upsert({
-      where: { id },
-      update: {},
-      create: {
-        id,
+    let entry: { title: { ro: string; en: string }; issuer: string; year: number | null };
+    if (certification !== null && typeof certification === "object") {
+      entry = {
+        title: localizedText(certification.titlu),
+        issuer: text(certification.emitent),
+        year: integer(certification.an),
+      };
+    } else {
+      // Short form: "Title, Issuer".
+      const raw = text(certification);
+      const [title, ...issuerParts] = raw === TODO ? [TODO] : raw.split(",");
+      entry = {
         title: same((title ?? TODO).trim()),
         issuer: issuerParts.length > 0 ? issuerParts.join(",").trim() : TODO,
         year: null,
-        order: index,
-      },
+      };
+    }
+    await db.certification.upsert({
+      where: { id },
+      update: {},
+      create: { id, ...entry, order: index },
     });
     note(`certificare ${index + 1}`, !exists);
   }
@@ -355,7 +366,6 @@ async function main(): Promise<void> {
         maxParticipants,
         ageMin: content.ageMin ?? null,
         ageMax: content.ageMax ?? null,
-        artKey: content.artKey,
         order: index,
         bookableOnline: content.bookableOnline,
         active: Boolean(configEntry),
@@ -560,8 +570,6 @@ async function main(): Promise<void> {
         key: header.key,
         title: header.title,
         intro: header.intro,
-        artKey: header.artKey,
-        imageAlt: header.imageAlt,
         seoTitle: header.seoTitle ?? Prisma.DbNull,
         seoDescription: header.seoDescription,
       },

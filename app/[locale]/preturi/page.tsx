@@ -44,7 +44,7 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/pretu
       <PageHero
         title={header.title}
         intro={header.intro}
-        art={header.art}
+        image={header.image}
         imageAlt={header.imageAlt}
       />
 

@@ -2,7 +2,7 @@ import "server-only";
 import { cache } from "react";
 import { draftMode } from "next/headers";
 import { db } from "./db";
-import { pickArt, resolveMedia, type ArtSet, type ResolvedImage } from "./art";
+import { resolveMedia, type ResolvedImage } from "./media";
 import { t, tItems, tList } from "./i18n-content";
 import { isChildrenProgram } from "./programs";
 import type { Locale } from "@/i18n/routing";
@@ -15,10 +15,7 @@ import type {
   Level,
   PriceUnit,
   ProgramFormat,
-  SceneTransition,
   Surface,
-  TextPosition,
-  TextTone,
 } from "./generated/prisma/client";
 
 export const isPreview = cache(async (): Promise<boolean> => {
@@ -121,15 +118,6 @@ export type SceneView = {
   ctaLabel: string;
   ctaHref: string | null;
   extra: Record<string, string>;
-  imageAlt: string;
-  art: ArtSet | null;
-  artSecondary: ArtSet | null;
-  textPosDesktop: TextPosition;
-  textPosMobile: TextPosition;
-  tone: TextTone;
-  veil: boolean;
-  ball: { x: number; y: number; size: number };
-  transition: SceneTransition;
 };
 
 export const getScenes = cache(async (locale: Locale): Promise<SceneView[]> => {
@@ -137,7 +125,6 @@ export const getScenes = cache(async (locale: Locale): Promise<SceneView[]> => {
   const scenes = await db.scene.findMany({
     where: preview ? {} : { active: true },
     orderBy: { order: "asc" },
-    include: { image: true, imageMobile: true, imageSecondary: true, imageSecondaryMobile: true },
   });
   return scenes.map((scene) => {
     const extra: Record<string, string> = {};
@@ -154,22 +141,6 @@ export const getScenes = cache(async (locale: Locale): Promise<SceneView[]> => {
       ctaLabel: scene.ctaLabel ? t(scene.ctaLabel, locale) : "",
       ctaHref: scene.ctaHref,
       extra,
-      imageAlt: t(scene.imageAlt, locale),
-      art: pickArt({ media: scene.image, mobileMedia: scene.imageMobile, artKey: scene.artKey }),
-      artSecondary:
-        scene.artKeySecondary || scene.imageSecondary
-          ? pickArt({
-              media: scene.imageSecondary,
-              mobileMedia: scene.imageSecondaryMobile,
-              artKey: scene.artKeySecondary,
-            })
-          : null,
-      textPosDesktop: scene.textPosDesktop,
-      textPosMobile: scene.textPosMobile,
-      tone: scene.tone,
-      veil: scene.veil,
-      ball: { x: scene.ballX, y: scene.ballY, size: scene.ballSize },
-      transition: scene.transition,
     };
   });
 });
@@ -235,7 +206,7 @@ export type ProgramView = {
   maxParticipants: number | null;
   ageMin: number | null;
   ageMax: number | null;
-  art: ArtSet | null;
+  image: ResolvedImage | null;
   imageAlt: string;
   bookableOnline: boolean;
   active: boolean;
@@ -280,7 +251,7 @@ export const getPrograms = cache(async (locale: Locale): Promise<ProgramView[]> 
       maxParticipants: p.maxParticipants,
       ageMin: p.ageMin,
       ageMax: p.ageMax,
-      art: pickArt({ media: p.image, artKey: p.artKey }),
+      image: resolveMedia(p.image),
       imageAlt: p.image ? t(p.image.alt, locale) : name,
       bookableOnline: p.bookableOnline,
       active: p.active,
@@ -437,7 +408,7 @@ export const getTestimonials = cache(
 export type PageHeaderView = {
   title: string;
   intro: string;
-  art: ArtSet | null;
+  image: ResolvedImage | null;
   imageAlt: string;
   seoTitle: string;
   seoDescription: string;
@@ -446,12 +417,12 @@ export type PageHeaderView = {
 export const getPageHeader = cache(async (key: string, locale: Locale): Promise<PageHeaderView> => {
   const header = await db.pageHeader.findUnique({ where: { key }, include: { image: true } });
   if (!header)
-    return { title: "", intro: "", art: null, imageAlt: "", seoTitle: "", seoDescription: "" };
+    return { title: "", intro: "", image: null, imageAlt: "", seoTitle: "", seoDescription: "" };
   const title = t(header.title, locale);
   return {
     title,
     intro: t(header.intro, locale),
-    art: pickArt({ media: header.image, artKey: header.artKey }),
+    image: resolveMedia(header.image),
     imageAlt: header.imageAlt ? t(header.imageAlt, locale) : "",
     seoTitle: header.seoTitle ? t(header.seoTitle, locale) : title,
     seoDescription: header.seoDescription ? t(header.seoDescription, locale) : "",

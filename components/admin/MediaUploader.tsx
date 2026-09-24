@@ -97,7 +97,9 @@ export function MediaUploader({ onUploaded, compact = false }: Props) {
       </p>
       <label className="admin-check">
         <input type="checkbox" name="treatment" />
-        <span>Aplică tratamentul cald, ca fotografia să se potrivească cu picturile site-ului</span>
+        <span>
+          Aplică tratamentul cald (culori calde și granulație fină), ca fotografiile să arate unitar
+        </span>
       </label>
       <div className="flex flex-wrap items-center gap-3">
         <button type="submit" className="btn btn-primary btn-small" disabled={busy}>

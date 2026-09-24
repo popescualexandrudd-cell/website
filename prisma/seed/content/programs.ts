@@ -10,7 +10,6 @@ export type ProgramContent = {
   audience: Audience;
   level: Level;
   format: ProgramFormat;
-  artKey: string;
   bookableOnline: boolean;
   ageMin?: number;
   ageMax?: number;
@@ -22,15 +21,15 @@ export const programContent: ProgramContent[] = [
     configName: "Lecție individuală",
     name: { ro: "Lecție individuală", en: "Private lesson" },
     summary: {
-      ro: "O oră doar pentru tine, construită în jurul unui singur obiectiv. Pentru orice vârstă și orice nivel.",
-      en: "An hour just for you, built around a single goal. For any age and any level.",
+      ro: "Ședință individuală cu un obiectiv operațional clar: corectarea tehnicii, pregătire tactică sau pregătire pentru competiție. Pentru orice vârstă și nivel.",
+      en: "A one-to-one session with one clear operational objective: technical correction, tactical work or competition preparation. For any age and level.",
     },
     focusPoints: {
       ro: [
-        "evaluare și plan scris pe 8–12 săptămâni",
-        "un obiectiv clar în fiecare lecție",
-        "corecturi pe loc și filmări scurte, când ajută",
-        "exerciții pe care le poți face singur între lecții",
+        "evaluare inițială și plan de pregătire pe 8–12 săptămâni",
+        "un obiectiv operațional pentru fiecare ședință",
+        "corectarea tehnicii cu feedback imediat și filmări scurte",
+        "exerciții de consolidare pentru perioada dintre ședințe",
       ],
       en: [
         "assessment and a written 8–12 week plan",
@@ -42,10 +41,9 @@ export const programContent: ProgramContent[] = [
     audience: "TOATE",
     level: "TOATE",
     format: "INDIVIDUAL",
-    artKey: "05-program-adulti",
     bookableOnline: true,
     description: {
-      ro: `Lecția individuală e cel mai direct drum de la „vreau să joc” la „joc”. Suntem doar noi doi pe teren, așa că tot timpul lecției e al tău: fiecare minge aruncată, fiecare corectură, fiecare pauză în care îți explic de ce o lovitură a ieșit lungă.
+      ro: `Ședința individuală este forma de pregătire cu cea mai mare densitate de lucru: tot timpul de teren este dedicat unui singur sportiv. Fiecare minge servită, fiecare corectură și fiecare explicație urmăresc obiectivul operațional stabilit în planul de pregătire, iar feedbackul vine imediat, în momentul execuției.
 
 ## Pentru cine
 
@@ -75,7 +73,7 @@ Pentru începători, o lecție pe săptămână aduce progres vizibil; două lec
 ## Ce aduci
 
 Pantofi de tenis (pe zgură, cu talpă pentru zgură), haine lejere, apă. Racheta o poți împrumuta la început, până aflăm ce mărime și ce greutate ți se potrivesc.`,
-      en: `A private lesson is the most direct route from "I want to play" to "I play". It is just the two of us on court, so the whole hour is yours: every ball fed, every correction, every pause in which I explain why a shot went long.
+      en: `The one-to-one session is the densest form of training: all the court time goes to a single player. Every ball fed, every correction and every explanation serves the operational objective set in the training plan, and feedback comes immediately, at the moment of execution.
 
 ## Who it is for
 
@@ -112,15 +110,15 @@ Tennis shoes (clay-court soles on clay), comfortable clothes, water. You can bor
     configName: "Lecție în doi",
     name: { ro: "Lecție în doi", en: "Lesson for two" },
     summary: {
-      ro: "Doi prieteni, doi frați sau un cuplu, la un nivel apropiat. Ora se împarte, prețul e pe persoană.",
-      en: "Two friends, two siblings or a couple at a similar level. You share the hour; the price is per person.",
+      ro: "Pregătire în pereche pentru doi sportivi de nivel apropiat: exerciții în cooperare și situații de joc. Prețul este pe persoană.",
+      en: "Paired training for two players of a similar level: cooperative drills and match situations. The price is per person.",
     },
     focusPoints: {
       ro: [
-        "exerciții gândite pentru pereche",
-        "schimburi între voi, cu sarcini precise",
-        "joc cu puncte și alegeri tactice simple",
-        "obiective separate pentru fiecare",
+        "exerciții în cooperare, construite pentru pereche",
+        "schimburi cu sarcini tehnice și de precizie",
+        "joc la puncte și primele decizii tactice",
+        "obiective individuale pentru fiecare sportiv",
       ],
       en: [
         "drills designed for a pair",
@@ -132,10 +130,9 @@ Tennis shoes (clay-court soles on clay), comfortable clothes, water. You can bor
     audience: "TOATE",
     level: "TOATE",
     format: "SEMI_PRIVAT",
-    artKey: "05-program-juniori",
     bookableOnline: true,
     description: {
-      ro: `Lecția în doi e pentru doi oameni care vor să învețe împreună: doi prieteni, doi frați, un cuplu sau un părinte cu copilul lui mai mare. Ora se împarte, prețul se calculează pe persoană, iar tenisul devine din prima zi ceea ce este de fapt: un joc cu cineva de partea cealaltă a fileului.
+      ro: `Pregătirea în pereche lucrează cu doi sportivi de nivel apropiat: prieteni, frați, un cuplu sau un părinte cu copilul mai mare. Exercițiile în cooperare și situațiile de joc apar din prima ședință, astfel încât tehnica se exersează direct în condițiile schimbului de mingi. Prețul se calculează pe persoană.
 
 ## Cum funcționează
 
@@ -160,7 +157,7 @@ Pentru copii, lecția în doi funcționează bine de pe la 8–9 ani, când pot 
 ## Organizare
 
 Rezervarea se face pe numele unuia dintre voi, cu 2 participanți. Dacă unul dintre voi nu poate veni, anunțați-mă cât mai devreme: lecția se poate transforma în lecție individuală sau se mută, după politica de anulare.`,
-      en: `A lesson for two is for two people who want to learn together: two friends, two siblings, a couple, or a parent with an older child. You share the hour, the price is per person, and from day one tennis becomes what it really is: a game with someone on the other side of the net.
+      en: `Paired training works with two players of a similar level: friends, siblings, a couple or a parent with an older child. Cooperative drills and match situations start from the first session, so technique is practised directly under rally conditions. The price is per person.
 
 ## How it works
 
@@ -192,13 +189,13 @@ Book under one of your names, with 2 participants. If one of you cannot come, le
     configName: "Mini-tenis",
     name: { ro: "Mini-tenis", en: "Mini tennis" },
     summary: {
-      ro: "Pentru copii de 4–7 ani: teren mic, mingi lente și multe jocuri. Grupe de maximum 6 copii.",
-      en: "For children aged 4–7: a small court, slow balls and plenty of games. Groups of up to 6.",
+      ro: "Etapa de inițiere pentru 4–7 ani: teren redus, mingi cu presiune scăzută, coordonare și deprinderi motrice de bază dezvoltate prin joc. Grupe de maximum 6 copii.",
+      en: "The introduction stage for ages 4–7: a smaller court, low-compression balls, coordination and basic motor skills developed through play. Groups of up to 6.",
     },
     focusPoints: {
       ro: [
-        "coordonare ochi–mână: prinde, aruncă, lovește",
-        "echilibru, alergare și opriri",
+        "coordonare oculo-motorie: prindere, aruncare, lovire",
+        "echilibru, alergare, opriri și schimbări de direcție",
         "primele lovituri: forehand, rever, serviciul de jos",
         "regulile jocului și schimbul cu un partener",
       ],
@@ -212,12 +209,11 @@ Book under one of your names, with 2 participants. If one of you cannot come, le
     audience: "COPII",
     level: "INCEPATOR",
     format: "GRUPA",
-    artKey: "05-program-mini-tenis",
     bookableOnline: true,
     ageMin: 4,
     ageMax: 7,
     description: {
-      ro: `La 4–7 ani, tenisul se învață prin joc. Mini-tenisul folosește terenuri mai mici, fileu mai jos, rachete scurte și mingi mai moi și mai lente (roșii, din spumă sau cu presiune redusă), ca un copil să poată ține mingea în joc de la prima oră. Nu îi cerem să joace ca un adult micșorat; îi dăm un teren pe măsura lui.
+      ro: `Între 4 și 7 ani, tenisul se învață prin joc. Mini-tenisul adaptează echipamentul la particularitățile de vârstă: teren redus, fileu mai jos, rachete scurte și mingi cu presiune scăzută, mai lente, astfel încât copilul să țină mingea în joc încă din prima ședință. Accentul cade pe coordonare, echilibru și deprinderile motrice de bază, pe care se construiește ulterior tehnica.
 
 ## Ce se lucrează
 
@@ -243,7 +239,7 @@ După ședințe vă spun pe scurt ce am lucrat și ce poate exersa copilul acas�
 ## Înscriere
 
 Înscrierea începe cu o ședință de probă. Dacă grupa e plină, puteți intra pe lista de așteptare și vă anunț când se eliberează un loc.`,
-      en: `At 4–7, tennis is learned through play. Mini tennis uses smaller courts, a lower net, short racquets and softer, slower balls (red foam or low-compression), so a child can keep the ball in play from the very first session. We do not ask them to play like a shrunken adult; we give them a court their size.
+      en: `Between 4 and 7, tennis is learned through play. Mini tennis adapts the equipment to the child's stage of development: a smaller court, a lower net, short racquets and slower, low-compression balls, so the child can keep the ball in play from the first session. The focus is on coordination, balance and the basic motor skills on which technique is later built.
 
 ## What we work on
 
@@ -276,16 +272,16 @@ Enrolment starts with a trial session. If the group is full, you can join the wa
     configName: "Grupe copii și juniori",
     name: { ro: "Grupe copii și juniori", en: "Children and junior groups" },
     summary: {
-      ro: "Pentru 8–16 ani: tenis complet, pe etape de minge, în grupe de maximum 6, organizate după nivel.",
-      en: "For ages 8–16: complete tennis, in ball stages, in groups of up to 6 organised by level.",
+      ro: "Pentru 8–16 ani: formare tehnică completă pe etapele de minge, dezvoltarea calităților motrice și inițiere competițională, în grupe de maximum 6 organizate pe niveluri.",
+      en: "For ages 8–16: complete technical grounding through the ball stages, motor development and a first taste of competition, in groups of up to 6 organised by level.",
     },
     focusPoints: {
       ro: [
         "toate loviturile: forehand, rever, serviciu, voleu, smeci",
-        "deplasare: split-step, pași laterali, revenire",
+        "deplasare: split-step, pași adăugați, revenire în poziție",
         "tactică de bază și construcția punctului",
-        "pregătire fizică adaptată vârstei",
-        "cum treci peste o greșeală",
+        "pregătire fizică adaptată particularităților de vârstă",
+        "gestionarea greșelii și concentrarea în joc",
       ],
       en: [
         "every stroke: forehand, backhand, serve, volley, smash",
@@ -298,12 +294,11 @@ Enrolment starts with a trial session. If the group is full, you can join the wa
     audience: "JUNIORI",
     level: "TOATE",
     format: "GRUPA",
-    artKey: "05-program-juniori",
     bookableOnline: true,
     ageMin: 8,
     ageMax: 16,
     description: {
-      ro: `Între 8 și 16 ani, copiii pot învăța tenisul complet: toate loviturile, deplasarea pe tot terenul, tactica de bază și, pentru cei care vor, primele meciuri oficiale. Grupele sunt mici (maximum 6 copii) și organizate după nivel, nu doar după vârstă.
+      ro: `Între 8 și 16 ani are loc formarea tehnică completă: toate loviturile, deplasarea pe întreaga suprafață a terenului, tactica de bază și, pentru cei pregătiți, inițierea competițională. Grupele sunt mici (maximum 6 sportivi) și se alcătuiesc după nivel, nu doar după vârstă, ca sarcinile să rămână accesibile și progresive.
 
 ## Progresia pe mingi
 
@@ -332,7 +327,7 @@ La începutul fiecărui ciclu de 8–12 săptămâni vă spun ce urmărim cu gru
 ## Înscriere
 
 Începem cu o ședință de probă, în care văd nivelul copilului și îl așez în grupa potrivită. Dacă nu e loc, lista de așteptare e deschisă.`,
-      en: `Between 8 and 16, children can learn the whole game: every stroke, movement across the full court, basic tactics and, for those who want it, their first official matches. Groups are small (up to 6 children) and organised by level, not just by age.
+      en: `Between 8 and 16, players build a complete technical foundation: every stroke, movement across the whole court, basic tactics and, for those who are ready, a first taste of competition. Groups are small (up to 6 players) and formed by level, not just by age, so tasks stay achievable and progressive.
 
 ## Ball stages
 
@@ -368,14 +363,14 @@ We start with a trial session, in which I see your child's level and place them 
     configName: "Adulți începători",
     name: { ro: "Adulți începători", en: "Adult beginners" },
     summary: {
-      ro: "Grupă de maximum 4 adulți care încep de la zero sau revin după mult timp. Un ritm omenesc, corect de la început.",
-      en: "A group of up to 4 adults starting from scratch or coming back after years. A humane pace, done right from the start.",
+      ro: "Grupă de maximum 4 adulți: învățarea corectă a tehnicii de bază, cu o progresie adaptată ritmului fiecăruia, de la primele lovituri până la joc.",
+      en: "A group of up to 4 adults: learning sound basic technique, with a progression matched to each person's pace, from the first strokes to match play.",
     },
     focusPoints: {
       ro: [
         "prizele de bază și când se folosește fiecare",
         "forehand și rever din poziție, apoi din deplasare",
-        "serviciul pas cu pas, fără să forțăm umărul",
+        "serviciul pe faze, cu protecția articulației umărului",
         "voleu, schimburi lungi și numărătoarea",
       ],
       en: [
@@ -388,10 +383,9 @@ We start with a trial session, in which I see your child's level and place them 
     audience: "ADULTI",
     level: "INCEPATOR",
     format: "GRUPA",
-    artKey: "05-program-adulti",
     bookableOnline: true,
     description: {
-      ro: `Nu e niciodată prea târziu pentru primul forehand. Grupa de adulți începători e pentru cei care n-au jucat deloc sau au jucat puțin, demult, și vor să învețe corect de la început, într-un ritm omenesc, alături de alți oameni aflați în același punct.
+      ro: `Grupa de adulți începători este pentru cei care nu au jucat niciodată sau au jucat puțin, cu mult timp în urmă, și vor să învețe corect de la început. Învățarea tehnicii urmează o progresie clară, de la prize și lovituri din poziție la joc în deplasare, cu un volum de efort adaptat fiecăruia.
 
 ## De ce în grupă
 
@@ -420,7 +414,7 @@ Când grupa ajunge să joace seturi, trecem la exerciții de nivel intermediar s
 ## Ce aduceți
 
 Pantofi de tenis potriviți suprafeței, haine lejere, apă. Rachetele se împrumută la început. Dacă aveți dureri de spate, de umăr sau de genunchi, spuneți-mi la prima ședință și adaptăm exercițiile.`,
-      en: `It is never too late for your first forehand. The adult beginners' group is for people who have never played, or played a little a long time ago, and want to learn properly from the start, at a humane pace, alongside others at the same point.
+      en: `The adult beginners' group is for people who have never played, or played a little a long time ago, and want to learn properly from the start. Technique follows a clear progression, from grips and strokes from a set position to play on the move, with a training load matched to each person.
 
 ## Why a group
 
@@ -456,16 +450,16 @@ Tennis shoes suited to the surface, comfortable clothes, water. Racquets are len
     configName: "Performanță și competiție",
     name: { ro: "Performanță și competiție", en: "Performance and competition" },
     summary: {
-      ro: "Pentru jucătorii care concurează: 90 de minute de teren și pregătire fizică specifică, cu plan de sezon.",
-      en: "For players who compete: 90 minutes of court work and tennis-specific conditioning, with a season plan.",
+      ro: "Pentru sportivii care participă la competiții: pregătire tehnico-tactică și fizică specifică, cu periodizare pe sezonul competițional.",
+      en: "For players who compete: technical, tactical and sport-specific physical training, periodised around the competition season.",
     },
     focusPoints: {
       ro: [
-        "modele de joc după serviciu și retur",
-        "serviciul ca armă și al doilea serviciu sigur",
+        "modele de joc după serviciu și după retur",
+        "serviciul ca armă tactică și un al doilea serviciu sigur",
         "trecerea din apărare în atac",
-        "rutine între puncte și momente tensionate",
-        "pregătire fizică și prevenirea accidentărilor",
+        "rutine între puncte și gestionarea momentelor decisive",
+        "pregătire fizică specifică și profilaxia accidentărilor",
       ],
       en: [
         "patterns of play after serve and return",
@@ -478,10 +472,9 @@ Tennis shoes suited to the surface, comfortable clothes, water. Racquets are len
     audience: "TOATE",
     level: "COMPETITIE",
     format: "INDIVIDUAL",
-    artKey: "05-program-performanta",
     bookableOnline: true,
     description: {
-      ro: `Programul de performanță e pentru jucătorii care concurează sau vor să concureze: juniori înscriși în circuitele de turnee și adulți care joacă în ligi sau turnee de amatori. Aici lecția nu mai e despre a învăța o lovitură, ci despre a o face să țină sub presiune, în al treilea set, pe vânt.
+      ro: `Programul de performanță se adresează sportivilor care concurează sau se pregătesc pentru competiție: juniori din circuitele de turnee și adulți din ligile și turneele de amatori. Obiectivul nu mai este învățarea loviturii, ci stabilitatea ei în condiții de presiune, oboseală și adversitate, integrată într-un model de joc personal.
 
 ## Structura
 
@@ -510,7 +503,7 @@ Performanța la vârste mici are nevoie de echilibru: școală, somn, alte sport
 ## Început
 
 Prima ședință este o evaluare completă: joc, tehnică, mișcare și câteva teste fizice simple. Pe baza ei facem planul pe următoarele 8–12 săptămâni.`,
-      en: `The performance programme is for players who compete or want to: juniors on the tournament circuits and adults playing in leagues or amateur events. Here the lesson is no longer about learning a stroke, but about making it hold up under pressure, in the third set, in the wind.
+      en: `The performance programme is for players who compete or are preparing to: juniors on the tournament circuits and adults in leagues and amateur events. The goal is no longer learning a stroke but keeping it stable under pressure, fatigue and adversity, within a personal game style.
 
 ## Structure
 
@@ -546,8 +539,8 @@ The first session is a full assessment: play, technique, movement and a few simp
     configName: "Analiză video a tehnicii",
     name: { ro: "Analiză video a tehnicii", en: "Video technique analysis" },
     summary: {
-      ro: "Filmăm loviturile, le privim cadru cu cadru și lucrăm pe două-trei corecturi esențiale. Primești clipurile după lecție.",
-      en: "We film your strokes, study them frame by frame and work on two or three key corrections. You get the clips afterwards.",
+      ro: "Analiza biomecanică a loviturilor, cadru cu cadru: identificăm două-trei corecturi esențiale și le lucrăm pe teren. Primești înregistrările după ședință.",
+      en: "Frame-by-frame biomechanical analysis of your strokes: we identify two or three key corrections and work on them on court. You receive the footage afterwards.",
     },
     focusPoints: {
       ro: [
@@ -566,10 +559,9 @@ The first session is a full assessment: play, technique, movement and a few simp
     audience: "TOATE",
     level: "INTERMEDIAR",
     format: "INDIVIDUAL",
-    artKey: "05-program-video",
     bookableOnline: true,
     description: {
-      ro: `Ce simți că faci pe teren și ce faci de fapt sunt de multe ori două lucruri diferite. Analiza video le aduce la un loc: filmăm loviturile, le privim împreună cu încetinitorul și vezi cu ochii tăi unde se pierde puterea sau controlul.
+      ro: `Senzația proprie asupra mișcării și execuția reală diferă adesea. Analiza video le aliniază: filmăm loviturile din mai multe unghiuri, le analizăm cadru cu cadru și identificăm în lanțul kinetic punctul în care se pierd viteza sau controlul.
 
 ## Cum se desfășoară
 
@@ -594,7 +586,7 @@ Nimic special: echipamentul obișnuit de joc și, dacă vrei, telefonul tău, ca
 ## Confidențialitate
 
 Înregistrările sunt ale tale. Le folosesc doar pentru analiza noastră și nu le public nicăieri fără acordul tău scris. Pentru minori, acordul îl dă părintele.`,
-      en: `What you feel you are doing on court and what you are actually doing are often two different things. Video analysis brings them together: we film your strokes, watch them in slow motion together, and you see with your own eyes where power or control gets lost.
+      en: `How a movement feels and how it is actually executed often differ. Video analysis lines them up: we film your strokes from several angles, study them frame by frame and find the point in the kinetic chain where speed or control is lost.
 
 ## How it works
 
@@ -626,8 +618,8 @@ The recordings are yours. I use them only for our analysis and never publish the
     configName: "Tabere și clinici de weekend",
     name: { ro: "Tabere și clinici de weekend", en: "Camps and weekend clinics" },
     summary: {
-      ro: "Mult tenis într-un timp scurt: clinici cu o singură temă și tabere de zi pentru copii în vacanțe.",
-      en: "A lot of tennis in a short time: single-theme clinics and day camps for children during the holidays.",
+      ro: "Volum mare de pregătire într-un timp scurt: clinici tematice de weekend și tabere de zi pentru copii, în vacanțe.",
+      en: "A high training volume in a short time: themed weekend clinics and day camps for children during the holidays.",
     },
     focusPoints: {
       ro: [
@@ -646,10 +638,9 @@ The recordings are yours. I use them only for our analysis and never publish the
     audience: "TOATE",
     level: "TOATE",
     format: "EVENIMENT",
-    artKey: "05-program-tabere",
     bookableOnline: false,
     description: {
-      ro: `Taberele și clinicile de weekend sunt ocazii de a juca mult într-un timp scurt: câteva ore pe zi, două sau mai multe zile la rând, cu un subiect clar și cu oameni noi de partea cealaltă a fileului.
+      ro: `Taberele și clinicile de weekend concentrează un volum mare de pregătire într-un interval scurt: câteva ore pe zi, două sau mai multe zile consecutive, cu o temă tehnico-tactică precisă și cu parteneri de joc diferiți.
 
 ## Clinicile de weekend
 
@@ -679,7 +670,7 @@ Pantofi de tenis, un tricou de schimb, șapcă, cremă de protecție solară, ap
 Datele, programul zilnic și prețul fiecărei tabere sau clinici se anunță pe această pagină cu câteva săptămâni înainte. Locurile sunt limitate, pentru că raportul dintre antrenor și jucători rămâne mic și în tabere.
 
 Dacă vrei să afli primul când se deschide înscrierea, lasă-ți datele pe lista de așteptare pentru acest program și îți scriu când apare următoarea dată.`,
-      en: `Camps and weekend clinics are a chance to play a lot in a short time: a few hours a day, two or more days in a row, with a clear theme and new people on the other side of the net.
+      en: `Camps and weekend clinics pack a large training volume into a short time: a few hours a day, two or more days in a row, with a precise technical and tactical theme and a variety of practice partners.
 
 ## Weekend clinics
 

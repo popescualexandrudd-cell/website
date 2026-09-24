@@ -1,15 +1,14 @@
 # Surse, licențe și mulțumiri
 
-## Imagini
+## Imagini și 3D
 
-- **Picturile provizorii** (`art-src/placeholders/`, generate de `scripts/placeholders.ts`) și
-  iconița cu mingea aurie (`app/icon.svg`) sunt create pentru acest proiect. Nu conțin elemente
-  preluate din alte site-uri sau opere.
-- **Picturile finale** nu sunt încă incluse. Specificațiile lor sunt în
-  `docs/DIRECTIE-ARTISTICA.md`. Când le adaugi, trece aici autorul sau generatorul folosit și
-  licența (de exemplu: „Generat cu …, drepturi de utilizare comercială conform termenilor …”).
-- **Gravuri și picturi istorice**: niciuna folosită deocamdată. Dacă adaugi, doar din domeniul
-  public, cu sursa exactă (de exemplu The Met Open Access, CC0; Rijksmuseum, CC0).
+- **Scena 3D** (teren, fileu, gard, jucători, rachetă, minge) e construită în cod pentru acest
+  proiect, din forme geometrice și texturi desenate procedural (`components/court3d/`). Nu
+  folosește modele, texturi sau fotografii preluate din alte surse.
+- **Pictograma** (`app/icon.svg`), desenele de teren (`CourtMark`, afișul scenei 3D) și ilustrația
+  paginii 404 sunt create pentru acest proiect.
+- **Fotografiile** se încarcă din admin. Când adaugi fotografii făcute de altcineva, trece aici
+  autorul și acordul de folosire.
 - **Harta** (doar după click): © contribuitorii OpenStreetMap, date sub licența ODbL
   (openstreetmap.org/copyright).
 
@@ -19,8 +18,8 @@ Găzduite pe același server (nicio cerere către Google la vizitarea site-ului)
 
 | Font | Autor | Licență |
 | --- | --- | --- |
-| Cormorant Garamond | Christian Thalmann (Catharsis Fonts) | SIL Open Font License 1.1 |
-| Hanken Grotesk | Alfredo Marco Pradil (Hanken Design Co.) | SIL Open Font License 1.1 |
+| Barlow Condensed | Jeremy Tribby | SIL Open Font License 1.1 |
+| Inter | Rasmus Andersson | SIL Open Font License 1.1 |
 
 ## Programe și biblioteci
 
@@ -29,8 +28,7 @@ Găzduite pe același server (nicio cerere către Google la vizitarea site-ului)
 | Next.js 16, React 19 | aplicația web | MIT |
 | TypeScript, ESLint, Prettier | cod și verificări | Apache-2.0 / MIT |
 | Tailwind CSS 4 | stiluri | MIT |
-| GSAP 3 (ScrollTrigger, SplitText) | animațiile paginii principale | GSAP Standard „no charge” License |
-| Lenis | derularea lină | MIT |
+| three.js | scena 3D de pe pagina principală | MIT |
 | Prisma 7, node-postgres | baza de date | Apache-2.0 / MIT |
 | PostgreSQL 16 | baza de date | PostgreSQL License |
 | next-intl | română și engleză | MIT |

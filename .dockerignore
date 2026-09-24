@@ -15,9 +15,6 @@ backups
 .env.*
 !.env.example
 *.log
-# Generated in the image by `npm run images`
-public/art/generated
-public/art/manifest.json
 app/apple-icon.png
 public/icon-512.png
 public/email/minge.png

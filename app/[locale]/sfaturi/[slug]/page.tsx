@@ -11,7 +11,7 @@ import { PageSection } from "@/components/pages/PageHero";
 import { Breadcrumbs } from "@/components/pages/Breadcrumbs";
 import { JsonLd } from "@/components/pages/JsonLd";
 import { Markdown } from "@/components/site/Markdown";
-import { ArtPicture } from "@/components/ui/ArtPicture";
+import { Picture } from "@/components/ui/Picture";
 
 type Props = PageProps<"/[locale]/sfaturi/[slug]">;
 
@@ -54,31 +54,33 @@ export default async function TipPage({ params }: Props) {
           ]),
         ]}
       />
-      <header className="grid-page page-hero-text">
-        <div className="page-hero-copy">
-          <Breadcrumbs
-            label={t("nav.tips")}
-            items={[
-              { label: t("common.home"), href: "/" },
-              { label: header.title, href: "/sfaturi" },
-              { label: post.title },
-            ]}
-          />
-          <h1 className="page-title">{post.title}</h1>
-          {post.publishedAt ? (
-            <p className="ed-row-meta mt-3">
-              {t("tips.published", {
-                date: formatDate(post.publishedAt, "Europe/Bucharest", locale, "d MMMM yyyy"),
-              })}
-            </p>
-          ) : null}
-          <p className="page-intro">{post.excerpt}</p>
+      <header className="page-hero tone-dark">
+        <div className="page-hero-inner page-hero-inner--single">
+          <div className="page-hero-copy">
+            <Breadcrumbs
+              label={t("nav.tips")}
+              items={[
+                { label: t("common.home"), href: "/" },
+                { label: header.title, href: "/sfaturi" },
+                { label: post.title },
+              ]}
+            />
+            <h1 className="page-title">{post.title}</h1>
+            {post.publishedAt ? (
+              <p className="hero-meta mt-4">
+                {t("tips.published", {
+                  date: formatDate(post.publishedAt, "Europe/Bucharest", locale, "d MMMM yyyy"),
+                })}
+              </p>
+            ) : null}
+            <p className="page-intro">{post.excerpt}</p>
+          </div>
         </div>
       </header>
       {post.cover ? (
         <PageSection>
-          <ArtPicture
-            art={post.cover}
+          <Picture
+            image={post.cover}
             alt={post.coverAlt}
             priority
             sizes="(min-width: 1024px) 70vw, 100vw"

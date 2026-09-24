@@ -30,8 +30,8 @@ export function MediaLibrary({ items }: { items: LibraryItem[] }) {
         <h2 className="admin-h2">Biblioteca ({items.length})</h2>
         {items.length === 0 ? (
           <p className="text-cerneala-2">
-            Nu ai încărcat încă nicio fotografie. Site-ul folosește deocamdată picturile din setul
-            de imagini.
+            Nu ai încărcat încă nicio fotografie. Până atunci, site-ul folosește grafica implicită
+            (terenul desenat în linii) și rama de pe pagina principală rămâne goală.
           </p>
         ) : (
           <ul className="media-library">

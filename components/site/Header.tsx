@@ -11,6 +11,13 @@ type Props = { settings: LocalizedSettings };
 
 export async function Header({ settings }: Props) {
   const t = await getTranslations();
+  const primary = [
+    { href: "/programe", label: t("nav.programs") },
+    { href: "/despre", label: t("nav.about") },
+    { href: "/facilitati", label: t("nav.facilities") },
+    { href: "/preturi", label: t("nav.pricing") },
+    { href: "/contact", label: t("nav.contact") },
+  ] as const;
   const links = [
     { href: "/programe", label: t("nav.programs") },
     { href: "/facilitati", label: t("nav.facilities") },
@@ -25,19 +32,31 @@ export async function Header({ settings }: Props) {
   return (
     <header className="site-header">
       <div className="site-header-bar">
-        <Link
-          href="/"
-          className="site-monogram"
-          aria-label={`${settings.brandName} · ${t("common.home")}`}
-        >
-          <Monogram letters={settings.monogram} className="size-10 md:size-11" />
+        <Link href="/" className="site-monogram">
+          <Monogram letters={settings.monogram} className="size-10 shrink-0 md:size-11" />
+          <span className="site-brand">
+            <span className="site-brand-name">
+              <TodoText value={settings.brandName} />
+            </span>
+            {settings.tagline ? (
+              <span className="site-brand-tagline">{settings.tagline}</span>
+            ) : null}
+            <span className="sr-only">, {t("common.home")}</span>
+          </span>
         </Link>
+        <nav className="site-nav" aria-label={t("nav.mainLabel")}>
+          {primary.map((link) => (
+            <Link key={link.href} href={link.href}>
+              {link.label}
+            </Link>
+          ))}
+        </nav>
         <div className="site-header-actions">
-          <Link href="/rezervare" className="header-book">
+          <Link href="/rezervare" className="btn btn-primary header-book">
             {t("common.book")}
           </Link>
           <MenuDialog openLabel={t("common.menu")} closeLabel={t("common.closeMenu")}>
-            <nav aria-label={t("nav.mainLabel")} className="menu-nav">
+            <nav aria-label={t("nav.menuLabel")} className="menu-nav">
               <ul>
                 {links.map((link) => (
                   <li key={link.href}>

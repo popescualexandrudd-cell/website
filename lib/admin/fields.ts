@@ -37,7 +37,6 @@ export type FieldDef = Base &
     | { kind: "enum"; options: Option[] }
     | { kind: "relation"; source: RelationSource }
     | { kind: "media" }
-    | { kind: "art" }
     | { kind: "date" }
     | { kind: "datetime" }
     | { kind: "time" }
@@ -63,29 +62,6 @@ export const WEEKDAYS: Option[] = [
   { value: "5", label: "Vineri" },
   { value: "6", label: "Sâmbătă" },
   { value: "7", label: "Duminică" },
-];
-
-export const TEXT_POSITIONS: Option[] = [
-  { value: "STANGA_SUS", label: "Stânga sus" },
-  { value: "STANGA_CENTRU", label: "Stânga, la mijloc" },
-  { value: "STANGA_JOS", label: "Stânga jos" },
-  { value: "DREAPTA_SUS", label: "Dreapta sus" },
-  { value: "DREAPTA_CENTRU", label: "Dreapta, la mijloc" },
-  { value: "DREAPTA_JOS", label: "Dreapta jos" },
-  { value: "CENTRU_SUS", label: "Centru sus" },
-  { value: "CENTRU", label: "Centru" },
-  { value: "CENTRU_JOS", label: "Centru jos" },
-];
-
-export const TRANSITIONS: Option[] = [
-  { value: "DIZOLVARE", label: "Dizolvare" },
-  { value: "ZOOM_LENT", label: "Zoom lent" },
-  { value: "ZOOM_MINGE", label: "Zoom prin minge" },
-  { value: "NORI", label: "Nori" },
-  { value: "PERGAMENT", label: "Pergament (rastru)" },
-  { value: "MASCA_PENSULA", label: "Mască de pensulă" },
-  { value: "CURCUBEU", label: "Curcubeu" },
-  { value: "NOAPTE", label: "Noapte" },
 ];
 
 export const AUDIENCES: Option[] = [

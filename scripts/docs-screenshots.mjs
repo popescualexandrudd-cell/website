@@ -103,8 +103,11 @@ await go("/admin/continut/scene");
 const scene = page.locator('.sortable-item a[href^="/admin/continut/scene/"]').first();
 if (await scene.count()) {
   await go((await scene.getAttribute("href")) ?? "/admin");
-  await page.locator("legend", { hasText: "Mingea aurie" }).scrollIntoViewIfNeeded();
-  await save("13-scena-minge", "Reglajele unei scene: poziția textului și a mingii, tranziția");
+  await page.getByText("Cifrele de sub titlu", { exact: false }).first().scrollIntoViewIfNeeded();
+  await save(
+    "13-sectiune",
+    "Editarea primei secțiuni a paginii principale: titlul, butoanele și cele patru repere",
+  );
 }
 await go("/admin/media");
 await save("14-media", "Încărcarea unei fotografii, cu descrierea obligatorie", { fullPage: true });

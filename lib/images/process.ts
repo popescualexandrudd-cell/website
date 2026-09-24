@@ -24,8 +24,8 @@ export function openImage(input: Buffer | string, options: { density?: number } 
 }
 
 /**
- * Warm grade + fine grain, so real photos sit well next to the paintings.
- * Applied to files in art-src/foto/ and, optionally, to photos uploaded in the admin.
+ * Warm grade + fine grain, so photos taken in different light sit well together on the
+ * clay palette. Optional for photos uploaded in the admin.
  */
 export async function applyPhotoTreatment(input: Buffer): Promise<Buffer> {
   const image = openImage(input);

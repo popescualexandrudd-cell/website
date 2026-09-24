@@ -11,10 +11,11 @@ import { breadcrumbLd, serviceLd } from "@/lib/structured-data";
 import { PageSection } from "@/components/pages/PageHero";
 import { Breadcrumbs } from "@/components/pages/Breadcrumbs";
 import { JsonLd } from "@/components/pages/JsonLd";
-import { ArtPicture } from "@/components/ui/ArtPicture";
+import { Picture } from "@/components/ui/Picture";
+import { CourtMark } from "@/components/ui/CourtMark";
 import { Markdown } from "@/components/site/Markdown";
 import { TodoText } from "@/components/site/TodoText";
-import { programMeta } from "@/components/scenes/programMeta";
+import { programMeta } from "@/components/home/programMeta";
 
 type Props = PageProps<"/[locale]/programe/[slug]">;
 
@@ -90,7 +91,7 @@ export default async function ProgramPage({ params }: Props) {
           ]),
         ]}
       />
-      <header className="grid-page program-hero">
+      <header className="grid-page program-hero tone-dark">
         <div className="program-hero-copy">
           <Breadcrumbs
             label={t("nav.programs")}
@@ -101,7 +102,7 @@ export default async function ProgramPage({ params }: Props) {
             ]}
           />
           <h1 className="page-title">{program.name}</h1>
-          <p className="ed-row-meta mt-3">{programMeta(program, t).join(" · ")}</p>
+          <p className="hero-meta mt-4">{programMeta(program, t).join(" · ")}</p>
           <p className="page-intro">{program.summary}</p>
           <p className="mt-8 flex flex-wrap gap-3">
             {program.bookableOnline && program.format !== "EVENIMENT" ? (
@@ -121,17 +122,20 @@ export default async function ProgramPage({ params }: Props) {
             )}
           </p>
         </div>
-        {program.art ? (
-          <figure className="program-hero-figure">
-            <ArtPicture
-              art={program.art}
+        <figure className="program-hero-figure">
+          {program.image ? (
+            <Picture
+              image={program.image}
               alt={program.imageAlt}
               priority
-              desktopOnly
               sizes="(min-width: 1024px) 34vw, 90vw"
             />
-          </figure>
-        ) : null}
+          ) : (
+            <div className="program-hero-court">
+              <CourtMark variant="plan" />
+            </div>
+          )}
+        </figure>
       </header>
 
       <PageSection className="page-section--narrow">

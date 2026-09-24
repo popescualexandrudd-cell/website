@@ -3,6 +3,11 @@
 Acest fișier păstrează planul de design și fiecare decizie luată fără să întreb, cu motivul ei.
 Ordinea: întâi planul vizual (scris înainte de cod), apoi deciziile tehnice, în ordinea în care au apărut.
 
+> **Actualizare (redesign „zgură”, partea a III-a):** direcția vizuală din partea I (picturi
+> renascentiste, pergament, minge aurie, animații GSAP) a fost înlocuită la cererea antrenorului
+> cu o identitate de academie de tenis: paleta suprafeței de zgură, tipografie sans condensată și
+> scene 3D în timp real. Părțile I și II rămân ca istoric; ce s-a schimbat e descris în partea a III-a.
+
 ---
 
 ## Partea I. Planul de design
@@ -475,3 +480,95 @@ Desktop 1440×900                                   Mobil 390×844
     adaugă doar certificatul proxy-ului (nu e în depozit); stack-ul complet a pornit dintr-o copie
     curată a depozitului, cu HTTPS pe `localhost` (certificat intern Caddy), iar rezervarea,
     confirmarea din admin, emailurile, încărcarea imaginilor, backup-ul și restaurarea au funcționat.
+
+---
+
+## Partea a III-a. Redesign: paleta de zgură, tipografie de academie, scene 3D
+
+Cererea: fundal în culorile zgurii (portocaliu, cărămiziu, galben cald), fonturi simple și
+moderne ca la marile academii, animații 3D realiste în locul celor abstracte, o secțiune personală
+elegantă pentru fotografia antrenorului, texte de specialitate despre Alexandru Daniel Popescu și un
+audit al codului. Site-ul de referință indicat (Rafa Nadal Academy) nu a putut fi deschis din acest
+mediu (rețea blocată), așa că structura urmează convențiile comune ale academiilor mari: antet
+închis la culoare cu navigație orizontală, hero pe tot ecranul cu titlu mare în majuscule, cifre-
+cheie sub hero, secțiuni alternante deschis/închis, carduri de program, cale de dezvoltare pe etape.
+
+61. **Paleta** (tokens în `app/globals.css`): nisip `#F6EFE6` (fundal), nisip adânc `#ECDFCD`,
+    zgură `#B94C22` (butoane, accente; contrast 5,1:1 cu textul crem), zgură adâncă `#9A3D19`
+    (linkuri, 6:1 pe nisip), cărămidă închisă `#2A130B` (antet, subsol, secțiuni închise), galben
+    cald `#F2B134` (doar decor și text mare pe fond închis) și galbenul mingii `#D9E453` (puncte de
+    listă, pictograma). Textul mic pe zgură e crem, niciodată galben (3,7:1 nu ajunge).
+62. **Tipografie**: Barlow Condensed 700 pentru titluri, cu majuscule, ca tabelele de scor și
+    semnalistica de academie; Inter (variabil) pentru text. Ambele au ă â î ș ț în subsetul
+    latin-ext (verificat în fișierele fontului). Înălțimea rândului la titluri e 1,06–1,14, nu 0,9:
+    virgula de sub Ș/Ț atingea altfel rândul următor.
+63. **Motorul 3D** (`components/court3d/engine/`, three.js 0.186): un singur context WebGL pentru
+    toată pagina; pânza se mută în zona 3D cea mai vizibilă (hero sau laborator) și nu desenează
+    nimic când nicio zonă nu e pe ecran sau fila e ascunsă. Terenul are dimensiunile ITF
+    (23,77 × 10,97 m, fileu 0,914 m la centru și 1,07 m la stâlpi, cu săgeată), texturi procedurale
+    (zgură cu urme de perie și de alunecare, linii prăfuite, fileu, fetru cu cusătură), soare de
+    după-amiază cu umbre, cer și chiparoși. Nicio imagine nu se descarcă.
+64. **Fizica mingii**: gravitație, rezistența aerului (Cd 0,55), efectul Magnus cu
+    CL = S/(2S+1), ricoșeu pe zgură cu restituție 0,78 și frecare Coulomb 0,7 care transformă
+    rotația (liftatul „mușcă” și sare, tăiatul alunecă). Fiecare lovitură e calculată prin
+    bisecție ca să aterizeze exact unde a țintit jucătorul și să treacă fileul; urma pe zgură și
+    praful apar la fiecare ricoșeu. Testele unitare verifică dimensiunile, efectul liftatului,
+    ricoșeul și precizia țintirii.
+65. **Jucătorii**: manechine biomecanice din forme netede, animate pe fazele reale ale loviturilor
+    (dreapta liftată, rever cu două mâini, serviciu), cu cinematică inversă pentru brațe și
+    picioare: cheile descriu unde e mâna pe mâner, orientarea rachetei și a fețelor ei, rotația
+    bazinului și a umerilor și poziția picioarelor; coatele și genunchii se calculează. Capul
+    urmărește mingea, picioarele stau pe zgură și pășesc doar când corpul are nevoie. În meci,
+    jucătorul prezice traiectoria, face split-step, aleargă spre minge, alege dreapta sau reverul,
+    iar lovitura e sincronizată ca racheta să întâlnească mingea exact la impact.
+66. **Limita realismului, spusă deschis**: oameni fotorealiști (piele, fețe, haine care se mișcă)
+    cer modele scanate și animații înregistrate prin motion capture, livrate de un artist 3D.
+    Proiectul nu inventează așa ceva: manechinul biomecanic e o alegere asumată (arată mecanica
+    loviturii, nu un personaj) și e prezentat ca atare pe site („Model biomecanic”).
+67. **Performanța 3D**: three.js e un fișier separat (≈ 159 KB gzip) încărcat doar după ce
+    pagina s-a încărcat și browserul e liber (sau la prima interacțiune), doar dacă zona 3D e
+    aproape de ecran și dispozitivul are WebGL 2 cu accelerare hardware. Randarea software
+    (SwiftShader, llvmpipe) primește afișul static. Construcția scenei se face în pași cu pauze,
+    iar shaderele se compilează asincron. Rezoluția se adaptează la durata cadrelor; dacă nici la
+    rezoluția minimă nu ține pasul, animația se oprește pe ultimul cadru. Pe telefoane și
+    dispozitive modeste: umbre 1024 px și 30 de cadre pe secundă. Obiectele statice sunt comasate
+    (stâlpii gardului într-un singur apel de desenare, mobilierul în două). JavaScript-ul inițial
+    specific paginii principale: 4,6 KB gzip (restul e comun tuturor paginilor).
+68. **Accesibilitate 3D**: pânza e decorativă (`aria-hidden`), zona are o descriere text; la
+    „reduced motion” meciul se oprește pe un cadru real de impact, iar laboratorul nu pornește
+    singur. Laboratorul se controlează doar cu butoane și un cursor reale (tastatură, cititoare de
+    ecran); fazele și explicațiile sunt text normal, utile și fără 3D.
+69. **Pagina principală, secțiune cu secțiune**: hero 3D cu patru repere, antrenorul (rama foto),
+    filozofia (declarație pe zgură), metoda + laboratorul tehnic, palierele de pregătire (de la
+    inițiere la înaltă performanță, plus adulți), programe (carduri), baza sportivă (cu planul
+    terenului la scară), prima lecție, locuri libere, întrebări, rezervare. Secțiunile se
+    editează din admin (texte, butoane, ordine, vizibilitate); o secțiune nouă fără machetă
+    dedicată apare ca text simplu.
+70. **Secțiunea personală**: rama portret 4:5, decalată peste un bloc de zgură cu linie galbenă,
+    folosește fotografia din profilul antrenorului. Până la încărcare, rama afișează un teren
+    desenat și nota vizibilă „[DE COMPLETAT] Fotografia ta pe teren”, aceeași pe pagina principală
+    și pe „Despre mine”.
+71. **Conținut**: doar faptele date de antrenor (liceu cu program sportiv; licență UNEFS în
+    performanță sportivă, specializarea tenis și performanță motrică; masterand UNEFS în
+    management și marketing în structuri sportive; arbitru național FRT; curs de formare
+    psihopedagogică cu atestat; 4 ani de antrenorat; copii cu rezultate la nivel național și
+    european, inclusiv campioni ai României; antrenor la Elite Tennis Club, pe toate palierele).
+    Ce nu s-a spus rămâne marcat: anii diplomelor, instituția care a eliberat atestatul
+    psihopedagogic, adresa și localitatea clubului. Registrul: terminologie de metodică și
+    biomecanică (lanț kinetic, obiective operaționale, periodizare, calități motrice, învățare
+    motrică), cu fraze scurte.
+72. **Date**: migrarea `redesign_3d` șterge 17 coloane și 3 enumerări folosite doar de picturi
+    (poziția textului, tonul, mingea, tranzițiile, imaginile scenelor, cheile de pictură la programe
+    și antete) și redenumește cheile `constelatia` → `rezervare`, `impreuna` → `antrenorul`, fără
+    să atingă textele editate. Programele și antetele păstrează o fotografie opțională.
+    `config/antrenor.yml` acceptă acum texte în ambele limbi (`ro:`/`en:`) și certificări cu titlu,
+    emitent și an.
+73. **Audit și curățenie**: avertismentul Next.js despre `package-lock.json` din folderul
+    utilizatorului e rezolvat cu `turbopack.root` și `outputFileTracingRoot` fixate pe proiect;
+    eliminate GSAP, Lenis, shaderul halftone, regizorul cinematic, cele 30 de compoziții SVG,
+    manifestul de picturi citit de pe disc la fiecare proces și câmpul „pictură” din admin;
+    `<html data-page>` și antetul `x-pathname` nu mai aveau cititor și au dispărut. Axe a găsit
+    două probleme noi, rezolvate: contrastul etichetei galbene pe zgură și numele accesibil al
+    linkului din antet (trebuie să conțină textul vizibil). Testele: 58 unitare și de integrare,
+    10 end-to-end (inclusiv axe WCAG 2.2 AA pe toate paginile, la „reduced motion” și fără).
+74. **Pagina 404** e o minge ieșită în afara terenului („Out”): același limbaj, fără imagine.

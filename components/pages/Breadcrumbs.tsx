@@ -1,5 +1,5 @@
 import { Link } from "@/i18n/navigation";
-import type { StaticPathname } from "@/components/scenes/links";
+import type { StaticPathname } from "@/components/home/links";
 
 type Crumb = { label: string; href?: StaticPathname };
 

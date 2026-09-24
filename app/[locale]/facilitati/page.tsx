@@ -8,7 +8,7 @@ import { PageHero, PageSection } from "@/components/pages/PageHero";
 import { MapOnClick } from "@/components/pages/MapOnClick";
 import { TodoText } from "@/components/site/TodoText";
 import { Markdown } from "@/components/site/Markdown";
-import { ArtPicture } from "@/components/ui/ArtPicture";
+import { Picture } from "@/components/ui/Picture";
 
 export async function generateMetadata({
   params,
@@ -42,7 +42,7 @@ export default async function FacilitiesPage({ params }: PageProps<"/[locale]/fa
       <PageHero
         title={header.title}
         intro={header.intro}
-        art={header.art}
+        image={header.image}
         imageAlt={header.imageAlt}
       />
       {locations.map((location) => (
@@ -157,7 +157,7 @@ export default async function FacilitiesPage({ params }: PageProps<"/[locale]/fa
               <li key={service.id} className={`ed-row ${service.image ? "" : "ed-row--no-image"}`}>
                 {service.image ? (
                   <span className="ed-row-image">
-                    <ArtPicture art={service.image} alt={service.imageAlt} sizes="9rem" />
+                    <Picture image={service.image} alt={service.imageAlt} sizes="9rem" />
                   </span>
                 ) : null}
                 <div>

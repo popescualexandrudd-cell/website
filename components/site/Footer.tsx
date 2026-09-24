@@ -23,10 +23,10 @@ export async function Footer({ settings, location, policyVersion }: Props) {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="site-footer" data-tone-zone="dark">
+    <footer className="site-footer">
       <div className="grid-page gap-y-12 py-16 md:py-24">
         <div className="col-span-4 md:col-span-4 lg:col-span-4">
-          <p className="font-display text-h3 leading-tight">
+          <p className="footer-brand">
             <TodoText value={settings.brandName} />
           </p>
           <p className="mt-2 text-cerneala-2">{settings.tagline}</p>

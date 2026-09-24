@@ -129,34 +129,6 @@ enum EmailStatus {
   ESUAT
 }
 
-enum TextPosition {
-  STANGA_SUS
-  STANGA_CENTRU
-  STANGA_JOS
-  DREAPTA_SUS
-  DREAPTA_CENTRU
-  DREAPTA_JOS
-  CENTRU_SUS
-  CENTRU
-  CENTRU_JOS
-}
-
-enum TextTone {
-  INCHIS
-  DESCHIS
-}
-
-enum SceneTransition {
-  DIZOLVARE
-  ZOOM_LENT
-  ZOOM_MINGE
-  NORI
-  PERGAMENT
-  MASCA_PENSULA
-  CURCUBEU
-  NOAPTE
-}
-
 enum LegalKind {
   CONFIDENTIALITATE
   TERMENI
@@ -233,37 +205,18 @@ model Certification {
 }
 
 model Scene {
-  id                     String          @id @default(cuid())
-  key                    String          @unique
-  order                  Int             @default(0)
-  indexName              Json
-  title                  Json
-  body                   Json
-  ctaLabel               Json?
-  ctaHref                String?
-  extra                  Json?
-  imageAlt               Json
-  artKey                 String
-  artKeySecondary        String?
-  imageId                String?
-  image                  Media?          @relation("SceneImage", fields: [imageId], references: [id], onDelete: SetNull)
-  imageMobileId          String?
-  imageMobile            Media?          @relation("SceneImageMobile", fields: [imageMobileId], references: [id], onDelete: SetNull)
-  imageSecondaryId       String?
-  imageSecondary         Media?          @relation("SceneImageSecondary", fields: [imageSecondaryId], references: [id], onDelete: SetNull)
-  imageSecondaryMobileId String?
-  imageSecondaryMobile   Media?          @relation("SceneImageSecondaryMobile", fields: [imageSecondaryMobileId], references: [id], onDelete: SetNull)
-  textPosDesktop         TextPosition    @default(STANGA_CENTRU)
-  textPosMobile          TextPosition    @default(CENTRU_JOS)
-  tone                   TextTone        @default(INCHIS)
-  veil                   Boolean         @default(false)
-  ballX                  Float           @default(0.5)
-  ballY                  Float           @default(0.5)
-  ballSize               Float           @default(0.06)
-  transition             SceneTransition @default(DIZOLVARE)
-  active                 Boolean         @default(true)
-  createdAt              DateTime        @default(now())
-  updatedAt              DateTime        @updatedAt
+  id        String   @id @default(cuid())
+  key       String   @unique
+  order     Int      @default(0)
+  indexName Json
+  title     Json
+  body      Json
+  ctaLabel  Json?
+  ctaHref   String?
+  extra     Json?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([order])
 }
@@ -282,7 +235,6 @@ model Program {
   maxParticipants Int?
   ageMin          Int?
   ageMax          Int?
-  artKey          String?
   imageId         String?
   image           Media?          @relation("ProgramImage", fields: [imageId], references: [id], onDelete: SetNull)
   order           Int             @default(0)
@@ -464,7 +416,6 @@ model PageHeader {
   key            String   @unique
   title          Json
   intro          Json
-  artKey         String?
   imageId        String?
   image          Media?   @relation("PageHeaderImage", fields: [imageId], references: [id], onDelete: SetNull)
   imageAlt       Json?
@@ -475,30 +426,26 @@ model PageHeader {
 }
 
 model Media {
-  id                    String          @id @default(cuid())
-  path                  String          @unique
-  mimeType              String
-  width                 Int
-  height                Int
-  blurDataURL           String
-  alt                   Json
-  size                  Int
-  variants              Json
-  originalName          String?
-  createdAt             DateTime        @default(now())
-  updatedAt             DateTime        @updatedAt
-  coachPhotos           CoachProfile[]  @relation("CoachPhoto")
-  certifications        Certification[] @relation("CertificationImage")
-  scenes                Scene[]         @relation("SceneImage")
-  scenesMobile          Scene[]         @relation("SceneImageMobile")
-  scenesSecondary       Scene[]         @relation("SceneImageSecondary")
-  scenesSecondaryMobile Scene[]         @relation("SceneImageSecondaryMobile")
-  programs              Program[]       @relation("ProgramImage")
-  facilities            Facility[]      @relation("FacilityImage")
-  testimonials          Testimonial[]   @relation("TestimonialPhoto")
-  galleryItems          GalleryItem[]   @relation("GalleryMedia")
-  posts                 Post[]          @relation("PostCover")
-  pageHeaders           PageHeader[]    @relation("PageHeaderImage")
+  id             String          @id @default(cuid())
+  path           String          @unique
+  mimeType       String
+  width          Int
+  height         Int
+  blurDataURL    String
+  alt            Json
+  size           Int
+  variants       Json
+  originalName   String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  coachPhotos    CoachProfile[]  @relation("CoachPhoto")
+  certifications Certification[] @relation("CertificationImage")
+  programs       Program[]       @relation("ProgramImage")
+  facilities     Facility[]      @relation("FacilityImage")
+  testimonials   Testimonial[]   @relation("TestimonialPhoto")
+  galleryItems   GalleryItem[]   @relation("GalleryMedia")
+  posts          Post[]          @relation("PostCover")
+  pageHeaders    PageHeader[]    @relation("PageHeaderImage")
 
   @@index([createdAt])
 }

@@ -156,16 +156,6 @@ export async function mediaUsage(id: string): Promise<number> {
   const counts = await Promise.all([
     db.coachProfile.count({ where: { photoId: id } }),
     db.certification.count({ where: { imageId: id } }),
-    db.scene.count({
-      where: {
-        OR: [
-          { imageId: id },
-          { imageMobileId: id },
-          { imageSecondaryId: id },
-          { imageSecondaryMobileId: id },
-        ],
-      },
-    }),
     db.program.count({ where: { imageId: id } }),
     db.facility.count({ where: { imageId: id } }),
     db.testimonial.count({ where: { photoId: id } }),

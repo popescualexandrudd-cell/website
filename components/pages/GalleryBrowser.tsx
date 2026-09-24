@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { GalleryView } from "@/lib/content";
-import { ArtPicture } from "@/components/ui/ArtPicture";
+import { Picture } from "@/components/ui/Picture";
 
 type Props = { items: GalleryView[]; categories: string[] };
 
@@ -69,7 +69,7 @@ export function GalleryBrowser({ items, categories }: Props) {
                 setIndex(i);
               }}
             >
-              <ArtPicture art={item.image} alt={item.alt} sizes="(min-width: 1024px) 30vw, 50vw" />
+              <Picture image={item.image} alt={item.alt} sizes="(min-width: 1024px) 30vw, 50vw" />
             </button>
             {item.caption ? <p className="mt-2 text-note text-cerneala-2">{item.caption}</p> : null}
           </li>
@@ -96,7 +96,7 @@ export function GalleryBrowser({ items, categories }: Props) {
               </button>
             </div>
             <figure>
-              <ArtPicture art={current.image} alt={current.alt} sizes="90vw" priority />
+              <Picture image={current.image} alt={current.alt} sizes="90vw" priority />
               {current.caption ? <figcaption>{current.caption}</figcaption> : null}
             </figure>
             {visible.length > 1 ? (

@@ -50,34 +50,7 @@ test("paginile publice nu au probleme de accesibilitate (axe, WCAG 2.2 AA)", asy
     const page = await context.newPage();
     for (const path of PUBLIC) {
       await page.goto(path, { waitUntil: "networkidle" });
-      const cinematic = reducedMotion === "no-preference" && (path === "/" || path === "/en");
-      if (!cinematic) {
-        expect(await violations(page), `${path} (${reducedMotion})`).toEqual([]);
-        continue;
-      }
-      // Cinematic home: each scene's text sits over the fixed painting, so every scene is checked
-      // at the scroll position where it is actually read.
-      expect(await violations(page, (b) => b.exclude(".scene")), `${path} (fără scene)`).toEqual(
-        [],
-      );
-      const scenes = await page.$$eval("section[data-scene]", (els) =>
-        els.map((el) => ({
-          key: el.id,
-          top: el.getBoundingClientRect().top + window.scrollY,
-          height: (el as HTMLElement).offsetHeight,
-        })),
-      );
-      for (const scene of scenes) {
-        await page.evaluate(
-          (y) => window.scrollTo(0, y),
-          scene.top + Math.max(0, scene.height - 900) * 0.5,
-        );
-        await page.waitForTimeout(1200);
-        expect(
-          await violations(page, (b) => b.include(`#${scene.key}`)),
-          `${path} #${scene.key}`,
-        ).toEqual([]);
-      }
+      expect(await violations(page), `${path} (${reducedMotion})`).toEqual([]);
     }
     await context.close();
   }
