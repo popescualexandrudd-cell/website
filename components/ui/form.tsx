@@ -132,9 +132,9 @@ export function ConsentField({ error, label }: { error?: string; label?: ReactNo
         <label htmlFor={`consent-${id}`} className="text-[0.95rem] leading-snug">
           {label ??
             t.rich("consent", {
-              privacy: () => (
+              privacy: (chunks) => (
                 <Link href="/confidentialitate" className="link" target="_blank" rel="noopener">
-                  {t("privacyLink")}
+                  {chunks}
                 </Link>
               ),
             })}

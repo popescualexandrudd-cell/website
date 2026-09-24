@@ -224,7 +224,7 @@
   },
   "form": {
     "required": "obligatoriu",
-    "consent": "Am citit {privacy} și sunt de acord cu prelucrarea datelor pentru acest scop.",
+    "consent": "Am citit <privacy>politica de confidențialitate</privacy> și sunt de acord cu prelucrarea datelor pentru acest scop.",
     "privacyLink": "politica de confidențialitate",
     "honeypot": "Nu completa acest câmp",
     "errorSummary": "Formularul are câteva probleme. Le-am marcat mai jos.",
@@ -339,7 +339,8 @@
     "preferences": "Zilele și orele care ți-ar conveni",
     "preferencesHint": "De exemplu: marți și joi după 17:00, sau sâmbătă dimineața.",
     "submit": "Intră pe lista de așteptare",
-    "success": "Ești pe lista de așteptare. Îți scriu când se eliberează un loc."
+    "success": "Ești pe lista de așteptare. Îți scriu când se eliberează un loc.",
+    "childAge": "Vârsta copilului, dacă e pentru un copil (opțional)"
   },
   "review": {
     "title": "Cum a fost prima lecție?",

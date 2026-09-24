@@ -13,3 +13,11 @@ export function programMeta(program: ProgramView, t: T): string[] {
   parts.push(t(`programs.format.${program.format}`));
   return parts;
 }
+
+export const GROUP_ORDER = ["TOATE", "COPII", "JUNIORI", "ADULTI", "PERFORMANTA"] as const;
+export type ProgramGroup = (typeof GROUP_ORDER)[number];
+
+/** The /programe page groups by audience; competition programmes form their own group. */
+export function programGroup(p: ProgramView): ProgramGroup {
+  return p.level === "COMPETITIE" ? "PERFORMANTA" : p.audience;
+}

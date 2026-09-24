@@ -211,3 +211,7 @@ export function cancelDeadline(startsAt: Date, freeCancelHours: number): Date {
 export function canCancelFree(startsAt: Date, freeCancelHours: number, now = new Date()): boolean {
   return now.getTime() <= cancelDeadline(startsAt, freeCancelHours).getTime();
 }
+
+export function hasStarted(startsAt: Date, now = new Date()): boolean {
+  return startsAt.getTime() <= now.getTime();
+}

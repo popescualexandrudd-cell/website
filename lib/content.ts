@@ -522,3 +522,33 @@ export const getGallery = cache(async (locale: Locale): Promise<GalleryView[]> =
     return [{ id: item.id, image, alt: t(item.alt, locale), caption: item.caption ? t(item.caption, locale) : "", category: item.category }];
   });
 });
+
+// ─── Group timetable ─────────────────────────────────────────────────────────
+
+export type GroupScheduleView = {
+  id: string;
+  weekday: number;
+  startTime: string;
+  durationMin: number;
+  capacity: number;
+  membersCount: number;
+  seasonFrom: Date | null;
+  seasonTo: Date | null;
+};
+
+export const getGroupSchedules = cache(async (programId: string): Promise<GroupScheduleView[]> => {
+  const rows = await db.groupSchedule.findMany({
+    where: { programId, active: true },
+    orderBy: [{ weekday: "asc" }, { startTime: "asc" }],
+  });
+  return rows.map((r) => ({
+    id: r.id,
+    weekday: r.weekday,
+    startTime: r.startTime,
+    durationMin: r.durationMin,
+    capacity: r.capacity,
+    membersCount: r.membersCount,
+    seasonFrom: r.seasonFrom,
+    seasonTo: r.seasonTo,
+  }));
+});

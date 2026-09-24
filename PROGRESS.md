@@ -8,7 +8,7 @@ Fiecare fază se încheie cu verificări și un commit. Dacă lucrul se întreru
 | 2. Fundație | gata |
 | 3. Date | gata |
 | 4. Sistem vizual și pagina principală | gata |
-| 5. Pagini interioare | — |
+| 5. Pagini interioare | gata |
 | 6. Rezervări și emailuri | — |
 | 7. Admin | — |
 | 8. SEO, GDPR, securitate, performanță, accesibilitate | — |
@@ -49,6 +49,18 @@ Fiecare fază se încheie cu verificări și un commit. Dacă lucrul se întreru
 - Motorul de disponibilitate, logica de rezervare, emailurile și widget-ul de rezervare din scena 10
   au fost construite deja aici, pentru că pagina principală depinde de ele.
 
+## Faza 5: Pagini interioare
+
+- Toate rutele din secțiunea 6, în română și în engleză (căi traduse): programe (grupate pe public),
+  pagina fiecărui program (descriere, pentru cine, ce se lucrează, prețuri, orar grupe, întrebări,
+  rezervare cu programul preselectat), facilități (hartă la click), despre, prețuri, rezervare în 4 pași,
+  gestionarea rezervării prin token (anulare în termen, .ics), galerie (filtre + lightbox pe `<dialog>`),
+  sfaturi, întrebări pe categorii, contact, pagini legale cu date completate din setări, listă de
+  așteptare, recenzie din invitație, confirmare newsletter, 404 și 500.
+- Metadate pe fiecare pagină (canonical, hreflang, Open Graph) și JSON-LD (Person, SportsActivityLocation,
+  Service + Offer, FAQPage, BreadcrumbList, Article).
+- Verificat în browser: o rezervare completă, cu emailul clientului în Mailpit.
+
 ## Următorul pas
 
-Faza 5: paginile interioare din secțiunea 6.
+Faza 6: testele motorului de rezervări (inclusiv ora de vară/iarnă și cererile simultane), worker-ul.

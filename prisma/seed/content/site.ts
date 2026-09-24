@@ -18,10 +18,10 @@ export const pageHeaderContent: {
       ro: "Lecții individuale, lecții în doi, grupe pe vârste și niveluri, pregătire pentru competiție. Fiecare program pornește de la o evaluare și are un plan scris.",
       en: "Private lessons, lessons for two, groups by age and level, competition training. Every programme starts with an assessment and has a written plan.",
     },
-    artKey: "05-program-juniori",
+    artKey: "04-schele",
     imageAlt: {
-      ro: "Pictură: doi tineri jucători în haine de epocă schimbă mingi pe un teren de zgură într-o curte de piatră.",
-      en: "Painting: two young players in period clothing rally on a clay court in a stone courtyard.",
+      ro: "Frescă: meșteri pe schele de lemn construiesc o minge de tenis aurie uriașă.",
+      en: "Fresco: craftsmen on wooden scaffolding build a giant gold tennis ball.",
     },
     seoDescription: {
       ro: "Lecții de tenis individuale și în doi, mini-tenis, grupe pentru copii, juniori și adulți, performanță și analiză video.",
@@ -120,10 +120,10 @@ export const pageHeaderContent: {
       ro: "Articole scurte despre echipament, tehnică și primii pași în tenis, pentru jucători și pentru părinți.",
       en: "Short articles on equipment, technique and first steps in tennis, for players and for parents.",
     },
-    artKey: "04b-pergament",
+    artKey: "06-schita-teren",
     imageAlt: {
-      ro: "Un pergament desfășurat cu planul unui teren.",
-      en: "An unrolled parchment with the plan of a court.",
+      ro: "Schiță sepia a unui teren de tenis văzut de sus, pe pergament.",
+      en: "A sepia sketch of a tennis court seen from above, on parchment.",
     },
     seoDescription: {
       ro: "Sfaturi practice de tenis: rachete pentru copii, pantofi pentru zgură, primele luni ca adult.",

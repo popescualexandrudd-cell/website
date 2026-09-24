@@ -224,7 +224,7 @@
   },
   "form": {
     "required": "required",
-    "consent": "I have read the {privacy} and agree to my data being processed for this purpose.",
+    "consent": "I have read the <privacy>privacy policy</privacy> and agree to my data being processed for this purpose.",
     "privacyLink": "privacy policy",
     "honeypot": "Leave this field empty",
     "errorSummary": "The form has a few problems. They are marked below.",
@@ -339,7 +339,8 @@
     "preferences": "Days and times that would suit you",
     "preferencesHint": "For example: Tuesdays and Thursdays after 5 pm, or Saturday mornings.",
     "submit": "Join the waiting list",
-    "success": "You are on the waiting list. I will write to you when a place opens up."
+    "success": "You are on the waiting list. I will write to you when a place opens up.",
+    "childAge": "Child's age, if it is for a child (optional)"
   },
   "review": {
     "title": "How was your first lesson?",
