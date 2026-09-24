@@ -1,0 +1,16 @@
+import { config as loadEnv } from "dotenv";
+import { defineConfig } from "prisma/config";
+
+loadEnv({ quiet: true });
+
+export default defineConfig({
+  schema: "prisma/schema.prisma",
+  migrations: {
+    path: "prisma/migrations",
+    seed: "tsx prisma/seed.ts",
+  },
+  datasource: {
+    // `prisma generate` runs at `npm install` and in the Docker build, where no database exists.
+    url: process.env.DATABASE_URL ?? "postgresql://build:build@localhost:5432/build",
+  },
+});

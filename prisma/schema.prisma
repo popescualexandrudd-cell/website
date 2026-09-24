@@ -1,0 +1,761 @@
+// Schema bazei de date. Câmpurile traductibile sunt `Json` de forma { "ro": "...", "en": "..." };
+// helperul `t(field, locale)` din lib/i18n-content.ts revine la "ro" când lipsește traducerea.
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../lib/generated/prisma"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum AdminRole {
+  PROPRIETAR
+  EDITOR
+}
+
+enum BookingMode {
+  CERERE
+  INSTANT
+}
+
+enum Audience {
+  COPII
+  JUNIORI
+  ADULTI
+  TOATE
+}
+
+enum Level {
+  INCEPATOR
+  INTERMEDIAR
+  AVANSAT
+  COMPETITIE
+  TOATE
+}
+
+enum ProgramFormat {
+  INDIVIDUAL
+  SEMI_PRIVAT
+  GRUPA
+  EVENIMENT
+}
+
+enum PriceUnit {
+  LECTIE
+  PERSOANA
+  LUNA
+  PACHET
+  EVENIMENT
+}
+
+enum Surface {
+  ZGURA
+  HARD
+  IARBA
+  SINTETIC
+  COVOR
+}
+
+enum FacilityType {
+  DOTARE_BAZA
+  SERVICIU_ANTRENOR
+  ECHIPAMENT
+}
+
+enum PostStatus {
+  CIORNA
+  PUBLICAT
+}
+
+enum FaqCategory {
+  INCEPUT
+  ECHIPAMENT
+  COPII
+  PROGRAM_PLATA
+  TEREN_VREME
+  COMPETITIE
+}
+
+enum GalleryCategory {
+  LECTII
+  GRUPE
+  TURNEE
+  TERENURI
+  EVENIMENTE
+}
+
+enum ExceptionType {
+  BLOCAT
+  DISPONIBIL_EXTRA
+}
+
+enum BookingStatus {
+  IN_ASTEPTARE
+  CONFIRMATA
+  ANULATA_CLIENT
+  ANULATA_ANTRENOR
+  EFECTUATA
+  NEPREZENTARE
+}
+
+enum BookingSource {
+  SITE
+  ADMIN
+  TELEFON
+  WHATSAPP
+}
+
+enum WaitlistStatus {
+  NOU
+  CONTACTAT
+  INSCRIS
+  ARHIVAT
+}
+
+enum MessageStatus {
+  NOU
+  CITIT
+  ARHIVAT
+}
+
+enum EmailStatus {
+  IN_ASTEPTARE
+  TRIMIS
+  ESUAT
+}
+
+enum TextPosition {
+  STANGA_SUS
+  STANGA_CENTRU
+  STANGA_JOS
+  DREAPTA_SUS
+  DREAPTA_CENTRU
+  DREAPTA_JOS
+  CENTRU_SUS
+  CENTRU
+  CENTRU_JOS
+}
+
+enum TextTone {
+  INCHIS
+  DESCHIS
+}
+
+enum SceneTransition {
+  DIZOLVARE
+  ZOOM_LENT
+  ZOOM_MINGE
+  NORI
+  PERGAMENT
+  MASCA_PENSULA
+  CURCUBEU
+  NOAPTE
+}
+
+enum LegalKind {
+  CONFIDENTIALITATE
+  TERMENI
+  COOKIES
+}
+
+// ─── Content ─────────────────────────────────────────────────────────────────
+
+model SiteSettings {
+  id                   Int         @id @default(1)
+  brandName            String
+  monogram             String
+  tagline              Json
+  phone                String
+  whatsapp             String
+  email                String
+  instagramUrl         String?
+  facebookUrl          String?
+  tiktokUrl            String?
+  seoTitle             Json
+  seoDescription       Json
+  bookingMode          BookingMode @default(CERERE)
+  freeCancelHours      Int         @default(24)
+  minNoticeHours       Int         @default(12)
+  horizonDays          Int         @default(60)
+  bufferMinutes        Int         @default(10)
+  slotStepMinutes      Int         @default(30)
+  firstLessonText      Json
+  paymentMethods       Json
+  workingHours         Json
+  legalForm            String
+  legalName            String
+  legalCui             String
+  legalRegNo           String?
+  legalAddress         String
+  enEnabled            Boolean     @default(true)
+  umamiEnabled         Boolean     @default(false)
+  reviewInvitesEnabled Boolean     @default(true)
+  newsletterEnabled    Boolean     @default(true)
+  retentionMonths      Int         @default(24)
+  timezone             String      @default("Europe/Bucharest")
+  currency             String      @default("RON")
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+}
+
+model CoachProfile {
+  id              Int      @id @default(1)
+  name            String
+  title           Json
+  story           Json
+  philosophy      Json
+  results         Json?
+  yearsExperience Int?
+  languages       Json
+  photoId         String?
+  photo           Media?   @relation("CoachPhoto", fields: [photoId], references: [id], onDelete: SetNull)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Certification {
+  id        String   @id @default(cuid())
+  title     Json
+  issuer    String
+  year      Int?
+  imageId   String?
+  image     Media?   @relation("CertificationImage", fields: [imageId], references: [id], onDelete: SetNull)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+}
+
+model Scene {
+  id                     String          @id @default(cuid())
+  key                    String          @unique
+  order                  Int             @default(0)
+  indexName              Json
+  title                  Json
+  body                   Json
+  ctaLabel               Json?
+  ctaHref                String?
+  extra                  Json?
+  imageAlt               Json
+  artKey                 String
+  artKeySecondary        String?
+  imageId                String?
+  image                  Media?          @relation("SceneImage", fields: [imageId], references: [id], onDelete: SetNull)
+  imageMobileId          String?
+  imageMobile            Media?          @relation("SceneImageMobile", fields: [imageMobileId], references: [id], onDelete: SetNull)
+  imageSecondaryId       String?
+  imageSecondary         Media?          @relation("SceneImageSecondary", fields: [imageSecondaryId], references: [id], onDelete: SetNull)
+  imageSecondaryMobileId String?
+  imageSecondaryMobile   Media?          @relation("SceneImageSecondaryMobile", fields: [imageSecondaryMobileId], references: [id], onDelete: SetNull)
+  textPosDesktop         TextPosition    @default(STANGA_CENTRU)
+  textPosMobile          TextPosition    @default(CENTRU_JOS)
+  tone                   TextTone        @default(INCHIS)
+  veil                   Boolean         @default(false)
+  ballX                  Float           @default(0.5)
+  ballY                  Float           @default(0.5)
+  ballSize               Float           @default(0.06)
+  transition             SceneTransition @default(DIZOLVARE)
+  active                 Boolean         @default(true)
+  createdAt              DateTime        @default(now())
+  updatedAt              DateTime        @updatedAt
+
+  @@index([order])
+}
+
+model Program {
+  id              String          @id @default(cuid())
+  slug            String          @unique
+  name            Json
+  summary         Json
+  description     Json
+  focusPoints     Json
+  audience        Audience        @default(TOATE)
+  level           Level           @default(TOATE)
+  format          ProgramFormat   @default(INDIVIDUAL)
+  durationMin     Int?
+  maxParticipants Int?
+  ageMin          Int?
+  ageMax          Int?
+  artKey          String?
+  imageId         String?
+  image           Media?          @relation("ProgramImage", fields: [imageId], references: [id], onDelete: SetNull)
+  order           Int             @default(0)
+  bookableOnline  Boolean         @default(true)
+  active          Boolean         @default(true)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  pricingPlans    PricingPlan[]
+  groupSchedules  GroupSchedule[]
+  bookings        Booking[]
+  faqs            Faq[]
+  waitlist        WaitlistEntry[]
+
+  @@index([order])
+  @@index([active])
+}
+
+model PricingPlan {
+  id           String    @id @default(cuid())
+  programId    String?
+  program      Program?  @relation(fields: [programId], references: [id], onDelete: SetNull)
+  name         Json
+  price        Decimal?  @db.Decimal(10, 2)
+  currency     String    @default("RON")
+  unit         PriceUnit @default(LECTIE)
+  sessions     Int?
+  validityDays Int?
+  includes     Json?
+  highlighted  Boolean   @default(false)
+  isPackage    Boolean   @default(false)
+  order        Int       @default(0)
+  active       Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  clients      Client[]
+
+  @@index([programId])
+  @@index([order])
+}
+
+model Location {
+  id                String             @id @default(cuid())
+  name              String
+  address           String
+  city              String
+  lat               Float?
+  lng               Float?
+  mapUrl            String?
+  directions        Json?
+  order             Int                @default(0)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  courts            Court[]
+  facilities        Facility[]
+  availabilityRules AvailabilityRule[]
+  groupSchedules    GroupSchedule[]
+  bookings          Booking[]
+}
+
+model Court {
+  id              String    @id @default(cuid())
+  locationId      String
+  location        Location  @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  name            Json
+  surface         Surface
+  count           Int?
+  coveredInWinter Boolean?
+  floodlights     Boolean?
+  active          Boolean   @default(true)
+  order           Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  bookings        Booking[]
+
+  @@index([locationId])
+}
+
+model Facility {
+  id           String       @id @default(cuid())
+  locationId   String?
+  location     Location?    @relation(fields: [locationId], references: [id], onDelete: SetNull)
+  type         FacilityType
+  name         Json
+  description  Json?
+  illustration String?
+  imageId      String?
+  image        Media?       @relation("FacilityImage", fields: [imageId], references: [id], onDelete: SetNull)
+  order        Int          @default(0)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([type, order])
+}
+
+model Testimonial {
+  id        String    @id @default(cuid())
+  author    String
+  role      Json
+  text      Json
+  photoId   String?
+  photo     Media?    @relation("TestimonialPhoto", fields: [photoId], references: [id], onDelete: SetNull)
+  consent   Boolean   @default(false)
+  consentAt DateTime?
+  published Boolean   @default(false)
+  isExample Boolean   @default(false)
+  bookingId String?
+  order     Int       @default(0)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([published, order])
+}
+
+model GalleryItem {
+  id              String          @id @default(cuid())
+  mediaId         String
+  media           Media           @relation("GalleryMedia", fields: [mediaId], references: [id], onDelete: Cascade)
+  alt             Json
+  caption         Json?
+  category        GalleryCategory @default(LECTII)
+  hasMinors       Boolean         @default(false)
+  parentalConsent Boolean         @default(false)
+  consentAt       DateTime?
+  published       Boolean         @default(false)
+  order           Int             @default(0)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([published, order])
+}
+
+model Post {
+  id             String     @id @default(cuid())
+  slug           String     @unique
+  title          Json
+  excerpt        Json
+  body           Json
+  coverId        String?
+  cover          Media?     @relation("PostCover", fields: [coverId], references: [id], onDelete: SetNull)
+  status         PostStatus @default(CIORNA)
+  publishedAt    DateTime?
+  seoTitle       Json?
+  seoDescription Json?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  @@index([status, publishedAt])
+}
+
+model Faq {
+  id         String      @id @default(cuid())
+  question   Json
+  answer     Json
+  category   FaqCategory @default(INCEPUT)
+  showOnHome Boolean     @default(false)
+  programId  String?
+  program    Program?    @relation(fields: [programId], references: [id], onDelete: SetNull)
+  order      Int         @default(0)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@index([category, order])
+  @@index([showOnHome])
+}
+
+model LegalPage {
+  id               String    @id @default(cuid())
+  kind             LegalKind @unique
+  title            Json
+  body             Json
+  version          String
+  reviewedByLawyer Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+model PageHeader {
+  id             String   @id @default(cuid())
+  key            String   @unique
+  title          Json
+  intro          Json
+  artKey         String?
+  imageId        String?
+  image          Media?   @relation("PageHeaderImage", fields: [imageId], references: [id], onDelete: SetNull)
+  imageAlt       Json?
+  seoTitle       Json?
+  seoDescription Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Media {
+  id                    String          @id @default(cuid())
+  path                  String          @unique
+  mimeType              String
+  width                 Int
+  height                Int
+  blurDataURL           String
+  alt                   Json
+  size                  Int
+  variants              Json
+  originalName          String?
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+  coachPhotos           CoachProfile[]  @relation("CoachPhoto")
+  certifications        Certification[] @relation("CertificationImage")
+  scenes                Scene[]         @relation("SceneImage")
+  scenesMobile          Scene[]         @relation("SceneImageMobile")
+  scenesSecondary       Scene[]         @relation("SceneImageSecondary")
+  scenesSecondaryMobile Scene[]         @relation("SceneImageSecondaryMobile")
+  programs              Program[]       @relation("ProgramImage")
+  facilities            Facility[]      @relation("FacilityImage")
+  testimonials          Testimonial[]   @relation("TestimonialPhoto")
+  galleryItems          GalleryItem[]   @relation("GalleryMedia")
+  posts                 Post[]          @relation("PostCover")
+  pageHeaders           PageHeader[]    @relation("PageHeaderImage")
+
+  @@index([createdAt])
+}
+
+// ─── Schedule & bookings ─────────────────────────────────────────────────────
+
+model AvailabilityRule {
+  id         String    @id @default(cuid())
+  weekday    Int
+  startTime  String
+  endTime    String
+  locationId String?
+  location   Location? @relation(fields: [locationId], references: [id], onDelete: SetNull)
+  validFrom  DateTime? @db.Date
+  validTo    DateTime? @db.Date
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([weekday])
+}
+
+model AvailabilityException {
+  id        String        @id @default(cuid())
+  date      DateTime      @db.Date
+  startTime String?
+  endTime   String?
+  type      ExceptionType
+  reason    String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([date])
+}
+
+model GroupSchedule {
+  id           String    @id @default(cuid())
+  programId    String
+  program      Program   @relation(fields: [programId], references: [id], onDelete: Cascade)
+  weekday      Int
+  startTime    String
+  durationMin  Int
+  capacity     Int
+  membersCount Int       @default(0)
+  seasonFrom   DateTime? @db.Date
+  seasonTo     DateTime? @db.Date
+  locationId   String?
+  location     Location? @relation(fields: [locationId], references: [id], onDelete: SetNull)
+  active       Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  bookings     Booking[]
+
+  @@index([programId])
+  @@index([weekday])
+}
+
+model Booking {
+  id              String         @id @default(cuid())
+  code            String         @unique
+  programId       String
+  program         Program        @relation(fields: [programId], references: [id], onDelete: Restrict)
+  locationId      String?
+  location        Location?      @relation(fields: [locationId], references: [id], onDelete: SetNull)
+  courtId         String?
+  court           Court?         @relation(fields: [courtId], references: [id], onDelete: SetNull)
+  groupScheduleId String?
+  groupSchedule   GroupSchedule? @relation(fields: [groupScheduleId], references: [id], onDelete: SetNull)
+  clientId        String?
+  client          Client?        @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  startsAt        DateTime       @db.Timestamptz(3)
+  endsAt          DateTime       @db.Timestamptz(3)
+  blockedUntil    DateTime       @db.Timestamptz(3)
+  status          BookingStatus  @default(IN_ASTEPTARE)
+  name            String
+  email           String
+  phone           String
+  participants    Int            @default(1)
+  declaredLevel   Level?
+  message         String?
+  forMinor        Boolean        @default(false)
+  parentName      String?
+  childFirstName  String?
+  childAge        Int?
+  gdprConsent     Boolean
+  gdprConsentAt   DateTime
+  policyVersion   String
+  cancelTokenHash String         @unique
+  reviewTokenHash String?        @unique
+  source          BookingSource  @default(SITE)
+  internalNotes   String?
+  locale          String         @default("ro")
+  confirmedAt     DateTime?
+  cancelledAt     DateTime?
+  cancelReason    String?
+  completedAt     DateTime?
+  reminderSentAt  DateTime?
+  reviewInviteAt  DateTime?
+  anonymizedAt    DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  emailLogs       EmailLog[]
+
+  @@index([startsAt])
+  @@index([status])
+  @@index([email])
+  @@index([groupScheduleId, startsAt])
+  @@index([clientId])
+}
+
+model WaitlistEntry {
+  id            String         @id @default(cuid())
+  programId     String?
+  program       Program?       @relation(fields: [programId], references: [id], onDelete: SetNull)
+  preferences   String
+  name          String
+  email         String
+  phone         String
+  message       String?
+  forMinor      Boolean        @default(false)
+  childAge      Int?
+  consent       Boolean
+  consentAt     DateTime
+  policyVersion String
+  status        WaitlistStatus @default(NOU)
+  locale        String         @default("ro")
+  anonymizedAt  DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([status])
+  @@index([email])
+}
+
+model Client {
+  id                String       @id @default(cuid())
+  name              String
+  email             String?      @unique
+  phone             String?
+  notes             String?
+  activePlanId      String?
+  activePlan        PricingPlan? @relation(fields: [activePlanId], references: [id], onDelete: SetNull)
+  sessionsRemaining Int?
+  packageValidUntil DateTime?    @db.Date
+  anonymizedAt      DateTime?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  bookings          Booking[]
+
+  @@index([phone])
+  @@index([name])
+}
+
+// ─── System ──────────────────────────────────────────────────────────────────
+
+model AdminUser {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  name         String
+  passwordHash String
+  role         AdminRole  @default(EDITOR)
+  failedLogins Int        @default(0)
+  lockedUntil  DateTime?
+  lastLoginAt  DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  sessions     Session[]
+  auditLogs    AuditLog[]
+}
+
+model Session {
+  id        String    @id
+  userId    String
+  user      AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  ip        String?
+  userAgent String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model ContactMessage {
+  id            String        @id @default(cuid())
+  name          String
+  email         String
+  phone         String?
+  subject       String?
+  message       String
+  status        MessageStatus @default(NOU)
+  consent       Boolean
+  consentAt     DateTime
+  policyVersion String
+  locale        String        @default("ro")
+  anonymizedAt  DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([status, createdAt])
+}
+
+model NewsletterSubscriber {
+  id                   String    @id @default(cuid())
+  email                String    @unique
+  confirmTokenHash     String?   @unique
+  confirmedAt          DateTime?
+  unsubscribeTokenHash String    @unique
+  locale               String    @default("ro")
+  consentAt            DateTime
+  policyVersion        String
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+}
+
+model AuditLog {
+  id        String     @id @default(cuid())
+  userId    String?
+  user      AdminUser? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  entity    String
+  entityId  String?
+  diff      Json?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([createdAt])
+  @@index([entity, entityId])
+}
+
+model EmailLog {
+  id            String      @id @default(cuid())
+  to            String
+  template      String
+  subject       String
+  status        EmailStatus @default(IN_ASTEPTARE)
+  error         String?
+  attempts      Int         @default(0)
+  nextAttemptAt DateTime?
+  payload       Json
+  bookingId     String?
+  booking       Booking?    @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  sentAt        DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([status, nextAttemptAt])
+  @@index([createdAt])
+}
+
+model RateLimit {
+  key         String   @id
+  count       Int
+  windowStart DateTime
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([expiresAt])
+}

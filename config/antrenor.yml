@@ -1,0 +1,85 @@
+# Configurația clientului (secțiunea 0 din brief).
+# Completează valorile dintre paranteze pătrate, apoi rulează `npm run db:reset`
+# (reconstruiește baza de date din acest fișier) sau editează direct din admin.
+# Orice valoare care rămâne între paranteze pătrate apare pe site ca [DE COMPLETAT].
+# Valorile marcate „opțional" sau „url sau gol" rămân simplu goale dacă nu le completezi.
+
+antrenor:
+  nume: "[Prenume Nume]"
+  titulatura: "Antrenor de tenis"
+  ani_experienta: "[ex. 12]"
+  certificari:
+    - "[ex. Licență de antrenor, Federația Română de Tenis]"
+    - "[ex. ITF Coaching Course, Level 2]"
+  limbi_vorbite: ["română", "engleză"]
+  parcurs: "[3–5 fraze: cum ai ajuns la tenis, ce te definește ca antrenor]"
+  rezultate_elevi: "[opțional: rezultate reale ale elevilor, doar cu acordul lor]"
+
+contact:
+  telefon: "[+40 7xx xxx xxx]"
+  whatsapp: "[+40 7xx xxx xxx]"
+  email: "[adresa@domeniu.ro]"
+  instagram: "[url sau gol]"
+  facebook: "[url sau gol]"
+  tiktok: "[url sau gol]"
+
+locatii:
+  - nume: "[Numele bazei sportive / clubului]"
+    adresa: "[Stradă, număr, localitate, județ]"
+    localitate: "[Localitatea]"
+    coordonate: "[lat, lng]"
+    terenuri:
+      - { suprafata: "zgură", numar: "[ex. 4]", acoperit_iarna: "[da/nu]", nocturna: "[da/nu]" }
+      - { suprafata: "hard",  numar: "[ex. 2]", acoperit_iarna: "[da/nu]", nocturna: "[da/nu]" }
+    dotari: ["vestiare", "dușuri", "parcare", "[altele]"]
+
+programe:   # punct de pornire pentru seed; ajustează nume, durate, prețuri
+  - { nume: "Lecție individuală", format: "individual", durata_min: 60, pret_ron: "[ ]", public: "toate vârstele" }
+  - { nume: "Lecție în doi", format: "semi-privat", durata_min: 60, pret_ron_persoana: "[ ]", public: "prieteni, frați, cupluri" }
+  - { nume: "Mini-tenis", format: "grupă", varsta: "4–7 ani", max_elevi: 6, durata_min: 45, pret_ron_luna: "[ ]" }
+  - { nume: "Grupe copii și juniori", format: "grupă", varsta: "8–16 ani", max_elevi: 6, durata_min: 90, pret_ron_luna: "[ ]" }
+  - { nume: "Adulți începători", format: "grupă", max_elevi: 4, durata_min: 60, pret_ron_luna: "[ ]" }
+  - { nume: "Performanță și competiție", format: "individual + pregătire fizică", durata_min: 90, pret_ron: "[ ]" }
+  - { nume: "Analiză video a tehnicii", format: "individual", durata_min: 60, pret_ron: "[ ]" }
+  - { nume: "Tabere și clinici de weekend", format: "eveniment", pret_ron: "[ ]" }
+
+pachete:
+  - { nume: "[ex. 5 lecții individuale]",  pret_ron: "[ ]", valabilitate_zile: 60 }
+  - { nume: "[ex. 10 lecții individuale]", pret_ron: "[ ]", valabilitate_zile: 120 }
+
+servicii_incluse:   # „facilitățile mele de antrenor"
+  - "Evaluare inițială și plan de antrenament personalizat"
+  - "Rachete și mingi de împrumut pentru începători"
+  - "Mașină de aruncat mingi"
+  - "Analiză video a loviturilor, trimisă după lecție"
+  - "[Racordare rachete, dacă e cazul]"
+  - "[Pregătire și însoțire la turnee, dacă e cazul]"
+
+program_lucru:
+  luni_vineri: "07:00–21:00"
+  sambata: "08:00–14:00"
+  duminica: "închis"
+
+rezervari:
+  mod: "cerere"                 # "cerere" = confirm eu fiecare rezervare | "instant"
+  anulare_gratuita_ore: 24
+  rezervare_minim_ore_inainte: 12
+  orizont_zile: 60
+  pauza_intre_lectii_min: 10
+  prima_lectie: "[ex. evaluare de 30 de minute, gratuită / la preț redus]"
+
+plata:
+  metode: ["numerar la teren", "transfer bancar"]
+  plata_online_stripe: false    # true = activează modulul Stripe
+
+site:
+  domeniu: "[numele-tau-tenis.ro]"
+  limbi: ["ro", "en"]           # șterge "en" dacă vrei doar română
+  fus_orar: "Europe/Bucharest"
+  moneda: "RON"
+
+entitate_legala:
+  forma: "[PFA / II / SRL]"
+  denumire: "[ ]"
+  cui: "[ ]"
+  sediu: "[ ]"

@@ -339,3 +339,16 @@ Desktop 1440×900                                   Mobil 390×844
     site-ul cu ciornele și elementele inactive, cu o bandă „Previzualizare" sus.
 19. **Harta** e un iframe OpenStreetMap încărcat doar la click (nu cere cont, nu setează cookie-uri de
     marketing), cu link spre Google Maps pentru navigație.
+20. **`config/antrenor.yml` are în plus câmpul `localitate`** la locație: titlurile SEO locale
+    („Antrenor de tenis în [localitate]") au nevoie de oraș separat de adresa completă.
+21. **Valorile opționale** din configurație („[opțional: …]", „[url sau gol]") rămân goale, nu devin
+    `[DE COMPLETAT]`: un link de Instagram „de completat" n-ar avea sens pe site.
+22. **Serviciile condiționate** („[Racordare rachete, dacă e cazul]") apar cu numele lor și cu
+    descrierea `[DE COMPLETAT]`, ca antrenorul să le confirme sau să le șteargă. Nu le prezint ca fapte.
+23. **Orarul grupelor din seed este o propunere** (marți/joi 17:00 mini-tenis etc.), în intervalul de
+    lucru din configurație. E listat în `CONTENT-TODO.md` ca de verificat.
+24. **`npm run db:reset`** folosește `prisma migrate reset`. Prisma 7 refuză să ruleze această comandă
+    când detectează un agent AI fără acordul explicit al utilizatorului. Am verificat echivalentul pe
+    o bază nouă: `migrate deploy` + seed rulat de două ori (a doua rulare nu creează nimic).
+25. **Stripe nu este implementat**: configurația are `plata_online_stripe: false`. Un comutator fără
+    modul în spate ar fi fost un stub. Limitarea și pașii de adăugare sunt în raportul final.
