@@ -1,0 +1,35 @@
+# Local development services: PostgreSQL and Mailpit (catches every outgoing email).
+# Start:  docker compose -f docker-compose.dev.yml up -d
+# Mailpit inbox: http://localhost:8025
+name: antrenor-tenis-dev
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: tenis
+      POSTGRES_PASSWORD: tenis
+      POSTGRES_DB: tenis
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tenis -d tenis"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  mailpit:
+    image: axllent/mailpit:v1.31
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: "1"
+      MP_SMTP_AUTH_ALLOW_INSECURE: "1"
+
+volumes:
+  db-data:

@@ -1,0 +1,10 @@
+node_modules
+.next
+dist
+lib/generated
+public
+prisma/migrations
+playwright-report
+test-results
+package-lock.json
+*.md
