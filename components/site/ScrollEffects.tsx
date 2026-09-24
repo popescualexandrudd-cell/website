@@ -54,7 +54,7 @@ export function ScrollEffects() {
     const targets = [
       ...document.querySelectorAll<HTMLElement>(SECTIONS),
       ...document.querySelectorAll<HTMLElement>(ITEMS),
-    ].filter((el) => !el.dataset.fx && below(el));
+    ].filter((el) => el.dataset.fx !== "in" && below(el));
     for (const el of targets) el.dataset.fx = "wait";
 
     const reveal = new IntersectionObserver(
@@ -115,6 +115,8 @@ export function ScrollEffects() {
     update();
 
     const stop = () => {
+      // Whatever has not been revealed yet goes back to plain (a new run may prepare it again).
+      for (const el of targets) if (el.dataset.fx === "wait") delete el.dataset.fx;
       reveal.disconnect();
       watch.disconnect();
       window.removeEventListener("scroll", schedule);

@@ -1,80 +1,82 @@
 import {
-  CapsuleGeometry,
-  CylinderGeometry,
+  Bone,
+  DoubleSide,
   Euler,
   Group,
-  LatheGeometry,
   Matrix4,
   Mesh,
+  MeshPhysicalMaterial,
   MeshStandardMaterial,
-  type Object3D,
   Quaternion,
-  SphereGeometry,
-  Vector2,
+  Skeleton,
+  SkinnedMesh,
   Vector3,
-  type BufferGeometry,
+  type Material,
   type Texture,
 } from "three";
 import { buildRacket, RACKET, SWEET_SPOT } from "./racket";
 import { CHANNELS } from "./pose";
+import { HUMAN } from "./humanRig";
+import type { HumanAsset } from "./humanAsset";
 
 /**
- * An articulated athlete built from smooth primitives, posed every frame from a pose vector
- * (see pose.ts). Positions are solved in the player's root space; elbows and knees come from
- * two-bone inverse kinematics with pole vectors, the head tracks the ball, and in free play the
- * feet stay planted on the clay and step only when the body needs them elsewhere.
+ * The athlete: a real human body (the MakeHuman base mesh, CC0, morphed into a young athletic
+ * man and dressed; see scripts/build-3d-assets.ts) skinned to a light skeleton, posed every
+ * frame from a pose vector (see pose.ts). Positions are solved in the player's root space;
+ * elbows and knees come from two-bone inverse kinematics with pole vectors, the right hand
+ * holds the racket (the left joins it for two-handed shots), the head tracks the ball, and in
+ * free play the feet stay planted on the clay and step only when the body needs them elsewhere.
  */
 
 const DEG = Math.PI / 180;
 const DOWN = new Vector3(0, -1, 0);
 const UP = new Vector3(0, 1, 0);
+const FORWARD = new Vector3(0, 0, -1);
+const v3 = (a: readonly number[]) => new Vector3(a[0], a[1], a[2]);
 
+/** Body measurements, from the model's rest pose (metres). */
 export const BODY = {
-  ankle: 0.085,
-  shin: 0.43,
-  thigh: 0.43,
-  hipOffset: new Vector3(0.09, -0.07, 0),
-  spine: new Vector3(0, 0.08, 0),
-  shoulder: new Vector3(0.18, 0.39, 0.01),
-  neck: new Vector3(0, 0.45, 0.01),
-  upperArm: 0.3,
-  forearm: 0.27,
+  ankle: HUMAN.body.ankle,
+  shin: HUMAN.body.shin,
+  thigh: HUMAN.body.thigh,
+  hipOffset: v3(HUMAN.body.hipOffset),
+  spine: v3(HUMAN.body.spine),
+  shoulder: v3(HUMAN.body.shoulder),
+  neck: v3(HUMAN.body.neck),
+  head: v3(HUMAN.body.head),
+  upperArm: HUMAN.body.upperArm,
+  forearm: HUMAN.body.forearm,
 };
 
-export type Outfit = { shirt: number; shorts: number; cap: number; shoe: number };
+/**
+ * The strokes were keyed for a standing pelvis height of 1.015 m; this body stands a little
+ * taller, so every pose is lifted by the difference (same knee bend, same reach).
+ */
+const PELVIS_LIFT = BODY.ankle + BODY.thigh + BODY.shin - BODY.hipOffset.y - 1.015;
 
-/** Lathe profile for a limb hanging along -y: rounded ends, a gentle muscle bulge. */
-function limb(length: number, r0: number, r1: number, bulge = 0.1, bulgeAt = 0.3): BufferGeometry {
-  const pts: Vector2[] = [];
-  for (let i = 4; i >= 1; i--) {
-    const a = (i / 4) * (Math.PI / 2);
-    pts.push(new Vector2(Math.cos(a) * r1, -length - Math.sin(a) * r1 * 0.7));
-  }
-  for (let i = 8; i >= 0; i--) {
-    const s = i / 8;
-    const r = (r0 + (r1 - r0) * s) * (1 + bulge * Math.exp(-((s - bulgeAt) ** 2) / 0.04));
-    pts.push(new Vector2(r, -s * length));
-  }
-  for (let i = 1; i <= 4; i++) {
-    const a = (i / 4) * (Math.PI / 2);
-    pts.push(new Vector2(Math.cos(a) * r0, Math.sin(a) * r0 * 0.7));
-  }
-  pts.unshift(new Vector2(0, -length - r1 * 0.7));
-  pts.push(new Vector2(0, r0 * 0.7));
-  return new LatheGeometry(pts, 14);
-}
+export type Outfit = { shirt: number; shorts: number; shoe: number };
 
-/** Lathe from (radius, height) pairs, bottom to top, closed at both ends. */
-function body(profile: [number, number][], depth: number): BufferGeometry {
-  const pts = profile.map(([r, y]) => new Vector2(r, y));
-  const first = profile[0];
-  const last = profile.at(-1);
-  if (first) pts.unshift(new Vector2(0, first[1]));
-  if (last) pts.push(new Vector2(0, last[1]));
-  const geometry = new LatheGeometry(pts, 20);
-  geometry.scale(1, 1, depth);
-  return geometry;
-}
+type Side = "l" | "r";
+const BONE_NAMES = [
+  "pelvis",
+  "spine",
+  "chest",
+  "neck",
+  "head",
+  "lUpperArm",
+  "lForearm",
+  "lHand",
+  "rUpperArm",
+  "rForearm",
+  "rHand",
+  "lThigh",
+  "lShin",
+  "lFoot",
+  "rThigh",
+  "rShin",
+  "rFoot",
+] as const;
+type BoneName = (typeof BONE_NAMES)[number];
 
 /** Two-bone IK: returns the middle joint and the reachable end for a chain root → target. */
 function solveTwoBone(
@@ -101,10 +103,27 @@ function solveTwoBone(
   outEnd.copy(root).addScaledVector(dir, dist);
 }
 
-function place(object: Object3D, from: Vector3, to: Vector3): void {
-  object.position.copy(from);
-  const dir = to.clone().sub(from);
-  if (dir.lengthSq() > 1e-10) object.quaternion.setFromUnitVectors(DOWN, dir.normalize());
+/** Rotation whose columns are the given axes. */
+function basis(x: Vector3, y: Vector3, z: Vector3, out = new Quaternion()): Quaternion {
+  return out.setFromRotationMatrix(new Matrix4().makeBasis(x, y, z));
+}
+
+/**
+ * The frame of a hinged limb segment from → to: +y along the segment, +x the hinge (the axis
+ * the elbow or knee bends about, from the IK pole), +z completing the frame. Stable even when
+ * the limb is straight, because the hinge comes from the pole, not from the bend.
+ */
+function hingeAxis(from: Vector3, end: Vector3, pole: Vector3): Vector3 {
+  const d = end.clone().sub(from).normalize();
+  const p = pole.clone().addScaledVector(d, -pole.dot(d));
+  if (p.lengthSq() < 1e-8) p.copy(FORWARD).addScaledVector(d, -FORWARD.dot(d));
+  return p.normalize().cross(d).normalize();
+}
+function segmentFrame(from: Vector3, to: Vector3, hinge: Vector3, out = new Quaternion()) {
+  const y = to.clone().sub(from).normalize();
+  const x = hinge.clone().addScaledVector(y, -hinge.dot(y)).normalize();
+  const z = new Vector3().crossVectors(x, y);
+  return basis(x, y, z, out);
 }
 
 /** Racket orientation: +y along the racket axis, +z along the string-bed normal. */
@@ -117,6 +136,110 @@ function racketQuaternion(dir: Vector3, face: Vector3, out: Quaternion): Quatern
   return out.setFromRotationMatrix(new Matrix4().makeBasis(x, y, z));
 }
 
+/** Signed angle of `v` around `axis`, measured from `ref` (both projected on the plane). */
+function angleAround(v: Vector3, ref: Vector3, axis: Vector3): number {
+  const a = v.clone().addScaledVector(axis, -v.dot(axis));
+  const b = ref.clone().addScaledVector(axis, -ref.dot(axis));
+  return Math.atan2(new Vector3().crossVectors(b, a).dot(axis), a.dot(b));
+}
+const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a));
+
+/** Rest-pose data of the skeleton, shared by every player. */
+const REST = (() => {
+  const r = HUMAN.rest;
+  const joint = {
+    pelvis: v3(r.pelvis),
+    chest: v3(r.chest),
+    neck: v3(r.neck),
+    head: v3(r.head),
+    lShoulder: v3(r.lShoulder),
+    lElbow: v3(r.lElbow),
+    lWrist: v3(r.lWrist),
+    rShoulder: v3(r.rShoulder),
+    rElbow: v3(r.rElbow),
+    rWrist: v3(r.rWrist),
+    lHip: v3(r.lHip),
+    lKnee: v3(r.lKnee),
+    lAnkle: v3(r.lAnkle),
+    lToe: v3(r.lToe),
+    rHip: v3(r.rHip),
+    rKnee: v3(r.rKnee),
+    rAnkle: v3(r.rAnkle),
+    rToe: v3(r.rToe),
+  };
+  const grip = (s: Side) => {
+    const g = HUMAN.grip[s];
+    const q = basis(v3(g.x), v3(g.y), v3(g.z));
+    const origin = v3(g.origin);
+    const wrist = s === "l" ? joint.lWrist : joint.rWrist;
+    // Where the wrist sits in the hand's (racket) frame.
+    const wristInHand = wrist.clone().sub(origin).applyQuaternion(q.clone().invert());
+    return { q, origin, wristInHand };
+  };
+  const arm = (s: Side) => {
+    const shoulder = s === "l" ? joint.lShoulder : joint.rShoulder;
+    const elbow = s === "l" ? joint.lElbow : joint.rElbow;
+    const wrist = s === "l" ? joint.lWrist : joint.rWrist;
+    // The rest elbow is bent: its offset from the shoulder–wrist line is the rest pole.
+    const d = wrist.clone().sub(shoulder).normalize();
+    const pole = elbow.clone().sub(shoulder);
+    pole.addScaledVector(d, -pole.dot(d));
+    const hinge = hingeAxis(shoulder, wrist, pole);
+    return {
+      upper: segmentFrame(shoulder, elbow, hinge),
+      fore: segmentFrame(elbow, wrist, hinge),
+    };
+  };
+  const leg = (s: Side) => {
+    const hip = s === "l" ? joint.lHip : joint.rHip;
+    const knee = s === "l" ? joint.lKnee : joint.rKnee;
+    const ankle = s === "l" ? joint.lAnkle : joint.rAnkle;
+    const toe = s === "l" ? joint.lToe : joint.rToe;
+    const hinge = hingeAxis(hip, ankle, FORWARD);
+    const along = toe.clone().sub(ankle);
+    const yaw = Math.atan2(-along.x, -along.z);
+    return {
+      thigh: segmentFrame(hip, knee, hinge),
+      shin: segmentFrame(knee, ankle, hinge),
+      foot: new Quaternion().setFromAxisAngle(UP, yaw),
+    };
+  };
+  const I = new Quaternion();
+  const frames: Record<BoneName, { origin: Vector3; q: Quaternion }> = {
+    pelvis: { origin: joint.pelvis, q: I },
+    spine: { origin: joint.chest, q: I },
+    chest: { origin: joint.chest, q: I },
+    neck: { origin: joint.neck, q: I },
+    head: { origin: joint.head, q: I },
+    lUpperArm: { origin: joint.lShoulder, q: arm("l").upper },
+    lForearm: { origin: joint.lElbow, q: arm("l").fore },
+    lHand: { origin: grip("l").origin, q: grip("l").q },
+    rUpperArm: { origin: joint.rShoulder, q: arm("r").upper },
+    rForearm: { origin: joint.rElbow, q: arm("r").fore },
+    rHand: { origin: grip("r").origin, q: grip("r").q },
+    lThigh: { origin: joint.lHip, q: leg("l").thigh },
+    lShin: { origin: joint.lKnee, q: leg("l").shin },
+    lFoot: { origin: joint.lAnkle, q: leg("l").foot },
+    rThigh: { origin: joint.rHip, q: leg("r").thigh },
+    rShin: { origin: joint.rKnee, q: leg("r").shin },
+    rFoot: { origin: joint.rAnkle, q: leg("r").foot },
+  };
+  // How the relaxed hand sits on the forearm (used when the left hand is free).
+  const handOnForearm = (s: Side) =>
+    frames[s === "l" ? "lForearm" : "rForearm"].q.clone().invert().multiply(frames[`${s}Hand`].q);
+  const handOffset = (s: Side) =>
+    frames[`${s}Hand`].origin
+      .clone()
+      .sub(s === "l" ? joint.lWrist : joint.rWrist)
+      .applyQuaternion(frames[`${s}Hand`].q.clone().invert());
+  return {
+    frames,
+    grip: { l: grip("l"), r: grip("r") },
+    handOnForearm: { l: handOnForearm("l"), r: handOnForearm("r") },
+    handOffset: { l: handOffset("l"), r: handOffset("r") },
+  };
+})();
+
 type Foot = {
   planted: Vector3;
   plantedYaw: number;
@@ -127,145 +250,106 @@ type Foot = {
   duration: number;
 };
 
+type Materials = Material[];
+
+function outfitMaterials(outfit: Outfit, detail: "high" | "low"): Materials {
+  const physical = detail === "high";
+  const fabric = (color: number) =>
+    physical
+      ? new MeshPhysicalMaterial({
+          color,
+          roughness: 0.86,
+          sheen: 0.7,
+          sheenRoughness: 0.55,
+          sheenColor: 0xffffff,
+          side: DoubleSide,
+        })
+      : new MeshStandardMaterial({ color, roughness: 0.86, side: DoubleSide });
+  const skin = physical
+    ? new MeshPhysicalMaterial({
+        color: 0xd29a7c,
+        roughness: 0.5,
+        sheen: 0.35,
+        sheenRoughness: 0.6,
+        sheenColor: 0xff8a6a,
+        clearcoat: 0.08,
+        clearcoatRoughness: 0.55,
+        vertexColors: true,
+      })
+    : new MeshStandardMaterial({ color: 0xd29a7c, roughness: 0.55, vertexColors: true });
+  const shoes = physical
+    ? new MeshPhysicalMaterial({
+        color: outfit.shoe,
+        roughness: 0.48,
+        clearcoat: 0.35,
+        clearcoatRoughness: 0.4,
+        vertexColors: true,
+        side: DoubleSide,
+      })
+    : new MeshStandardMaterial({ color: outfit.shoe, roughness: 0.5, vertexColors: true });
+  const hair = new MeshStandardMaterial({ color: 0x2b1e16, roughness: 0.82 });
+  const eyes = physical
+    ? new MeshPhysicalMaterial({
+        roughness: 0.12,
+        clearcoat: 1,
+        clearcoatRoughness: 0.05,
+        vertexColors: true,
+      })
+    : new MeshStandardMaterial({ roughness: 0.2, vertexColors: true });
+  // Order: skin, shirt, shorts, socks, shoes, hair, eyes (HUMAN_MATERIALS).
+  return [skin, fabric(outfit.shirt), fabric(outfit.shorts), fabric(0xf4f2ee), shoes, hair, eyes];
+}
+
 export class Player {
   readonly root = new Group();
   readonly racket: Group;
-  private readonly pelvis: Mesh;
-  private readonly chest: Mesh;
-  private readonly neck: Mesh;
-  private readonly head: Group;
-  private readonly segments: Record<string, Object3D> = {};
-  private readonly feet: Record<"l" | "r", Foot>;
+  private readonly body: SkinnedMesh;
+  private readonly bones: Record<BoneName, Bone>;
+  private readonly feet: Record<Side, Foot>;
   private readonly lookTarget = new Vector3(0, 1.2, -10);
   /** Feet follow the pose directly (technique lab) or plant and step (free play). */
   plantFeet = false;
   /** Root velocity in world space (m/s), so stepping feet land ahead of a moving body. */
   readonly velocity = new Vector3();
   private readonly lastLeftHand = new Vector3();
+  /** Which way round each hand holds the racket (the racket's two faces look the same). */
+  private readonly palmFlip: Record<Side, boolean> = { l: false, r: false };
 
-  constructor(outfit: Outfit, textures: { strings: Texture; grip: Texture }) {
-    const skin = new MeshStandardMaterial({ color: 0xb98466, roughness: 0.62 });
-    const shirt = new MeshStandardMaterial({ color: outfit.shirt, roughness: 0.78 });
-    const shorts = new MeshStandardMaterial({ color: outfit.shorts, roughness: 0.8 });
-    const shoe = new MeshStandardMaterial({ color: outfit.shoe, roughness: 0.55 });
-    const sole = new MeshStandardMaterial({ color: 0xb8704a, roughness: 0.9 });
-    const cap = new MeshStandardMaterial({ color: outfit.cap, roughness: 0.7 });
-    const sock = new MeshStandardMaterial({ color: 0xf1eee8, roughness: 0.9 });
-
-    this.pelvis = new Mesh(
-      body(
-        [
-          [0.1, -0.15],
-          [0.15, -0.1],
-          [0.165, -0.02],
-          [0.16, 0.06],
-          [0.145, 0.12],
-        ],
-        0.72,
-      ),
-      shorts,
-    );
-    this.chest = new Mesh(
-      body(
-        [
-          [0.135, -0.02],
-          [0.14, 0.08],
-          [0.15, 0.18],
-          [0.168, 0.28],
-          [0.172, 0.35],
-          [0.16, 0.41],
-          [0.1, 0.45],
-          [0.05, 0.47],
-        ],
-        0.62,
-      ),
-      shirt,
-    );
-    this.neck = new Mesh(new CylinderGeometry(0.048, 0.055, 0.12, 12), skin);
-    this.head = new Group();
-    const skull = new Mesh(new SphereGeometry(0.105, 24, 16), skin);
-    skull.scale.set(0.9, 1.1, 1);
-    const capDome = new Mesh(
-      new SphereGeometry(0.112, 24, 12, 0, Math.PI * 2, 0, Math.PI * 0.42),
-      cap,
-    );
-    capDome.scale.set(0.92, 1.05, 1.02);
-    capDome.position.y = 0.02;
-    const visor = new Mesh(new CylinderGeometry(0.1, 0.1, 0.012, 20, 1, false, -0.9, 1.8), cap);
-    visor.position.set(0, 0.035, -0.07);
-    visor.rotation.x = -0.12;
-    visor.scale.set(0.9, 1, 0.9);
-    this.head.add(skull, capDome, visor);
-
-    const makeLimb = (
-      name: string,
-      length: number,
-      r0: number,
-      r1: number,
-      material: MeshStandardMaterial,
-      sleeve?: { material: MeshStandardMaterial; length: number; radius: number },
-    ) => {
-      const group = new Group();
-      group.add(new Mesh(limb(length, r0, r1), material));
-      if (sleeve) {
-        const s = new Mesh(
-          new CylinderGeometry(sleeve.radius, sleeve.radius * 0.94, sleeve.length, 14, 1, true),
-          sleeve.material,
-        );
-        s.position.y = -sleeve.length / 2 + 0.02;
-        group.add(s);
-      }
-      this.segments[name] = group;
-      return group;
-    };
-
-    const parts: Object3D[] = [this.pelvis, this.chest, this.neck, this.head];
-    for (const side of ["l", "r"] as const) {
-      parts.push(
-        makeLimb(`${side}UpperArm`, BODY.upperArm, 0.056, 0.043, skin, {
-          material: shirt,
-          length: 0.13,
-          radius: 0.07,
-        }),
-        makeLimb(`${side}Forearm`, BODY.forearm, 0.046, 0.033, skin),
-        makeLimb(`${side}Thigh`, BODY.thigh, 0.092, 0.06, skin, {
-          material: shorts,
-          length: 0.2,
-          radius: 0.106,
-        }),
-        makeLimb(`${side}Shin`, BODY.shin, 0.062, 0.04, skin, {
-          material: sock,
-          length: 0.1,
-          radius: 0.046,
-        }),
-      );
-      const shoulder = new Mesh(new SphereGeometry(0.062, 16, 12), shirt);
-      this.segments[`${side}Shoulder`] = shoulder;
-      const hand = new Mesh(new SphereGeometry(1, 12, 10), skin);
-      hand.scale.set(0.038, 0.06, 0.03);
-      this.segments[`${side}Hand`] = hand;
-      const foot = new Group();
-      const upper = new Mesh(new CapsuleGeometry(0.047, 0.18, 4, 12), shoe);
-      upper.rotation.x = Math.PI / 2;
-      upper.scale.set(1, 1, 0.72);
-      upper.position.set(0, 0.045, -0.06);
-      const soleMesh = new Mesh(new CapsuleGeometry(0.05, 0.19, 2, 12), sole);
-      soleMesh.rotation.x = Math.PI / 2;
-      soleMesh.scale.set(1.02, 1, 0.22);
-      soleMesh.position.set(0, 0.012, -0.06);
-      foot.add(upper, soleMesh);
-      this.segments[`${side}Foot`] = foot;
-      parts.push(shoulder, hand, foot);
+  constructor(
+    outfit: Outfit,
+    textures: { strings: Texture; grip: Texture },
+    human: HumanAsset,
+    detail: "high" | "low" = "high",
+  ) {
+    const bones = {} as Record<BoneName, Bone>;
+    const inverses: Matrix4[] = [];
+    const list: Bone[] = [];
+    for (const name of human.bones as readonly string[]) {
+      if (!(BONE_NAMES as readonly string[]).includes(name)) throw new Error(`bone ${name}`);
+      const bone = new Bone();
+      bone.name = name;
+      const rest = REST.frames[name as BoneName];
+      bone.position.copy(rest.origin);
+      bone.quaternion.copy(rest.q);
+      inverses.push(new Matrix4().compose(rest.origin, rest.q, new Vector3(1, 1, 1)).invert());
+      bones[name as BoneName] = bone;
+      list.push(bone);
+      this.root.add(bone);
     }
+    this.bones = bones;
+    this.body = new SkinnedMesh(human.geometry, outfitMaterials(outfit, detail));
+    this.body.castShadow = true;
+    this.body.receiveShadow = true;
+    // The players never leave the court; skip per-frame bounds of the moving skeleton.
+    this.body.frustumCulled = false;
+    this.root.add(this.body);
+    this.body.bind(new Skeleton(list, inverses), new Matrix4());
 
     this.racket = buildRacket(textures, 0xc2562b);
-    parts.push(this.racket);
-    for (const part of parts) {
-      part.traverse((o) => {
-        if (o instanceof Mesh) o.castShadow = true;
-      });
-      this.root.add(part);
-    }
+    this.racket.traverse((o) => {
+      if (o instanceof Mesh) o.castShadow = true;
+    });
+    this.root.add(this.racket);
 
     const foot = (): Foot => ({
       planted: new Vector3(),
@@ -304,11 +388,10 @@ export class Player {
 
   /** The sweet spot, in world space, for a pose (used to line the ball up with the strings). */
   sweetSpot(pose: Float32Array, out: Vector3): Vector3 {
-    const hand = new Vector3(pose[9], pose[10], pose[11]);
     const dir = new Vector3(pose[12], pose[13], pose[14]).normalize();
-    // The IK may shorten an over-extended arm; solve it to stay exact.
-    const actual = this.solveArm("r", pose, hand);
-    out.copy(actual).addScaledVector(dir, SWEET_SPOT);
+    // Planning only: the hand's way round the handle is not changed by looking ahead.
+    const grip = this.racketHand(pose, false).grip;
+    out.copy(grip).addScaledVector(dir, SWEET_SPOT);
     return this.root.localToWorld(out);
   }
 
@@ -316,7 +399,7 @@ export class Player {
     const pelvisQ = new Quaternion().setFromEuler(
       new Euler((pose[4] ?? 0) * -DEG, (pose[3] ?? 0) * DEG, (pose[5] ?? 0) * DEG, "YXZ"),
     );
-    const pelvisPos = new Vector3(pose[0], pose[1], pose[2]);
+    const pelvisPos = new Vector3(pose[0], (pose[1] ?? 0) + PELVIS_LIFT, pose[2]);
     const origin = BODY.spine.clone().applyQuaternion(pelvisQ).add(pelvisPos);
     const q = new Quaternion().setFromEuler(
       new Euler((pose[7] ?? 0) * -DEG, (pose[6] ?? 0) * DEG, (pose[8] ?? 0) * DEG, "YXZ"),
@@ -324,48 +407,101 @@ export class Player {
     return { origin, q, pelvisQ };
   }
 
-  private shoulderPos(side: "l" | "r", pose: Float32Array): Vector3 {
+  private shoulderPos(side: Side, pose: Float32Array): Vector3 {
     const { origin, q } = this.chestFrame(pose);
     const offset = BODY.shoulder.clone();
     if (side === "l") offset.x *= -1;
     return offset.applyQuaternion(q).add(origin);
   }
 
-  private solveArm(
-    side: "l" | "r",
-    pose: Float32Array,
-    target: Vector3,
-    elbowOut?: Vector3,
-  ): Vector3 {
+  private armPole(side: Side, pose: Float32Array): Vector3 {
     const { q } = this.chestFrame(pose);
+    const base = side === "r" ? 18 : 26;
+    return new Vector3(pose[base], pose[base + 1], pose[base + 2]).applyQuaternion(q);
+  }
+
+  /**
+   * Solves an arm whose hand holds the racket at `grip` with orientation `racketQ`. The racket
+   * looks the same from both faces, so the hand may hold it either way round: it keeps the
+   * way that twists the forearm least (with some hysteresis, so it never flips mid-swing).
+   */
+  private holdRacket(
+    side: Side,
+    pose: Float32Array,
+    grip: Vector3,
+    racketQ: Quaternion,
+    commit = true,
+  ) {
     const shoulder = this.shoulderPos(side, pose);
-    const poleBase = side === "r" ? 18 : 26;
-    const pole = new Vector3(
-      pose[poleBase],
-      pose[poleBase + 1],
-      pose[poleBase + 2],
-    ).applyQuaternion(q);
-    const elbow = elbowOut ?? new Vector3();
-    const end = new Vector3();
-    solveTwoBone(shoulder, target, BODY.upperArm, BODY.forearm, pole, elbow, end);
-    return end;
+    const pole = this.armPole(side, pose);
+    const rest = REST.grip[side];
+    const flipQ = racketQ.clone().multiply(new Quaternion().setFromAxisAngle(UP, Math.PI));
+    const solve = (handQ: Quaternion) => {
+      const wrist = rest.wristInHand.clone().applyQuaternion(handQ).add(grip);
+      const elbow = new Vector3();
+      const end = new Vector3();
+      solveTwoBone(shoulder, wrist, BODY.upperArm, BODY.forearm, pole, elbow, end);
+      const hinge = hingeAxis(shoulder, end, pole);
+      const foreQ = segmentFrame(elbow, end, hinge);
+      const twist = this.forearmTwist(side, foreQ, handQ, elbow, end);
+      return { handQ, wrist: end, elbow, hinge, foreQ, twist, reach: wrist.distanceTo(end) };
+    };
+    const kept = solve(this.palmFlip[side] ? flipQ : racketQ);
+    const other = solve(this.palmFlip[side] ? racketQ : flipQ);
+    // Prefer the hold that lets the hand reach the grip, then the one that twists least.
+    const cost = (c: { twist: number; reach: number }) => Math.abs(c.twist) + c.reach * 25;
+    const switchHands = cost(other) + 25 * DEG < cost(kept);
+    if (switchHands && commit) this.palmFlip[side] = !this.palmFlip[side];
+    const best = switchHands ? other : kept;
+    // Out of reach: the hand follows the arm instead of floating off it.
+    const actualGrip = rest.wristInHand
+      .clone()
+      .applyQuaternion(best.handQ)
+      .negate()
+      .add(best.wrist);
+    return { ...best, shoulder, grip: best.reach > 1e-4 ? actualGrip : grip.clone() };
+  }
+
+  /** How far the hand is turned about the forearm, relative to the rest pose. */
+  private forearmTwist(
+    side: Side,
+    foreQ: Quaternion,
+    handQ: Quaternion,
+    elbow: Vector3,
+    wrist: Vector3,
+  ): number {
+    const axis = wrist.clone().sub(elbow).normalize();
+    const restRel = REST.handOnForearm[side];
+    // Where the hand's x axis would be with no twist (rest relation), and where it is.
+    const neutral = new Vector3(1, 0, 0).applyQuaternion(foreQ.clone().multiply(restRel));
+    const actual = new Vector3(1, 0, 0).applyQuaternion(handQ);
+    return wrap(angleAround(actual, neutral, axis));
+  }
+
+  private racketHand(pose: Float32Array, commit = true) {
+    const hand = new Vector3(pose[9], pose[10], pose[11]);
+    const dir = new Vector3(pose[12], pose[13], pose[14]).normalize();
+    const face = new Vector3(pose[15], pose[16], pose[17]);
+    const racketQ = racketQuaternion(dir, face, new Quaternion());
+    return { racketQ, dir, ...this.holdRacket("r", pose, hand, racketQ, commit) };
   }
 
   /** Poses the whole body. `dt` advances the stepping feet (0 = no time passes). */
   apply(pose: Float32Array, dt: number): void {
     if (pose.length < CHANNELS) return;
+    const b = this.bones;
     const { origin, q, pelvisQ } = this.chestFrame(pose);
-    const pelvisPos = new Vector3(pose[0], pose[1], pose[2]);
-    this.pelvis.position.copy(pelvisPos);
-    this.pelvis.quaternion.copy(pelvisQ);
-    this.chest.position.copy(origin);
-    this.chest.quaternion.copy(q);
+    const pelvisPos = new Vector3(pose[0], (pose[1] ?? 0) + PELVIS_LIFT, pose[2]);
+    b.pelvis.position.copy(pelvisPos);
+    b.pelvis.quaternion.copy(pelvisQ);
+    b.spine.position.copy(origin);
+    b.spine.quaternion.copy(pelvisQ).slerp(q, 0.5);
+    b.chest.position.copy(origin);
+    b.chest.quaternion.copy(q);
     const neckBase = BODY.neck.clone().applyQuaternion(q).add(origin);
-    this.neck.position.copy(neckBase).addScaledVector(UP.clone().applyQuaternion(q), 0.04);
-    this.neck.quaternion.copy(q);
+    const headPos = BODY.head.clone().applyQuaternion(q).add(neckBase);
 
     // Head: turns towards the ball, within what a neck allows relative to the shoulders.
-    const headPos = neckBase.clone().addScaledVector(UP.clone().applyQuaternion(q), 0.17);
     const look = this.root.worldToLocal(this.lookTarget.clone()).sub(headPos);
     const chestYaw = (pose[6] ?? 0) * DEG;
     let yaw = Math.atan2(-look.x, -look.z);
@@ -374,42 +510,76 @@ export class Player {
     rel = Math.max(-1.3, Math.min(1.3, rel));
     yaw = chestYaw + rel;
     const pitch = Math.max(-0.7, Math.min(0.9, Math.atan2(look.y, Math.hypot(look.x, look.z))));
-    this.head.position.copy(headPos);
-    this.head.quaternion.setFromEuler(new Euler(pitch, yaw, 0, "YXZ"));
+    const headQ = new Quaternion().setFromEuler(new Euler(pitch * 0.8, yaw, 0, "YXZ"));
+    b.neck.position.copy(neckBase);
+    b.neck.quaternion.copy(q).slerp(headQ, 0.45);
+    b.head.position.copy(headPos);
+    b.head.quaternion.copy(headQ);
 
-    // Racket arm.
-    const hand = new Vector3(pose[9], pose[10], pose[11]);
-    const dir = new Vector3(pose[12], pose[13], pose[14]).normalize();
-    const face = new Vector3(pose[15], pose[16], pose[17]);
-    const rElbow = new Vector3();
-    const rHand = this.solveArm("r", pose, hand, rElbow);
-    const rShoulder = this.shoulderPos("r", pose);
-    const racketQ = racketQuaternion(dir, face, new Quaternion());
-    this.racket.quaternion.copy(racketQ);
-    this.racket.position.copy(rHand).addScaledVector(dir, -RACKET.gripAt);
-    this.setArm("r", rShoulder, rElbow, rHand, racketQ);
+    // Racket arm: the hand holds the racket at the pose's grip point.
+    const right = this.racketHand(pose);
+    this.racket.quaternion.copy(right.racketQ);
+    this.racket.position.copy(right.grip).addScaledVector(right.dir, -RACKET.gripAt);
+    this.setArm(
+      "r",
+      right.shoulder,
+      right.elbow,
+      right.wrist,
+      right.hinge,
+      right.handQ,
+      right.grip,
+    );
 
     // Free arm: its own target, the handle above the right hand, or the throat.
-    const leftFree = new Vector3(pose[21], pose[22], pose[23]);
-    const onGrip = rHand.clone().addScaledVector(dir, 0.085);
-    const onThroat = rHand
-      .clone()
-      .addScaledVector(dir, 0.25)
-      .addScaledVector(new Vector3(0, 0, 1).applyQuaternion(racketQ), -0.02);
     const wGrip = pose[24] ?? 0;
     const wThroat = pose[25] ?? 0;
-    const leftTarget = leftFree
-      .multiplyScalar(Math.max(0, 1 - wGrip - wThroat))
-      .addScaledVector(onGrip, wGrip)
-      .addScaledVector(onThroat, wThroat);
-    const lElbow = new Vector3();
-    const lHand = this.solveArm("l", pose, leftTarget, lElbow);
-    this.lastLeftHand.copy(lHand);
-    const handQ =
-      wGrip + wThroat > 0.5
-        ? racketQ
-        : new Quaternion().setFromUnitVectors(DOWN, lHand.clone().sub(lElbow).normalize());
-    this.setArm("l", this.shoulderPos("l", pose), lElbow, lHand, handQ);
+    const held = Math.min(1, wGrip + wThroat);
+    const onGrip = right.grip.clone().addScaledVector(right.dir, 0.095);
+    const onThroat = right.grip
+      .clone()
+      .addScaledVector(right.dir, 0.25)
+      .addScaledVector(new Vector3(0, 0, 1).applyQuaternion(right.racketQ), -0.02);
+    const lShoulder = this.shoulderPos("l", pose);
+    const lPole = this.armPole("l", pose);
+    let lElbow = new Vector3();
+    let lWrist = new Vector3();
+    let lHinge: Vector3;
+    let lHandQ: Quaternion;
+    let lGrip: Vector3;
+    if (held > 0.02) {
+      const target =
+        wGrip + wThroat > 0
+          ? onGrip
+              .clone()
+              .multiplyScalar(wGrip / (wGrip + wThroat))
+              .addScaledVector(onThroat, wThroat / (wGrip + wThroat))
+          : onGrip;
+      const holding = this.holdRacket("l", pose, target, right.racketQ);
+      if (held < 0.98) {
+        // Letting go or taking hold: blend with the free hand.
+        const free = this.freeHand(pose, lShoulder, lPole);
+        lElbow = free.elbow.lerp(holding.elbow, held);
+        lWrist = free.wrist.lerp(holding.wrist, held);
+        lHinge = free.hinge.lerp(holding.hinge, held).normalize();
+        lHandQ = free.handQ.slerp(holding.handQ, held);
+        lGrip = free.grip.lerp(holding.grip, held);
+      } else {
+        lElbow = holding.elbow;
+        lWrist = holding.wrist;
+        lHinge = holding.hinge;
+        lHandQ = holding.handQ;
+        lGrip = holding.grip;
+      }
+    } else {
+      const free = this.freeHand(pose, lShoulder, lPole);
+      lElbow = free.elbow;
+      lWrist = free.wrist;
+      lHinge = free.hinge;
+      lHandQ = free.handQ;
+      lGrip = free.grip;
+    }
+    this.lastLeftHand.copy(lGrip);
+    this.setArm("l", lShoulder, lElbow, lWrist, lHinge, lHandQ, lGrip);
 
     // Legs.
     for (const side of ["l", "r"] as const) {
@@ -424,43 +594,61 @@ export class Player {
       const ankle = position.clone();
       ankle.y = BODY.ankle + Math.sin(heel) * 0.14 + lift;
       const footDir = new Vector3(-Math.sin(footYaw), 0, -Math.cos(footYaw));
-      const kneePole = footDir
-        .clone()
-        .multiplyScalar(1)
-        .add(new Vector3(side === "l" ? -0.2 : 0.2, 0, 0));
+      const kneePole = footDir.clone().add(new Vector3(side === "l" ? -0.2 : 0.2, 0, 0));
       const knee = new Vector3();
       const end = new Vector3();
       solveTwoBone(hip, ankle, BODY.thigh, BODY.shin, kneePole, knee, end);
-      const thigh = this.segments[`${side}Thigh`];
-      const shin = this.segments[`${side}Shin`];
-      const footMesh = this.segments[`${side}Foot`];
-      if (thigh) place(thigh, hip, knee);
-      if (shin) place(shin, knee, end);
-      if (footMesh) {
-        footMesh.position.set(end.x, end.y - BODY.ankle, end.z);
-        footMesh.quaternion.setFromEuler(new Euler(-heel, footYaw, 0, "YXZ"));
-      }
+      const hinge = hingeAxis(hip, end, kneePole);
+      const thigh = b[`${side}Thigh`];
+      const shin = b[`${side}Shin`];
+      const foot = b[`${side}Foot`];
+      thigh.position.copy(hip);
+      segmentFrame(hip, knee, hinge, thigh.quaternion);
+      shin.position.copy(knee);
+      segmentFrame(knee, end, hinge, shin.quaternion);
+      foot.position.copy(end);
+      foot.quaternion.setFromEuler(new Euler(-heel, footYaw, 0, "YXZ"));
     }
   }
 
+  /** A free left hand: the pose's target is the palm; the wrist stays straight. */
+  private freeHand(pose: Float32Array, shoulder: Vector3, pole: Vector3) {
+    const target = new Vector3(pose[21], pose[22], pose[23]);
+    const reachDir = target.clone().sub(shoulder).normalize();
+    const palm = REST.handOffset.l.length();
+    const wristTarget = target.clone().addScaledVector(reachDir, -palm);
+    const elbow = new Vector3();
+    const wrist = new Vector3();
+    solveTwoBone(shoulder, wristTarget, BODY.upperArm, BODY.forearm, pole, elbow, wrist);
+    const hinge = hingeAxis(shoulder, wrist, pole);
+    const foreQ = segmentFrame(elbow, wrist, hinge);
+    const handQ = foreQ.clone().multiply(REST.handOnForearm.l);
+    const grip = REST.handOffset.l.clone().applyQuaternion(handQ).add(wrist);
+    return { elbow, wrist, hinge, handQ, grip };
+  }
+
   private setArm(
-    side: "l" | "r",
+    side: Side,
     shoulder: Vector3,
     elbow: Vector3,
-    hand: Vector3,
+    wrist: Vector3,
+    hinge: Vector3,
     handQ: Quaternion,
+    grip: Vector3,
   ): void {
-    const upper = this.segments[`${side}UpperArm`];
-    const fore = this.segments[`${side}Forearm`];
-    const joint = this.segments[`${side}Shoulder`];
-    const handMesh = this.segments[`${side}Hand`];
-    if (upper) place(upper, shoulder, elbow);
-    if (fore) place(fore, elbow, hand);
-    if (joint) joint.position.copy(shoulder);
-    if (handMesh) {
-      handMesh.position.copy(hand);
-      handMesh.quaternion.copy(handQ);
-    }
+    const upper = this.bones[`${side}UpperArm`];
+    const fore = this.bones[`${side}Forearm`];
+    const hand = this.bones[`${side}Hand`];
+    upper.position.copy(shoulder);
+    segmentFrame(shoulder, elbow, hinge, upper.quaternion);
+    fore.position.copy(elbow);
+    segmentFrame(elbow, wrist, hinge, fore.quaternion);
+    // Half of the hand's turn is taken by the forearm (pronation), so the wrist never wrings.
+    const twist = this.forearmTwist(side, fore.quaternion, handQ, elbow, wrist);
+    const axis = wrist.clone().sub(elbow).normalize();
+    fore.quaternion.premultiply(new Quaternion().setFromAxisAngle(axis, twist * 0.5));
+    hand.position.copy(grip);
+    hand.quaternion.copy(handQ);
   }
 
   /**
@@ -470,7 +658,7 @@ export class Player {
    * is moving fast.
    */
   private footPosition(
-    side: "l" | "r",
+    side: Side,
     wantLocal: Vector3,
     wantYaw: number,
     dt: number,

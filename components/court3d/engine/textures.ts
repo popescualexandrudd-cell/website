@@ -214,21 +214,133 @@ export function netTexture(): Texture {
   return toTexture(el);
 }
 
-/** Dark green windscreen fabric with a faint weave. */
-export function windscreenTexture(): Texture {
-  const [el, ctx] = canvas(128, 128);
+/**
+ * Windscreen fabric: dark green knitted mesh with its horizontal weave, grommet-reinforced top
+ * and bottom hems, and — on the "print" variant — the club's name repeated along the panel.
+ * One tile covers 6 m of fence (1024 px wide, 2.2 m tall).
+ */
+export function windscreenTexture(print?: string): Texture {
+  const W = 1024;
+  const H = 384;
+  const [el, ctx] = canvas(W, H);
   const random = rng(5);
-  ctx.fillStyle = "#294433";
-  ctx.fillRect(0, 0, 128, 128);
-  for (let y = 0; y < 128; y += 2) {
-    ctx.fillStyle = `rgba(255,255,255,${0.015 + random() * 0.02})`;
-    ctx.fillRect(0, y, 128, 1);
+  ctx.fillStyle = "#23392c";
+  ctx.fillRect(0, 0, W, H);
+  // Knit: fine horizontal ribs and a slightly irregular vertical grain.
+  for (let y = 0; y < H; y += 2) {
+    ctx.fillStyle = `rgba(255,255,255,${0.018 + random() * 0.018})`;
+    ctx.fillRect(0, y, W, 1);
   }
-  for (let i = 0; i < 400; i++) {
-    ctx.fillStyle = `rgba(0,0,0,${random() * 0.12})`;
-    ctx.fillRect(random() * 128, random() * 128, 2, 1);
+  for (let i = 0; i < 5000; i++) {
+    ctx.fillStyle = `rgba(0,0,0,${random() * 0.1})`;
+    ctx.fillRect(random() * W, random() * H, 2 + random() * 3, 1);
+  }
+  // Sun-faded blotches.
+  for (let i = 0; i < 30; i++) {
+    const x = random() * W;
+    const y = random() * H;
+    const r = 40 + random() * 120;
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, "rgba(120,150,120,0.05)");
+    g.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = g;
+    ctx.fillRect(x - r, y - r, r * 2, r * 2);
+  }
+  // Hems with brass grommets every 30 cm.
+  for (const y of [0, H - 14]) {
+    ctx.fillStyle = "#1b2b21";
+    ctx.fillRect(0, y, W, 14);
+    for (let x = 12; x < W; x += W / 20) {
+      ctx.fillStyle = "#b99d5c";
+      ctx.beginPath();
+      ctx.arc(x, y + 7, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#1b2b21";
+      ctx.beginPath();
+      ctx.arc(x, y + 7, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  if (print) {
+    ctx.font = "700 64px 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "rgba(236,232,220,0.82)";
+    const text = print.split("").join("\u200a");
+    ctx.fillText(text, W / 2, H * 0.47);
+    ctx.fillStyle = "rgba(194,86,43,0.9)";
+    ctx.fillRect(W / 2 - 150, H * 0.47 + 42, 300, 6);
+  }
+  return toTexture(el, { anisotropy: 8 });
+}
+
+/**
+ * Chain-link fencing: galvanised wire woven into 5 cm diamonds, on a transparent background
+ * (used with alphaTest). One tile is 0.5 × 0.5 m.
+ */
+export function chainLinkTexture(): Texture {
+  const size = 256;
+  const [el, ctx] = canvas(size, size);
+  ctx.clearRect(0, 0, size, size);
+  const cells = 10;
+  const step = size / cells;
+  ctx.lineCap = "round";
+  for (const [color, width] of [
+    ["rgba(40,46,44,0.95)", 3.4],
+    ["rgba(150,158,154,0.95)", 1.6],
+  ] as const) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    for (let i = -cells; i <= cells * 2; i++) {
+      ctx.beginPath();
+      ctx.moveTo(i * step, 0);
+      ctx.lineTo(i * step + size, size);
+      ctx.moveTo(i * step, size);
+      ctx.lineTo(i * step + size, 0);
+      ctx.stroke();
+    }
+  }
+  return toTexture(el, { anisotropy: 8 });
+}
+
+/** Trapezoidal ribbed steel cladding (walls and roof of the covered courts' hall). */
+export function claddingTexture(): Texture {
+  const [el, ctx] = canvas(256, 64);
+  const random = rng(15);
+  ctx.fillStyle = "#c9ced0";
+  ctx.fillRect(0, 0, 256, 64);
+  for (let x = 0; x < 256; x += 32) {
+    ctx.fillStyle = "rgba(0,0,0,0.13)";
+    ctx.fillRect(x, 0, 6, 64);
+    ctx.fillStyle = "rgba(255,255,255,0.35)";
+    ctx.fillRect(x + 6, 0, 3, 64);
+    ctx.fillStyle = "rgba(0,0,0,0.05)";
+    ctx.fillRect(x + 22, 0, 10, 64);
+  }
+  for (let i = 0; i < 300; i++) {
+    ctx.fillStyle = `rgba(90,80,70,${random() * 0.05})`;
+    ctx.fillRect(random() * 256, random() * 64, 1 + random() * 3, 1 + random() * 8);
   }
   return toTexture(el);
+}
+
+/** Weathered asphalt for the paths between the courts. */
+export function asphaltTexture(maxAnisotropy: number): Texture {
+  const size = 256;
+  const [el, ctx] = canvas(size, size);
+  const random = rng(17);
+  ctx.fillStyle = "#6c6a66";
+  ctx.fillRect(0, 0, size, size);
+  const noise = tileNoise(size, 8, random);
+  const image = ctx.getImageData(0, 0, size, size);
+  for (let i = 0; i < size * size; i++) {
+    const grain = (random() - 0.5) * 34 + ((noise[i] ?? 0) - 0.5) * 26;
+    image.data[i * 4] = Math.max(0, Math.min(255, 108 + grain));
+    image.data[i * 4 + 1] = Math.max(0, Math.min(255, 106 + grain));
+    image.data[i * 4 + 2] = Math.max(0, Math.min(255, 101 + grain));
+  }
+  ctx.putImageData(image, 0, 0);
+  return toTexture(el, { anisotropy: maxAnisotropy });
 }
 
 /**

@@ -5,6 +5,7 @@ import {
   Color,
   CylinderGeometry,
   DoubleSide,
+  Euler,
   Float32BufferAttribute,
   Group,
   IcosahedronGeometry,
@@ -21,6 +22,9 @@ import {
 } from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import {
+  asphaltTexture,
+  chainLinkTexture,
+  claddingTexture,
   clayGrainTexture,
   clayMacroTexture,
   lineTexture,
@@ -271,76 +275,298 @@ function buildFurniture(): Group {
   return mergeStatic(group);
 }
 
-/** Fence posts, top rail and the dark green windscreens around the court. */
-function buildFence(): Group {
+type FenceMaterials = {
+  screen: MeshStandardMaterial;
+  printed: MeshStandardMaterial;
+  wire: MeshStandardMaterial;
+  post: MeshStandardMaterial;
+};
+
+function fenceMaterials(): { materials: FenceMaterials; textures: Texture[] } {
+  const plain = windscreenTexture();
+  const print = windscreenTexture("ELITE TENNIS CLUB");
+  const wire = chainLinkTexture();
+  const screen = new MeshStandardMaterial({ map: plain, roughness: 0.95, side: DoubleSide });
+  const printed = new MeshStandardMaterial({ map: print, roughness: 0.95, side: DoubleSide });
+  const wireMaterial = new MeshStandardMaterial({
+    map: wire,
+    alphaTest: 0.35,
+    roughness: 0.55,
+    metalness: 0.5,
+    side: DoubleSide,
+  });
+  const post = new MeshStandardMaterial({ color: 0x27332d, roughness: 0.45, metalness: 0.55 });
+  return {
+    materials: { screen, printed, wire: wireMaterial, post },
+    textures: [plain, print, wire],
+  };
+}
+
+/**
+ * The fence of one court: galvanised chain-link from the ground to the top rail (3.6 m), dark
+ * green windscreens tied on up to 2.2 m (the club's name printed on the long sides), round
+ * posts every 3 m with top and middle rails, and a gate in one corner.
+ */
+function buildFence(
+  materials: FenceMaterials,
+  centreX: number,
+  sides: { north: boolean; south: boolean; west: boolean; east: boolean },
+): Group {
   const group = new Group();
   const hx = COURT.surfaceHalfWidth + 0.05;
   const hz = COURT.surfaceHalfLength + 0.05;
-  const height = 3.4;
-  const screenHeight = 2.3;
-  const screen = windscreenTexture();
-  const screenMaterial = new MeshStandardMaterial({
-    map: screen,
-    roughness: 0.95,
-    side: DoubleSide,
-  });
-  const meshMaterial = new MeshStandardMaterial({
-    color: 0x2c3a31,
-    roughness: 0.8,
-    transparent: true,
-    opacity: 0.35,
-    side: DoubleSide,
-    depthWrite: false,
-  });
-  const postMaterial = new MeshStandardMaterial({
-    color: 0x1c2a22,
-    roughness: 0.5,
-    metalness: 0.4,
-  });
-  const sides: { length: number; position: Vector3; rotation: number }[] = [
-    { length: hx * 2, position: new Vector3(0, 0, -hz), rotation: 0 },
-    { length: hx * 2, position: new Vector3(0, 0, hz), rotation: Math.PI },
-    { length: hz * 2, position: new Vector3(-hx, 0, 0), rotation: Math.PI / 2 },
-    { length: hz * 2, position: new Vector3(hx, 0, 0), rotation: -Math.PI / 2 },
-  ];
-  // Every post of the four walls in one instanced draw call.
+  const height = 3.6;
+  const screenHeight = 2.2;
+  const walls: { length: number; position: Vector3; rotation: number; printed: boolean }[] = [];
+  if (sides.north)
+    walls.push({
+      length: hx * 2,
+      position: new Vector3(centreX, 0, -hz),
+      rotation: 0,
+      printed: false,
+    });
+  if (sides.south)
+    walls.push({
+      length: hx * 2,
+      position: new Vector3(centreX, 0, hz),
+      rotation: Math.PI,
+      printed: false,
+    });
+  if (sides.west)
+    walls.push({
+      length: hz * 2,
+      position: new Vector3(centreX - hx, 0, 0),
+      rotation: Math.PI / 2,
+      printed: true,
+    });
+  if (sides.east)
+    walls.push({
+      length: hz * 2,
+      position: new Vector3(centreX + hx, 0, 0),
+      rotation: -Math.PI / 2,
+      printed: true,
+    });
   const postMatrices: Matrix4[] = [];
+  const railMatrices: Matrix4[] = [];
   const q = new Quaternion();
-  for (const side of sides) {
-    const wall = new Group();
-    const s = new Mesh(new PlaneGeometry(side.length, screenHeight), screenMaterial);
-    s.position.y = screenHeight / 2;
-    const m = new Mesh(new PlaneGeometry(side.length, height - screenHeight), meshMaterial);
-    m.position.y = screenHeight + (height - screenHeight) / 2;
-    s.receiveShadow = true;
-    wall.add(s, m);
-    const rail = new Mesh(new CylinderGeometry(0.03, 0.03, side.length, 8), postMaterial);
-    rail.rotation.z = Math.PI / 2;
-    rail.position.y = height;
-    wall.add(rail);
-    wall.position.copy(side.position);
-    wall.rotation.y = side.rotation;
-    wall.updateMatrixWorld(true);
-    const posts = Math.round(side.length / 3);
-    for (let i = 0; i <= posts; i++) {
-      const local = new Vector3(-side.length / 2 + (i / posts) * side.length, height / 2, 0.03);
-      postMatrices.push(
-        new Matrix4().compose(local.applyMatrix4(wall.matrixWorld), q, new Vector3(1, 1, 1)),
+  const one = new Vector3(1, 1, 1);
+  for (const wall of walls) {
+    const w = new Group();
+    // Windscreen panels, 6 m each, hung 5 cm above the clay.
+    const panels = Math.round(wall.length / 6);
+    const panelLength = wall.length / panels;
+    for (let i = 0; i < panels; i++) {
+      const printed = wall.printed && i % 2 === 1;
+      const panel = new Mesh(
+        new PlaneGeometry(panelLength - 0.04, screenHeight - 0.05),
+        printed ? materials.printed : materials.screen,
       );
+      panel.position.set(-wall.length / 2 + (i + 0.5) * panelLength, 0.05 + screenHeight / 2, 0.02);
+      panel.receiveShadow = true;
+      w.add(panel);
     }
-    group.add(wall);
+    // Chain-link over the whole height (seen above the screens and through the gate).
+    const wireGeometry = new PlaneGeometry(wall.length, height);
+    const uv = wireGeometry.getAttribute("uv");
+    for (let i = 0; i < uv.count; i++)
+      uv.setXY(i, uv.getX(i) * wall.length * 2, uv.getY(i) * height * 2);
+    const wire = new Mesh(wireGeometry, materials.wire);
+    wire.position.set(0, height / 2, 0);
+    w.add(wire);
+    w.position.copy(wall.position);
+    w.rotation.y = wall.rotation;
+    w.updateMatrixWorld(true);
+    const rot = new Quaternion().setFromEuler(new Euler(0, wall.rotation, Math.PI / 2));
+    for (const y of [height, 1.2]) {
+      const centre = new Vector3(0, y, 0.035).applyMatrix4(w.matrixWorld);
+      railMatrices.push(new Matrix4().compose(centre, rot, new Vector3(1, wall.length, 1)));
+    }
+    const posts = Math.round(wall.length / 3);
+    for (let i = 0; i <= posts; i++) {
+      const local = new Vector3(-wall.length / 2 + (i / posts) * wall.length, height / 2, 0.04);
+      postMatrices.push(new Matrix4().compose(local.applyMatrix4(w.matrixWorld), q, one));
+    }
+    group.add(w);
   }
   const posts = new InstancedMesh(
-    new CylinderGeometry(0.035, 0.035, height, 8),
-    postMaterial,
+    new CylinderGeometry(0.038, 0.038, height + 0.1, 10),
+    materials.post,
     postMatrices.length,
   );
   postMatrices.forEach((matrix, i) => posts.setMatrixAt(i, matrix));
-  group.add(posts);
+  posts.castShadow = true;
+  const rails = new InstancedMesh(
+    new CylinderGeometry(0.022, 0.022, 1, 8),
+    materials.post,
+    railMatrices.length,
+  );
+  railMatrices.forEach((matrix, i) => rails.setMatrixAt(i, matrix));
+  group.add(posts, rails);
   return group;
 }
 
-/** A ring of trees beyond the fence, fading into the haze. */
+/** Floodlight masts at the corners: 9 m poles with two LED heads aimed at the court. */
+function buildLights(): Group {
+  const group = new Group();
+  const metal = new MeshStandardMaterial({ color: 0x8d9391, roughness: 0.45, metalness: 0.7 });
+  const housing = new MeshStandardMaterial({ color: 0x2c3032, roughness: 0.5, metalness: 0.4 });
+  const lens = new MeshStandardMaterial({
+    color: 0xe9eef2,
+    roughness: 0.2,
+    emissive: 0x9aa4ab,
+    emissiveIntensity: 0.15,
+  });
+  const hx = COURT.surfaceHalfWidth + 0.6;
+  const hz = COURT.surfaceHalfLength - 4;
+  for (const [x, z] of [
+    [-hx, -hz],
+    [hx, -hz],
+    [-hx, hz],
+    [hx, hz],
+    [-hx, 0],
+    [hx, 0],
+  ] as const) {
+    const mast = new Group();
+    const pole = new Mesh(new CylinderGeometry(0.07, 0.11, 9, 10), metal);
+    pole.position.y = 4.5;
+    mast.add(pole);
+    const arm = new Mesh(new BoxGeometry(0.9, 0.08, 0.08), metal);
+    arm.position.set(0, 8.9, 0);
+    mast.add(arm);
+    for (const dx of [-0.35, 0.35]) {
+      const head = new Group();
+      const box = new Mesh(new BoxGeometry(0.5, 0.36, 0.1), housing);
+      const face = new Mesh(new BoxGeometry(0.44, 0.3, 0.02), lens);
+      face.position.z = 0.055;
+      head.add(box, face);
+      head.position.set(dx, 8.7, 0.12);
+      head.rotation.x = 0.55;
+      mast.add(head);
+    }
+    mast.position.set(x, 0, z);
+    // Heads face the court centre.
+    mast.rotation.y = Math.atan2(-x, -z);
+    group.add(mast);
+  }
+  return mergeStatic(group);
+}
+
+/** The coach's things by the court: a ball basket, the drag brush on the fence, a scoreboard. */
+function buildDetails(): Group {
+  const group = new Group();
+  const wire = new MeshStandardMaterial({ color: 0x30343a, roughness: 0.5, metalness: 0.6 });
+  const felt = new MeshStandardMaterial({ color: 0xd8e25a, roughness: 0.95 });
+  // Ball basket beside the near baseline, full of balls.
+  const basket = new Group();
+  const cage = new Mesh(new CylinderGeometry(0.2, 0.18, 0.5, 16, 4, true), wire);
+  cage.position.y = 0.55;
+  const cageMaterial = cage.material as MeshStandardMaterial;
+  cageMaterial.wireframe = true;
+  basket.add(cage);
+  for (const [lx, lz] of [
+    [0.18, 0.18],
+    [-0.18, 0.18],
+    [0.18, -0.18],
+    [-0.18, -0.18],
+  ] as const) {
+    const leg = new Mesh(new CylinderGeometry(0.012, 0.012, 0.8, 6), wire);
+    leg.position.set(lx, 0.4, lz);
+    leg.rotation.set(lz > 0 ? -0.12 : 0.12, 0, lx > 0 ? 0.12 : -0.12);
+    basket.add(leg);
+  }
+  const random = rng(31);
+  const ballGeometry = new SphereGeometry(0.034, 10, 8);
+  for (let i = 0; i < 26; i++) {
+    const a = random() * Math.PI * 2;
+    const r = Math.sqrt(random()) * 0.15;
+    const ball = new Mesh(ballGeometry, felt);
+    ball.position.set(Math.cos(a) * r, 0.5 + random() * 0.26, Math.sin(a) * r);
+    basket.add(ball);
+  }
+  basket.position.set(COURT.halfDoubles + 1.4, 0, COURT.halfLength - 1.2);
+  group.add(basket);
+
+  // Drag brush leaning on the fence behind the far baseline.
+  const broom = new MeshStandardMaterial({ color: 0x6b4a2f, roughness: 0.95 });
+  const brush = new Mesh(new BoxGeometry(1.8, 0.35, 0.05), broom);
+  brush.position.set(-3.5, 0.3, -COURT.surfaceHalfLength + 0.25);
+  brush.rotation.x = -0.25;
+  const handle = new Mesh(new CylinderGeometry(0.015, 0.015, 1.7, 6), broom);
+  handle.position.set(-3.5, 0.95, -COURT.surfaceHalfLength + 0.4);
+  handle.rotation.x = -0.35;
+  group.add(brush, handle);
+
+  // Flip-card scoreboard on the fence beside the net.
+  const board = new Mesh(
+    new BoxGeometry(0.9, 0.5, 0.05),
+    new MeshStandardMaterial({ color: 0x1d2a22, roughness: 0.6 }),
+  );
+  board.position.set(-COURT.surfaceHalfWidth + 0.12, 1.5, 0.9);
+  board.rotation.y = Math.PI / 2;
+  group.add(board);
+  const white = new MeshStandardMaterial({ color: 0xefece4, roughness: 0.7 });
+  for (let i = 0; i < 4; i++) {
+    const card = new Mesh(new BoxGeometry(0.16, 0.24, 0.01), white);
+    card.position.set(-COURT.surfaceHalfWidth + 0.155, 1.5, 0.9 - 0.33 + i * 0.22);
+    card.rotation.y = Math.PI / 2;
+    group.add(card);
+  }
+  group.traverse((o) => {
+    if (o instanceof Mesh) o.castShadow = true;
+  });
+  return mergeStatic(group);
+}
+
+/**
+ * The covered courts' hall in the distance: a steel-clad hall with a barrel roof and a band of
+ * translucent panels under the eaves.
+ */
+function buildHall(cladding: Texture): Group {
+  const group = new Group();
+  const walls = new MeshStandardMaterial({ map: cladding, roughness: 0.55, metalness: 0.35 });
+  const roof = new MeshStandardMaterial({ color: 0xb9bec0, roughness: 0.5, metalness: 0.4 });
+  const glazing = new MeshStandardMaterial({ color: 0xdfe6e8, roughness: 0.25, metalness: 0.1 });
+  const w = 36;
+  const d = 40;
+  const h = 6.5;
+  const map = cladding.clone();
+  map.repeat.set(w / 2, 1);
+  map.needsUpdate = true;
+  for (const [x, z, length, rot] of [
+    [0, -d / 2, w, 0],
+    [0, d / 2, w, Math.PI],
+    [-w / 2, 0, d, Math.PI / 2],
+    [w / 2, 0, d, -Math.PI / 2],
+  ] as const) {
+    const wall = new Mesh(new PlaneGeometry(length, h), walls);
+    wall.position.set(x, h / 2, z);
+    wall.rotation.y = rot;
+    group.add(wall);
+    const band = new Mesh(new PlaneGeometry(length, 0.9), glazing);
+    band.position.set(x, h - 0.6, z);
+    band.rotation.y = rot;
+    band.translateZ(0.02);
+    group.add(band);
+  }
+  const vault = new Mesh(
+    new CylinderGeometry(w / 2 / Math.sin(1.1), w / 2 / Math.sin(1.1), d, 40, 1, true, -1.1, 2.2),
+    roof,
+  );
+  vault.rotation.x = Math.PI / 2;
+  vault.rotation.z = 0;
+  const radius = w / 2 / Math.sin(1.1);
+  vault.position.y = h - radius * Math.cos(1.1);
+  group.add(vault);
+  group.traverse((o) => {
+    if (o instanceof Mesh) {
+      o.castShadow = true;
+      o.receiveShadow = true;
+    }
+  });
+  return group;
+}
+
+/** A ring of trees beyond the fence, fading into the haze (painted-sky fallback only). */
 function buildTrees(): InstancedMesh {
   const random = rng(21);
   const count = 84;
@@ -372,62 +598,117 @@ export type CourtScene = {
   textures: Texture[];
 };
 
-/** Everything static: surface, lines, net, furniture, fence, surroundings and sky. */
-export function buildCourt(maxAnisotropy: number, detail: "high" | "low"): CourtScene {
+/**
+ * Everything static: our court (surface, lines, net, furniture, fence, floodlights, the coach's
+ * things) and the club around it: the neighbouring clay courts, the paths between them and,
+ * further away, the hall of the covered courts. With the photographed surroundings the field
+ * and trees come from the photograph; without it, a painted sky and a ring of trees.
+ */
+export function buildCourt(
+  maxAnisotropy: number,
+  detail: "high" | "low",
+  photographed = false,
+): CourtScene {
   const group = new Group();
   const macro = clayMacroTexture(maxAnisotropy);
   const grain = clayGrainTexture(maxAnisotropy);
   grain.repeat.set(24, 48);
-  const surface = new Mesh(
-    new PlaneGeometry(COURT.surfaceHalfWidth * 2, COURT.surfaceHalfLength * 2),
-    new MeshStandardMaterial({
-      map: macro,
-      bumpMap: grain,
-      bumpScale: 1.4,
-      roughnessMap: grain,
-      roughness: 1,
-      color: 0xffffff,
-    }),
-  );
-  surface.rotation.x = -Math.PI / 2;
-  surface.receiveShadow = true;
-  group.add(surface);
-
-  const lines = new Mesh(
-    linesGeometry(courtLines()),
-    new MeshStandardMaterial({
-      map: lineTexture(),
-      roughness: 0.85,
-      polygonOffset: true,
-      polygonOffsetFactor: -2,
-      polygonOffsetUnits: -2,
-    }),
-  );
-  lines.position.y = 0.002;
-  lines.receiveShadow = true;
-  group.add(lines);
-
+  const clay = new MeshStandardMaterial({
+    map: macro,
+    bumpMap: grain,
+    bumpScale: 1.4,
+    roughnessMap: grain,
+    roughness: 1,
+    color: 0xffffff,
+  });
+  const lineMaterial = new MeshStandardMaterial({
+    map: lineTexture(),
+    roughness: 0.85,
+    polygonOffset: true,
+    polygonOffsetFactor: -2,
+    polygonOffsetUnits: -2,
+  });
+  const courtWidth = COURT.surfaceHalfWidth * 2 + 0.1;
+  const neighbours = detail === "high" ? [-1, 1] : [];
+  for (const offset of [0, ...neighbours]) {
+    const x = offset * courtWidth;
+    const surface = new Mesh(
+      new PlaneGeometry(COURT.surfaceHalfWidth * 2, COURT.surfaceHalfLength * 2),
+      clay,
+    );
+    surface.rotation.x = -Math.PI / 2;
+    surface.position.x = x;
+    surface.receiveShadow = true;
+    group.add(surface);
+    const lines = new Mesh(linesGeometry(courtLines()), lineMaterial);
+    lines.position.set(x, 0.002, 0);
+    lines.receiveShadow = true;
+    group.add(lines);
+    if (offset !== 0) {
+      const net = buildNet();
+      net.position.x = x;
+      group.add(net);
+    }
+  }
   group.add(buildNet());
   group.add(buildFurniture());
-  group.add(buildFence());
+  group.add(buildDetails());
 
-  const ground = new Mesh(
-    new PlaneGeometry(260, 260),
-    new MeshStandardMaterial({ color: 0x4a4f33, roughness: 1 }),
-  );
-  ground.rotation.x = -Math.PI / 2;
-  ground.position.y = -0.02;
-  ground.receiveShadow = detail === "high";
-  group.add(ground);
-  group.add(buildTrees());
+  const fence = fenceMaterials();
+  group.add(buildFence(fence.materials, 0, { north: true, south: true, west: true, east: true }));
+  for (const offset of neighbours) {
+    group.add(
+      buildFence(fence.materials, offset * courtWidth, {
+        north: true,
+        south: true,
+        west: offset < 0,
+        east: offset > 0,
+      }),
+    );
+  }
+  group.add(buildLights());
 
-  const skyMap = skyTexture();
-  const sky = new Mesh(
-    new SphereGeometry(120, 32, 16),
-    new MeshBasicMaterial({ map: skyMap, side: BackSide, fog: false, depthWrite: false }),
-  );
-  sky.renderOrder = -1;
-  group.add(sky);
-
-  return { group, textures: [macro, grain, skyMap] };
+  const textures: Texture[] = [macro, grain, ...fence.textures];
+  if (photographed) {
+    // Asphalt paths around the courts, ending in the photographed field.
+    const asphalt = asphaltTexture(maxAnisotropy);
+    const span = courtWidth * (1 + neighbours.length) + 8;
+    const depth = COURT.surfaceHalfLength * 2 + 8;
+    asphalt.repeat.set(span / 4, depth / 4);
+    const path = new Mesh(
+      new PlaneGeometry(span, depth),
+      new MeshStandardMaterial({ map: asphalt, roughness: 0.95 }),
+    );
+    path.rotation.x = -Math.PI / 2;
+    path.position.y = -0.004;
+    path.receiveShadow = true;
+    group.add(path);
+    textures.push(asphalt);
+    if (detail === "high") {
+      const cladding = claddingTexture();
+      const hall = buildHall(cladding);
+      hall.position.set(courtWidth * 0.5, 0, -COURT.surfaceHalfLength - 34);
+      group.add(hall);
+      textures.push(cladding);
+    }
+  } else {
+    const ground = new Mesh(
+      new PlaneGeometry(260, 260),
+      new MeshStandardMaterial({ color: 0x4a4f33, roughness: 1 }),
+    );
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -0.02;
+    ground.receiveShadow = detail === "high";
+    group.add(ground);
+    group.add(buildTrees());
+    const skyMap = skyTexture();
+    const sky = new Mesh(
+      new SphereGeometry(120, 32, 16),
+      new MeshBasicMaterial({ map: skyMap, side: BackSide, fog: false, depthWrite: false }),
+    );
+    sky.renderOrder = -1;
+    group.add(sky);
+    textures.push(skyMap);
+  }
+  return { group, textures };
 }

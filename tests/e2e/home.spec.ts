@@ -41,7 +41,12 @@ test("fără WebGL, pagina rămâne completă: afișul terenului și textele faz
   const page = await context.newPage();
   await page.goto("/");
   await expect(page.locator(".hero .court3d")).toHaveAttribute("data-status", "unavailable");
-  await expect(page.locator(".hero .court3d-poster svg")).toBeVisible();
+  const poster = page.locator(".hero .court3d-poster img");
+  await expect(poster).toBeVisible();
+  // The rendered still has loaded (not a broken image).
+  await expect
+    .poll(() => poster.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth))
+    .toBeGreaterThan(0);
   await expect(page.locator(".lab-phase-title")).not.toBeEmpty();
   await context.close();
 });

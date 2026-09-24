@@ -6,7 +6,8 @@ import {
   Vector3,
   WebGLRenderer,
 } from "three";
-import { createStage, type Detail } from "./stage";
+import { createStage, loadSky, type Detail } from "./stage";
+import { loadHuman } from "./humanAsset";
 import { Player, type Outfit } from "./player";
 import { BallView } from "./ballView";
 import { Rally } from "./rally";
@@ -66,8 +67,8 @@ const LAB_VIEWS: Record<LabView, { az: number; el: number }> = {
   sus: { az: 30, el: 68 },
 };
 
-const NEAR_OUTFIT: Outfit = { shirt: 0xf3f0ea, shorts: 0x2b2f3b, cap: 0xf3f0ea, shoe: 0xf5f3ef };
-const FAR_OUTFIT: Outfit = { shirt: 0x24324a, shorts: 0xf0ede6, cap: 0x24324a, shoe: 0xf5f3ef };
+const NEAR_OUTFIT: Outfit = { shirt: 0xf3f0ea, shorts: 0x2b2f3b, shoe: 0xf5f3ef };
+const FAR_OUTFIT: Outfit = { shirt: 0x24324a, shorts: 0xf0ede6, shoe: 0xf5f3ef };
 
 /**
  * The single WebGL scene behind every 3D viewport on the page. Viewports register their
@@ -155,6 +156,9 @@ export class CourtEngine {
    */
   static async create(options: { detail: Detail; reducedMotion: boolean }): Promise<CourtEngine> {
     const pause = () => new Promise<void>((resolve) => setTimeout(resolve, 0));
+    // The player model and the photographed surroundings download while the scene is built.
+    const humanPromise = loadHuman();
+    const skyPromise = loadSky(options.detail).catch(() => null);
     const renderer = new WebGLRenderer({
       antialias: true,
       powerPreference: "high-performance",
@@ -174,12 +178,13 @@ export class CourtEngine {
     canvas.className = "court3d-canvas";
     canvas.setAttribute("aria-hidden", "true");
     await pause();
-    const stage = createStage(renderer, options.detail);
+    const stage = createStage(renderer, options.detail, await skyPromise);
     await pause();
     const racketTextures = { strings: stringTexture(), grip: gripTexture() };
-    const near = new Player(NEAR_OUTFIT, racketTextures);
-    const far = new Player(FAR_OUTFIT, racketTextures);
-    const labPlayer = new Player(NEAR_OUTFIT, racketTextures);
+    const human = await humanPromise;
+    const near = new Player(NEAR_OUTFIT, racketTextures, human, options.detail);
+    const far = new Player(FAR_OUTFIT, racketTextures, human, options.detail);
+    const labPlayer = new Player(NEAR_OUTFIT, racketTextures, human, options.detail);
     const rallyBall = new BallView();
     const labBall = new BallView();
     stage.scene.add(near.root, far.root, rallyBall.group, labPlayer.root, labBall.group);

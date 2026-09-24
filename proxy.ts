@@ -77,6 +77,6 @@ export function proxy(request: NextRequest): NextResponse {
 export const config = {
   // Prefetches must pass through too: the locale rewrite (/programe → /ro/programe) happens here.
   matcher: [
-    "/((?!api|_next/static|_next/image|media|art|fonts|favicon.ico|icon.svg|apple-icon.png|robots.txt|sitemap.xml|manifest.webmanifest|.*\\.(?:svg|png|jpg|jpeg|webp|avif|ico|txt|xml|ics)$).*)",
+    "/((?!api|_next/static|_next/image|media|art|3d|fonts|favicon.ico|icon.svg|apple-icon.png|robots.txt|sitemap.xml|manifest.webmanifest|.*\\.(?:svg|png|jpg|jpeg|webp|avif|ico|txt|xml|ics)$).*)",
   ],
 };

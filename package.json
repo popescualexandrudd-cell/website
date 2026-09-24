@@ -25,6 +25,7 @@
     "db:reset": "prisma migrate reset --force && npm run db:seed",
     "db:seed": "tsx prisma/seed.ts",
     "images": "tsx scripts/images.ts",
+    "assets:3d": "tsx scripts/build-3d-assets.ts && prettier --write components/court3d/engine/humanRig.ts",
     "admin:create": "tsx scripts/admin-create.ts",
     "worker": "tsx worker/index.ts",
     "build:tools": "node scripts/build-tools.mjs",
