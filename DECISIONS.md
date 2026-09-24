@@ -408,7 +408,7 @@ Desktop 1440×900                                   Mobil 390×844
 42. **Imaginile generate nu sunt în git** (`public/art/generated/`, manifestul, iconițele PNG): sunt
     rezultatul lui `npm run images` din sursele din `art-src/` și `app/icon.svg`. Se generează singure
     la `npm run dev` și `npm run build` când lipsesc (și în build-ul Docker). Motiv: fișierele binare
-    comprimate conțin inevitabil octeți care arată ca „ş”/„ţ” pentru `grep`, iar verificarea diacriticelor
+    comprimate conțin inevitabil octeți care, pentru `grep`, arată ca literele s și t cu sedilă, iar verificarea diacriticelor
     din criteriile de acceptare trebuie să nu găsească nimic în depozit. Manifestul se citește la
     rulare, deci verificarea tipurilor nu depinde de imagini.
 43. **Imaginile Open Graph** se generează la cerere de `/api/og?path=…&lang=…` (next/og, 1200×630,

@@ -59,9 +59,11 @@ jobs:
 
       - run: npm ci
 
-      - name: Diacritice cu virgulă (fără ş ţ cu sedilă)
+      - name: Diacritice cu virgulă (fără s și t cu sedilă)
+        # Byte patterns (UTF-8) for the cedilla letters U+015E, U+015F, U+0162, U+0163, so this
+        # file itself does not contain them.
         run: |
-          if grep -rnE "ş|ţ|Ş|Ţ" --exclude-dir=node_modules --exclude-dir=.git --exclude="PROMPT*.md" .; then
+          if LC_ALL=C grep -rnE $'\xc5\x9e|\xc5\x9f|\xc5\xa2|\xc5\xa3' --exclude-dir=node_modules --exclude-dir=.git --exclude="PROMPT*.md" .; then
             echo "Am găsit diacritice cu sedilă. Folosește ș ț Ș Ț (virgulă dedesubt)."; exit 1
           fi
 
