@@ -58,6 +58,8 @@ export function toFormValue(field: FieldDef, value: unknown, tz: string): FieldV
       return value === true;
     case "triBool":
       return value === true ? "da" : value === false ? "nu" : "";
+    case "intList":
+      return Array.isArray(value) ? value.join(", ") : "";
     case "date":
       return value instanceof Date ? value.toISOString().slice(0, 10) : "";
     case "datetime":
@@ -228,6 +230,30 @@ export function parseForm(fields: FieldDef[], form: FormData, tz: string): Parse
         } else if ((min !== undefined && value < min) || (max !== undefined && value > max)) {
           fail(name, `Valoarea trebuie să fie între ${min ?? "…"} și ${max ?? "…"}.`);
         } else data[name] = value;
+        break;
+      }
+      case "intList": {
+        const parts = read(form, key)
+          .split(/[\s,;]+/)
+          .filter(Boolean);
+        const values = parts.map((part) => Number(part));
+        if (values.length === 0) {
+          if (field.nullable) data[name] = [];
+          else fail(name, REQUIRED);
+        } else if (values.some((v) => !Number.isInteger(v))) {
+          fail(name, "Scrie numere întregi despărțite prin virgulă, de exemplu 60, 90, 120.");
+        } else if (
+          values.some(
+            (v) =>
+              (field.min !== undefined && v < field.min) ||
+              (field.max !== undefined && v > field.max),
+          )
+        ) {
+          fail(
+            name,
+            `Fiecare valoare trebuie să fie între ${field.min ?? "…"} și ${field.max ?? "…"}.`,
+          );
+        } else data[name] = [...new Set(values)].sort((a, b) => a - b);
         break;
       }
       case "decimal": {

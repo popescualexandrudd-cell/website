@@ -31,7 +31,7 @@ export async function loadEngineInput(
   now = new Date(),
   client: Pick<
     typeof db,
-    "siteSettings" | "availabilityRule" | "availabilityException" | "booking" | "groupSchedule"
+    "siteSettings" | "availabilityRule" | "availabilityException" | "booking"
   > = db,
 ): Promise<EngineInput> {
   const settings = await client.siteSettings.findUniqueOrThrow({
@@ -48,7 +48,7 @@ export async function loadEngineInput(
   const fromDate = new Date(`${addDaysToKey(todayKey, -1)}T00:00:00Z`);
   const toDate = new Date(`${addDaysToKey(todayKey, settings.horizonDays + 2)}T00:00:00Z`);
 
-  const [rules, exceptions, bookings, groupSchedules] = await Promise.all([
+  const [rules, exceptions, bookings] = await Promise.all([
     client.availabilityRule.findMany({
       select: { weekday: true, startTime: true, endTime: true, validFrom: true, validTo: true },
     }),
@@ -62,21 +62,7 @@ export async function loadEngineInput(
         startsAt: { lt: toDate },
         blockedUntil: { gt: fromDate },
       },
-      select: { startsAt: true, blockedUntil: true, groupScheduleId: true, participants: true },
-    }),
-    client.groupSchedule.findMany({
-      select: {
-        id: true,
-        programId: true,
-        weekday: true,
-        startTime: true,
-        durationMin: true,
-        capacity: true,
-        membersCount: true,
-        seasonFrom: true,
-        seasonTo: true,
-        active: true,
-      },
+      select: { startsAt: true, blockedUntil: true },
     }),
   ]);
 
@@ -84,17 +70,7 @@ export async function loadEngineInput(
     settings,
     rules,
     exceptions,
-    bookings: bookings
-      .filter((b) => !b.groupScheduleId)
-      .map((b) => ({ startsAt: b.startsAt, blockedUntil: b.blockedUntil })),
-    groupSchedules,
-    groupEnrollments: bookings
-      .filter((b): b is typeof b & { groupScheduleId: string } => Boolean(b.groupScheduleId))
-      .map((b) => ({
-        groupScheduleId: b.groupScheduleId,
-        startsAt: b.startsAt,
-        participants: b.participants,
-      })),
+    bookings,
     now,
   };
 }

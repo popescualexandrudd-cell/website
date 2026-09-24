@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { bookingContacts, bookingTitle, programName, when } from "@/lib/admin/format";
+import { t } from "@/lib/i18n-content";
 import { statusLabel } from "@/lib/admin/booking-actions";
 import { BookingActions } from "@/components/admin/BookingActions";
 import { NotesForm } from "@/components/admin/NotesForm";
@@ -35,6 +36,7 @@ export default async function BookingDetailPage({
     where: { id },
     include: {
       program: true,
+      lessonType: true,
       location: true,
       client: true,
       emailLogs: { orderBy: { createdAt: "desc" }, take: 10 },
@@ -50,6 +52,8 @@ export default async function BookingDetailPage({
   const rows: [string, string][] = [
     ["Cod", booking.code],
     ["Program", programName(booking)],
+    ["Lecția", booking.lessonType ? t(booking.lessonType.name, "ro") : "—"],
+    ["Durata", `${booking.durationMin} de minute`],
     ["Când", when(booking.startsAt, booking.endsAt, tz)],
     ["Participanți", String(booking.participants)],
     ["Telefon", booking.phone || "—"],
@@ -62,7 +66,7 @@ export default async function BookingDetailPage({
     ],
   ];
   if (booking.forMinor)
-    rows.splice(4, 0, [
+    rows.splice(6, 0, [
       "Copil",
       `${booking.childFirstName ?? "—"}${booking.childAge ? `, ${booking.childAge} ani` : ""}`,
     ]);

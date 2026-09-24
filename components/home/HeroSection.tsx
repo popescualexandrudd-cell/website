@@ -5,6 +5,7 @@ import { TodoText } from "@/components/site/TodoText";
 import { Court3D } from "@/components/court3d/Court3D";
 import { CourtPoster } from "@/components/court3d/CourtPoster";
 import { safeHref } from "./links";
+import { Words } from "@/components/site/Words";
 
 /**
  * The opening: a live 3D match on clay behind the headline, the two main actions and four
@@ -38,7 +39,7 @@ export async function HeroSection({ scene }: { scene: SceneView }) {
           <TodoText value={scene.indexName} />
         </p>
         <h1 id={`${scene.key}-title`} className="hero-title">
-          <TodoText value={scene.title} />
+          <Words text={scene.title} />
         </h1>
         {scene.body ? (
           <p className="hero-lead">

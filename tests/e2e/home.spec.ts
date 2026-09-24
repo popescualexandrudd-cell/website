@@ -2,7 +2,9 @@ import { expect, test } from "@playwright/test";
 
 test("pagina principală: titlul, secțiunea personală și laboratorul tehnic", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText(/Tenis de performanță/i);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    /Lecții de tenis pentru copii și adulți/i,
+  );
   await expect(page.locator("#antrenorul .coach-portrait")).toBeVisible();
 
   // The lab's phases are plain buttons: they work with or without the 3D scene.

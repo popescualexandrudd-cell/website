@@ -11,9 +11,11 @@ import { manageToken } from "@/lib/email/messages";
 import { hashToken } from "@/lib/tokens";
 
 const TZ = "Europe/Bucharest";
+let initiereId = "";
+let competitieId = "";
 let individualId = "";
-let semiId = "";
-let miniId = "";
+let pairId = "";
+let groupId = "";
 
 /** A weekday at least three days ahead, so notice and opening hours never interfere. */
 function futureWeekday(offsetDays = 3): string {
@@ -24,7 +26,9 @@ function futureWeekday(offsetDays = 3): string {
 
 function input(overrides: Partial<CreateBookingInput> = {}): CreateBookingInput {
   return {
-    programId: individualId,
+    programId: initiereId,
+    lessonTypeId: individualId,
+    durationMin: 60,
     startsAt: zonedInstant(futureWeekday(), "10:00", TZ),
     name: "Test Client",
     email: `test-${Math.random().toString(36).slice(2)}@example.com`,
@@ -38,14 +42,16 @@ function input(overrides: Partial<CreateBookingInput> = {}): CreateBookingInput 
 }
 
 beforeAll(async () => {
-  individualId = (await db.program.findUniqueOrThrow({ where: { slug: "lectie-individuala" } })).id;
-  semiId = (await db.program.findUniqueOrThrow({ where: { slug: "lectie-in-doi" } })).id;
-  miniId = (await db.program.findUniqueOrThrow({ where: { slug: "mini-tenis" } })).id;
+  initiereId = (await db.program.findUniqueOrThrow({ where: { slug: "initiere" } })).id;
+  competitieId = (await db.program.findUniqueOrThrow({ where: { slug: "competitie" } })).id;
+  const lesson = (slug: string) => db.lessonType.findUniqueOrThrow({ where: { slug } });
+  individualId = (await lesson("lectie-individuala")).id;
+  pairId = (await lesson("lectie-in-doi")).id;
+  groupId = (await lesson("lectie-de-grup")).id;
 });
 
 beforeEach(async () => {
   await db.$executeRawUnsafe('TRUNCATE "EmailLog", "Booking", "Client" RESTART IDENTITY CASCADE');
-  await db.groupSchedule.updateMany({ data: { membersCount: 0 } });
 });
 
 describe("creating bookings", () => {
@@ -71,17 +77,27 @@ describe("creating bookings", () => {
     expect(await db.booking.count({ where: { startsAt } })).toBe(1);
   });
 
-  it("keeps the break between lessons, also for different programmes", async () => {
+  it("keeps the break between lessons, also for different programmes and lesson types", async () => {
     const day = futureWeekday(5);
     expect((await createBooking(input({ startsAt: zonedInstant(day, "10:00", TZ) }))).ok).toBe(
       true,
     );
     const tooClose = await createBooking(
-      input({ programId: semiId, participants: 2, startsAt: zonedInstant(day, "11:05", TZ) }),
+      input({
+        programId: competitieId,
+        lessonTypeId: pairId,
+        participants: 2,
+        startsAt: zonedInstant(day, "11:05", TZ),
+      }),
     );
     expect(tooClose.ok).toBe(false);
     const afterBreak = await createBooking(
-      input({ programId: semiId, participants: 2, startsAt: zonedInstant(day, "11:10", TZ) }),
+      input({
+        programId: competitieId,
+        lessonTypeId: pairId,
+        participants: 2,
+        startsAt: zonedInstant(day, "11:10", TZ),
+      }),
     );
     expect(afterBreak.ok).toBe(true);
   });
@@ -143,48 +159,72 @@ describe("creating bookings", () => {
     });
   });
 
-  it("asks for the child's first name and age for children's programmes", async () => {
-    const schedule = await db.groupSchedule.findFirstOrThrow({ where: { programId: miniId } });
-    let key = futureWeekday(3);
-    while (isoWeekday(key) !== schedule.weekday) key = addDaysToKey(key, 1);
-    const result = await createBooking(
-      input({
-        programId: miniId,
-        groupScheduleId: schedule.id,
-        startsAt: zonedInstant(key, schedule.startTime, TZ),
-      }),
-    );
+  it("asks for the child's first name and age when the lesson is for a child", async () => {
+    const result = await createBooking(input({ forMinor: true }));
     expect(result).toEqual({ ok: false, error: "minor" });
+    const withChild = await createBooking(
+      input({ forMinor: true, childFirstName: "Ana", childAge: 7, parentName: "Test Client" }),
+    );
+    expect(withChild.ok).toBe(true);
   });
 });
 
-describe("group sessions", () => {
-  it("never overfills a session, even with simultaneous requests", async () => {
-    const schedule = await db.groupSchedule.findFirstOrThrow({ where: { programId: miniId } });
-    await db.groupSchedule.update({
-      where: { id: schedule.id },
-      data: { membersCount: schedule.capacity - 1 },
-    });
-    let key = futureWeekday(3);
-    while (isoWeekday(key) !== schedule.weekday) key = addDaysToKey(key, 1);
-    const startsAt = zonedInstant(key, schedule.startTime, TZ);
-    const results = await Promise.all(
-      Array.from({ length: 4 }, (_, i) =>
-        createBooking(
-          input({
-            programId: miniId,
-            groupScheduleId: schedule.id,
-            startsAt,
-            forMinor: true,
-            childFirstName: `Copil${i}`,
-            childAge: 6,
-            parentName: "Părinte",
-          }),
-        ),
-      ),
+describe("durations and lesson types", () => {
+  it("stores the chosen duration and blocks it, with the break, for everyone", async () => {
+    const day = futureWeekday(9);
+    const long = await createBooking(
+      input({ durationMin: 120, startsAt: zonedInstant(day, "09:00", TZ) }),
     );
-    expect(results.filter((r) => r.ok)).toHaveLength(1);
-    expect(results.filter((r) => !r.ok && r.error === "sessionFull")).toHaveLength(3);
+    expect(long.ok).toBe(true);
+    if (!long.ok) return;
+    const row = await db.booking.findUniqueOrThrow({ where: { id: long.bookingId } });
+    expect(row.durationMin).toBe(120);
+    expect(row.lessonTypeId).toBe(individualId);
+    expect(row.endsAt.getTime() - row.startsAt.getTime()).toBe(120 * 60_000);
+    // 10:30 falls inside the two-hour lesson; 11:10 is right after the break.
+    expect((await createBooking(input({ startsAt: zonedInstant(day, "10:30", TZ) }))).ok).toBe(
+      false,
+    );
+    expect((await createBooking(input({ startsAt: zonedInstant(day, "11:10", TZ) }))).ok).toBe(
+      true,
+    );
+  });
+
+  it("refuses a duration the lesson type does not offer", async () => {
+    expect(await createBooking(input({ durationMin: 75 }))).toEqual({
+      ok: false,
+      error: "duration",
+    });
+  });
+
+  it("checks the number of people against the lesson type", async () => {
+    expect(await createBooking(input({ lessonTypeId: pairId, participants: 1 }))).toEqual({
+      ok: false,
+      error: "participants",
+    });
+    expect(await createBooking(input({ lessonTypeId: groupId, participants: 7 }))).toEqual({
+      ok: false,
+      error: "participants",
+    });
+    const group = await createBooking(
+      input({
+        lessonTypeId: groupId,
+        participants: 5,
+        startsAt: zonedInstant(futureWeekday(10), "17:00", TZ),
+      }),
+    );
+    expect(group.ok).toBe(true);
+  });
+
+  it("refuses unknown programmes and lesson types", async () => {
+    expect(await createBooking(input({ programId: "missing-program" }))).toEqual({
+      ok: false,
+      error: "program",
+    });
+    expect(await createBooking(input({ lessonTypeId: "missing-lesson" }))).toEqual({
+      ok: false,
+      error: "lessonType",
+    });
   });
 });
 
@@ -208,7 +248,8 @@ describe("cancelling through the link", () => {
       data: {
         id: soonId,
         code: "TN-SOON01",
-        programId: individualId,
+        programId: initiereId,
+        lessonTypeId: individualId,
         startsAt,
         endsAt: new Date(startsAt.getTime() + 3_600_000),
         blockedUntil: new Date(startsAt.getTime() + 70 * 60_000),

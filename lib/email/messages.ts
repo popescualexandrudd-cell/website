@@ -26,7 +26,7 @@ const LEVEL_LABELS: Record<string, string> = {
 export async function loadBookingForEmail(id: string) {
   return db.booking.findUniqueOrThrow({
     where: { id },
-    include: { program: true, location: true },
+    include: { program: true, lessonType: true, location: true },
   });
 }
 type BookingForEmail = Awaited<ReturnType<typeof loadBookingForEmail>>;
@@ -60,9 +60,12 @@ function describe(booking: BookingForEmail, l: EmailLang, timezone: string): Boo
   );
   const when = `${date}, ${formatTime(booking.startsAt, timezone)}–${formatTime(booking.endsAt, timezone)}`;
   const where = booking.location ? `${booking.location.name}, ${booking.location.address}` : "—";
+  const minutes =
+    l === "en" ? `${booking.durationMin} minutes` : `${booking.durationMin} de minute`;
   return {
     code: booking.code,
     program: t(booking.program.name, l),
+    lesson: booking.lessonType ? `${t(booking.lessonType.name, l)}, ${minutes}` : minutes,
     when,
     where,
     participants: booking.participants,
@@ -85,7 +88,7 @@ function icsFor(
     uid: `${booking.code}@${new URL(urls.home("ro")).host}`,
     start: booking.startsAt,
     end: booking.endsAt,
-    summary: `${t(booking.program.name, l)} · ${brand}`,
+    summary: `${booking.lessonType ? t(booking.lessonType.name, l) : t(booking.program.name, l)} · ${brand}`,
     description: `${strings[l].details.code}: ${booking.code}\n${urls.manageBooking(manageToken(booking.id), booking.locale)}`,
     location: booking.location
       ? `${booking.location.name}, ${booking.location.address}`
@@ -113,7 +116,7 @@ async function clientEmail(
   const s = strings[l];
   const details = describe(booking, l, settings.timezone);
   const subject =
-    kind === "request" || kind === "requestGroup"
+    kind === "request"
       ? s.requestReceived.subject(booking.code)
       : kind === "confirmed"
         ? s.confirmed.subject(booking.code)
@@ -153,12 +156,7 @@ export async function queueNewBookingEmails(bookingId: string): Promise<string[]
   const { settings, coachEmail, ornamentUrl } = await context();
   const ids: string[] = [];
   const instant = booking.status === "CONFIRMATA";
-  ids.push(
-    await clientEmail(
-      booking,
-      instant ? "confirmed" : booking.groupScheduleId ? "requestGroup" : "request",
-    ),
-  );
+  ids.push(await clientEmail(booking, instant ? "confirmed" : "request"));
 
   if (coachEmail) {
     const details = describe(booking, "ro", settings.timezone);
@@ -169,9 +167,7 @@ export async function queueNewBookingEmails(bookingId: string): Promise<string[]
       await queueEmail({
         to: coachEmail,
         template: "coach-new-booking",
-        subject: booking.groupScheduleId
-          ? coachStrings.newBooking.subjectGroup(booking.code, details.when)
-          : coachStrings.newBooking.subject(booking.code, details.when),
+        subject: coachStrings.newBooking.subject(booking.code, details.when),
         bookingId: booking.id,
         replyTo: booking.email,
         element: createElement(CoachBookingEmail, {

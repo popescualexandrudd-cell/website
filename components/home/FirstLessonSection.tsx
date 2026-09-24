@@ -2,6 +2,7 @@ import { Link } from "@/i18n/navigation";
 import type { SceneView } from "@/lib/content";
 import { TodoText } from "@/components/site/TodoText";
 import { safeHref } from "./links";
+import { Words } from "@/components/site/Words";
 
 /** The first lesson is an assessment: the offer itself comes from the settings. */
 export function FirstLessonSection({
@@ -20,7 +21,7 @@ export function FirstLessonSection({
             <TodoText value={scene.indexName} />
           </p>
           <h2 id={`${scene.key}-title`} className="band-title">
-            <TodoText value={scene.title} />
+            <Words text={scene.title} />
           </h2>
         </div>
         <div className="band-copy">

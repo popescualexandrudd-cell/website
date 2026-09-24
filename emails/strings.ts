@@ -10,6 +10,7 @@ export const strings = {
     details: {
       code: "Cod",
       program: "Program",
+      lesson: "Lecția",
       when: "Când",
       where: "Unde",
       participants: "Participanți",
@@ -23,7 +24,6 @@ export const strings = {
       preview: "Îți confirm în cel mai scurt timp.",
       title: "Am primit cererea ta.",
       body: "Verific programul și îți confirm pe email, de obicei în aceeași zi. Până atunci, ora rămâne rezervată pentru tine.",
-      groupBody: "Ne vedem la ședința de probă. Îți confirm pe email în cel mai scurt timp.",
     },
     confirmed: {
       subject: (code: string) => `Lecția e confirmată (${code})`,
@@ -62,7 +62,7 @@ export const strings = {
       subject: "Confirmă abonarea",
       preview: "Un singur clic.",
       title: "Confirmă abonarea.",
-      body: "Apasă butonul de mai jos ca să primești un email când se deschid înscrierile la tabere și clinici. Dacă nu tu ai cerut abonarea, ignoră acest mesaj.",
+      body: "Apasă butonul de mai jos ca să primești un email când am locuri libere sau noutăți despre lecții. Dacă nu tu ai cerut abonarea, ignoră acest mesaj.",
       button: "Confirmă abonarea",
       unsubscribe: "Dezabonare",
     },
@@ -80,6 +80,7 @@ export const strings = {
     details: {
       code: "Code",
       program: "Programme",
+      lesson: "Lesson",
       when: "When",
       where: "Where",
       participants: "Participants",
@@ -93,7 +94,6 @@ export const strings = {
       preview: "I will confirm shortly.",
       title: "I have your request.",
       body: "I will check the schedule and confirm by email, usually the same day. Until then, the slot is held for you.",
-      groupBody: "See you at the trial session. I will confirm by email shortly.",
     },
     confirmed: {
       subject: (code: string) => `Your lesson is confirmed (${code})`,
@@ -132,7 +132,7 @@ export const strings = {
       subject: "Confirm your subscription",
       preview: "One click.",
       title: "Confirm your subscription.",
-      body: "Press the button below to get an email when enrolment opens for camps and clinics. If you did not ask to subscribe, ignore this message.",
+      body: "Press the button below to get an email when I have free places or news about lessons. If you did not ask to subscribe, ignore this message.",
       button: "Confirm subscription",
       unsubscribe: "Unsubscribe",
     },
@@ -148,7 +148,6 @@ export const strings = {
 export const coachStrings = {
   newBooking: {
     subject: (code: string, when: string) => `Rezervare nouă ${code}: ${when}`,
-    subjectGroup: (code: string, when: string) => `Cerere de înscriere ${code}: ${when}`,
     title: "Rezervare nouă",
     requestNote:
       "Clientul așteaptă confirmarea. Apasă unul dintre butoane; pagina îți cere încă o confirmare.",

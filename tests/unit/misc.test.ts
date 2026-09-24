@@ -83,6 +83,9 @@ describe("content helpers", () => {
       "https://wa.me/40722123456?text=Bun%C4%83",
     );
     expect(whatsappLink("[DE COMPLETAT]")).toBeNull();
+    // Local Romanian numbers get the country code that wa.me needs.
+    expect(whatsappLink("0722 501 748")).toBe("https://wa.me/40722501748");
+    expect(whatsappLink("0040 722 501 748")).toBe("https://wa.me/40722501748");
   });
 
   it("fills the legal templates from the settings", () => {

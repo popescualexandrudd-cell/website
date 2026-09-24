@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { SceneView } from "@/lib/content";
 import { TodoText } from "@/components/site/TodoText";
+import { Words } from "@/components/site/Words";
 
 /** Places left this month, computed live from the availability. */
 export async function PlacesSection({
@@ -27,7 +28,7 @@ export async function PlacesSection({
             <TodoText value={scene.indexName} />
           </p>
           <h2 id={`${scene.key}-title`} className="band-title">
-            <TodoText value={scene.title} />
+            <Words text={scene.title} />
           </h2>
           {scene.body ? (
             <p className="mt-4 max-w-xl text-cerneala-2">

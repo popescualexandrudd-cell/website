@@ -13,7 +13,7 @@ import {
   type BookingTransition,
 } from "@/lib/admin/booking-actions";
 import { verifyPayload } from "@/lib/tokens";
-import { createBooking } from "@/lib/booking";
+import { ADMIN_DURATION, createBooking } from "@/lib/booking";
 import { zonedInstant } from "@/lib/availability";
 import { getPolicyVersion } from "@/lib/content";
 import { queueConfirmationEmail } from "@/lib/email/messages";
@@ -76,9 +76,10 @@ export async function saveBookingNotes(_prev: FormState, formData: FormData): Pr
 
 const manualSchema = z.object({
   programId: z.string().min(1),
+  lessonTypeId: z.string().min(1),
+  durationMin: z.coerce.number().int().min(ADMIN_DURATION.min).max(ADMIN_DURATION.max),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   time: z.string().regex(/^\d{2}:\d{2}$/),
-  groupScheduleId: z.string().optional(),
   name: z.string().trim().min(2).max(120),
   email: z.string().trim().toLowerCase().max(200).optional(),
   phone: z.string().trim().min(6).max(40),
@@ -118,12 +119,14 @@ export async function createManualBooking(
   });
   const result = await createBooking({
     programId: data.programId,
+    lessonTypeId: data.lessonTypeId,
+    durationMin: data.durationMin,
     startsAt: zonedInstant(data.date, data.time, settings.timezone),
-    groupScheduleId: data.groupScheduleId || null,
     name: data.name,
     email,
     phone: data.phone,
     participants: data.participants,
+    forMinor: Boolean(data.childFirstName),
     childFirstName: data.childFirstName || null,
     childAge: data.childAge ? Number.parseInt(data.childAge, 10) : null,
     parentName: data.childFirstName ? data.name : null,
@@ -137,11 +140,12 @@ export async function createManualBooking(
     const messages: Record<string, string> = {
       conflict:
         "Intervalul se suprapune cu altă lecție (sau cu pauza dintre lecții). Alege altă oră.",
-      unavailable:
-        "Pentru grupe, alege o ședință existentă din orarul grupei (ziua și ora exacte).",
-      sessionFull: "Ședința de grupă este completă.",
-      participants: "Numărul de participanți nu e valid pentru acest program.",
+      unavailable: "Ora aleasă nu mai e liberă. Alege altă oră.",
+      participants:
+        "Numărul de participanți nu se potrivește cu tipul lecției (de exemplu, 2 pentru lecția în doi).",
       program: "Programul nu există.",
+      lessonType: "Tipul de lecție nu există.",
+      duration: `Durata trebuie să fie între ${ADMIN_DURATION.min} și ${ADMIN_DURATION.max} de minute.`,
       minor: "Pentru copii completează prenumele și vârsta copilului.",
     };
     return {

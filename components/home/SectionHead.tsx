@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { TodoText } from "@/components/site/TodoText";
+import { Words } from "@/components/site/Words";
 
 type Props = {
   id: string;
@@ -21,7 +22,7 @@ export function SectionHead({ id, kicker, title, as = "h2", className = "", chil
         </p>
       ) : null}
       <Tag id={id} className="home-title">
-        <TodoText value={title} />
+        <Words text={title} />
       </Tag>
       {children}
     </div>

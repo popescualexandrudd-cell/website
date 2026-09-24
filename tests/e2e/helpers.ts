@@ -28,13 +28,19 @@ export async function loginAsAdmin(page: Page) {
   await expect(page).toHaveURL(/\/admin(\?|$)/);
 }
 
-/** Fills the details step of the booking form and submits it. */
+/**
+ * Fills "Datele mele" (step 4), moves on to the confirmation (step 5) and ticks the consent,
+ * leaving only the final submit to the test.
+ */
 export async function fillBookingDetails(page: Page, who: { name: string; email: string }) {
-  const form = page.locator(".booking-form");
-  await form.getByLabel("Numele tău").fill(who.name);
-  await form.getByLabel(/^Email/).fill(who.email);
-  await form.getByLabel(/^Telefon/).fill("0722 123 456");
-  await form.locator('input[name="consent"]').check();
+  const flow = page.locator(".booking-flow");
+  await expect(flow.getByRole("heading", { name: "Datele mele" })).toBeVisible();
+  await flow.getByLabel("Numele tău").fill(who.name);
+  await flow.getByLabel(/^Email/).fill(who.email);
+  await flow.getByLabel(/^Telefon/).fill("0722 123 456");
+  await flow.getByRole("button", { name: "Verifică și trimite" }).click();
+  await expect(flow.getByRole("heading", { name: "Confirmarea rezervării" })).toBeVisible();
+  await flow.locator('input[name="consent"]').check();
 }
 
 type MailpitMessage = {
@@ -44,16 +50,18 @@ type MailpitMessage = {
   Attachments: number;
 };
 
-/** Waits until Mailpit has a message for `to` whose subject matches. */
+/** Waits until Mailpit has a message (for `to`, when given) whose subject matches. */
 export async function waitForEmail(
-  to: string,
+  to: string | null,
   subject: RegExp,
   timeoutMs = 20_000,
 ): Promise<MailpitMessage> {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
     const response = await fetch(
-      `${MAILPIT}/api/v1/search?query=${encodeURIComponent(`to:"${to}"`)}`,
+      to
+        ? `${MAILPIT}/api/v1/search?query=${encodeURIComponent(`to:"${to}"`)}`
+        : `${MAILPIT}/api/v1/messages?limit=200`,
     );
     if (response.ok) {
       const body = (await response.json()) as { messages: MailpitMessage[] };
@@ -62,5 +70,5 @@ export async function waitForEmail(
     }
     await new Promise((resolve) => setTimeout(resolve, 500));
   }
-  throw new Error(`Niciun email către ${to} cu subiectul ${subject}`);
+  throw new Error(`Niciun email către ${to ?? "oricine"} cu subiectul ${subject}`);
 }

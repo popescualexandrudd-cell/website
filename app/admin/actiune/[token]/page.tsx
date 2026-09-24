@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { verifyPayload } from "@/lib/tokens";
-import { bookingTitle, programName, when } from "@/lib/admin/format";
+import { bookingTitle, lessonLine, when } from "@/lib/admin/format";
 import { statusLabel } from "@/lib/admin/booking-actions";
 import { EmailActionForm } from "@/components/admin/EmailActionForm";
 
@@ -17,7 +17,10 @@ export default async function EmailActionPage({ params }: PageProps<"/admin/acti
   const payload = verifyPayload(decodeURIComponent(token));
   const booking =
     payload && typeof payload.b === "string"
-      ? await db.booking.findUnique({ where: { id: payload.b }, include: { program: true } })
+      ? await db.booking.findUnique({
+          where: { id: payload.b },
+          include: { program: true, lessonType: true },
+        })
       : null;
   const settings = await db.siteSettings.findUniqueOrThrow({
     where: { id: 1 },
@@ -53,7 +56,7 @@ export default async function EmailActionPage({ params }: PageProps<"/admin/acti
                 </tr>
                 <tr>
                   <th scope="row">Program</th>
-                  <td>{programName(booking)}</td>
+                  <td>{lessonLine(booking)}</td>
                 </tr>
                 <tr>
                   <th scope="row">Când</th>

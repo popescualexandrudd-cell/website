@@ -6,6 +6,7 @@ import {
   getCoach,
   getFacilities,
   getFaqs,
+  getLessonTypes,
   getLocations,
   getPrograms,
   getScenes,
@@ -21,8 +22,8 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { CoachSection } from "@/components/home/CoachSection";
 import { StatementSection } from "@/components/home/StatementSection";
 import { MethodSection } from "@/components/home/MethodSection";
-import { PathwaySection } from "@/components/home/PathwaySection";
 import { ProgramsSection } from "@/components/home/ProgramsSection";
+import { LessonsSection } from "@/components/home/LessonsSection";
 import { VenueSection } from "@/components/home/VenueSection";
 import { FirstLessonSection } from "@/components/home/FirstLessonSection";
 import { PlacesSection } from "@/components/home/PlacesSection";
@@ -51,18 +52,29 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const locale = raw as Locale;
   setRequestLocale(locale);
 
-  const [scenes, programs, locations, facilities, faqs, testimonials, settingsRow, engine, coach] =
-    await Promise.all([
-      getScenes(locale),
-      getPrograms(locale),
-      getLocations(locale),
-      getFacilities(locale),
-      getFaqs(locale, "home"),
-      getTestimonials(locale, 3),
-      getSettings(),
-      loadEngineInput(),
-      getCoach(locale),
-    ]);
+  const [
+    scenes,
+    programs,
+    lessons,
+    locations,
+    facilities,
+    faqs,
+    testimonials,
+    settingsRow,
+    engine,
+    coach,
+  ] = await Promise.all([
+    getScenes(locale),
+    getPrograms(locale),
+    getLessonTypes(locale),
+    getLocations(locale),
+    getFacilities(locale),
+    getFaqs(locale, "home"),
+    getTestimonials(locale, 3),
+    getSettings(),
+    loadEngineInput(),
+    getCoach(locale),
+  ]);
   const settings = localizedSettings(settingsRow, locale);
   const location = locations[0] ?? null;
   const amenities = facilities.filter((f) => f.type === "DOTARE_BAZA");
@@ -79,12 +91,10 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         return <StatementSection key={scene.key} scene={scene} />;
       case "metoda":
         return <MethodSection key={scene.key} scene={scene} />;
-      case "palierele":
-        return <PathwaySection key={scene.key} scene={scene} />;
+      case "lectii":
+        return <LessonsSection key={scene.key} scene={scene} lessons={lessons} />;
       case "programe":
-        return (
-          <ProgramsSection key={scene.key} scene={scene} programs={programs} locale={locale} />
-        );
+        return <ProgramsSection key={scene.key} scene={scene} programs={programs} />;
       case "terenul":
         return (
           <VenueSection key={scene.key} scene={scene} location={location} amenities={amenities} />
@@ -122,7 +132,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     <div className="home" data-home>
       <JsonLd
         data={[
-          businessLd(settings, location, settings.seoDescription),
+          businessLd(settings, location, settings.seoDescription, lessons),
           personLd(settings, coach, localizedUrl("/despre", locale)),
         ]}
       />

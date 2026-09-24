@@ -7,20 +7,23 @@ import {
   type BookingStatus,
   type Level,
 } from "./generated/prisma/client";
-import { groupOccurrences, isSlotAvailable, localDateKey } from "./availability";
+import { isSlotAvailable } from "./availability";
 import { loadEngineInput } from "./availability-data";
 import { generateBookingCode, hashToken } from "./tokens";
 import { manageToken } from "./email/messages";
-import { isChildrenProgram } from "./programs";
 
 const MINUTE = 60_000;
-/** Every booking creation takes this lock, so availability and group capacity checks never race. */
+/** Every booking creation takes this lock, so availability checks never race. */
 const BOOKING_LOCK_KEY = 4_242_001;
+/** Durations accepted from the admin (phone bookings), in minutes. */
+export const ADMIN_DURATION = { min: 15, max: 600 };
 
 export type CreateBookingInput = {
+  /** The training programme (Inițiere, Competiție, Amatori). */
   programId: string;
+  lessonTypeId: string;
+  durationMin: number;
   startsAt: Date;
-  groupScheduleId?: string | null;
   name: string;
   email: string;
   phone: string;
@@ -40,7 +43,7 @@ export type CreateBookingInput = {
 };
 
 export type CreateBookingError =
-  "program" | "participants" | "unavailable" | "conflict" | "sessionFull" | "minor";
+  "program" | "lessonType" | "duration" | "participants" | "unavailable" | "conflict" | "minor";
 export type CreateBookingResult =
   | { ok: true; bookingId: string; code: string; status: BookingStatus; manageToken: string }
   | { ok: false; error: CreateBookingError };
@@ -88,76 +91,50 @@ export async function createBooking(input: CreateBookingInput): Promise<CreateBo
       async (tx) => {
         await tx.$executeRaw`SELECT pg_advisory_xact_lock(${BOOKING_LOCK_KEY}::bigint)`;
         const settings = await tx.siteSettings.findUniqueOrThrow({ where: { id: 1 } });
-        const program = await tx.program.findUnique({ where: { id: input.programId } });
         const isAdmin = input.source !== "SITE";
+        const program = await tx.program.findUnique({ where: { id: input.programId } });
         if (!program || (!isAdmin && (!program.active || !program.bookableOnline)))
           throw new BookingRejected("program");
+        const lessonType = await tx.lessonType.findUnique({ where: { id: input.lessonTypeId } });
+        if (!lessonType || (!isAdmin && (!lessonType.active || !lessonType.bookableOnline)))
+          throw new BookingRejected("lessonType");
 
-        const exclusive = program.format === "INDIVIDUAL" || program.format === "SEMI_PRIVAT";
-        const isGroup = program.format === "GRUPA";
-        const maxParticipants =
-          program.format === "INDIVIDUAL" ? 1 : exclusive ? (program.maxParticipants ?? 2) : 1;
+        const durationMin = input.durationMin;
+        const durationOk = isAdmin
+          ? Number.isInteger(durationMin) &&
+            durationMin >= ADMIN_DURATION.min &&
+            durationMin <= ADMIN_DURATION.max
+          : lessonType.durations.includes(durationMin);
+        if (!durationOk) throw new BookingRejected("duration");
+
         if (
           !Number.isInteger(input.participants) ||
-          input.participants < 1 ||
-          input.participants > maxParticipants
+          input.participants < lessonType.minParticipants ||
+          input.participants > lessonType.maxParticipants
         ) {
           throw new BookingRejected("participants");
         }
-        const forMinor = isChildrenProgram(program) || Boolean(input.forMinor);
+        const forMinor = Boolean(input.forMinor);
         if (forMinor && (!input.childFirstName || !input.childAge) && !isAdmin)
           throw new BookingRejected("minor");
 
         const engine = await loadEngineInput(new Date(), tx);
-        let durationMin = program.durationMin ?? 60;
-        let groupScheduleId: string | null = null;
-
-        if (isGroup) {
-          const schedule = input.groupScheduleId
-            ? await tx.groupSchedule.findUnique({ where: { id: input.groupScheduleId } })
-            : null;
-          if (!schedule || schedule.programId !== program.id || !schedule.active)
-            throw new BookingRejected("unavailable");
-          const key = localDateKey(input.startsAt, settings.timezone);
-          const occurrence = groupOccurrences(
-            engine.groupSchedules.filter((g) => g.id === schedule.id),
-            key,
-            key,
-            engine.exceptions,
-            engine.groupEnrollments,
-            settings.timezone,
-          ).find((o) => o.start.getTime() === input.startsAt.getTime());
-          if (!occurrence) throw new BookingRejected("unavailable");
-          if (
-            !isAdmin &&
-            input.startsAt.getTime() < Date.now() + settings.minNoticeHours * 60 * MINUTE
-          )
-            throw new BookingRejected("unavailable");
-          if (occurrence.spotsLeft < input.participants) throw new BookingRejected("sessionFull");
-          durationMin = schedule.durationMin;
-          groupScheduleId = schedule.id;
-        } else if (exclusive) {
-          if (isAdmin) {
-            const conflictEngine = {
-              ...engine,
-              settings: { ...engine.settings, minNoticeHours: -24 * 365, horizonDays: 3650 },
-              rules: allDayRules(),
-              exceptions: [],
-            };
-            if (!isSlotAvailable(conflictEngine, input.startsAt, durationMin))
-              throw new BookingRejected("conflict");
-          } else if (!isSlotAvailable(engine, input.startsAt, durationMin)) {
-            throw new BookingRejected("unavailable");
-          }
-        } else if (!isAdmin) {
-          // Events (camps, clinics) are not booked online; they go through the waiting list.
-          throw new BookingRejected("program");
+        if (isAdmin) {
+          // Phone bookings may fall outside the published hours; they only must not overlap.
+          const conflictEngine = {
+            ...engine,
+            settings: { ...engine.settings, minNoticeHours: -24 * 365, horizonDays: 3650 },
+            rules: allDayRules(),
+            exceptions: [],
+          };
+          if (!isSlotAvailable(conflictEngine, input.startsAt, durationMin))
+            throw new BookingRejected("conflict");
+        } else if (!isSlotAvailable(engine, input.startsAt, durationMin)) {
+          throw new BookingRejected("unavailable");
         }
 
         const endsAt = new Date(input.startsAt.getTime() + durationMin * MINUTE);
-        const blockedUntil = exclusive
-          ? new Date(endsAt.getTime() + settings.bufferMinutes * MINUTE)
-          : endsAt;
+        const blockedUntil = new Date(endsAt.getTime() + settings.bufferMinutes * MINUTE);
         const status: BookingStatus =
           input.status ??
           (settings.bookingMode === "INSTANT" || isAdmin ? "CONFIRMATA" : "IN_ASTEPTARE");
@@ -199,9 +176,10 @@ export async function createBooking(input: CreateBookingInput): Promise<CreateBo
             id,
             code,
             programId: program.id,
+            lessonTypeId: lessonType.id,
+            durationMin,
             locationId: location?.id ?? null,
             courtId: input.courtId ?? null,
-            groupScheduleId,
             clientId: client.id,
             startsAt: input.startsAt,
             endsAt,
@@ -256,7 +234,7 @@ export async function findBookingByToken(token: string) {
   if (!token || token.length < 20 || token.length > 200) return null;
   return db.booking.findUnique({
     where: { cancelTokenHash: hashToken(token) },
-    include: { program: true, location: true },
+    include: { program: true, lessonType: true, location: true },
   });
 }
 

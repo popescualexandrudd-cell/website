@@ -5,7 +5,7 @@ import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { t } from "@/lib/i18n-content";
 import { formatPrice, mailLink, telLink, whatsappLink } from "@/lib/format";
-import { countLabel, programName, when } from "@/lib/admin/format";
+import { countLabel, lessonLine, when } from "@/lib/admin/format";
 import { statusLabel } from "@/lib/admin/booking-actions";
 import { eraseClientAction } from "@/app/actions/admin-clients";
 import { ActionButton } from "@/components/admin/ActionButton";
@@ -20,7 +20,11 @@ export default async function ClientPage({ params }: PageProps<"/admin/clienti/[
     where: { id },
     include: {
       activePlan: true,
-      bookings: { orderBy: { startsAt: "desc" }, include: { program: true }, take: 200 },
+      bookings: {
+        orderBy: { startsAt: "desc" },
+        include: { program: true, lessonType: true },
+        take: 200,
+      },
     },
   });
   if (!client) notFound();
@@ -124,7 +128,7 @@ export default async function ClientPage({ params }: PageProps<"/admin/clienti/[
                 <Link href={`/admin/rezervari/${b.id}`} className="admin-row-link">
                   <span className="admin-row-title">{when(b.startsAt, b.endsAt, tz)}</span>
                   <span className="admin-row-meta block">
-                    {programName(b)} · {b.code} ·{" "}
+                    {lessonLine(b)} · {b.code} ·{" "}
                     <span className={`status status--${b.status}`}>{statusLabel(b.status)}</span>
                   </span>
                 </Link>

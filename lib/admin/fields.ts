@@ -30,6 +30,8 @@ export type FieldDef = Base &
     | { kind: "i18nItems" }
     | { kind: "i18nRecord"; keys: Option[] }
     | { kind: "int"; min?: number; max?: number }
+    /** Whole numbers written as "60, 90, 120" (an Int[] column). */
+    | { kind: "intList"; min?: number; max?: number }
     | { kind: "float"; min?: number; max?: number; step?: number }
     | { kind: "decimal" }
     | { kind: "bool" }
@@ -44,7 +46,7 @@ export type FieldDef = Base &
     | { kind: "hours" }
   );
 
-export type RelationSource = "program" | "groupProgram" | "location";
+export type RelationSource = "program" | "lessonType" | "location";
 
 export type I18nValue = { ro: string; en: string };
 export type MediaValue = { id: string; url: string; alt: string } | null;
@@ -79,15 +81,8 @@ export const LEVELS: Option[] = [
   { value: "TOATE", label: "Toate nivelurile" },
 ];
 
-export const FORMATS: Option[] = [
-  { value: "INDIVIDUAL", label: "Individual" },
-  { value: "SEMI_PRIVAT", label: "Semi-privat (2 elevi)" },
-  { value: "GRUPA", label: "Grupă" },
-  { value: "EVENIMENT", label: "Eveniment (tabără, clinic)" },
-];
-
 export const PRICE_UNITS: Option[] = [
-  { value: "LECTIE", label: "pe lecție" },
+  { value: "LECTIE", label: "pe lecție (tot grupul)" },
   { value: "PERSOANA", label: "de persoană" },
   { value: "LUNA", label: "pe lună" },
   { value: "PACHET", label: "pe pachet" },

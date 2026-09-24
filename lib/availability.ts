@@ -5,8 +5,9 @@
  * keeps daylight-saving changes (last Sunday of March and of October) correct.
  *
  * Free time = availability rules + extra-availability exceptions
- *           − blocked exceptions − active bookings − group sessions,
- * where every busy interval keeps the break between lessons on both sides.
+ *           − blocked exceptions − active bookings,
+ * where every busy interval keeps the break between lessons on both sides. Every lesson (for
+ * one, two, three or a group) takes the coach's time exclusively, for the duration chosen.
  */
 import { addDays, getISODay, parseISO } from "date-fns";
 import { formatInTimeZone, fromZonedTime } from "date-fns-tz";
@@ -37,34 +38,10 @@ export type ExceptionInput = {
 /** A booked exclusive lesson: blocks [startsAt, blockedUntil) — blockedUntil already includes the break. */
 export type BusyBooking = { startsAt: Date; blockedUntil: Date };
 
-export type GroupScheduleInput = {
-  id: string;
-  programId: string;
-  weekday: number;
-  startTime: string;
-  durationMin: number;
-  capacity: number;
-  membersCount: number;
-  seasonFrom?: Date | null;
-  seasonTo?: Date | null;
-  active: boolean;
-};
-
-export type GroupEnrollment = { groupScheduleId: string; startsAt: Date; participants: number };
-
 export type Interval = { start: number; end: number };
 
 export type Slot = { start: Date; end: Date };
 export type DaySlots = { date: string; slots: Slot[] };
-
-export type GroupOccurrence = {
-  groupScheduleId: string;
-  programId: string;
-  start: Date;
-  end: Date;
-  capacity: number;
-  spotsLeft: number;
-};
 
 const MINUTE = 60_000;
 
@@ -168,85 +145,22 @@ export function openWindowsForDate(
   return subtractIntervals(mergeIntervals(open), blocked);
 }
 
-/** Every occurrence of the active group sessions between two local dates (inclusive). */
-export function groupOccurrences(
-  schedules: GroupScheduleInput[],
-  fromKey: string,
-  toKey: string,
-  exceptions: ExceptionInput[],
-  enrollments: GroupEnrollment[],
-  timezone: string,
-): GroupOccurrence[] {
-  const out: GroupOccurrence[] = [];
-  for (let key = fromKey; key <= toKey; key = addDaysToKey(key, 1)) {
-    const weekday = isoWeekday(key);
-    const blocked = exceptions
-      .filter((e) => e.type === "BLOCAT" && dateKeyOf(e.date) === key)
-      .map((e) =>
-        e.startTime && e.endTime
-          ? {
-              start: zonedInstant(key, e.startTime, timezone).getTime(),
-              end: zonedInstant(key, e.endTime, timezone).getTime(),
-            }
-          : {
-              start: zonedInstant(key, "00:00", timezone).getTime(),
-              end: zonedInstant(addDaysToKey(key, 1), "00:00", timezone).getTime(),
-            },
-      );
-    for (const schedule of schedules) {
-      if (!schedule.active || schedule.weekday !== weekday) continue;
-      if (!inRange(key, schedule.seasonFrom, schedule.seasonTo)) continue;
-      const start = zonedInstant(key, schedule.startTime, timezone);
-      const end = new Date(start.getTime() + schedule.durationMin * MINUTE);
-      const session = { start: start.getTime(), end: end.getTime() };
-      if (blocked.some((b) => overlaps(b, session))) continue;
-      const taken = enrollments
-        .filter(
-          (e) => e.groupScheduleId === schedule.id && e.startsAt.getTime() === start.getTime(),
-        )
-        .reduce((sum, e) => sum + e.participants, 0);
-      out.push({
-        groupScheduleId: schedule.id,
-        programId: schedule.programId,
-        start,
-        end,
-        capacity: schedule.capacity,
-        spotsLeft: Math.max(0, schedule.capacity - schedule.membersCount - taken),
-      });
-    }
-  }
-  return out;
-}
-
 export type EngineInput = {
   settings: AvailabilitySettings;
   rules: RuleInput[];
   exceptions: ExceptionInput[];
   bookings: BusyBooking[];
-  groupSchedules: GroupScheduleInput[];
-  groupEnrollments: GroupEnrollment[];
   now: Date;
 };
 
-/** Busy intervals for exclusive lessons: bookings (with their break) and group sessions (plus break). */
-function busyIntervals(input: EngineInput, fromKey: string, toKey: string): Interval[] {
-  const buffer = input.settings.bufferMinutes * MINUTE;
-  const fromBookings = input.bookings.map((b) => ({
-    start: b.startsAt.getTime(),
-    end: b.blockedUntil.getTime(),
-  }));
-  const fromGroups = groupOccurrences(
-    input.groupSchedules,
-    fromKey,
-    toKey,
-    input.exceptions,
-    [],
-    input.settings.timezone,
-  ).map((o) => ({ start: o.start.getTime(), end: o.end.getTime() + buffer }));
-  return mergeIntervals([...fromBookings, ...fromGroups]);
+/** Busy intervals: active bookings, each with the break that follows it. */
+function busyIntervals(input: EngineInput): Interval[] {
+  return mergeIntervals(
+    input.bookings.map((b) => ({ start: b.startsAt.getTime(), end: b.blockedUntil.getTime() })),
+  );
 }
 
-/** Can an exclusive lesson of `durationMin` start at `start`? Checks window, notice, horizon and conflicts. */
+/** Can a lesson of `durationMin` start at `start`? Checks window, notice, horizon and conflicts. */
 export function isSlotAvailable(input: EngineInput, start: Date, durationMin: number): boolean {
   const { settings, now } = input;
   const tz = settings.timezone;
@@ -261,12 +175,11 @@ export function isSlotAvailable(input: EngineInput, start: Date, durationMin: nu
     start: lesson.start,
     end: lesson.end + settings.bufferMinutes * MINUTE,
   };
-  const busy = busyIntervals(input, addDaysToKey(dateKey, -1), addDaysToKey(dateKey, 1));
-  return !busy.some((b) => overlaps(b, withBreak));
+  return !busyIntervals(input).some((b) => overlaps(b, withBreak));
 }
 
 /**
- * Bookable start times for an exclusive lesson, grouped by local date, from today until the
+ * Bookable start times for a lesson of `durationMin`, grouped by local date, from today until the
  * horizon (or `untilKey`). Starts sit on the step grid (:00, :30) and also right after each busy
  * interval, so the break never wastes a whole step.
  */
@@ -286,7 +199,7 @@ export function exclusiveSlots(
   const step = Math.max(5, settings.slotStepMinutes) * MINUTE;
   const duration = durationMin * MINUTE;
   const buffer = settings.bufferMinutes * MINUTE;
-  const busy = busyIntervals(input, addDaysToKey(fromKey, -1), addDaysToKey(untilKey, 1));
+  const busy = busyIntervals(input);
 
   const days: DaySlots[] = [];
   for (let key = fromKey; key <= untilKey; key = addDaysToKey(key, 1)) {
@@ -312,30 +225,9 @@ export function exclusiveSlots(
   return days;
 }
 
-/** Upcoming group sessions for one programme, with the spots left in each. */
-export function groupSlots(
-  input: EngineInput,
-  programId: string,
-  options: { untilKey?: string } = {},
-): GroupOccurrence[] {
-  const { settings, now } = input;
-  const tz = settings.timezone;
-  const todayKey = localDateKey(now, tz);
-  const untilKey = options.untilKey ?? addDaysToKey(todayKey, settings.horizonDays);
-  const earliest = now.getTime() + settings.minNoticeHours * 60 * MINUTE;
-  return groupOccurrences(
-    input.groupSchedules.filter((g) => g.programId === programId),
-    todayKey,
-    untilKey,
-    input.exceptions,
-    input.groupEnrollments,
-    tz,
-  ).filter((o) => o.start.getTime() >= earliest);
-}
-
 /**
- * "Places left this month" (home page, scene 8): free one-hour lessons that can still be
- * booked this month, packed without overlap and with the break, plus free spots in the groups.
+ * "Places left this month" (home page): free one-hour lessons that can still be booked this
+ * month, packed without overlap and with the break.
  */
 export function freePlacesThisMonth(input: EngineInput, lessonMinutes = 60): number {
   const tz = input.settings.timezone;
@@ -348,12 +240,7 @@ export function freePlacesThisMonth(input: EngineInput, lessonMinutes = 60): num
   const earliest = input.now.getTime() + input.settings.minNoticeHours * 60 * MINUTE;
   const buffer = input.settings.bufferMinutes * MINUTE;
   const lesson = lessonMinutes * MINUTE;
-  const busy = busyIntervals(input, addDaysToKey(todayKey, -1), addDaysToKey(monthEndKey, 1)).map(
-    (b) => ({
-      start: b.start - buffer,
-      end: b.end,
-    }),
-  );
+  const busy = busyIntervals(input).map((b) => ({ start: b.start - buffer, end: b.end }));
   let lessons = 0;
   for (let key = todayKey; key <= monthEndKey; key = addDaysToKey(key, 1)) {
     const windows = openWindowsForDate(key, input.rules, input.exceptions, tz)
@@ -363,8 +250,5 @@ export function freePlacesThisMonth(input: EngineInput, lessonMinutes = 60): num
       lessons += Math.floor((free.end - free.start + buffer) / (lesson + buffer));
     }
   }
-  const groupSpots = input.groupSchedules
-    .filter((g) => g.active)
-    .reduce((sum, g) => sum + Math.max(0, g.capacity - g.membersCount), 0);
-  return lessons + groupSpots;
+  return lessons;
 }

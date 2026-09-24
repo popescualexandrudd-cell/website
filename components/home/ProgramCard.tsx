@@ -1,14 +1,13 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { ProgramView } from "@/lib/content";
-import { formatPrice } from "@/lib/format";
 import { Picture } from "@/components/ui/Picture";
 import { CourtMark } from "@/components/ui/CourtMark";
 import { TodoText } from "@/components/site/TodoText";
 import { programMeta } from "./programMeta";
 
-/** A programme as a card: photo (or a court drawn on clay), name, key facts, price. */
-export async function ProgramCard({ program, locale }: { program: ProgramView; locale: string }) {
+/** A training programme as a card: photo (or a court drawn on clay), name, who it is for. */
+export async function ProgramCard({ program }: { program: ProgramView }) {
   const t = await getTranslations();
   return (
     <li className="program-card">
@@ -35,16 +34,6 @@ export async function ProgramCard({ program, locale }: { program: ProgramView; l
             <TodoText value={program.summary} />
           </span>
           <span className="program-card-foot">
-            <span className="numerals">
-              {program.priceFrom ? (
-                <>
-                  {t("common.from")}{" "}
-                  <TodoText
-                    value={formatPrice(program.priceFrom.price, program.priceFrom.currency, locale)}
-                  />
-                </>
-              ) : null}
-            </span>
             <span className="program-card-more" aria-hidden="true">
               {t("home.viewProgram")}
             </span>

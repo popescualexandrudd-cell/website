@@ -3,7 +3,6 @@ import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { localDateKey, zonedInstant, addDaysToKey } from "@/lib/availability";
-import { t } from "@/lib/i18n-content";
 import { deleteExceptionAction, deleteRuleAction } from "@/app/actions/admin-availability";
 import { ExceptionForm, RuleForm } from "@/components/admin/AvailabilityForms";
 
@@ -16,16 +15,11 @@ export default async function AvailabilityPage() {
   const settings = await db.siteSettings.findUniqueOrThrow({ where: { id: 1 } });
   const tz = settings.timezone;
   const today = localDateKey(new Date(), tz);
-  const [rules, exceptions, groups] = await Promise.all([
+  const [rules, exceptions] = await Promise.all([
     db.availabilityRule.findMany({ orderBy: [{ weekday: "asc" }, { startTime: "asc" }] }),
     db.availabilityException.findMany({
       where: { date: { gte: new Date(`${today}T00:00:00Z`) } },
       orderBy: { date: "asc" },
-    }),
-    db.groupSchedule.findMany({
-      where: { active: true },
-      include: { program: true },
-      orderBy: { startTime: "asc" },
     }),
   ]);
   // Blocked time that already holds active bookings: the coach must move or cancel them.
@@ -58,9 +52,9 @@ export default async function AvailabilityPage() {
         <div>
           <h1 className="admin-title">Disponibilitate</h1>
           <p>
-            Orele în care clienții pot rezerva lecții individuale. Pauza dintre lecții (
-            {settings.bufferMinutes} min), preavizul ({settings.minNoticeHours} h) și orizontul (
-            {settings.horizonDays} zile) se schimbă din{" "}
+            Orele în care clienții pot rezerva lecții (individuale, în doi, în trei, de grup sau
+            analiză biomecanică). Pauza dintre lecții ({settings.bufferMinutes} min), preavizul (
+            {settings.minNoticeHours} h) și orizontul ({settings.horizonDays} zile) se schimbă din{" "}
             <Link href="/admin/setari" className="link">
               Setări
             </Link>
@@ -78,13 +72,10 @@ export default async function AvailabilityPage() {
         <div className="week">
           {DAYS.map((day, i) => {
             const dayRules = rules.filter((r) => r.weekday === i + 1);
-            const dayGroups = groups.filter((g) => g.weekday === i + 1);
             return (
               <section key={day} className="week-day">
                 <h3>{day}</h3>
-                {dayRules.length === 0 && dayGroups.length === 0 ? (
-                  <p className="text-note text-cerneala-2">liber</p>
-                ) : null}
+                {dayRules.length === 0 ? <p className="text-note text-cerneala-2">liber</p> : null}
                 {dayRules.map((rule) => (
                   <div key={rule.id} className="week-item" data-kind="rule">
                     <span className="numerals font-medium">
@@ -106,17 +97,6 @@ export default async function AvailabilityPage() {
                       </button>
                     </form>
                   </div>
-                ))}
-                {dayGroups.map((g) => (
-                  <Link
-                    key={g.id}
-                    href={`/admin/continut/grupe/${g.id}`}
-                    className="week-item"
-                    data-kind="group"
-                  >
-                    <span className="numerals font-medium">{g.startTime}</span> grupă:{" "}
-                    {t(g.program.name, "ro")}
-                  </Link>
                 ))}
               </section>
             );

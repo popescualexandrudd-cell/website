@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { addDaysToKey, groupOccurrences, localDateKey, zonedInstant } from "@/lib/availability";
-import { bookingContacts, bookingTitle, dayLabel, programName, when } from "@/lib/admin/format";
-import { t } from "@/lib/i18n-content";
+import { addDaysToKey, localDateKey, zonedInstant } from "@/lib/availability";
+import { bookingContacts, bookingTitle, dayLabel, lessonLine, when } from "@/lib/admin/format";
 import { BookingActions } from "@/components/admin/BookingActions";
 import { OkNotice } from "@/components/admin/OkNotice";
 import { BOOKING_OK } from "@/lib/admin/booking-done";
@@ -27,23 +26,14 @@ export default async function TodayPage({ searchParams }: PageProps<"/admin/azi"
   const start = zonedInstant(key, "00:00", tz);
   const end = zonedInstant(addDaysToKey(key, 1), "00:00", tz);
 
-  const [bookings, schedules, exceptions] = await Promise.all([
-    db.booking.findMany({
-      where: {
-        startsAt: { gte: start, lt: end },
-        status: { in: ["IN_ASTEPTARE", "CONFIRMATA", "EFECTUATA", "NEPREZENTARE"] },
-      },
-      orderBy: { startsAt: "asc" },
-      include: { program: true },
-    }),
-    db.groupSchedule.findMany({ where: { active: true }, include: { program: true } }),
-    db.availabilityException.findMany({ where: { date: new Date(`${key}T00:00:00Z`) } }),
-  ]);
-  const sessions = groupOccurrences(schedules, key, key, exceptions, [], tz).map((o) => ({
-    ...o,
-    program: schedules.find((s) => s.id === o.groupScheduleId)?.program,
-    members: schedules.find((s) => s.id === o.groupScheduleId)?.membersCount ?? 0,
-  }));
+  const bookings = await db.booking.findMany({
+    where: {
+      startsAt: { gte: start, lt: end },
+      status: { in: ["IN_ASTEPTARE", "CONFIRMATA", "EFECTUATA", "NEPREZENTARE"] },
+    },
+    orderBy: { startsAt: "asc" },
+    include: { program: true, lessonType: true },
+  });
 
   return (
     <>
@@ -71,7 +61,7 @@ export default async function TodayPage({ searchParams }: PageProps<"/admin/azi"
       </div>
 
       <OkNotice code={params.ok} messages={BOOKING_OK} />
-      {bookings.length === 0 && sessions.length === 0 ? (
+      {bookings.length === 0 ? (
         <p className="text-cerneala-2">Nicio lecție în această zi.</p>
       ) : null}
 
@@ -88,7 +78,7 @@ export default async function TodayPage({ searchParams }: PageProps<"/admin/azi"
                   <span className="admin-row-title">{bookingTitle(b)}</span>
                 </Link>
                 <p className="admin-row-meta">
-                  {programName(b)}
+                  {lessonLine(b)}
                   {b.participants > 1 ? ` · ${b.participants} persoane` : ""} ·{" "}
                   <span className={`status status--${b.status}`}>{statusLabel(b.status)}</span>
                 </p>
@@ -114,21 +104,6 @@ export default async function TodayPage({ searchParams }: PageProps<"/admin/azi"
             </div>
           );
         })}
-        {sessions.map((s) => (
-          <div key={`${s.groupScheduleId}-${s.start.toISOString()}`} className="admin-row">
-            <div>
-              <span className="admin-row-title numerals">{when(s.start, s.end, tz, false)}</span>{" "}
-              <span className="admin-row-title">
-                Grupă: {s.program ? t(s.program.name, "ro") : ""}
-              </span>
-              <p className="admin-row-meta">
-                {s.members} membri obișnuiți ·{" "}
-                {bookings.filter((b) => b.groupScheduleId === s.groupScheduleId).length} cereri noi
-                · capacitate {s.capacity}
-              </p>
-            </div>
-          </div>
-        ))}
       </div>
     </>
   );

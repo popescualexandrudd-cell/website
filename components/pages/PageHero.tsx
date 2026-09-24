@@ -3,6 +3,7 @@ import type { ResolvedImage } from "@/lib/media-shared";
 import { Picture } from "@/components/ui/Picture";
 import { CourtMark } from "@/components/ui/CourtMark";
 import { TodoText } from "@/components/site/TodoText";
+import { Words } from "@/components/site/Words";
 
 type Props = {
   title: string;
@@ -24,7 +25,7 @@ export function PageHero({ title, intro, image, imageAlt = "", children, eyebrow
         <div className="page-hero-copy">
           {eyebrow}
           <h1 className="page-title">
-            <TodoText value={title} />
+            <Words text={title} />
           </h1>
           {intro ? (
             <p className="page-intro">

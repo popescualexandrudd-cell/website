@@ -38,13 +38,6 @@ enum Level {
   TOATE
 }
 
-enum ProgramFormat {
-  INDIVIDUAL
-  SEMI_PRIVAT
-  GRUPA
-  EVENIMENT
-}
-
 enum PriceUnit {
   LECTIE
   PERSOANA
@@ -221,57 +214,79 @@ model Scene {
   @@index([order])
 }
 
+/// A training programme (Inițiere, Competiție, Amatori): who it is for and what it works on.
+/// It is chosen first when booking; the lesson itself is a LessonType.
 model Program {
-  id              String          @id @default(cuid())
-  slug            String          @unique
-  name            Json
-  summary         Json
-  description     Json
-  focusPoints     Json
-  audience        Audience        @default(TOATE)
-  level           Level           @default(TOATE)
-  format          ProgramFormat   @default(INDIVIDUAL)
-  durationMin     Int?
-  maxParticipants Int?
-  ageMin          Int?
-  ageMax          Int?
-  imageId         String?
-  image           Media?          @relation("ProgramImage", fields: [imageId], references: [id], onDelete: SetNull)
-  order           Int             @default(0)
-  bookableOnline  Boolean         @default(true)
-  active          Boolean         @default(true)
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  pricingPlans    PricingPlan[]
-  groupSchedules  GroupSchedule[]
-  bookings        Booking[]
-  faqs            Faq[]
-  waitlist        WaitlistEntry[]
+  id             String          @id @default(cuid())
+  slug           String          @unique
+  name           Json
+  summary        Json
+  description    Json
+  focusPoints    Json
+  audience       Audience        @default(TOATE)
+  level          Level           @default(TOATE)
+  ageMin         Int?
+  ageMax         Int?
+  imageId        String?
+  image          Media?          @relation("ProgramImage", fields: [imageId], references: [id], onDelete: SetNull)
+  order          Int             @default(0)
+  bookableOnline Boolean         @default(true)
+  active         Boolean         @default(true)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  bookings       Booking[]
+  faqs           Faq[]
+  waitlist       WaitlistEntry[]
 
   @@index([order])
   @@index([active])
 }
 
+/// What is booked: individual, for two, for three, group, biomechanical analysis. Every lesson
+/// takes the coach's time exclusively, for the duration the client picks.
+model LessonType {
+  id              String        @id @default(cuid())
+  slug            String        @unique
+  name            Json
+  summary         Json
+  minParticipants Int           @default(1)
+  maxParticipants Int           @default(1)
+  /// Durations offered in the booking form, in minutes.
+  durations       Int[]         @default([60, 90, 120])
+  /// Price for one hour; the price of a lesson is proportional to its duration.
+  hourlyRate      Decimal?      @db.Decimal(10, 2)
+  priceUnit       PriceUnit     @default(LECTIE)
+  order           Int           @default(0)
+  bookableOnline  Boolean       @default(true)
+  active          Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  bookings        Booking[]
+  pricingPlans    PricingPlan[]
+
+  @@index([order])
+}
+
 model PricingPlan {
-  id           String    @id @default(cuid())
-  programId    String?
-  program      Program?  @relation(fields: [programId], references: [id], onDelete: SetNull)
+  id           String      @id @default(cuid())
+  lessonTypeId String?
+  lessonType   LessonType? @relation(fields: [lessonTypeId], references: [id], onDelete: SetNull)
   name         Json
-  price        Decimal?  @db.Decimal(10, 2)
-  currency     String    @default("RON")
-  unit         PriceUnit @default(LECTIE)
+  price        Decimal?    @db.Decimal(10, 2)
+  currency     String      @default("RON")
+  unit         PriceUnit   @default(LECTIE)
   sessions     Int?
   validityDays Int?
   includes     Json?
-  highlighted  Boolean   @default(false)
-  isPackage    Boolean   @default(false)
-  order        Int       @default(0)
-  active       Boolean   @default(true)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  highlighted  Boolean     @default(false)
+  isPackage    Boolean     @default(false)
+  order        Int         @default(0)
+  active       Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
   clients      Client[]
 
-  @@index([programId])
+  @@index([lessonTypeId])
   @@index([order])
 }
 
@@ -280,6 +295,9 @@ model Location {
   name              String
   address           String
   city              String
+  /** County and postal code, for the address search engines read (schema.org PostalAddress). */
+  region            String?
+  postalCode        String?
   lat               Float?
   lng               Float?
   mapUrl            String?
@@ -290,7 +308,6 @@ model Location {
   courts            Court[]
   facilities        Facility[]
   availabilityRules AvailabilityRule[]
-  groupSchedules    GroupSchedule[]
   bookings          Booking[]
 }
 
@@ -480,63 +497,42 @@ model AvailabilityException {
   @@index([date])
 }
 
-model GroupSchedule {
-  id           String    @id @default(cuid())
-  programId    String
-  program      Program   @relation(fields: [programId], references: [id], onDelete: Cascade)
-  weekday      Int
-  startTime    String
-  durationMin  Int
-  capacity     Int
-  membersCount Int       @default(0)
-  seasonFrom   DateTime? @db.Date
-  seasonTo     DateTime? @db.Date
-  locationId   String?
-  location     Location? @relation(fields: [locationId], references: [id], onDelete: SetNull)
-  active       Boolean   @default(true)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  bookings     Booking[]
-
-  @@index([programId])
-  @@index([weekday])
-}
-
 model Booking {
-  id              String         @id @default(cuid())
-  code            String         @unique
+  id              String        @id @default(cuid())
+  code            String        @unique
   programId       String
-  program         Program        @relation(fields: [programId], references: [id], onDelete: Restrict)
+  program         Program       @relation(fields: [programId], references: [id], onDelete: Restrict)
+  lessonTypeId    String?
+  lessonType      LessonType?   @relation(fields: [lessonTypeId], references: [id], onDelete: Restrict)
+  durationMin     Int           @default(60)
   locationId      String?
-  location        Location?      @relation(fields: [locationId], references: [id], onDelete: SetNull)
+  location        Location?     @relation(fields: [locationId], references: [id], onDelete: SetNull)
   courtId         String?
-  court           Court?         @relation(fields: [courtId], references: [id], onDelete: SetNull)
-  groupScheduleId String?
-  groupSchedule   GroupSchedule? @relation(fields: [groupScheduleId], references: [id], onDelete: SetNull)
+  court           Court?        @relation(fields: [courtId], references: [id], onDelete: SetNull)
   clientId        String?
-  client          Client?        @relation(fields: [clientId], references: [id], onDelete: SetNull)
-  startsAt        DateTime       @db.Timestamptz(3)
-  endsAt          DateTime       @db.Timestamptz(3)
-  blockedUntil    DateTime       @db.Timestamptz(3)
-  status          BookingStatus  @default(IN_ASTEPTARE)
+  client          Client?       @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  startsAt        DateTime      @db.Timestamptz(3)
+  endsAt          DateTime      @db.Timestamptz(3)
+  blockedUntil    DateTime      @db.Timestamptz(3)
+  status          BookingStatus @default(IN_ASTEPTARE)
   name            String
   email           String
   phone           String
-  participants    Int            @default(1)
+  participants    Int           @default(1)
   declaredLevel   Level?
   message         String?
-  forMinor        Boolean        @default(false)
+  forMinor        Boolean       @default(false)
   parentName      String?
   childFirstName  String?
   childAge        Int?
   gdprConsent     Boolean
   gdprConsentAt   DateTime
   policyVersion   String
-  cancelTokenHash String         @unique
-  reviewTokenHash String?        @unique
-  source          BookingSource  @default(SITE)
+  cancelTokenHash String        @unique
+  reviewTokenHash String?       @unique
+  source          BookingSource @default(SITE)
   internalNotes   String?
-  locale          String         @default("ro")
+  locale          String        @default("ro")
   confirmedAt     DateTime?
   cancelledAt     DateTime?
   cancelReason    String?
@@ -544,14 +540,13 @@ model Booking {
   reminderSentAt  DateTime?
   reviewInviteAt  DateTime?
   anonymizedAt    DateTime?
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
   emailLogs       EmailLog[]
 
   @@index([startsAt])
   @@index([status])
   @@index([email])
-  @@index([groupScheduleId, startsAt])
   @@index([clientId])
 }
 

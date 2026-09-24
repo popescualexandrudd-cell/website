@@ -132,11 +132,11 @@ describe("content editor parsing", () => {
     if (!program || !pricing) throw new Error("missing resource");
     const form = new FormData();
     form.set("f.slug", "Lecții Copii");
-    form.set("f.format", "ALTCEVA");
+    form.set("f.audience", "ALTCEVA");
     const parsed = parseForm(program.fields, form, "Europe/Bucharest");
     expect(parsed.errors.name).toBeDefined();
     expect(parsed.errors.slug).toBeDefined();
-    expect(parsed.errors.format).toBeDefined();
+    expect(parsed.errors.audience).toBeDefined();
     const priceForm = new FormData();
     priceForm.set("f.price", "250,5");
     expect(
@@ -154,6 +154,21 @@ describe("content editor parsing", () => {
         "Europe/Bucharest",
       ).errors.price,
     ).toBeDefined();
+  });
+
+  it("reads the durations of a lesson type as a sorted list of minutes", () => {
+    const lessons = getResource("lectii");
+    if (!lessons) throw new Error("missing resource");
+    const durations = lessons.fields.filter((f) => f.name === "durations");
+    const form = new FormData();
+    form.set("f.durations", "120, 60 90;60");
+    expect(parseForm(durations, form, "Europe/Bucharest").data.durations).toEqual([60, 90, 120]);
+    form.set("f.durations", "60, o oră");
+    expect(parseForm(durations, form, "Europe/Bucharest").errors.durations).toBeDefined();
+    form.set("f.durations", "10");
+    expect(parseForm(durations, form, "Europe/Bucharest").errors.durations).toBeDefined();
+    form.set("f.durations", "");
+    expect(parseForm(durations, form, "Europe/Bucharest").errors.durations).toBeDefined();
   });
 
   it("refuses to publish a gallery photo with minors without parental consent", () => {

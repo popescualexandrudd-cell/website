@@ -16,10 +16,25 @@ async function violations(page: Page, scope: (builder: AxeBuilder) => AxeBuilder
   );
 }
 
+/**
+ * With motion on, sections fade in as they are scrolled to: scroll through the page and let the
+ * transitions finish, so contrast is measured on the final colours, not halfway through a fade.
+ */
+async function revealAll(page: Page) {
+  await page.evaluate(async () => {
+    for (let y = 0; y < document.documentElement.scrollHeight; y += 500) {
+      window.scrollTo(0, y);
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    }
+    window.scrollTo(0, 0);
+  });
+  await page.waitForTimeout(1600);
+}
+
 const PUBLIC = [
   "/",
   "/programe",
-  "/programe/lectie-individuala",
+  "/programe/initiere",
   "/preturi",
   "/rezervare",
   "/contact",
@@ -34,6 +49,7 @@ const ADMIN = [
   "/admin/rezervari",
   "/admin/disponibilitate",
   "/admin/continut/programe",
+  "/admin/continut/lectii",
   "/admin/media",
   "/admin/setari",
 ];
@@ -50,6 +66,7 @@ test("paginile publice nu au probleme de accesibilitate (axe, WCAG 2.2 AA)", asy
     const page = await context.newPage();
     for (const path of PUBLIC) {
       await page.goto(path, { waitUntil: "networkidle" });
+      if (reducedMotion === "no-preference") await revealAll(page);
       expect(await violations(page), `${path} (${reducedMotion})`).toEqual([]);
     }
     await context.close();

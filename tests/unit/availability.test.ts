@@ -3,8 +3,6 @@ import { formatInTimeZone } from "date-fns-tz";
 import {
   exclusiveSlots,
   freePlacesThisMonth,
-  groupOccurrences,
-  groupSlots,
   isSlotAvailable,
   mergeIntervals,
   openWindowsForDate,
@@ -31,8 +29,6 @@ function engine(overrides: Partial<EngineInput> = {}): EngineInput {
     rules: [],
     exceptions: [],
     bookings: [],
-    groupSchedules: [],
-    groupEnrollments: [],
     now: new Date("2026-03-01T06:00:00Z"),
     ...overrides,
   };
@@ -206,26 +202,44 @@ describe("exclusive lesson slots", () => {
     expect(days.map((d) => d.date)).toEqual(["2026-03-17"]);
   });
 
-  it("treats group sessions as busy time for private lessons", () => {
+  it("offers only the start times where the chosen duration fits", () => {
     const input = engine({
       rules: weekdays("16:00", "20:00"),
-      groupSchedules: [
+      bookings: [
         {
-          id: "g1",
-          programId: "p",
-          weekday: 2,
-          startTime: "17:00",
-          durationMin: 60,
-          capacity: 6,
-          membersCount: 0,
-          active: true,
+          startsAt: zonedInstant("2026-03-10", "17:00", TZ),
+          blockedUntil: zonedInstant("2026-03-10", "18:10", TZ),
         },
       ],
     });
-    const times = (
-      exclusiveSlots(input, 60, { fromKey: "2026-03-10", untilKey: "2026-03-10" })[0]?.slots ?? []
-    ).map((s) => formatInTimeZone(s.start, TZ, "HH:mm"));
-    expect(times).toEqual(["18:10", "18:30", "19:00"]);
+    const times = (minutes: number) =>
+      (
+        exclusiveSlots(input, minutes, { fromKey: "2026-03-10", untilKey: "2026-03-10" })[0]
+          ?.slots ?? []
+      ).map((s) => formatInTimeZone(s.start, TZ, "HH:mm"));
+    // 60 minutes: 16:00 would end at 17:00 with no break before the booking; after it, from 18:10.
+    expect(times(60)).toEqual(["18:10", "18:30", "19:00"]);
+    // 90 minutes: the lesson must end by 20:00, so 18:10 and 18:30 are the only starts.
+    expect(times(90)).toEqual(["18:10", "18:30"]);
+    // 120 minutes: nothing fits in the time left.
+    expect(times(120)).toEqual([]);
+  });
+
+  it("gives every kind of lesson the coach's time exclusively", () => {
+    const input = engine({
+      rules: weekdays("08:00", "10:00"),
+      bookings: [
+        // A group lesson for six still blocks the whole interval.
+        {
+          startsAt: zonedInstant("2026-03-10", "08:00", TZ),
+          blockedUntil: zonedInstant("2026-03-10", "09:40", TZ),
+        },
+      ],
+    });
+    expect(isSlotAvailable(input, zonedInstant("2026-03-10", "08:30", TZ), 60)).toBe(false);
+    expect(exclusiveSlots(input, 60, { fromKey: "2026-03-10", untilKey: "2026-03-10" })).toEqual(
+      [],
+    );
   });
 
   it("answers point checks the same way", () => {
@@ -245,74 +259,13 @@ describe("exclusive lesson slots", () => {
   });
 });
 
-describe("group sessions", () => {
-  const schedule = {
-    id: "g1",
-    programId: "mini",
-    weekday: 2,
-    startTime: "17:00",
-    durationMin: 45,
-    capacity: 6,
-    membersCount: 2,
-    active: true,
-  };
-
-  it("counts the spots left in each occurrence", () => {
-    const start = zonedInstant("2026-03-10", "17:00", TZ);
-    const occurrences = groupOccurrences(
-      [schedule],
-      "2026-03-09",
-      "2026-03-17",
-      [],
-      [{ groupScheduleId: "g1", startsAt: start, participants: 1 }],
-      TZ,
-    );
-    expect(occurrences).toHaveLength(2);
-    expect(occurrences[0]?.spotsLeft).toBe(3);
-    expect(occurrences[1]?.spotsLeft).toBe(4);
-  });
-
-  it("skips sessions on blocked days and outside the season", () => {
-    const occurrences = groupOccurrences(
-      [{ ...schedule, seasonTo: date("2026-03-16") }],
-      "2026-03-09",
-      "2026-03-31",
-      [{ date: date("2026-03-10"), type: "BLOCAT" }],
-      [],
-      TZ,
-    );
-    expect(occurrences).toHaveLength(0);
-  });
-
-  it("lists upcoming sessions for one programme only", () => {
-    const input = engine({
-      groupSchedules: [schedule, { ...schedule, id: "g2", programId: "other" }],
-      settings: { ...engine().settings, horizonDays: 14 },
-    });
-    expect(groupSlots(input, "mini").every((o) => o.programId === "mini")).toBe(true);
-    expect(groupSlots(input, "mini")).toHaveLength(2);
-  });
-});
-
 describe("free places this month", () => {
-  it("packs one-hour lessons with the break, and adds free group spots", () => {
+  it("packs one-hour lessons with the break", () => {
     const input = engine({
       now: zonedInstant("2026-03-30", "06:00", TZ), // Monday; notice pushes the start to 18:00 today
       rules: [{ weekday: 2, startTime: "08:00", endTime: "11:30" }],
-      groupSchedules: [
-        {
-          id: "g",
-          programId: "p",
-          weekday: 3,
-          startTime: "17:00",
-          durationMin: 60,
-          capacity: 6,
-          membersCount: 4,
-          active: true,
-        },
-      ],
     });
-    // Tuesday 31 March: 3.5 hours → 3 lessons with 10-minute breaks; plus 2 group spots.
-    expect(freePlacesThisMonth(input)).toBe(5);
+    // Tuesday 31 March: 3.5 hours → 3 lessons with 10-minute breaks.
+    expect(freePlacesThisMonth(input)).toBe(3);
   });
 });

@@ -27,14 +27,14 @@ export const faqContent: FaqContent[] = [
     id: "seed-faq-02",
     category: "COPII",
     showOnHome: true,
-    programSlug: "mini-tenis",
+    programSlug: "initiere",
     question: {
       ro: "De la ce vârstă poate începe un copil?",
       en: "At what age can a child start?",
     },
     answer: {
-      ro: "De la 4 ani, în grupa de mini-tenis. Mai important decât vârsta e ca cel mic să poată sta 45 de minute într-o activitate de grup și să urmeze indicații simple. Dacă nu sunteți siguri, începeți cu o ședință de probă: se vede repede dacă e momentul.",
-      en: "From 4, in the mini tennis group. More important than age is whether your child can stay with a group activity for 45 minutes and follow simple instructions. If you are not sure, start with a trial session: it quickly shows whether the time is right.",
+      ro: "De la 4 ani, în programul de Inițiere, cu mini-tenis: teren mai mic, mingi mai moi și multe jocuri. Mai important decât vârsta e ca cel mic să urmeze indicații simple și să aibă chef de mișcare. Dacă nu sunteți siguri, rezervați o primă lecție de 60 de minute: se vede repede dacă e momentul.",
+      en: "From 4, in the Beginners programme, with mini tennis: a smaller court, softer balls and plenty of games. More important than age is whether your child can follow simple instructions and enjoys moving. If you are not sure, book a first 60-minute lesson: it quickly shows whether the time is right.",
     },
   },
   {
@@ -59,8 +59,8 @@ export const faqContent: FaqContent[] = [
       en: "How do I cancel a lesson?",
     },
     answer: {
-      ro: "Din linkul din emailul de confirmare, gratuit până cu {ore} de ore înainte de lecție. După acest termen, sună-mă sau scrie-mi pe WhatsApp. Anularea mai târzie nu mai e gratuită, dar în caz de boală sau de urgență vorbim și găsim o soluție.",
-      en: "Through the link in your confirmation email, free of charge up to {ore} hours before the lesson. After that, call me or message me on WhatsApp. Later cancellations are no longer free, but in case of illness or an emergency we talk and find a solution.",
+      ro: "Din linkul din emailul de confirmare, gratuit până cu {ore} de ore înainte de lecție. După acest termen, sună-mă sau scrie-mi. Anularea mai târzie nu mai e gratuită, dar în caz de boală sau de urgență vorbim și găsim o soluție.",
+      en: "Through the link in your confirmation email, free of charge up to {ore} hours before the lesson. After that, call or write to me. Later cancellations are no longer free, but in case of illness or an emergency we talk and find a solution.",
     },
   },
   {
@@ -72,8 +72,8 @@ export const faqContent: FaqContent[] = [
       en: "How do I pay?",
     },
     answer: {
-      ro: "Numerar la teren sau prin transfer bancar. Lecțiile individuale se plătesc la lecție, grupele la începutul lunii, iar pachetele la prima ședință din pachet. Datele pentru transfer ți le trimit după confirmarea rezervării.",
-      en: "In cash at the court or by bank transfer. Private lessons are paid at the lesson, groups at the start of the month, and packages at the first session of the package. I send you the transfer details once your booking is confirmed.",
+      ro: "Numerar la teren sau prin transfer bancar. Lecțiile se plătesc la lecție, iar pachetele la prima ședință din pachet. Prețul depinde de tipul lecției și de durata aleasă; datele pentru transfer ți le trimit după confirmarea rezervării.",
+      en: "In cash at the court or by bank transfer. Lessons are paid at the lesson and packages at the first session of the package. The price depends on the kind of lesson and the length you choose; I send you the transfer details once your booking is confirmed.",
     },
   },
   {
@@ -111,8 +111,8 @@ export const faqContent: FaqContent[] = [
       en: "Do you play in winter?",
     },
     answer: {
-      ro: "Da, lecțiile continuă și iarna, pe terenurile acoperite ale bazei: [DE COMPLETAT]. Programul de iarnă poate fi puțin diferit; orele libere le vezi mereu actualizate în pagina de rezervare.",
-      en: "Yes, lessons continue through the winter on the venue's covered courts: [DE COMPLETAT]. The winter schedule may differ slightly; you can always see the up-to-date free times on the booking page.",
+      ro: "Da. Elite Tennis Club are 4 terenuri de zgură acoperite, folosite tot anul, așa că lecțiile continuă și iarna. Orele libere le vezi mereu actualizate în pagina de rezervare.",
+      en: "Yes. Elite Tennis Club has 4 covered clay courts used all year round, so lessons carry on through the winter. You can always see the up-to-date free times on the booking page.",
     },
   },
   {
@@ -132,28 +132,27 @@ export const faqContent: FaqContent[] = [
     id: "seed-faq-10",
     category: "COPII",
     showOnHome: false,
-    programSlug: "lectie-in-doi",
     question: {
       ro: "Pot lua lecții împreună cu copilul meu?",
       en: "Can I take lessons together with my child?",
     },
     answer: {
-      ro: "Da, ca lecție în doi, dacă nivelurile sunt apropiate. Funcționează foarte bine cu copii de peste 10–11 ani. Pentru copiii mai mici, recomand ca cel mic să vină la mini-tenis sau la grupă, iar dumneavoastră la lecții separate; așa progresați amândoi în ritmul vostru și puteți juca apoi împreună în weekend.",
-      en: "Yes, as a lesson for two, if your levels are close. It works very well with children over 10 or 11. For younger children, I recommend mini tennis or a group for them and separate lessons for you; that way you both progress at your own pace and can then play together at weekends.",
+      ro: "Da, ca lecție în doi, dacă nivelurile sunt apropiate. Funcționează foarte bine cu copii de peste 10–11 ani. Pentru copiii mai mici, recomand lecții separate: cel mic la Inițiere, dumneavoastră în ritmul vostru. Așa progresați amândoi și puteți juca apoi împreună în weekend.",
+      en: "Yes, as a lesson for two, if your levels are close. It works very well with children over 10 or 11. For younger children, I recommend separate lessons: the little one in the Beginners programme, you at your own pace. That way you both progress and can then play together at weekends.",
     },
   },
   {
     id: "seed-faq-11",
     category: "COMPETITIE",
     showOnHome: false,
-    programSlug: "performanta-competitie",
+    programSlug: "competitie",
     question: {
       ro: "Pregătiți și pentru turnee?",
       en: "Do you prepare players for tournaments?",
     },
     answer: {
-      ro: "Da, în programul de performanță și competiție: plan de sezon, alegerea turneelor potrivite nivelului, pregătire tehnică, tactică și fizică, apoi discuția meciurilor după fiecare turneu. Însoțirea la turnee: [DE COMPLETAT].",
-      en: "Yes, in the performance and competition programme: a season plan, choosing tournaments that suit the player's level, technical, tactical and physical preparation, then a review of the matches after each tournament. Accompanying players to tournaments: [DE COMPLETAT].",
+      ro: "Da, în programul de Competiție: plan de sezon, alegerea turneelor potrivite nivelului, pregătire tehnică, tactică și fizică, apoi discuția meciurilor după fiecare turneu. Însoțirea la turnee: [DE COMPLETAT].",
+      en: "Yes, in the Competition programme: a season plan, choosing tournaments that suit the player's level, technical, tactical and physical preparation, then a review of the matches after each tournament. Accompanying players to tournaments: [DE COMPLETAT].",
     },
   },
   {
@@ -200,12 +199,38 @@ export const faqContent: FaqContent[] = [
     category: "PROGRAM_PLATA",
     showOnHome: false,
     question: {
-      ro: "Pot face o ședință de probă înainte să mă înscriu la o grupă?",
-      en: "Can I do a trial session before joining a group?",
+      ro: "Cum funcționează lecția de grup?",
+      en: "How does a group lesson work?",
     },
     answer: {
-      ro: "Da. Înscrierea la orice grupă începe cu o ședință de probă. Alegi o dată din pagina de rezervare, vii, și după ședință îți spun dacă grupa e potrivită nivelului tău. Dacă grupa e plină, te trec pe lista de așteptare.",
-      en: "Yes. Joining any group starts with a trial session. Pick a date on the booking page, come along, and afterwards I will tell you whether the group suits your level. If the group is full, I put you on the waiting list.",
+      ro: "Lecția de grup e pentru 4–6 jucători de nivel apropiat și se rezervă pentru tot grupul, cu numărul de persoane ales la rezervare. Dacă vii singur și vrei să intri într-o grupă, scrie-mi la „Datele mele” sau intră pe lista de așteptare și te anunț când se formează una pe nivelul tău.",
+      en: "A group lesson is for 4–6 players of a similar level and is booked for the whole group, with the number of people chosen when you book. If you are on your own and want to join a group, tell me in “My details” or join the waiting list and I will let you know when one forms at your level.",
+    },
+  },
+  {
+    id: "seed-faq-16",
+    category: "PROGRAM_PLATA",
+    showOnHome: true,
+    question: {
+      ro: "Cât să dureze o lecție: 60, 90 sau 120 de minute?",
+      en: "How long should a lesson be: 60, 90 or 120 minutes?",
+    },
+    answer: {
+      ro: "Pentru copiii mici și pentru începători, 60 de minute sunt de obicei de ajuns. Dacă joci deja constant, 90 de minute lasă timp și pentru exerciții, și pentru joc. 120 de minute sau mai mult au sens la pregătirea pentru turnee sau când lucrăm și partea fizică. Durata o alegi din listă, la rezervare.",
+      en: "For young children and beginners, 60 minutes is usually enough. If you already play regularly, 90 minutes leaves time for both drills and play. 120 minutes or more makes sense when preparing for tournaments or when we also work on fitness. You choose the length from the list when you book.",
+    },
+  },
+  {
+    id: "seed-faq-17",
+    category: "INCEPUT",
+    showOnHome: false,
+    question: {
+      ro: "Care e diferența dintre programe și tipurile de lecții?",
+      en: "What is the difference between programmes and kinds of lesson?",
+    },
+    answer: {
+      ro: "Programul (Inițiere, Competiție sau Amatori) spune ce lucrăm și în ce ritm. Tipul lecției spune cu cine: singur, în doi, în trei sau într-o grupă de 4–6. Le poți combina, de exemplu programul Amatori, în lecții în doi cu un prieten.",
+      en: "The programme (Beginners, Competition or Recreational) says what we work on and at what pace. The kind of lesson says with whom: on your own, in twos, threes or a group of 4–6. You can combine them, for example the Recreational programme in lessons for two with a friend.",
     },
   },
 ];

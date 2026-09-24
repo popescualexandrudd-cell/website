@@ -10,17 +10,23 @@ async function relationOptions(
   sources: Set<RelationSource>,
 ): Promise<Partial<Record<RelationSource, Option[]>>> {
   const out: Partial<Record<RelationSource, Option[]>> = {};
-  if (sources.has("program") || sources.has("groupProgram")) {
+  const toOption = (row: { id: string; name: unknown; active: boolean }) => ({
+    value: row.id,
+    label: `${t(row.name, "ro")}${row.active ? "" : " (inactiv)"}`,
+  });
+  if (sources.has("program")) {
     const programs = await db.program.findMany({
       orderBy: { order: "asc" },
-      select: { id: true, name: true, format: true, active: true },
-    });
-    const toOption = (p: (typeof programs)[number]) => ({
-      value: p.id,
-      label: `${t(p.name, "ro")}${p.active ? "" : " (inactiv)"}`,
+      select: { id: true, name: true, active: true },
     });
     out.program = programs.map(toOption);
-    out.groupProgram = programs.filter((p) => p.format === "GRUPA").map(toOption);
+  }
+  if (sources.has("lessonType")) {
+    const lessons = await db.lessonType.findMany({
+      orderBy: { order: "asc" },
+      select: { id: true, name: true, active: true },
+    });
+    out.lessonType = lessons.map(toOption);
   }
   if (sources.has("location")) {
     const locations = await db.location.findMany({
@@ -67,6 +73,8 @@ export async function loadEditorProps(resource: Resource, row: Row | null) {
 /** Sensible defaults for a new row (the database defaults, where the form needs to show them). */
 function defaultFor(name: string, kind: string): unknown {
   if (kind === "bool") return ["active", "bookableOnline"].includes(name);
+  if (kind === "intList" && name === "durations") return [60, 90, 120, 150, 180];
+  if (name === "minParticipants" || name === "maxParticipants") return 1;
   if (name === "currency") return "RON";
   return null;
 }

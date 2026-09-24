@@ -4,7 +4,6 @@ import { draftMode } from "next/headers";
 import { db } from "./db";
 import { resolveMedia, type ResolvedImage } from "./media";
 import { t, tItems, tList } from "./i18n-content";
-import { isChildrenProgram } from "./programs";
 import type { Locale } from "@/i18n/routing";
 import type {
   Audience,
@@ -14,7 +13,6 @@ import type {
   LegalKind,
   Level,
   PriceUnit,
-  ProgramFormat,
   Surface,
 } from "./generated/prisma/client";
 
@@ -158,7 +156,7 @@ export type PriceView = {
   includes: string;
   highlighted: boolean;
   isPackage: boolean;
-  programId: string | null;
+  lessonTypeId: string | null;
 };
 
 function toPriceView(
@@ -173,7 +171,7 @@ function toPriceView(
     includes: unknown;
     highlighted: boolean;
     isPackage: boolean;
-    programId: string | null;
+    lessonTypeId: string | null;
   },
   locale: Locale,
 ): PriceView {
@@ -188,10 +186,11 @@ function toPriceView(
     includes: plan.includes ? t(plan.includes, locale) : "",
     highlighted: plan.highlighted,
     isPackage: plan.isPackage,
-    programId: plan.programId,
+    lessonTypeId: plan.lessonTypeId,
   };
 }
 
+/** A training programme: Inițiere, Competiție, Amatori. */
 export type ProgramView = {
   id: string;
   slug: string;
@@ -201,41 +200,22 @@ export type ProgramView = {
   focusPoints: string[];
   audience: Audience;
   level: Level;
-  format: ProgramFormat;
-  durationMin: number | null;
-  maxParticipants: number | null;
   ageMin: number | null;
   ageMax: number | null;
   image: ResolvedImage | null;
   imageAlt: string;
   bookableOnline: boolean;
   active: boolean;
-  prices: PriceView[];
-  priceFrom: PriceView | null;
-  isGroup: boolean;
-  isExclusive: boolean;
-  forMinors: boolean;
 };
-
-function lowestPrice(prices: PriceView[]): PriceView | null {
-  const regular = prices.filter((p) => !p.isPackage);
-  const priced = regular.filter((p) => p.price !== null);
-  if (priced.length > 0)
-    return [...priced].sort((a, b) => Number(a.price) - Number(b.price))[0] ?? null;
-  return regular[0] ?? null;
-}
-
-export { isChildrenProgram };
 
 export const getPrograms = cache(async (locale: Locale): Promise<ProgramView[]> => {
   const preview = await isPreview();
   const programs = await db.program.findMany({
     where: preview ? {} : { active: true },
     orderBy: { order: "asc" },
-    include: { image: true, pricingPlans: { where: { active: true }, orderBy: { order: "asc" } } },
+    include: { image: true },
   });
   return programs.map((p) => {
-    const prices = p.pricingPlans.map((plan) => toPriceView(plan, locale));
     const name = t(p.name, locale);
     return {
       id: p.id,
@@ -246,20 +226,12 @@ export const getPrograms = cache(async (locale: Locale): Promise<ProgramView[]> 
       focusPoints: tList(p.focusPoints, locale),
       audience: p.audience,
       level: p.level,
-      format: p.format,
-      durationMin: p.durationMin,
-      maxParticipants: p.maxParticipants,
       ageMin: p.ageMin,
       ageMax: p.ageMax,
       image: resolveMedia(p.image),
       imageAlt: p.image ? t(p.image.alt, locale) : name,
       bookableOnline: p.bookableOnline,
       active: p.active,
-      prices,
-      priceFrom: lowestPrice(prices),
-      isGroup: p.format === "GRUPA",
-      isExclusive: p.format === "INDIVIDUAL" || p.format === "SEMI_PRIVAT",
-      forMinors: isChildrenProgram(p),
     };
   });
 });
@@ -267,6 +239,39 @@ export const getPrograms = cache(async (locale: Locale): Promise<ProgramView[]> 
 export const getProgram = cache(async (slug: string, locale: Locale) => {
   const programs = await getPrograms(locale);
   return programs.find((p) => p.slug === slug) ?? null;
+});
+
+/** A kind of lesson that is booked, with its durations and hourly rate. */
+export type LessonTypeView = {
+  id: string;
+  slug: string;
+  name: string;
+  summary: string;
+  minParticipants: number;
+  maxParticipants: number;
+  durations: number[];
+  hourlyRate: string | null;
+  priceUnit: PriceUnit;
+  bookableOnline: boolean;
+};
+
+export const getLessonTypes = cache(async (locale: Locale): Promise<LessonTypeView[]> => {
+  const types = await db.lessonType.findMany({
+    where: { active: true },
+    orderBy: { order: "asc" },
+  });
+  return types.map((l) => ({
+    id: l.id,
+    slug: l.slug,
+    name: t(l.name, locale),
+    summary: t(l.summary, locale),
+    minParticipants: l.minParticipants,
+    maxParticipants: l.maxParticipants,
+    durations: [...l.durations].sort((a, b) => a - b),
+    hourlyRate: l.hourlyRate ? l.hourlyRate.toString() : null,
+    priceUnit: l.priceUnit,
+    bookableOnline: l.bookableOnline,
+  }));
 });
 
 export const getPackages = cache(async (locale: Locale): Promise<PriceView[]> => {
@@ -301,6 +306,8 @@ export type LocationView = {
   name: string;
   address: string;
   city: string;
+  region: string | null;
+  postalCode: string | null;
   lat: number | null;
   lng: number | null;
   mapUrl: string | null;
@@ -318,6 +325,8 @@ export const getLocations = cache(async (locale: Locale): Promise<LocationView[]
     name: l.name,
     address: l.address,
     city: l.city,
+    region: l.region,
+    postalCode: l.postalCode,
     lat: l.lat,
     lng: l.lng,
     mapUrl: l.mapUrl,
@@ -554,34 +563,4 @@ export const getGallery = cache(async (locale: Locale): Promise<GalleryView[]> =
       },
     ];
   });
-});
-
-// ─── Group timetable ─────────────────────────────────────────────────────────
-
-export type GroupScheduleView = {
-  id: string;
-  weekday: number;
-  startTime: string;
-  durationMin: number;
-  capacity: number;
-  membersCount: number;
-  seasonFrom: Date | null;
-  seasonTo: Date | null;
-};
-
-export const getGroupSchedules = cache(async (programId: string): Promise<GroupScheduleView[]> => {
-  const rows = await db.groupSchedule.findMany({
-    where: { programId, active: true },
-    orderBy: [{ weekday: "asc" }, { startTime: "asc" }],
-  });
-  return rows.map((r) => ({
-    id: r.id,
-    weekday: r.weekday,
-    startTime: r.startTime,
-    durationMin: r.durationMin,
-    capacity: r.capacity,
-    membersCount: r.membersCount,
-    seasonFrom: r.seasonFrom,
-    seasonTo: r.seasonTo,
-  }));
 });

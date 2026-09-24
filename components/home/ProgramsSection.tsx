@@ -7,11 +7,9 @@ import { safeHref } from "./links";
 export function ProgramsSection({
   scene,
   programs,
-  locale,
 }: {
   scene: SceneView;
   programs: ProgramView[];
-  locale: string;
 }) {
   const href = safeHref(scene.ctaHref) ?? "/programe";
   return (
@@ -27,7 +25,7 @@ export function ProgramsSection({
         </div>
         <ul className="program-grid">
           {programs.map((program) => (
-            <ProgramCard key={program.id} program={program} locale={locale} />
+            <ProgramCard key={program.id} program={program} />
           ))}
         </ul>
       </div>

@@ -49,6 +49,16 @@ export function programName(b: { program: { name: unknown } }): string {
   return t(b.program.name, "ro");
 }
 
+/** "Lecție individuală, 90 min · Inițiere": what was booked, for lists and the day view. */
+export function lessonLine(b: {
+  program: { name: unknown };
+  lessonType?: { name: unknown } | null;
+  durationMin: number;
+}): string {
+  const lesson = b.lessonType ? `${t(b.lessonType.name, "ro")}, ` : "";
+  return `${lesson}${b.durationMin} min · ${t(b.program.name, "ro")}`;
+}
+
 /** Monday 00:00 → next Monday 00:00 (local), as UTC instants, for the week containing `date`. */
 export function weekKeys(dateKey: string): string[] {
   const d = new Date(`${dateKey}T12:00:00Z`);

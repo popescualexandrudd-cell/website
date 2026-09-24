@@ -6,6 +6,8 @@ type Common = { lang: EmailLang; brand: string; ornamentUrl: string };
 export type BookingDetails = {
   code: string;
   program: string;
+  /** "Lecție individuală, 90 de minute" */
+  lesson: string;
   when: string;
   where: string;
   participants: number;
@@ -18,6 +20,7 @@ function bookingRows(lang: EmailLang, d: BookingDetails): [string, string][] {
   const rows: [string, string][] = [
     [s.code, d.code],
     [s.program, d.program],
+    [s.lesson, d.lesson],
     [s.when, d.when],
     [s.where, d.where],
   ];
@@ -27,7 +30,7 @@ function bookingRows(lang: EmailLang, d: BookingDetails): [string, string][] {
 }
 
 export type ClientBookingKind =
-  "request" | "requestGroup" | "confirmed" | "reminder" | "cancelledByClient" | "cancelledByCoach";
+  "request" | "confirmed" | "reminder" | "cancelledByClient" | "cancelledByCoach";
 
 export function ClientBookingEmail(
   props: Common & {
@@ -42,7 +45,7 @@ export function ClientBookingEmail(
   const s = strings[props.lang];
   const { kind } = props;
   const title =
-    kind === "request" || kind === "requestGroup"
+    kind === "request"
       ? s.requestReceived.title
       : kind === "confirmed"
         ? s.confirmed.title
@@ -52,7 +55,7 @@ export function ClientBookingEmail(
             ? s.cancelledClient.titleByClient
             : s.cancelledClient.titleByCoach;
   const preview =
-    kind === "request" || kind === "requestGroup"
+    kind === "request"
       ? s.requestReceived.preview
       : kind === "confirmed"
         ? s.confirmed.preview
@@ -62,15 +65,13 @@ export function ClientBookingEmail(
   const body =
     kind === "request"
       ? s.requestReceived.body
-      : kind === "requestGroup"
-        ? s.requestReceived.groupBody
-        : kind === "confirmed"
-          ? s.confirmed.body
-          : kind === "reminder"
-            ? s.reminder.body
-            : kind === "cancelledByClient"
-              ? s.cancelledClient.bodyByClient
-              : s.cancelledClient.bodyByCoach;
+      : kind === "confirmed"
+        ? s.confirmed.body
+        : kind === "reminder"
+          ? s.reminder.body
+          : kind === "cancelledByClient"
+            ? s.cancelledClient.bodyByClient
+            : s.cancelledClient.bodyByCoach;
   const cancelled = kind === "cancelledByClient" || kind === "cancelledByCoach";
   return (
     <EmailLayout

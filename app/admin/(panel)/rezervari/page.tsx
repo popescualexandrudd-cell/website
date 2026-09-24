@@ -3,7 +3,7 @@ import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { addDaysToKey, localDateKey, zonedInstant } from "@/lib/availability";
-import { bookingTitle, dayLabel, programName, weekKeys, when } from "@/lib/admin/format";
+import { bookingTitle, dayLabel, lessonLine, weekKeys, when } from "@/lib/admin/format";
 import { statusLabel } from "@/lib/admin/booking-actions";
 import type { BookingStatus, Prisma } from "@/lib/generated/prisma/client";
 
@@ -42,7 +42,7 @@ export default async function BookingsPage({ searchParams }: PageProps<"/admin/r
         status: { in: ["IN_ASTEPTARE", "CONFIRMATA", "EFECTUATA", "NEPREZENTARE"] },
       },
       orderBy: { startsAt: "asc" },
-      include: { program: true },
+      include: { program: true, lessonType: true },
     });
     return (
       <>
@@ -84,7 +84,7 @@ export default async function BookingsPage({ searchParams }: PageProps<"/admin/r
                     href={`/admin/rezervari/${b.id}`}
                     className="week-item"
                     data-status={b.status}
-                    data-kind={b.groupScheduleId ? "group" : "lesson"}
+                    data-kind="lesson"
                   >
                     <span className="numerals font-medium">
                       {when(b.startsAt, b.endsAt, tz, false)}
@@ -92,7 +92,7 @@ export default async function BookingsPage({ searchParams }: PageProps<"/admin/r
                     <br />
                     {bookingTitle(b)}
                     <br />
-                    <span className="text-cerneala-2">{programName(b)}</span>
+                    <span className="text-cerneala-2">{lessonLine(b)}</span>
                   </Link>
                 ))}
               </section>
@@ -139,7 +139,7 @@ export default async function BookingsPage({ searchParams }: PageProps<"/admin/r
       orderBy: { startsAt: from || to || status ? "desc" : "asc" },
       skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
-      include: { program: true },
+      include: { program: true, lessonType: true },
     }),
     db.booking.count({ where }),
   ]);
@@ -212,7 +212,7 @@ export default async function BookingsPage({ searchParams }: PageProps<"/admin/r
             <span>
               <span className="admin-row-title">{bookingTitle(b)}</span>
               <span className="admin-row-meta block">
-                {when(b.startsAt, b.endsAt, tz)} · {programName(b)} · {b.code}
+                {when(b.startsAt, b.endsAt, tz)} · {lessonLine(b)} · {b.code}
               </span>
             </span>
             <span className={`status status--${b.status}`}>{statusLabel(b.status)}</span>

@@ -4,12 +4,11 @@ import { after } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { t } from "@/lib/i18n-content";
-import { exclusiveSlots, groupSlots, localDateKey, addDaysToKey } from "@/lib/availability";
+import { exclusiveSlots, localDateKey, addDaysToKey } from "@/lib/availability";
 import { loadEngineInput } from "@/lib/availability-data";
 import { cancelByClient, createBooking } from "@/lib/booking";
 import { formatDate, formatTime } from "@/lib/format";
 import { getPolicyVersion } from "@/lib/content";
-import { isChildrenProgram } from "@/lib/programs";
 import { getClientIp } from "@/lib/request";
 import { allowFormSubmission, rateLimit } from "@/lib/rate-limit";
 import { verifyTurnstile } from "@/lib/turnstile";
@@ -21,20 +20,12 @@ import { audit } from "@/lib/audit";
 
 export type SlotOption = { start: string; label: string };
 export type DayOption = { date: string; label: string; slots: SlotOption[] };
-export type SessionOption = {
-  groupScheduleId: string;
-  start: string;
-  dateLabel: string;
-  timeLabel: string;
-  spotsLeft: number;
-};
 export type AvailabilityResult =
-  | { kind: "exclusive"; days: DayOption[]; horizonDays: number; hasMore: boolean }
-  | { kind: "group"; sessions: SessionOption[]; horizonDays: number }
-  | { kind: "none" };
+  { kind: "slots"; days: DayOption[]; horizonDays: number; hasMore: boolean } | { kind: "none" };
 
 const availabilitySchema = z.object({
-  programId: z.string().min(1).max(40),
+  lessonTypeId: z.string().min(1).max(40),
+  durationMin: z.number().int().min(15).max(600),
   locale: z.enum(["ro", "en"]).catch("ro"),
   fromDate: z
     .string()
@@ -43,9 +34,10 @@ const availabilitySchema = z.object({
   days: z.number().int().min(1).max(60).optional(),
 });
 
-/** Free times for a programme, formatted for the booking flow. */
+/** Free start times for a lesson type and duration, formatted for the booking flow. */
 export async function fetchAvailability(raw: {
-  programId: string;
+  lessonTypeId: string;
+  durationMin: number;
   locale: string;
   fromDate?: string;
   days?: number;
@@ -54,39 +46,25 @@ export async function fetchAvailability(raw: {
   if (!parsed.success) return { kind: "none" };
   const ip = await getClientIp();
   if (!(await rateLimit(`availability:${ip}`, 120, 60))) return { kind: "none" };
-  const { programId, locale, fromDate, days } = parsed.data;
-  const program = await db.program.findUnique({ where: { id: programId } });
-  if (!program || !program.active || !program.bookableOnline) return { kind: "none" };
+  const { lessonTypeId, durationMin, locale, fromDate, days } = parsed.data;
+  const lessonType = await db.lessonType.findUnique({ where: { id: lessonTypeId } });
+  if (
+    !lessonType ||
+    !lessonType.active ||
+    !lessonType.bookableOnline ||
+    !lessonType.durations.includes(durationMin)
+  )
+    return { kind: "none" };
 
   const engine = await loadEngineInput();
   const tz = engine.settings.timezone;
   const dateLabel = (d: Date) =>
     formatDate(d, tz, locale, locale === "en" ? "EEEE d MMMM" : "EEEE, d MMMM");
-
-  if (program.format === "GRUPA") {
-    const sessions = groupSlots(engine, program.id).slice(0, 24);
-    return {
-      kind: "group",
-      horizonDays: engine.settings.horizonDays,
-      sessions: sessions.map((s) => ({
-        groupScheduleId: s.groupScheduleId,
-        start: s.start.toISOString(),
-        dateLabel: dateLabel(s.start),
-        timeLabel: `${formatTime(s.start, tz)}–${formatTime(s.end, tz)}`,
-        spotsLeft: s.spotsLeft,
-      })),
-    };
-  }
-  if (program.format !== "INDIVIDUAL" && program.format !== "SEMI_PRIVAT") return { kind: "none" };
-
   const limitDays = days ?? 7;
-  const all = exclusiveSlots(engine, program.durationMin ?? 60, {
-    fromKey: fromDate,
-    limitDays: limitDays + 1,
-  });
+  const all = exclusiveSlots(engine, durationMin, { fromKey: fromDate, limitDays: limitDays + 1 });
   const visible = all.slice(0, limitDays);
   return {
-    kind: "exclusive",
+    kind: "slots",
     horizonDays: engine.settings.horizonDays,
     hasMore: all.length > limitDays,
     days: visible.map((day) => ({
@@ -94,7 +72,7 @@ export async function fetchAvailability(raw: {
       label: dateLabel(day.slots[0]?.start ?? new Date(`${day.date}T12:00:00Z`)),
       slots: day.slots.map((slot) => ({
         start: slot.start.toISOString(),
-        label: formatTime(slot.start, tz),
+        label: `${formatTime(slot.start, tz)}–${formatTime(slot.end, tz)}`,
       })),
     })),
   };
@@ -108,16 +86,14 @@ export async function nextDayKey(date: string): Promise<string> {
 const bookingSchema = z
   .object({
     programId: z.string().min(1).max(40),
+    lessonTypeId: z.string().min(1).max(40),
+    durationMin: z.coerce.number().int().min(15).max(600),
     startsAt: z.string().datetime({ offset: true }),
-    groupScheduleId: z
-      .string()
-      .max(40)
-      .optional()
-      .transform((value) => (value ? value : null)),
+    forWhom: z.enum(["self", "child"]).catch("self"),
     name: fields.name,
     email: fields.email,
     phone: fields.phone,
-    participants: z.coerce.number().int().min(1).max(10).catch(1),
+    participants: z.coerce.number().int().min(1).max(20).catch(1),
     declaredLevel: z
       .enum(["INCEPATOR", "INTERMEDIAR", "AVANSAT", "COMPETITIE"])
       .optional()
@@ -153,9 +129,13 @@ export async function submitBooking(_prev: FormState, formData: FormData): Promi
   if (!parsed.success) return { status: "error", fieldErrors: zodFieldErrors(parsed.error) };
   const data = parsed.data;
 
-  const program = await db.program.findUnique({ where: { id: data.programId } });
+  const [program, lessonType] = await Promise.all([
+    db.program.findUnique({ where: { id: data.programId } }),
+    db.lessonType.findUnique({ where: { id: data.lessonTypeId } }),
+  ]);
   if (!program) return { status: "error", error: "program" };
-  const minor = isChildrenProgram(program);
+  if (!lessonType) return { status: "error", error: "lessonType" };
+  const minor = data.forWhom === "child";
   if (minor) {
     const errors: Record<string, string> = {};
     if (!data.childFirstName) errors.childFirstName = "childFirstName";
@@ -172,8 +152,9 @@ export async function submitBooking(_prev: FormState, formData: FormData): Promi
   try {
     const result = await createBooking({
       programId: data.programId,
+      lessonTypeId: data.lessonTypeId,
+      durationMin: data.durationMin,
       startsAt: new Date(data.startsAt),
-      groupScheduleId: data.groupScheduleId,
       name: data.name,
       email: data.email,
       phone: data.phone,
@@ -192,9 +173,10 @@ export async function submitBooking(_prev: FormState, formData: FormData): Promi
       const map: Record<string, string> = {
         conflict: "conflict",
         unavailable: "unavailable",
-        sessionFull: "sessionFull",
         participants: "participants",
         program: "program",
+        lessonType: "lessonType",
+        duration: "duration",
         minor: "childFirstName",
       };
       return { status: "error", error: map[result.error] ?? "server" };
@@ -208,9 +190,10 @@ export async function submitBooking(_prev: FormState, formData: FormData): Promi
       data: {
         code: result.code,
         bookingStatus: result.status,
-        kind: program.format === "GRUPA" ? "group" : "lesson",
+        email: data.email,
         manageUrl: urls.manageBooking(result.manageToken, data.locale),
         programName: t(program.name, data.locale),
+        lessonName: t(lessonType.name, data.locale),
       },
     };
   } catch (error) {

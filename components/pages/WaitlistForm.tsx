@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 
 type Props = {
-  programs: { id: string; name: string; forMinors: boolean }[];
+  programs: { id: string; name: string }[];
   initialProgramId?: string | null;
   turnstileSiteKey?: string | null;
   nonce?: string;

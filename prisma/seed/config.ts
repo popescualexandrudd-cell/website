@@ -36,7 +36,9 @@ const configSchema = z.object({
       z.object({
         nume: scalar,
         adresa: scalar,
+        cod_postal: scalar,
         localitate: scalar,
+        judet: scalar,
         coordonate: scalar,
         terenuri: z
           .array(
@@ -52,7 +54,18 @@ const configSchema = z.object({
       }),
     )
     .min(1),
-  programe: z.array(z.record(z.string(), scalar)).default([]),
+  programe: z.array(z.object({ nume: scalar })).default([]),
+  lectii: z
+    .array(
+      z.object({
+        nume: scalar,
+        persoane: scalar,
+        durate_min: z.array(scalar).default([60, 90, 120]),
+        tarif_ora_ron: scalar,
+        tarif_pe: scalar,
+      }),
+    )
+    .default([]),
   pachete: z
     .array(z.object({ nume: scalar, pret_ron: scalar, valabilitate_zile: scalar }))
     .default([]),
@@ -170,9 +183,11 @@ export function hoursRange(value: Scalar): { start: string; end: string } | null
   return { start: `${pad(h1)}:${m1}`, end: `${pad(h2)}:${m2}` };
 }
 
-/** Digits-only international number for wa.me links, or null if missing. */
+/** Digits-only international number for wa.me links ("0722 501 748" → "40722501748"), or null. */
 export function phoneDigits(value: Scalar): string | null {
   if (isPlaceholder(value)) return null;
-  const digits = String(value).replace(/[^\d]/g, "");
+  let digits = String(value).replace(/[^\d]/g, "");
+  if (digits.startsWith("00")) digits = digits.slice(2);
+  else if (digits.length === 10 && digits.startsWith("0")) digits = `40${digits.slice(1)}`;
   return digits.length >= 8 ? digits : null;
 }

@@ -1,5 +1,12 @@
 import { isFilled } from "./i18n-content";
-import type { FaqView, LocalizedSettings, LocationView, PostView, ProgramView } from "./content";
+import type {
+  FaqView,
+  LessonTypeView,
+  LocalizedSettings,
+  LocationView,
+  PostView,
+  ProgramView,
+} from "./content";
 import { appUrl } from "./paths";
 
 /** schema.org objects (JSON-LD). Missing ([DE COMPLETAT]) values are simply left out. */
@@ -55,18 +62,43 @@ export function personLd(
   });
 }
 
+/** "Bulevardul Biruinței 19-21, Pantelimon, Ilfov" → "Bulevardul Biruinței 19-21" when the rest is the town and county. */
+function streetOf(location: LocationView): string {
+  const parts = location.address.split(",").map((part) => part.trim());
+  const extra = new Set(
+    [location.city, location.region].filter(Boolean).map((v) => v!.toLowerCase()),
+  );
+  const street = parts.filter((part, i) => i === 0 || !extra.has(part.toLowerCase()));
+  return street.join(", ");
+}
+
 export function businessLd(
   settings: LocalizedSettings,
   location: LocationView | null,
   description: string,
+  lessons: LessonTypeView[] = [],
 ) {
+  const town = location && isFilled(location.city) ? location.city : undefined;
+  const offers = lessons
+    .filter((l) => l.hourlyRate !== null)
+    .map((l) =>
+      clean({
+        "@type": "Offer",
+        name: `${l.name}, 60 min`,
+        price: l.hourlyRate,
+        priceCurrency: settings.currency,
+      }),
+    );
   return clean({
     "@context": "https://schema.org",
     "@type": ["SportsActivityLocation", "LocalBusiness"],
     "@id": businessId(),
     name: isFilled(settings.brandName) ? settings.brandName : settings.tagline,
+    alternateName:
+      location && isFilled(location.name) ? `Lecții de tenis la ${location.name}` : undefined,
     description,
     url: appUrl(),
+    image: `${appUrl()}/api/og?path=%2F&lang=ro`,
     telephone: isFilled(settings.phone) ? settings.phone : undefined,
     email: isFilled(settings.email) ? settings.email : undefined,
     currenciesAccepted: settings.currency,
@@ -76,8 +108,10 @@ export function businessLd(
       location && isFilled(location.address)
         ? clean({
             "@type": "PostalAddress",
-            streetAddress: location.address,
-            addressLocality: isFilled(location.city) ? location.city : undefined,
+            streetAddress: streetOf(location),
+            addressLocality: town,
+            addressRegion: location.region ?? undefined,
+            postalCode: location.postalCode ?? undefined,
             addressCountry: "RO",
           })
         : undefined,
@@ -85,14 +119,34 @@ export function businessLd(
       location?.lat && location.lng
         ? { "@type": "GeoCoordinates", latitude: location.lat, longitude: location.lng }
         : undefined,
+    hasMap: location?.mapUrl ?? undefined,
+    areaServed: town
+      ? [town, "București", "Ilfov"].map((name) => ({ "@type": "Place", name }))
+      : undefined,
+    sameAs: [settings.instagramUrl, settings.facebookUrl, settings.tiktokUrl].filter(
+      (s): s is string => Boolean(s),
+    ),
+    makesOffer: offers.length > 0 ? offers : undefined,
   });
 }
 
-export function serviceLd(program: ProgramView, url: string) {
-  const offers = program.prices
-    .filter((p) => p.price !== null)
-    .map((p) =>
-      clean({ "@type": "Offer", name: p.name, price: p.price, priceCurrency: p.currency, url }),
+export function serviceLd(
+  program: ProgramView,
+  url: string,
+  lessons: LessonTypeView[] = [],
+  currency = "RON",
+) {
+  // One offer per kind of lesson with a published hourly rate (price of one hour).
+  const offers = lessons
+    .filter((l) => l.hourlyRate !== null)
+    .map((l) =>
+      clean({
+        "@type": "Offer",
+        name: `${l.name}, 60 min`,
+        price: l.hourlyRate,
+        priceCurrency: currency,
+        url,
+      }),
     );
   return clean({
     "@context": "https://schema.org",

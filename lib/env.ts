@@ -49,6 +49,9 @@ const envSchema = z.object({
   TURNSTILE_SECRET_KEY: optionalString,
   UMAMI_SCRIPT_URL: optionalString,
   UMAMI_WEBSITE_ID: optionalString,
+  /** Codes from Google Search Console and Bing Webmaster Tools (the content of their meta tag). */
+  GOOGLE_SITE_VERIFICATION: optionalString,
+  BING_SITE_VERIFICATION: optionalString,
 });
 
 export type Env = z.infer<typeof envSchema>;

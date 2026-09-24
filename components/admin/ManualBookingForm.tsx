@@ -4,60 +4,102 @@ import { useFormAction } from "@/components/ui/useFormAction";
 import { useState } from "react";
 import { createManualBooking } from "@/app/actions/admin-bookings";
 
-type Program = {
+type Program = { id: string; name: string };
+type Lesson = {
   id: string;
   name: string;
-  format: string;
-  forMinors: boolean;
-  maxParticipants: number | null;
+  minParticipants: number;
+  maxParticipants: number;
+  durations: number[];
 };
-type Schedule = { id: string; programId: string; label: string };
 
+/** Phone and WhatsApp bookings: programme, kind of lesson, duration, day and time, client. */
 export function ManualBookingForm({
   programs,
-  schedules,
+  lessons,
   today,
 }: {
   programs: Program[];
-  schedules: Schedule[];
+  lessons: Lesson[];
   today: string;
 }) {
   const { state, pending, formProps: actionProps } = useFormAction(createManualBooking);
-  const [programId, setProgramId] = useState(programs[0]?.id ?? "");
-  const program = programs.find((p) => p.id === programId);
-  const groupSchedules = schedules.filter((s) => s.programId === programId);
+  const [lessonId, setLessonId] = useState(lessons[0]?.id ?? "");
+  const [forChild, setForChild] = useState(false);
+  const lesson = lessons.find((l) => l.id === lessonId);
   const err = (name: string) => state.fieldErrors?.[name];
   return (
     <form {...actionProps} className="admin-form">
       <fieldset>
         <legend>Lecția</legend>
-        <label className="field">
-          <span className="field-label">Program</span>
-          <select
-            name="programId"
-            className="input"
-            value={programId}
-            onChange={(e) => setProgramId(e.target.value)}
-          >
-            {programs.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        {program?.format === "GRUPA" ? (
+        <div className="admin-grid-2">
           <label className="field">
-            <span className="field-label">Grupa (ziua și ora trebuie să fie ale unei ședințe)</span>
-            <select name="groupScheduleId" className="input">
-              {groupSchedules.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.label}
+            <span className="field-label">Program de pregătire</span>
+            <select name="programId" className="input" defaultValue={programs[0]?.id}>
+              {programs.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
                 </option>
               ))}
             </select>
           </label>
-        ) : null}
+          <label className="field">
+            <span className="field-label">Tipul lecției</span>
+            <select
+              name="lessonTypeId"
+              className="input"
+              value={lessonId}
+              onChange={(e) => setLessonId(e.target.value)}
+            >
+              {lessons.map((l) => (
+                <option key={l.id} value={l.id}>
+                  {l.name}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <div className="admin-grid-2">
+          <label className="field">
+            <span className="field-label">Durata (minute)</span>
+            <input
+              type="number"
+              name="durationMin"
+              min={15}
+              max={600}
+              step={5}
+              required
+              key={lessonId}
+              defaultValue={lesson?.durations[0] ?? 60}
+              list="durate-uzuale"
+              className="input"
+              aria-invalid={err("durationMin") ? true : undefined}
+            />
+            <datalist id="durate-uzuale">
+              {(lesson?.durations ?? [60, 90, 120]).map((minutes) => (
+                <option key={minutes} value={minutes} />
+              ))}
+            </datalist>
+          </label>
+          <label className="field">
+            <span className="field-label">
+              Participanți
+              {lesson && lesson.maxParticipants > lesson.minParticipants
+                ? ` (${lesson.minParticipants}–${lesson.maxParticipants})`
+                : ""}
+            </span>
+            <input
+              type="number"
+              name="participants"
+              key={lessonId}
+              min={lesson?.minParticipants ?? 1}
+              max={lesson?.maxParticipants ?? 1}
+              defaultValue={lesson?.minParticipants ?? 1}
+              className="input"
+              aria-invalid={err("participants") ? true : undefined}
+            />
+          </label>
+        </div>
         <div className="admin-grid-2">
           <label className="field">
             <span className="field-label">Data</span>
@@ -85,17 +127,6 @@ export function ManualBookingForm({
         </div>
         <div className="admin-grid-2">
           <label className="field">
-            <span className="field-label">Participanți</span>
-            <input
-              type="number"
-              name="participants"
-              min={1}
-              max={program?.maxParticipants ?? 1}
-              defaultValue={program?.format === "SEMI_PRIVAT" ? 2 : 1}
-              className="input"
-            />
-          </label>
-          <label className="field">
             <span className="field-label">Primită prin</span>
             <select name="source" className="input" defaultValue="TELEFON">
               <option value="TELEFON">Telefon</option>
@@ -103,19 +134,27 @@ export function ManualBookingForm({
               <option value="ADMIN">Altfel (în persoană)</option>
             </select>
           </label>
+          <label className="field">
+            <span className="field-label">Stare</span>
+            <select name="status" className="input" defaultValue="CONFIRMATA">
+              <option value="CONFIRMATA">Confirmată</option>
+              <option value="IN_ASTEPTARE">În așteptare</option>
+            </select>
+          </label>
         </div>
-        <label className="field">
-          <span className="field-label">Stare</span>
-          <select name="status" className="input" defaultValue="CONFIRMATA">
-            <option value="CONFIRMATA">Confirmată</option>
-            <option value="IN_ASTEPTARE">În așteptare</option>
-          </select>
-        </label>
       </fieldset>
       <fieldset>
         <legend>Clientul</legend>
+        <label className="admin-check">
+          <input
+            type="checkbox"
+            checked={forChild}
+            onChange={(e) => setForChild(e.target.checked)}
+          />
+          <span>Lecția este pentru un copil (datele de contact sunt ale părintelui)</span>
+        </label>
         <label className="field">
-          <span className="field-label">{program?.forMinors ? "Numele părintelui" : "Nume"}</span>
+          <span className="field-label">{forChild ? "Numele părintelui" : "Nume"}</span>
           <input
             name="name"
             required
@@ -123,11 +162,11 @@ export function ManualBookingForm({
             aria-invalid={err("name") ? true : undefined}
           />
         </label>
-        {program?.forMinors ? (
+        {forChild ? (
           <div className="admin-grid-2">
             <label className="field">
               <span className="field-label">Prenumele copilului</span>
-              <input name="childFirstName" className="input" />
+              <input name="childFirstName" required className="input" />
             </label>
             <label className="field">
               <span className="field-label">Vârsta copilului</span>

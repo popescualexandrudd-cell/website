@@ -3,7 +3,7 @@ import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { addDaysToKey, localDateKey, openWindowsForDate, zonedInstant } from "@/lib/availability";
-import { when, bookingTitle, programName, weekKeys } from "@/lib/admin/format";
+import { when, bookingTitle, lessonLine, weekKeys } from "@/lib/admin/format";
 import { BookingActions } from "@/components/admin/BookingActions";
 import { OkNotice } from "@/components/admin/OkNotice";
 import { BOOKING_OK } from "@/lib/admin/booking-done";
@@ -29,7 +29,6 @@ async function occupancy(tz: string, monthOffset: number) {
     }),
     db.booking.findMany({
       where: {
-        groupScheduleId: null,
         status: { in: ["IN_ASTEPTARE", "CONFIRMATA", "EFECTUATA"] },
         startsAt: {
           gte: zonedInstant(firstKey, "00:00", tz),
@@ -88,7 +87,7 @@ export default async function DashboardPage({ searchParams }: PageProps<"/admin"
             where: { status: "IN_ASTEPTARE", startsAt: { gte: new Date() } },
             orderBy: { startsAt: "asc" },
             take: 5,
-            include: { program: true },
+            include: { program: true, lessonType: true },
           })
         : [],
       isOwner ? Promise.all([0, 1, 2].map((offset) => occupancy(tz, offset))) : [],
@@ -175,7 +174,7 @@ export default async function DashboardPage({ searchParams }: PageProps<"/admin"
                     <Link href={`/admin/rezervari/${b.id}`} className="admin-row-link">
                       <span className="admin-row-title">{bookingTitle(b)}</span>
                       <span className="admin-row-meta block">
-                        {when(b.startsAt, b.endsAt, tz)} · {programName(b)} · {b.code}
+                        {when(b.startsAt, b.endsAt, tz)} · {lessonLine(b)} · {b.code}
                       </span>
                     </Link>
                     <BookingActions id={b.id} status={b.status} compact back="/admin" />

@@ -60,7 +60,7 @@ const ENTITIES: Record<string, string> = {
   Scene: "secțiune a paginii principale",
   Program: "program",
   PricingPlan: "preț",
-  GroupSchedule: "grupă",
+  LessonType: "tip de lecție",
   Location: "locație",
   Court: "teren",
   Facility: "facilitate",

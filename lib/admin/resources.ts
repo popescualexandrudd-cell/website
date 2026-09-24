@@ -7,14 +7,12 @@ import {
   BOOKING_MODES,
   FACILITY_TYPES,
   FAQ_CATEGORIES,
-  FORMATS,
   GALLERY_CATEGORIES,
   LEVELS,
   POST_STATUSES,
   PRICE_UNITS,
   SURFACES,
   TIMEZONES,
-  WEEKDAYS,
   optionLabel,
   type FieldDef,
   type Option,
@@ -38,6 +36,7 @@ export type Delegate = {
 export type ModelName =
   | "scene"
   | "program"
+  | "lessonType"
   | "pricingPlan"
   | "location"
   | "court"
@@ -48,7 +47,6 @@ export type ModelName =
   | "testimonial"
   | "galleryItem"
   | "post"
-  | "groupSchedule"
   | "pageHeader"
   | "legalPage"
   | "siteSettings";
@@ -257,19 +255,18 @@ const program: Resource = {
   key: "programe",
   model: "program",
   entity: "Program",
-  label: "Programe",
+  label: "Programe de pregătire",
   singular: "programul",
   addLabel: "Adaugă un program",
   newTitle: "Program nou",
-  description: "Lecții individuale, grupe, tabere: descrieri, durată, vârste, rezervare online.",
+  description: "Inițiere, Competiție, Amatori: ce lucrăm, pentru cine, pagina fiecărui program.",
   section: "Programe și prețuri",
   orderable: true,
   canCreate: true,
   canDelete: true,
   listOrderBy: { order: "asc" },
   title: (r) => ro(r.name),
-  meta: (r) =>
-    `${optionLabel(FORMATS, str(r.format))} · ${optionLabel(AUDIENCES, str(r.audience))}${r.durationMin ? ` · ${str(r.durationMin)} min` : ""}`,
+  meta: (r) => `${optionLabel(AUDIENCES, str(r.audience))} · ${optionLabel(LEVELS, str(r.level))}`,
   flags: (r) => [
     ...(yes(r.active) ? [] : ["inactiv"]),
     ...(yes(r.bookableOnline) ? [] : ["fără rezervare online"]),
@@ -321,27 +318,8 @@ const program: Resource = {
       help: "Câte un punct pe rând.",
       group: "Texte",
     },
-    { kind: "enum", name: "format", label: "Format", options: FORMATS, group: "Detalii" },
     { kind: "enum", name: "audience", label: "Pentru cine", options: AUDIENCES, group: "Detalii" },
     { kind: "enum", name: "level", label: "Nivel", options: LEVELS, group: "Detalii" },
-    {
-      kind: "int",
-      name: "durationMin",
-      label: "Durata unei ședințe (minute)",
-      nullable: true,
-      min: 15,
-      max: 600,
-      group: "Detalii",
-    },
-    {
-      kind: "int",
-      name: "maxParticipants",
-      label: "Număr maxim de elevi",
-      nullable: true,
-      min: 1,
-      max: 40,
-      group: "Detalii",
-    },
     {
       kind: "int",
       name: "ageMin",
@@ -368,6 +346,123 @@ const program: Resource = {
       nullable: true,
       group: "Imagine",
     },
+    {
+      kind: "bool",
+      name: "bookableOnline",
+      label: "Apare la rezervarea online",
+      group: "Publicare",
+    },
+    { kind: "bool", name: "active", label: "Activ (apare pe site)", group: "Publicare" },
+  ],
+};
+
+const lessonType: Resource = {
+  key: "lectii",
+  model: "lessonType",
+  entity: "LessonType",
+  label: "Tipuri de lecții",
+  singular: "tipul de lecție",
+  addLabel: "Adaugă un tip de lecție",
+  newTitle: "Tip de lecție nou",
+  description:
+    "Individuală, în doi, în trei, de grup, analiză biomecanică: câte persoane, ce durate se pot alege la rezervare, tariful pe oră.",
+  section: "Programe și prețuri",
+  orderable: true,
+  canCreate: true,
+  canDelete: true,
+  listOrderBy: { order: "asc" },
+  title: (r) => ro(r.name),
+  meta: (r) => {
+    const people =
+      r.minParticipants === r.maxParticipants
+        ? `${str(r.minParticipants)} pers.`
+        : `${str(r.minParticipants)}–${str(r.maxParticipants)} pers.`;
+    const durations = Array.isArray(r.durations) ? `${r.durations.join(", ")} min` : "";
+    const rate =
+      r.hourlyRate === null || r.hourlyRate === undefined
+        ? "tarif necompletat"
+        : `${str(r.hourlyRate)} lei/oră ${optionLabel(PRICE_UNITS, str(r.priceUnit))}`;
+    return `${people} · ${durations} · ${rate}`;
+  },
+  flags: (r) => [
+    ...(yes(r.active) ? [] : ["inactiv"]),
+    ...(yes(r.bookableOnline) ? [] : ["fără rezervare online"]),
+    ...(r.hourlyRate === null ? ["fără tarif"] : []),
+  ],
+  publicPath: () => "/programe#tipuri-de-lectii",
+  prepare: (data) => {
+    const min = typeof data.minParticipants === "number" ? data.minParticipants : 1;
+    const max = typeof data.maxParticipants === "number" ? data.maxParticipants : 1;
+    if (min > max) return "Numărul minim de persoane nu poate fi mai mare decât cel maxim.";
+    return null;
+  },
+  deleteBlocked: async (r) => {
+    const bookings = await db.booking.count({ where: { lessonTypeId: String(r.id) } });
+    return bookings > 0
+      ? `Tipul de lecție are ${countLabel(bookings, "rezervare", "rezervări")} în istoric și nu poate fi șters. Debifează „Activ” ca să nu mai apară pe site.`
+      : null;
+  },
+  fields: [
+    { kind: "i18n", name: "name", label: "Nume", required: true, group: "Texte", maxLength: 120 },
+    {
+      kind: "slug",
+      name: "slug",
+      label: "Cod în adresă",
+      help: "Litere mici, cifre și cratime, de exemplu lectie-in-doi. Apare în linkurile de rezervare.",
+      required: true,
+      group: "Texte",
+    },
+    {
+      kind: "i18nText",
+      name: "summary",
+      label: "Descriere scurtă",
+      required: true,
+      group: "Texte",
+      rows: 3,
+    },
+    {
+      kind: "int",
+      name: "minParticipants",
+      label: "Minimum de persoane",
+      required: true,
+      min: 1,
+      max: 20,
+      group: "Persoane și durate",
+    },
+    {
+      kind: "int",
+      name: "maxParticipants",
+      label: "Maximum de persoane",
+      required: true,
+      min: 1,
+      max: 20,
+      group: "Persoane și durate",
+    },
+    {
+      kind: "intList",
+      name: "durations",
+      label: "Durate care se pot alege (minute)",
+      help: "Despărțite prin virgulă, de exemplu 60, 90, 120, 150, 180. Apar în lista „Durata antrenamentului”.",
+      required: true,
+      min: 30,
+      max: 600,
+      group: "Persoane și durate",
+    },
+    {
+      kind: "decimal",
+      name: "hourlyRate",
+      label: "Tarif pe oră",
+      help: "Doar cifre, de exemplu 150. Prețul unei lecții se calculează din durată (90 min = 1,5 × tariful). Gol = „[DE COMPLETAT]” pe site.",
+      nullable: true,
+      group: "Tarif",
+    },
+    {
+      kind: "enum",
+      name: "priceUnit",
+      label: "Tariful este",
+      options: PRICE_UNITS.filter((o) => o.value === "LECTIE" || o.value === "PERSOANA"),
+      group: "Tarif",
+    },
     { kind: "bool", name: "bookableOnline", label: "Se poate rezerva online", group: "Publicare" },
     { kind: "bool", name: "active", label: "Activ (apare pe site)", group: "Publicare" },
   ],
@@ -381,7 +476,8 @@ const pricing: Resource = {
   singular: "prețul",
   addLabel: "Adaugă un preț sau pachet",
   newTitle: "Preț nou",
-  description: "Tariful fiecărui program și pachetele de lecții.",
+  description:
+    "Pachete de lecții și alte tarife fixe. Tariful pe oră al fiecărei lecții se schimbă din „Tipuri de lecții”.",
   section: "Programe și prețuri",
   orderable: true,
   canCreate: true,
@@ -402,9 +498,9 @@ const pricing: Resource = {
     { kind: "i18n", name: "name", label: "Nume", required: true, group: "Preț", maxLength: 120 },
     {
       kind: "relation",
-      name: "programId",
-      label: "Programul",
-      source: "program",
+      name: "lessonTypeId",
+      label: "Tipul de lecție (opțional)",
+      source: "lessonType",
       nullable: true,
       group: "Preț",
     },
@@ -454,100 +550,6 @@ const pricing: Resource = {
     },
     { kind: "bool", name: "highlighted", label: "Evidențiat (recomandat)", group: "Publicare" },
     { kind: "bool", name: "active", label: "Activ (apare pe site)", group: "Publicare" },
-  ],
-};
-
-const group: Resource = {
-  key: "grupe",
-  model: "groupSchedule",
-  entity: "GroupSchedule",
-  label: "Orarul grupelor",
-  singular: "ședința de grupă",
-  addLabel: "Adaugă o ședință de grupă",
-  newTitle: "Ședință de grupă nouă",
-  description: "Zilele și orele grupelor, capacitatea și câți membri au deja.",
-  section: "Programe și prețuri",
-  canCreate: true,
-  canDelete: true,
-  listOrderBy: [{ weekday: "asc" }, { startTime: "asc" }],
-  title: (r) =>
-    `${optionLabel(WEEKDAYS, str(r.weekday))}, ${str(r.startTime)} (${str(r.durationMin)} min)`,
-  meta: (r) => `Capacitate ${str(r.capacity)} · membri ${str(r.membersCount)}`,
-  flags: (r) => (yes(r.active) ? [] : ["inactivă"]),
-  publicPath: () => "/rezervare",
-  prepare: (data) => {
-    if (
-      typeof data.capacity === "number" &&
-      typeof data.membersCount === "number" &&
-      data.membersCount > data.capacity
-    ) {
-      return "Numărul de membri nu poate depăși capacitatea grupei.";
-    }
-    if (
-      data.seasonFrom instanceof Date &&
-      data.seasonTo instanceof Date &&
-      data.seasonFrom > data.seasonTo
-    ) {
-      return "Sezonul trebuie să înceapă înainte să se termine.";
-    }
-    return null;
-  },
-  deleteBlocked: async (r) => {
-    const bookings = await db.booking.count({ where: { groupScheduleId: String(r.id) } });
-    return bookings > 0
-      ? `Ședința are ${countLabel(bookings, "rezervare", "rezervări")} și nu poate fi ștearsă. Debifează „Activă” ca să nu mai apară.`
-      : null;
-  },
-  fields: [
-    {
-      kind: "relation",
-      name: "programId",
-      label: "Programul (grupa)",
-      source: "groupProgram",
-      required: true,
-      group: "Orar",
-    },
-    { kind: "weekday", name: "weekday", label: "Ziua", required: true, group: "Orar" },
-    { kind: "time", name: "startTime", label: "Ora de început", required: true, group: "Orar" },
-    {
-      kind: "int",
-      name: "durationMin",
-      label: "Durata (minute)",
-      required: true,
-      min: 30,
-      max: 300,
-      group: "Orar",
-    },
-    {
-      kind: "int",
-      name: "capacity",
-      label: "Capacitate (elevi)",
-      required: true,
-      min: 1,
-      max: 40,
-      group: "Locuri",
-    },
-    {
-      kind: "int",
-      name: "membersCount",
-      label: "Membri permanenți deja înscriși",
-      help: "Ocupă locuri în fiecare săptămână; site-ul arată doar locurile rămase.",
-      required: true,
-      min: 0,
-      max: 40,
-      group: "Locuri",
-    },
-    { kind: "date", name: "seasonFrom", label: "Sezonul începe", nullable: true, group: "Sezon" },
-    { kind: "date", name: "seasonTo", label: "Sezonul se termină", nullable: true, group: "Sezon" },
-    {
-      kind: "relation",
-      name: "locationId",
-      label: "Locația",
-      source: "location",
-      nullable: true,
-      group: "Sezon",
-    },
-    { kind: "bool", name: "active", label: "Activă", group: "Publicare" },
   ],
 };
 
@@ -602,6 +604,23 @@ const location: Resource = {
       label: "Localitatea",
       required: true,
       maxLength: 120,
+      group: "Locație",
+    },
+    {
+      kind: "text",
+      name: "region",
+      label: "Județul",
+      help: "Pentru adresa pe care o citește Google, de exemplu Ilfov.",
+      nullable: true,
+      maxLength: 60,
+      group: "Locație",
+    },
+    {
+      kind: "text",
+      name: "postalCode",
+      label: "Codul poștal",
+      nullable: true,
+      maxLength: 12,
       group: "Locație",
     },
     {
@@ -1523,8 +1542,8 @@ export const RESOURCES: Resource[] = [
   profile,
   certification,
   program,
+  lessonType,
   pricing,
-  group,
   location,
   court,
   facility,

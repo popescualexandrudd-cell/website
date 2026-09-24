@@ -7,7 +7,7 @@
  */
 import { config as loadEnv } from "dotenv";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { Prisma, PrismaClient, type PriceUnit } from "../lib/generated/prisma/client";
+import { Prisma, PrismaClient } from "../lib/generated/prisma/client";
 import {
   TODO,
   coordinates,
@@ -24,7 +24,7 @@ import {
   yesNo,
 } from "./seed/config";
 import { sceneSeeds } from "./seed/content/scenes";
-import { programContent } from "./seed/content/programs";
+import { lessonContent, programContent } from "./seed/content/programs";
 import { faqContent } from "./seed/content/faqs";
 import { postContent } from "./seed/content/posts";
 import { LEGAL_VERSION, legalContent } from "./seed/content/legal";
@@ -131,18 +131,19 @@ async function main(): Promise<void> {
       monogram: initials(coachName),
       tagline: localizedText(config.antrenor.titulatura, "Tennis coach"),
       phone: text(config.contact.telefon),
-      whatsapp: phoneDigits(config.contact.whatsapp) ?? TODO,
+      // Optional: without a WhatsApp number the WhatsApp buttons simply do not appear.
+      whatsapp: phoneDigits(config.contact.whatsapp) ?? "",
       email: text(config.contact.email),
       instagramUrl: optionalText(config.contact.instagram),
       facebookUrl: optionalText(config.contact.facebook),
       tiktokUrl: optionalText(config.contact.tiktok),
       seoTitle: {
-        ro: `Antrenor de tenis în ${city}: lecții pentru copii și adulți`,
-        en: `Tennis coach in ${city}: lessons for children and adults`,
+        ro: `Lecții de tenis ${city}: antrenor pentru copii și adulți`,
+        en: `Tennis lessons in ${city}: a coach for children and adults`,
       },
       seoDescription: {
-        ro: `Lecții de tenis individuale și în grupă pentru copii, juniori și adulți la ${locationName}, ${city}. Prima lecție este o evaluare. Rezervare online.`,
-        en: `Private and group tennis lessons for children, juniors and adults at ${locationName}, ${city}. The first lesson is an assessment. Book online.`,
+        ro: `Lecții de tenis la ${locationName}, ${city}, lângă București: inițiere, competiție și amatori, pentru copii și adulți, pe zgură. Rezervi online.`,
+        en: `Tennis lessons at ${locationName}, ${city}, next to Bucharest: beginners, competition and recreational, for children and adults, on clay. Book online.`,
       },
       bookingMode: String(config.rezervari.mod).trim() === "instant" ? "INSTANT" : "CERERE",
       freeCancelHours: integer(config.rezervari.anulare_gratuita_ore) ?? 24,
@@ -223,6 +224,7 @@ async function main(): Promise<void> {
   // ── Location, courts, facilities ──────────────────────────────────────────
   const locationId = "seed-location-01";
   const coords = coordinates(firstLocation.coordonate);
+  const address = text(firstLocation.adresa);
   const locationExists = await db.location.findUnique({ where: { id: locationId } });
   await db.location.upsert({
     where: { id: locationId },
@@ -230,13 +232,18 @@ async function main(): Promise<void> {
     create: {
       id: locationId,
       name: locationName,
-      address: text(firstLocation.adresa),
+      address,
       city,
+      region: optionalText(firstLocation.judet),
+      postalCode: optionalText(firstLocation.cod_postal),
       lat: coords?.lat ?? null,
       lng: coords?.lng ?? null,
+      // Without coordinates the map link searches for the club by name and address.
       mapUrl: coords
         ? `https://www.google.com/maps/search/?api=1&query=${coords.lat},${coords.lng}`
-        : null,
+        : address === TODO
+          ? null
+          : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${locationName}, ${address}`)}`,
       directions: todoT,
     },
   });
@@ -262,21 +269,38 @@ async function main(): Promise<void> {
     if (!kind) continue;
     const id = `seed-court-${String(index + 1).padStart(2, "0")}`;
     const exists = await db.court.findUnique({ where: { id } });
+    // Two rows of the same surface are told apart by whether they are covered.
+    const covered = yesNo(court.acoperit_iarna);
+    const sameSurface = firstLocation.terenuri.filter(
+      (other) =>
+        String(other.suprafata ?? "")
+          .trim()
+          .toLowerCase() ===
+        String(court.suprafata ?? "")
+          .trim()
+          .toLowerCase(),
+    ).length;
+    const name =
+      sameSurface > 1 && covered !== null
+        ? covered
+          ? { ro: `${kind.name.ro} acoperite`, en: `Covered ${kind.name.en.toLowerCase()}` }
+          : { ro: `${kind.name.ro} în aer liber`, en: `Outdoor ${kind.name.en.toLowerCase()}` }
+        : kind.name;
     await db.court.upsert({
       where: { id },
       update: {},
       create: {
         id,
         locationId,
-        name: kind.name,
+        name,
         surface: kind.surface,
         count: integer(court.numar),
-        coveredInWinter: yesNo(court.acoperit_iarna),
+        coveredInWinter: covered,
         floodlights: yesNo(court.nocturna),
         order: index,
       },
     });
-    note(`teren ${kind.name.ro}`, !exists);
+    note(`teren ${name.ro}`, !exists);
   }
 
   let facilityOrder = 0;
@@ -337,19 +361,13 @@ async function main(): Promise<void> {
     note(`serviciu ${index + 1}`, !exists);
   }
 
-  // ── Programs & pricing ────────────────────────────────────────────────────
+  // ── Training programmes, lesson types & packages ─────────────────────────
   const programIds = new Map<string, string>();
   for (const [index, content] of programContent.entries()) {
-    const configEntry = config.programe.find(
+    const inConfig = config.programe.some(
       (entry) => String(entry.nume ?? "").trim() === content.configName,
     );
     const exists = await db.program.findUnique({ where: { slug: content.slug } });
-    const maxParticipants =
-      content.format === "INDIVIDUAL"
-        ? 1
-        : content.format === "SEMI_PRIVAT"
-          ? 2
-          : integer(configEntry?.max_elevi);
     const program = await db.program.upsert({
       where: { slug: content.slug },
       update: {},
@@ -361,61 +379,55 @@ async function main(): Promise<void> {
         focusPoints: content.focusPoints,
         audience: content.audience,
         level: content.level,
-        format: content.format,
-        durationMin: integer(configEntry?.durata_min),
-        maxParticipants,
         ageMin: content.ageMin ?? null,
         ageMax: content.ageMax ?? null,
         order: index,
-        bookableOnline: content.bookableOnline,
-        active: Boolean(configEntry),
+        bookableOnline: true,
+        active: inConfig,
       },
     });
     programIds.set(content.slug, program.id);
     note(`program ${content.slug}`, !exists);
-
-    const priceFields: { key: string; unit: PriceUnit; label: { ro: string; en: string } }[] = [
-      {
-        key: "pret_ron",
-        unit: content.format === "EVENIMENT" ? "EVENIMENT" : "LECTIE",
-        label:
-          content.format === "EVENIMENT"
-            ? { ro: "Participare", en: "Participation" }
-            : { ro: "Lecție", en: "Lesson" },
-      },
-      {
-        key: "pret_ron_persoana",
-        unit: "PERSOANA",
-        label: { ro: "Lecție, de persoană", en: "Lesson, per person" },
-      },
-      {
-        key: "pret_ron_luna",
-        unit: "LUNA",
-        label: { ro: "Abonament lunar", en: "Monthly membership" },
-      },
-    ];
-    for (const field of priceFields) {
-      if (!configEntry || !(field.key in configEntry)) continue;
-      const id = `seed-price-${content.slug}-${field.unit.toLowerCase()}`;
-      const priceExists = await db.pricingPlan.findUnique({ where: { id } });
-      await db.pricingPlan.upsert({
-        where: { id },
-        update: {},
-        create: {
-          id,
-          programId: program.id,
-          name: field.label,
-          price: decimal(configEntry[field.key]),
-          currency: isPlaceholder(config.site.moneda) ? "RON" : String(config.site.moneda),
-          unit: field.unit,
-          order: index * 10,
-        },
-      });
-      note(`preț ${content.slug}`, !priceExists);
-    }
   }
 
-  const individualId = programIds.get("lectie-individuala") ?? null;
+  const lessonIds = new Map<string, string>();
+  for (const [index, content] of lessonContent.entries()) {
+    const entry = config.lectii.find((l) => String(l.nume ?? "").trim() === content.configName);
+    const people = String(entry?.persoane ?? "").match(/(\d+)(?:\s*[-–]\s*(\d+))?/);
+    const minParticipants = people ? Number(people[1]) : content.minParticipants;
+    const maxParticipants = people?.[2] ? Number(people[2]) : minParticipants;
+    const durations = (entry?.durate_min ?? [])
+      .map((value) => integer(value))
+      .filter((value): value is number => value !== null && value >= 15 && value <= 600);
+    const exists = await db.lessonType.findUnique({ where: { slug: content.slug } });
+    const lesson = await db.lessonType.upsert({
+      where: { slug: content.slug },
+      update: {},
+      create: {
+        slug: content.slug,
+        name: content.name,
+        summary: content.summary,
+        minParticipants,
+        maxParticipants: Math.max(minParticipants, maxParticipants),
+        durations:
+          durations.length > 0 ? [...new Set(durations)].sort((a, b) => a - b) : [60, 90, 120],
+        hourlyRate: entry ? decimal(entry.tarif_ora_ron) : null,
+        priceUnit:
+          String(entry?.tarif_pe ?? "")
+            .trim()
+            .toLowerCase() === "persoană"
+            ? "PERSOANA"
+            : content.priceUnit,
+        order: index,
+        bookableOnline: true,
+        active: Boolean(entry),
+      },
+    });
+    lessonIds.set(content.slug, lesson.id);
+    note(`tip de lecție ${content.slug}`, !exists);
+  }
+
+  const individualId = lessonIds.get("lectie-individuala") ?? null;
   for (const [index, pack] of config.pachete.entries()) {
     const id = `seed-package-${String(index + 1).padStart(2, "0")}`;
     const exists = await db.pricingPlan.findUnique({ where: { id } });
@@ -424,9 +436,10 @@ async function main(): Promise<void> {
       update: {},
       create: {
         id,
-        programId: individualId,
+        lessonTypeId: individualId,
         name: isPlaceholder(pack.nume) ? todoT : { ro: text(pack.nume) },
         price: decimal(pack.pret_ron),
+        currency: isPlaceholder(config.site.moneda) ? "RON" : String(config.site.moneda),
         unit: "PACHET",
         isPackage: true,
         sessions: isPlaceholder(pack.nume)
@@ -444,7 +457,7 @@ async function main(): Promise<void> {
     note(`pachet ${index + 1}`, !exists);
   }
 
-  // ── Availability & group schedule ─────────────────────────────────────────
+  // ── Availability ──────────────────────────────────────────────────────────
   const ruleDays: { days: number[]; value: typeof config.program_lucru.luni_vineri }[] = [
     { days: [1, 2, 3, 4, 5], value: config.program_lucru.luni_vineri },
     { days: [6], value: config.program_lucru.sambata },
@@ -463,39 +476,6 @@ async function main(): Promise<void> {
       });
       note(`disponibilitate ziua ${weekday}`, !exists);
     }
-  }
-
-  // A proposed starting schedule for the groups; the coach adjusts it in the admin.
-  const groupPlan: { slug: string; weekday: number; time: string }[] = [
-    { slug: "mini-tenis", weekday: 2, time: "17:00" },
-    { slug: "mini-tenis", weekday: 4, time: "17:00" },
-    { slug: "mini-tenis", weekday: 6, time: "09:00" },
-    { slug: "grupe-copii-juniori", weekday: 1, time: "17:30" },
-    { slug: "grupe-copii-juniori", weekday: 3, time: "17:30" },
-    { slug: "adulti-incepatori", weekday: 2, time: "19:00" },
-    { slug: "adulti-incepatori", weekday: 4, time: "19:00" },
-  ];
-  for (const [index, entry] of groupPlan.entries()) {
-    const programId = programIds.get(entry.slug);
-    const program = programId ? await db.program.findUnique({ where: { id: programId } }) : null;
-    if (!program) continue;
-    const id = `seed-group-${String(index + 1).padStart(2, "0")}`;
-    const exists = await db.groupSchedule.findUnique({ where: { id } });
-    await db.groupSchedule.upsert({
-      where: { id },
-      update: {},
-      create: {
-        id,
-        programId: program.id,
-        weekday: entry.weekday,
-        startTime: entry.time,
-        durationMin: program.durationMin ?? 60,
-        capacity: program.maxParticipants ?? 6,
-        membersCount: 0,
-        locationId,
-      },
-    });
-    note(`orar grupă ${entry.slug}`, !exists);
   }
 
   // ── Scenes ────────────────────────────────────────────────────────────────

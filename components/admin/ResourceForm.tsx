@@ -432,11 +432,13 @@ function FieldControl({ field, value, media, options, error }: ControlProps) {
       const numberProps =
         field.kind === "int"
           ? { min: field.min, max: field.max, step: 1, inputMode: "numeric" as const }
-          : field.kind === "float"
-            ? { min: field.min, max: field.max, step: field.step ?? "any" }
-            : field.kind === "decimal"
-              ? { inputMode: "decimal" as const }
-              : {};
+          : field.kind === "intList"
+            ? { inputMode: "numeric" as const, pattern: "[0-9 ,;]*" }
+            : field.kind === "float"
+              ? { min: field.min, max: field.max, step: field.step ?? "any" }
+              : field.kind === "decimal"
+                ? { inputMode: "decimal" as const }
+                : {};
       return (
         <div className="field">
           <label htmlFor={inputId} className="field-label">

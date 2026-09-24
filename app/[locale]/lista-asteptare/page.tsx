@@ -44,7 +44,7 @@ export default async function WaitlistPage({
       />
       <PageSection className="page-section--narrow">
         <WaitlistForm
-          programs={programs.map((p) => ({ id: p.id, name: p.name, forMinors: p.forMinors }))}
+          programs={programs.map((p) => ({ id: p.id, name: p.name }))}
           initialProgramId={initial}
           turnstileSiteKey={
             process.env.TURNSTILE_SECRET_KEY ? (process.env.TURNSTILE_SITE_KEY ?? null) : null

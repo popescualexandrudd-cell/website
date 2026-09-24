@@ -3,9 +3,9 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import {
+  getLessonTypes,
   getPackages,
   getPageHeader,
-  getPrograms,
   getSettings,
   localizedSettings,
 } from "@/lib/content";
@@ -13,6 +13,7 @@ import { formatPrice } from "@/lib/format";
 import { pageMetadata } from "@/lib/seo";
 import { PageHero, PageSection } from "@/components/pages/PageHero";
 import { TodoText } from "@/components/site/TodoText";
+import { LessonTypeList } from "@/components/pages/LessonTypeList";
 
 export async function generateMetadata({
   params,
@@ -30,9 +31,9 @@ export async function generateMetadata({
 export default async function PricingPage({ params }: PageProps<"/[locale]/preturi">) {
   const locale = (await params).locale as Locale;
   setRequestLocale(locale);
-  const [header, programs, packages, settingsRow, t] = await Promise.all([
+  const [header, lessons, packages, settingsRow, t] = await Promise.all([
     getPageHeader("preturi", locale),
-    getPrograms(locale),
+    getLessonTypes(locale),
     getPackages(locale),
     getSettings(),
     getTranslations(),
@@ -58,46 +59,9 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/pretu
         </p>
       </PageSection>
 
-      <PageSection id="tarife" title={t("pricing.perProgram")} className="page-section--narrow">
-        <div
-          className="overflow-x-auto"
-          tabIndex={0}
-          role="region"
-          aria-label={t("pricing.perProgram")}
-        >
-          <table className="price-table">
-            <tbody>
-              {programs.flatMap((program) =>
-                program.prices
-                  .filter((price) => !price.isPackage)
-                  .map((price, i) => (
-                    <tr key={price.id}>
-                      <th scope="row" className="font-normal">
-                        {i === 0 ? (
-                          <Link
-                            href={{ pathname: "/programe/[slug]", params: { slug: program.slug } }}
-                            className="font-display text-[1.35rem] leading-tight underline-offset-4 hover:underline"
-                          >
-                            {program.name}
-                          </Link>
-                        ) : null}
-                        <span className="block text-note text-cerneala-2">
-                          {price.name}
-                          {program.durationMin
-                            ? ` · ${t("common.minutes", { n: program.durationMin })}`
-                            : ""}
-                        </span>
-                      </th>
-                      <td className="whitespace-nowrap">
-                        <TodoText value={formatPrice(price.price, price.currency, locale)} />{" "}
-                        <span className="text-cerneala-2">{t(`programs.unit.${price.unit}`)}</span>
-                      </td>
-                    </tr>
-                  )),
-              )}
-            </tbody>
-          </table>
-        </div>
+      <PageSection id="tarife" title={t("pricing.perLesson")} className="page-section--narrow">
+        <p className="measure mb-6 text-cerneala-2">{t("pricing.perLessonIntro")}</p>
+        <LessonTypeList lessons={lessons} locale={locale} currency={settings.currency} withPrices />
       </PageSection>
 
       {packages.length > 0 ? (

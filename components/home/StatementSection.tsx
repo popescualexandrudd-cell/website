@@ -1,6 +1,7 @@
 import type { SceneView } from "@/lib/content";
 import { TodoText } from "@/components/site/TodoText";
 import { CourtMark } from "@/components/ui/CourtMark";
+import { Words } from "@/components/site/Words";
 
 /** A single statement in large type on clay: the coaching philosophy in two sentences. */
 export function StatementSection({ scene }: { scene: SceneView }) {
@@ -12,7 +13,7 @@ export function StatementSection({ scene }: { scene: SceneView }) {
           <TodoText value={scene.indexName} />
         </p>
         <h2 id={`${scene.key}-title`} className="statement-title">
-          <TodoText value={scene.title} />
+          <Words text={scene.title} />
         </h2>
         {scene.body ? (
           <p className="statement-body">

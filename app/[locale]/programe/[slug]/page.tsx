@@ -3,8 +3,14 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
-import { getFaqs, getGroupSchedules, getLocations, getPageHeader, getProgram } from "@/lib/content";
-import { formatPrice } from "@/lib/format";
+import {
+  getFaqs,
+  getLessonTypes,
+  getLocations,
+  getPageHeader,
+  getProgram,
+  getSettings,
+} from "@/lib/content";
 import { isFilled } from "@/lib/i18n-content";
 import { localizedUrl, pageMetadata } from "@/lib/seo";
 import { breadcrumbLd, serviceLd } from "@/lib/structured-data";
@@ -14,8 +20,9 @@ import { JsonLd } from "@/components/pages/JsonLd";
 import { Picture } from "@/components/ui/Picture";
 import { CourtMark } from "@/components/ui/CourtMark";
 import { Markdown } from "@/components/site/Markdown";
-import { TodoText } from "@/components/site/TodoText";
+import { LessonTypeList } from "@/components/pages/LessonTypeList";
 import { programMeta } from "@/components/home/programMeta";
+import { Words } from "@/components/site/Words";
 
 type Props = PageProps<"/[locale]/programe/[slug]">;
 
@@ -46,10 +53,11 @@ export default async function ProgramPage({ params }: Props) {
   const { locale, slug, program } = await load(params);
   if (!program) notFound();
   setRequestLocale(locale);
-  const [t, faqs, schedules, programsHeader] = await Promise.all([
+  const [t, faqs, lessons, settings, programsHeader] = await Promise.all([
     getTranslations(),
     getFaqs(locale),
-    getGroupSchedules(program.id),
+    getLessonTypes(locale),
+    getSettings(),
     getPageHeader("programe", locale),
   ]);
   const programFaqs = faqs.filter((f) => f.programId === program.id);
@@ -72,18 +80,14 @@ export default async function ProgramPage({ params }: Props) {
         ? t("common.years", { min: program.ageMin, max: program.ageMax })
         : t("common.yearsFrom", { min: program.ageMin }),
     ]);
+  else facts.push([t("programs.age"), t(`programs.groups.${program.audience}`)]);
   facts.push([t("programs.level2"), t(`programs.level.${program.level}`)]);
-  facts.push([t("programs.format2"), t(`programs.format.${program.format}`)]);
-  if (program.durationMin)
-    facts.push([t("programs.duration"), t("common.minutes", { n: program.durationMin })]);
-  if (program.maxParticipants && program.maxParticipants > 1)
-    facts.push([t("programs.group"), t("common.maxStudents", { n: program.maxParticipants })]);
 
   return (
     <>
       <JsonLd
         data={[
-          serviceLd(program, url),
+          serviceLd(program, url, lessons, settings.currency),
           breadcrumbLd([
             { name: t("common.home"), url: localizedUrl("/", locale) },
             { name: programsHeader.title, url: localizedUrl("/programe", locale) },
@@ -101,11 +105,13 @@ export default async function ProgramPage({ params }: Props) {
               { label: program.name },
             ]}
           />
-          <h1 className="page-title">{program.name}</h1>
+          <h1 className="page-title">
+            <Words text={program.name} />
+          </h1>
           <p className="hero-meta mt-4">{programMeta(program, t).join(" · ")}</p>
           <p className="page-intro">{program.summary}</p>
           <p className="mt-8 flex flex-wrap gap-3">
-            {program.bookableOnline && program.format !== "EVENIMENT" ? (
+            {program.bookableOnline ? (
               <Link
                 href={{ pathname: "/rezervare", query: { program: program.slug } }}
                 className="btn btn-primary"
@@ -167,52 +173,15 @@ export default async function ProgramPage({ params }: Props) {
         </dl>
       </PageSection>
 
-      {program.prices.length > 0 ? (
-        <PageSection id="preturi" title={t("programs.prices")} className="page-section--narrow">
-          <table className="price-table">
-            <tbody>
-              {program.prices.map((price) => (
-                <tr key={price.id}>
-                  <th scope="row">
-                    {price.name}
-                    {price.includes ? (
-                      <span className="block text-note font-normal text-cerneala-2">
-                        {price.includes}
-                      </span>
-                    ) : null}
-                  </th>
-                  <td>
-                    <TodoText value={formatPrice(price.price, price.currency, locale)} />{" "}
-                    <span className="text-cerneala-2">{t(`programs.unit.${price.unit}`)}</span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </PageSection>
-      ) : null}
-
-      {program.format === "GRUPA" ? (
-        <PageSection id="orar" title={t("programs.schedule")} className="page-section--narrow">
-          {schedules.length > 0 ? (
-            <table className="price-table">
-              <tbody>
-                {schedules.map((s) => (
-                  <tr key={s.id}>
-                    <th scope="row" className="capitalize-first">
-                      {t(`programs.weekday.${s.weekday}`)}
-                    </th>
-                    <td className="numerals">
-                      {s.startTime} · {t("common.minutes", { n: s.durationMin })} ·{" "}
-                      {t("programs.spots", { count: s.capacity })}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p>{t("programs.scheduleEmpty")}</p>
-          )}
+      {lessons.length > 0 ? (
+        <PageSection id="lectii" title={t("programs.howToTrain")} className="page-section--narrow">
+          <p className="measure mb-6 text-cerneala-2">{t("programs.howToTrainIntro")}</p>
+          <LessonTypeList
+            lessons={lessons}
+            locale={locale}
+            currency={settings.currency}
+            programSlug={program.slug}
+          />
         </PageSection>
       ) : null}
 
@@ -240,7 +209,7 @@ export default async function ProgramPage({ params }: Props) {
 
       <PageSection className="page-section--narrow">
         <p className="flex flex-wrap gap-3">
-          {program.bookableOnline && program.format !== "EVENIMENT" ? (
+          {program.bookableOnline ? (
             <Link
               href={{ pathname: "/rezervare", query: { program: program.slug } }}
               className="btn btn-primary"
