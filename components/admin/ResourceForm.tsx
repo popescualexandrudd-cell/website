@@ -110,7 +110,7 @@ export function ResourceForm(props: Props) {
               rel="noopener"
               className="btn btn-secondary"
             >
-              Previzualizează pe site
+              Previzualizează
             </a>
           ) : null}
           {state.status === "success" ? (

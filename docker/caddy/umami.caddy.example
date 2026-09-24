@@ -1,0 +1,6 @@
+# Statistics (Umami) on a subdomain. To enable: copy this file to docker/caddy/sites/umami.caddy,
+# set UMAMI_DOMAIN in .env (e.g. statistici.numele-tau-tenis.ro) and add the DNS record.
+{$UMAMI_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy umami:3000
+}

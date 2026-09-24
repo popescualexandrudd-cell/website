@@ -1,0 +1,45 @@
+# HTTPS with automatic Let's Encrypt certificates, compression, long cache for static files,
+# uploaded images served straight from the volume, www → apex redirect.
+{
+	email {$ACME_EMAIL}
+	servers {
+		trusted_proxies static private_ranges
+	}
+}
+
+{$DOMAIN} {
+	encode zstd gzip
+
+	request_body {
+		max_size 12MB
+	}
+
+	# Images uploaded from the admin (content-hashed names, never change).
+	handle /media/* {
+		root * /srv
+		file_server
+		header Cache-Control "public, max-age=31536000, immutable"
+		header X-Content-Type-Options nosniff
+	}
+
+	handle {
+		reverse_proxy app:3000 {
+			header_up X-Forwarded-Host {host}
+		}
+	}
+
+	header {
+		-Server
+		-X-Powered-By
+		-Via
+	}
+
+	# No access log: visitors' IP addresses are not stored (errors still go to `docker compose logs caddy`).
+}
+
+www.{$DOMAIN} {
+	redir https://{$DOMAIN}{uri} permanent
+}
+
+# Optional sites (e.g. Umami statistics), see docker/caddy/umami.caddy.example.
+import /etc/caddy/sites/*.caddy

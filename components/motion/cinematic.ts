@@ -145,12 +145,20 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
     dirty = true;
   };
   const splits: SplitText[] = [];
+  const readerCopies: HTMLElement[] = [];
   const runtimes: Runtime[] = configs.flatMap((config) => {
     const section = root.querySelector<HTMLElement>(`section[data-scene="${config.key}"]`);
     if (!section) return [];
     const words: HTMLElement[] = [];
     section.querySelectorAll<HTMLElement>("[data-split]").forEach((el) => {
-      const split = SplitText.create(el, { type: "words", aria: "auto" });
+      // Screen readers get the sentence once, from a visually hidden copy; the animated words are
+      // hidden from them (aria-label on a paragraph or span is not allowed).
+      const copy = document.createElement("span");
+      copy.className = "sr-only";
+      copy.textContent = (el.textContent ?? "").trim();
+      el.after(copy);
+      readerCopies.push(copy);
+      const split = SplitText.create(el, { type: "words", aria: "hidden" });
       splits.push(split);
       words.push(...(split.words as HTMLElement[]));
     });
@@ -760,6 +768,7 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
       r.hold.kill();
     });
     splits.forEach((split) => split.revert());
+    readerCopies.forEach((copy) => copy.remove());
     lenis.destroy();
     halftone?.destroy();
     halftone = null;

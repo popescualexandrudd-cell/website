@@ -6,6 +6,8 @@ import { addDaysToKey, groupOccurrences, localDateKey, zonedInstant } from "@/li
 import { bookingContacts, bookingTitle, dayLabel, programName, when } from "@/lib/admin/format";
 import { t } from "@/lib/i18n-content";
 import { BookingActions } from "@/components/admin/BookingActions";
+import { OkNotice } from "@/components/admin/OkNotice";
+import { BOOKING_OK } from "@/lib/admin/booking-done";
 import { statusLabel } from "@/lib/admin/booking-actions";
 
 export const metadata: Metadata = { title: "Azi" };
@@ -17,7 +19,8 @@ export default async function TodayPage({ searchParams }: PageProps<"/admin/azi"
     select: { timezone: true },
   });
   const tz = settings.timezone;
-  const requested = (await searchParams).zi;
+  const params = await searchParams;
+  const requested = params.zi;
   const today = localDateKey(new Date(), tz);
   const key =
     typeof requested === "string" && /^\d{4}-\d{2}-\d{2}$/.test(requested) ? requested : today;
@@ -67,6 +70,7 @@ export default async function TodayPage({ searchParams }: PageProps<"/admin/azi"
         </div>
       </div>
 
+      <OkNotice code={params.ok} messages={BOOKING_OK} />
       {bookings.length === 0 && sessions.length === 0 ? (
         <p className="text-cerneala-2">Nicio lecție în această zi.</p>
       ) : null}
@@ -106,7 +110,7 @@ export default async function TodayPage({ searchParams }: PageProps<"/admin/azi"
                   ) : null}
                 </div>
               </div>
-              <BookingActions id={b.id} status={b.status} compact />
+              <BookingActions id={b.id} status={b.status} compact back={`/admin/azi?zi=${key}`} />
             </div>
           );
         })}

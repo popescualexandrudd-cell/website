@@ -3,6 +3,7 @@
  * Idempotent and non-destructive: every record is created only if it is missing, so running it
  * twice changes nothing and never overwrites what the coach edited in the admin.
  * To rebuild everything from the config file: `npm run db:reset`.
+ * `--if-empty` runs it only on a database that has no content yet (used by the Docker image).
  */
 import { config as loadEnv } from "dotenv";
 import { PrismaPg } from "@prisma/adapter-pg";
@@ -73,6 +74,15 @@ function initials(name: string): string {
 }
 
 async function main(): Promise<void> {
+  // In the Docker image the seed runs at every start with --if-empty: only a brand-new database
+  // gets the initial content, so what the coach deleted in the admin never comes back.
+  if (
+    process.argv.includes("--if-empty") &&
+    (await db.siteSettings.findUnique({ where: { id: 1 } }))
+  ) {
+    console.info("Seed: baza de date are deja conținut, nu adaug nimic.");
+    return;
+  }
   const config = loadConfig();
   const created: string[] = [];
   const note = (label: string, wasCreated: boolean) => {

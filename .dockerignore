@@ -1,0 +1,25 @@
+# Keep the build context small and free of secrets.
+.git
+.github
+node_modules
+.next
+dist
+coverage
+test-results
+playwright-report
+blob-report
+storage
+backups
+.scratch
+.env
+.env.*
+!.env.example
+*.log
+# Generated in the image by `npm run images`
+public/art/generated
+public/art/manifest.json
+app/apple-icon.png
+public/icon-512.png
+public/email/minge.png
+# Local-only tooling
+docker-compose.dev.yml

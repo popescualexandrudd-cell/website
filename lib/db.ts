@@ -12,7 +12,19 @@ function createClient(): PrismaClient {
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
-/** One client per process; survives hot reloads in development. */
-export const db: PrismaClient = globalForPrisma.prisma ?? createClient();
+function client(): PrismaClient {
+  globalForPrisma.prisma ??= createClient();
+  return globalForPrisma.prisma;
+}
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+/**
+ * One client per process (survives hot reloads in development), created on first use: importing
+ * this module never needs a database, so `next build` works without DATABASE_URL.
+ */
+export const db: PrismaClient = new Proxy({} as PrismaClient, {
+  get(_target, property) {
+    const real = client();
+    const value: unknown = Reflect.get(real, property, real);
+    return typeof value === "function" ? value.bind(real) : value;
+  },
+});

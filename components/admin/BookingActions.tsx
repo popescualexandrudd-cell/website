@@ -2,33 +2,28 @@
 
 import { useFormAction } from "@/components/ui/useFormAction";
 import { bookingTransitionAction } from "@/app/actions/admin-bookings";
+import { BOOKING_DONE } from "@/lib/admin/booking-done";
 import type { BookingStatus } from "@/lib/generated/prisma/browser";
-
-const DONE_TEXT: Record<string, string> = {
-  confirm: "Rezervarea e confirmată. Clientul primește emailul cu fișierul pentru calendar.",
-  decline: "Rezervarea e refuzată. Clientul primește un email.",
-  cancel: "Rezervarea e anulată. Clientul primește un email.",
-  done: "Lecția e marcată ca efectuată.",
-  noshow: "Lecția e marcată ca neprezentare.",
-  reopen: "Lecția e din nou confirmată.",
-};
 
 /** One-tap actions on a booking; declining or cancelling asks for an optional reason first. */
 export function BookingActions({
   id,
   status,
   compact = false,
+  back,
 }: {
   id: string;
   status: BookingStatus;
   compact?: boolean;
+  /** On lists: go back to this page afterwards (the row may leave the list). */
+  back?: string;
 }) {
   const { state, pending, formProps: actionProps } = useFormAction(bookingTransitionAction);
   const small = compact ? "btn-small" : "";
   if (state.status === "success") {
     return (
       <p role="status" className="admin-ok">
-        {DONE_TEXT[state.data?.action ?? ""] ?? "Salvat."}
+        {BOOKING_DONE[state.data?.action ?? ""] ?? "Salvat."}
       </p>
     );
   }
@@ -36,6 +31,7 @@ export function BookingActions({
     <form {...actionProps}>
       <input type="hidden" name="id" value={id} />
       <input type="hidden" name="action" value={value} />
+      {back ? <input type="hidden" name="back" value={back} /> : null}
       <button type="submit" className={`btn ${variant} ${small}`} disabled={pending}>
         {label}
       </button>
@@ -47,6 +43,7 @@ export function BookingActions({
       <form {...actionProps} className="mt-3 grid gap-3">
         <input type="hidden" name="id" value={id} />
         <input type="hidden" name="action" value={value} />
+        {back ? <input type="hidden" name="back" value={back} /> : null}
         <label className="field">
           <span className="field-label">Motivul (apare în emailul către client, opțional)</span>
           <textarea name="reason" rows={2} className="input" maxLength={500} />

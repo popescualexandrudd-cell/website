@@ -40,3 +40,7 @@ coverage/
 *.log
 npm-debug.log*
 .scratch/
+
+# rclone credentials
+docker/backup/rclone/rclone.conf
+docker/caddy/sites/*.caddy

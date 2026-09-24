@@ -433,3 +433,45 @@ Desktop 1440×900                                   Mobil 390×844
 49. **`npm audit`**: 4 vulnerabilități „high” veneau din CLI-ul Prisma (`mysql2`, nefolosit, și
     `deepmerge-ts`). Le-am rezolvat cu `overrides` (versiuni corectate, aceeași interfață);
     `prisma validate`, `migrate status` și testele trec. Rezultat: 0 vulnerabilități.
+50. **Imaginea de producție** (`Dockerfile`): Node 22 Alpine, patru etape. Imaginea finală conține
+    doar serverul Next.js `standalone` (cu modulele pe care le folosește efectiv), fișierele statice,
+    worker-ul/seed-ul/admin-create compilate cu esbuild în `dist/` și CLI-ul Prisma pentru migrări,
+    într-un director separat. 728 MB față de 1,74 GB cu toate dependențele de producție.
+    Rulează ca utilizatorul `app` (uid 1001), cu `HEALTHCHECK` pe `/api/health`.
+51. **La pornire** (`docker/app/entrypoint.sh`): `prisma migrate deploy`, apoi seed-ul doar dacă baza
+    e goală (`--if-empty`). La prima instalare site-ul are conținut fără alt pas; după aceea seed-ul
+    nu mai atinge nimic, deci ce șterge antrenorul din admin nu reapare.
+52. **Clientul Prisma se creează la prima folosire** (proxy în `lib/db.ts`), ca `next build` să
+    funcționeze fără `DATABASE_URL` (în Docker, build-ul nu are acces la bază).
+53. **Compose**: baza de date e doar în rețeaua `backend`, marcată `internal` (fără porturi publicate
+    și fără ieșire în internet); `app` și `worker` au sistemul de fișiere read-only (plus `tmpfs`
+    pentru `/tmp` și cache), `cap_drop: ALL`, `no-new-privileges`, jurnale rotite (5 × 10 MB).
+54. **Caddy**: HTTPS automat, HTTP/2 și HTTP/3, compresie zstd/gzip, `www` → domeniul simplu,
+    `/media` servit direct din volum (read-only) cu cache de un an, limită de 12 MB la încărcare.
+    **Fără jurnal de acces**: IP-urile vizitatorilor nu se păstrează (erorile rămân în jurnal).
+    `/_next/static` și `/art/generated` au deja `immutable` de la Next.js.
+55. **Backup**: container separat (Postgres 16 Alpine + rclone copiat din imaginea oficială, fără
+    `apk`), programat zilnic la 03:30 ora României; `pg_dump` în format custom + arhiva imaginilor,
+    cu data și ora până la secundă în nume; 14 zile; `rclone sync` opțional. Restaurarea face întâi
+    un backup „inainte-de-restaurare”, apoi `pg_restore --clean --single-transaction`. Testul a
+    prins o eroare reală: fără secunde în nume, backup-ul de siguranță suprascria backup-ul din
+    același minut.
+56. **Volumul `media` e partajat** de app (scrie), Caddy (citește) și backup (arhivează/restaurează).
+    Imaginea de backup creează `/media` cu proprietarul 1001, iar backup-ul pornește după aplicație,
+    ca volumul nou să aparțină mereu utilizatorului aplicației (testul inițial a găsit volumul
+    creat ca root, deci încărcările eșuau).
+57. **`deploy.sh`**: backup, păstrează imaginea curentă ca `antrenor-tenis-app:anterior`,
+    construiește, pornește și așteaptă starea „healthy” (5 minute); altfel revine la imaginea
+    anterioară. Migrările de bază de date nu se anulează automat: backup-ul făcut chiar înainte se
+    restaurează cu `restore.sh` (mesajul scriptului spune asta).
+58. **CI** (`.github/workflows/ci.yml`): verificarea diacriticelor, lint, tipuri, teste cu PostgreSQL,
+    build, e2e cu Mailpit, `npm audit --audit-level=critical`, build-ul imaginii Docker; deploy prin
+    SSH doar dacă variabila `DEPLOY_ENABLED` e `true`.
+59. **Capturile din `GHID-ADMIN.md`** sunt SVG-uri care conțin imaginea JPEG în base64
+    (`scripts/docs-screenshots.mjs`): se afișează în GitHub și în orice browser, iar depozitul rămâne
+    doar cu fișiere text (vezi decizia 42).
+60. **Verificarea în acest mediu**: rețeaua de aici trece printr-un proxy cu certificat propriu și
+    blochează `dl-cdn.alpinelinux.org`. Imaginea s-a construit cu o variantă a Dockerfile-ului care
+    adaugă doar certificatul proxy-ului (nu e în depozit); stack-ul complet a pornit dintr-o copie
+    curată a depozitului, cu HTTPS pe `localhost` (certificat intern Caddy), iar rezervarea,
+    confirmarea din admin, emailurile, încărcarea imaginilor, backup-ul și restaurarea au funcționat.

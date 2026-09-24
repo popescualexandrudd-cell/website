@@ -17,6 +17,7 @@ import { createBooking } from "@/lib/booking";
 import { zonedInstant } from "@/lib/availability";
 import { getPolicyVersion } from "@/lib/content";
 import { queueConfirmationEmail } from "@/lib/email/messages";
+import { backWith } from "@/lib/admin/redirect";
 import type { FormState } from "@/lib/validation";
 
 function refresh(id?: string) {
@@ -38,6 +39,7 @@ export async function bookingTransitionAction(
   if (!result.ok) return { status: "error", error: result.error };
   after(() => deliverLater(result.emailIds));
   refresh(id);
+  if (formData.get("back")) backWith(formData, "/admin", `rezervare-${action}`);
   return { status: "success", data: { action } };
 }
 

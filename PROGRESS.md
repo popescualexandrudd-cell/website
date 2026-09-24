@@ -12,7 +12,7 @@ Fiecare fază se încheie cu verificări și un commit. Dacă lucrul se întreru
 | 6. Rezervări și emailuri | gata |
 | 7. Admin | gata |
 | 8. SEO, GDPR, securitate, performanță, accesibilitate | gata |
-| 9. Deploy | — |
+| 9. Deploy | gata |
 | 10. QA final | — |
 
 ## Faza 2: Fundație
@@ -70,7 +70,7 @@ Fiecare fază se încheie cu verificări și un commit. Dacă lucrul se întreru
   „Intervalul tocmai a fost ocupat. Alege altă oră.").
 - Emailuri React Email (client și antrenor, în limba clientului), `.ics` atașat, jurnal `EmailLog` cu
   reîncercare și revendicare atomică (fără trimiteri duble).
-- Worker node-cron separat (`worker/index.ts`, construit cu esbuild în `dist/worker.mjs`): reîncercări
+- Worker node-cron separat (`worker/index.ts`, construit cu esbuild în `dist/worker.mjs` de `npm run build:tools`): reîncercări
   email, memento la 24 h, invitații la recenzie, anonimizare după perioada de retenție, curățenie.
 - Teste: 41 (Vitest). Unitare: generarea intervalelor pe 29 martie și 25 octombrie 2026, ferestre care
   traversează schimbarea orei, pauze, preaviz, orizont, excepții, grupe, limita de anulare, `.ics`,
@@ -124,6 +124,31 @@ Fiecare fază se încheie cu verificări și un commit. Dacă lucrul se întreru
   preîncărcată, `content-visibility` pe scenele de mai jos. Lighthouse mobil: vezi decizia 48.
 - `npm audit`: 0 vulnerabilități. Politica de cookie-uri menționează și cookie-ul de previzualizare.
 
+## Faza 9: Deploy
+
+- `Dockerfile` în patru etape (Node 22 Alpine, `standalone`, utilizator non-root, `HEALTHCHECK`),
+  imagine de 728 MB; la pornire: migrări + conținut inițial doar pe o bază goală.
+- `docker-compose.yml`: app, worker, db (rețea internă, nepublicată), Caddy (HTTPS, www → domeniu,
+  compresie, `/media` din volum), backup (zilnic, 14 zile, rclone opțional), Umami (profil
+  `analytics`). `Caddyfile` fără jurnal de acces.
+- Scripturi: `setup-server.sh` (Ubuntu 24.04, idempotent: Docker, firewall, actualizări automate,
+  swap, `.env` cu parole aleatorii), `deploy.sh` (backup, build, verificare, revenire automată),
+  `backup.sh` (acum, listă, copiere), `restore.sh` (cu backup de siguranță).
+- CI în GitHub Actions: diacritice, lint, tipuri, teste cu PostgreSQL, build, e2e cu Mailpit, audit,
+  imaginea Docker, deploy opțional prin SSH.
+- Documentație în română: `README.md`, `DEPLOY.md` (pas cu pas pentru nontehnici), `GHID-ADMIN.md`
+  (cu 18 capturi de pe telefon), `CONTENT-TODO.md`, `CREDITS.md`, `docs/DIRECTIE-ARTISTICA.md`.
+- Verificat dintr-o copie curată a depozitului: `docker compose up` pornește tot pe HTTPS; rezervare,
+  confirmare din admin, emailuri cu `.ics`, încărcare de imagini servite de Caddy; backup și
+  restaurare (baza de date și imaginile); `deploy.sh` cu o versiune stricată intenționat revine
+  singur la versiunea anterioară. Testele au găsit și corectat trei erori reale (volumul `media`
+  creat ca root, suprascrierea backup-ului din același minut, oprirea lui `deploy.sh` înainte de
+  revenire).
+- Teste end-to-end (Playwright): rezervare completă cu emailuri, confirmare din admin cu `.ics`,
+  anulare prin link, două rezervări simultane pe același interval (una reușește), formular de
+  contact (inclusiv eroare fără pierderea textului), autentificare greșită, axe pe paginile publice
+  (fiecare scenă cinematică la poziția ei) și pe admin la 1440 și 390 px. 8 teste, toate trec.
+
 ## Următorul pas
 
-Faza 9: deploy (Docker, Caddy, scripturi, CI, documentație).
+Faza 10: QA final și raportul.

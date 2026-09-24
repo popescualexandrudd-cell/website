@@ -180,14 +180,16 @@ describe("content editor parsing", () => {
 });
 
 describe("GDPR", () => {
+  // Unique per run: the test database is reused between runs.
+  const run = Math.random().toString(36).slice(2, 8);
   it("exports and then erases a client, keeping anonymised bookings", async () => {
     const program = await db.program.findFirstOrThrow();
     const client = await db.client.create({
-      data: { name: "Maria Ionescu", email: "maria.gdpr@example.com", phone: "0722000009" },
+      data: { name: "Maria Ionescu", email: `maria.${run}@example.com`, phone: "0722000009" },
     });
     const booking = await db.booking.create({
       data: {
-        code: "TN-GDPR01",
+        code: `TN-M${run}`,
         programId: program.id,
         clientId: client.id,
         startsAt: new Date(Date.now() - 10 * 86_400_000),
@@ -195,18 +197,18 @@ describe("GDPR", () => {
         blockedUntil: new Date(Date.now() - 10 * 86_400_000 + 4_200_000),
         status: "EFECTUATA",
         name: "Maria Ionescu",
-        email: "maria.gdpr@example.com",
+        email: `maria.${run}@example.com`,
         phone: "0722000009",
         gdprConsent: true,
         gdprConsentAt: new Date(),
         policyVersion: "test",
-        cancelTokenHash: "gdpr-hash-1",
+        cancelTokenHash: `gdpr-1-${run}`,
       },
     });
     await db.contactMessage.create({
       data: {
         name: "Maria",
-        email: "maria.gdpr@example.com",
+        email: `maria.${run}@example.com`,
         message: "Bună ziua",
         consent: true,
         consentAt: new Date(),
@@ -217,7 +219,7 @@ describe("GDPR", () => {
     const exported = await exportClientData(client.id);
     expect(exported?.bookings).toHaveLength(1);
     expect(exported?.contactMessages).toHaveLength(1);
-    expect(JSON.stringify(exported)).not.toContain("gdpr-hash-1");
+    expect(JSON.stringify(exported)).not.toContain(`gdpr-1-${run}`);
 
     const result = await eraseClient(client.id);
     expect(result.ok).toBe(true);
@@ -226,16 +228,19 @@ describe("GDPR", () => {
     expect(anonymised.name).toBe("Anonimizat");
     expect(anonymised.email).not.toContain("maria");
     expect(anonymised.anonymizedAt).not.toBeNull();
-    expect(await db.contactMessage.count({ where: { email: "maria.gdpr@example.com" } })).toBe(0);
+    expect(await db.contactMessage.count({ where: { email: `maria.${run}@example.com` } })).toBe(0);
   });
 
   it("refuses to erase a client with an upcoming active lesson", async () => {
     const program = await db.program.findFirstOrThrow();
-    const client = await db.client.create({ data: { name: "Dan", email: "dan.gdpr@example.com" } });
-    const start = new Date(Date.now() + 30 * 86_400_000);
+    const client = await db.client.create({
+      data: { name: "Dan", email: `dan.${run}@example.com` },
+    });
+    // Far in the future and at a random hour, so it never overlaps another test booking.
+    const start = new Date(Date.now() + (400 + Math.floor(Math.random() * 300)) * 86_400_000);
     await db.booking.create({
       data: {
-        code: "TN-GDPR02",
+        code: `TN-D${run}`,
         programId: program.id,
         clientId: client.id,
         startsAt: start,
@@ -243,16 +248,18 @@ describe("GDPR", () => {
         blockedUntil: new Date(start.getTime() + 4_200_000),
         status: "CONFIRMATA",
         name: "Dan",
-        email: "dan.gdpr@example.com",
+        email: `dan.${run}@example.com`,
         phone: "0722000010",
         gdprConsent: true,
         gdprConsentAt: new Date(),
         policyVersion: "test",
-        cancelTokenHash: "gdpr-hash-2",
+        cancelTokenHash: `gdpr-2-${run}`,
       },
     });
     const result = await eraseClient(client.id);
     expect(result.ok).toBe(false);
+    await db.booking.deleteMany({ where: { clientId: client.id } });
+    await db.client.delete({ where: { id: client.id } });
   });
 });
 

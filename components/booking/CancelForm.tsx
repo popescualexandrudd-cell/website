@@ -28,7 +28,11 @@ export function CancelForm({ token, hours }: { token: string; hours: number }) {
       {...actionProps}
       className="grid max-w-xl gap-4"
       onSubmit={(event) => {
-        if (!window.confirm(t("cancelConfirm"))) event.preventDefault();
+        if (!window.confirm(t("cancelConfirm"))) {
+          event.preventDefault();
+          return;
+        }
+        actionProps.onSubmit(event);
       }}
     >
       <input type="hidden" name="token" value={token} />

@@ -5,6 +5,8 @@ import { db } from "@/lib/db";
 import { addDaysToKey, localDateKey, openWindowsForDate, zonedInstant } from "@/lib/availability";
 import { when, bookingTitle, programName, weekKeys } from "@/lib/admin/format";
 import { BookingActions } from "@/components/admin/BookingActions";
+import { OkNotice } from "@/components/admin/OkNotice";
+import { BOOKING_OK } from "@/lib/admin/booking-done";
 import { TODO_MARK } from "@/lib/i18n-content";
 
 export const metadata: Metadata = { title: "Tablou de bord" };
@@ -56,7 +58,8 @@ async function occupancy(tz: string, monthOffset: number) {
 
 export default async function DashboardPage({ searchParams }: PageProps<"/admin">) {
   const { user } = await requireAdmin();
-  const forbidden = (await searchParams).interzis === "1";
+  const params = await searchParams;
+  const forbidden = params.interzis === "1";
   const isOwner = user.role === "PROPRIETAR";
   const settings = await db.siteSettings.findUniqueOrThrow({ where: { id: 1 } });
   const tz = settings.timezone;
@@ -128,6 +131,7 @@ export default async function DashboardPage({ searchParams }: PageProps<"/admin"
         ) : null}
       </div>
 
+      <OkNotice code={params.ok} messages={BOOKING_OK} />
       {forbidden ? (
         <p className="admin-warning mb-4">
           Această secțiune e disponibilă doar contului de proprietar.
@@ -174,7 +178,7 @@ export default async function DashboardPage({ searchParams }: PageProps<"/admin"
                         {when(b.startsAt, b.endsAt, tz)} · {programName(b)} · {b.code}
                       </span>
                     </Link>
-                    <BookingActions id={b.id} status={b.status} compact />
+                    <BookingActions id={b.id} status={b.status} compact back="/admin" />
                   </div>
                 ))}
               </div>
