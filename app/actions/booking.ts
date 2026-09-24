@@ -8,7 +8,8 @@ import { exclusiveSlots, groupSlots, localDateKey, addDaysToKey } from "@/lib/av
 import { loadEngineInput } from "@/lib/availability-data";
 import { cancelByClient, createBooking } from "@/lib/booking";
 import { formatDate, formatTime } from "@/lib/format";
-import { getPolicyVersion, isChildrenProgram } from "@/lib/content";
+import { getPolicyVersion } from "@/lib/content";
+import { isChildrenProgram } from "@/lib/programs";
 import { getClientIp } from "@/lib/request";
 import { allowFormSubmission, rateLimit } from "@/lib/rate-limit";
 import { verifyTurnstile } from "@/lib/turnstile";

@@ -4,6 +4,7 @@ import { draftMode } from "next/headers";
 import { db } from "./db";
 import { pickArt, resolveMedia, type ArtSet, type ResolvedImage } from "./art";
 import { t, tItems, tList } from "./i18n-content";
+import { isChildrenProgram } from "./programs";
 import type { Locale } from "@/i18n/routing";
 import type {
   Audience,
@@ -239,9 +240,7 @@ function lowestPrice(prices: PriceView[]): PriceView | null {
   return regular[0] ?? null;
 }
 
-export function isChildrenProgram(p: { audience: Audience; ageMax: number | null }): boolean {
-  return p.audience === "COPII" || p.audience === "JUNIORI" || (p.ageMax !== null && p.ageMax < 18);
-}
+export { isChildrenProgram };
 
 export const getPrograms = cache(async (locale: Locale): Promise<ProgramView[]> => {
   const preview = await isPreview();

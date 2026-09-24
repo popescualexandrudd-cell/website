@@ -21,7 +21,7 @@ function formatUtc(date: Date): string {
 }
 
 export function escapeIcsText(value: string): string {
-  return value.replace(/\\/g, "\\\\").replace(/;/g, "\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
+  return value.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
 }
 
 /** Folds a content line into 75-octet chunks (UTF-8 safe), continuation lines start with a space. */

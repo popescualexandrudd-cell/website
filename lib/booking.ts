@@ -6,7 +6,7 @@ import { groupOccurrences, isSlotAvailable, localDateKey } from "./availability"
 import { loadEngineInput } from "./availability-data";
 import { generateBookingCode, hashToken } from "./tokens";
 import { manageToken } from "./email/messages";
-import { isChildrenProgram } from "./content";
+import { isChildrenProgram } from "./programs";
 
 const MINUTE = 60_000;
 /** Every booking creation takes this lock, so availability and group capacity checks never race. */

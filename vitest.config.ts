@@ -3,13 +3,18 @@ import { fileURLToPath } from "node:url";
 
 export default defineConfig({
   resolve: {
-    alias: { "@": fileURLToPath(new URL("./", import.meta.url)) },
+    alias: {
+      "@": fileURLToPath(new URL("./", import.meta.url)),
+      "server-only": fileURLToPath(new URL("./tests/stubs/server-only.ts", import.meta.url)),
+    },
   },
   test: {
-    include: ["tests/unit/**/*.test.ts"],
+    include: ["tests/unit/**/*.test.ts", "tests/integration/**/*.test.ts"],
     environment: "node",
+    globalSetup: ["./tests/global-setup.ts"],
     setupFiles: ["./tests/unit/setup.ts"],
-    testTimeout: 20000,
+    testTimeout: 30000,
+    hookTimeout: 120000,
     fileParallelism: false,
   },
 });

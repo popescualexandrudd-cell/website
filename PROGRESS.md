@@ -9,7 +9,7 @@ Fiecare fază se încheie cu verificări și un commit. Dacă lucrul se întreru
 | 3. Date | gata |
 | 4. Sistem vizual și pagina principală | gata |
 | 5. Pagini interioare | gata |
-| 6. Rezervări și emailuri | — |
+| 6. Rezervări și emailuri | gata |
 | 7. Admin | — |
 | 8. SEO, GDPR, securitate, performanță, accesibilitate | — |
 | 9. Deploy | — |
@@ -61,6 +61,24 @@ Fiecare fază se încheie cu verificări și un commit. Dacă lucrul se întreru
   Service + Offer, FAQPage, BreadcrumbList, Article).
 - Verificat în browser: o rezervare completă, cu emailul clientului în Mailpit.
 
+## Faza 6: Rezervări, emailuri, worker
+
+- Motorul de disponibilitate (`lib/availability.ts`): reguli − excepții − rezervări − ședințe de grupă,
+  cu pauza dintre lecții pe ambele părți, preaviz minim, orizont, fus orar și ora de vară/iarnă.
+- Crearea rezervării (`lib/booking.ts`): tranzacție cu `pg_advisory_xact_lock`, reverificare, iar
+  constrângerea de excludere din Postgres ca ultimă garanție (eroarea 23P01 devine mesajul
+  „Intervalul tocmai a fost ocupat. Alege altă oră.").
+- Emailuri React Email (client și antrenor, în limba clientului), `.ics` atașat, jurnal `EmailLog` cu
+  reîncercare și revendicare atomică (fără trimiteri duble).
+- Worker node-cron separat (`worker/index.ts`, construit cu esbuild în `dist/worker.mjs`): reîncercări
+  email, memento la 24 h, invitații la recenzie, anonimizare după perioada de retenție, curățenie.
+- Teste: 41 (Vitest). Unitare: generarea intervalelor pe 29 martie și 25 octombrie 2026, ferestre care
+  traversează schimbarea orei, pauze, preaviz, orizont, excepții, grupe, limita de anulare, `.ics`,
+  token-uri, geometrie. Integrare pe PostgreSQL real (`<baza>_test`): 6 cereri simultane pe același
+  interval → exact una reușește; pauza dintre lecții; inserare directă care ocolește aplicația →
+  respinsă de constrângere; grupă plină la cereri simultane; anulare înainte și după limită; job-urile.
+- Testele au prins o eroare reală: `;` nu era escapat în fișierul `.ics`.
+
 ## Următorul pas
 
-Faza 6: testele motorului de rezervări (inclusiv ora de vară/iarnă și cererile simultane), worker-ul.
+Faza 7: panoul de administrare.
