@@ -114,7 +114,7 @@ export function sceneSeeds(vars: { nume: string; locatie: string }): SceneSeed[]
       veil: true,
       ballX: 0.66,
       ballY: 0.46,
-      ballSize: 0.16,
+      ballSize: 0.24,
       transition: "PERGAMENT",
     },
     {
@@ -155,9 +155,9 @@ export function sceneSeeds(vars: { nume: string; locatie: string }): SceneSeed[]
       textPosDesktop: "DREAPTA_CENTRU",
       textPosMobile: "CENTRU_JOS",
       tone: "INCHIS",
-      ballX: 0.34,
+      ballX: 0.5,
       ballY: 0.5,
-      ballSize: 0.03,
+      ballSize: 0.022,
       transition: "DIZOLVARE",
     },
     {
@@ -181,7 +181,7 @@ export function sceneSeeds(vars: { nume: string; locatie: string }): SceneSeed[]
       tone: "INCHIS",
       ballX: 0.5,
       ballY: 0.5,
-      ballSize: 0.035,
+      ballSize: 0.022,
       transition: "MASCA_PENSULA",
     },
     {

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1500" width="1200" height="1500"><defs>
+<radialGradient id="ballFill" cx="0.36" cy="0.32" r="0.72">
+  <stop offset="0" stop-color="#FFF6CF"/>
+  <stop offset="0.2" stop-color="#F4DC8A"/>
+  <stop offset="0.58" stop-color="#C9A13B"/>
+  <stop offset="1" stop-color="#6E5214"/>
+</radialGradient>
+<radialGradient id="ballGlow" cx="0.5" cy="0.5" r="0.5">
+  <stop offset="0" stop-color="#F4DC8A" stop-opacity="0.55"/>
+  <stop offset="0.45" stop-color="#C9A13B" stop-opacity="0.18"/>
+  <stop offset="1" stop-color="#C9A13B" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="vignette" cx="0.5" cy="0.5" r="0.75">
+  <stop offset="0.55" stop-color="#1D1A15" stop-opacity="0"/>
+  <stop offset="1" stop-color="#1D1A15" stop-opacity="0.38"/>
+</radialGradient>
+<filter id="grain" x="0" y="0" width="100%" height="100%">
+  <feTurbulence type="fractalNoise" baseFrequency="1.5" numOctaves="2" seed="7" stitchTiles="stitch"/>
+  <feColorMatrix type="matrix" values="0 0 0 0 0.11  0 0 0 0 0.10  0 0 0 0 0.08  0 0 0 0.55 -0.12"/>
+</filter>
+<filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="10.5"/></filter>
+<filter id="softer" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="27"/></filter>
+<filter id="cloudSoft" x="-20%" y="-40%" width="140%" height="180%"><feGaussianBlur stdDeviation="4.1"/></filter>
+<filter id="blurS" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="2.3"/></filter></defs><rect width="1200" height="1500" fill="#D9BE92"/><rect y="900" width="1200" height="600" fill="#B8683F"/><rect y="892.5" width="1200" height="18" fill="#000" opacity="0.12"/>
+<ellipse cx="600" cy="1380" rx="360" ry="30" fill="#000" opacity="0.15"/>
+<g><path d="M 496.5 1110.6 L 452.4 1350" stroke="#3A2A1C" stroke-width="28.4" stroke-linecap="round"/><path d="M 559.5 1110.6 L 603.6 1350" stroke="#3A2A1C" stroke-width="28.4" stroke-linecap="round"/><path d="M 446.1 846 C 442 1047.6, 443 1072.8, 433.5 1135.8 Q 528 1154.7 622.5 1135.8 C 613.1 1072.8, 614 1047.6, 609.9 846 Q 528 820.8 446.1 846 Z" fill="#3F5E8C"/><path d="M 544.4 846 C 569 1047.6, 575.3 1072.8, 580 1135.8 L 622.5 1135.8 C 613.1 1072.8, 614 1047.6, 609.9 846 Z" fill="#000" opacity="0.18"/><path d="M 597.6 858.6 Q 704.7 857.3 786.6 846" fill="none" stroke="#3F5E8C" stroke-width="32.8" stroke-linecap="round"/><circle cx="786.6" cy="846" r="17.6" fill="#D9B08C"/><path d="M 458.4 858.6 Q 389.1 882.5 345 896.4" fill="none" stroke="#3F5E8C" stroke-width="32.8" stroke-linecap="round"/><circle cx="345" cy="896.4" r="17.6" fill="#D9B08C"/><rect x="514.1" y="801.5" width="27.7" height="50.8" fill="#D9B08C"/><circle cx="528" cy="762.8" r="42.8" fill="#D9B08C"/><path d="M 485.2 762.8 A 42.8 42.8 0 0 1 566.6 747.8 Q 528 754.3 485.2 780 Z" fill="#8A5A2B"/></g>
+<g transform="translate(744 990) rotate(60)">
+<clipPath id="rq744990"><ellipse cx="0" cy="-231" rx="48" ry="69"/></clipPath>
+<line x1="0" y1="0" x2="0" y2="-162" stroke="#7A5634" stroke-width="13.5" stroke-linecap="round"/>
+<g clip-path="url(#rq744990)" stroke="#E8DCC0" stroke-opacity="0.75" stroke-width="2.4"><line x1="-40.3" y1="-300" x2="-40.3" y2="-162"/><line x1="-26.9" y1="-300" x2="-26.9" y2="-162"/><line x1="-13.4" y1="-300" x2="-13.4" y2="-162"/><line x1="0" y1="-300" x2="0" y2="-162"/><line x1="13.4" y1="-300" x2="13.4" y2="-162"/><line x1="26.9" y1="-300" x2="26.9" y2="-162"/><line x1="40.3" y1="-300" x2="40.3" y2="-162"/><line x1="-48" y1="-181.7" x2="48" y2="-181.7"/><line x1="-48" y1="-201.4" x2="48" y2="-201.4"/><line x1="-48" y1="-221.1" x2="48" y2="-221.1"/><line x1="-48" y1="-240.9" x2="48" y2="-240.9"/><line x1="-48" y1="-260.6" x2="48" y2="-260.6"/><line x1="-48" y1="-280.3" x2="48" y2="-280.3"/></g>
+<ellipse cx="0" cy="-231" rx="48" ry="69" fill="none" stroke="#7A5634" stroke-width="9"/>
+</g>
+<circle cx="816" cy="750" r="134.4" fill="url(#ballGlow)"/><clipPath id="ballClip816x750"><circle cx="816" cy="750" r="42"/></clipPath><circle cx="816" cy="750" r="42" fill="url(#ballFill)"/><g clip-path="url(#ballClip816x750)"><path d="M 790 716.4 C 811.8 735.3, 811.8 764.7, 790 783.6" fill="none" stroke="#FFF3CC" stroke-opacity="0.55" stroke-width="3.2" stroke-linecap="round"/><path d="M 842 716.4 C 820.2 735.3, 820.2 764.7, 842 783.6" fill="none" stroke="#FFF3CC" stroke-opacity="0.55" stroke-width="3.2" stroke-linecap="round"/></g><rect width="1200" height="1500" filter="url(#grain)" opacity="0.5"/><rect width="1200" height="1500" fill="url(#vignette)"/></svg>

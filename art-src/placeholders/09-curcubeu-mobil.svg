@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920"><defs>
+<radialGradient id="ballFill" cx="0.36" cy="0.32" r="0.72">
+  <stop offset="0" stop-color="#FFF6CF"/>
+  <stop offset="0.2" stop-color="#F4DC8A"/>
+  <stop offset="0.58" stop-color="#C9A13B"/>
+  <stop offset="1" stop-color="#6E5214"/>
+</radialGradient>
+<radialGradient id="ballGlow" cx="0.5" cy="0.5" r="0.5">
+  <stop offset="0" stop-color="#F4DC8A" stop-opacity="0.55"/>
+  <stop offset="0.45" stop-color="#C9A13B" stop-opacity="0.18"/>
+  <stop offset="1" stop-color="#C9A13B" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="vignette" cx="0.5" cy="0.5" r="0.75">
+  <stop offset="0.55" stop-color="#1D1A15" stop-opacity="0"/>
+  <stop offset="1" stop-color="#1D1A15" stop-opacity="0.38"/>
+</radialGradient>
+<filter id="grain" x="0" y="0" width="100%" height="100%">
+  <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="7" stitchTiles="stitch"/>
+  <feColorMatrix type="matrix" values="0 0 0 0 0.11  0 0 0 0 0.10  0 0 0 0 0.08  0 0 0 0.55 -0.12"/>
+</filter>
+<filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="13.5"/></filter>
+<filter id="softer" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="34.5"/></filter>
+<filter id="cloudSoft" x="-20%" y="-40%" width="140%" height="180%"><feGaussianBlur stdDeviation="5.3"/></filter>
+<filter id="blurS" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="3"/></filter><linearGradient id="skyRain" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9C6EC"/><stop offset="1" stop-color="#EEF2F3"/></linearGradient></defs><rect width="1080" height="1920" fill="url(#skyRain)"/>
+<g opacity="0.9" filter="url(#cloudSoft)">
+<g fill="#AFBBD2"><circle cx="18.4" cy="1624.4" r="23"/><circle cx="39.3" cy="1624.1" r="41.2"/><circle cx="66.2" cy="1607.4" r="42.6"/><circle cx="92.9" cy="1605.4" r="46.6"/><circle cx="111.5" cy="1596.5" r="55.4"/><circle cx="143.1" cy="1596.8" r="54.3"/><circle cx="170.1" cy="1603.1" r="65.8"/><circle cx="202.2" cy="1603.7" r="63.3"/><circle cx="221.5" cy="1599.6" r="63.6"/><circle cx="245.2" cy="1609.3" r="48.6"/><circle cx="272.7" cy="1612.6" r="44.5"/><circle cx="298" cy="1625.3" r="37.6"/><circle cx="316.9" cy="1629.6" r="35.1"/><rect x="9.7" y="1632" width="304.6" height="29.2" rx="14.6"/></g>
+<g fill="#EEF0EE"><circle cx="15.6" cy="1619.4" r="22.1"/><circle cx="34.4" cy="1615" r="39.5"/><circle cx="61.1" cy="1598" r="40.9"/><circle cx="87.3" cy="1595.1" r="44.7"/><circle cx="104.9" cy="1584.3" r="53.2"/><circle cx="136.6" cy="1584.9" r="52.2"/><circle cx="162.2" cy="1588.6" r="63.1"/><circle cx="194.7" cy="1589.8" r="60.7"/><circle cx="213.9" cy="1585.6" r="61.1"/><circle cx="239.3" cy="1598.6" r="46.6"/><circle cx="267.3" cy="1602.8" r="42.7"/><circle cx="293.4" cy="1617" r="36.1"/><circle cx="312.6" cy="1621.9" r="33.7"/><rect x="6.5" y="1619" width="311" height="32.4" rx="16.2"/></g>
+<g fill="#FFFFFF" opacity="0.8"><circle cx="9.9" cy="1612.5" r="12.7"/><circle cx="75.6" cy="1581.2" r="25.6"/><circle cx="91" cy="1567.7" r="30.5"/><circle cx="145.7" cy="1568.9" r="36.2"/><circle cx="178.8" cy="1570.8" r="34.8"/><circle cx="198" cy="1566.5" r="35"/><circle cx="227.2" cy="1584" r="26.7"/><circle cx="284" cy="1605.7" r="20.7"/><circle cx="303.9" cy="1611.4" r="19.3"/></g>
+</g><g opacity="0.9" filter="url(#cloudSoft)">
+<g fill="#AFBBD2"><circle cx="752" cy="1722.5" r="34.8"/><circle cx="774" cy="1711.7" r="45.9"/><circle cx="811.4" cy="1702.1" r="50.2"/><circle cx="848.5" cy="1697.3" r="65.7"/><circle cx="864.5" cy="1699" r="60.5"/><circle cx="894" cy="1684.9" r="72.8"/><circle cx="928" cy="1685.9" r="73.9"/><circle cx="954.3" cy="1688.3" r="72.4"/><circle cx="991.3" cy="1699.4" r="65.2"/><circle cx="1000.3" cy="1698.7" r="55.5"/><circle cx="1043.6" cy="1701.8" r="49.9"/><circle cx="1066.2" cy="1722.4" r="49.3"/><circle cx="1085.7" cy="1725" r="26.4"/><rect x="745.4" y="1728" width="345.2" height="33" rx="16.5"/></g>
+<g fill="#EEF0EE"><circle cx="747.8" cy="1714.8" r="33.4"/><circle cx="768.5" cy="1701.6" r="44"/><circle cx="805.4" cy="1691" r="48.2"/><circle cx="840.6" cy="1682.8" r="63.1"/><circle cx="857.3" cy="1685.7" r="58"/><circle cx="885.3" cy="1668.9" r="69.9"/><circle cx="919.1" cy="1669.6" r="71"/><circle cx="945.7" cy="1672.4" r="69.5"/><circle cx="983.4" cy="1685" r="62.6"/><circle cx="993.6" cy="1686.4" r="53.3"/><circle cx="1037.6" cy="1690.8" r="47.9"/><circle cx="1060.2" cy="1711.5" r="47.4"/><circle cx="1082.5" cy="1719.2" r="25.4"/><rect x="741.7" y="1713.3" width="352.5" height="36.7" rx="18.4"/></g>
+<g fill="#FFFFFF" opacity="0.8"><circle cx="739.1" cy="1704.4" r="19.2"/><circle cx="757" cy="1687.9" r="25.2"/><circle cx="792.9" cy="1676" r="27.6"/><circle cx="824.1" cy="1663.1" r="36.2"/><circle cx="842.2" cy="1667.5" r="33.2"/><circle cx="867.1" cy="1647" r="40.1"/><circle cx="900.6" cy="1647.5" r="40.7"/><circle cx="927.6" cy="1650.6" r="39.8"/><circle cx="967.1" cy="1665.5" r="35.9"/><circle cx="979.7" cy="1669.8" r="30.5"/><circle cx="1075.9" cy="1711.3" r="14.5"/></g>
+</g>
+<g opacity="0.55" filter="url(#blurS)"><path d="M -129.6 1190.4 A 669.6 669.6 0 0 1 1209.6 1190.4" stroke="#C65B4E" stroke-width="23.4" fill="none"/><path d="M -106.2 1190.4 A 646.2 646.2 0 0 1 1186.2 1190.4" stroke="#D99A4E" stroke-width="23.4" fill="none"/><path d="M -82.7 1190.4 A 622.7 622.7 0 0 1 1162.7 1190.4" stroke="#E3CB6B" stroke-width="23.4" fill="none"/><path d="M -59.3 1190.4 A 599.3 599.3 0 0 1 1139.3 1190.4" stroke="#86A96A" stroke-width="23.4" fill="none"/><path d="M -35.9 1190.4 A 575.9 575.9 0 0 1 1115.9 1190.4" stroke="#5D86B8" stroke-width="23.4" fill="none"/><path d="M -12.4 1190.4 A 552.4 552.4 0 0 1 1092.4 1190.4" stroke="#6E5E9E" stroke-width="23.4" fill="none"/></g>
+<circle cx="540" cy="691.2" r="241.9" fill="url(#ballGlow)"/><clipPath id="ballClip540x691"><circle cx="540" cy="691.2" r="75.6"/></clipPath><circle cx="540" cy="691.2" r="75.6" fill="url(#ballFill)"/><g clip-path="url(#ballClip540x691)"><path d="M 493.1 630.7 C 532.4 664.7, 532.4 717.7, 493.1 751.7" fill="none" stroke="#FFF3CC" stroke-opacity="0.55" stroke-width="5.7" stroke-linecap="round"/><path d="M 586.9 630.7 C 547.6 664.7, 547.6 717.7, 586.9 751.7" fill="none" stroke="#FFF3CC" stroke-opacity="0.55" stroke-width="5.7" stroke-linecap="round"/></g><rect width="1080" height="1920" filter="url(#grain)" opacity="0.5"/><rect width="1080" height="1920" fill="url(#vignette)"/></svg>

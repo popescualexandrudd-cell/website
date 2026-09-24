@@ -19,6 +19,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
+  agentRules: false,
   reactStrictMode: true,
   serverExternalPackages: ["@node-rs/argon2", "sharp", "pg"],
   experimental: {

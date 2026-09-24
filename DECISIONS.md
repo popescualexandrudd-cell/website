@@ -352,3 +352,21 @@ Desktop 1440×900                                   Mobil 390×844
     o bază nouă: `migrate deploy` + seed rulat de două ori (a doua rulare nu creează nimic).
 25. **Stripe nu este implementat**: configurația are `plata_online_stripe: false`. Un comutator fără
     modul în spate ar fi fost un stub. Limitarea și pașii de adăugare sunt în raportul final.
+26. **Pictura scenei 3 (`03-cer`) nu conține mingea.** În scena 3 mingea se compune pe site din
+    puncte halftone (shader). O minge pictată ar concura cu ea. În variantele mobilă și statică,
+    aceeași minge e desenată în CSS peste pictură. Promptul din `docs/DIRECTIE-ARTISTICA.md` e ajustat.
+27. **Terenul din scenele 6–7 e vertical și centrat** (vedere de sus, lungimea pe verticală, 80% din
+    înălțimea picturii). Așa schița, mozaicul și liniile desenate pe scroll se suprapun exact, iar
+    textul are loc de o parte și de alta.
+28. **Tranzițiile sunt generice**: fiecare tip (`DIZOLVARE`, `ZOOM_LENT`, `ZOOM_MINGE`, `NORI`,
+    `PERGAMENT`, `MASCA_PENSULA`, `CURCUBEU`, `NOAPTE`) funcționează între oricare două scene, deci
+    antrenorul poate schimba tipul sau ordinea scenelor din admin fără cod.
+29. **Imaginile din stage se descarcă doar în modul cinematic** (`<source media>` cu interogarea
+    cinematică și un pixel transparent în rest): pe mobil și cu reduced-motion nu se descarcă nimic
+    în plus. GSAP, Lenis și shader-ul se încarcă dinamic, tot doar în modul cinematic.
+30. **Suprapunerile SVG** (liniile terenului, constelația, curcubeul, masca de pensulă) folosesc
+    `viewBox` 2560×1440 cu `preserveAspectRatio="xMidYMid slice"`, adică exact aceeași încadrare ca
+    `object-fit: cover` a picturilor 16:9.
+31. **„Locuri libere în septembrie: 81"** cu datele din seed: disponibilitatea din seed e tot programul
+    de lucru (07–21). Numărul devine realist când antrenorul setează în admin doar timpul liber pentru
+    elevi noi (vezi decizia 13).

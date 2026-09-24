@@ -6,8 +6,8 @@ Fiecare fază se încheie cu verificări și un commit. Dacă lucrul se întreru
 | --- | --- |
 | 1. Plan de design (`DECISIONS.md`) | gata |
 | 2. Fundație | gata |
-| 3. Date | în lucru |
-| 4. Sistem vizual și pagina principală | — |
+| 3. Date | gata |
+| 4. Sistem vizual și pagina principală | gata |
 | 5. Pagini interioare | — |
 | 6. Rezervări și emailuri | — |
 | 7. Admin | — |
@@ -25,6 +25,30 @@ Fiecare fază se încheie cu verificări și un commit. Dacă lucrul se întreru
 - `proxy.ts`: i18n (ro fără prefix, en sub `/en` cu căi traduse) și CSP cu nonce.
 - `docker-compose.dev.yml`: PostgreSQL 16 și Mailpit.
 
+## Faza 3: Date
+
+- Schema Prisma completă (`prisma/schema.prisma`), migrarea inițială și migrarea SQL cu `btree_gist` +
+  constrângerea de excludere pe `tstzrange(startsAt, blockedUntil)`.
+- Seed idempotent din `config/antrenor.yml`: setări, profil, certificări, locație, terenuri, dotări și
+  servicii, 8 programe (300–370 de cuvinte în română, traduse), prețuri, pachete, disponibilitate,
+  orar de grupe (propunere), 10 scene, 15 întrebări, 3 articole-ciornă, 3 recenzii [EXEMPLU] nepublicate,
+  pagini legale, antete de pagină. Rulat de două ori pe o bază nouă: a doua rulare nu creează nimic.
+
+## Faza 4: Sistem vizual și pagina principală
+
+- Placeholder-e SVG compoziționale pentru toate picturile (`scripts/placeholders.ts`), rasterizate de
+  `npm run images` în AVIF/WebP pe breakpoint-uri, cu blurDataURL și manifest.
+- Header (monogram, Rezervă, meniu overlay pe `<dialog>`), footer cu newsletter, bara mobilă.
+- Pagina principală: 10 scene, stage lipit cu straturi, mingea călătoare, 8 tipuri de tranziții,
+  halftone WebGL (fallback CSS), linii de teren și constelație desenate pe scroll, mască de pensulă,
+  nori în parallax, index de scene cu progres, SplitText pentru cuvinte, Lenis.
+- Trei layout-uri din același markup: cinematic (≥ 768 px), stivuit 9:16 pe mobil, static cu reduced-motion.
+- Capturi verificate la 1440×900 și 390×844 pentru fiecare scenă și pentru mijlocul fiecărei tranziții;
+  corectate: banda de programe, coloana textului din scena 6, lizibilitatea indexului, norii dublați,
+  header-ul pe mobil.
+- Motorul de disponibilitate, logica de rezervare, emailurile și widget-ul de rezervare din scena 10
+  au fost construite deja aici, pentru că pagina principală depinde de ele.
+
 ## Următorul pas
 
-Faza 3: schema Prisma, migrarea cu constrângerea de excludere, seed-ul din `config/antrenor.yml`.
+Faza 5: paginile interioare din secțiunea 6.

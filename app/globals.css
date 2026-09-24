@@ -388,3 +388,494 @@
     text-shadow: 0 1px 12px rgb(29 26 21 / 0.35);
   }
 }
+
+/* ─── Site chrome ─────────────────────────────────────────────────────────── */
+@layer components {
+  :root {
+    --ui-color: var(--color-cerneala);
+    --header-h: 4.25rem;
+  }
+  html[data-tone="light"] {
+    --ui-color: var(--color-pergament);
+  }
+  html.menu-open {
+    overflow: hidden;
+  }
+
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    color: var(--ui-color);
+    background: var(--color-pergament);
+    border-bottom: 1px solid var(--color-linie);
+    transition: color 0.35s var(--ease-scene);
+  }
+  /* Over the cinematic stage the header floats on the paintings; elsewhere it stays solid. */
+  @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+    html[data-page="home"] .site-header {
+      position: fixed;
+      inset-inline: 0;
+      background: transparent;
+      border-bottom-color: transparent;
+      pointer-events: none;
+    }
+    html[data-page="home"] .site-header a,
+    html[data-page="home"] .site-header button {
+      pointer-events: auto;
+    }
+  }
+  .site-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--header-h);
+    padding-inline: var(--page-margin);
+  }
+  @media (min-width: 768px) {
+    :root {
+      --header-h: 5rem;
+    }
+  }
+  .site-monogram {
+    display: inline-flex;
+    color: inherit;
+    border-radius: 999px;
+  }
+  .site-header-actions {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 2vw, 1.75rem);
+  }
+  .header-book,
+  .menu-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.75rem;
+    padding-inline: 0.25rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    color: inherit;
+    background: none;
+    border: 0;
+  }
+  .header-book::before {
+    content: "";
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 999px;
+    background: radial-gradient(circle at 36% 32%, #fff6cf 0, var(--color-aur-deschis) 20%, var(--color-aur) 58%, var(--color-aur-inchis) 100%);
+  }
+  .header-book:hover,
+  .menu-button:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+  .menu-button-lines {
+    position: relative;
+    width: 1.1rem;
+    height: 0.5rem;
+    border-top: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+  }
+
+  .menu-dialog {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: var(--color-pergament);
+    color: var(--color-cerneala);
+  }
+  .menu-dialog::backdrop {
+    background: rgb(29 26 21 / 0.2);
+  }
+  .menu-dialog[open] {
+    animation: menu-in 0.35s var(--ease-scene);
+  }
+  @keyframes menu-in {
+    from {
+      opacity: 0;
+    }
+  }
+  .menu-dialog-inner {
+    display: grid;
+    min-height: 100%;
+    grid-template-rows: auto 1fr auto;
+    padding: 1.25rem var(--page-margin) 2rem;
+  }
+  .menu-close {
+    justify-self: end;
+    min-height: 2.75rem;
+    padding: 0 0.25rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    background: none;
+    border: 0;
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+  .menu-nav {
+    align-self: center;
+    padding-block: 2rem;
+  }
+  @media (min-width: 1024px) {
+    .menu-nav {
+      margin-left: calc((100vw - 2 * var(--page-margin)) / 12);
+    }
+  }
+  .menu-link {
+    display: inline-block;
+    padding-block: 0.1em;
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 1.4rem + 3.4vw, 3.9rem);
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: var(--tracking-display);
+    text-decoration: none;
+  }
+  .menu-link:hover {
+    font-style: normal;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.12em;
+  }
+  .menu-secondary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.75rem;
+    margin-top: 2.25rem;
+    font-size: 1.0625rem;
+  }
+  .menu-secondary a {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+  .menu-contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.75rem;
+    color: var(--color-cerneala-2);
+  }
+
+  .site-footer {
+    background: var(--color-pergament);
+    border-top: 1px solid var(--color-linie);
+    padding-bottom: var(--bar-height);
+  }
+  .footer-heading {
+    font-family: var(--font-sans);
+    font-size: var(--text-note);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--color-cerneala-2);
+    margin-bottom: 0.9rem;
+  }
+  .footer-list {
+    display: grid;
+    gap: 0.45rem;
+  }
+  .footer-list a {
+    text-decoration: underline;
+    text-decoration-color: rgb(29 26 21 / 0.35);
+    text-underline-offset: 0.22em;
+  }
+  .footer-list a:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .mobile-bar {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 45;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    padding: 0.6rem 0.75rem calc(0.6rem + env(safe-area-inset-bottom));
+    background: rgb(236 227 207 / 0.96);
+    border-top: 1px solid var(--color-linie);
+    transform: translateY(0);
+    transition: transform 0.35s var(--ease-scene);
+  }
+  .mobile-bar[data-visible="false"] {
+    transform: translateY(110%);
+  }
+  .mobile-bar-primary,
+  .mobile-bar-secondary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    border-radius: 2px;
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .mobile-bar-primary {
+    background: var(--color-cerneala);
+    color: var(--color-pergament);
+  }
+  .mobile-bar-secondary {
+    border: 1px solid var(--color-cerneala);
+  }
+  .mobile-bar:has(> :only-child) {
+    grid-template-columns: 1fr;
+  }
+  @media (max-width: 767px) {
+    :root {
+      --bar-height: 4.4rem;
+    }
+  }
+  @media (min-width: 768px) {
+    .mobile-bar {
+      display: none;
+    }
+  }
+
+  .preview-banner {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem 1.25rem;
+    padding: 0.5rem 1rem;
+    background: var(--color-ultramarin);
+    color: var(--color-pergament);
+    font-size: 0.9rem;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+/* ─── Booking flow ────────────────────────────────────────────────────────── */
+@layer components {
+  .booking-flow {
+    display: grid;
+    gap: 1.75rem;
+  }
+  .booking-heading {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: 1.15;
+    outline: none;
+  }
+  .booking-subheading {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: 1.25rem;
+    outline: none;
+  }
+  .booking-steps ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    font-size: 0.9375rem;
+    color: var(--color-cerneala-2);
+  }
+  .booking-steps li[aria-current="step"] {
+    color: var(--color-cerneala);
+    font-weight: 500;
+  }
+  .booking-step-number {
+    display: inline-grid;
+    place-items: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-right: 0.25rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-size: 0.8rem;
+  }
+  .booking-steps li[aria-current="step"] .booking-step-number {
+    background: var(--color-cerneala);
+    color: var(--color-pergament);
+    border-color: var(--color-cerneala);
+  }
+  .booking-step {
+    display: grid;
+    gap: 1.25rem;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+  }
+  .booking-step legend {
+    padding: 0;
+    margin-bottom: 1.25rem;
+  }
+  .booking-programs {
+    display: grid;
+    border-top: 1px solid var(--color-linie);
+  }
+  .booking-program {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    align-items: start;
+    padding: 1rem 0.25rem;
+    border-bottom: 1px solid var(--color-linie);
+    cursor: pointer;
+  }
+  .booking-program:has(input:checked) {
+    background: rgb(201 161 59 / 0.12);
+  }
+  .booking-radio {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-top: 0.3rem;
+    accent-color: var(--color-cerneala);
+  }
+  .booking-program-name {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    line-height: 1.15;
+  }
+  .booking-program-meta {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.9375rem;
+    color: var(--color-cerneala-2);
+  }
+  .booking-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .booking-selected-program {
+    color: var(--color-cerneala-2);
+  }
+  .booking-alert {
+    padding: 0.6rem 0.9rem;
+    border-left: 2px solid var(--color-eroare);
+    color: var(--color-eroare);
+    background: rgb(155 28 28 / 0.06);
+  }
+  .slot-days {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .slot-day-heading {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+    text-transform: none;
+  }
+  .slot-day-heading::first-letter {
+    text-transform: uppercase;
+  }
+  .slot-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .slot-list--compact {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+  }
+  .slot {
+    display: inline-grid;
+    gap: 0.1rem;
+    min-width: 5rem;
+    min-height: 2.75rem;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid rgb(29 26 21 / 0.4);
+    border-radius: 2px;
+    background: var(--color-pergament-deschis);
+    color: var(--color-cerneala);
+    text-align: left;
+    font-size: 0.95rem;
+    transition: background-color 0.2s, border-color 0.2s;
+  }
+  .slot:hover:not(:disabled) {
+    border-color: var(--color-cerneala);
+    background: #fffaf0;
+  }
+  .slot:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .slot-day {
+    font-size: 0.8125rem;
+    color: var(--color-cerneala-2);
+  }
+  .slot-day::first-letter {
+    text-transform: uppercase;
+  }
+  .slot-time {
+    font-weight: 500;
+  }
+  .slot-spots {
+    font-size: 0.8125rem;
+    color: var(--color-cerneala-2);
+  }
+  .session-list {
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  }
+  .slot--session {
+    width: 100%;
+  }
+  .booking-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    align-items: baseline;
+    padding: 0.8rem 1rem;
+    background: var(--color-pergament-adanc);
+  }
+  .booking-fields {
+    display: grid;
+    gap: 1.1rem;
+  }
+  @media (min-width: 768px) {
+    .booking-fields {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 1.25rem;
+    }
+    .booking-fields-wide {
+      grid-column: 1 / -1;
+    }
+  }
+  .booking-done {
+    padding: 1.5rem;
+    border: 1px solid var(--color-linie);
+    background: var(--color-pergament-deschis);
+  }
+  .booking-flow[data-compact] .booking-done {
+    background: var(--color-pergament);
+    color: var(--color-cerneala);
+  }
+  /* Inside the night scene the widget sits on a quiet parchment panel. */
+  .constellation-widget {
+    padding: 1.5rem;
+    background: rgb(236 227 207 / 0.97);
+    color: var(--color-cerneala);
+    text-shadow: none;
+    border-radius: 2px;
+  }
+  .constellation-widget .booking-flow {
+    gap: 1rem;
+  }
+}
