@@ -53,7 +53,12 @@ export default async function FacilitiesPage({ params }: PageProps<"/[locale]/fa
           <p className="text-cerneala-2">
             <TodoText value={location.address} />
           </p>
-          <div className="mt-6 overflow-x-auto">
+          <div
+            className="mt-6 overflow-x-auto"
+            tabIndex={0}
+            role="region"
+            aria-label={t("facilities.courts")}
+          >
             <table className="price-table">
               <thead>
                 <tr>

@@ -411,3 +411,25 @@ Desktop 1440×900                                   Mobil 390×844
     comprimate conțin inevitabil octeți care arată ca „ş”/„ţ” pentru `grep`, iar verificarea diacriticelor
     din criteriile de acceptare trebuie să nu găsească nimic în depozit. Manifestul se citește la
     rulare, deci verificarea tipurilor nu depinde de imagini.
+43. **Imaginile Open Graph** se generează la cerere de `/api/og?path=…&lang=…` (next/og, 1200×630,
+    cache o zi). Titlul se caută în baza de date după calea paginii, nu se ia din adresă, ca nimeni
+    să nu poată genera imagini cu text arbitrar pe domeniul antrenorului. Fontul e Cormorant din
+    `@fontsource`; subsetul latin-ext e declarat primul, altfel Satori desenează „ă” cu fontul implicit.
+44. **Fonturi**: se preîncarcă doar Hanken Grotesk (textul), subsetul latin. Cormorant și subsetul
+    latin-ext (ă, ș, ț) se descarcă imediat ce pagina le folosește (`unicode-range`), cu fallback
+    ajustat la aceleași dimensiuni (CLS 0). Pe mobil, preîncărcarea tuturor celor șase fișiere lua
+    lățime de bandă primei picturi.
+45. **Prima pictură se preîncarcă din `<head>`** (`<link rel="preload" as="image" imagesrcset media>`),
+    separat pentru telefon (9:16) și desktop, astfel că descărcarea nu așteaptă după scripturi.
+46. **Widget-ul de rezervare de pe pagina principală se încarcă doar la apropiere** (IntersectionObserver,
+    1500 px înainte); fără JavaScript rămâne un link către pagina de rezervare.
+47. **`content-visibility: auto`** pe scenele de sub prima, în afara modului cinematic: timpul de
+    stil și layout pe mobil a scăzut de la ~670 ms la ~230 ms (Lighthouse, CPU încetinit 4×).
+48. **Măsurători Lighthouse (mobil)**: pe serverul de producție local (HTTP/1.1, fără Caddy),
+    simularea standard dă 89–96 la performanță, 100 la accesibilitate, bune practici și SEO;
+    cu încetinire reală (`--throttling-method=devtools`) pagina principală are 98 (LCP 1,8 s).
+    Variația de ±3 puncte vine din simulare. JavaScript la încărcarea paginii principale: 160 KB gzip
+    pe mobil, 220 KB pe desktop (inclusiv GSAP, încărcat dinamic).
+49. **`npm audit`**: 4 vulnerabilități „high” veneau din CLI-ul Prisma (`mysql2`, nefolosit, și
+    `deepmerge-ts`). Le-am rezolvat cu `overrides` (versiuni corectate, aceeași interfață);
+    `prisma validate`, `migrate status` și testele trec. Rezultat: 0 vulnerabilități.

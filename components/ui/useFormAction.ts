@@ -1,7 +1,7 @@
 "use client";
 
 import { startTransition, useActionState, type FormEvent } from "react";
-import { idleState, type FormState } from "@/lib/validation";
+import { idleState, type FormState } from "@/lib/form-state";
 
 type Action = (state: FormState, formData: FormData) => Promise<FormState>;
 

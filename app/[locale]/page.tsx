@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import {
+  getCoach,
   getFacilities,
   getFaqs,
   getLocations,
@@ -31,18 +32,20 @@ import { QuestionsScene } from "@/components/scenes/QuestionsScene";
 import { ConstellationScene } from "@/components/scenes/ConstellationScene";
 import { HomeDirector } from "@/components/motion/HomeDirector";
 import { BookingWidget } from "@/components/booking/BookingWidget";
+import { JsonLd } from "@/components/pages/JsonLd";
+import { pageMetadata, localizedUrl } from "@/lib/seo";
+import { businessLd, personLd } from "@/lib/structured-data";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]">): Promise<Metadata> {
   const { locale } = await params;
   const settings = localizedSettings(await getSettings(), locale as Locale);
-  return {
-    title: { absolute: settings.seoTitle },
+  return pageMetadata({
+    locale: locale as Locale,
+    href: "/",
+    title: settings.seoTitle,
     description: settings.seoDescription,
-    alternates: {
-      canonical: locale === "en" ? "/en" : "/",
-      languages: settings.enEnabled ? { ro: "/", en: "/en", "x-default": "/" } : undefined,
-    },
-  };
+    absoluteTitle: true,
+  });
 }
 
 export default async function HomePage({ params }: PageProps<"/[locale]">) {
@@ -50,18 +53,29 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const locale = raw as Locale;
   setRequestLocale(locale);
 
-  const [scenes, programs, locations, facilities, faqs, testimonials, settingsRow, engine, t] =
-    await Promise.all([
-      getScenes(locale),
-      getPrograms(locale),
-      getLocations(locale),
-      getFacilities(locale),
-      getFaqs(locale, "home"),
-      getTestimonials(locale, 3),
-      getSettings(),
-      loadEngineInput(),
-      getTranslations("nav"),
-    ]);
+  const [
+    scenes,
+    programs,
+    locations,
+    facilities,
+    faqs,
+    testimonials,
+    settingsRow,
+    engine,
+    t,
+    coach,
+  ] = await Promise.all([
+    getScenes(locale),
+    getPrograms(locale),
+    getLocations(locale),
+    getFacilities(locale),
+    getFaqs(locale, "home"),
+    getTestimonials(locale, 3),
+    getSettings(),
+    loadEngineInput(),
+    getTranslations("nav"),
+    getCoach(locale),
+  ]);
   const settings = localizedSettings(settingsRow, locale);
   const location = locations[0] ?? null;
   const amenities = facilities.filter((f) => f.type === "DOTARE_BAZA");
@@ -144,6 +158,12 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
 
   return (
     <div className="home" data-home>
+      <JsonLd
+        data={[
+          businessLd(settings, location, settings.seoDescription),
+          personLd(settings, coach, localizedUrl("/despre", locale)),
+        ]}
+      />
       <Stage scenes={scenes} />
       <div className="scene-index-shell">
         <SceneIndex scenes={scenes} label={t("sceneIndexLabel")} />

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useFormAction } from "@/components/ui/useFormAction";
-import type { FormState } from "@/lib/validation";
+import type { FormState } from "@/lib/form-state";
 
 type Props = {
   action: (state: FormState, formData: FormData) => Promise<FormState>;

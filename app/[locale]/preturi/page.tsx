@@ -59,7 +59,12 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/pretu
       </PageSection>
 
       <PageSection id="tarife" title={t("pricing.perProgram")} className="page-section--narrow">
-        <div className="overflow-x-auto">
+        <div
+          className="overflow-x-auto"
+          tabIndex={0}
+          role="region"
+          aria-label={t("pricing.perProgram")}
+        >
           <table className="price-table">
             <tbody>
               {programs.flatMap((program) =>

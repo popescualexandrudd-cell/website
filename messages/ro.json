@@ -310,7 +310,9 @@
       "ANULATA_ANTRENOR": "anulată de antrenor",
       "EFECTUATA": "efectuată",
       "NEPREZENTARE": "neprezentare"
-    }
+    },
+    "widgetLoading": "Se încarcă zilele și orele libere…",
+    "widgetFallback": "Alege ziua și ora pe pagina de rezervare"
   },
   "manage": {
     "title": "Rezervarea {code}",

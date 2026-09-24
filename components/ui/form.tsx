@@ -12,7 +12,7 @@ import {
 import { useFormStatus } from "react-dom";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import type { FormState } from "@/lib/validation";
+import type { FormState } from "@/lib/form-state";
 
 type BaseProps = {
   name: string;

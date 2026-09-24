@@ -221,7 +221,6 @@ export function Stage({ scenes }: { scenes: SceneView[] }) {
               gateMedia={CINEMATIC_MEDIA}
               sizes="40vw"
               className="stage-cloud"
-              priority
               style={{ backgroundImage: "none" }}
             />
           ) : null,

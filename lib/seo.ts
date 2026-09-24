@@ -29,6 +29,12 @@ export async function pageMetadata(options: {
 }): Promise<Metadata> {
   const settings = await getSettings();
   const canonical = localizedUrl(options.href, options.locale);
+  const image = {
+    url: `${appUrl()}/api/og?path=${encodeURIComponent(getPathname({ href: options.href, locale: "ro" }))}&lang=${options.locale}`,
+    width: 1200,
+    height: 630,
+    alt: options.title,
+  };
   const languages = settings.enEnabled
     ? {
         ro: localizedUrl(options.href, "ro"),
@@ -47,12 +53,14 @@ export async function pageMetadata(options: {
       url: canonical,
       type: options.type ?? "website",
       locale: options.locale === "en" ? "en_GB" : "ro_RO",
+      images: [image],
       ...(options.publishedTime ? { publishedTime: options.publishedTime } : {}),
     },
     twitter: {
       card: "summary_large_image",
       title: options.title,
       description: options.description || undefined,
+      images: [image.url],
     },
   };
 }

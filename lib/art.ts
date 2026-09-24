@@ -1,16 +1,9 @@
+import "server-only";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import type { ArtSet, ResolvedImage } from "./art-shared";
 
-export type ImageSource = { w: number; src: string };
-export type ResolvedImage = {
-  width: number;
-  height: number;
-  blurDataURL: string;
-  avif: ImageSource[];
-  webp: ImageSource[];
-  fallback: string;
-};
-export type ArtSet = { desktop: ResolvedImage; mobile: ResolvedImage | null };
+export { srcSet, type ArtSet, type ImageSource, type ResolvedImage } from "./art-shared";
 
 type EncodedVariant = { w: number; avif: string; webp: string };
 type Encoded = { width: number; height: number; blurDataURL: string; variants: EncodedVariant[] };
@@ -133,8 +126,4 @@ export function pickArt(options: {
   const mobile =
     resolveMedia(options.mobileMedia) ?? (options.media ? null : (art?.mobile ?? null));
   return { desktop, mobile };
-}
-
-export function srcSet(sources: ImageSource[]): string {
-  return sources.map((s) => `${s.src} ${s.w}w`).join(", ");
 }

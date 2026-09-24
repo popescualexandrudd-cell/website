@@ -1389,3 +1389,16 @@
     color: var(--color-aur-inchis);
   }
 }
+
+/* Home booking widget, before its code has loaded */
+.booking-widget-lazy {
+  min-height: 24rem;
+}
+.booking-widget-placeholder {
+  display: grid;
+  place-items: center;
+  min-height: 24rem;
+  padding: 1.5rem;
+  border: 1px solid var(--color-linie);
+  text-align: center;
+}

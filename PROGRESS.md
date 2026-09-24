@@ -11,7 +11,7 @@ Fiecare fază se încheie cu verificări și un commit. Dacă lucrul se întreru
 | 5. Pagini interioare | gata |
 | 6. Rezervări și emailuri | gata |
 | 7. Admin | gata |
-| 8. SEO, GDPR, securitate, performanță, accesibilitate | — |
+| 8. SEO, GDPR, securitate, performanță, accesibilitate | gata |
 | 9. Deploy | — |
 | 10. QA final | — |
 
@@ -108,6 +108,22 @@ Fiecare fază se încheie cu verificări și un commit. Dacă lucrul se întreru
   validare, previzualizare Markdown, salvare, ștergere, reordonare, încărcare, rol Editor fără acces
   la rezervări.
 
+## Faza 8: SEO, GDPR, securitate, performanță, accesibilitate
+
+- `sitemap.xml` (toate paginile publice, RO și EN cu hreflang, programele active și articolele
+  publicate), `robots.txt` (fără admin, API și paginile personale cu token), `manifest.webmanifest`.
+- Imagini Open Graph generate cu next/og pentru fiecare pagină; JSON-LD pe pagina principală
+  (SportsActivityLocation + LocalBusiness, Person), pe lângă cele din faza 5.
+- CSP cu nonce verificat în producție (`next build` + `next start`): nicio încălcare în consolă pe
+  paginile publice, harta la click, admin. Antete: HSTS, nosniff, Referrer-Policy, Permissions-Policy,
+  X-Frame-Options, COOP; adminul are `noindex` și `no-store`. Paginile publice nu setează cookie-uri.
+- axe (WCAG 2.0/2.1/2.2 A și AA) pe 21 de pagini publice și 19 pagini de admin, desktop cu
+  reduced-motion și mobil: 0 probleme (corectat: tabelele cu derulare orizontală primesc focus).
+- Performanță: JS inițial 160 KB gzip pe mobil (zod scos din bundle-ul client, widget-ul de
+  rezervare încărcat la apropiere), fonturi preîncărcate doar cele necesare, prima pictură
+  preîncărcată, `content-visibility` pe scenele de mai jos. Lighthouse mobil: vezi decizia 48.
+- `npm audit`: 0 vulnerabilități. Politica de cookie-uri menționează și cookie-ul de previzualizare.
+
 ## Următorul pas
 
-Faza 8: SEO, GDPR, securitate, performanță, accesibilitate.
+Faza 9: deploy (Docker, Caddy, scripturi, CI, documentație).

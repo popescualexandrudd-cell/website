@@ -46,7 +46,7 @@ export default async function NewsletterPage({ searchParams }: PageProps<"/admin
       {subscribers.length === 0 ? (
         <p className="text-cerneala-2">Niciun abonat încă.</p>
       ) : (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Lista abonaților">
           <table className="admin-table">
             <thead>
               <tr>

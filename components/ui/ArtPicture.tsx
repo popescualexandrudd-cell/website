@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { srcSet, type ArtSet, type ResolvedImage } from "@/lib/art";
+import { srcSet, type ArtSet, type ResolvedImage } from "@/lib/art-shared";
 
 type Props = {
   art: ArtSet | ResolvedImage;
@@ -45,41 +45,68 @@ export function ArtPicture({
   const desktop = isArtSet(art) ? art.desktop : art;
   const mobile = isArtSet(art) && !desktopOnly ? art.mobile : null;
   return (
-    <picture className={className}>
-      {mobile ? (
+    <>
+      {priority ? (
+        // React hoists these into <head>, so the LCP image starts downloading before scripts and fonts.
         <>
-          <source
-            media="(max-width: 767px)"
+          {mobile ? (
+            <link
+              rel="preload"
+              as="image"
+              type="image/avif"
+              imageSrcSet={srcSet(mobile.avif)}
+              imageSizes={mobileSizes}
+              media="(max-width: 767px)"
+              fetchPriority="high"
+            />
+          ) : null}
+          <link
+            rel="preload"
+            as="image"
             type="image/avif"
-            srcSet={srcSet(mobile.avif)}
-            sizes={mobileSizes}
-          />
-          <source
-            media="(max-width: 767px)"
-            type="image/webp"
-            srcSet={srcSet(mobile.webp)}
-            sizes={mobileSizes}
+            imageSrcSet={srcSet(desktop.avif)}
+            imageSizes={sizes}
+            media={gateMedia ?? (mobile ? "(min-width: 768px)" : undefined)}
+            fetchPriority="high"
           />
         </>
       ) : null}
-      <source media={gateMedia} type="image/avif" srcSet={srcSet(desktop.avif)} sizes={sizes} />
-      <source media={gateMedia} type="image/webp" srcSet={srcSet(desktop.webp)} sizes={sizes} />
-      <img
-        src={gateMedia ? TRANSPARENT_PIXEL : desktop.fallback}
-        width={desktop.width}
-        height={desktop.height}
-        alt={alt}
-        className={imgClassName}
-        loading={priority ? "eager" : "lazy"}
-        decoding={priority ? "sync" : "async"}
-        fetchPriority={priority ? "high" : "auto"}
-        style={{
-          backgroundImage: `url("${desktop.blurDataURL}")`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          ...style,
-        }}
-      />
-    </picture>
+      <picture className={className}>
+        {mobile ? (
+          <>
+            <source
+              media="(max-width: 767px)"
+              type="image/avif"
+              srcSet={srcSet(mobile.avif)}
+              sizes={mobileSizes}
+            />
+            <source
+              media="(max-width: 767px)"
+              type="image/webp"
+              srcSet={srcSet(mobile.webp)}
+              sizes={mobileSizes}
+            />
+          </>
+        ) : null}
+        <source media={gateMedia} type="image/avif" srcSet={srcSet(desktop.avif)} sizes={sizes} />
+        <source media={gateMedia} type="image/webp" srcSet={srcSet(desktop.webp)} sizes={sizes} />
+        <img
+          src={gateMedia ? TRANSPARENT_PIXEL : desktop.fallback}
+          width={desktop.width}
+          height={desktop.height}
+          alt={alt}
+          className={imgClassName}
+          loading={priority ? "eager" : "lazy"}
+          decoding={priority ? "sync" : "async"}
+          fetchPriority={priority ? "high" : "auto"}
+          style={{
+            backgroundImage: `url("${desktop.blurDataURL}")`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            ...style,
+          }}
+        />
+      </picture>
+    </>
   );
 }

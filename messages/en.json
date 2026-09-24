@@ -310,7 +310,9 @@
       "ANULATA_ANTRENOR": "cancelled by the coach",
       "EFECTUATA": "completed",
       "NEPREZENTARE": "no-show"
-    }
+    },
+    "widgetLoading": "Loading the free days and times…",
+    "widgetFallback": "Choose a day and time on the booking page"
   },
   "manage": {
     "title": "Booking {code}",

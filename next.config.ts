@@ -22,6 +22,10 @@ const nextConfig: NextConfig = {
   agentRules: false,
   reactStrictMode: true,
   serverExternalPackages: ["@node-rs/argon2", "sharp", "pg"],
+  // Fonts read from disk by the Open Graph image route (not imported, so not traced automatically).
+  outputFileTracingIncludes: {
+    "/api/og": ["./node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin*-{400,500}-*.woff"],
+  },
   experimental: {
     serverActions: {
       bodySizeLimit: "2mb",

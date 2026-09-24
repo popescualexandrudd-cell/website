@@ -313,7 +313,7 @@
     padding-top: 12svh;
     background: linear-gradient(to bottom, rgb(236 227 207 / 0), var(--color-pergament) 12svh);
   }
-  .scene:first-child .scene-static + .scene-body {
+  .scene:first-of-type .scene-static + .scene-body {
     margin-top: -30svh;
     padding-top: 16svh;
   }
@@ -334,7 +334,7 @@
   /* Simple dissolves as each painting enters, where the browser supports scroll timelines. */
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
-      .scene-static-img {
+      .scene:not(:first-of-type) .scene-static-img {
         animation: scene-dissolve linear both;
         animation-timeline: view();
         animation-range: entry 0% entry 70%;
@@ -862,5 +862,14 @@
   }
   to {
     transform: translateX(2.5vw);
+  }
+}
+
+/* Outside the cinematic layout, scenes below the fold skip layout and paint until they come
+   near the viewport (the cinematic layout needs real sizes for its scroll timeline). */
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .scene:not(:first-of-type) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 1400px;
   }
 }

@@ -219,6 +219,7 @@ Pentru antrenor și colaboratori, panoul de administrare folosește un singur co
 | Cookie | Scop | Durată |
 | --- | --- | --- |
 | \`sesiune_admin\` | păstrează autentificarea în panoul de administrare | 30 de zile sau până la ieșirea din cont |
+| \`__prerender_bypass\` | arată ciornele când antrenorul previzualizează site-ul | până la ieșirea din previzualizare sau închiderea browserului |
 
 Cookie-urile strict necesare nu au nevoie de consimțământ, conform art. 4 alin. (5) din Legea nr. 506/2004. De aceea site-ul nu afișează un banner de cookie-uri.
 
@@ -246,6 +247,7 @@ For the coach and collaborators, the admin panel uses a single strictly necessar
 | Cookie | Purpose | Duration |
 | --- | --- | --- |
 | \`sesiune_admin\` | keeps you signed in to the admin panel | 30 days or until you sign out |
+| \`__prerender_bypass\` | shows drafts while the coach previews the site | until preview ends or the browser closes |
 
 Strictly necessary cookies do not require consent under Article 4(5) of Romanian Law 506/2004. That is why the site shows no cookie banner.
 
