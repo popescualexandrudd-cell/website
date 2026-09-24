@@ -370,3 +370,44 @@ Desktop 1440×900                                   Mobil 390×844
 31. **„Locuri libere în septembrie: 81"** cu datele din seed: disponibilitatea din seed e tot programul
     de lucru (07–21). Numărul devine realist când antrenorul setează în admin doar timpul liber pentru
     elevi noi (vezi decizia 13).
+32. **Editorul de conținut e generic** (`lib/admin/resources.ts`): fiecare tip de conținut e descris
+    o singură dată prin câmpuri (text, text traductibil RO/EN, Markdown cu previzualizare, listă,
+    număr, preț, dată, oră, alegere, relație, imagine, pictură). Aceeași descriere generează
+    formularul, validarea pe server și lista. Serverul citește doar câmpurile declarate, deci o
+    cerere modificată nu poate scrie alte coloane (ordinea, id-ul). Adăugarea unui câmp nou înseamnă
+    o linie în registru, nu un formular nou.
+33. **Scenele și antetele de pagină nu se pot adăuga sau șterge din admin**, doar edita și reordona
+    (scenele) sau ascunde. Fiecare scenă are o componentă și o coregrafie proprie; o scenă „nouă”
+    fără cod n-ar avea ce afișa.
+34. **Ștergerile care ar strica istoricul sunt refuzate cu explicație**: un program cu rezervări, o
+    ședință de grupă cu rezervări (setarea `groupScheduleId` la NULL le-ar transforma în lecții
+    exclusive suprapuse, pe care constrângerea de excludere le-ar respinge oricum), ultima locație,
+    o imagine folosită pe site. În locul ștergerii, mesajul propune debifarea „Activ”.
+35. **Versiunea politicii de confidențialitate crește automat** (data zilei) când textul paginii legale
+    se schimbă, pentru că fiecare acord salvat (rezervare, contact, newsletter) păstrează versiunea.
+36. **Formularele nu se golesc la o eroare de validare.** React 19 resetează automat formularele cu
+    `action` după fiecare trimitere; `useFormAction` (`components/ui/useFormAction.ts`) trimite prin
+    `startTransition` și păstrează ce a scris utilizatorul. Fără JavaScript, formularul trimite nativ.
+37. **Încărcarea imaginilor**: tipul real se verifică prin decodare cu sharp (nu după extensie sau
+    MIME), SVG e refuzat (poate conține scripturi), limita e 10 MB, originalul nu se păstrează:
+    se salvează doar variantele AVIF/WebP re-encodate (fără EXIF/GPS), cu nume aleatorii, în
+    `MEDIA_DIR`. În producție Caddy le servește direct; ruta `/media/[...path]` le servește în
+    dezvoltare și refuză orice cale care iese din director.
+38. **Acțiunile din liste redirecționează înapoi cu `?ok=`** (marcat citit, arhivat, șters): rândul
+    poate ieși din filtrul curent, iar mesajul de confirmare trebuie să rămână vizibil.
+39. **Ștergerea datelor unui client (GDPR)** anonimizează rezervările (rămân data, programul și
+    starea, pentru statistică și evidența contabilă) și șterge mesajele, cererile de pe lista de
+    așteptare, abonarea, recenziile legate și copiile emailurilor. E refuzată cât timp clientul are
+    lecții viitoare active, ca să nu rămână un interval blocat fără persoană de contact.
+40. **Exportul newsletter-ului include linkul personal de dezabonare** al fiecărui abonat: site-ul nu
+    trimite newslettere, antrenorul folosește un serviciu extern (Brevo, Mailchimp) și pune linkul în
+    fiecare email.
+41. **Regula `no-html-link-for-pages` e oprită doar în admin**: ruta `[...rest]` face ca orice URL
+    intern să pară o pagină, iar descărcările (CSV, JSON) și previzualizarea trebuie să fie `<a>`
+    simple, nu `<Link>` (care ar prelua și naviga pe client).
+42. **Imaginile generate nu sunt în git** (`public/art/generated/`, manifestul, iconițele PNG): sunt
+    rezultatul lui `npm run images` din sursele din `art-src/` și `app/icon.svg`. Se generează singure
+    la `npm run dev` și `npm run build` când lipsesc (și în build-ul Docker). Motiv: fișierele binare
+    comprimate conțin inevitabil octeți care arată ca „ş”/„ţ” pentru `grep`, iar verificarea diacriticelor
+    din criteriile de acceptare trebuie să nu găsească nimic în depozit. Manifestul se citește la
+    rulare, deci verificarea tipurilor nu depinde de imagini.

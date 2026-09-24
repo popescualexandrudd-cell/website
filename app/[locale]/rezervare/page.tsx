@@ -8,13 +8,23 @@ import { PageHero, PageSection } from "@/components/pages/PageHero";
 import { BookingFlow } from "@/components/booking/BookingFlow";
 import { toBookable } from "@/components/booking/toBookable";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/rezervare">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/rezervare">): Promise<Metadata> {
   const locale = (await params).locale as Locale;
   const header = await getPageHeader("rezervare", locale);
-  return pageMetadata({ locale, href: "/rezervare", title: header.seoTitle, description: header.seoDescription });
+  return pageMetadata({
+    locale,
+    href: "/rezervare",
+    title: header.seoTitle,
+    description: header.seoDescription,
+  });
 }
 
-export default async function BookingPage({ params, searchParams }: PageProps<"/[locale]/rezervare">) {
+export default async function BookingPage({
+  params,
+  searchParams,
+}: PageProps<"/[locale]/rezervare">) {
   const locale = (await params).locale as Locale;
   setRequestLocale(locale);
   const query = await searchParams;
@@ -31,13 +41,20 @@ export default async function BookingPage({ params, searchParams }: PageProps<"/
 
   return (
     <>
-      <PageHero title={header.title} intro={header.intro} art={header.art} imageAlt={header.imageAlt} />
+      <PageHero
+        title={header.title}
+        intro={header.intro}
+        art={header.art}
+        imageAlt={header.imageAlt}
+      />
       <PageSection className="page-section--narrow">
         <BookingFlow
           programs={bookable}
           initialProgramId={initial}
           bookingMode={settings.bookingMode}
-          turnstileSiteKey={process.env.TURNSTILE_SECRET_KEY ? (process.env.TURNSTILE_SITE_KEY ?? null) : null}
+          turnstileSiteKey={
+            process.env.TURNSTILE_SECRET_KEY ? (process.env.TURNSTILE_SITE_KEY ?? null) : null
+          }
           nonce={h.get("x-nonce") ?? undefined}
         />
       </PageSection>

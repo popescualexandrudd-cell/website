@@ -18,7 +18,8 @@ export function MethodScene({ scene, index }: { scene: SceneView; index: number 
                 {i + 1}
               </span>
               <p>
-                {step.title ? <strong className="method-step-title">{step.title}.</strong> : null} {step.text}
+                {step.title ? <strong className="method-step-title">{step.title}.</strong> : null}{" "}
+                {step.text}
               </p>
             </li>
           ))}

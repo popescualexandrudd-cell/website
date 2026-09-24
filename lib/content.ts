@@ -80,8 +80,14 @@ export type LocalizedSettings = ReturnType<typeof localizedSettings>;
 // ─── Coach ───────────────────────────────────────────────────────────────────
 
 export const getCoach = cache(async (locale: Locale) => {
-  const coach = await db.coachProfile.findUniqueOrThrow({ where: { id: 1 }, include: { photo: true } });
-  const certifications = await db.certification.findMany({ orderBy: { order: "asc" }, include: { image: true } });
+  const coach = await db.coachProfile.findUniqueOrThrow({
+    where: { id: 1 },
+    include: { photo: true },
+  });
+  const certifications = await db.certification.findMany({
+    orderBy: { order: "asc" },
+    include: { image: true },
+  });
   return {
     name: coach.name,
     title: t(coach.title, locale),
@@ -152,7 +158,11 @@ export const getScenes = cache(async (locale: Locale): Promise<SceneView[]> => {
       art: pickArt({ media: scene.image, mobileMedia: scene.imageMobile, artKey: scene.artKey }),
       artSecondary:
         scene.artKeySecondary || scene.imageSecondary
-          ? pickArt({ media: scene.imageSecondary, mobileMedia: scene.imageSecondaryMobile, artKey: scene.artKeySecondary })
+          ? pickArt({
+              media: scene.imageSecondary,
+              mobileMedia: scene.imageSecondaryMobile,
+              artKey: scene.artKeySecondary,
+            })
           : null,
       textPosDesktop: scene.textPosDesktop,
       textPosMobile: scene.textPosMobile,
@@ -180,19 +190,22 @@ export type PriceView = {
   programId: string | null;
 };
 
-function toPriceView(plan: {
-  id: string;
-  name: unknown;
-  price: { toString(): string } | null;
-  currency: string;
-  unit: PriceUnit;
-  sessions: number | null;
-  validityDays: number | null;
-  includes: unknown;
-  highlighted: boolean;
-  isPackage: boolean;
-  programId: string | null;
-}, locale: Locale): PriceView {
+function toPriceView(
+  plan: {
+    id: string;
+    name: unknown;
+    price: { toString(): string } | null;
+    currency: string;
+    unit: PriceUnit;
+    sessions: number | null;
+    validityDays: number | null;
+    includes: unknown;
+    highlighted: boolean;
+    isPackage: boolean;
+    programId: string | null;
+  },
+  locale: Locale,
+): PriceView {
   return {
     id: plan.id,
     name: t(plan.name, locale),
@@ -236,7 +249,8 @@ export type ProgramView = {
 function lowestPrice(prices: PriceView[]): PriceView | null {
   const regular = prices.filter((p) => !p.isPackage);
   const priced = regular.filter((p) => p.price !== null);
-  if (priced.length > 0) return [...priced].sort((a, b) => Number(a.price) - Number(b.price))[0] ?? null;
+  if (priced.length > 0)
+    return [...priced].sort((a, b) => Number(a.price) - Number(b.price))[0] ?? null;
   return regular[0] ?? null;
 }
 
@@ -285,7 +299,10 @@ export const getProgram = cache(async (slug: string, locale: Locale) => {
 });
 
 export const getPackages = cache(async (locale: Locale): Promise<PriceView[]> => {
-  const plans = await db.pricingPlan.findMany({ where: { active: true, isPackage: true }, orderBy: { order: "asc" } });
+  const plans = await db.pricingPlan.findMany({
+    where: { active: true, isPackage: true },
+    orderBy: { order: "asc" },
+  });
   return plans.map((plan) => toPriceView(plan, locale));
 });
 
@@ -346,7 +363,10 @@ export const getLocations = cache(async (locale: Locale): Promise<LocationView[]
 });
 
 export const getFacilities = cache(async (locale: Locale): Promise<FacilityView[]> => {
-  const facilities = await db.facility.findMany({ orderBy: [{ type: "asc" }, { order: "asc" }], include: { image: true } });
+  const facilities = await db.facility.findMany({
+    orderBy: [{ type: "asc" }, { order: "asc" }],
+    include: { image: true },
+  });
   return facilities.map((f) => ({
     id: f.id,
     type: f.type,
@@ -360,41 +380,57 @@ export const getFacilities = cache(async (locale: Locale): Promise<FacilityView[
 
 // ─── FAQ, testimonials ───────────────────────────────────────────────────────
 
-export type FaqView = { id: string; question: string; answer: string; category: FaqCategory; programId: string | null };
+export type FaqView = {
+  id: string;
+  question: string;
+  answer: string;
+  category: FaqCategory;
+  programId: string | null;
+};
 
-export const getFaqs = cache(async (locale: Locale, filter: "home" | "all" = "all"): Promise<FaqView[]> => {
-  const faqs = await db.faq.findMany({
-    where: filter === "home" ? { showOnHome: true } : {},
-    orderBy: [{ order: "asc" }],
-    take: filter === "home" ? 6 : undefined,
-  });
-  return faqs.map((f) => ({
-    id: f.id,
-    question: t(f.question, locale),
-    answer: t(f.answer, locale),
-    category: f.category,
-    programId: f.programId,
-  }));
-});
+export const getFaqs = cache(
+  async (locale: Locale, filter: "home" | "all" = "all"): Promise<FaqView[]> => {
+    const faqs = await db.faq.findMany({
+      where: filter === "home" ? { showOnHome: true } : {},
+      orderBy: [{ order: "asc" }],
+      take: filter === "home" ? 6 : undefined,
+    });
+    return faqs.map((f) => ({
+      id: f.id,
+      question: t(f.question, locale),
+      answer: t(f.answer, locale),
+      category: f.category,
+      programId: f.programId,
+    }));
+  },
+);
 
-export type TestimonialView = { id: string; author: string; role: string; text: string; photo: ResolvedImage | null };
+export type TestimonialView = {
+  id: string;
+  author: string;
+  role: string;
+  text: string;
+  photo: ResolvedImage | null;
+};
 
 /** Only real, consented, published reviews ever reach the public site. */
-export const getTestimonials = cache(async (locale: Locale, limit?: number): Promise<TestimonialView[]> => {
-  const items = await db.testimonial.findMany({
-    where: { published: true, consent: true, isExample: false },
-    orderBy: { order: "asc" },
-    take: limit,
-    include: { photo: true },
-  });
-  return items.map((i) => ({
-    id: i.id,
-    author: i.author,
-    role: t(i.role, locale),
-    text: t(i.text, locale),
-    photo: resolveMedia(i.photo),
-  }));
-});
+export const getTestimonials = cache(
+  async (locale: Locale, limit?: number): Promise<TestimonialView[]> => {
+    const items = await db.testimonial.findMany({
+      where: { published: true, consent: true, isExample: false },
+      orderBy: { order: "asc" },
+      take: limit,
+      include: { photo: true },
+    });
+    return items.map((i) => ({
+      id: i.id,
+      author: i.author,
+      role: t(i.role, locale),
+      text: t(i.text, locale),
+      photo: resolveMedia(i.photo),
+    }));
+  },
+);
 
 // ─── Pages ───────────────────────────────────────────────────────────────────
 
@@ -409,7 +445,8 @@ export type PageHeaderView = {
 
 export const getPageHeader = cache(async (key: string, locale: Locale): Promise<PageHeaderView> => {
   const header = await db.pageHeader.findUnique({ where: { key }, include: { image: true } });
-  if (!header) return { title: "", intro: "", art: null, imageAlt: "", seoTitle: "", seoDescription: "" };
+  if (!header)
+    return { title: "", intro: "", art: null, imageAlt: "", seoTitle: "", seoDescription: "" };
   const title = t(header.title, locale);
   return {
     title,
@@ -424,11 +461,19 @@ export const getPageHeader = cache(async (key: string, locale: Locale): Promise<
 export const getLegalPage = cache(async (kind: LegalKind, locale: Locale) => {
   const page = await db.legalPage.findUnique({ where: { kind } });
   if (!page) return null;
-  return { title: t(page.title, locale), body: t(page.body, locale), version: page.version, updatedAt: page.updatedAt };
+  return {
+    title: t(page.title, locale),
+    body: t(page.body, locale),
+    version: page.version,
+    updatedAt: page.updatedAt,
+  };
 });
 
 export const getPolicyVersion = cache(async (): Promise<string> => {
-  const page = await db.legalPage.findUnique({ where: { kind: "CONFIDENTIALITATE" }, select: { version: true } });
+  const page = await db.legalPage.findUnique({
+    where: { kind: "CONFIDENTIALITATE" },
+    select: { version: true },
+  });
   return page?.version ?? "necunoscută";
 });
 
@@ -461,7 +506,13 @@ function toPostView(
     updatedAt: Date;
     seoTitle: unknown;
     seoDescription: unknown;
-    cover: { width: number; height: number; blurDataURL: string; variants: unknown; alt: unknown } | null;
+    cover: {
+      width: number;
+      height: number;
+      blurDataURL: string;
+      variants: unknown;
+      alt: unknown;
+    } | null;
   },
   locale: Locale,
 ): PostView {
@@ -496,7 +547,11 @@ export const getPost = cache(async (slug: string, locale: Locale): Promise<PostV
   const preview = await isPreview();
   const post = await db.post.findUnique({ where: { slug }, include: { cover: true } });
   if (!post) return null;
-  if (!preview && (post.status !== "PUBLICAT" || !post.publishedAt || post.publishedAt > new Date())) return null;
+  if (
+    !preview &&
+    (post.status !== "PUBLICAT" || !post.publishedAt || post.publishedAt > new Date())
+  )
+    return null;
   return toPostView(post, locale);
 });
 
@@ -518,7 +573,15 @@ export const getGallery = cache(async (locale: Locale): Promise<GalleryView[]> =
   return items.flatMap((item) => {
     const image = resolveMedia(item.media);
     if (!image) return [];
-    return [{ id: item.id, image, alt: t(item.alt, locale), caption: item.caption ? t(item.caption, locale) : "", category: item.category }];
+    return [
+      {
+        id: item.id,
+        image,
+        alt: t(item.alt, locale),
+        caption: item.caption ? t(item.caption, locale) : "",
+        category: item.category,
+      },
+    ];
   });
 });
 

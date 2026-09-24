@@ -9,9 +9,14 @@
  * the mobile version is a centred 9:16 crop of it.
  * Real photos of the coach go in art-src/foto/ and receive the site's warm grade and grain.
  *
+ * It also renders the icons (apple-icon, 512 px icon, email ornament) from app/icon.svg.
+ *
  * To replace an image: drop a file with the same name in art-src/ and run `npm run images`.
+ * The output is not committed (it is rebuilt by `npm run dev`/`npm run build` when missing and
+ * in the Docker build), so the repository contains only the sources.
+ *   npm run images -- --if-missing   does nothing when the output already exists
  */
-import { existsSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { basename, extname, join } from "node:path";
 import sharp from "sharp";
 import { applyPhotoTreatment, encodeVariants, type EncodedImage } from "../lib/images/process";
@@ -35,7 +40,12 @@ const WIDTHS: Record<Kind, { desktop: number[]; mobile: number[] }> = {
   foto: { desktop: [640, 1024, 1600], mobile: [] },
 };
 
-type ManifestEntry = { kind: Kind; source: "art" | "placeholder" | "foto"; desktop: EncodedImage; mobile?: EncodedImage };
+type ManifestEntry = {
+  kind: Kind;
+  source: "art" | "placeholder" | "foto";
+  desktop: EncodedImage;
+  mobile?: EncodedImage;
+};
 
 function findRaster(dir: string, name: string): string | null {
   for (const ext of RASTER) {
@@ -53,7 +63,34 @@ async function mobileCropFrom(path: string): Promise<Buffer> {
   return image.extract({ left, top: 0, width: cropWidth, height }).toBuffer();
 }
 
+const ICONS = [
+  { path: join(root, "app", "apple-icon.png"), size: 180, background: "#ECE3CF", crop: true },
+  { path: join(root, "public", "icon-512.png"), size: 512, background: null, crop: true },
+  { path: join(root, "public", "email", "minge.png"), size: 64, background: null, crop: false },
+];
+
+/** Icons from the gold-ball favicon: cropped to the ball for app icons, whole for the email ornament. */
+async function renderIcons(): Promise<void> {
+  const svg = readFileSync(join(root, "app", "icon.svg"), "utf8");
+  for (const icon of ICONS) {
+    const source = icon.crop ? svg.replace('viewBox="0 0 64 64"', 'viewBox="4 4 56 56"') : svg;
+    let image = sharp(Buffer.from(source), {
+      density: Math.ceil((icon.size / 64) * 72 * 2),
+    }).resize(icon.size, icon.size);
+    if (icon.background) image = image.flatten({ background: icon.background });
+    mkdirSync(join(icon.path, ".."), { recursive: true });
+    await image.png({ compressionLevel: 9 }).toFile(icon.path);
+  }
+}
+
 async function main(): Promise<void> {
+  if (
+    process.argv.includes("--if-missing") &&
+    existsSync(manifestPath) &&
+    ICONS.every((icon) => existsSync(icon.path))
+  )
+    return;
+  await renderIcons();
   rmSync(outDir, { recursive: true, force: true });
   const manifest: Record<string, ManifestEntry> = {};
   const extraKeys = existsSync(artSrc)
@@ -68,7 +105,8 @@ async function main(): Promise<void> {
     const widths = WIDTHS[kind];
     const realDesktop = findRaster(artSrc, key);
     const placeholderDesktop = join(placeholderDir, `${key}.svg`);
-    const desktopSource = realDesktop ?? (existsSync(placeholderDesktop) ? placeholderDesktop : null);
+    const desktopSource =
+      realDesktop ?? (existsSync(placeholderDesktop) ? placeholderDesktop : null);
     if (!desktopSource) continue;
     const isSvg = desktopSource.endsWith(".svg");
 
@@ -99,7 +137,12 @@ async function main(): Promise<void> {
         });
       }
     }
-    manifest[key] = { kind, source: realDesktop ? "art" : "placeholder", desktop, ...(mobile ? { mobile } : {}) };
+    manifest[key] = {
+      kind,
+      source: realDesktop ? "art" : "placeholder",
+      desktop,
+      ...(mobile ? { mobile } : {}),
+    };
     console.info(`  ${realDesktop ? "pictură " : "provizoriu"}  ${key}`);
   }
 

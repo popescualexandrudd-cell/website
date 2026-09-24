@@ -8,11 +8,19 @@ export async function GET() {
   try {
     await db.$queryRaw`SELECT 1`;
     return Response.json(
-      { status: "ok", database: "ok", latencyMs: Date.now() - started, time: new Date().toISOString() },
+      {
+        status: "ok",
+        database: "ok",
+        latencyMs: Date.now() - started,
+        time: new Date().toISOString(),
+      },
       { headers: { "Cache-Control": "no-store" } },
     );
   } catch (error) {
     console.error("health: database unreachable", error);
-    return Response.json({ status: "error", database: "unreachable" }, { status: 503, headers: { "Cache-Control": "no-store" } });
+    return Response.json(
+      { status: "error", database: "unreachable" },
+      { status: 503, headers: { "Cache-Control": "no-store" } },
+    );
   }
 }

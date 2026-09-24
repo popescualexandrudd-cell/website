@@ -1,7 +1,12 @@
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { db } from "@/lib/db";
 import { addDaysToKey, isoWeekday, localDateKey, zonedInstant } from "@/lib/availability";
-import { cancelByClient, createBooking, isOverlapError, type CreateBookingInput } from "@/lib/booking";
+import {
+  cancelByClient,
+  createBooking,
+  isOverlapError,
+  type CreateBookingInput,
+} from "@/lib/booking";
 import { manageToken } from "@/lib/email/messages";
 import { hashToken } from "@/lib/tokens";
 
@@ -57,23 +62,34 @@ describe("creating bookings", () => {
 
   it("lets exactly one of many simultaneous requests win the same slot", async () => {
     const startsAt = zonedInstant(futureWeekday(4), "12:00", TZ);
-    const results = await Promise.all(Array.from({ length: 6 }, () => createBooking(input({ startsAt }))));
+    const results = await Promise.all(
+      Array.from({ length: 6 }, () => createBooking(input({ startsAt }))),
+    );
     expect(results.filter((r) => r.ok)).toHaveLength(1);
-    for (const r of results.filter((r) => !r.ok)) expect(["conflict", "unavailable"]).toContain(r.ok ? "" : r.error);
+    for (const r of results.filter((r) => !r.ok))
+      expect(["conflict", "unavailable"]).toContain(r.ok ? "" : r.error);
     expect(await db.booking.count({ where: { startsAt } })).toBe(1);
   });
 
   it("keeps the break between lessons, also for different programmes", async () => {
     const day = futureWeekday(5);
-    expect((await createBooking(input({ startsAt: zonedInstant(day, "10:00", TZ) }))).ok).toBe(true);
-    const tooClose = await createBooking(input({ programId: semiId, participants: 2, startsAt: zonedInstant(day, "11:05", TZ) }));
+    expect((await createBooking(input({ startsAt: zonedInstant(day, "10:00", TZ) }))).ok).toBe(
+      true,
+    );
+    const tooClose = await createBooking(
+      input({ programId: semiId, participants: 2, startsAt: zonedInstant(day, "11:05", TZ) }),
+    );
     expect(tooClose.ok).toBe(false);
-    const afterBreak = await createBooking(input({ programId: semiId, participants: 2, startsAt: zonedInstant(day, "11:10", TZ) }));
+    const afterBreak = await createBooking(
+      input({ programId: semiId, participants: 2, startsAt: zonedInstant(day, "11:10", TZ) }),
+    );
     expect(afterBreak.ok).toBe(true);
   });
 
   it("is protected by the database even when the application checks are bypassed", async () => {
-    const first = await createBooking(input({ startsAt: zonedInstant(futureWeekday(6), "15:00", TZ) }));
+    const first = await createBooking(
+      input({ startsAt: zonedInstant(futureWeekday(6), "15:00", TZ) }),
+    );
     expect(first.ok).toBe(true);
     if (!first.ok) return;
     const existing = await db.booking.findUniqueOrThrow({ where: { id: first.bookingId } });
@@ -108,21 +124,36 @@ describe("creating bookings", () => {
     const first = await createBooking(input({ startsAt }));
     expect(first.ok).toBe(true);
     if (!first.ok) return;
-    await db.booking.update({ where: { id: first.bookingId }, data: { status: "ANULATA_CLIENT", cancelledAt: new Date() } });
+    await db.booking.update({
+      where: { id: first.bookingId },
+      data: { status: "ANULATA_CLIENT", cancelledAt: new Date() },
+    });
     expect((await createBooking(input({ startsAt }))).ok).toBe(true);
   });
 
   it("rejects times outside opening hours and too many participants", async () => {
     const lateEvening = zonedInstant(futureWeekday(3), "22:30", TZ);
-    expect(await createBooking(input({ startsAt: lateEvening }))).toEqual({ ok: false, error: "unavailable" });
-    expect(await createBooking(input({ participants: 2 }))).toEqual({ ok: false, error: "participants" });
+    expect(await createBooking(input({ startsAt: lateEvening }))).toEqual({
+      ok: false,
+      error: "unavailable",
+    });
+    expect(await createBooking(input({ participants: 2 }))).toEqual({
+      ok: false,
+      error: "participants",
+    });
   });
 
   it("asks for the child's first name and age for children's programmes", async () => {
     const schedule = await db.groupSchedule.findFirstOrThrow({ where: { programId: miniId } });
     let key = futureWeekday(3);
     while (isoWeekday(key) !== schedule.weekday) key = addDaysToKey(key, 1);
-    const result = await createBooking(input({ programId: miniId, groupScheduleId: schedule.id, startsAt: zonedInstant(key, schedule.startTime, TZ) }));
+    const result = await createBooking(
+      input({
+        programId: miniId,
+        groupScheduleId: schedule.id,
+        startsAt: zonedInstant(key, schedule.startTime, TZ),
+      }),
+    );
     expect(result).toEqual({ ok: false, error: "minor" });
   });
 });
@@ -130,14 +161,25 @@ describe("creating bookings", () => {
 describe("group sessions", () => {
   it("never overfills a session, even with simultaneous requests", async () => {
     const schedule = await db.groupSchedule.findFirstOrThrow({ where: { programId: miniId } });
-    await db.groupSchedule.update({ where: { id: schedule.id }, data: { membersCount: schedule.capacity - 1 } });
+    await db.groupSchedule.update({
+      where: { id: schedule.id },
+      data: { membersCount: schedule.capacity - 1 },
+    });
     let key = futureWeekday(3);
     while (isoWeekday(key) !== schedule.weekday) key = addDaysToKey(key, 1);
     const startsAt = zonedInstant(key, schedule.startTime, TZ);
     const results = await Promise.all(
       Array.from({ length: 4 }, (_, i) =>
         createBooking(
-          input({ programId: miniId, groupScheduleId: schedule.id, startsAt, forMinor: true, childFirstName: `Copil${i}`, childAge: 6, parentName: "Părinte" }),
+          input({
+            programId: miniId,
+            groupScheduleId: schedule.id,
+            startsAt,
+            forMinor: true,
+            childFirstName: `Copil${i}`,
+            childAge: 6,
+            parentName: "Părinte",
+          }),
         ),
       ),
     );
@@ -148,10 +190,15 @@ describe("group sessions", () => {
 
 describe("cancelling through the link", () => {
   it("allows it before the limit and refuses it after", async () => {
-    const early = await createBooking(input({ startsAt: zonedInstant(futureWeekday(8), "16:00", TZ) }));
+    const early = await createBooking(
+      input({ startsAt: zonedInstant(futureWeekday(8), "16:00", TZ) }),
+    );
     expect(early.ok).toBe(true);
     if (!early.ok) return;
-    expect(await cancelByClient(early.manageToken, "Nu mai pot")).toEqual({ ok: true, bookingId: early.bookingId });
+    expect(await cancelByClient(early.manageToken, "Nu mai pot")).toEqual({
+      ok: true,
+      bookingId: early.bookingId,
+    });
     expect((await cancelByClient(early.manageToken, null)).ok).toBe(false);
 
     // A lesson that starts in a few hours: the free-cancellation window has already closed.
@@ -176,7 +223,10 @@ describe("cancelling through the link", () => {
         source: "TELEFON",
       },
     });
-    expect(await cancelByClient(manageToken(soonId), null)).toEqual({ ok: false, error: "tooLate" });
+    expect(await cancelByClient(manageToken(soonId), null)).toEqual({
+      ok: false,
+      error: "tooLate",
+    });
     expect(await cancelByClient("x".repeat(43), null)).toEqual({ ok: false, error: "notFound" });
   });
 });

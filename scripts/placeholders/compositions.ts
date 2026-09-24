@@ -108,7 +108,11 @@ const cer: Composition = (c, mobile) => {
     [1, "#5A83DA"],
   ]);
   const clouds = mobile
-    ? [cloud(w * 0.2, h * 0.12, w * 0.5, 3), cloud(w * 0.85, h * 0.55, w * 0.55, 4, 0.9), cloud(w * 0.3, h * 0.82, w * 0.7, 5)]
+    ? [
+        cloud(w * 0.2, h * 0.12, w * 0.5, 3),
+        cloud(w * 0.85, h * 0.55, w * 0.55, 4, 0.9),
+        cloud(w * 0.3, h * 0.82, w * 0.7, 5),
+      ]
     : [
         cloud(w * 0.12, h * 0.16, w * 0.22, 3),
         cloud(w * 0.82, h * 0.2, w * 0.26, 4, 0.9),
@@ -135,12 +139,16 @@ const schele: Composition = (c, mobile) => {
   const cols = [-1.35, -0.7, 0, 0.7, 1.35];
   for (const k of cols) {
     const x = bx + k * r;
-    poles.push(`<rect x="${r1(x - r * 0.025)}" y="${r1(by - r * 1.45)}" width="${r1(r * 0.05)}" height="${r1(h - (by - r * 1.45))}" fill="${wood}"/>`);
+    poles.push(
+      `<rect x="${r1(x - r * 0.025)}" y="${r1(by - r * 1.45)}" width="${r1(r * 0.05)}" height="${r1(h - (by - r * 1.45))}" fill="${wood}"/>`,
+    );
   }
   const levels = [-1.05, -0.35, 0.35, 1.05];
   for (const lv of levels) {
     const y = by + lv * r;
-    poles.push(`<rect x="${r1(bx - r * 1.45)}" y="${r1(y)}" width="${r1(r * 2.9)}" height="${r1(r * 0.05)}" fill="#8A6440"/>`);
+    poles.push(
+      `<rect x="${r1(bx - r * 1.45)}" y="${r1(y)}" width="${r1(r * 2.9)}" height="${r1(r * 0.05)}" fill="#8A6440"/>`,
+    );
   }
   poles.push(
     `<path d="M ${r1(bx - r * 1.35)} ${r1(by + r * 1.05)} L ${r1(bx - r * 0.7)} ${r1(by + r * 0.35)} M ${r1(bx + r * 1.35)} ${r1(by + r * 1.05)} L ${r1(bx + r * 0.7)} ${r1(by + r * 0.35)} M ${r1(bx - r * 1.35)} ${r1(by - r * 0.35)} L ${r1(bx - r * 0.7)} ${r1(by - r * 1.05)}" stroke="${wood}" stroke-width="${r1(r * 0.035)}"/>`,
@@ -148,19 +156,53 @@ const schele: Composition = (c, mobile) => {
   );
   // ladder
   const lx = bx - r * 1.1;
-  const ladder = `<g stroke="${wood}" stroke-width="${r1(r * 0.022)}"><line x1="${r1(lx)}" y1="${r1(h)}" x2="${r1(lx + r * 0.2)}" y2="${r1(by + r * 0.35)}"/><line x1="${r1(lx + r * 0.22)}" y1="${r1(h)}" x2="${r1(lx + r * 0.42)}" y2="${r1(by + r * 0.35)}"/>${Array.from({ length: 7 }, (_, i) => {
-    const t = (i + 1) / 8;
-    const y = h - t * (h - by - r * 0.35);
-    const x = lx + t * r * 0.2;
-    return `<line x1="${r1(x)}" y1="${r1(y)}" x2="${r1(x + r * 0.22)}" y2="${r1(y)}"/>`;
-  }).join("")}</g>`;
+  const ladder = `<g stroke="${wood}" stroke-width="${r1(r * 0.022)}"><line x1="${r1(lx)}" y1="${r1(h)}" x2="${r1(lx + r * 0.2)}" y2="${r1(by + r * 0.35)}"/><line x1="${r1(lx + r * 0.22)}" y1="${r1(h)}" x2="${r1(lx + r * 0.42)}" y2="${r1(by + r * 0.35)}"/>${Array.from(
+    { length: 7 },
+    (_, i) => {
+      const t = (i + 1) / 8;
+      const y = h - t * (h - by - r * 0.35);
+      const x = lx + t * r * 0.2;
+      return `<line x1="${r1(x)}" y1="${r1(y)}" x2="${r1(x + r * 0.22)}" y2="${r1(y)}"/>`;
+    },
+  ).join("")}</g>`;
   const workers = [
-    person({ x: bx - r * 1.05, y: by - r * 0.35, h: r * 0.42, robe: "#8C3B2A", pose: "reachUp", shortRobe: true }),
-    person({ x: bx + r * 1.02, y: by + r * 0.35, h: r * 0.4, robe: "#3F5E8C", pose: "guide", facing: -1, shortRobe: true }),
-    person({ x: bx + r * 0.25, y: by - r * 1.05, h: r * 0.38, robe: palette.in, pose: "reachUp", shortRobe: true }),
-    person({ x: bx - r * 0.45, y: by + r * 1.05, h: r * 0.4, robe: "#6C5A2E", pose: "stand", shortRobe: true }),
+    person({
+      x: bx - r * 1.05,
+      y: by - r * 0.35,
+      h: r * 0.42,
+      robe: "#8C3B2A",
+      pose: "reachUp",
+      shortRobe: true,
+    }),
+    person({
+      x: bx + r * 1.02,
+      y: by + r * 0.35,
+      h: r * 0.4,
+      robe: "#3F5E8C",
+      pose: "guide",
+      facing: -1,
+      shortRobe: true,
+    }),
+    person({
+      x: bx + r * 0.25,
+      y: by - r * 1.05,
+      h: r * 0.38,
+      robe: palette.in,
+      pose: "reachUp",
+      shortRobe: true,
+    }),
+    person({
+      x: bx - r * 0.45,
+      y: by + r * 1.05,
+      h: r * 0.4,
+      robe: "#6C5A2E",
+      pose: "stand",
+      shortRobe: true,
+    }),
   ];
-  const clouds = mobile ? [cloud(w * 0.2, h * 0.08, w * 0.4, 11)] : [cloud(w * 0.14, h * 0.2, w * 0.2, 11), cloud(w * 0.3, h * 0.7, w * 0.16, 12, 0.8)];
+  const clouds = mobile
+    ? [cloud(w * 0.2, h * 0.08, w * 0.4, 11)]
+    : [cloud(w * 0.14, h * 0.2, w * 0.2, 11), cloud(w * 0.3, h * 0.7, w * 0.16, 12, 0.8)];
   const body = `<rect width="${w}" height="${h}" fill="url(#skyFresco)"/>${clouds.join("")}
 ${ball(bx, by, r, { glow: true })}
 ${poles.join("")}${ladder}${workers.join("")}`;
@@ -281,7 +323,9 @@ const programTabere: Composition = (c) => {
     const r = w * (0.1 + rand() * 0.1);
     return `<circle cx="${r1(x)}" cy="${r1(y)}" r="${r1(r)}" fill="${rand() > 0.5 ? palette.frunza : palette.frunzaDeschis}"/>`;
   }).join("");
-  const basketBalls = Array.from({ length: 9 }, (_, i) => ball(w * (0.64 + (i % 3) * 0.045), h * (0.8 - Math.floor(i / 3) * 0.03), w * 0.022)).join("");
+  const basketBalls = Array.from({ length: 9 }, (_, i) =>
+    ball(w * (0.64 + (i % 3) * 0.045), h * (0.8 - Math.floor(i / 3) * 0.03), w * 0.022),
+  ).join("");
   const body = `<rect width="${w}" height="${h}" fill="#CFE0F5"/>
 <rect y="${r1(h * 0.62)}" width="${w}" height="${r1(h * 0.38)}" fill="#A95A36"/>
 <rect x="${r1(w * 0.46)}" y="${r1(h * 0.2)}" width="${r1(w * 0.06)}" height="${r1(h * 0.46)}" fill="#5B4028"/>
@@ -322,8 +366,25 @@ const schitaTeren: Composition = (c, mobile) => {
     return `<line x1="${r1(cx + width * 0.62)}" y1="${r1(y)}" x2="${r1(cx + width * 0.68)}" y2="${r1(y)}"/>`;
   }).join("");
   const workers = [
-    person({ x: cx - width * 0.85, y: cy + length * 0.46, h: length * 0.07, robe: "#7A5634", pose: "reachUp", shortRobe: true, skin: "#B98A63" }),
-    person({ x: cx + width * 0.82, y: cy - length * 0.3, h: length * 0.065, robe: "#6B4A2B", pose: "guide", facing: -1, shortRobe: true, skin: "#B98A63" }),
+    person({
+      x: cx - width * 0.85,
+      y: cy + length * 0.46,
+      h: length * 0.07,
+      robe: "#7A5634",
+      pose: "reachUp",
+      shortRobe: true,
+      skin: "#B98A63",
+    }),
+    person({
+      x: cx + width * 0.82,
+      y: cy - length * 0.3,
+      h: length * 0.065,
+      robe: "#6B4A2B",
+      pose: "guide",
+      facing: -1,
+      shortRobe: true,
+      skin: "#B98A63",
+    }),
   ].map((p) => `<g opacity="0.75">${p}</g>`);
   const body = `${parchmentBase(c, 6)}
 ${construction}
@@ -350,23 +411,37 @@ const mozaic: Composition = (c, mobile) => {
   const tile = length * 0.028;
   for (let y = 0; y < h; y += tile) {
     for (let x = 0; x < w; x += tile) {
-      const inside = x > clayX - border * 2 && x < clayX + clayW + border * 2 && y > clayY - border * 2 && y < clayY + clayH + border * 2;
+      const inside =
+        x > clayX - border * 2 &&
+        x < clayX + clayW + border * 2 &&
+        y > clayY - border * 2 &&
+        y < clayY + clayH + border * 2;
       if (inside) continue;
       const shade = rand();
       const fill = shade > 0.9 ? "#D9CDB2" : shade > 0.6 ? "#E9E0CB" : "#F1EADB";
-      tiles.push(`<rect x="${r1(x + 1)}" y="${r1(y + 1)}" width="${r1(tile - 2)}" height="${r1(tile - 2)}" fill="${fill}"/>`);
+      tiles.push(
+        `<rect x="${r1(x + 1)}" y="${r1(y + 1)}" width="${r1(tile - 2)}" height="${r1(tile - 2)}" fill="${fill}"/>`,
+      );
     }
   }
   const meander = (x: number, y: number, ww: number, hh: number) => {
     const step = border * 0.8;
     const items: string[] = [];
     for (let t = 0; t < ww; t += step * 2) {
-      items.push(`<rect x="${r1(x + t)}" y="${r1(y)}" width="${r1(step)}" height="${r1(border * 0.5)}" fill="#6E5214"/>`);
-      items.push(`<rect x="${r1(x + t)}" y="${r1(y + hh - border * 0.5)}" width="${r1(step)}" height="${r1(border * 0.5)}" fill="#6E5214"/>`);
+      items.push(
+        `<rect x="${r1(x + t)}" y="${r1(y)}" width="${r1(step)}" height="${r1(border * 0.5)}" fill="#6E5214"/>`,
+      );
+      items.push(
+        `<rect x="${r1(x + t)}" y="${r1(y + hh - border * 0.5)}" width="${r1(step)}" height="${r1(border * 0.5)}" fill="#6E5214"/>`,
+      );
     }
     for (let t = 0; t < hh; t += step * 2) {
-      items.push(`<rect x="${r1(x)}" y="${r1(y + t)}" width="${r1(border * 0.5)}" height="${r1(step)}" fill="#6E5214"/>`);
-      items.push(`<rect x="${r1(x + ww - border * 0.5)}" y="${r1(y + t)}" width="${r1(border * 0.5)}" height="${r1(step)}" fill="#6E5214"/>`);
+      items.push(
+        `<rect x="${r1(x)}" y="${r1(y + t)}" width="${r1(border * 0.5)}" height="${r1(step)}" fill="#6E5214"/>`,
+      );
+      items.push(
+        `<rect x="${r1(x + ww - border * 0.5)}" y="${r1(y + t)}" width="${r1(border * 0.5)}" height="${r1(step)}" fill="#6E5214"/>`,
+      );
     }
     return items.join("");
   };
@@ -445,7 +520,12 @@ const ramuri: Composition = (c, mobile) => {
   const { w, h } = c;
   const rand = rng(95);
   const leafs: string[] = [];
-  const clearing = { x: w / 2, y: h / 2, rx: mobile ? w * 0.42 : w * 0.26, ry: mobile ? h * 0.3 : h * 0.36 };
+  const clearing = {
+    x: w / 2,
+    y: h / 2,
+    rx: mobile ? w * 0.42 : w * 0.26,
+    ry: mobile ? h * 0.3 : h * 0.36,
+  };
   for (let i = 0; i < 520; i += 1) {
     const x = rand() * w;
     const y = rand() * h;
@@ -505,7 +585,10 @@ const constelatie: Composition = (c, mobile) => {
       ];
   const P = pts.map(([x, y]) => [x! * w, y! * h] as const);
   const lines = P.slice(1)
-    .map(([x, y], i) => `<line x1="${r1(P[i]![0])}" y1="${r1(P[i]![1])}" x2="${r1(x)}" y2="${r1(y)}"/>`)
+    .map(
+      ([x, y], i) =>
+        `<line x1="${r1(P[i]![0])}" y1="${r1(P[i]![1])}" x2="${r1(x)}" y2="${r1(y)}"/>`,
+    )
     .join("");
   const court = mobile
     ? { x: w * 0.2, y: h * 0.56, ww: w * 0.6, hh: h * 0.06 }
@@ -520,7 +603,10 @@ const constelatie: Composition = (c, mobile) => {
   ];
   const courtPath = `<path d="M ${r1(courtStars[0]![0]!)} ${r1(courtStars[0]![1]!)} L ${r1(courtStars[1]![0]!)} ${r1(courtStars[1]![1]!)} L ${r1(courtStars[2]![0]!)} ${r1(courtStars[2]![1]!)} L ${r1(courtStars[3]![0]!)} ${r1(courtStars[3]![1]!)} Z M ${r1(courtStars[4]![0]!)} ${r1(courtStars[4]![1]!)} L ${r1(courtStars[5]![0]!)} ${r1(courtStars[5]![1]!)}"/>`;
   const starDots = [...P, ...courtStars]
-    .map(([x, y]) => `<circle cx="${r1(x!)}" cy="${r1(y!)}" r="${r1(w * 0.003)}" fill="#FFF6DD"/><circle cx="${r1(x!)}" cy="${r1(y!)}" r="${r1(w * 0.012)}" fill="url(#ballGlow)" opacity="0.6"/>`)
+    .map(
+      ([x, y]) =>
+        `<circle cx="${r1(x!)}" cy="${r1(y!)}" r="${r1(w * 0.003)}" fill="#FFF6DD"/><circle cx="${r1(x!)}" cy="${r1(y!)}" r="${r1(w * 0.012)}" fill="url(#ballGlow)" opacity="0.6"/>`,
+    )
     .join("");
   const apex = P[3]!;
   const body = `<rect width="${w}" height="${h}" fill="url(#night)"/>
@@ -543,7 +629,10 @@ const makeCloud =
     return svgDocument(c, "", cloud(w / 2, h * 0.58, w * 0.8, seed, 1), false);
   };
 
-export const compositions: Record<string, { composition: Composition; kind: "scene" | "program" | "texture" | "cloud" }> = {
+export const compositions: Record<
+  string,
+  { composition: Composition; kind: "scene" | "program" | "texture" | "cloud" }
+> = {
   "01-deschiderea": { composition: deschiderea, kind: "scene" },
   "02-impreuna": { composition: impreuna, kind: "scene" },
   "03-cer": { composition: cer, kind: "scene" },

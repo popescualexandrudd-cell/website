@@ -8,7 +8,12 @@ import { SceneTitle } from "./SceneTitle";
 export function OpeningScene({ scene, index }: { scene: SceneView; index: number }) {
   return (
     <SceneFrame scene={scene} index={index} length={2} priority>
-      <SceneTitle id={`${scene.key}-title`} as="h1" text={scene.title} className="scene-title--hero" />
+      <SceneTitle
+        id={`${scene.key}-title`}
+        as="h1"
+        text={scene.title}
+        className="scene-title--hero"
+      />
       <p className="scene-lead">
         <TodoText value={scene.body} />
       </p>

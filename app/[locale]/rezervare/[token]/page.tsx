@@ -9,13 +9,22 @@ import { PageSection } from "@/components/pages/PageHero";
 import { CancelForm } from "@/components/booking/CancelForm";
 import { TodoText } from "@/components/site/TodoText";
 
-export const metadata: Metadata = { robots: { index: false, follow: false }, referrer: "no-referrer" };
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+  referrer: "no-referrer",
+};
 
-export default async function ManageBookingPage({ params }: PageProps<"/[locale]/rezervare/[token]">) {
+export default async function ManageBookingPage({
+  params,
+}: PageProps<"/[locale]/rezervare/[token]">) {
   const { locale: raw, token } = await params;
   const locale = raw as Locale;
   setRequestLocale(locale);
-  const [booking, settingsRow, t] = await Promise.all([findBookingByToken(token), getSettings(), getTranslations()]);
+  const [booking, settingsRow, t] = await Promise.all([
+    findBookingByToken(token),
+    getSettings(),
+    getTranslations(),
+  ]);
   const settings = localizedSettings(settingsRow, locale);
   const tel = telLink(settings.phone);
   const wa = whatsappLink(settings.whatsapp);

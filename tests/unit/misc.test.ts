@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { buildIcs, escapeIcsText, foldIcsLine } from "@/lib/ics";
 import { cancelDeadline, canCancelFree } from "@/lib/booking";
-import { deriveToken, generateBookingCode, hashToken, signPayload, verifyPayload } from "@/lib/tokens";
+import {
+  deriveToken,
+  generateBookingCode,
+  hashToken,
+  signPayload,
+  verifyPayload,
+} from "@/lib/tokens";
 import { fillLegalTemplate } from "@/lib/legal";
 import { formatPrice, whatsappLink } from "@/lib/format";
 import { t, tList, isFilled } from "@/lib/i18n-content";
@@ -22,12 +28,19 @@ describe("calendar file", () => {
   it("escapes text and folds long lines at 75 octets", () => {
     expect(escapeIcsText("a, b; c\nd\\")).toBe("a\\, b\\; c\\nd\\\\");
     const folded = foldIcsLine(`DESCRIPTION:${"ă".repeat(60)}`);
-    for (const line of folded.split("\r\n")) expect(new TextEncoder().encode(line).length).toBeLessThanOrEqual(75);
+    for (const line of folded.split("\r\n"))
+      expect(new TextEncoder().encode(line).length).toBeLessThanOrEqual(75);
   });
 
   it("writes UTC times and the event fields", () => {
     const ics = buildIcs(
-      { uid: "TN-1@example.ro", start: new Date("2026-06-01T07:00:00Z"), end: new Date("2026-06-01T08:00:00Z"), summary: "Lecție, individuală", location: "Baza; Str. 1" },
+      {
+        uid: "TN-1@example.ro",
+        start: new Date("2026-06-01T07:00:00Z"),
+        end: new Date("2026-06-01T08:00:00Z"),
+        summary: "Lecție, individuală",
+        location: "Baza; Str. 1",
+      },
       new Date("2026-05-01T00:00:00Z"),
     );
     expect(ics).toContain("DTSTART:20260601T070000Z");
@@ -67,7 +80,9 @@ describe("content helpers", () => {
     expect(formatPrice("250.00", "RON", "ro")).toBe("250 lei");
     expect(formatPrice("1200.5", "RON", "en")).toBe("RON 1,200.50");
     expect(formatPrice(null, "RON", "ro")).toBe("[DE COMPLETAT]");
-    expect(whatsappLink("+40 722 123 456", "Bună")).toBe("https://wa.me/40722123456?text=Bun%C4%83");
+    expect(whatsappLink("+40 722 123 456", "Bună")).toBe(
+      "https://wa.me/40722123456?text=Bun%C4%83",
+    );
     expect(whatsappLink("[DE COMPLETAT]")).toBeNull();
   });
 
@@ -94,7 +109,9 @@ describe("content helpers", () => {
 
   it("renders Markdown without raw HTML and highlights missing content", () => {
     expect(renderMarkdown("<script>alert(1)</script>")).not.toContain("<script>");
-    expect(renderMarkdown("Nume: [DE COMPLETAT]")).toContain('<mark class="todo-mark">[DE COMPLETAT]</mark>');
+    expect(renderMarkdown("Nume: [DE COMPLETAT]")).toContain(
+      '<mark class="todo-mark">[DE COMPLETAT]</mark>',
+    );
     expect(orderedListItems("1. **Evaluare.** La prima lecție.\n2. Plan")).toEqual([
       { title: "Evaluare", text: "La prima lecție." },
       { title: "", text: "Plan" },

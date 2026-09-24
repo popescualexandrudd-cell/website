@@ -36,7 +36,11 @@ export default async function TipPage({ params }: Props) {
   setRequestLocale(locale);
   const post = await getPost(slug, locale);
   if (!post) notFound();
-  const [t, header, coach] = await Promise.all([getTranslations(), getPageHeader("sfaturi", locale), getCoach(locale)]);
+  const [t, header, coach] = await Promise.all([
+    getTranslations(),
+    getPageHeader("sfaturi", locale),
+    getCoach(locale),
+  ]);
   const url = localizedUrl({ pathname: "/sfaturi/[slug]", params: { slug } }, locale);
   return (
     <article>
@@ -52,17 +56,33 @@ export default async function TipPage({ params }: Props) {
       />
       <header className="grid-page page-hero-text">
         <div className="page-hero-copy">
-          <Breadcrumbs label={t("nav.tips")} items={[{ label: t("common.home"), href: "/" }, { label: header.title, href: "/sfaturi" }, { label: post.title }]} />
+          <Breadcrumbs
+            label={t("nav.tips")}
+            items={[
+              { label: t("common.home"), href: "/" },
+              { label: header.title, href: "/sfaturi" },
+              { label: post.title },
+            ]}
+          />
           <h1 className="page-title">{post.title}</h1>
           {post.publishedAt ? (
-            <p className="ed-row-meta mt-3">{t("tips.published", { date: formatDate(post.publishedAt, "Europe/Bucharest", locale, "d MMMM yyyy") })}</p>
+            <p className="ed-row-meta mt-3">
+              {t("tips.published", {
+                date: formatDate(post.publishedAt, "Europe/Bucharest", locale, "d MMMM yyyy"),
+              })}
+            </p>
           ) : null}
           <p className="page-intro">{post.excerpt}</p>
         </div>
       </header>
       {post.cover ? (
         <PageSection>
-          <ArtPicture art={post.cover} alt={post.coverAlt} priority sizes="(min-width: 1024px) 70vw, 100vw" />
+          <ArtPicture
+            art={post.cover}
+            alt={post.coverAlt}
+            priority
+            sizes="(min-width: 1024px) 70vw, 100vw"
+          />
         </PageSection>
       ) : null}
       <PageSection className="page-section--narrow">

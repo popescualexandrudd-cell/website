@@ -94,7 +94,10 @@ async function main(): Promise<void> {
     const range = hoursRange(value);
     if (range) return { label, hours: same(`${range.start}–${range.end}`) };
     const raw = text(value);
-    return { label, hours: raw.toLowerCase() === "închis" ? { ro: "închis", en: "closed" } : same(raw) };
+    return {
+      label,
+      hours: raw.toLowerCase() === "închis" ? { ro: "închis", en: "closed" } : same(raw),
+    };
   });
 
   const paymentMethods = config.plata.metode
@@ -144,7 +147,9 @@ async function main(): Promise<void> {
       legalCui: text(config.entitate_legala.cui),
       legalAddress: text(config.entitate_legala.sediu),
       enEnabled: languages.includes("en"),
-      timezone: isPlaceholder(config.site.fus_orar) ? "Europe/Bucharest" : String(config.site.fus_orar),
+      timezone: isPlaceholder(config.site.fus_orar)
+        ? "Europe/Bucharest"
+        : String(config.site.fus_orar),
       currency: isPlaceholder(config.site.moneda) ? "RON" : String(config.site.moneda),
     },
   });
@@ -208,13 +213,18 @@ async function main(): Promise<void> {
       city,
       lat: coords?.lat ?? null,
       lng: coords?.lng ?? null,
-      mapUrl: coords ? `https://www.google.com/maps/search/?api=1&query=${coords.lat},${coords.lng}` : null,
+      mapUrl: coords
+        ? `https://www.google.com/maps/search/?api=1&query=${coords.lat},${coords.lng}`
+        : null,
       directions: todoT,
     },
   });
   note("locație", !locationExists);
 
-  const SURFACES: Record<string, { surface: "ZGURA" | "HARD" | "IARBA" | "SINTETIC" | "COVOR"; name: { ro: string; en: string } }> = {
+  const SURFACES: Record<
+    string,
+    { surface: "ZGURA" | "HARD" | "IARBA" | "SINTETIC" | "COVOR"; name: { ro: string; en: string } }
+  > = {
     zgură: { surface: "ZGURA", name: { ro: "Terenuri de zgură", en: "Clay courts" } },
     hard: { surface: "HARD", name: { ro: "Terenuri hard", en: "Hard courts" } },
     iarbă: { surface: "IARBA", name: { ro: "Terenuri de iarbă", en: "Grass courts" } },
@@ -222,7 +232,12 @@ async function main(): Promise<void> {
     covor: { surface: "COVOR", name: { ro: "Terenuri cu covor", en: "Carpet courts" } },
   };
   for (const [index, court] of firstLocation.terenuri.entries()) {
-    const kind = SURFACES[String(court.suprafata ?? "").trim().toLowerCase()];
+    const kind =
+      SURFACES[
+        String(court.suprafata ?? "")
+          .trim()
+          .toLowerCase()
+      ];
     if (!kind) continue;
     const id = `seed-court-${String(index + 1).padStart(2, "0")}`;
     const exists = await db.court.findUnique({ where: { id } });
@@ -245,14 +260,23 @@ async function main(): Promise<void> {
 
   let facilityOrder = 0;
   for (const amenity of firstLocation.dotari) {
-    const key = String(amenity ?? "").trim().toLowerCase();
+    const key = String(amenity ?? "")
+      .trim()
+      .toLowerCase();
     const id = `seed-amenity-${facilityOrder + 1}`;
     const exists = await db.facility.findUnique({ where: { id } });
     const name = isPlaceholder(amenity) ? todoT : (amenityNames[key] ?? { ro: capitalize(key) });
     await db.facility.upsert({
       where: { id },
       update: {},
-      create: { id, locationId, type: "DOTARE_BAZA", name, illustration: key || "altele", order: facilityOrder },
+      create: {
+        id,
+        locationId,
+        type: "DOTARE_BAZA",
+        name,
+        illustration: key || "altele",
+        order: facilityOrder,
+      },
     });
     note(`dotare ${name.ro}`, !exists);
     facilityOrder += 1;
@@ -265,9 +289,19 @@ async function main(): Promise<void> {
     const known = serviceDescriptions[raw];
     let data: Prisma.FacilityUncheckedCreateInput;
     if (known) {
-      data = { id, type: known.type, name: known.name, description: known.description, illustration: known.illustration, order: index };
+      data = {
+        id,
+        type: known.type,
+        name: known.name,
+        description: known.description,
+        illustration: known.illustration,
+        order: index,
+      };
     } else {
-      const inner = raw.replace(/^\[|\]$/g, "").replace(/,?\s*dacă e cazul/i, "").trim();
+      const inner = raw
+        .replace(/^\[|\]$/g, "")
+        .replace(/,?\s*dacă e cazul/i, "")
+        .trim();
       const conditional = conditionalServices[inner.toLowerCase()];
       data = {
         id,
@@ -285,10 +319,16 @@ async function main(): Promise<void> {
   // ── Programs & pricing ────────────────────────────────────────────────────
   const programIds = new Map<string, string>();
   for (const [index, content] of programContent.entries()) {
-    const configEntry = config.programe.find((entry) => String(entry.nume ?? "").trim() === content.configName);
+    const configEntry = config.programe.find(
+      (entry) => String(entry.nume ?? "").trim() === content.configName,
+    );
     const exists = await db.program.findUnique({ where: { slug: content.slug } });
     const maxParticipants =
-      content.format === "INDIVIDUAL" ? 1 : content.format === "SEMI_PRIVAT" ? 2 : integer(configEntry?.max_elevi);
+      content.format === "INDIVIDUAL"
+        ? 1
+        : content.format === "SEMI_PRIVAT"
+          ? 2
+          : integer(configEntry?.max_elevi);
     const program = await db.program.upsert({
       where: { slug: content.slug },
       update: {},
@@ -315,9 +355,24 @@ async function main(): Promise<void> {
     note(`program ${content.slug}`, !exists);
 
     const priceFields: { key: string; unit: PriceUnit; label: { ro: string; en: string } }[] = [
-      { key: "pret_ron", unit: content.format === "EVENIMENT" ? "EVENIMENT" : "LECTIE", label: content.format === "EVENIMENT" ? { ro: "Participare", en: "Participation" } : { ro: "Lecție", en: "Lesson" } },
-      { key: "pret_ron_persoana", unit: "PERSOANA", label: { ro: "Lecție, de persoană", en: "Lesson, per person" } },
-      { key: "pret_ron_luna", unit: "LUNA", label: { ro: "Abonament lunar", en: "Monthly membership" } },
+      {
+        key: "pret_ron",
+        unit: content.format === "EVENIMENT" ? "EVENIMENT" : "LECTIE",
+        label:
+          content.format === "EVENIMENT"
+            ? { ro: "Participare", en: "Participation" }
+            : { ro: "Lecție", en: "Lesson" },
+      },
+      {
+        key: "pret_ron_persoana",
+        unit: "PERSOANA",
+        label: { ro: "Lecție, de persoană", en: "Lesson, per person" },
+      },
+      {
+        key: "pret_ron_luna",
+        unit: "LUNA",
+        label: { ro: "Abonament lunar", en: "Monthly membership" },
+      },
     ];
     for (const field of priceFields) {
       if (!configEntry || !(field.key in configEntry)) continue;
@@ -354,7 +409,9 @@ async function main(): Promise<void> {
         price: decimal(pack.pret_ron),
         unit: "PACHET",
         isPackage: true,
-        sessions: isPlaceholder(pack.nume) ? null : integer(String(pack.nume).match(/\d+/)?.[0] ?? null),
+        sessions: isPlaceholder(pack.nume)
+          ? null
+          : integer(String(pack.nume).match(/\d+/)?.[0] ?? null),
         validityDays: integer(pack.valabilitate_zile),
         includes: {
           ro: "Lecțiile se pot folosi în perioada de valabilitate, de la prima ședință.",
@@ -505,7 +562,9 @@ async function main(): Promise<void> {
   if (created.length === 0) {
     console.info("Seed: totul exista deja, nimic de adăugat.");
   } else {
-    console.info(`Seed: am creat ${created.length} înregistrări (${created.slice(0, 6).join(", ")}${created.length > 6 ? ", …" : ""}).`);
+    console.info(
+      `Seed: am creat ${created.length} înregistrări (${created.slice(0, 6).join(", ")}${created.length > 6 ? ", …" : ""}).`,
+    );
   }
 }
 

@@ -1,18 +1,24 @@
 "use client";
 
-import { useActionState } from "react";
+import { useFormAction } from "@/components/ui/useFormAction";
 import { useLocale, useTranslations } from "next-intl";
 import { subscribeNewsletter } from "@/app/actions/forms";
-import { idleState } from "@/lib/validation";
-import { ConsentField, FormStatus, Honeypot, SubmitButton, TextField, useErrorText } from "@/components/ui/form";
+import {
+  ConsentField,
+  FormStatus,
+  Honeypot,
+  SubmitButton,
+  TextField,
+  useErrorText,
+} from "@/components/ui/form";
 
 export function NewsletterForm({ policyVersion }: { policyVersion: string }) {
   const t = useTranslations("footer");
   const locale = useLocale();
   const errorText = useErrorText();
-  const [state, action] = useActionState(subscribeNewsletter, idleState);
+  const { state, pending, formProps: actionProps } = useFormAction(subscribeNewsletter);
   return (
-    <form action={action} className="relative grid max-w-md gap-4" noValidate>
+    <form {...actionProps} className="relative grid max-w-md gap-4" noValidate>
       <div>
         <h2 className="font-display text-[1.5rem] leading-tight">{t("newsletterTitle")}</h2>
         <p className="mt-1 text-cerneala-2">{t("newsletterText")}</p>
@@ -31,10 +37,15 @@ export function NewsletterForm({ policyVersion }: { policyVersion: string }) {
             label={t("newsletterLabel")}
             error={errorText(state.fieldErrors?.email)}
           />
-          <ConsentField label={t("newsletterConsent")} error={errorText(state.fieldErrors?.consent)} />
+          <ConsentField
+            label={t("newsletterConsent")}
+            error={errorText(state.fieldErrors?.consent)}
+          />
           <FormStatus state={state} success={t("newsletterSuccess")} />
           <div>
-            <SubmitButton className="btn btn-secondary">{t("newsletterSubmit")}</SubmitButton>
+            <SubmitButton className="btn btn-secondary" pending={pending}>
+              {t("newsletterSubmit")}
+            </SubmitButton>
           </div>
         </>
       )}

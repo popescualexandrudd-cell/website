@@ -4,7 +4,13 @@ import { useEffect, useState } from "react";
 import { usePathname } from "@/i18n/navigation";
 import { Link } from "@/i18n/navigation";
 
-type Props = { bookLabel: string; whatsappLabel: string; whatsappUrl: string | null; callLabel: string; telUrl: string | null };
+type Props = {
+  bookLabel: string;
+  whatsappLabel: string;
+  whatsappUrl: string | null;
+  callLabel: string;
+  telUrl: string | null;
+};
 
 /**
  * Fixed bar under 768 px with the two actions people need on the phone. On the home page it
@@ -21,9 +27,12 @@ export function MobileBar({ bookLabel, whatsappLabel, whatsappUrl, callLabel, te
     if (!isHome) return;
     const first = document.querySelector("[data-scene]");
     if (!first) return;
-    const observer = new IntersectionObserver(([entry]) => setPastFirstScene(entry ? !entry.isIntersecting : true), {
-      threshold: 0.15,
-    });
+    const observer = new IntersectionObserver(
+      ([entry]) => setPastFirstScene(entry ? !entry.isIntersecting : true),
+      {
+        threshold: 0.15,
+      },
+    );
     observer.observe(first);
     return () => observer.disconnect();
   }, [isHome]);

@@ -58,7 +58,8 @@ export function proxy(request: NextRequest): NextResponse {
   requestHeaders.set("Content-Security-Policy", csp);
   requestHeaders.set("x-pathname", request.nextUrl.pathname);
 
-  const isAdmin = request.nextUrl.pathname === "/admin" || request.nextUrl.pathname.startsWith("/admin/");
+  const isAdmin =
+    request.nextUrl.pathname === "/admin" || request.nextUrl.pathname.startsWith("/admin/");
 
   let response: NextResponse;
   if (isAdmin) {

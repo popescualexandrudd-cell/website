@@ -32,7 +32,11 @@
 .scene-title--calligraphic {
   font-style: italic;
   font-weight: 300;
-  font-feature-settings: "swsh" 1, "salt" 1, "liga" 1, "dlig" 1;
+  font-feature-settings:
+    "swsh" 1,
+    "salt" 1,
+    "liga" 1,
+    "dlig" 1;
   letter-spacing: -0.005em;
 }
 .scene-lead {
@@ -261,7 +265,12 @@
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background-image: radial-gradient(circle, var(--color-aur-deschis) 34%, var(--color-aur) 46%, transparent 50%);
+  background-image: radial-gradient(
+    circle,
+    var(--color-aur-deschis) 34%,
+    var(--color-aur) 46%,
+    transparent 50%
+  );
   background-size: 11% 11%;
   -webkit-mask-image: radial-gradient(circle, #000 60%, transparent 71%);
   mask-image: radial-gradient(circle, #000 60%, transparent 71%);
@@ -529,7 +538,12 @@
     opacity: 0;
     border-radius: 50%;
     --r: 1;
-    background-image: radial-gradient(circle, var(--color-aur-deschis) 0, var(--color-aur) calc(var(--r) * 1px), transparent calc(var(--r) * 1px + 0.6px));
+    background-image: radial-gradient(
+      circle,
+      var(--color-aur-deschis) 0,
+      var(--color-aur) calc(var(--r) * 1px),
+      transparent calc(var(--r) * 1px + 0.6px)
+    );
     background-size: 14px 14px;
     -webkit-mask-image: radial-gradient(circle, #000 64%, transparent 71%);
     mask-image: radial-gradient(circle, #000 64%, transparent 71%);
@@ -545,7 +559,11 @@
     position: absolute;
     inset: 0;
     z-index: 36;
-    background: radial-gradient(ellipse at 50% 70%, rgb(255 250 235 / 0.95), rgb(255 250 235 / 0) 70%);
+    background: radial-gradient(
+      ellipse at 50% 70%,
+      rgb(255 250 235 / 0.95),
+      rgb(255 250 235 / 0) 70%
+    );
     opacity: 0;
   }
 
@@ -570,7 +588,13 @@
   .travel-ball-body {
     inset: 0;
     opacity: 0;
-    background: radial-gradient(circle at 36% 32%, #fff6cf 0, var(--color-aur-deschis) 20%, var(--color-aur) 58%, var(--color-aur-inchis) 100%);
+    background: radial-gradient(
+      circle at 36% 32%,
+      #fff6cf 0,
+      var(--color-aur-deschis) 20%,
+      var(--color-aur) 58%,
+      var(--color-aur-inchis) 100%
+    );
     box-shadow: 0 0.6em 1.2em -0.6em rgb(29 26 21 / 0.35);
   }
   .travel-ball-body::after {
@@ -597,7 +621,13 @@
   .travel-ball-glow {
     inset: -160%;
     opacity: 0;
-    background: radial-gradient(circle, rgb(255 246 221 / 0.6) 0, rgb(244 220 138 / 0.28) 22%, rgb(201 161 59 / 0.1) 42%, transparent 66%);
+    background: radial-gradient(
+      circle,
+      rgb(255 246 221 / 0.6) 0,
+      rgb(244 220 138 / 0.28) 22%,
+      rgb(201 161 59 / 0.1) 42%,
+      transparent 66%
+    );
   }
   .travel-ball-cover {
     inset: -1px;
@@ -670,11 +700,22 @@
     position: absolute;
     inset: -3rem -4rem;
     z-index: -1;
-    background: radial-gradient(closest-side, rgb(236 227 207 / 0.94), rgb(236 227 207 / 0.84) 62%, rgb(236 227 207 / 0));
+    background: radial-gradient(
+      closest-side,
+      rgb(236 227 207 / 0.94),
+      rgb(236 227 207 / 0.84) 62%,
+      rgb(236 227 207 / 0)
+    );
   }
   .scene--flow[data-veil] .scene-text::before {
     inset: -4rem -5rem;
-    background: linear-gradient(to right, rgb(236 227 207 / 0), rgb(236 227 207 / 0.93) 12%, rgb(236 227 207 / 0.93) 88%, rgb(236 227 207 / 0));
+    background: linear-gradient(
+      to right,
+      rgb(236 227 207 / 0),
+      rgb(236 227 207 / 0.93) 12%,
+      rgb(236 227 207 / 0.93) 88%,
+      rgb(236 227 207 / 0)
+    );
   }
   .scene[data-tone="light"] .faq-answer,
   .scene[data-tone="light"] .program-item-meta {
@@ -712,8 +753,18 @@
     overflow: visible;
     /* The band fades out before it reaches the scene index in the left column. */
     --fade-start: calc(var(--page-margin) + (100vw - 2 * var(--page-margin)) / 12 - 1rem);
-    -webkit-mask-image: linear-gradient(to right, transparent 0, transparent calc(var(--fade-start) - 3rem), #000 var(--fade-start));
-    mask-image: linear-gradient(to right, transparent 0, transparent calc(var(--fade-start) - 3rem), #000 var(--fade-start));
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      transparent calc(var(--fade-start) - 3rem),
+      #000 var(--fade-start)
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      transparent calc(var(--fade-start) - 3rem),
+      #000 var(--fade-start)
+    );
   }
   .scene[data-scene="programe"] .programs-track {
     display: flex;
@@ -757,10 +808,14 @@
     gap: 0.2rem;
   }
   html[data-tone="dark"] .scene-index {
-    text-shadow: 0 0 10px rgb(236 227 207 / 0.95), 0 0 2px rgb(236 227 207 / 0.9);
+    text-shadow:
+      0 0 10px rgb(236 227 207 / 0.95),
+      0 0 2px rgb(236 227 207 / 0.9);
   }
   html[data-tone="light"] .scene-index {
-    text-shadow: 0 0 10px rgb(11 27 77 / 0.9), 0 0 2px rgb(11 27 77 / 0.8);
+    text-shadow:
+      0 0 10px rgb(11 27 77 / 0.9),
+      0 0 2px rgb(11 27 77 / 0.8);
   }
   .scene-index a {
     display: inline-block;

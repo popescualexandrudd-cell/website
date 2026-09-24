@@ -26,7 +26,8 @@ function bookingRows(lang: EmailLang, d: BookingDetails): [string, string][] {
   return rows;
 }
 
-export type ClientBookingKind = "request" | "requestGroup" | "confirmed" | "reminder" | "cancelledByClient" | "cancelledByCoach";
+export type ClientBookingKind =
+  "request" | "requestGroup" | "confirmed" | "reminder" | "cancelledByClient" | "cancelledByCoach";
 
 export function ClientBookingEmail(
   props: Common & {
@@ -72,7 +73,14 @@ export function ClientBookingEmail(
               : s.cancelledClient.bodyByCoach;
   const cancelled = kind === "cancelledByClient" || kind === "cancelledByCoach";
   return (
-    <EmailLayout lang={props.lang} preview={preview} title={title} ornamentUrl={props.ornamentUrl} brand={props.brand} footer={s.footerNote}>
+    <EmailLayout
+      lang={props.lang}
+      preview={preview}
+      title={title}
+      ornamentUrl={props.ornamentUrl}
+      brand={props.brand}
+      footer={s.footerNote}
+    >
       <P>{s.greeting(props.details.clientName)}</P>
       <P>{body}</P>
       {cancelled && props.reason ? (
@@ -81,9 +89,15 @@ export function ClientBookingEmail(
         </P>
       ) : null}
       <DetailRows rows={bookingRows(props.lang, props.details)} />
-      {kind === "confirmed" || kind === "reminder" ? <P>{s.confirmed.cancelNote(props.freeCancelHours)}</P> : null}
-      {!cancelled && props.manageUrl ? <PrimaryButton href={props.manageUrl}>{s.manageLink}</PrimaryButton> : null}
-      {cancelled && props.bookAgainUrl ? <SecondaryButton href={props.bookAgainUrl}>{s.cancelledClient.bookAgain}</SecondaryButton> : null}
+      {kind === "confirmed" || kind === "reminder" ? (
+        <P>{s.confirmed.cancelNote(props.freeCancelHours)}</P>
+      ) : null}
+      {!cancelled && props.manageUrl ? (
+        <PrimaryButton href={props.manageUrl}>{s.manageLink}</PrimaryButton>
+      ) : null}
+      {cancelled && props.bookAgainUrl ? (
+        <SecondaryButton href={props.bookAgainUrl}>{s.cancelledClient.bookAgain}</SecondaryButton>
+      ) : null}
       <P>
         {s.signature}
         <br />
@@ -115,13 +129,26 @@ export function CoachBookingEmail(
   if (props.message) rows.push([strings.ro.details.message, props.message]);
   if (props.reason) rows.push([strings.ro.cancelledClient.reason, props.reason]);
   return (
-    <EmailLayout lang="ro" preview={`${props.details.code} · ${props.details.when}`} title={title} ornamentUrl={props.ornamentUrl} brand={props.brand} footer="Notificare automată de pe site.">
+    <EmailLayout
+      lang="ro"
+      preview={`${props.details.code} · ${props.details.when}`}
+      title={title}
+      ornamentUrl={props.ornamentUrl}
+      brand={props.brand}
+      footer="Notificare automată de pe site."
+    >
       {props.mode === "request" ? <P>{c.newBooking.requestNote}</P> : null}
       {props.mode === "instant" ? <P>{c.newBooking.instantNote}</P> : null}
       <DetailRows rows={rows} />
-      {props.mode === "request" && props.confirmUrl ? <PrimaryButton href={props.confirmUrl}>{c.newBooking.confirm}</PrimaryButton> : null}
-      {props.mode === "request" && props.declineUrl ? <SecondaryButton href={props.declineUrl}>{c.newBooking.decline}</SecondaryButton> : null}
-      {props.whatsappUrl ? <SecondaryButton href={props.whatsappUrl}>{c.newBooking.whatsapp}</SecondaryButton> : null}
+      {props.mode === "request" && props.confirmUrl ? (
+        <PrimaryButton href={props.confirmUrl}>{c.newBooking.confirm}</PrimaryButton>
+      ) : null}
+      {props.mode === "request" && props.declineUrl ? (
+        <SecondaryButton href={props.declineUrl}>{c.newBooking.decline}</SecondaryButton>
+      ) : null}
+      {props.whatsappUrl ? (
+        <SecondaryButton href={props.whatsappUrl}>{c.newBooking.whatsapp}</SecondaryButton>
+      ) : null}
       <P>
         <QuietLink href={props.adminUrl}>{c.newBooking.open}</QuietLink>
       </P>
@@ -153,7 +180,9 @@ export function SimpleEmail(
         <P key={index}>{text}</P>
       ))}
       {props.rows ? <DetailRows rows={props.rows} /> : null}
-      {props.button ? <PrimaryButton href={props.button.href}>{props.button.label}</PrimaryButton> : null}
+      {props.button ? (
+        <PrimaryButton href={props.button.href}>{props.button.label}</PrimaryButton>
+      ) : null}
       {props.secondary ? (
         <P>
           <QuietLink href={props.secondary.href}>{props.secondary.label}</QuietLink>

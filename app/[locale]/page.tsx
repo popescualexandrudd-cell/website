@@ -50,17 +50,18 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const locale = raw as Locale;
   setRequestLocale(locale);
 
-  const [scenes, programs, locations, facilities, faqs, testimonials, settingsRow, engine, t] = await Promise.all([
-    getScenes(locale),
-    getPrograms(locale),
-    getLocations(locale),
-    getFacilities(locale),
-    getFaqs(locale, "home"),
-    getTestimonials(locale, 3),
-    getSettings(),
-    loadEngineInput(),
-    getTranslations("nav"),
-  ]);
+  const [scenes, programs, locations, facilities, faqs, testimonials, settingsRow, engine, t] =
+    await Promise.all([
+      getScenes(locale),
+      getPrograms(locale),
+      getLocations(locale),
+      getFacilities(locale),
+      getFaqs(locale, "home"),
+      getTestimonials(locale, 3),
+      getSettings(),
+      loadEngineInput(),
+      getTranslations("nav"),
+    ]);
   const settings = localizedSettings(settingsRow, locale);
   const location = locations[0] ?? null;
   const amenities = facilities.filter((f) => f.type === "DOTARE_BAZA");
@@ -76,15 +77,48 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       case "metoda":
         return <MethodScene key={scene.key} scene={scene} index={index} />;
       case "programe":
-        return <ProgramsScene key={scene.key} scene={scene} index={index} programs={programs} locale={locale} />;
+        return (
+          <ProgramsScene
+            key={scene.key}
+            scene={scene}
+            index={index}
+            programs={programs}
+            locale={locale}
+          />
+        );
       case "terenul":
-        return <CourtScene key={scene.key} scene={scene} index={index} location={location} amenities={amenities} />;
+        return (
+          <CourtScene
+            key={scene.key}
+            scene={scene}
+            index={index}
+            location={location}
+            amenities={amenities}
+          />
+        );
       case "prima-lectie":
-        return <FirstLessonScene key={scene.key} scene={scene} index={index} firstLessonText={settings.firstLessonText} />;
+        return (
+          <FirstLessonScene
+            key={scene.key}
+            scene={scene}
+            index={index}
+            firstLessonText={settings.firstLessonText}
+          />
+        );
       case "locurile":
-        return <PlacesScene key={scene.key} scene={scene} index={index} month={month} count={places} />;
+        return (
+          <PlacesScene key={scene.key} scene={scene} index={index} month={month} count={places} />
+        );
       case "intrebari":
-        return <QuestionsScene key={scene.key} scene={scene} index={index} faqs={faqs} testimonials={testimonials} />;
+        return (
+          <QuestionsScene
+            key={scene.key}
+            scene={scene}
+            index={index}
+            faqs={faqs}
+            testimonials={testimonials}
+          />
+        );
       case "constelatia":
         return (
           <ConstellationScene

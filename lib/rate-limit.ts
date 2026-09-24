@@ -5,9 +5,15 @@ import { db } from "./db";
  * Fixed-window rate limit stored in Postgres, shared by every app process.
  * Returns true when the action is allowed (and counts it).
  */
-export async function rateLimit(key: string, limit: number, windowSeconds: number): Promise<boolean> {
+export async function rateLimit(
+  key: string,
+  limit: number,
+  windowSeconds: number,
+): Promise<boolean> {
   const now = new Date();
-  const windowStart = new Date(Math.floor(now.getTime() / (windowSeconds * 1000)) * windowSeconds * 1000);
+  const windowStart = new Date(
+    Math.floor(now.getTime() / (windowSeconds * 1000)) * windowSeconds * 1000,
+  );
   const expiresAt = new Date(windowStart.getTime() + windowSeconds * 1000);
   const rows = await db.$queryRaw<{ count: number }[]>`
     INSERT INTO "RateLimit" ("key", "count", "windowStart", "expiresAt", "createdAt", "updatedAt")
@@ -23,7 +29,11 @@ export async function rateLimit(key: string, limit: number, windowSeconds: numbe
 }
 
 /** Limits a public form by IP and, when given, by email address. */
-export async function allowFormSubmission(form: string, ip: string, email?: string): Promise<boolean> {
+export async function allowFormSubmission(
+  form: string,
+  ip: string,
+  email?: string,
+): Promise<boolean> {
   const byIp = await rateLimit(`form:${form}:ip:${ip}`, 8, 15 * 60);
   if (!byIp) return false;
   if (email) {

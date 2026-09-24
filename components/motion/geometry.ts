@@ -6,9 +6,21 @@
 
 export type Point = { x: number; y: number };
 export type BallState = { x: number; y: number; size: number; opacity: number };
-export type LayerTransform = { scale: number; originX: number; originY: number; translateX: number; translateY: number };
+export type LayerTransform = {
+  scale: number;
+  originX: number;
+  originY: number;
+  translateX: number;
+  translateY: number;
+};
 
-export const IDENTITY: LayerTransform = { scale: 1, originX: 0, originY: 0, translateX: 0, translateY: 0 };
+export const IDENTITY: LayerTransform = {
+  scale: 1,
+  originX: 0,
+  originY: 0,
+  translateX: 0,
+  translateY: 0,
+};
 
 export function clamp(value: number, min = 0, max = 1): number {
   return Math.min(max, Math.max(min, value));
@@ -91,7 +103,12 @@ export function hopAlong(anchors: BallState[], progress: number, height = 0.12):
   const b = anchors[index + 1] as BallState;
   const e = easeInOut(local);
   const jump = Math.sin(Math.PI * e) * Math.hypot(b.x - a.x, b.y - a.y) * height;
-  return { x: lerp(a.x, b.x, e), y: lerp(a.y, b.y, e) - jump, size: lerp(a.size, b.size, e), opacity: lerp(a.opacity, b.opacity, e) };
+  return {
+    x: lerp(a.x, b.x, e),
+    y: lerp(a.y, b.y, e) - jump,
+    size: lerp(a.size, b.size, e),
+    opacity: lerp(a.opacity, b.opacity, e),
+  };
 }
 
 /** Transform-origin (in px) so that zooming a layer moves the camera towards `point`. */

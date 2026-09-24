@@ -17,7 +17,9 @@ export async function Footer({ settings, location, policyVersion }: Props) {
     { href: settings.instagramUrl, label: "Instagram" },
     { href: settings.facebookUrl, label: "Facebook" },
     { href: settings.tiktokUrl, label: "TikTok" },
-  ].filter((s): s is { href: string; label: string } => Boolean(s.href && /^https?:\/\//.test(s.href)));
+  ].filter((s): s is { href: string; label: string } =>
+    Boolean(s.href && /^https?:\/\//.test(s.href)),
+  );
   const year = new Date().getFullYear();
 
   return (
@@ -38,7 +40,9 @@ export async function Footer({ settings, location, policyVersion }: Props) {
         <div className="col-span-4 md:col-span-2 lg:col-span-3 lg:col-start-6">
           <h2 className="footer-heading">{t("footer.contact")}</h2>
           <ul className="footer-list">
-            <li>{tel ? <a href={tel}>{settings.phone}</a> : <TodoText value={settings.phone} />}</li>
+            <li>
+              {tel ? <a href={tel}>{settings.phone}</a> : <TodoText value={settings.phone} />}
+            </li>
             {whatsapp ? (
               <li>
                 <a href={whatsapp} rel="noopener noreferrer" target="_blank">
@@ -46,7 +50,9 @@ export async function Footer({ settings, location, policyVersion }: Props) {
                 </a>
               </li>
             ) : null}
-            <li>{mail ? <a href={mail}>{settings.email}</a> : <TodoText value={settings.email} />}</li>
+            <li>
+              {mail ? <a href={mail}>{settings.email}</a> : <TodoText value={settings.email} />}
+            </li>
             {location ? (
               <li className="text-cerneala-2">
                 <TodoText value={location.name} />
@@ -72,13 +78,24 @@ export async function Footer({ settings, location, policyVersion }: Props) {
         <nav className="col-span-4 md:col-span-4 lg:col-span-2" aria-label={t("nav.footerLabel")}>
           <h2 className="footer-heading">{t("footer.legal")}</h2>
           <ul className="footer-list">
-            <li><Link href="/confidentialitate">{t("footer.privacy")}</Link></li>
-            <li><Link href="/termeni">{t("footer.terms")}</Link></li>
-            <li><Link href="/cookies">{t("footer.cookies")}</Link></li>
-            <li><Link href="/contact">{t("nav.contact")}</Link></li>
+            <li>
+              <Link href="/confidentialitate">{t("footer.privacy")}</Link>
+            </li>
+            <li>
+              <Link href="/termeni">{t("footer.terms")}</Link>
+            </li>
+            <li>
+              <Link href="/cookies">{t("footer.cookies")}</Link>
+            </li>
+            <li>
+              <Link href="/contact">{t("nav.contact")}</Link>
+            </li>
             {settings.enEnabled ? (
               <li>
-                <LanguageSwitch label={t("common.languageSwitch")} srLabel={t("common.languageSwitchLabel")} />
+                <LanguageSwitch
+                  label={t("common.languageSwitch")}
+                  srLabel={t("common.languageSwitchLabel")}
+                />
               </li>
             ) : null}
           </ul>
@@ -100,7 +117,13 @@ export async function Footer({ settings, location, policyVersion }: Props) {
 
         <div className="col-span-4 border-t border-linie pt-6 text-note text-cerneala-2 md:col-span-8 lg:col-span-12">
           <p>
-            <TodoText value={t("footer.entity", { name: settings.legalName, form: settings.legalForm, cui: settings.legalCui })} />
+            <TodoText
+              value={t("footer.entity", {
+                name: settings.legalName,
+                form: settings.legalForm,
+                cui: settings.legalCui,
+              })}
+            />
             {settings.legalRegNo ? `, ${settings.legalRegNo}` : ""}
             {" · "}
             <TodoText value={t("footer.address", { address: settings.legalAddress })} />

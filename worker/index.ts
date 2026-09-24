@@ -8,7 +8,13 @@
 import cron from "node-cron";
 import { getEnv } from "../lib/env";
 import { db } from "../lib/db";
-import { cleanup, retryDueEmails, runRetention, sendDueReminders, sendDueReviewInvites } from "../lib/jobs";
+import {
+  cleanup,
+  retryDueEmails,
+  runRetention,
+  sendDueReminders,
+  sendDueReviewInvites,
+} from "../lib/jobs";
 
 try {
   getEnv();
@@ -27,7 +33,8 @@ function job(name: string, fn: () => Promise<unknown>) {
     try {
       const result = await fn();
       const summary = typeof result === "number" ? result : JSON.stringify(result);
-      if (result && summary !== "0" && summary !== "{}") console.info(`[worker] ${name}: ${summary} (${Date.now() - started} ms)`);
+      if (result && summary !== "0" && summary !== "{}")
+        console.info(`[worker] ${name}: ${summary} (${Date.now() - started} ms)`);
     } catch (error) {
       console.error(`[worker] ${name} a eșuat:`, error);
     } finally {
@@ -36,14 +43,36 @@ function job(name: string, fn: () => Promise<unknown>) {
   };
 }
 
-const settings = await db.siteSettings.findUnique({ where: { id: 1 }, select: { timezone: true } }).catch(() => null);
+const settings = await db.siteSettings
+  .findUnique({ where: { id: 1 }, select: { timezone: true } })
+  .catch(() => null);
 const timezone = settings?.timezone ?? "Europe/Bucharest";
 const tasks = [
-  cron.schedule("* * * * *", job("emailuri", () => retryDueEmails()), { timezone }),
-  cron.schedule("*/5 * * * *", job("mementouri", () => sendDueReminders()), { timezone }),
-  cron.schedule("*/30 * * * *", job("invitații recenzie", () => sendDueReviewInvites()), { timezone }),
-  cron.schedule("15 3 * * *", job("retenție", () => runRetention()), { timezone }),
-  cron.schedule("25 3 * * *", job("curățenie", () => cleanup()), { timezone }),
+  cron.schedule(
+    "* * * * *",
+    job("emailuri", () => retryDueEmails()),
+    { timezone },
+  ),
+  cron.schedule(
+    "*/5 * * * *",
+    job("mementouri", () => sendDueReminders()),
+    { timezone },
+  ),
+  cron.schedule(
+    "*/30 * * * *",
+    job("invitații recenzie", () => sendDueReviewInvites()),
+    { timezone },
+  ),
+  cron.schedule(
+    "15 3 * * *",
+    job("retenție", () => runRetention()),
+    { timezone },
+  ),
+  cron.schedule(
+    "25 3 * * *",
+    job("curățenie", () => cleanup()),
+    { timezone },
+  ),
 ];
 
 console.info("[worker] pornit: emailuri, mementouri, invitații, retenție, curățenie.");

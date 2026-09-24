@@ -1,7 +1,10 @@
 import "server-only";
 
 /** Verifies a Cloudflare Turnstile token when Turnstile is configured; otherwise always passes. */
-export async function verifyTurnstile(token: string | null | undefined, ip: string): Promise<boolean> {
+export async function verifyTurnstile(
+  token: string | null | undefined,
+  ip: string,
+): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
   if (!secret || !process.env.TURNSTILE_SITE_KEY) return true;
   if (!token) return false;

@@ -31,17 +31,29 @@ export function GalleryBrowser({ items, categories }: Props) {
     setIndex(null);
     openerRef.current?.focus();
   };
-  const move = (delta: number) => setIndex((i) => (i === null ? null : (i + delta + visible.length) % visible.length));
+  const move = (delta: number) =>
+    setIndex((i) => (i === null ? null : (i + delta + visible.length) % visible.length));
 
   return (
     <>
       {categories.length > 1 ? (
         <div className="gallery-filters" role="group" aria-label={t("filterLabel")}>
-          <button type="button" className="chip" aria-pressed={filter === null} onClick={() => setFilter(null)}>
+          <button
+            type="button"
+            className="chip"
+            aria-pressed={filter === null}
+            onClick={() => setFilter(null)}
+          >
             {t("all")}
           </button>
           {categories.map((category) => (
-            <button key={category} type="button" className="chip" aria-pressed={filter === category} onClick={() => setFilter(category)}>
+            <button
+              key={category}
+              type="button"
+              className="chip"
+              aria-pressed={filter === category}
+              onClick={() => setFilter(category)}
+            >
               {t(`categories.${category}`)}
             </button>
           ))}
@@ -76,7 +88,9 @@ export function GalleryBrowser({ items, categories }: Props) {
         {current ? (
           <div className="lightbox-inner">
             <div className="lightbox-bar">
-              <p aria-live="polite">{t("counter", { current: (index ?? 0) + 1, total: visible.length })}</p>
+              <p aria-live="polite">
+                {t("counter", { current: (index ?? 0) + 1, total: visible.length })}
+              </p>
               <button type="button" onClick={close}>
                 {t("close")}
               </button>

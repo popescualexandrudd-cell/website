@@ -25,7 +25,11 @@ export async function Header({ settings }: Props) {
   return (
     <header className="site-header">
       <div className="site-header-bar">
-        <Link href="/" className="site-monogram" aria-label={`${settings.brandName} · ${t("common.home")}`}>
+        <Link
+          href="/"
+          className="site-monogram"
+          aria-label={`${settings.brandName} · ${t("common.home")}`}
+        >
           <Monogram letters={settings.monogram} className="size-10 md:size-11" />
         </Link>
         <div className="site-header-actions">
@@ -52,13 +56,22 @@ export async function Header({ settings }: Props) {
                 </li>
                 {settings.enEnabled ? (
                   <li>
-                    <LanguageSwitch label={t("common.languageSwitch")} srLabel={t("common.languageSwitchLabel")} />
+                    <LanguageSwitch
+                      label={t("common.languageSwitch")}
+                      srLabel={t("common.languageSwitchLabel")}
+                    />
                   </li>
                 ) : null}
               </ul>
             </nav>
             <div className="menu-contact">
-              {tel ? <a href={tel}>{settings.phone}</a> : <span><TodoText value={settings.phone} /></span>}
+              {tel ? (
+                <a href={tel}>{settings.phone}</a>
+              ) : (
+                <span>
+                  <TodoText value={settings.phone} />
+                </span>
+              )}
               {whatsapp ? (
                 <a href={whatsapp} rel="noopener noreferrer" target="_blank">
                   {t("common.whatsapp")}

@@ -6,7 +6,15 @@ import { SceneTitle } from "./SceneTitle";
 import { safeHref } from "./links";
 
 /** Scene 7 · first lesson: the text about the first lesson comes from the settings. */
-export function FirstLessonScene({ scene, index, firstLessonText }: { scene: SceneView; index: number; firstLessonText: string }) {
+export function FirstLessonScene({
+  scene,
+  index,
+  firstLessonText,
+}: {
+  scene: SceneView;
+  index: number;
+  firstLessonText: string;
+}) {
   const href = safeHref(scene.ctaHref) ?? "/preturi";
   return (
     <SceneFrame scene={scene} index={index} length={2}>

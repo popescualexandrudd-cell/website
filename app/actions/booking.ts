@@ -17,10 +17,17 @@ import { deliverEmails } from "@/lib/email/send";
 import { queueCancellationEmails, queueNewBookingEmails } from "@/lib/email/messages";
 import { fields, formDataToObject, zodFieldErrors, type FormState } from "@/lib/validation";
 import { urls } from "@/lib/paths";
+import { audit } from "@/lib/audit";
 
 export type SlotOption = { start: string; label: string };
 export type DayOption = { date: string; label: string; slots: SlotOption[] };
-export type SessionOption = { groupScheduleId: string; start: string; dateLabel: string; timeLabel: string; spotsLeft: number };
+export type SessionOption = {
+  groupScheduleId: string;
+  start: string;
+  dateLabel: string;
+  timeLabel: string;
+  spotsLeft: number;
+};
 export type AvailabilityResult =
   | { kind: "exclusive"; days: DayOption[]; horizonDays: number; hasMore: boolean }
   | { kind: "group"; sessions: SessionOption[]; horizonDays: number }
@@ -37,7 +44,12 @@ const availabilitySchema = z.object({
 });
 
 /** Free times for a programme, formatted for the booking flow. */
-export async function fetchAvailability(raw: { programId: string; locale: string; fromDate?: string; days?: number }): Promise<AvailabilityResult> {
+export async function fetchAvailability(raw: {
+  programId: string;
+  locale: string;
+  fromDate?: string;
+  days?: number;
+}): Promise<AvailabilityResult> {
   const parsed = availabilitySchema.safeParse(raw);
   if (!parsed.success) return { kind: "none" };
   const ip = await getClientIp();
@@ -48,7 +60,8 @@ export async function fetchAvailability(raw: { programId: string; locale: string
 
   const engine = await loadEngineInput();
   const tz = engine.settings.timezone;
-  const dateLabel = (d: Date) => formatDate(d, tz, locale, locale === "en" ? "EEEE d MMMM" : "EEEE, d MMMM");
+  const dateLabel = (d: Date) =>
+    formatDate(d, tz, locale, locale === "en" ? "EEEE d MMMM" : "EEEE, d MMMM");
 
   if (program.format === "GRUPA") {
     const sessions = groupSlots(engine, program.id).slice(0, 24);
@@ -67,7 +80,10 @@ export async function fetchAvailability(raw: { programId: string; locale: string
   if (program.format !== "INDIVIDUAL" && program.format !== "SEMI_PRIVAT") return { kind: "none" };
 
   const limitDays = days ?? 7;
-  const all = exclusiveSlots(engine, program.durationMin ?? 60, { fromKey: fromDate, limitDays: limitDays + 1 });
+  const all = exclusiveSlots(engine, program.durationMin ?? 60, {
+    fromKey: fromDate,
+    limitDays: limitDays + 1,
+  });
   const visible = all.slice(0, limitDays);
   return {
     kind: "exclusive",
@@ -76,7 +92,10 @@ export async function fetchAvailability(raw: { programId: string; locale: string
     days: visible.map((day) => ({
       date: day.date,
       label: dateLabel(day.slots[0]?.start ?? new Date(`${day.date}T12:00:00Z`)),
-      slots: day.slots.map((slot) => ({ start: slot.start.toISOString(), label: formatTime(slot.start, tz) })),
+      slots: day.slots.map((slot) => ({
+        start: slot.start.toISOString(),
+        label: formatTime(slot.start, tz),
+      })),
     })),
   };
 }
@@ -99,7 +118,10 @@ const bookingSchema = z
     email: fields.email,
     phone: fields.phone,
     participants: z.coerce.number().int().min(1).max(10).catch(1),
-    declaredLevel: z.enum(["INCEPATOR", "INTERMEDIAR", "AVANSAT", "COMPETITIE"]).optional().catch(undefined),
+    declaredLevel: z
+      .enum(["INCEPATOR", "INTERMEDIAR", "AVANSAT", "COMPETITIE"])
+      .optional()
+      .catch(undefined),
     message: fields.optionalText(2000),
     childFirstName: z
       .string()
@@ -116,7 +138,10 @@ const bookingSchema = z
     locale: fields.locale,
   })
   .superRefine((data, ctx) => {
-    if (data.childAge !== null && (!Number.isInteger(data.childAge) || data.childAge < 3 || data.childAge > 17)) {
+    if (
+      data.childAge !== null &&
+      (!Number.isInteger(data.childAge) || data.childAge < 3 || data.childAge > 17)
+    ) {
       ctx.addIssue({ code: "custom", path: ["childAge"], message: "childAge" });
     }
   });
@@ -139,8 +164,10 @@ export async function submitBooking(_prev: FormState, formData: FormData): Promi
   }
 
   const ip = await getClientIp();
-  if (!(await verifyTurnstile(raw["cf-turnstile-response"], ip))) return { status: "error", error: "captcha" };
-  if (!(await allowFormSubmission("booking", ip, data.email))) return { status: "error", error: "rateLimit" };
+  if (!(await verifyTurnstile(raw["cf-turnstile-response"], ip)))
+    return { status: "error", error: "captcha" };
+  if (!(await allowFormSubmission("booking", ip, data.email)))
+    return { status: "error", error: "rateLimit" };
 
   try {
     const result = await createBooking({
@@ -192,16 +219,28 @@ export async function submitBooking(_prev: FormState, formData: FormData): Promi
   }
 }
 
-const cancelSchema = z.object({ token: z.string().min(20).max(200), reason: fields.optionalText(500) });
+const cancelSchema = z.object({
+  token: z.string().min(20).max(200),
+  reason: fields.optionalText(500),
+});
 
-export async function cancelBookingByToken(_prev: FormState, formData: FormData): Promise<FormState> {
+export async function cancelBookingByToken(
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> {
   const parsed = cancelSchema.safeParse(formDataToObject(formData));
   if (!parsed.success) return { status: "error", error: "notFound" };
   const ip = await getClientIp();
-  if (!(await rateLimit(`cancel:${ip}`, 20, 15 * 60))) return { status: "error", error: "rateLimit" };
+  if (!(await rateLimit(`cancel:${ip}`, 20, 15 * 60)))
+    return { status: "error", error: "rateLimit" };
   const result = await cancelByClient(parsed.data.token, parsed.data.reason);
   if (!result.ok) return { status: "error", error: result.error };
-  const ids = await queueCancellationEmails(result.bookingId, "client", parsed.data.reason ?? undefined);
+  await audit(null, "rezervare.anulata-client", "Booking", result.bookingId);
+  const ids = await queueCancellationEmails(
+    result.bookingId,
+    "client",
+    parsed.data.reason ?? undefined,
+  );
   after(async () => {
     await deliverEmails(ids);
   });
@@ -210,6 +249,9 @@ export async function cancelBookingByToken(_prev: FormState, formData: FormData)
 
 /** Today's key in the business time zone (used to show "today"/"tomorrow"). */
 export async function todayKey(): Promise<string> {
-  const settings = await db.siteSettings.findUniqueOrThrow({ where: { id: 1 }, select: { timezone: true } });
+  const settings = await db.siteSettings.findUniqueOrThrow({
+    where: { id: 1 },
+    select: { timezone: true },
+  });
   return localDateKey(new Date(), settings.timezone);
 }

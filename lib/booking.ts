@@ -1,7 +1,12 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
 import { db } from "./db";
-import { Prisma, type BookingSource, type BookingStatus, type Level } from "./generated/prisma/client";
+import {
+  Prisma,
+  type BookingSource,
+  type BookingStatus,
+  type Level,
+} from "./generated/prisma/client";
 import { groupOccurrences, isSlotAvailable, localDateKey } from "./availability";
 import { loadEngineInput } from "./availability-data";
 import { generateBookingCode, hashToken } from "./tokens";
@@ -34,7 +39,8 @@ export type CreateBookingInput = {
   courtId?: string | null;
 };
 
-export type CreateBookingError = "program" | "participants" | "unavailable" | "conflict" | "sessionFull" | "minor";
+export type CreateBookingError =
+  "program" | "participants" | "unavailable" | "conflict" | "sessionFull" | "minor";
 export type CreateBookingResult =
   | { ok: true; bookingId: string; code: string; status: BookingStatus; manageToken: string }
   | { ok: false; error: CreateBookingError };
@@ -49,10 +55,22 @@ class BookingRejected extends Error {
 export function isOverlapError(error: unknown): boolean {
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     const meta = JSON.stringify(error.meta ?? {});
-    return error.code === "P2004" || meta.includes("23P01") || meta.includes("Booking_no_overlap") || error.message.includes("Booking_no_overlap");
+    return (
+      error.code === "P2004" ||
+      meta.includes("23P01") ||
+      meta.includes("Booking_no_overlap") ||
+      error.message.includes("Booking_no_overlap")
+    );
   }
-  const text = error instanceof Error ? `${error.message} ${String((error as { cause?: unknown }).cause ?? "")}` : String(error);
-  return text.includes("23P01") || text.includes("Booking_no_overlap") || text.includes("exclusion constraint");
+  const text =
+    error instanceof Error
+      ? `${error.message} ${String((error as { cause?: unknown }).cause ?? "")}`
+      : String(error);
+  return (
+    text.includes("23P01") ||
+    text.includes("Booking_no_overlap") ||
+    text.includes("exclusion constraint")
+  );
 }
 
 /**
@@ -72,16 +90,23 @@ export async function createBooking(input: CreateBookingInput): Promise<CreateBo
         const settings = await tx.siteSettings.findUniqueOrThrow({ where: { id: 1 } });
         const program = await tx.program.findUnique({ where: { id: input.programId } });
         const isAdmin = input.source !== "SITE";
-        if (!program || (!isAdmin && (!program.active || !program.bookableOnline))) throw new BookingRejected("program");
+        if (!program || (!isAdmin && (!program.active || !program.bookableOnline)))
+          throw new BookingRejected("program");
 
         const exclusive = program.format === "INDIVIDUAL" || program.format === "SEMI_PRIVAT";
         const isGroup = program.format === "GRUPA";
-        const maxParticipants = program.format === "INDIVIDUAL" ? 1 : exclusive ? (program.maxParticipants ?? 2) : 1;
-        if (!Number.isInteger(input.participants) || input.participants < 1 || input.participants > maxParticipants) {
+        const maxParticipants =
+          program.format === "INDIVIDUAL" ? 1 : exclusive ? (program.maxParticipants ?? 2) : 1;
+        if (
+          !Number.isInteger(input.participants) ||
+          input.participants < 1 ||
+          input.participants > maxParticipants
+        ) {
           throw new BookingRejected("participants");
         }
         const forMinor = isChildrenProgram(program) || Boolean(input.forMinor);
-        if (forMinor && (!input.childFirstName || !input.childAge) && !isAdmin) throw new BookingRejected("minor");
+        if (forMinor && (!input.childFirstName || !input.childAge) && !isAdmin)
+          throw new BookingRejected("minor");
 
         const engine = await loadEngineInput(new Date(), tx);
         let durationMin = program.durationMin ?? 60;
@@ -91,20 +116,36 @@ export async function createBooking(input: CreateBookingInput): Promise<CreateBo
           const schedule = input.groupScheduleId
             ? await tx.groupSchedule.findUnique({ where: { id: input.groupScheduleId } })
             : null;
-          if (!schedule || schedule.programId !== program.id || !schedule.active) throw new BookingRejected("unavailable");
+          if (!schedule || schedule.programId !== program.id || !schedule.active)
+            throw new BookingRejected("unavailable");
           const key = localDateKey(input.startsAt, settings.timezone);
-          const occurrence = groupOccurrences(engine.groupSchedules.filter((g) => g.id === schedule.id), key, key, engine.exceptions, engine.groupEnrollments, settings.timezone).find(
-            (o) => o.start.getTime() === input.startsAt.getTime(),
-          );
+          const occurrence = groupOccurrences(
+            engine.groupSchedules.filter((g) => g.id === schedule.id),
+            key,
+            key,
+            engine.exceptions,
+            engine.groupEnrollments,
+            settings.timezone,
+          ).find((o) => o.start.getTime() === input.startsAt.getTime());
           if (!occurrence) throw new BookingRejected("unavailable");
-          if (!isAdmin && input.startsAt.getTime() < Date.now() + settings.minNoticeHours * 60 * MINUTE) throw new BookingRejected("unavailable");
+          if (
+            !isAdmin &&
+            input.startsAt.getTime() < Date.now() + settings.minNoticeHours * 60 * MINUTE
+          )
+            throw new BookingRejected("unavailable");
           if (occurrence.spotsLeft < input.participants) throw new BookingRejected("sessionFull");
           durationMin = schedule.durationMin;
           groupScheduleId = schedule.id;
         } else if (exclusive) {
           if (isAdmin) {
-            const conflictEngine = { ...engine, settings: { ...engine.settings, minNoticeHours: -24 * 365, horizonDays: 3650 }, rules: allDayRules(), exceptions: [] };
-            if (!isSlotAvailable(conflictEngine, input.startsAt, durationMin)) throw new BookingRejected("conflict");
+            const conflictEngine = {
+              ...engine,
+              settings: { ...engine.settings, minNoticeHours: -24 * 365, horizonDays: 3650 },
+              rules: allDayRules(),
+              exceptions: [],
+            };
+            if (!isSlotAvailable(conflictEngine, input.startsAt, durationMin))
+              throw new BookingRejected("conflict");
           } else if (!isSlotAvailable(engine, input.startsAt, durationMin)) {
             throw new BookingRejected("unavailable");
           }
@@ -114,20 +155,42 @@ export async function createBooking(input: CreateBookingInput): Promise<CreateBo
         }
 
         const endsAt = new Date(input.startsAt.getTime() + durationMin * MINUTE);
-        const blockedUntil = exclusive ? new Date(endsAt.getTime() + settings.bufferMinutes * MINUTE) : endsAt;
-        const status: BookingStatus = input.status ?? (settings.bookingMode === "INSTANT" || isAdmin ? "CONFIRMATA" : "IN_ASTEPTARE");
+        const blockedUntil = exclusive
+          ? new Date(endsAt.getTime() + settings.bufferMinutes * MINUTE)
+          : endsAt;
+        const status: BookingStatus =
+          input.status ??
+          (settings.bookingMode === "INSTANT" || isAdmin ? "CONFIRMATA" : "IN_ASTEPTARE");
 
         const email = input.email.trim().toLowerCase();
         const clientName = forMinor && input.parentName ? input.parentName : input.name;
-        const client = await tx.client.upsert({
-          where: { email },
-          update: { phone: input.phone, name: clientName },
-          create: { email, phone: input.phone, name: clientName },
-        });
+        // Phone bookings may have no email: then the client is matched by phone number.
+        const noEmail = email.endsWith(".invalid");
+        const byPhone = noEmail
+          ? await tx.client.findFirst({ where: { phone: input.phone, anonymizedAt: null } })
+          : null;
+        const client = byPhone
+          ? await tx.client.update({ where: { id: byPhone.id }, data: { name: clientName } })
+          : noEmail
+            ? await tx.client.create({
+                data: { email: null, phone: input.phone, name: clientName },
+              })
+            : await tx.client.upsert({
+                where: { email },
+                update: { phone: input.phone, name: clientName },
+                create: { email, phone: input.phone, name: clientName },
+              });
 
-        const location = await tx.location.findFirst({ orderBy: { order: "asc" }, select: { id: true } });
+        const location = await tx.location.findFirst({
+          orderBy: { order: "asc" },
+          select: { id: true },
+        });
         let code = generateBookingCode();
-        for (let attempt = 0; attempt < 5 && (await tx.booking.findUnique({ where: { code }, select: { id: true } })); attempt += 1) {
+        for (
+          let attempt = 0;
+          attempt < 5 && (await tx.booking.findUnique({ where: { code }, select: { id: true } }));
+          attempt += 1
+        ) {
           code = generateBookingCode();
         }
 
@@ -167,7 +230,13 @@ export async function createBooking(input: CreateBookingInput): Promise<CreateBo
       },
       { timeout: 15_000, maxWait: 10_000 },
     );
-    return { ok: true, bookingId: booking.id, code: booking.code, status: booking.status, manageToken: token };
+    return {
+      ok: true,
+      bookingId: booking.id,
+      code: booking.code,
+      status: booking.status,
+      manageToken: token,
+    };
   } catch (error) {
     if (error instanceof BookingRejected) return { ok: false, error: error.reason };
     if (isOverlapError(error)) return { ok: false, error: "conflict" };
@@ -176,7 +245,11 @@ export async function createBooking(input: CreateBookingInput): Promise<CreateBo
 }
 
 function allDayRules() {
-  return [1, 2, 3, 4, 5, 6, 7].map((weekday) => ({ weekday, startTime: "00:00", endTime: "23:59" }));
+  return [1, 2, 3, 4, 5, 6, 7].map((weekday) => ({
+    weekday,
+    startTime: "00:00",
+    endTime: "23:59",
+  }));
 }
 
 export async function findBookingByToken(token: string) {
@@ -187,15 +260,25 @@ export async function findBookingByToken(token: string) {
   });
 }
 
-export type CancelResult = { ok: true; bookingId: string } | { ok: false; error: "notFound" | "tooLate" | "notActive" };
+export type CancelResult =
+  { ok: true; bookingId: string } | { ok: false; error: "notFound" | "tooLate" | "notActive" };
 
 /** Client cancellation through the link: allowed until the free-cancellation limit. */
-export async function cancelByClient(token: string, reason: string | null, now = new Date()): Promise<CancelResult> {
+export async function cancelByClient(
+  token: string,
+  reason: string | null,
+  now = new Date(),
+): Promise<CancelResult> {
   const booking = await findBookingByToken(token);
   if (!booking) return { ok: false, error: "notFound" };
-  if (booking.status !== "IN_ASTEPTARE" && booking.status !== "CONFIRMATA") return { ok: false, error: "notActive" };
-  const settings = await db.siteSettings.findUniqueOrThrow({ where: { id: 1 }, select: { freeCancelHours: true } });
-  if (!canCancelFree(booking.startsAt, settings.freeCancelHours, now)) return { ok: false, error: "tooLate" };
+  if (booking.status !== "IN_ASTEPTARE" && booking.status !== "CONFIRMATA")
+    return { ok: false, error: "notActive" };
+  const settings = await db.siteSettings.findUniqueOrThrow({
+    where: { id: 1 },
+    select: { freeCancelHours: true },
+  });
+  if (!canCancelFree(booking.startsAt, settings.freeCancelHours, now))
+    return { ok: false, error: "tooLate" };
   const updated = await db.booking.updateMany({
     where: { id: booking.id, status: { in: ["IN_ASTEPTARE", "CONFIRMATA"] } },
     data: { status: "ANULATA_CLIENT", cancelledAt: now, cancelReason: reason },

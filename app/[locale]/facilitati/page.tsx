@@ -10,10 +10,17 @@ import { TodoText } from "@/components/site/TodoText";
 import { Markdown } from "@/components/site/Markdown";
 import { ArtPicture } from "@/components/ui/ArtPicture";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/facilitati">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/facilitati">): Promise<Metadata> {
   const locale = (await params).locale as Locale;
   const header = await getPageHeader("facilitati", locale);
-  return pageMetadata({ locale, href: "/facilitati", title: header.seoTitle, description: header.seoDescription });
+  return pageMetadata({
+    locale,
+    href: "/facilitati",
+    title: header.seoTitle,
+    description: header.seoDescription,
+  });
 }
 
 export default async function FacilitiesPage({ params }: PageProps<"/[locale]/facilitati">) {
@@ -25,13 +32,19 @@ export default async function FacilitiesPage({ params }: PageProps<"/[locale]/fa
     getFacilities(locale),
     getTranslations(),
   ]);
-  const yesNo = (value: boolean | null) => (value === null ? TODO_MARK : value ? t("common.yes") : t("common.no"));
+  const yesNo = (value: boolean | null) =>
+    value === null ? TODO_MARK : value ? t("common.yes") : t("common.no");
   const amenities = facilities.filter((f) => f.type === "DOTARE_BAZA");
   const services = facilities.filter((f) => f.type !== "DOTARE_BAZA");
 
   return (
     <>
-      <PageHero title={header.title} intro={header.intro} art={header.art} imageAlt={header.imageAlt} />
+      <PageHero
+        title={header.title}
+        intro={header.intro}
+        art={header.art}
+        imageAlt={header.imageAlt}
+      />
       {locations.map((location) => (
         <PageSection key={location.id} id={`locatie-${location.id}`} title={t("facilities.courts")}>
           <p className="section-subtitle">
@@ -54,7 +67,10 @@ export default async function FacilitiesPage({ params }: PageProps<"/[locale]/fa
                 {location.courts.map((court) => (
                   <tr key={court.id}>
                     <th scope="row" className="zgura font-normal">
-                      {court.name} <span className="text-note">({t(`facilities.surface.${court.surface}`)})</span>
+                      {court.name}{" "}
+                      <span className="text-note">
+                        ({t(`facilities.surface.${court.surface}`)})
+                      </span>
                     </th>
                     <td>
                       <TodoText value={court.count === null ? TODO_MARK : String(court.count)} />
@@ -84,7 +100,12 @@ export default async function FacilitiesPage({ params }: PageProps<"/[locale]/fa
                   />
                   {location.mapUrl ? (
                     <p className="mt-3">
-                      <a href={location.mapUrl} className="link" target="_blank" rel="noopener noreferrer">
+                      <a
+                        href={location.mapUrl}
+                        className="link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         {t("facilities.openInMaps")}
                       </a>
                     </p>
@@ -144,7 +165,9 @@ export default async function FacilitiesPage({ params }: PageProps<"/[locale]/fa
                     </p>
                   ) : null}
                 </div>
-                <span className="ed-row-aside text-cerneala-2">{service.type === "ECHIPAMENT" ? t("facilities.equipment") : ""}</span>
+                <span className="ed-row-aside text-cerneala-2">
+                  {service.type === "ECHIPAMENT" ? t("facilities.equipment") : ""}
+                </span>
               </li>
             ))}
           </ul>

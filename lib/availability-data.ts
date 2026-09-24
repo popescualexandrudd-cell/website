@@ -12,7 +12,13 @@ export const ACTIVE_STATUSES = ["IN_ASTEPTARE", "CONFIRMATA"] as const;
 export async function loadAvailabilitySettings(): Promise<AvailabilitySettings> {
   const settings = await db.siteSettings.findUniqueOrThrow({
     where: { id: 1 },
-    select: { timezone: true, minNoticeHours: true, horizonDays: true, bufferMinutes: true, slotStepMinutes: true },
+    select: {
+      timezone: true,
+      minNoticeHours: true,
+      horizonDays: true,
+      bufferMinutes: true,
+      slotStepMinutes: true,
+    },
   });
   return settings;
 }
@@ -23,11 +29,20 @@ export async function loadAvailabilitySettings(): Promise<AvailabilitySettings> 
  */
 export async function loadEngineInput(
   now = new Date(),
-  client: Pick<typeof db, "siteSettings" | "availabilityRule" | "availabilityException" | "booking" | "groupSchedule"> = db,
+  client: Pick<
+    typeof db,
+    "siteSettings" | "availabilityRule" | "availabilityException" | "booking" | "groupSchedule"
+  > = db,
 ): Promise<EngineInput> {
   const settings = await client.siteSettings.findUniqueOrThrow({
     where: { id: 1 },
-    select: { timezone: true, minNoticeHours: true, horizonDays: true, bufferMinutes: true, slotStepMinutes: true },
+    select: {
+      timezone: true,
+      minNoticeHours: true,
+      horizonDays: true,
+      bufferMinutes: true,
+      slotStepMinutes: true,
+    },
   });
   const todayKey = localDateKey(now, settings.timezone);
   const fromDate = new Date(`${addDaysToKey(todayKey, -1)}T00:00:00Z`);
@@ -69,11 +84,17 @@ export async function loadEngineInput(
     settings,
     rules,
     exceptions,
-    bookings: bookings.filter((b) => !b.groupScheduleId).map((b) => ({ startsAt: b.startsAt, blockedUntil: b.blockedUntil })),
+    bookings: bookings
+      .filter((b) => !b.groupScheduleId)
+      .map((b) => ({ startsAt: b.startsAt, blockedUntil: b.blockedUntil })),
     groupSchedules,
     groupEnrollments: bookings
       .filter((b): b is typeof b & { groupScheduleId: string } => Boolean(b.groupScheduleId))
-      .map((b) => ({ groupScheduleId: b.groupScheduleId, startsAt: b.startsAt, participants: b.participants })),
+      .map((b) => ({
+        groupScheduleId: b.groupScheduleId,
+        startsAt: b.startsAt,
+        participants: b.participants,
+      })),
     now,
   };
 }

@@ -6,7 +6,17 @@ import { SceneFrame } from "./SceneFrame";
 import { SceneTitle } from "./SceneTitle";
 
 /** Scene 8 · places: the count is computed live from the availability. */
-export async function PlacesScene({ scene, index, month, count }: { scene: SceneView; index: number; month: string; count: number }) {
+export async function PlacesScene({
+  scene,
+  index,
+  month,
+  count,
+}: {
+  scene: SceneView;
+  index: number;
+  month: string;
+  count: number;
+}) {
   const t = await getTranslations("home");
   const label = (scene.extra.available || t("placesLabel", { month: "{luna}", count: "{n}" }))
     .replace("{luna}", month)

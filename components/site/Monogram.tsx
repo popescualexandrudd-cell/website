@@ -5,7 +5,15 @@ export function Monogram({ letters, className }: Props) {
   const clean = letters.replace(/[^\p{L}]/gu, "").slice(0, 3);
   return (
     <svg viewBox="0 0 48 48" className={className} aria-hidden="true" focusable="false">
-      <circle cx="24" cy="24" r="22.5" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.7" />
+      <circle
+        cx="24"
+        cy="24"
+        r="22.5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1"
+        opacity="0.7"
+      />
       {clean ? (
         <text
           x="24"
@@ -13,7 +21,11 @@ export function Monogram({ letters, className }: Props) {
           textAnchor="middle"
           dominantBaseline="central"
           fill="currentColor"
-          style={{ fontFamily: "var(--font-display)", fontSize: clean.length > 2 ? 15 : 19, letterSpacing: "0.02em" }}
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: clean.length > 2 ? 15 : 19,
+            letterSpacing: "0.02em",
+          }}
         >
           {clean}
         </text>

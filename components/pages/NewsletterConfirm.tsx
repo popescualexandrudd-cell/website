@@ -1,15 +1,14 @@
 "use client";
 
-import { useActionState } from "react";
+import { useFormAction } from "@/components/ui/useFormAction";
 import { useTranslations } from "next-intl";
 import { confirmNewsletter } from "@/app/actions/forms";
-import { idleState } from "@/lib/validation";
 import { SubmitButton } from "@/components/ui/form";
 
 /** A button, not an automatic GET: mail scanners open links and must not (un)subscribe anyone. */
 export function NewsletterConfirm({ token, label }: { token: string; label: string }) {
   const t = useTranslations("newsletter");
-  const [state, action] = useActionState(confirmNewsletter, idleState);
+  const { state, pending, formProps: actionProps } = useFormAction(confirmNewsletter);
   if (state.status === "success") {
     return (
       <p role="status" className="notice">
@@ -18,7 +17,7 @@ export function NewsletterConfirm({ token, label }: { token: string; label: stri
     );
   }
   return (
-    <form action={action} className="grid gap-4">
+    <form {...actionProps} className="grid gap-4">
       <input type="hidden" name="token" value={token} />
       {state.status === "error" ? (
         <p role="alert" className="booking-alert">
@@ -26,7 +25,7 @@ export function NewsletterConfirm({ token, label }: { token: string; label: stri
         </p>
       ) : null}
       <div>
-        <SubmitButton>{label}</SubmitButton>
+        <SubmitButton pending={pending}>{label}</SubmitButton>
       </div>
     </form>
   );

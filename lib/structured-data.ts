@@ -5,7 +5,9 @@ import { appUrl } from "./paths";
 /** schema.org objects (JSON-LD). Missing ([DE COMPLETAT]) values are simply left out. */
 
 const clean = <T extends Record<string, unknown>>(value: T): T =>
-  Object.fromEntries(Object.entries(value).filter(([, v]) => v !== undefined && v !== null && v !== "")) as T;
+  Object.fromEntries(
+    Object.entries(value).filter(([, v]) => v !== undefined && v !== null && v !== ""),
+  ) as T;
 
 const OPENING_DAYS: Record<string, string[]> = {
   "Luni–vineri": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
@@ -21,7 +23,9 @@ function openingHours(settings: LocalizedSettings) {
     const match = row.hours.match(/(\d{2}:\d{2})\s*[–-]\s*(\d{2}:\d{2})/);
     const days = OPENING_DAYS[row.label];
     if (!match || !days) return [];
-    return [{ "@type": "OpeningHoursSpecification", dayOfWeek: days, opens: match[1], closes: match[2] }];
+    return [
+      { "@type": "OpeningHoursSpecification", dayOfWeek: days, opens: match[1], closes: match[2] },
+    ];
   });
 }
 
@@ -29,7 +33,11 @@ export function businessId(): string {
   return `${appUrl()}/#business`;
 }
 
-export function personLd(settings: LocalizedSettings, coach: { name: string; title: string; languages: string[] }, url: string) {
+export function personLd(
+  settings: LocalizedSettings,
+  coach: { name: string; title: string; languages: string[] },
+  url: string,
+) {
   return clean({
     "@context": "https://schema.org",
     "@type": "Person",
@@ -41,11 +49,17 @@ export function personLd(settings: LocalizedSettings, coach: { name: string; tit
     telephone: isFilled(settings.phone) ? settings.phone : undefined,
     email: isFilled(settings.email) ? settings.email : undefined,
     worksFor: { "@id": businessId() },
-    sameAs: [settings.instagramUrl, settings.facebookUrl, settings.tiktokUrl].filter((s): s is string => Boolean(s)),
+    sameAs: [settings.instagramUrl, settings.facebookUrl, settings.tiktokUrl].filter(
+      (s): s is string => Boolean(s),
+    ),
   });
 }
 
-export function businessLd(settings: LocalizedSettings, location: LocationView | null, description: string) {
+export function businessLd(
+  settings: LocalizedSettings,
+  location: LocationView | null,
+  description: string,
+) {
   return clean({
     "@context": "https://schema.org",
     "@type": ["SportsActivityLocation", "LocalBusiness"],
@@ -60,16 +74,26 @@ export function businessLd(settings: LocalizedSettings, location: LocationView |
     openingHoursSpecification: openingHours(settings),
     address:
       location && isFilled(location.address)
-        ? clean({ "@type": "PostalAddress", streetAddress: location.address, addressLocality: isFilled(location.city) ? location.city : undefined, addressCountry: "RO" })
+        ? clean({
+            "@type": "PostalAddress",
+            streetAddress: location.address,
+            addressLocality: isFilled(location.city) ? location.city : undefined,
+            addressCountry: "RO",
+          })
         : undefined,
-    geo: location?.lat && location.lng ? { "@type": "GeoCoordinates", latitude: location.lat, longitude: location.lng } : undefined,
+    geo:
+      location?.lat && location.lng
+        ? { "@type": "GeoCoordinates", latitude: location.lat, longitude: location.lng }
+        : undefined,
   });
 }
 
 export function serviceLd(program: ProgramView, url: string) {
   const offers = program.prices
     .filter((p) => p.price !== null)
-    .map((p) => clean({ "@type": "Offer", name: p.name, price: p.price, priceCurrency: p.currency, url }));
+    .map((p) =>
+      clean({ "@type": "Offer", name: p.name, price: p.price, priceCurrency: p.currency, url }),
+    );
   return clean({
     "@context": "https://schema.org",
     "@type": "Service",
@@ -89,7 +113,11 @@ export function faqLd(faqs: FaqView[]) {
     "@type": "FAQPage",
     mainEntity: faqs
       .filter((f) => isFilled(f.question) && isFilled(f.answer))
-      .map((f) => ({ "@type": "Question", name: f.question, acceptedAnswer: { "@type": "Answer", text: f.answer } })),
+      .map((f) => ({
+        "@type": "Question",
+        name: f.question,
+        acceptedAnswer: { "@type": "Answer", text: f.answer },
+      })),
   };
 }
 
@@ -97,7 +125,12 @@ export function breadcrumbLd(items: { name: string; url: string }[]) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: items.map((item, index) => ({ "@type": "ListItem", position: index + 1, name: item.name, item: item.url })),
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
   };
 }
 

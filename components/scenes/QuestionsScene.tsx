@@ -12,12 +12,26 @@ import { safeHref } from "./links";
  * built on <details>/<summary>, so it works with the keyboard, screen readers and without JS.
  * Reviews appear only if real, consented ones are published.
  */
-export async function QuestionsScene({ scene, index, faqs, testimonials }: { scene: SceneView; index: number; faqs: FaqView[]; testimonials: TestimonialView[] }) {
+export async function QuestionsScene({
+  scene,
+  index,
+  faqs,
+  testimonials,
+}: {
+  scene: SceneView;
+  index: number;
+  faqs: FaqView[];
+  testimonials: TestimonialView[];
+}) {
   const t = await getTranslations("home");
   const href = safeHref(scene.ctaHref) ?? "/intrebari";
   return (
     <SceneFrame scene={scene} index={index} layout="flow">
-      <SceneTitle id={`${scene.key}-title`} text={scene.title} className="scene-title--calligraphic" />
+      <SceneTitle
+        id={`${scene.key}-title`}
+        text={scene.title}
+        className="scene-title--calligraphic"
+      />
       <div className="faq-list">
         {faqs.map((faq) => (
           <details key={faq.id} className="faq-item">

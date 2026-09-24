@@ -8,19 +8,35 @@ import { pageMetadata } from "@/lib/seo";
 import { PageHero, PageSection } from "@/components/pages/PageHero";
 import { ArtPicture } from "@/components/ui/ArtPicture";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/sfaturi">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/sfaturi">): Promise<Metadata> {
   const locale = (await params).locale as Locale;
   const header = await getPageHeader("sfaturi", locale);
-  return pageMetadata({ locale, href: "/sfaturi", title: header.seoTitle, description: header.seoDescription });
+  return pageMetadata({
+    locale,
+    href: "/sfaturi",
+    title: header.seoTitle,
+    description: header.seoDescription,
+  });
 }
 
 export default async function TipsPage({ params }: PageProps<"/[locale]/sfaturi">) {
   const locale = (await params).locale as Locale;
   setRequestLocale(locale);
-  const [header, posts, t] = await Promise.all([getPageHeader("sfaturi", locale), getPosts(locale), getTranslations("tips")]);
+  const [header, posts, t] = await Promise.all([
+    getPageHeader("sfaturi", locale),
+    getPosts(locale),
+    getTranslations("tips"),
+  ]);
   return (
     <>
-      <PageHero title={header.title} intro={header.intro} art={header.art} imageAlt={header.imageAlt} />
+      <PageHero
+        title={header.title}
+        intro={header.intro}
+        art={header.art}
+        imageAlt={header.imageAlt}
+      />
       <PageSection className="page-section--narrow">
         {posts.length === 0 ? (
           <p className="notice">{t("empty")}</p>
@@ -35,10 +51,21 @@ export default async function TipsPage({ params }: PageProps<"/[locale]/sfaturi"
                 ) : null}
                 <div>
                   <h2 className="ed-row-title">
-                    <Link href={{ pathname: "/sfaturi/[slug]", params: { slug: post.slug } }}>{post.title}</Link>
+                    <Link href={{ pathname: "/sfaturi/[slug]", params: { slug: post.slug } }}>
+                      {post.title}
+                    </Link>
                   </h2>
                   {post.publishedAt ? (
-                    <p className="ed-row-meta">{t("published", { date: formatDate(post.publishedAt, "Europe/Bucharest", locale, "d MMMM yyyy") })}</p>
+                    <p className="ed-row-meta">
+                      {t("published", {
+                        date: formatDate(
+                          post.publishedAt,
+                          "Europe/Bucharest",
+                          locale,
+                          "d MMMM yyyy",
+                        ),
+                      })}
+                    </p>
                   ) : null}
                   <p className="ed-row-text">{post.excerpt}</p>
                 </div>

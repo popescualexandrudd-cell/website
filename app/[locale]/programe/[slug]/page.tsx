@@ -29,8 +29,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!program) return {};
   const city = (await getLocations(locale))[0]?.city;
   const where = city && isFilled(city) ? (locale === "en" ? ` in ${city}` : ` în ${city}`) : "";
-  const title = locale === "en" ? `${program.name}: tennis lessons${where}` : `${program.name}: lecții de tenis${where}`;
-  return pageMetadata({ locale, href: { pathname: "/programe/[slug]", params: { slug } }, title, description: program.summary });
+  const title =
+    locale === "en"
+      ? `${program.name}: tennis lessons${where}`
+      : `${program.name}: lecții de tenis${where}`;
+  return pageMetadata({
+    locale,
+    href: { pathname: "/programe/[slug]", params: { slug } },
+    title,
+    description: program.summary,
+  });
 }
 
 export default async function ProgramPage({ params }: Props) {
@@ -46,16 +54,29 @@ export default async function ProgramPage({ params }: Props) {
   const programFaqs = faqs.filter((f) => f.programId === program.id);
   // The description may already have its own "what we work on" section; do not repeat it.
   const workHeading = t("programs.whatWeWorkOn").toLocaleLowerCase(locale);
-  const descriptionCoversFocus = program.description
-    .split("\n")
-    .some((line) => line.startsWith("#") && line.replace(/^#+\s*/, "").trim().toLocaleLowerCase(locale) === workHeading);
+  const descriptionCoversFocus = program.description.split("\n").some(
+    (line) =>
+      line.startsWith("#") &&
+      line
+        .replace(/^#+\s*/, "")
+        .trim()
+        .toLocaleLowerCase(locale) === workHeading,
+  );
   const url = localizedUrl({ pathname: "/programe/[slug]", params: { slug } }, locale);
   const facts: [string, string][] = [];
-  if (program.ageMin !== null) facts.push([t("programs.age"), program.ageMax !== null ? t("common.years", { min: program.ageMin, max: program.ageMax }) : t("common.yearsFrom", { min: program.ageMin })]);
+  if (program.ageMin !== null)
+    facts.push([
+      t("programs.age"),
+      program.ageMax !== null
+        ? t("common.years", { min: program.ageMin, max: program.ageMax })
+        : t("common.yearsFrom", { min: program.ageMin }),
+    ]);
   facts.push([t("programs.level2"), t(`programs.level.${program.level}`)]);
   facts.push([t("programs.format2"), t(`programs.format.${program.format}`)]);
-  if (program.durationMin) facts.push([t("programs.duration"), t("common.minutes", { n: program.durationMin })]);
-  if (program.maxParticipants && program.maxParticipants > 1) facts.push([t("programs.group"), t("common.maxStudents", { n: program.maxParticipants })]);
+  if (program.durationMin)
+    facts.push([t("programs.duration"), t("common.minutes", { n: program.durationMin })]);
+  if (program.maxParticipants && program.maxParticipants > 1)
+    facts.push([t("programs.group"), t("common.maxStudents", { n: program.maxParticipants })]);
 
   return (
     <>
@@ -71,17 +92,30 @@ export default async function ProgramPage({ params }: Props) {
       />
       <header className="grid-page program-hero">
         <div className="program-hero-copy">
-          <Breadcrumbs label={t("nav.programs")} items={[{ label: t("common.home"), href: "/" }, { label: programsHeader.title, href: "/programe" }, { label: program.name }]} />
+          <Breadcrumbs
+            label={t("nav.programs")}
+            items={[
+              { label: t("common.home"), href: "/" },
+              { label: programsHeader.title, href: "/programe" },
+              { label: program.name },
+            ]}
+          />
           <h1 className="page-title">{program.name}</h1>
           <p className="ed-row-meta mt-3">{programMeta(program, t).join(" · ")}</p>
           <p className="page-intro">{program.summary}</p>
           <p className="mt-8 flex flex-wrap gap-3">
             {program.bookableOnline && program.format !== "EVENIMENT" ? (
-              <Link href={{ pathname: "/rezervare", query: { program: program.slug } }} className="btn btn-primary">
+              <Link
+                href={{ pathname: "/rezervare", query: { program: program.slug } }}
+                className="btn btn-primary"
+              >
                 {t("programs.bookThis")}
               </Link>
             ) : (
-              <Link href={{ pathname: "/lista-asteptare", query: { program: program.slug } }} className="btn btn-primary">
+              <Link
+                href={{ pathname: "/lista-asteptare", query: { program: program.slug } }}
+                className="btn btn-primary"
+              >
                 {t("programs.joinWaitlist")}
               </Link>
             )}
@@ -89,7 +123,13 @@ export default async function ProgramPage({ params }: Props) {
         </div>
         {program.art ? (
           <figure className="program-hero-figure">
-            <ArtPicture art={program.art} alt={program.imageAlt} priority desktopOnly sizes="(min-width: 1024px) 34vw, 90vw" />
+            <ArtPicture
+              art={program.art}
+              alt={program.imageAlt}
+              priority
+              desktopOnly
+              sizes="(min-width: 1024px) 34vw, 90vw"
+            />
           </figure>
         ) : null}
       </header>
@@ -99,7 +139,11 @@ export default async function ProgramPage({ params }: Props) {
       </PageSection>
 
       {program.focusPoints.length > 0 && !descriptionCoversFocus ? (
-        <PageSection id="ce-lucram" title={t("programs.whatWeWorkOn")} className="page-section--narrow">
+        <PageSection
+          id="ce-lucram"
+          title={t("programs.whatWeWorkOn")}
+          className="page-section--narrow"
+        >
           <ul className="focus-list">
             {program.focusPoints.map((point) => (
               <li key={point}>{point}</li>
@@ -127,7 +171,11 @@ export default async function ProgramPage({ params }: Props) {
                 <tr key={price.id}>
                   <th scope="row">
                     {price.name}
-                    {price.includes ? <span className="block text-note font-normal text-cerneala-2">{price.includes}</span> : null}
+                    {price.includes ? (
+                      <span className="block text-note font-normal text-cerneala-2">
+                        {price.includes}
+                      </span>
+                    ) : null}
                   </th>
                   <td>
                     <TodoText value={formatPrice(price.price, price.currency, locale)} />{" "}
@@ -151,7 +199,8 @@ export default async function ProgramPage({ params }: Props) {
                       {t(`programs.weekday.${s.weekday}`)}
                     </th>
                     <td className="numerals">
-                      {s.startTime} · {t("common.minutes", { n: s.durationMin })} · {t("programs.spots", { count: s.capacity })}
+                      {s.startTime} · {t("common.minutes", { n: s.durationMin })} ·{" "}
+                      {t("programs.spots", { count: s.capacity })}
                     </td>
                   </tr>
                 ))}
@@ -164,7 +213,11 @@ export default async function ProgramPage({ params }: Props) {
       ) : null}
 
       {programFaqs.length > 0 ? (
-        <PageSection id="intrebari" title={t("programs.questions")} className="page-section--narrow">
+        <PageSection
+          id="intrebari"
+          title={t("programs.questions")}
+          className="page-section--narrow"
+        >
           <div className="faq-list">
             {programFaqs.map((faq) => (
               <details key={faq.id} className="faq-item">
@@ -184,11 +237,17 @@ export default async function ProgramPage({ params }: Props) {
       <PageSection className="page-section--narrow">
         <p className="flex flex-wrap gap-3">
           {program.bookableOnline && program.format !== "EVENIMENT" ? (
-            <Link href={{ pathname: "/rezervare", query: { program: program.slug } }} className="btn btn-primary">
+            <Link
+              href={{ pathname: "/rezervare", query: { program: program.slug } }}
+              className="btn btn-primary"
+            >
               {t("programs.bookThis")}
             </Link>
           ) : (
-            <Link href={{ pathname: "/lista-asteptare", query: { program: program.slug } }} className="btn btn-primary">
+            <Link
+              href={{ pathname: "/lista-asteptare", query: { program: program.slug } }}
+              className="btn btn-primary"
+            >
               {t("programs.joinWaitlist")}
             </Link>
           )}

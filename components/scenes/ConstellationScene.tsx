@@ -48,7 +48,9 @@ export async function ConstellationScene({
               </a>
             </li>
           ) : null}
-          <li>{mail ? <a href={mail}>{settings.email}</a> : <TodoText value={settings.email} />}</li>
+          <li>
+            {mail ? <a href={mail}>{settings.email}</a> : <TodoText value={settings.email} />}
+          </li>
           {location ? (
             <li>
               <TodoText value={location.address} />

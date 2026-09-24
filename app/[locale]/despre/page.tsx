@@ -11,10 +11,17 @@ import { Markdown } from "@/components/site/Markdown";
 import { TodoText } from "@/components/site/TodoText";
 import { ArtPicture } from "@/components/ui/ArtPicture";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/despre">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/despre">): Promise<Metadata> {
   const locale = (await params).locale as Locale;
   const header = await getPageHeader("despre", locale);
-  return pageMetadata({ locale, href: "/despre", title: header.seoTitle, description: header.seoDescription });
+  return pageMetadata({
+    locale,
+    href: "/despre",
+    title: header.seoTitle,
+    description: header.seoDescription,
+  });
 }
 
 export default async function AboutPage({ params }: PageProps<"/[locale]/despre">) {
@@ -33,7 +40,12 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/despre"
   return (
     <>
       <JsonLd data={personLd(settings, coach, localizedUrl("/despre", locale))} />
-      <PageHero title={header.title} intro={header.intro} art={header.art} imageAlt={header.imageAlt}>
+      <PageHero
+        title={header.title}
+        intro={header.intro}
+        art={header.art}
+        imageAlt={header.imageAlt}
+      >
         <p className="mt-6 font-display text-h3 leading-tight">
           <TodoText value={coach.name} />
           <span className="block font-sans text-body text-cerneala-2">{coach.title}</span>
@@ -44,7 +56,11 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/despre"
         <div className="about-story">
           {coach.photo ? (
             <figure className="about-photo">
-              <ArtPicture art={coach.photo} alt={coach.photoAlt} sizes="(min-width: 1024px) 18rem, 60vw" />
+              <ArtPicture
+                art={coach.photo}
+                alt={coach.photoAlt}
+                sizes="(min-width: 1024px) 18rem, 60vw"
+              />
             </figure>
           ) : null}
           <Markdown source={coach.story} />
@@ -53,7 +69,13 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/despre"
           <div>
             <dt>{t("about.experience")}</dt>
             <dd>
-              <TodoText value={coach.yearsExperience === null ? TODO_MARK : t("about.experienceYears", { count: coach.yearsExperience })} />
+              <TodoText
+                value={
+                  coach.yearsExperience === null
+                    ? TODO_MARK
+                    : t("about.experienceYears", { count: coach.yearsExperience })
+                }
+              />
             </dd>
           </div>
           <div>
@@ -68,7 +90,11 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/despre"
       </PageSection>
 
       {coach.certifications.length > 0 ? (
-        <PageSection id="certificari" title={t("about.certifications")} className="page-section--narrow">
+        <PageSection
+          id="certificari"
+          title={t("about.certifications")}
+          className="page-section--narrow"
+        >
           <ul>
             {coach.certifications.map((c) => (
               <li key={c.id} className={`ed-row ${c.image ? "" : "ed-row--no-image"}`}>
@@ -103,7 +129,11 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/despre"
           <ul className="gallery-grid">
             {photos.map((photo) => (
               <li key={photo.id} className="gallery-item">
-                <ArtPicture art={photo.image} alt={photo.alt} sizes="(min-width: 1024px) 30vw, 50vw" />
+                <ArtPicture
+                  art={photo.image}
+                  alt={photo.alt}
+                  sizes="(min-width: 1024px) 30vw, 50vw"
+                />
               </li>
             ))}
           </ul>

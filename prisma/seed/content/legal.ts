@@ -7,7 +7,11 @@ import type { LegalKind } from "../../../lib/generated/prisma/client";
  */
 export const LEGAL_VERSION = "2026-09-24";
 
-type LegalContent = { kind: LegalKind; title: { ro: string; en: string }; body: { ro: string; en: string } };
+type LegalContent = {
+  kind: LegalKind;
+  title: { ro: string; en: string };
+  body: { ro: string; en: string };
+};
 
 export const legalContent: LegalContent[] = [
   {

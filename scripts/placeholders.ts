@@ -8,7 +8,10 @@ import { join } from "node:path";
 import { compositions } from "./placeholders/compositions";
 
 const root = process.cwd();
-const outDirs = [join(root, "art-src", "placeholders"), join(root, "public", "art", "placeholders")];
+const outDirs = [
+  join(root, "art-src", "placeholders"),
+  join(root, "public", "art", "placeholders"),
+];
 for (const dir of outDirs) mkdirSync(dir, { recursive: true });
 
 const sizes = {

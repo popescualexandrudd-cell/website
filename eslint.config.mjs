@@ -17,6 +17,12 @@ export default defineConfig([
     },
   },
   {
+    // app/[locale]/[...rest] catches every path, so this rule would flag plain <a> links to
+    // downloads and route handlers (CSV/JSON exports, preview) in the admin, which must not use <Link>.
+    files: ["app/admin/**", "components/admin/**"],
+    rules: { "@next/next/no-html-link-for-pages": "off" },
+  },
+  {
     files: ["scripts/**", "worker/**", "prisma/**", "tests/**"],
     rules: { "no-console": "off" },
   },

@@ -86,7 +86,12 @@ function grainOverlay({ w, h }: Canvas): string {
 }
 
 /** The gold tennis ball: radial gradient, the seam and a soft glow. */
-export function ball(cx: number, cy: number, r: number, options: { glow?: boolean; shadow?: boolean } = {}): string {
+export function ball(
+  cx: number,
+  cy: number,
+  r: number,
+  options: { glow?: boolean; shadow?: boolean } = {},
+): string {
   const seamWidth = r1(r * 0.075);
   const seam = (flip: number) => {
     const x0 = cx + flip * r * 0.62;
@@ -94,7 +99,9 @@ export function ball(cx: number, cy: number, r: number, options: { glow?: boolea
   };
   const clipId = `ballClip${Math.round(cx)}x${Math.round(cy)}`;
   return [
-    options.glow ? `<circle cx="${r1(cx)}" cy="${r1(cy)}" r="${r1(r * 3.2)}" fill="url(#ballGlow)"/>` : "",
+    options.glow
+      ? `<circle cx="${r1(cx)}" cy="${r1(cy)}" r="${r1(r * 3.2)}" fill="url(#ballGlow)"/>`
+      : "",
     options.shadow
       ? `<ellipse cx="${r1(cx + r * 0.15)}" cy="${r1(cy + r * 1.25)}" rx="${r1(r * 0.9)}" ry="${r1(r * 0.22)}" fill="#1D1A15" opacity="0.28" filter="url(#blurS)"/>`
       : "",
@@ -119,7 +126,8 @@ export function cloud(cx: number, cy: number, width: number, seed: number, opaci
     const y = cy - dome * width * 0.13 - rand() * width * 0.04;
     shadow.push(`<circle cx="${r1(x + r * 0.12)}" cy="${r1(y + r * 0.22)}" r="${r1(r)}"/>`);
     body.push(`<circle cx="${r1(x)}" cy="${r1(y)}" r="${r1(r * 0.96)}"/>`);
-    if (rand() > 0.35) light.push(`<circle cx="${r1(x - r * 0.25)}" cy="${r1(y - r * 0.3)}" r="${r1(r * 0.55)}"/>`);
+    if (rand() > 0.35)
+      light.push(`<circle cx="${r1(x - r * 0.25)}" cy="${r1(y - r * 0.3)}" r="${r1(r * 0.55)}"/>`);
   }
   const base = `<rect x="${r1(cx - width * 0.48)}" y="${r1(cy - width * 0.04)}" width="${r1(width * 0.96)}" height="${r1(width * 0.1)}" rx="${r1(width * 0.05)}"/>`;
   return `<g opacity="${opacity}" filter="url(#cloudSoft)">
@@ -129,7 +137,8 @@ export function cloud(cx: number, cy: number, width: number, seed: number, opaci
 </g>`;
 }
 
-type Pose = "stand" | "reachUp" | "holdChest" | "swing" | "serve" | "pointUp" | "guide" | "sit" | "unroll";
+type Pose =
+  "stand" | "reachUp" | "holdChest" | "swing" | "serve" | "pointUp" | "guide" | "sit" | "unroll";
 
 /**
  * A standing figure in period dress, drawn with rounded strokes for limbs and a bell-shaped robe.
@@ -164,7 +173,11 @@ export function person(options: {
 
   const shoulderL = { x: x - sw * 0.85, y: shoulderY + h * 0.02 };
   const shoulderR = { x: x + sw * 0.85, y: shoulderY + h * 0.02 };
-  const arm = (from: { x: number; y: number }, elbow: { x: number; y: number }, hand: { x: number; y: number }) =>
+  const arm = (
+    from: { x: number; y: number },
+    elbow: { x: number; y: number },
+    hand: { x: number; y: number },
+  ) =>
     `<path d="M ${r1(from.x)} ${r1(from.y)} Q ${r1(elbow.x)} ${r1(elbow.y)} ${r1(hand.x)} ${r1(hand.y)}" fill="none" stroke="${robe}" stroke-width="${limb}" stroke-linecap="round"/><circle cx="${r1(hand.x)}" cy="${r1(hand.y)}" r="${r1(h * 0.028)}" fill="${skin}"/>`;
 
   // legs (visible under a short tunic)
@@ -193,7 +206,10 @@ export function person(options: {
   const reach = (side: 1 | -1, dx: number, dy: number, bend = 0) => {
     const s = side === 1 ? shoulderR : shoulderL;
     const hand = { x: s.x + dx * h * f, y: s.y + dy * h };
-    const elbow = { x: (s.x + hand.x) / 2 + bend * h * f, y: (s.y + hand.y) / 2 + Math.abs(bend) * h * 0.4 };
+    const elbow = {
+      x: (s.x + hand.x) / 2 + bend * h * f,
+      y: (s.y + hand.y) / 2 + Math.abs(bend) * h * 0.4,
+    };
     return arm(s, elbow, hand);
   };
   switch (pose) {
@@ -235,7 +251,13 @@ export function person(options: {
 }
 
 /** An old wooden racquet: long handle, small oval head, strings. */
-export function racquet(x: number, y: number, length: number, angleDeg: number, color = palette.lemn): string {
+export function racquet(
+  x: number,
+  y: number,
+  length: number,
+  angleDeg: number,
+  color = palette.lemn,
+): string {
   const headRx = length * 0.16;
   const headRy = length * 0.23;
   const handle = length - headRy * 2;
@@ -297,7 +319,9 @@ export function stars(canvas: Canvas, count: number, seed: number, maxY = 1): st
     const y = rand() * canvas.h * maxY;
     const r = (0.6 + rand() * 1.9) * (canvas.w / 2560) * 1.4;
     const o = 0.35 + rand() * 0.6;
-    items.push(`<circle cx="${r1(x)}" cy="${r1(y)}" r="${r1(r)}" fill="#F4EEDC" opacity="${r1(o)}"/>`);
+    items.push(
+      `<circle cx="${r1(x)}" cy="${r1(y)}" r="${r1(r)}" fill="#F4EEDC" opacity="${r1(o)}"/>`,
+    );
   }
   return items.join("");
 }

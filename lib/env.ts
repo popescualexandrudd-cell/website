@@ -14,21 +14,33 @@ const envSchema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
   DATABASE_URL: z
     .string({ error: "DATABASE_URL lipsește: adresa bazei de date PostgreSQL." })
-    .url("DATABASE_URL trebuie să fie o adresă validă, de forma postgresql://user:parola@host:5432/baza"),
+    .url(
+      "DATABASE_URL trebuie să fie o adresă validă, de forma postgresql://user:parola@host:5432/baza",
+    ),
   APP_URL: z
-    .string({ error: "APP_URL lipsește: adresa publică a site-ului, de exemplu https://numele-tau-tenis.ro" })
+    .string({
+      error: "APP_URL lipsește: adresa publică a site-ului, de exemplu https://numele-tau-tenis.ro",
+    })
     .url("APP_URL trebuie să fie o adresă completă, cu https://")
     .transform((value) => value.replace(/\/+$/, "")),
   AUTH_SECRET: z
     .string({ error: "AUTH_SECRET lipsește: generează unul cu `openssl rand -base64 48`." })
-    .min(32, "AUTH_SECRET trebuie să aibă cel puțin 32 de caractere. Generează unul cu `openssl rand -base64 48`."),
-  SMTP_HOST: z.string({ error: "SMTP_HOST lipsește: serverul de email (în dezvoltare: localhost)." }).min(1),
+    .min(
+      32,
+      "AUTH_SECRET trebuie să aibă cel puțin 32 de caractere. Generează unul cu `openssl rand -base64 48`.",
+    ),
+  SMTP_HOST: z
+    .string({ error: "SMTP_HOST lipsește: serverul de email (în dezvoltare: localhost)." })
+    .min(1),
   SMTP_PORT: z.coerce.number().int().positive().default(587),
   SMTP_SECURE: booleanFromString,
   SMTP_USER: optionalString,
   SMTP_PASSWORD: optionalString,
   EMAIL_FROM: z
-    .string({ error: "EMAIL_FROM lipsește: expeditorul emailurilor, de exemplu \"Nume <rezervari@domeniu.ro>\"." })
+    .string({
+      error:
+        'EMAIL_FROM lipsește: expeditorul emailurilor, de exemplu "Nume <rezervari@domeniu.ro>".',
+    })
     .min(3),
   COACH_NOTIFY_EMAIL: optionalString,
   MEDIA_DIR: z.string().default("./storage/media"),

@@ -30,15 +30,18 @@ export const strings = {
       preview: "Ne vedem pe teren.",
       title: "Lecția e confirmată.",
       body: "Am atașat fișierul pentru calendar. Adu pantofi de tenis, apă și haine în care te miști ușor; racheta o poți împrumuta.",
-      cancelNote: (hours: number) => `Poți anula gratuit din linkul de mai jos până cu ${hours} de ore înainte.`,
+      cancelNote: (hours: number) =>
+        `Poți anula gratuit din linkul de mai jos până cu ${hours} de ore înainte.`,
     },
     cancelledClient: {
       subject: (code: string) => `Rezervarea ${code} e anulată`,
       preview: "Ora a fost eliberată.",
       titleByClient: "Rezervarea e anulată.",
       titleByCoach: "Am anulat rezervarea.",
-      bodyByClient: "Am primit anularea. Dacă vrei să alegi altă oră, pagina de rezervare e deschisă oricând.",
-      bodyByCoach: "Îmi pare rău, dar trebuie să anulez această lecție. Scrie-mi sau alege altă oră din pagina de rezervare, iar dacă ai plătit în avans, îți returnez suma.",
+      bodyByClient:
+        "Am primit anularea. Dacă vrei să alegi altă oră, pagina de rezervare e deschisă oricând.",
+      bodyByCoach:
+        "Îmi pare rău, dar trebuie să anulez această lecție. Scrie-mi sau alege altă oră din pagina de rezervare, iar dacă ai plătit în avans, îți returnez suma.",
       reason: "Motiv",
       bookAgain: "Alege altă oră",
     },
@@ -97,15 +100,18 @@ export const strings = {
       preview: "See you on court.",
       title: "Your lesson is confirmed.",
       body: "The calendar file is attached. Bring tennis shoes, water and clothes you can move in; you can borrow a racquet.",
-      cancelNote: (hours: number) => `You can cancel free of charge from the link below up to ${hours} hours before.`,
+      cancelNote: (hours: number) =>
+        `You can cancel free of charge from the link below up to ${hours} hours before.`,
     },
     cancelledClient: {
       subject: (code: string) => `Booking ${code} is cancelled`,
       preview: "The slot has been released.",
       titleByClient: "Your booking is cancelled.",
       titleByCoach: "I have cancelled the booking.",
-      bodyByClient: "I have received your cancellation. If you would like another time, the booking page is always open.",
-      bodyByCoach: "I am sorry, but I have to cancel this lesson. Write to me or choose another time on the booking page; if you paid in advance, I will refund you.",
+      bodyByClient:
+        "I have received your cancellation. If you would like another time, the booking page is always open.",
+      bodyByCoach:
+        "I am sorry, but I have to cancel this lesson. Write to me or choose another time on the booking page; if you paid in advance, I will refund you.",
       reason: "Reason",
       bookAgain: "Choose another time",
     },
@@ -144,7 +150,8 @@ export const coachStrings = {
     subject: (code: string, when: string) => `Rezervare nouă ${code}: ${when}`,
     subjectGroup: (code: string, when: string) => `Cerere de înscriere ${code}: ${when}`,
     title: "Rezervare nouă",
-    requestNote: "Clientul așteaptă confirmarea. Apasă unul dintre butoane; pagina îți cere încă o confirmare.",
+    requestNote:
+      "Clientul așteaptă confirmarea. Apasă unul dintre butoane; pagina îți cere încă o confirmare.",
     instantNote: "Rezervarea e deja confirmată automat (modul instant).",
     confirm: "Confirmă rezervarea",
     decline: "Refuză rezervarea",
@@ -155,7 +162,19 @@ export const coachStrings = {
     subject: (code: string) => `Rezervarea ${code} a fost anulată de client`,
     title: "Rezervare anulată de client",
   },
-  contact: { subject: (name: string) => `Mesaj nou de la ${name}`, title: "Mesaj nou din formularul de contact", open: "Deschide inboxul" },
-  waitlist: { subject: (name: string) => `Listă de așteptare: ${name}`, title: "Cerere nouă pe lista de așteptare", open: "Deschide lista" },
-  review: { subject: (name: string) => `Recenzie nouă de la ${name}`, title: "Recenzie nouă, nepublicată", open: "Verifică și publică" },
+  contact: {
+    subject: (name: string) => `Mesaj nou de la ${name}`,
+    title: "Mesaj nou din formularul de contact",
+    open: "Deschide inboxul",
+  },
+  waitlist: {
+    subject: (name: string) => `Listă de așteptare: ${name}`,
+    title: "Cerere nouă pe lista de așteptare",
+    open: "Deschide lista",
+  },
+  review: {
+    subject: (name: string) => `Recenzie nouă de la ${name}`,
+    title: "Recenzie nouă, nepublicată",
+    open: "Verifică și publică",
+  },
 };

@@ -47,7 +47,10 @@ const BRUSH_STROKES = [
  * It is decorative: aria-hidden, since each scene's own section carries its text and image alt.
  */
 export function Stage({ scenes }: { scenes: SceneView[] }) {
-  const clouds = ["nor-01", "nor-02", "nor-03", "nor-04", "nor-05"].map((key) => ({ key, art: resolveArt(key) }));
+  const clouds = ["nor-01", "nor-02", "nor-03", "nor-04", "nor-05"].map((key) => ({
+    key,
+    art: resolveArt(key),
+  }));
   const texture = resolveArt("textura-pergament");
   const courtScene = scenes.find((s) => s.key === "terenul");
   const court = courtPaths(IMAGE_W / 2, IMAGE_H / 2, IMAGE_H * 0.8);
@@ -57,7 +60,18 @@ export function Stage({ scenes }: { scenes: SceneView[] }) {
 
   return (
     <div className="stage" aria-hidden="true">
-      <div className="stage-parchment">{texture ? <ArtPicture art={texture} alt="" desktopOnly gateMedia={CINEMATIC_MEDIA} className="stage-fill" imgClassName="stage-img" /> : null}</div>
+      <div className="stage-parchment">
+        {texture ? (
+          <ArtPicture
+            art={texture}
+            alt=""
+            desktopOnly
+            gateMedia={CINEMATIC_MEDIA}
+            className="stage-fill"
+            imgClassName="stage-img"
+          />
+        ) : null}
+      </div>
       {scenes.map((scene, i) => (
         <div key={scene.key} className="stage-group" data-group={scene.key}>
           {scene.art ? (
@@ -68,7 +82,15 @@ export function Stage({ scenes }: { scenes: SceneView[] }) {
               data-aspect={(scene.art.desktop.width / scene.art.desktop.height).toFixed(4)}
               data-first={i === 0 ? "true" : undefined}
             >
-              <ArtPicture art={scene.art} alt="" desktopOnly gateMedia={CINEMATIC_MEDIA} priority={i === 0} className="stage-fill" imgClassName="stage-img" />
+              <ArtPicture
+                art={scene.art}
+                alt=""
+                desktopOnly
+                gateMedia={CINEMATIC_MEDIA}
+                priority={i === 0}
+                className="stage-fill"
+                imgClassName="stage-img"
+              />
             </div>
           ) : null}
           {scene.artSecondary ? (
@@ -76,9 +98,18 @@ export function Stage({ scenes }: { scenes: SceneView[] }) {
               className="stage-layer"
               data-layer={scene.key}
               data-role="secondary"
-              data-aspect={(scene.artSecondary.desktop.width / scene.artSecondary.desktop.height).toFixed(4)}
+              data-aspect={(
+                scene.artSecondary.desktop.width / scene.artSecondary.desktop.height
+              ).toFixed(4)}
             >
-              <ArtPicture art={scene.artSecondary} alt="" desktopOnly gateMedia={CINEMATIC_MEDIA} className="stage-fill" imgClassName="stage-img" />
+              <ArtPicture
+                art={scene.artSecondary}
+                alt=""
+                desktopOnly
+                gateMedia={CINEMATIC_MEDIA}
+                className="stage-fill"
+                imgClassName="stage-img"
+              />
             </div>
           ) : null}
         </div>
@@ -89,29 +120,65 @@ export function Stage({ scenes }: { scenes: SceneView[] }) {
         const href = art?.webp.find((v) => v.w >= 1920)?.src ?? art?.fallback;
         if (!href) return null;
         return (
-          <svg key={scene.key} className="stage-brush" data-brush-for={scene.key} viewBox={`0 0 ${IMAGE_W} ${IMAGE_H}`} preserveAspectRatio="xMidYMid slice">
+          <svg
+            key={scene.key}
+            className="stage-brush"
+            data-brush-for={scene.key}
+            viewBox={`0 0 ${IMAGE_W} ${IMAGE_H}`}
+            preserveAspectRatio="xMidYMid slice"
+          >
             <defs>
-              <mask id={`brush-${scene.key}`} maskUnits="userSpaceOnUse" x="0" y="0" width={IMAGE_W} height={IMAGE_H}>
+              <mask
+                id={`brush-${scene.key}`}
+                maskUnits="userSpaceOnUse"
+                x="0"
+                y="0"
+                width={IMAGE_W}
+                height={IMAGE_H}
+              >
                 <rect width={IMAGE_W} height={IMAGE_H} fill="black" />
                 {BRUSH_STROKES.map((d, i) => (
-                  <path key={i} d={d} className="brush-stroke" stroke="white" strokeWidth={560} strokeLinecap="round" fill="none" pathLength={1} />
+                  <path
+                    key={i}
+                    d={d}
+                    className="brush-stroke"
+                    stroke="white"
+                    strokeWidth={560}
+                    strokeLinecap="round"
+                    fill="none"
+                    pathLength={1}
+                  />
                 ))}
               </mask>
             </defs>
-            <image data-href={href} width={IMAGE_W} height={IMAGE_H} preserveAspectRatio="xMidYMid slice" mask={`url(#brush-${scene.key})`} />
+            <image
+              data-href={href}
+              width={IMAGE_W}
+              height={IMAGE_H}
+              preserveAspectRatio="xMidYMid slice"
+              mask={`url(#brush-${scene.key})`}
+            />
           </svg>
         );
       })}
 
       {courtScene ? (
-        <svg className="stage-court" viewBox={`0 0 ${IMAGE_W} ${IMAGE_H}`} preserveAspectRatio="xMidYMid slice">
+        <svg
+          className="stage-court"
+          viewBox={`0 0 ${IMAGE_W} ${IMAGE_H}`}
+          preserveAspectRatio="xMidYMid slice"
+        >
           {court.map((d, i) => (
             <path key={i} d={d} className="court-line" pathLength={1} />
           ))}
         </svg>
       ) : null}
 
-      <svg className="stage-rainbow" viewBox={`0 0 ${IMAGE_W} ${IMAGE_H}`} preserveAspectRatio="xMidYMid slice">
+      <svg
+        className="stage-rainbow"
+        viewBox={`0 0 ${IMAGE_W} ${IMAGE_H}`}
+        preserveAspectRatio="xMidYMid slice"
+      >
         {["#C65B4E", "#D99A4E", "#E3CB6B", "#86A96A", "#5D86B8", "#6E5E9E"].map((color, i) => {
           const r = IMAGE_W * 0.4 - i * 36;
           return (
@@ -128,7 +195,11 @@ export function Stage({ scenes }: { scenes: SceneView[] }) {
         })}
       </svg>
 
-      <svg className="stage-constellation" viewBox={`0 0 ${IMAGE_W} ${IMAGE_H}`} preserveAspectRatio="xMidYMid slice">
+      <svg
+        className="stage-constellation"
+        viewBox={`0 0 ${IMAGE_W} ${IMAGE_H}`}
+        preserveAspectRatio="xMidYMid slice"
+      >
         <path
           d={`M ${CONSTELLATION.map(([x, y]) => `${x * IMAGE_W} ${y * IMAGE_H}`).join(" L ")}`}
           className="constellation-line"
@@ -142,7 +213,17 @@ export function Stage({ scenes }: { scenes: SceneView[] }) {
       <div className="stage-clouds">
         {clouds.map(({ key, art }) =>
           art ? (
-            <ArtPicture key={key} art={art} alt="" desktopOnly gateMedia={CINEMATIC_MEDIA} sizes="40vw" className="stage-cloud" priority style={{ backgroundImage: "none" }} />
+            <ArtPicture
+              key={key}
+              art={art}
+              alt=""
+              desktopOnly
+              gateMedia={CINEMATIC_MEDIA}
+              sizes="40vw"
+              className="stage-cloud"
+              priority
+              style={{ backgroundImage: "none" }}
+            />
           ) : null,
         )}
       </div>

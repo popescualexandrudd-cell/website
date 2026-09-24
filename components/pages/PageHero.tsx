@@ -3,7 +3,14 @@ import type { ArtSet } from "@/lib/art";
 import { ArtPicture } from "@/components/ui/ArtPicture";
 import { TodoText } from "@/components/site/TodoText";
 
-type Props = { title: string; intro?: string; art: ArtSet | null; imageAlt?: string; children?: ReactNode; eyebrow?: ReactNode };
+type Props = {
+  title: string;
+  intro?: string;
+  art: ArtSet | null;
+  imageAlt?: string;
+  children?: ReactNode;
+  eyebrow?: ReactNode;
+};
 
 /** Interior page header: one painting, then the title and a short introduction. */
 export function PageHero({ title, intro, art, imageAlt = "", children, eyebrow }: Props) {
@@ -11,7 +18,14 @@ export function PageHero({ title, intro, art, imageAlt = "", children, eyebrow }
     <header className="page-hero">
       {art ? (
         <figure className="page-hero-figure">
-          <ArtPicture art={art} alt={imageAlt} priority desktopOnly className="page-hero-picture" imgClassName="page-hero-img" />
+          <ArtPicture
+            art={art}
+            alt={imageAlt}
+            priority
+            desktopOnly
+            className="page-hero-picture"
+            imgClassName="page-hero-img"
+          />
         </figure>
       ) : null}
       <div className="grid-page page-hero-text">
@@ -32,9 +46,23 @@ export function PageHero({ title, intro, art, imageAlt = "", children, eyebrow }
   );
 }
 
-export function PageSection({ title, id, children, className = "" }: { title?: string; id?: string; children: ReactNode; className?: string }) {
+export function PageSection({
+  title,
+  id,
+  children,
+  className = "",
+}: {
+  title?: string;
+  id?: string;
+  children: ReactNode;
+  className?: string;
+}) {
   return (
-    <section className={`grid-page page-section ${className}`} aria-labelledby={title && id ? `${id}-title` : undefined} id={id}>
+    <section
+      className={`grid-page page-section ${className}`}
+      aria-labelledby={title && id ? `${id}-title` : undefined}
+      id={id}
+    >
       <div className="page-section-inner">
         {title ? (
           <h2 id={id ? `${id}-title` : undefined} className="section-title">

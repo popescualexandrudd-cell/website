@@ -107,7 +107,10 @@ const waitlistSchema = z.object({
     .string()
     .trim()
     .transform((value) => (value === "" ? null : Number.parseInt(value, 10)))
-    .refine((value) => value === null || (Number.isInteger(value) && value >= 3 && value <= 17), "childAge"),
+    .refine(
+      (value) => value === null || (Number.isInteger(value) && value >= 3 && value <= 17),
+      "childAge",
+    ),
   consent: fields.consent,
   locale: fields.locale,
 });
@@ -120,7 +123,9 @@ export async function submitWaitlist(_prev: FormState, formData: FormData): Prom
   if (!gate.ok) return gate.state;
   try {
     const data = parsed.data;
-    const program = data.programId ? await db.program.findUnique({ where: { id: data.programId } }) : null;
+    const program = data.programId
+      ? await db.program.findUnique({ where: { id: data.programId } })
+      : null;
     const entry = await db.waitlistEntry.create({
       data: {
         programId: program?.id ?? null,
@@ -161,9 +166,16 @@ export async function submitWaitlist(_prev: FormState, formData: FormData): Prom
 
 // ─── Newsletter (double opt-in) ──────────────────────────────────────────────
 
-const newsletterSchema = z.object({ email: fields.email, consent: fields.consent, locale: fields.locale });
+const newsletterSchema = z.object({
+  email: fields.email,
+  consent: fields.consent,
+  locale: fields.locale,
+});
 
-export async function subscribeNewsletter(_prev: FormState, formData: FormData): Promise<FormState> {
+export async function subscribeNewsletter(
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> {
   const raw = formDataToObject(formData);
   const parsed = newsletterSchema.safeParse(raw);
   if (!parsed.success) return { status: "error", fieldErrors: zodFieldErrors(parsed.error) };
@@ -179,7 +191,12 @@ export async function subscribeNewsletter(_prev: FormState, formData: FormData):
     const subscriber = existing
       ? await db.newsletterSubscriber.update({
           where: { id: existing.id },
-          data: { confirmTokenHash: hashToken(confirmToken), locale, consentAt: new Date(), policyVersion },
+          data: {
+            confirmTokenHash: hashToken(confirmToken),
+            locale,
+            consentAt: new Date(),
+            policyVersion,
+          },
         })
       : await db.newsletterSubscriber.create({
           data: {
@@ -193,7 +210,10 @@ export async function subscribeNewsletter(_prev: FormState, formData: FormData):
         });
     const unsubscribeToken = deriveToken("newsletter-unsubscribe", subscriber.id);
     if (!existing) {
-      await db.newsletterSubscriber.update({ where: { id: subscriber.id }, data: { unsubscribeTokenHash: hashToken(unsubscribeToken) } });
+      await db.newsletterSubscriber.update({
+        where: { id: subscriber.id },
+        data: { unsubscribeTokenHash: hashToken(unsubscribeToken) },
+      });
     }
     schedule(await queueNewsletterConfirmation(email, locale, confirmToken, unsubscribeToken));
     return { status: "success" };
@@ -209,13 +229,20 @@ export async function confirmNewsletter(_prev: FormState, formData: FormData): P
   if (!raw) return { status: "error", error: "invalid" };
   const hash = hashToken(raw);
   if (kind === "c.") {
-    const subscriber = await db.newsletterSubscriber.findUnique({ where: { confirmTokenHash: hash } });
+    const subscriber = await db.newsletterSubscriber.findUnique({
+      where: { confirmTokenHash: hash },
+    });
     if (!subscriber) return { status: "error", error: "invalid" };
-    await db.newsletterSubscriber.update({ where: { id: subscriber.id }, data: { confirmedAt: new Date(), confirmTokenHash: null } });
+    await db.newsletterSubscriber.update({
+      where: { id: subscriber.id },
+      data: { confirmedAt: new Date(), confirmTokenHash: null },
+    });
     return { status: "success", data: { kind: "confirmed" } };
   }
   if (kind === "u.") {
-    const subscriber = await db.newsletterSubscriber.findUnique({ where: { unsubscribeTokenHash: hash } });
+    const subscriber = await db.newsletterSubscriber.findUnique({
+      where: { unsubscribeTokenHash: hash },
+    });
     if (subscriber) await db.newsletterSubscriber.delete({ where: { id: subscriber.id } });
     return { status: "success", data: { kind: "unsubscribed" } };
   }
@@ -243,7 +270,9 @@ export async function submitReview(_prev: FormState, formData: FormData): Promis
   const gate = await guard("review", raw);
   if (!gate.ok) return gate.state;
   const data = parsed.data;
-  const booking = await db.booking.findUnique({ where: { reviewTokenHash: hashToken(data.token) } });
+  const booking = await db.booking.findUnique({
+    where: { reviewTokenHash: hashToken(data.token) },
+  });
   if (!booking) return { status: "error", error: "invalid" };
   const existing = await db.testimonial.findFirst({ where: { bookingId: booking.id } });
   if (existing) return { status: "error", error: "already" };

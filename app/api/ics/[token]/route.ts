@@ -11,16 +11,24 @@ export async function GET(_request: Request, context: RouteContext<"/api/ics/[to
   const { token } = await context.params;
   const booking = await findBookingByToken(token);
   if (!booking || (booking.status !== "CONFIRMATA" && booking.status !== "IN_ASTEPTARE")) {
-    return new Response("Rezervarea nu există sau a fost anulată.", { status: 404, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+    return new Response("Rezervarea nu există sau a fost anulată.", {
+      status: 404,
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
+    });
   }
-  const settings = await db.siteSettings.findUniqueOrThrow({ where: { id: 1 }, select: { brandName: true } });
+  const settings = await db.siteSettings.findUniqueOrThrow({
+    where: { id: 1 },
+    select: { brandName: true },
+  });
   const ics = buildIcs({
     uid: `${booking.code}@${new URL(urls.home("ro")).host}`,
     start: booking.startsAt,
     end: booking.endsAt,
     summary: `${t(booking.program.name, booking.locale)} · ${settings.brandName}`,
     description: `${booking.code}\n${urls.manageBooking(token, booking.locale)}`,
-    location: booking.location ? `${booking.location.name}, ${booking.location.address}` : undefined,
+    location: booking.location
+      ? `${booking.location.name}, ${booking.location.address}`
+      : undefined,
     url: urls.manageBooking(token, booking.locale),
     status: booking.status === "CONFIRMATA" ? "CONFIRMED" : "TENTATIVE",
   });

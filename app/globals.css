@@ -22,8 +22,12 @@
   --color-eroare: #9b1c1c;
   --color-succes: #2f5d34;
 
-  --font-display: var(--font-cormorant), "Cormorant Garamond", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-  --font-sans: var(--font-hanken), "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display:
+    var(--font-cormorant), "Cormorant Garamond", "Iowan Old Style", "Palatino Linotype", Georgia,
+    serif;
+  --font-sans:
+    var(--font-hanken), "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
 
   /* Modular scale, ratio 1.333, base 18px */
   --text-note: 0.84375rem;
@@ -467,7 +471,13 @@
     width: 0.55rem;
     height: 0.55rem;
     border-radius: 999px;
-    background: radial-gradient(circle at 36% 32%, #fff6cf 0, var(--color-aur-deschis) 20%, var(--color-aur) 58%, var(--color-aur-inchis) 100%);
+    background: radial-gradient(
+      circle at 36% 32%,
+      #fff6cf 0,
+      var(--color-aur-deschis) 20%,
+      var(--color-aur) 58%,
+      var(--color-aur-inchis) 100%
+    );
   }
   .header-book:hover,
   .menu-button:hover {
@@ -805,7 +815,9 @@
     color: var(--color-cerneala);
     text-align: left;
     font-size: 0.95rem;
-    transition: background-color 0.2s, border-color 0.2s;
+    transition:
+      background-color 0.2s,
+      border-color 0.2s;
   }
   .slot:hover:not(:disabled) {
     border-color: var(--color-cerneala);
@@ -1263,7 +1275,13 @@
     width: 0.5rem;
     height: 0.5rem;
     border-radius: 999px;
-    background: radial-gradient(circle at 36% 32%, #fff6cf 0, var(--color-aur-deschis) 20%, var(--color-aur) 58%, var(--color-aur-inchis) 100%);
+    background: radial-gradient(
+      circle at 36% 32%,
+      #fff6cf 0,
+      var(--color-aur-deschis) 20%,
+      var(--color-aur) 58%,
+      var(--color-aur-inchis) 100%
+    );
   }
   .capitalize-first::first-letter {
     text-transform: uppercase;

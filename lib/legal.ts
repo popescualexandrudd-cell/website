@@ -1,7 +1,13 @@
 import type { LocalizedSettings } from "./content";
 
 /** Fills the {{…}} placeholders of the legal drafts with the current settings. */
-export function fillLegalTemplate(body: string, settings: LocalizedSettings, version: string, locale: string, retentionMonths: number): string {
+export function fillLegalTemplate(
+  body: string,
+  settings: LocalizedSettings,
+  version: string,
+  locale: string,
+  retentionMonths: number,
+): string {
   const bookingMode =
     settings.bookingMode === "INSTANT"
       ? locale === "en"

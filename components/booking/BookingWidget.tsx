@@ -15,7 +15,9 @@ export async function BookingWidget({ programs }: { programs: ProgramView[] }) {
       programs={bookable}
       bookingMode={settings.bookingMode}
       compact
-      turnstileSiteKey={process.env.TURNSTILE_SECRET_KEY ? (process.env.TURNSTILE_SITE_KEY ?? null) : null}
+      turnstileSiteKey={
+        process.env.TURNSTILE_SECRET_KEY ? (process.env.TURNSTILE_SITE_KEY ?? null) : null
+      }
       nonce={h.get("x-nonce") ?? undefined}
     />
   );

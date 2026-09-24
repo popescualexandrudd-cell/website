@@ -1,11 +1,27 @@
 "use client";
 
-import { useActionState, useEffect, useMemo, useRef, useState, useTransition } from "react";
+import { useFormAction } from "@/components/ui/useFormAction";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { fetchAvailability, submitBooking, type AvailabilityResult, type DayOption, type SessionOption } from "@/app/actions/booking";
-import { idleState } from "@/lib/validation";
-import { ConsentField, FormStatus, Honeypot, SelectField, SubmitButton, TextArea, TextField, Turnstile, useErrorText } from "@/components/ui/form";
+import {
+  fetchAvailability,
+  submitBooking,
+  type AvailabilityResult,
+  type DayOption,
+  type SessionOption,
+} from "@/app/actions/booking";
+import {
+  ConsentField,
+  FormStatus,
+  Honeypot,
+  SelectField,
+  SubmitButton,
+  TextArea,
+  TextField,
+  Turnstile,
+  useErrorText,
+} from "@/components/ui/form";
 
 export type BookableProgram = {
   id: string;
@@ -33,25 +49,42 @@ type Props = {
 const COMPACT_SLOTS = 8;
 const RETRY_ERRORS = new Set(["conflict", "unavailable", "sessionFull"]);
 
-export function BookingFlow({ programs, initialProgramId, bookingMode, compact = false, turnstileSiteKey, nonce }: Props) {
+export function BookingFlow({
+  programs,
+  initialProgramId,
+  bookingMode,
+  compact = false,
+  turnstileSiteKey,
+  nonce,
+}: Props) {
   const t = useTranslations("booking");
   const tc = useTranslations("common");
   const locale = useLocale();
   const errorText = useErrorText();
-  const [programId, setProgramId] = useState<string | null>(initialProgramId ?? (compact ? (programs[0]?.id ?? null) : null));
+  const [programId, setProgramId] = useState<string | null>(
+    initialProgramId ?? (compact ? (programs[0]?.id ?? null) : null),
+  );
   const [step, setStep] = useState<1 | 2 | 3>(initialProgramId || compact ? 2 : 1);
   const [availability, setAvailability] = useState<AvailabilityResult | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);
   const [selection, setSelection] = useState<Selection | null>(null);
   const [loading, startLoading] = useTransition();
-  const [state, formAction] = useActionState(submitBooking, idleState);
+  const { state, pending, formProps: formActionProps } = useFormAction(submitBooking);
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const program = useMemo(() => programs.find((p) => p.id === programId) ?? null, [programs, programId]);
+  const program = useMemo(
+    () => programs.find((p) => p.id === programId) ?? null,
+    [programs, programId],
+  );
 
   const load = (id: string, fromDate?: string, append = false) => {
     startLoading(async () => {
       try {
-        const result = await fetchAvailability({ programId: id, locale, fromDate, days: compact ? 5 : 7 });
+        const result = await fetchAvailability({
+          programId: id,
+          locale,
+          fromDate,
+          days: compact ? 5 : 7,
+        });
         setLoadFailed(false);
         setAvailability((previous) => {
           if (append && previous?.kind === "exclusive" && result.kind === "exclusive") {
@@ -91,15 +124,25 @@ export function BookingFlow({ programs, initialProgramId, bookingMode, compact =
     setStep(3);
   };
 
-  const submitLabel = program?.format === "GRUPA" ? t("submitGroup") : bookingMode === "INSTANT" ? t("submitInstant") : t("submitRequest");
+  const submitLabel =
+    program?.format === "GRUPA"
+      ? t("submitGroup")
+      : bookingMode === "INSTANT"
+        ? t("submitInstant")
+        : t("submitRequest");
   const steps = [t("steps.program"), t("steps.time"), t("steps.details"), t("steps.done")];
   const currentStep = state.status === "success" ? 4 : step;
-  const retryError = state.status === "error" && state.error && RETRY_ERRORS.has(state.error) ? state.error : null;
+  const retryError =
+    state.status === "error" && state.error && RETRY_ERRORS.has(state.error) ? state.error : null;
 
   if (state.status === "success" && state.data) {
     const group = state.data.kind === "group";
     const instant = state.data.bookingStatus === "CONFIRMATA";
-    const title = group ? t("successGroupTitle") : instant ? t("successInstantTitle") : t("successRequestTitle");
+    const title = group
+      ? t("successGroupTitle")
+      : instant
+        ? t("successInstantTitle")
+        : t("successRequestTitle");
     const text = group
       ? t("successGroupText", { code: state.data.code ?? "" })
       : instant
@@ -107,7 +150,9 @@ export function BookingFlow({ programs, initialProgramId, bookingMode, compact =
         : t("successRequestText", { code: state.data.code ?? "" });
     return (
       <div className="booking-flow" data-compact={compact || undefined}>
-        {!compact ? <StepList steps={steps} current={4} label={t("stepOf", { current: 4, total: 4 })} /> : null}
+        {!compact ? (
+          <StepList steps={steps} current={4} label={t("stepOf", { current: 4, total: 4 })} />
+        ) : null}
         <div role="status" className="booking-done">
           <h2 ref={headingRef} tabIndex={-1} className="booking-heading">
             {title}
@@ -127,7 +172,13 @@ export function BookingFlow({ programs, initialProgramId, bookingMode, compact =
 
   return (
     <div className="booking-flow" data-compact={compact || undefined}>
-      {!compact ? <StepList steps={steps} current={currentStep} label={t("stepOf", { current: currentStep, total: 4 })} /> : null}
+      {!compact ? (
+        <StepList
+          steps={steps}
+          current={currentStep}
+          label={t("stepOf", { current: currentStep, total: 4 })}
+        />
+      ) : null}
 
       {step === 1 && !compact ? (
         <fieldset className="booking-step">
@@ -155,7 +206,12 @@ export function BookingFlow({ programs, initialProgramId, bookingMode, compact =
             ))}
           </div>
           <div className="booking-actions">
-            <button type="button" className="btn btn-primary" disabled={!programId} onClick={() => setStep(2)}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              disabled={!programId}
+              onClick={() => setStep(2)}
+            >
               {t("continue")}
             </button>
           </div>
@@ -186,8 +242,17 @@ export function BookingFlow({ programs, initialProgramId, bookingMode, compact =
               </select>
             </div>
           ) : null}
-          <h2 id="booking-time-heading" ref={compact ? undefined : headingRef} tabIndex={-1} className={compact ? "booking-subheading" : "booking-heading"}>
-            {compact ? t("firstFreeTimes") : program?.format === "GRUPA" ? t("chooseSession") : t("chooseTime")}
+          <h2
+            id="booking-time-heading"
+            ref={compact ? undefined : headingRef}
+            tabIndex={-1}
+            className={compact ? "booking-subheading" : "booking-heading"}
+          >
+            {compact
+              ? t("firstFreeTimes")
+              : program?.format === "GRUPA"
+                ? t("chooseSession")
+                : t("chooseTime")}
           </h2>
           {!compact && program ? (
             <p className="booking-selected-program">
@@ -224,7 +289,13 @@ export function BookingFlow({ programs, initialProgramId, bookingMode, compact =
               />
             ) : null}
             {availability?.kind === "group" ? (
-              <GroupSessions sessions={availability.sessions} compact={compact} onChoose={choose} emptyText={t("noSessions")} waitlistLabel={t("joinWaitlistInstead")} />
+              <GroupSessions
+                sessions={availability.sessions}
+                compact={compact}
+                onChoose={choose}
+                emptyText={t("noSessions")}
+                waitlistLabel={t("joinWaitlistInstead")}
+              />
             ) : null}
             {availability?.kind === "none" ? (
               <p>
@@ -239,8 +310,12 @@ export function BookingFlow({ programs, initialProgramId, bookingMode, compact =
       ) : null}
 
       {step === 3 && program && selection ? (
-        <form action={formAction} className="booking-step booking-form" noValidate>
-          <h2 ref={headingRef} tabIndex={-1} className={compact ? "booking-subheading" : "booking-heading"}>
+        <form {...formActionProps} className="booking-step booking-form" noValidate>
+          <h2
+            ref={headingRef}
+            tabIndex={-1}
+            className={compact ? "booking-subheading" : "booking-heading"}
+          >
             {t("steps.details")}
           </h2>
           <div className="booking-summary">
@@ -254,7 +329,9 @@ export function BookingFlow({ programs, initialProgramId, bookingMode, compact =
           </div>
           <input type="hidden" name="programId" value={program.id} />
           <input type="hidden" name="startsAt" value={selection.start} />
-          {selection.groupScheduleId ? <input type="hidden" name="groupScheduleId" value={selection.groupScheduleId} /> : null}
+          {selection.groupScheduleId ? (
+            <input type="hidden" name="groupScheduleId" value={selection.groupScheduleId} />
+          ) : null}
           <input type="hidden" name="locale" value={locale} />
           <Honeypot />
           {program.forMinors ? <p className="field-hint">{t("details.forMinorNote")}</p> : null}
@@ -267,7 +344,12 @@ export function BookingFlow({ programs, initialProgramId, bookingMode, compact =
             />
             {program.forMinors ? (
               <>
-                <TextField name="childFirstName" autoComplete="off" label={t("details.childFirstName")} error={errorText(state.fieldErrors?.childFirstName)} />
+                <TextField
+                  name="childFirstName"
+                  autoComplete="off"
+                  label={t("details.childFirstName")}
+                  error={errorText(state.fieldErrors?.childFirstName)}
+                />
                 <TextField
                   name="childAge"
                   type="number"
@@ -279,10 +361,27 @@ export function BookingFlow({ programs, initialProgramId, bookingMode, compact =
                 />
               </>
             ) : null}
-            <TextField name="email" type="email" autoComplete="email" label={t("details.email")} error={errorText(state.fieldErrors?.email)} />
-            <TextField name="phone" type="tel" autoComplete="tel" label={t("details.phone")} error={errorText(state.fieldErrors?.phone)} />
+            <TextField
+              name="email"
+              type="email"
+              autoComplete="email"
+              label={t("details.email")}
+              error={errorText(state.fieldErrors?.email)}
+            />
+            <TextField
+              name="phone"
+              type="tel"
+              autoComplete="tel"
+              label={t("details.phone")}
+              error={errorText(state.fieldErrors?.phone)}
+            />
             {program.format === "SEMI_PRIVAT" ? (
-              <SelectField name="participants" label={t("details.participants")} defaultValue="2" error={errorText(state.fieldErrors?.participants)}>
+              <SelectField
+                name="participants"
+                label={t("details.participants")}
+                defaultValue="2"
+                error={errorText(state.fieldErrors?.participants)}
+              >
                 {Array.from({ length: program.maxParticipants ?? 2 }, (_, i) => (
                   <option key={i + 1} value={i + 1}>
                     {i + 1}
@@ -293,7 +392,12 @@ export function BookingFlow({ programs, initialProgramId, bookingMode, compact =
               <input type="hidden" name="participants" value="1" />
             )}
             {!program.forMinors ? (
-              <SelectField name="declaredLevel" label={t("details.level")} optional defaultValue="INCEPATOR">
+              <SelectField
+                name="declaredLevel"
+                label={t("details.level")}
+                optional
+                defaultValue="INCEPATOR"
+              >
                 {(["INCEPATOR", "INTERMEDIAR", "AVANSAT", "COMPETITIE"] as const).map((level) => (
                   <option key={level} value={level}>
                     {t(`details.levelOptions.${level}`)}
@@ -314,7 +418,7 @@ export function BookingFlow({ programs, initialProgramId, bookingMode, compact =
           <Turnstile siteKey={turnstileSiteKey} nonce={nonce} />
           {state.status === "error" && !retryError ? <FormStatus state={state} success="" /> : null}
           <div className="booking-actions">
-            <SubmitButton>{submitLabel}</SubmitButton>
+            <SubmitButton pending={pending}>{submitLabel}</SubmitButton>
             <button type="button" className="btn btn-secondary" onClick={() => setStep(2)}>
               {t("back")}
             </button>
@@ -339,7 +443,11 @@ function StepList({ steps, current, label }: { steps: string[]; current: number;
       </p>
       <ol aria-label={label}>
         {steps.map((name, i) => (
-          <li key={name} aria-current={i + 1 === current ? "step" : undefined} data-done={i + 1 < current || undefined}>
+          <li
+            key={name}
+            aria-current={i + 1 === current ? "step" : undefined}
+            data-done={i + 1 < current || undefined}
+          >
             <span className="booking-step-number numerals">{i + 1}</span> {name}
           </li>
         ))}
@@ -362,13 +470,21 @@ function ExclusiveSlots(props: {
 }) {
   if (props.days.length === 0) return <p>{props.emptyText}</p>;
   if (props.compact) {
-    const flat = props.days.flatMap((day) => day.slots.map((slot) => ({ ...slot, day: day.label }))).slice(0, COMPACT_SLOTS);
+    const flat = props.days
+      .flatMap((day) => day.slots.map((slot) => ({ ...slot, day: day.label })))
+      .slice(0, COMPACT_SLOTS);
     return (
       <div>
         <ul className="slot-list slot-list--compact">
           {flat.map((slot) => (
             <li key={slot.start}>
-              <button type="button" className="slot" onClick={() => props.onChoose({ start: slot.start, label: `${slot.day}, ${slot.label}` })}>
+              <button
+                type="button"
+                className="slot"
+                onClick={() =>
+                  props.onChoose({ start: slot.start, label: `${slot.day}, ${slot.label}` })
+                }
+              >
                 <span className="slot-day">{slot.day}</span>
                 <span className="slot-time numerals">{slot.label}</span>
               </button>
@@ -377,7 +493,10 @@ function ExclusiveSlots(props: {
         </ul>
         {props.seeAllHref ? (
           <p className="mt-4">
-            <Link href={{ pathname: "/rezervare", query: { program: props.seeAllHref } }} className="link-quiet">
+            <Link
+              href={{ pathname: "/rezervare", query: { program: props.seeAllHref } }}
+              className="link-quiet"
+            >
               {props.seeAllLabel}
             </Link>
           </p>
@@ -393,7 +512,13 @@ function ExclusiveSlots(props: {
           <ul className="slot-list">
             {day.slots.map((slot) => (
               <li key={slot.start}>
-                <button type="button" className="slot" onClick={() => props.onChoose({ start: slot.start, label: `${day.label}, ${slot.label}` })}>
+                <button
+                  type="button"
+                  className="slot"
+                  onClick={() =>
+                    props.onChoose({ start: slot.start, label: `${day.label}, ${slot.label}` })
+                  }
+                >
                   <span className="slot-time numerals">{slot.label}</span>
                 </button>
               </li>
@@ -403,7 +528,12 @@ function ExclusiveSlots(props: {
       ))}
       {props.hasMore ? (
         <p className="mt-6">
-          <button type="button" className="btn btn-secondary" onClick={props.onMore} disabled={props.loading}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={props.onMore}
+            disabled={props.loading}
+          >
             {props.moreLabel}
           </button>
         </p>
@@ -412,7 +542,13 @@ function ExclusiveSlots(props: {
   );
 }
 
-function GroupSessions(props: { sessions: SessionOption[]; compact: boolean; onChoose: (s: Selection) => void; emptyText: string; waitlistLabel: string }) {
+function GroupSessions(props: {
+  sessions: SessionOption[];
+  compact: boolean;
+  onChoose: (s: Selection) => void;
+  emptyText: string;
+  waitlistLabel: string;
+}) {
   const t = useTranslations("booking");
   const sessions = props.compact ? props.sessions.slice(0, 6) : props.sessions;
   const open = sessions.filter((s) => s.spotsLeft > 0);
@@ -447,7 +583,9 @@ function GroupSessions(props: { sessions: SessionOption[]; compact: boolean; onC
             >
               <span className="slot-day">{session.dateLabel}</span>
               <span className="slot-time numerals">{session.timeLabel}</span>
-              <span className="slot-spots">{full ? t("full") : t("spotsLeft", { count: session.spotsLeft })}</span>
+              <span className="slot-spots">
+                {full ? t("full") : t("spotsLeft", { count: session.spotsLeft })}
+              </span>
             </button>
           </li>
         );

@@ -50,7 +50,13 @@ void main() {
 }`;
 
 export type Halftone = {
-  render: (options: { x: number; y: number; radius: number; progress: number; opacity: number }) => void;
+  render: (options: {
+    x: number;
+    y: number;
+    radius: number;
+    progress: number;
+    opacity: number;
+  }) => void;
   resize: () => void;
   clear: () => void;
   destroy: () => void;
@@ -69,7 +75,11 @@ function compile(gl: WebGLRenderingContext, type: number, source: string): WebGL
 }
 
 export function createHalftone(canvas: HTMLCanvasElement): Halftone | null {
-  const gl = canvas.getContext("webgl", { premultipliedAlpha: true, alpha: true, antialias: false });
+  const gl = canvas.getContext("webgl", {
+    premultipliedAlpha: true,
+    alpha: true,
+    antialias: false,
+  });
   if (!gl) return null;
   const vs = compile(gl, gl.VERTEX_SHADER, VERTEX);
   const fs = compile(gl, gl.FRAGMENT_SHADER, FRAGMENT);

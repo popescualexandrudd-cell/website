@@ -20,7 +20,16 @@ type Props = {
  * cinematic (desktop, motion allowed: the painting lives in the shared stage), stacked (mobile:
  * the 9:16 painting, then the text) and static (reduced motion or no JS: painting, then text).
  */
-export function SceneFrame({ scene, index, children, layout = "sticky", length = 2, priority = false, showStaticImage = true, staticExtra }: Props) {
+export function SceneFrame({
+  scene,
+  index,
+  children,
+  layout = "sticky",
+  length = 2,
+  priority = false,
+  showStaticImage = true,
+  staticExtra,
+}: Props) {
   const tone = scene.tone === "DESCHIS" ? "light" : "dark";
   return (
     <section
@@ -35,7 +44,13 @@ export function SceneFrame({ scene, index, children, layout = "sticky", length =
     >
       {showStaticImage && scene.art ? (
         <figure className="scene-static" data-mpos={scene.textPosMobile}>
-          <ArtPicture art={scene.art} alt={scene.imageAlt} priority={priority} className="scene-static-picture" imgClassName="scene-static-img" />
+          <ArtPicture
+            art={scene.art}
+            alt={scene.imageAlt}
+            priority={priority}
+            className="scene-static-picture"
+            imgClassName="scene-static-img"
+          />
           {staticExtra}
         </figure>
       ) : null}

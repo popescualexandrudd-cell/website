@@ -1,20 +1,27 @@
 import type { Prisma } from "../../../lib/generated/prisma/client";
 
-type SceneSeed = Omit<Prisma.SceneCreateInput, "image" | "imageMobile" | "imageSecondary" | "imageSecondaryMobile">;
+type SceneSeed = Omit<
+  Prisma.SceneCreateInput,
+  "image" | "imageMobile" | "imageSecondary" | "imageSecondaryMobile"
+>;
 
 /**
  * The ten scenes of the home page (brief, section 5). `{nume}` and `{locatie}` are replaced
  * at seed time from config/antrenor.yml. Ball coordinates are fractions of the 16:9 painting.
  */
 export function sceneSeeds(vars: { nume: string; locatie: string }): SceneSeed[] {
-  const fill = (value: string) => value.replaceAll("{nume}", vars.nume).replaceAll("{locatie}", vars.locatie);
+  const fill = (value: string) =>
+    value.replaceAll("{nume}", vars.nume).replaceAll("{locatie}", vars.locatie);
 
   return [
     {
       key: "deschiderea",
       order: 1,
       indexName: { ro: "Deschiderea", en: "Opening" },
-      title: { ro: "Tenisul se învață lovitură cu lovitură.", en: "Tennis is learned one stroke at a time." },
+      title: {
+        ro: "Tenisul se învață lovitură cu lovitură.",
+        en: "Tennis is learned one stroke at a time.",
+      },
       body: {
         ro: fill(
           "{nume}, antrenor de tenis. Lecții individuale și grupe pentru copii, juniori și adulți, la {locatie}.",
@@ -43,7 +50,10 @@ export function sceneSeeds(vars: { nume: string; locatie: string }): SceneSeed[]
       key: "impreuna",
       order: 2,
       indexName: { ro: "Împreună", en: "Together" },
-      title: { ro: "Eu aduc metoda. Tu aduci răbdarea.", en: "I bring the method. You bring the patience." },
+      title: {
+        ro: "Eu aduc metoda. Tu aduci răbdarea.",
+        en: "I bring the method. You bring the patience.",
+      },
       body: {
         ro: "Progresul se vede de la o săptămână la alta, și îl urmărim împreună.",
         en: "Progress shows from one week to the next, and we follow it together.",
@@ -65,7 +75,10 @@ export function sceneSeeds(vars: { nume: string; locatie: string }): SceneSeed[]
       key: "filozofia",
       order: 3,
       indexName: { ro: "Filozofia", en: "Philosophy" },
-      title: { ro: "Un joc bun e făcut din lucruri mici.", en: "A good game is made of small things." },
+      title: {
+        ro: "Un joc bun e făcut din lucruri mici.",
+        en: "A good game is made of small things.",
+      },
       body: {
         ro: "Priza. Pasul de ajustare. Momentul impactului. Respirația dintre puncte. Pe ele se sprijină tot restul, și cu ele începem.",
         en: "The grip. The adjustment step. The moment of contact. The breath between points. Everything else rests on them, and that is where we start.",

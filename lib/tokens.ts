@@ -27,7 +27,9 @@ function secret(): string {
 
 /** HMAC-signed, expiring payload for links in emails (e.g. the coach's confirm / decline buttons). */
 export function signPayload(payload: Record<string, string | number>, ttlSeconds: number): string {
-  const body = Buffer.from(JSON.stringify({ ...payload, exp: Math.floor(Date.now() / 1000) + ttlSeconds })).toString("base64url");
+  const body = Buffer.from(
+    JSON.stringify({ ...payload, exp: Math.floor(Date.now() / 1000) + ttlSeconds }),
+  ).toString("base64url");
   const signature = createHmac("sha256", secret()).update(body).digest("base64url");
   return `${body}.${signature}`;
 }
@@ -40,7 +42,10 @@ export function verifyPayload(token: string): Record<string, string | number> | 
   const b = Buffer.from(expected);
   if (a.length !== b.length || !timingSafeEqual(a, b)) return null;
   try {
-    const data = JSON.parse(Buffer.from(body, "base64url").toString("utf8")) as Record<string, string | number>;
+    const data = JSON.parse(Buffer.from(body, "base64url").toString("utf8")) as Record<
+      string,
+      string | number
+    >;
     if (typeof data.exp !== "number" || data.exp < Math.floor(Date.now() / 1000)) return null;
     return data;
   } catch {

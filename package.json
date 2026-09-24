@@ -7,7 +7,9 @@
     "node": ">=22.12"
   },
   "scripts": {
+    "predev": "tsx scripts/images.ts --if-missing",
     "dev": "next dev",
+    "prebuild": "tsx scripts/images.ts --if-missing",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",

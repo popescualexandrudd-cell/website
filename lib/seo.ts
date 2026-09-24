@@ -30,7 +30,11 @@ export async function pageMetadata(options: {
   const settings = await getSettings();
   const canonical = localizedUrl(options.href, options.locale);
   const languages = settings.enEnabled
-    ? { ro: localizedUrl(options.href, "ro"), en: localizedUrl(options.href, "en"), "x-default": localizedUrl(options.href, "ro") }
+    ? {
+        ro: localizedUrl(options.href, "ro"),
+        en: localizedUrl(options.href, "en"),
+        "x-default": localizedUrl(options.href, "ro"),
+      }
     : undefined;
   return {
     title: options.absoluteTitle ? { absolute: options.title } : options.title,
@@ -45,6 +49,10 @@ export async function pageMetadata(options: {
       locale: options.locale === "en" ? "en_GB" : "ro_RO",
       ...(options.publishedTime ? { publishedTime: options.publishedTime } : {}),
     },
-    twitter: { card: "summary_large_image", title: options.title, description: options.description || undefined },
+    twitter: {
+      card: "summary_large_image",
+      title: options.title,
+      description: options.description || undefined,
+    },
   };
 }

@@ -8,7 +8,11 @@ export function dateLocale(locale: Locale | string) {
 }
 
 /** "250 lei" / "RON 250"; the missing-price marker when the coach has not set it. */
-export function formatPrice(value: string | number | null | undefined, currency: string, locale: Locale | string): string {
+export function formatPrice(
+  value: string | number | null | undefined,
+  currency: string,
+  locale: Locale | string,
+): string {
   if (value === null || value === undefined || value === "") return TODO_MARK;
   const amount = typeof value === "number" ? value : Number.parseFloat(value);
   if (!Number.isFinite(amount)) return TODO_MARK;
@@ -20,7 +24,12 @@ export function formatPrice(value: string | number | null | undefined, currency:
   return `${formatted} ${currency}`;
 }
 
-export function formatDate(instant: Date | string, timezone: string, locale: Locale | string, pattern = "EEEE, d MMMM"): string {
+export function formatDate(
+  instant: Date | string,
+  timezone: string,
+  locale: Locale | string,
+  pattern = "EEEE, d MMMM",
+): string {
   return formatInTimeZone(new Date(instant), timezone, pattern, { locale: dateLocale(locale) });
 }
 

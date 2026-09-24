@@ -16,7 +16,11 @@ export type EncodedImage = {
 const LIMIT_INPUT_PIXELS = 50_000_000;
 
 export function openImage(input: Buffer | string, options: { density?: number } = {}): Sharp {
-  return sharp(input, { limitInputPixels: LIMIT_INPUT_PIXELS, density: options.density, failOn: "error" }).rotate();
+  return sharp(input, {
+    limitInputPixels: LIMIT_INPUT_PIXELS,
+    density: options.density,
+    failOn: "error",
+  }).rotate();
 }
 
 /**
@@ -36,11 +40,19 @@ export async function applyPhotoTreatment(input: Buffer): Promise<Buffer> {
     .gamma(1.04)
     .toBuffer();
   const noise = await sharp({
-    create: { width, height, channels: 3, background: { r: 128, g: 128, b: 128 }, noise: { type: "gaussian", mean: 128, sigma: 18 } },
+    create: {
+      width,
+      height,
+      channels: 3,
+      background: { r: 128, g: 128, b: 128 },
+      noise: { type: "gaussian", mean: 128, sigma: 18 },
+    },
   })
     .png()
     .toBuffer();
-  return sharp(graded).composite([{ input: noise, blend: "soft-light" }]).toBuffer();
+  return sharp(graded)
+    .composite([{ input: noise, blend: "soft-light" }])
+    .toBuffer();
 }
 
 function shortHash(buffer: Buffer): string {
@@ -66,25 +78,46 @@ export async function encodeVariants(options: {
   await mkdir(outDir, { recursive: true });
 
   // Decode once (SVG rasterisation and large JPEG decoding are the slow part), then resize from memory.
-  const decoded = await openImage(input, { density: options.density }).raw().toBuffer({ resolveWithObject: true });
+  const decoded = await openImage(input, { density: options.density })
+    .raw()
+    .toBuffer({ resolveWithObject: true });
   const { width: sourceWidth, height: sourceHeight, channels } = decoded.info;
   if (!sourceWidth || !sourceHeight) throw new Error("Imaginea nu are dimensiuni valide.");
   const hasAlpha = channels === 4;
-  const fromMemory = () => sharp(decoded.data, { raw: { width: sourceWidth, height: sourceHeight, channels } });
+  const fromMemory = () =>
+    sharp(decoded.data, { raw: { width: sourceWidth, height: sourceHeight, channels } });
 
-  const targetWidths = [...new Set(widths.map((w) => Math.min(w, sourceWidth)))].sort((a, b) => a - b);
+  const targetWidths = [...new Set(widths.map((w) => Math.min(w, sourceWidth)))].sort(
+    (a, b) => a - b,
+  );
   const variants: ImageVariant[] = [];
   for (const width of targetWidths) {
-    const resized = await fromMemory().resize({ width, withoutEnlargement: true }).raw().toBuffer({ resolveWithObject: true });
+    const resized = await fromMemory()
+      .resize({ width, withoutEnlargement: true })
+      .raw()
+      .toBuffer({ resolveWithObject: true });
     const scaled = () => sharp(resized.data, { raw: resized.info });
     const [avif, webp] = await Promise.all([
-      scaled().avif({ quality: hasAlpha ? 60 : 52, effort: 3 }).toBuffer(),
+      scaled()
+        .avif({ quality: hasAlpha ? 60 : 52, effort: 3 })
+        .toBuffer(),
       scaled().webp({ quality: 78, alphaQuality: 90, effort: 4 }).toBuffer(),
     ]);
-    const avifName = hashNames ? `${baseName}-${width}.${shortHash(avif)}.avif` : `${baseName}-${width}.avif`;
-    const webpName = hashNames ? `${baseName}-${width}.${shortHash(webp)}.webp` : `${baseName}-${width}.webp`;
-    await Promise.all([writeFile(join(outDir, avifName), avif), writeFile(join(outDir, webpName), webp)]);
-    variants.push({ w: width, avif: `${publicPrefix}/${avifName}`, webp: `${publicPrefix}/${webpName}` });
+    const avifName = hashNames
+      ? `${baseName}-${width}.${shortHash(avif)}.avif`
+      : `${baseName}-${width}.avif`;
+    const webpName = hashNames
+      ? `${baseName}-${width}.${shortHash(webp)}.webp`
+      : `${baseName}-${width}.webp`;
+    await Promise.all([
+      writeFile(join(outDir, avifName), avif),
+      writeFile(join(outDir, webpName), webp),
+    ]);
+    variants.push({
+      w: width,
+      avif: `${publicPrefix}/${avifName}`,
+      webp: `${publicPrefix}/${webpName}`,
+    });
   }
 
   const tiny = await fromMemory().resize({ width: 24 }).blur(1.2).webp({ quality: 40 }).toBuffer();

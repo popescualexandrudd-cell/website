@@ -1,5 +1,18 @@
 import type { ReactNode } from "react";
-import { Body, Button, Container, Head, Heading, Hr, Html, Img, Preview, Section, Text, Link } from "react-email";
+import {
+  Body,
+  Button,
+  Container,
+  Head,
+  Heading,
+  Hr,
+  Html,
+  Img,
+  Preview,
+  Section,
+  Text,
+  Link,
+} from "react-email";
 
 const colors = {
   pergament: "#ECE3CF",
@@ -26,10 +39,41 @@ export function EmailLayout(props: {
     <Html lang={props.lang}>
       <Head />
       <Preview>{props.preview}</Preview>
-      <Body style={{ backgroundColor: colors.pergament, margin: 0, padding: "32px 0", fontFamily: sans, color: colors.cerneala }}>
-        <Container style={{ maxWidth: 560, backgroundColor: colors.paper, padding: "40px 36px", border: `1px solid ${colors.linie}` }}>
-          <Img src={props.ornamentUrl} width="28" height="28" alt="" style={{ margin: "0 0 20px" }} />
-          <Heading as="h1" style={{ fontFamily: serif, fontWeight: 400, fontSize: 32, lineHeight: "1.1", margin: "0 0 20px", letterSpacing: "-0.01em" }}>
+      <Body
+        style={{
+          backgroundColor: colors.pergament,
+          margin: 0,
+          padding: "32px 0",
+          fontFamily: sans,
+          color: colors.cerneala,
+        }}
+      >
+        <Container
+          style={{
+            maxWidth: 560,
+            backgroundColor: colors.paper,
+            padding: "40px 36px",
+            border: `1px solid ${colors.linie}`,
+          }}
+        >
+          <Img
+            src={props.ornamentUrl}
+            width="28"
+            height="28"
+            alt=""
+            style={{ margin: "0 0 20px" }}
+          />
+          <Heading
+            as="h1"
+            style={{
+              fontFamily: serif,
+              fontWeight: 400,
+              fontSize: 32,
+              lineHeight: "1.1",
+              margin: "0 0 20px",
+              letterSpacing: "-0.01em",
+            }}
+          >
             {props.title}
           </Heading>
           {props.children}
@@ -46,15 +90,30 @@ export function EmailLayout(props: {
 }
 
 export function P({ children }: { children: ReactNode }) {
-  return <Text style={{ fontSize: 16, lineHeight: "1.6", margin: "0 0 16px", color: colors.cerneala }}>{children}</Text>;
+  return (
+    <Text style={{ fontSize: 16, lineHeight: "1.6", margin: "0 0 16px", color: colors.cerneala }}>
+      {children}
+    </Text>
+  );
 }
 
 export function DetailRows({ rows }: { rows: [string, string][] }) {
   return (
     <Section style={{ margin: "8px 0 24px", borderTop: `1px solid ${colors.linie}` }}>
       {rows.map(([label, value]) => (
-        <Text key={label} style={{ fontSize: 15, lineHeight: "1.5", margin: 0, padding: "10px 0", borderBottom: `1px solid ${colors.linie}` }}>
-          <span style={{ color: colors.cerneala2, display: "inline-block", minWidth: 120 }}>{label}</span>
+        <Text
+          key={label}
+          style={{
+            fontSize: 15,
+            lineHeight: "1.5",
+            margin: 0,
+            padding: "10px 0",
+            borderBottom: `1px solid ${colors.linie}`,
+          }}
+        >
+          <span style={{ color: colors.cerneala2, display: "inline-block", minWidth: 120 }}>
+            {label}
+          </span>
           <strong style={{ fontWeight: 500 }}>{value}</strong>
         </Text>
       ))}
@@ -107,7 +166,10 @@ export function SecondaryButton({ href, children }: { href: string; children: Re
 
 export function QuietLink({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <Link href={href} style={{ color: colors.ultramarin, textDecoration: "underline", fontSize: 15 }}>
+    <Link
+      href={href}
+      style={{ color: colors.ultramarin, textDecoration: "underline", fontSize: 15 }}
+    >
       {children}
     </Link>
   );

@@ -10,25 +10,56 @@ import { JsonLd } from "@/components/pages/JsonLd";
 import { Markdown } from "@/components/site/Markdown";
 import { TodoText } from "@/components/site/TodoText";
 
-const CATEGORY_ORDER = ["INCEPUT", "ECHIPAMENT", "COPII", "PROGRAM_PLATA", "TEREN_VREME", "COMPETITIE"] as const;
+const CATEGORY_ORDER = [
+  "INCEPUT",
+  "ECHIPAMENT",
+  "COPII",
+  "PROGRAM_PLATA",
+  "TEREN_VREME",
+  "COMPETITIE",
+] as const;
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/intrebari">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/intrebari">): Promise<Metadata> {
   const locale = (await params).locale as Locale;
   const header = await getPageHeader("intrebari", locale);
-  return pageMetadata({ locale, href: "/intrebari", title: header.seoTitle, description: header.seoDescription });
+  return pageMetadata({
+    locale,
+    href: "/intrebari",
+    title: header.seoTitle,
+    description: header.seoDescription,
+  });
 }
 
 export default async function FaqPage({ params }: PageProps<"/[locale]/intrebari">) {
   const locale = (await params).locale as Locale;
   setRequestLocale(locale);
-  const [header, faqs, t] = await Promise.all([getPageHeader("intrebari", locale), getFaqs(locale), getTranslations("faq")]);
-  const groups = CATEGORY_ORDER.map((key) => ({ key, items: faqs.filter((f) => f.category === key) })).filter((g) => g.items.length > 0);
+  const [header, faqs, t] = await Promise.all([
+    getPageHeader("intrebari", locale),
+    getFaqs(locale),
+    getTranslations("faq"),
+  ]);
+  const groups = CATEGORY_ORDER.map((key) => ({
+    key,
+    items: faqs.filter((f) => f.category === key),
+  })).filter((g) => g.items.length > 0);
   return (
     <>
       <JsonLd data={faqLd(faqs)} />
-      <PageHero title={header.title} intro={header.intro} art={header.art} imageAlt={header.imageAlt} />
+      <PageHero
+        title={header.title}
+        intro={header.intro}
+        art={header.art}
+        imageAlt={header.imageAlt}
+      />
       {groups.map((group) => (
-        <PageSection key={group.key} id={`categorie-${group.key.toLowerCase()}`} title={t(`categories.${group.key}`)} className="page-section--narrow">
+        <PageSection
+          key={group.key}
+          id={`categorie-${group.key.toLowerCase()}`}
+          title={t(`categories.${group.key}`)}
+          className="page-section--narrow"
+        >
           <div className="faq-list">
             {group.items.map((faq) => (
               <details key={faq.id} className="faq-item">

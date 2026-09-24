@@ -9,12 +9,20 @@ export const fields = {
     .trim()
     .max(40, "phone")
     .regex(/^\+?[\d\s().-]{8,}$/, "phone")
-    .refine((value) => value.replace(/\D/g, "").length >= 8 && value.replace(/\D/g, "").length <= 15, "phone"),
+    .refine(
+      (value) => value.replace(/\D/g, "").length >= 8 && value.replace(/\D/g, "").length <= 15,
+      "phone",
+    ),
   optionalPhone: z
     .string()
     .trim()
     .max(40, "phone")
-    .refine((value) => value === "" || (/^\+?[\d\s().-]{8,}$/.test(value) && value.replace(/\D/g, "").length <= 15), "phone")
+    .refine(
+      (value) =>
+        value === "" ||
+        (/^\+?[\d\s().-]{8,}$/.test(value) && value.replace(/\D/g, "").length <= 15),
+      "phone",
+    )
     .transform((value) => (value === "" ? null : value)),
   message: z.string().trim().min(10, "message").max(4000, "message"),
   optionalText: (max: number) =>

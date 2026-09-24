@@ -8,3 +8,8 @@ playwright-report
 test-results
 package-lock.json
 *.md
+storage
+backups
+.scratch
+art-src
+config/antrenor.yml

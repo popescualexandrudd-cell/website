@@ -5,7 +5,9 @@ import { getLegalPage } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 import { LegalPageView } from "@/components/pages/LegalPageView";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/cookies">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/cookies">): Promise<Metadata> {
   const locale = (await params).locale as Locale;
   const page = await getLegalPage("COOKIES", locale);
   return pageMetadata({ locale, href: "/cookies", title: page?.title ?? "Cookies" });

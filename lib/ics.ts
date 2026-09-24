@@ -17,11 +17,18 @@ export type IcsEvent = {
 };
 
 function formatUtc(date: Date): string {
-  return date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  return date
+    .toISOString()
+    .replace(/[-:]/g, "")
+    .replace(/\.\d{3}/, "");
 }
 
 export function escapeIcsText(value: string): string {
-  return value.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
+  return value
+    .replace(/\\/g, "\\\\")
+    .replace(/;/g, "\\;")
+    .replace(/,/g, "\\,")
+    .replace(/\r?\n/g, "\\n");
 }
 
 /** Folds a content line into 75-octet chunks (UTF-8 safe), continuation lines start with a space. */
@@ -69,7 +76,13 @@ export function buildIcs(event: IcsEvent, now = new Date()): string {
     lines.push(`ORGANIZER${cn}:mailto:${event.organizerEmail}`);
   }
   if (event.status !== "CANCELLED") {
-    lines.push("BEGIN:VALARM", "ACTION:DISPLAY", "DESCRIPTION:Lecție de tenis", "TRIGGER:-PT2H", "END:VALARM");
+    lines.push(
+      "BEGIN:VALARM",
+      "ACTION:DISPLAY",
+      "DESCRIPTION:Lecție de tenis",
+      "TRIGGER:-PT2H",
+      "END:VALARM",
+    );
   }
   lines.push("END:VEVENT", "END:VCALENDAR");
   return `${lines.map(foldIcsLine).join("\r\n")}\r\n`;

@@ -8,10 +8,21 @@ import { SceneTitle } from "./SceneTitle";
 import { safeHref } from "./links";
 
 /** Scene 6 · the court: surfaces, number of courts, floodlights, winter cover, amenities. */
-export async function CourtScene({ scene, index, location, amenities }: { scene: SceneView; index: number; location: LocationView | null; amenities: FacilityView[] }) {
+export async function CourtScene({
+  scene,
+  index,
+  location,
+  amenities,
+}: {
+  scene: SceneView;
+  index: number;
+  location: LocationView | null;
+  amenities: FacilityView[];
+}) {
   const t = await getTranslations();
   const href = safeHref(scene.ctaHref) ?? "/facilitati";
-  const flag = (value: boolean | null, yes: string, no: string) => (value === null ? TODO_MARK : value ? yes : no);
+  const flag = (value: boolean | null, yes: string, no: string) =>
+    value === null ? TODO_MARK : value ? yes : no;
   return (
     <SceneFrame scene={scene} index={index} length={2.6}>
       <SceneTitle id={`${scene.key}-title`} text={scene.title} />
@@ -27,11 +38,19 @@ export async function CourtScene({ scene, index, location, amenities }: { scene:
             <div key={court.id} className="court-row">
               <dt className="court-name">{court.name}</dt>
               <dd className="court-facts numerals">
-                {court.count === null ? <TodoText value={TODO_MARK} /> : t("home.courtCount", { count: court.count })}
+                {court.count === null ? (
+                  <TodoText value={TODO_MARK} />
+                ) : (
+                  t("home.courtCount", { count: court.count })
+                )}
                 {" · "}
-                <TodoText value={flag(court.floodlights, t("home.floodlights"), t("home.noFloodlights"))} />
+                <TodoText
+                  value={flag(court.floodlights, t("home.floodlights"), t("home.noFloodlights"))}
+                />
                 {" · "}
-                <TodoText value={flag(court.coveredInWinter, t("home.covered"), t("home.notCovered"))} />
+                <TodoText
+                  value={flag(court.coveredInWinter, t("home.covered"), t("home.notCovered"))}
+                />
               </dd>
             </div>
           ))}

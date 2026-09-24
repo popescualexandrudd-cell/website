@@ -183,10 +183,16 @@ export const pageHeaderContent: {
   },
 ];
 
-export const serviceDescriptions: Record<string, { type: FacilityType; name: T; description: T; illustration: string }> = {
+export const serviceDescriptions: Record<
+  string,
+  { type: FacilityType; name: T; description: T; illustration: string }
+> = {
   "Evaluare inițială și plan de antrenament personalizat": {
     type: "SERVICIU_ANTRENOR",
-    name: { ro: "Evaluare inițială și plan personalizat", en: "Initial assessment and a personal plan" },
+    name: {
+      ro: "Evaluare inițială și plan personalizat",
+      en: "Initial assessment and a personal plan",
+    },
     description: {
       ro: "La prima lecție vedem tehnica și mișcarea, apoi primești obiectivele pe 8–12 săptămâni, în scris.",
       en: "In the first lesson we look at technique and movement, then you get your 8–12 week goals in writing.",

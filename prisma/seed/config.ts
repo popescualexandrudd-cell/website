@@ -130,7 +130,8 @@ export function coordinates(value: Scalar): { lat: number; lng: number } | null 
     .split(",")
     .map((part) => Number.parseFloat(part.trim()));
   const [lat, lng] = parts;
-  if (lat === undefined || lng === undefined || !Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  if (lat === undefined || lng === undefined || !Number.isFinite(lat) || !Number.isFinite(lng))
+    return null;
   return { lat, lng };
 }
 

@@ -10,7 +10,7 @@ Fiecare fază se încheie cu verificări și un commit. Dacă lucrul se întreru
 | 4. Sistem vizual și pagina principală | gata |
 | 5. Pagini interioare | gata |
 | 6. Rezervări și emailuri | gata |
-| 7. Admin | — |
+| 7. Admin | gata |
 | 8. SEO, GDPR, securitate, performanță, accesibilitate | — |
 | 9. Deploy | — |
 | 10. QA final | — |
@@ -79,6 +79,35 @@ Fiecare fază se încheie cu verificări și un commit. Dacă lucrul se întreru
   respinsă de constrângere; grupă plină la cereri simultane; anulare înainte și după limită; job-urile.
 - Testele au prins o eroare reală: `;` nu era escapat în fișierul `.ics`.
 
+## Faza 7: Panou de administrare
+
+- Autentificare cu argon2id, sesiuni în baza de date (cookie httpOnly, 30 de zile, reînnoire),
+  blocare 15 minute după 5 parole greșite, limită de încercări pe IP și pe email, sesiune nouă la
+  fiecare autentificare, roluri Proprietar/Editor verificate pe server în fiecare pagină și acțiune.
+- Mobile-first: bară de jos cu Azi / Rezervări / Mesaje / Meniu, meniu lateral pe desktop.
+- Tablou de bord (de confirmat, lecții săptămâna aceasta, mesaje, listă de așteptare, grad de ocupare
+  pe 3 luni, avertismente: email lipsă, texte [DE COMPLETAT], pagini legale neverificate), Azi (cu
+  Sună / WhatsApp / email), rezervări (listă cu filtre, săptămână, detaliu, confirmare/refuz/anulare cu
+  motiv, efectuată/neprezentare, rezervare manuală, export CSV), confirmare din emailul antrenorului.
+- Disponibilitate: intervale săptămânale, excepții (concediu, zile libere, ore extra) cu avertisment
+  pentru rezervările afectate.
+- Conținut: editor generic pentru scene, antete, profil, certificări, programe, prețuri și pachete,
+  orarul grupelor, locații, terenuri, facilități, întrebări, recenzii, galerie, articole, pagini
+  legale; câmpuri RO/EN, Markdown cu previzualizare identică cu site-ul, alegere de imagine cu
+  încărcare, reordonare prin drag-and-drop (mouse, touch, tastatură) și butoane sus/jos,
+  previzualizare pe site cu ciornele.
+- Media: încărcare cu verificarea tipului real, 10 MB, re-encodare AVIF/WebP fără EXIF, text alternativ
+  obligatoriu, tratament cald opțional; o imagine folosită nu poate fi ștearsă.
+- Mesaje, listă de așteptare, clienți (istoric, pachet vândut, lecții rămase, note, export JSON și
+  ștergere GDPR), newsletter (export CSV cu link de dezabonare), setări (toate setările site-ului,
+  email de test, conturi), contul meu (parolă, deconectare de pe celelalte dispozitive), jurnal.
+- Toate formularele păstrează textul introdus când validarea eșuează (și cele publice).
+- Teste: 52 (11 noi: upload fără EXIF, SVG/fișier fals/prea mare refuzate, căi media în afara
+  directorului, parsarea formularului generic, regula minorilor din galerie, versiunea politicii,
+  export și ștergere GDPR, pluralul românesc, CSV). Verificat în browser la 390 px: creare, eroare de
+  validare, previzualizare Markdown, salvare, ștergere, reordonare, încărcare, rol Editor fără acces
+  la rezervări.
+
 ## Următorul pas
 
-Faza 7: panoul de administrare.
+Faza 8: SEO, GDPR, securitate, performanță, accesibilitate.

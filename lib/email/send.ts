@@ -30,7 +30,12 @@ export async function queueEmail(options: {
 }): Promise<string> {
   const html = await render(options.element);
   const text = await render(options.element, { plainText: true });
-  const payload: Payload = { html, text, attachments: options.attachments, replyTo: options.replyTo };
+  const payload: Payload = {
+    html,
+    text,
+    attachments: options.attachments,
+    replyTo: options.replyTo,
+  };
   const log = await db.emailLog.create({
     data: {
       to: options.to,
@@ -52,7 +57,10 @@ export async function deliverEmail(id: string): Promise<boolean> {
   const log = await db.emailLog.findUnique({ where: { id } });
   if (!log || log.status === "TRIMIS") return Boolean(log);
   if (!isPayload(log.payload)) {
-    await db.emailLog.update({ where: { id }, data: { status: "ESUAT", error: "Conținut invalid" } });
+    await db.emailLog.update({
+      where: { id },
+      data: { status: "ESUAT", error: "Conținut invalid" },
+    });
     return false;
   }
   const payload = log.payload;
@@ -71,7 +79,11 @@ export async function deliverEmail(id: string): Promise<boolean> {
       html: payload.html,
       text: payload.text,
       replyTo: payload.replyTo,
-      attachments: payload.attachments?.map((a) => ({ filename: a.filename, content: a.content, contentType: a.contentType })),
+      attachments: payload.attachments?.map((a) => ({
+        filename: a.filename,
+        content: a.content,
+        contentType: a.contentType,
+      })),
     });
     await db.emailLog.update({
       where: { id },

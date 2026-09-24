@@ -35,7 +35,11 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">): Pr
     description: settings.seoDescription,
     applicationName: settings.brandName,
     formatDetection: { telephone: false },
-    openGraph: { siteName: settings.brandName, locale: locale === "en" ? "en_GB" : "ro_RO", type: "website" },
+    openGraph: {
+      siteName: settings.brandName,
+      locale: locale === "en" ? "en_GB" : "ro_RO",
+      type: "website",
+    },
   };
 }
 
@@ -62,7 +66,13 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   const umamiId = process.env.UMAMI_WEBSITE_ID;
 
   return (
-    <html lang={locale} className={fontVariables} data-tone="dark" data-page={isHome ? "home" : "inner"} suppressHydrationWarning>
+    <html
+      lang={locale}
+      className={fontVariables}
+      data-tone="dark"
+      data-page={isHome ? "home" : "inner"}
+      suppressHydrationWarning
+    >
       <body>
         <noscript>
           <style>{`.stage{display:none!important}.scene-static{display:block!important}.scene{height:auto!important}`}</style>
@@ -77,7 +87,11 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
           <main id="continut" tabIndex={-1}>
             {children}
           </main>
-          <Footer settings={settings} location={locations[0] ?? null} policyVersion={policyVersion} />
+          <Footer
+            settings={settings}
+            location={locations[0] ?? null}
+            policyVersion={policyVersion}
+          />
           <MobileBar
             bookLabel={t("book")}
             whatsappLabel={t("whatsapp")}
@@ -87,7 +101,12 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
           />
         </NextIntlClientProvider>
         {settings.umamiEnabled && umamiUrl && umamiId ? (
-          <Script src={umamiUrl} data-website-id={umamiId} strategy="afterInteractive" nonce={nonce} />
+          <Script
+            src={umamiUrl}
+            data-website-id={umamiId}
+            strategy="afterInteractive"
+            nonce={nonce}
+          />
         ) : null}
       </body>
     </html>

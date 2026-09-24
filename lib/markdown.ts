@@ -8,7 +8,8 @@ import { TODO_MARK } from "./i18n-content";
 const md = new MarkdownIt({ html: false, linkify: true, typographer: false, breaks: false });
 
 const defaultLinkOpen =
-  md.renderer.rules.link_open ?? ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options));
+  md.renderer.rules.link_open ??
+  ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options));
 
 md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
   const token = tokens[idx];

@@ -19,7 +19,8 @@ type Props = {
   gateMedia?: string;
 };
 
-const TRANSPARENT_PIXEL = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+const TRANSPARENT_PIXEL =
+  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
 function isArtSet(value: ArtSet | ResolvedImage): value is ArtSet {
   return "desktop" in value;
@@ -47,8 +48,18 @@ export function ArtPicture({
     <picture className={className}>
       {mobile ? (
         <>
-          <source media="(max-width: 767px)" type="image/avif" srcSet={srcSet(mobile.avif)} sizes={mobileSizes} />
-          <source media="(max-width: 767px)" type="image/webp" srcSet={srcSet(mobile.webp)} sizes={mobileSizes} />
+          <source
+            media="(max-width: 767px)"
+            type="image/avif"
+            srcSet={srcSet(mobile.avif)}
+            sizes={mobileSizes}
+          />
+          <source
+            media="(max-width: 767px)"
+            type="image/webp"
+            srcSet={srcSet(mobile.webp)}
+            sizes={mobileSizes}
+          />
         </>
       ) : null}
       <source media={gateMedia} type="image/avif" srcSet={srcSet(desktop.avif)} sizes={sizes} />

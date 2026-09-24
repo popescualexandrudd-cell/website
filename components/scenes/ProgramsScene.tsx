@@ -13,7 +13,17 @@ import { safeHref } from "./links";
  * Scene 5 · programmes: a horizontal gallery of small paintings. In the cinematic layout the
  * section stays pinned while vertical scrolling moves the band sideways; elsewhere it is a list.
  */
-export async function ProgramsScene({ scene, index, programs, locale }: { scene: SceneView; index: number; programs: ProgramView[]; locale: string }) {
+export async function ProgramsScene({
+  scene,
+  index,
+  programs,
+  locale,
+}: {
+  scene: SceneView;
+  index: number;
+  programs: ProgramView[];
+  locale: string;
+}) {
   const t = await getTranslations();
   const allHref = safeHref(scene.ctaHref) ?? "/programe";
   return (
@@ -30,7 +40,10 @@ export async function ProgramsScene({ scene, index, programs, locale }: { scene:
         <ul className="programs-track" aria-label={t("home.programsTrackLabel")}>
           {programs.map((program) => (
             <li key={program.id} className="program-item">
-              <Link href={{ pathname: "/programe/[slug]", params: { slug: program.slug } }} className="program-item-link">
+              <Link
+                href={{ pathname: "/programe/[slug]", params: { slug: program.slug } }}
+                className="program-item-link"
+              >
                 <span className="program-item-frame">
                   {program.art ? (
                     <ArtPicture
@@ -49,7 +62,14 @@ export async function ProgramsScene({ scene, index, programs, locale }: { scene:
                 <span className="program-item-price numerals">
                   {program.priceFrom ? (
                     <>
-                      {t("common.from")} <TodoText value={formatPrice(program.priceFrom.price, program.priceFrom.currency, locale)} />
+                      {t("common.from")}{" "}
+                      <TodoText
+                        value={formatPrice(
+                          program.priceFrom.price,
+                          program.priceFrom.currency,
+                          locale,
+                        )}
+                      />
                     </>
                   ) : null}
                 </span>

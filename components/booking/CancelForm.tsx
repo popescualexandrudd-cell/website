@@ -1,14 +1,13 @@
 "use client";
 
-import { useActionState } from "react";
+import { useFormAction } from "@/components/ui/useFormAction";
 import { useTranslations } from "next-intl";
 import { cancelBookingByToken } from "@/app/actions/booking";
-import { idleState } from "@/lib/validation";
 import { SubmitButton, TextArea } from "@/components/ui/form";
 
 export function CancelForm({ token, hours }: { token: string; hours: number }) {
   const t = useTranslations("manage");
-  const [state, action] = useActionState(cancelBookingByToken, idleState);
+  const { state, pending, formProps: actionProps } = useFormAction(cancelBookingByToken);
   if (state.status === "success") {
     return (
       <p role="status" className="notice">
@@ -26,7 +25,7 @@ export function CancelForm({ token, hours }: { token: string; hours: number }) {
       : null;
   return (
     <form
-      action={action}
+      {...actionProps}
       className="grid max-w-xl gap-4"
       onSubmit={(event) => {
         if (!window.confirm(t("cancelConfirm"))) event.preventDefault();
@@ -40,7 +39,9 @@ export function CancelForm({ token, hours }: { token: string; hours: number }) {
         </p>
       ) : null}
       <div>
-        <SubmitButton className="btn btn-secondary">{t("cancelSubmit")}</SubmitButton>
+        <SubmitButton className="btn btn-secondary" pending={pending}>
+          {t("cancelSubmit")}
+        </SubmitButton>
       </div>
     </form>
   );

@@ -9,10 +9,17 @@ import { PageHero, PageSection } from "@/components/pages/PageHero";
 import { ContactForm } from "@/components/pages/ContactForm";
 import { TodoText } from "@/components/site/TodoText";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/contact">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/contact">): Promise<Metadata> {
   const locale = (await params).locale as Locale;
   const header = await getPageHeader("contact", locale);
-  return pageMetadata({ locale, href: "/contact", title: header.seoTitle, description: header.seoDescription });
+  return pageMetadata({
+    locale,
+    href: "/contact",
+    title: header.seoTitle,
+    description: header.seoDescription,
+  });
 }
 
 export default async function ContactPage({ params }: PageProps<"/[locale]/contact">) {
@@ -33,13 +40,20 @@ export default async function ContactPage({ params }: PageProps<"/[locale]/conta
 
   return (
     <>
-      <PageHero title={header.title} intro={header.intro} art={header.art} imageAlt={header.imageAlt} />
+      <PageHero
+        title={header.title}
+        intro={header.intro}
+        art={header.art}
+        imageAlt={header.imageAlt}
+      />
       <PageSection>
         <div className="contact-layout">
           <div>
             <h2 className="section-subtitle">{t("formTitle")}</h2>
             <ContactForm
-              turnstileSiteKey={process.env.TURNSTILE_SECRET_KEY ? (process.env.TURNSTILE_SITE_KEY ?? null) : null}
+              turnstileSiteKey={
+                process.env.TURNSTILE_SECRET_KEY ? (process.env.TURNSTILE_SITE_KEY ?? null) : null
+              }
               nonce={h.get("x-nonce") ?? undefined}
             />
           </div>
@@ -47,7 +61,15 @@ export default async function ContactPage({ params }: PageProps<"/[locale]/conta
             <dl className="fact-list">
               <div>
                 <dt>{t("phoneLabel")}</dt>
-                <dd>{tel ? <a href={tel} className="link">{settings.phone}</a> : <TodoText value={settings.phone} />}</dd>
+                <dd>
+                  {tel ? (
+                    <a href={tel} className="link">
+                      {settings.phone}
+                    </a>
+                  ) : (
+                    <TodoText value={settings.phone} />
+                  )}
+                </dd>
               </div>
               <div>
                 <dt>{t("whatsappLabel")}</dt>
@@ -63,7 +85,15 @@ export default async function ContactPage({ params }: PageProps<"/[locale]/conta
               </div>
               <div>
                 <dt>{t("emailLabel")}</dt>
-                <dd>{mail ? <a href={mail} className="link">{settings.email}</a> : <TodoText value={settings.email} />}</dd>
+                <dd>
+                  {mail ? (
+                    <a href={mail} className="link">
+                      {settings.email}
+                    </a>
+                  ) : (
+                    <TodoText value={settings.email} />
+                  )}
+                </dd>
               </div>
               {location ? (
                 <div>
@@ -79,7 +109,7 @@ export default async function ContactPage({ params }: PageProps<"/[locale]/conta
                 <dt>{t("hoursLabel")}</dt>
                 <dd>
                   {settings.workingHours.map((row) => (
-                    <span key={row.label} className="block numerals">
+                    <span key={row.label} className="numerals block">
                       {row.label}: {row.hours}
                     </span>
                   ))}

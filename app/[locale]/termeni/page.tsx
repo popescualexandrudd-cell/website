@@ -5,7 +5,9 @@ import { getLegalPage } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 import { LegalPageView } from "@/components/pages/LegalPageView";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/termeni">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/termeni">): Promise<Metadata> {
   const locale = (await params).locale as Locale;
   const page = await getLegalPage("TERMENI", locale);
   return pageMetadata({ locale, href: "/termeni", title: page?.title ?? "Terms" });

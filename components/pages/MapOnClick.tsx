@@ -15,7 +15,13 @@ export function MapOnClick({ lat, lng, title, buttonLabel, notice }: Props) {
   return (
     <div className="map-shell">
       {show ? (
-        <iframe src={src} title={title} loading="lazy" referrerPolicy="no-referrer" sandbox="allow-scripts allow-same-origin" />
+        <iframe
+          src={src}
+          title={title}
+          loading="lazy"
+          referrerPolicy="no-referrer"
+          sandbox="allow-scripts allow-same-origin"
+        />
       ) : (
         <div className="map-placeholder">
           <p className="mx-auto max-w-md text-cerneala-2">{notice}</p>

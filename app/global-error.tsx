@@ -4,7 +4,12 @@ import Link from "next/link";
 import "./globals.css";
 
 /** Last-resort error page (the root layout itself failed), so it carries its own <html>. */
-export default function GlobalError({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
+export default function GlobalError({
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
   return (
     <html lang="ro">
       <body>
@@ -15,8 +20,8 @@ export default function GlobalError({ reset }: { error: Error & { digest?: strin
             </p>
             <h1 className="page-title">Ceva n-a mers.</h1>
             <p className="page-intro">
-              A apărut o eroare de partea noastră. Încearcă din nou peste un minut. Dacă se repetă, revino mai târziu sau
-              scrie-ne din pagina de contact.
+              A apărut o eroare de partea noastră. Încearcă din nou peste un minut. Dacă se repetă,
+              revino mai târziu sau scrie-ne din pagina de contact.
             </p>
             <p className="mt-8 flex flex-wrap gap-3">
               <button type="button" className="btn btn-primary" onClick={reset}>

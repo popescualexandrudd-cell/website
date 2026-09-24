@@ -17,9 +17,12 @@ const lang = (locale: string): Lang => (locale === "en" ? "en" : "ro");
 
 export const urls = {
   home: (locale: string) => `${appUrl()}${lang(locale) === "en" ? "/en" : "/"}`,
-  manageBooking: (token: string, locale: string) => `${appUrl()}${LOCALIZED.manage[lang(locale)]}/${token}`,
-  review: (token: string, locale: string) => `${appUrl()}${LOCALIZED.review[lang(locale)]}/${token}`,
-  newsletter: (token: string, locale: string) => `${appUrl()}${LOCALIZED.newsletter[lang(locale)]}/${token}`,
+  manageBooking: (token: string, locale: string) =>
+    `${appUrl()}${LOCALIZED.manage[lang(locale)]}/${token}`,
+  review: (token: string, locale: string) =>
+    `${appUrl()}${LOCALIZED.review[lang(locale)]}/${token}`,
+  newsletter: (token: string, locale: string) =>
+    `${appUrl()}${LOCALIZED.newsletter[lang(locale)]}/${token}`,
   booking: (locale: string) => `${appUrl()}${LOCALIZED.booking[lang(locale)]}`,
   privacy: (locale: string) => `${appUrl()}${LOCALIZED.privacy[lang(locale)]}`,
   waitlist: (locale: string) => `${appUrl()}${LOCALIZED.waitlist[lang(locale)]}`,

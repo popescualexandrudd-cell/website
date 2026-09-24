@@ -6,6 +6,7 @@ import { db } from "./db";
 import { deliverEmails, retryDueEmails } from "./email/send";
 import { queueReminderEmail, queueReviewInvite, reviewToken } from "./email/messages";
 import { hashToken } from "./tokens";
+import { ANON, anonymizedBookingData } from "./gdpr";
 
 const HOUR = 3_600_000;
 const DAY = 24 * HOUR;
@@ -27,7 +28,10 @@ export async function sendDueReminders(now = new Date()): Promise<number> {
       await db.booking.update({ where: { id: booking.id }, data: { reminderSentAt: now } });
       continue;
     }
-    const claimed = await db.booking.updateMany({ where: { id: booking.id, reminderSentAt: null }, data: { reminderSentAt: now } });
+    const claimed = await db.booking.updateMany({
+      where: { id: booking.id, reminderSentAt: null },
+      data: { reminderSentAt: now },
+    });
     if (claimed.count === 0) continue;
     await deliverEmails(await queueReminderEmail(booking.id));
     sent += 1;
@@ -37,14 +41,20 @@ export async function sendDueReminders(now = new Date()): Promise<number> {
 
 /** After a client's first completed lesson, an optional invitation to leave a review. */
 export async function sendDueReviewInvites(now = new Date()): Promise<number> {
-  const settings = await db.siteSettings.findUnique({ where: { id: 1 }, select: { reviewInvitesEnabled: true } });
+  const settings = await db.siteSettings.findUnique({
+    where: { id: 1 },
+    select: { reviewInvitesEnabled: true },
+  });
   if (!settings?.reviewInvitesEnabled) return 0;
   const candidates = await db.booking.findMany({
     where: {
       status: "EFECTUATA",
       reviewInviteAt: null,
       anonymizedAt: null,
-      completedAt: { lte: new Date(now.getTime() - 2 * HOUR), gte: new Date(now.getTime() - 14 * DAY) },
+      completedAt: {
+        lte: new Date(now.getTime() - 2 * HOUR),
+        gte: new Date(now.getTime() - 14 * DAY),
+      },
     },
     select: { id: true, email: true, startsAt: true },
   });
@@ -53,10 +63,15 @@ export async function sendDueReviewInvites(now = new Date()): Promise<number> {
     const earlier = await db.booking.count({
       where: { email: booking.email, status: "EFECTUATA", startsAt: { lt: booking.startsAt } },
     });
-    const invited = await db.booking.count({ where: { email: booking.email, reviewInviteAt: { not: null } } });
+    const invited = await db.booking.count({
+      where: { email: booking.email, reviewInviteAt: { not: null } },
+    });
     const claimed = await db.booking.updateMany({
       where: { id: booking.id, reviewInviteAt: null },
-      data: { reviewInviteAt: now, reviewTokenHash: earlier === 0 && invited === 0 ? hashToken(reviewToken(booking.id)) : null },
+      data: {
+        reviewInviteAt: now,
+        reviewTokenHash: earlier === 0 && invited === 0 ? hashToken(reviewToken(booking.id)) : null,
+      },
     });
     if (claimed.count === 0 || earlier > 0 || invited > 0) continue;
     await deliverEmails(await queueReviewInvite(booking.id));
@@ -65,45 +80,50 @@ export async function sendDueReviewInvites(now = new Date()): Promise<number> {
   return sent;
 }
 
-const ANON = "Anonimizat";
-
 /**
  * GDPR retention: personal data older than the configured period is anonymised. Booking times,
  * programmes and statuses stay, so the statistics remain correct.
  */
 export async function runRetention(now = new Date()): Promise<Record<string, number>> {
-  const settings = await db.siteSettings.findUnique({ where: { id: 1 }, select: { retentionMonths: true } });
+  const settings = await db.siteSettings.findUnique({
+    where: { id: 1 },
+    select: { retentionMonths: true },
+  });
   const months = Math.max(1, settings?.retentionMonths ?? 24);
   const cutoff = new Date(now);
   cutoff.setMonth(cutoff.getMonth() - months);
 
-  const bookings = await db.booking.findMany({ where: { endsAt: { lt: cutoff }, anonymizedAt: null }, select: { id: true } });
+  const bookings = await db.booking.findMany({
+    where: { endsAt: { lt: cutoff }, anonymizedAt: null },
+    select: { id: true },
+  });
   for (const { id } of bookings) {
-    await db.booking.update({
-      where: { id },
-      data: {
-        name: ANON,
-        email: `anonim-${id}@anonim.invalid`,
-        phone: "",
-        message: null,
-        parentName: null,
-        childFirstName: null,
-        childAge: null,
-        internalNotes: null,
-        cancelReason: null,
-        clientId: null,
-        anonymizedAt: now,
-      },
-    });
+    await db.booking.update({ where: { id }, data: anonymizedBookingData(id, now) });
   }
 
   const messages = await db.contactMessage.updateMany({
     where: { createdAt: { lt: cutoff }, anonymizedAt: null },
-    data: { name: ANON, email: "anonim@anonim.invalid", phone: null, subject: null, message: "[anonimizat]", anonymizedAt: now },
+    data: {
+      name: ANON,
+      email: "anonim@anonim.invalid",
+      phone: null,
+      subject: null,
+      message: "[anonimizat]",
+      anonymizedAt: now,
+    },
   });
   const waitlist = await db.waitlistEntry.updateMany({
     where: { createdAt: { lt: cutoff }, anonymizedAt: null },
-    data: { name: ANON, email: "anonim@anonim.invalid", phone: "", message: null, preferences: "[anonimizat]", childAge: null, anonymizedAt: now, status: "ARHIVAT" },
+    data: {
+      name: ANON,
+      email: "anonim@anonim.invalid",
+      phone: "",
+      message: null,
+      preferences: "[anonimizat]",
+      childAge: null,
+      anonymizedAt: now,
+      status: "ARHIVAT",
+    },
   });
 
   // Clients with no booking inside the retention period and no active package.
@@ -119,7 +139,15 @@ export async function runRetention(now = new Date()): Promise<Record<string, num
   for (const { id } of staleClients) {
     await db.client.update({
       where: { id },
-      data: { name: ANON, email: null, phone: null, notes: null, activePlanId: null, sessionsRemaining: null, anonymizedAt: now },
+      data: {
+        name: ANON,
+        email: null,
+        phone: null,
+        notes: null,
+        activePlanId: null,
+        sessionsRemaining: null,
+        anonymizedAt: now,
+      },
     });
   }
 

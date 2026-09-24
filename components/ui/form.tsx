@@ -1,12 +1,27 @@
 "use client";
 
-import { useEffect, useId, useRef, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes, type TextareaHTMLAttributes } from "react";
+import {
+  useEffect,
+  useId,
+  useRef,
+  type InputHTMLAttributes,
+  type ReactNode,
+  type SelectHTMLAttributes,
+  type TextareaHTMLAttributes,
+} from "react";
 import { useFormStatus } from "react-dom";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { FormState } from "@/lib/validation";
 
-type BaseProps = { name: string; label: string; hint?: string; error?: string; optional?: boolean; className?: string };
+type BaseProps = {
+  name: string;
+  label: string;
+  hint?: string;
+  error?: string;
+  optional?: boolean;
+  className?: string;
+};
 
 function useFieldIds(name: string) {
   const id = useId();
@@ -14,10 +29,20 @@ function useFieldIds(name: string) {
 }
 
 function describedBy(hint: boolean, error: boolean, ids: { hintId: string; errorId: string }) {
-  return [hint ? ids.hintId : null, error ? ids.errorId : null].filter(Boolean).join(" ") || undefined;
+  return (
+    [hint ? ids.hintId : null, error ? ids.errorId : null].filter(Boolean).join(" ") || undefined
+  );
 }
 
-function FieldShell({ label, hint, error, ids, children, className, required }: {
+function FieldShell({
+  label,
+  hint,
+  error,
+  ids,
+  children,
+  className,
+  required,
+}: {
   label: string;
   hint?: string;
   error?: string;
@@ -61,7 +86,14 @@ export function TextField(props: BaseProps & InputHTMLAttributes<HTMLInputElemen
   const { name, label, hint, error, optional, className, ...rest } = props;
   const ids = useFieldIds(name);
   return (
-    <FieldShell label={label} hint={hint} error={error} ids={ids} className={className} required={!optional}>
+    <FieldShell
+      label={label}
+      hint={hint}
+      error={error}
+      ids={ids}
+      className={className}
+      required={!optional}
+    >
       <input
         id={ids.inputId}
         name={name}
@@ -79,7 +111,14 @@ export function TextArea(props: BaseProps & TextareaHTMLAttributes<HTMLTextAreaE
   const { name, label, hint, error, optional, className, ...rest } = props;
   const ids = useFieldIds(name);
   return (
-    <FieldShell label={label} hint={hint} error={error} ids={ids} className={className} required={!optional}>
+    <FieldShell
+      label={label}
+      hint={hint}
+      error={error}
+      ids={ids}
+      className={className}
+      required={!optional}
+    >
       <textarea
         id={ids.inputId}
         name={name}
@@ -93,11 +132,20 @@ export function TextArea(props: BaseProps & TextareaHTMLAttributes<HTMLTextAreaE
   );
 }
 
-export function SelectField(props: BaseProps & SelectHTMLAttributes<HTMLSelectElement> & { children: ReactNode }) {
+export function SelectField(
+  props: BaseProps & SelectHTMLAttributes<HTMLSelectElement> & { children: ReactNode },
+) {
   const { name, label, hint, error, optional, className, children, ...rest } = props;
   const ids = useFieldIds(name);
   return (
-    <FieldShell label={label} hint={hint} error={error} ids={ids} className={className} required={!optional}>
+    <FieldShell
+      label={label}
+      hint={hint}
+      error={error}
+      ids={ids}
+      className={className}
+      required={!optional}
+    >
       <select
         id={ids.inputId}
         name={name}
@@ -164,7 +212,10 @@ export function Honeypot() {
 
 declare global {
   interface Window {
-    turnstile?: { render: (element: HTMLElement, options: Record<string, unknown>) => string; remove: (id: string) => void };
+    turnstile?: {
+      render: (element: HTMLElement, options: Record<string, unknown>) => string;
+      remove: (id: string) => void;
+    };
   }
 }
 
@@ -176,7 +227,8 @@ export function Turnstile({ siteKey, nonce }: { siteKey?: string | null; nonce?:
     const element = ref.current;
     let widgetId: string | null = null;
     const mount = () => {
-      if (window.turnstile && element && !widgetId) widgetId = window.turnstile.render(element, { sitekey: siteKey, theme: "light" });
+      if (window.turnstile && element && !widgetId)
+        widgetId = window.turnstile.render(element, { sitekey: siteKey, theme: "light" });
     };
     if (window.turnstile) mount();
     else {
@@ -199,8 +251,17 @@ export function Turnstile({ siteKey, nonce }: { siteKey?: string | null; nonce?:
   return <div ref={ref} className="min-h-[65px]" />;
 }
 
-export function SubmitButton({ children, className = "btn btn-primary" }: { children: ReactNode; className?: string }) {
-  const { pending } = useFormStatus();
+export function SubmitButton({
+  children,
+  className = "btn btn-primary",
+  pending: pendingProp,
+}: {
+  children: ReactNode;
+  className?: string;
+  pending?: boolean;
+}) {
+  const status = useFormStatus();
+  const pending = pendingProp ?? status.pending;
   const t = useTranslations("common");
   return (
     <button type="submit" className={className} disabled={pending} aria-disabled={pending}>
@@ -226,7 +287,12 @@ export function FormStatus({ state, success }: { state: FormState; success: Reac
   }
   if (state.status === "error") {
     return (
-      <div ref={ref} tabIndex={-1} role="alert" className="border-l-2 border-eroare py-1 pl-4 text-eroare outline-none">
+      <div
+        ref={ref}
+        tabIndex={-1}
+        role="alert"
+        className="border-l-2 border-eroare py-1 pl-4 text-eroare outline-none"
+      >
         {state.error ? errorText(state.error) : t("errorSummary")}
       </div>
     );

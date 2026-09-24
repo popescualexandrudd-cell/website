@@ -92,10 +92,15 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
   const court = stage.querySelector<SVGSVGElement>(".stage-court");
   const courtLines = court ? Array.from(court.querySelectorAll<SVGPathElement>(".court-line")) : [];
   const rainbow = stage.querySelector<SVGSVGElement>(".stage-rainbow");
-  const rainbowBands = rainbow ? Array.from(rainbow.querySelectorAll<SVGPathElement>(".rainbow-band")) : [];
+  const rainbowBands = rainbow
+    ? Array.from(rainbow.querySelectorAll<SVGPathElement>(".rainbow-band"))
+    : [];
   const constellation = stage.querySelector<SVGSVGElement>(".stage-constellation");
-  const constellationLine = constellation?.querySelector<SVGPathElement>(".constellation-line") ?? null;
-  const constellationStars = constellation ? Array.from(constellation.querySelectorAll<SVGCircleElement>(".constellation-star")) : [];
+  const constellationLine =
+    constellation?.querySelector<SVGPathElement>(".constellation-line") ?? null;
+  const constellationStars = constellation
+    ? Array.from(constellation.querySelectorAll<SVGCircleElement>(".constellation-star"))
+    : [];
   const clouds = Array.from(stage.querySelectorAll<HTMLElement>(".stage-cloud"));
   const canvas = stage.querySelector<HTMLCanvasElement>(".stage-halftone");
   const halftoneFallback = stage.querySelector<HTMLElement>(".stage-halftone-fallback");
@@ -114,7 +119,9 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
   if (!halftone && halftoneFallback) halftoneFallback.dataset.active = "true";
 
   const layerOf = (key: string, role: "primary" | "secondary"): Layer | null => {
-    const el = stage.querySelector<HTMLElement>(`.stage-layer[data-layer="${key}"][data-role="${role}"]`);
+    const el = stage.querySelector<HTMLElement>(
+      `.stage-layer[data-layer="${key}"][data-role="${role}"]`,
+    );
     return el ? { el, aspect: Number(el.dataset.aspect) || 16 / 9 } : null;
   };
   const allLayers = Array.from(stage.querySelectorAll<HTMLElement>(".stage-layer"));
@@ -155,8 +162,18 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
         sticky: section.classList.contains("scene--sticky"),
         primary: layerOf(config.key, "primary"),
         secondary: layerOf(config.key, "secondary"),
-        enter: ScrollTrigger.create({ trigger: section, start: "top bottom", end: "top top", onUpdate: markDirty }),
-        hold: ScrollTrigger.create({ trigger: section, start: "top top", end: "bottom bottom", onUpdate: markDirty }),
+        enter: ScrollTrigger.create({
+          trigger: section,
+          start: "top bottom",
+          end: "top top",
+          onUpdate: markDirty,
+        }),
+        hold: ScrollTrigger.create({
+          trigger: section,
+          start: "top top",
+          end: "bottom bottom",
+          onUpdate: markDirty,
+        }),
         words,
         steps: Array.from(section.querySelectorAll<HTMLElement>(".method-step")),
       },
@@ -177,30 +194,53 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
   ScrollTrigger.addEventListener("refreshInit", measureTrack);
   measureTrack();
 
-  const programAnchors = programs ? Array.from(programs.section.querySelectorAll<HTMLElement>("[data-ball-anchor]")) : [];
+  const programAnchors = programs
+    ? Array.from(programs.section.querySelectorAll<HTMLElement>("[data-ball-anchor]"))
+    : [];
 
   // ── Frame computation ────────────────────────────────────────────────────────
   const W = () => window.innerWidth;
   const H = () => window.innerHeight;
 
-  const anchor = (layer: Layer | null, ball: SceneConfig["ball"], transform: LayerTransform = IDENTITY, overrides?: Partial<SceneConfig["ball"]>): BallState => {
+  const anchor = (
+    layer: Layer | null,
+    ball: SceneConfig["ball"],
+    transform: LayerTransform = IDENTITY,
+    overrides?: Partial<SceneConfig["ball"]>,
+  ): BallState => {
     const b = { ...ball, ...overrides };
     const aspect = layer?.aspect ?? 16 / 9;
     const point = transformPoint(coverPoint(b.x, b.y, b.size, W(), H(), aspect), transform);
     return { x: point.x, y: point.y, size: point.size, opacity: 0 };
   };
 
-  type SceneFrame = { layers: Map<HTMLElement, LayerFrame>; effects: Partial<Effects>; ball: BallFrame; textOpacity?: number };
+  type SceneFrame = {
+    layers: Map<HTMLElement, LayerFrame>;
+    effects: Partial<Effects>;
+    ball: BallFrame;
+    textOpacity?: number;
+  };
 
   const holdFrame = (r: Runtime, h: number): SceneFrame => {
     const layers = new Map<HTMLElement, LayerFrame>();
     const effects: Partial<Effects> = {};
     const key = r.config.key;
-    const breathe: LayerTransform = { scale: 1 + 0.035 * h, originX: W() / 2, originY: H() / 2, translateX: 0, translateY: 0 };
+    const breathe: LayerTransform = {
+      scale: 1 + 0.035 * h,
+      originX: W() / 2,
+      originY: H() / 2,
+      translateX: 0,
+      translateY: 0,
+    };
     let primaryTransform = breathe;
     let primaryOpacity = 1;
     let framed = false;
-    let ball: BallFrame = { ...anchor(r.primary, r.config.ball, breathe), glow: 0, cover: 0, star: 0 };
+    let ball: BallFrame = {
+      ...anchor(r.primary, r.config.ball, breathe),
+      glow: 0,
+      cover: 0,
+      star: 0,
+    };
 
     const sw = SECONDARY_SWITCH[key] ?? [0.45, 0.6];
     const secondaryOpacity = r.secondary ? segment(h, sw[0], sw[1]) : 0;
@@ -227,10 +267,16 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
       }
       case "programe": {
         primaryTransform = IDENTITY;
-        if (track) track.style.transform = `translate3d(${(-h * trackDistance).toFixed(1)}px, 0, 0)`;
+        if (track)
+          track.style.transform = `translate3d(${(-h * trackDistance).toFixed(1)}px, 0, 0)`;
         const anchors: BallState[] = programAnchors.map((el) => {
           const rect = el.getBoundingClientRect();
-          return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2, size: Math.max(18, W() * 0.018), opacity: 1 };
+          return {
+            x: rect.left + rect.width / 2,
+            y: rect.top + rect.height / 2,
+            size: Math.max(18, W() * 0.018),
+            opacity: 1,
+          };
         });
         const visible = anchors.filter((a) => a.x > W() * 0.05 && a.x < W() * 0.98);
         const list = visible.length > 0 ? anchors : anchors;
@@ -260,9 +306,20 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
       case "prima-lectie": {
         const e = easeInOut(segment(h, 0, 0.55));
         effects.parchment = 1;
-        primaryTransform = { scale: 1 - 0.38 * e, originX: W() / 2, originY: H() / 2, translateX: W() * 0.19 * e, translateY: 0 };
+        primaryTransform = {
+          scale: 1 - 0.38 * e,
+          originX: W() / 2,
+          originY: H() / 2,
+          translateX: W() * 0.19 * e,
+          translateY: 0,
+        };
         framed = e > 0.02;
-        ball = { ...anchor(r.primary, r.config.ball, primaryTransform), glow: 0.35 + 0.5 * segment(h, 0.35, 0.7), cover: 0, star: 0 };
+        ball = {
+          ...anchor(r.primary, r.config.ball, primaryTransform),
+          glow: 0.35 + 0.5 * segment(h, 0.35, 0.7),
+          cover: 0,
+          star: 0,
+        };
         break;
       }
       case "locurile":
@@ -279,9 +336,28 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
         break;
     }
 
-    if (r.primary) layers.set(r.primary.el, { opacity: primaryOpacity, transform: primaryTransform, z: 1, framed });
-    if (r.secondary) layers.set(r.secondary.el, { opacity: secondaryOpacity, transform: IDENTITY, z: 2, framed: false });
-    if (key !== "metoda" && key !== "programe" && key !== "terenul" && key !== "constelatia" && key !== "filozofia" && r.secondary) {
+    if (r.primary)
+      layers.set(r.primary.el, {
+        opacity: primaryOpacity,
+        transform: primaryTransform,
+        z: 1,
+        framed,
+      });
+    if (r.secondary)
+      layers.set(r.secondary.el, {
+        opacity: secondaryOpacity,
+        transform: IDENTITY,
+        z: 2,
+        framed: false,
+      });
+    if (
+      key !== "metoda" &&
+      key !== "programe" &&
+      key !== "terenul" &&
+      key !== "constelatia" &&
+      key !== "filozofia" &&
+      r.secondary
+    ) {
       // Secondary paintings carry their own ball; keep the overlay hidden.
       ball = { ...ball, opacity: 0 };
     }
@@ -308,32 +384,67 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
     if (mode === "sweep") {
       return clouds.map((_, i) => {
         const e = easeInOut(segment(t, i * 0.05, 0.62 + i * 0.05));
-        return { x: w * (1.15 - 2.5 * e) - w * 0.2 * (i % 2), y: hgt * (0.05 + (i * 0.19) % 0.8), scale: 1.8 + (i % 3) * 0.4, opacity: 1 };
+        return {
+          x: w * (1.15 - 2.5 * e) - w * 0.2 * (i % 2),
+          y: hgt * (0.05 + ((i * 0.19) % 0.8)),
+          scale: 1.8 + (i % 3) * 0.4,
+          opacity: 1,
+        };
       });
     }
     // Two foreground clouds drift a little faster than the painting: a light parallax.
-    const base = mode === "sky" ? [[0.58, 0.7], [0.08, 0.02]] : [[0.02, 0.36], [0.34, 0.8]];
+    const base =
+      mode === "sky"
+        ? [
+            [0.58, 0.7],
+            [0.08, 0.02],
+          ]
+        : [
+            [0.02, 0.36],
+            [0.34, 0.8],
+          ];
     return clouds.map((_, i) => {
       const slot = base[i];
       if (!slot) return { x: 0, y: 0, scale: 1, opacity: 0 };
       const [bx, by] = slot;
-      return { x: w * ((bx ?? 0) - 0.08 * t * (1 + i * 0.4)), y: hgt * ((by ?? 0) - 0.04 * t), scale: 0.62 + i * 0.1, opacity: 0.92 };
+      return {
+        x: w * ((bx ?? 0) - 0.08 * t * (1 + i * 0.4)),
+        y: hgt * ((by ?? 0) - 0.04 * t),
+        scale: 0.62 + i * 0.1,
+        opacity: 0.92,
+      };
     });
   }
 
-  const applyTransition = (out: SceneFrame, inc: SceneFrame, type: string, p: number, from: Runtime, to: Runtime): SceneFrame => {
+  const applyTransition = (
+    out: SceneFrame,
+    inc: SceneFrame,
+    type: string,
+    p: number,
+    from: Runtime,
+    to: Runtime,
+  ): SceneFrame => {
     const layers = new Map<HTMLElement, LayerFrame>();
     const effects: Partial<Effects> = { ...out.effects };
     const outLayers = out.layers;
     const incLayers = inc.layers;
-    const setOut = (fn: (frame: LayerFrame) => LayerFrame) => outLayers.forEach((f, el) => layers.set(el, fn({ ...f })));
+    const setOut = (fn: (frame: LayerFrame) => LayerFrame) =>
+      outLayers.forEach((f, el) => layers.set(el, fn({ ...f })));
     const setInc = (opacity: number, scale = 1) =>
       incLayers.forEach((f, el) =>
         layers.set(el, {
           ...f,
           opacity: f.opacity * opacity,
           z: f.z + 10,
-          transform: scale === 1 ? f.transform : { ...f.transform, scale: f.transform.scale * scale, originX: W() / 2, originY: H() / 2 },
+          transform:
+            scale === 1
+              ? f.transform
+              : {
+                  ...f.transform,
+                  scale: f.transform.scale * scale,
+                  originX: W() / 2,
+                  originY: H() / 2,
+                },
         }),
       );
     const outBall = out.ball;
@@ -342,7 +453,10 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
       const a = { ...outBall, opacity: 1 };
       const b = { ...incBall, opacity: 1 };
       const moved = arcBetween(a, b, p);
-      const visibility = Math.max(lerp(outBall.opacity, incBall.opacity, p), Math.sin(Math.PI * clamp(p)));
+      const visibility = Math.max(
+        lerp(outBall.opacity, incBall.opacity, p),
+        Math.sin(Math.PI * clamp(p)),
+      );
       return {
         ...moved,
         opacity: visibility,
@@ -360,7 +474,14 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
         setOut((f) => ({ ...f, transform: zoom }));
         setInc(segment(p, 0.4, 0.95), lerp(1.06, 1, p));
         const start = transformPoint(outBall, zoom);
-        ball = { ...ball, ...arcBetween({ ...outBall, ...start, opacity: 1 }, { ...incBall, opacity: 1 }, segment(p, 0.25, 1)) };
+        ball = {
+          ...ball,
+          ...arcBetween(
+            { ...outBall, ...start, opacity: 1 },
+            { ...incBall, opacity: 1 },
+            segment(p, 0.25, 1),
+          ),
+        };
         break;
       }
       case "ZOOM_MINGE": {
@@ -390,7 +511,15 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
       }
       case "PERGAMENT": {
         const z = 1 + 0.25 * easeInOut(segment(p, 0, 0.6));
-        setOut((f) => ({ ...f, transform: { ...f.transform, scale: f.transform.scale * z, originX: W() / 2, originY: H() / 2 } }));
+        setOut((f) => ({
+          ...f,
+          transform: {
+            ...f.transform,
+            scale: f.transform.scale * z,
+            originX: W() / 2,
+            originY: H() / 2,
+          },
+        }));
         effects.parchment = segment(p, 0.15, 0.55);
         effects.parchmentOnTop = true;
         setInc(segment(p, 0.6, 0.95));
@@ -427,8 +556,10 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
     }
 
     // Effects that belong to the incoming scene appear with it.
-    if (inc.effects.parchment && !effects.parchmentOnTop) effects.parchment = Math.max(effects.parchment ?? 0, inc.effects.parchment * p);
-    if (inc.effects.clouds && !effects.clouds) effects.clouds = inc.effects.clouds.map((c) => ({ ...c, opacity: c.opacity * p }));
+    if (inc.effects.parchment && !effects.parchmentOnTop)
+      effects.parchment = Math.max(effects.parchment ?? 0, inc.effects.parchment * p);
+    if (inc.effects.clouds && !effects.clouds)
+      effects.clouds = inc.effects.clouds.map((c) => ({ ...c, opacity: c.opacity * p }));
     if (from.config.key === "filozofia") effects.halftone = 0;
     return { layers, effects, ball };
   };
@@ -436,7 +567,14 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
   // ── Writing a frame to the DOM ───────────────────────────────────────────────
   const setDash = (paths: SVGPathElement[], progress: number, stagger = 0) => {
     paths.forEach((path, i) => {
-      const local = stagger > 0 ? segment(progress, i * stagger, Math.min(1, i * stagger + (1 - stagger * (paths.length - 1)))) : progress;
+      const local =
+        stagger > 0
+          ? segment(
+              progress,
+              i * stagger,
+              Math.min(1, i * stagger + (1 - stagger * (paths.length - 1))),
+            )
+          : progress;
       path.style.strokeDashoffset = String(1 - local);
     });
   };
@@ -455,7 +593,8 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
     const p = next ? next.enter.progress : 0;
 
     let frame = holdFrame(cur, cur.hold.progress);
-    if (next && p > 0) frame = applyTransition(frame, holdFrame(next, 0), cur.config.transition, p, cur, next);
+    if (next && p > 0)
+      frame = applyTransition(frame, holdFrame(next, 0), cur.config.transition, p, cur, next);
 
     // Layers
     for (const el of allLayers) {
@@ -489,9 +628,18 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
     }
     if (constellation) {
       constellation.style.opacity = String(clamp(e.constellation ?? 0));
-      if (constellationLine) constellationLine.style.strokeDashoffset = String(1 - (e.constellationDraw ?? 0));
+      if (constellationLine)
+        constellationLine.style.strokeDashoffset = String(1 - (e.constellationDraw ?? 0));
       constellationStars.forEach((star, i) => {
-        star.style.opacity = String(segment(e.constellationDraw ?? 0, i / constellationStars.length - 0.1, i / constellationStars.length + 0.1) * 0.9 + 0.1);
+        star.style.opacity = String(
+          segment(
+            e.constellationDraw ?? 0,
+            i / constellationStars.length - 0.1,
+            i / constellationStars.length + 0.1,
+          ) *
+            0.9 +
+            0.1,
+        );
       });
     }
     brushes.forEach((svg, key) => {
@@ -500,10 +648,13 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
       svg.style.visibility = active ? "visible" : "hidden";
       if (active) {
         const image = svg.querySelector("image");
-        if (image && !image.getAttribute("href") && image.dataset.href) image.setAttribute("href", image.dataset.href);
+        if (image && !image.getAttribute("href") && image.dataset.href)
+          image.setAttribute("href", image.dataset.href);
         const strokes = Array.from(svg.querySelectorAll<SVGPathElement>(".brush-stroke"));
         strokes.forEach((stroke, i) => {
-          stroke.style.strokeDashoffset = String(1 - segment(e.brushProgress ?? 0, i * 0.18, i * 0.18 + 0.55));
+          stroke.style.strokeDashoffset = String(
+            1 - segment(e.brushProgress ?? 0, i * 0.18, i * 0.18 + 0.55),
+          );
         });
       }
     });
@@ -522,7 +673,14 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
     if (philosophy) {
       const target = anchor(philosophy.primary, philosophy.config.ball);
       if (halftone) {
-        if (halftoneOpacity > 0) halftone.render({ x: target.x, y: target.y, radius: target.size / 2, progress: e.halftoneProgress ?? 0, opacity: halftoneOpacity });
+        if (halftoneOpacity > 0)
+          halftone.render({
+            x: target.x,
+            y: target.y,
+            radius: target.size / 2,
+            progress: e.halftoneProgress ?? 0,
+            opacity: halftoneOpacity,
+          });
         else halftone.clear();
       } else if (halftoneFallback) {
         halftoneFallback.style.opacity = String(halftoneOpacity);
@@ -540,7 +698,8 @@ export function startCinematic(root: HTMLElement, configs: SceneConfig[]): () =>
     ballEl.style.width = `${size.toFixed(1)}px`;
     ballEl.style.height = `${size.toFixed(1)}px`;
     if (ballBody) ballBody.style.opacity = clamp(b.opacity).toFixed(3);
-    if (ballGlow) ballGlow.style.opacity = clamp(Math.max(b.glow * (b.opacity > 0.05 ? 1 : 0.6), 0)).toFixed(3);
+    if (ballGlow)
+      ballGlow.style.opacity = clamp(Math.max(b.glow * (b.opacity > 0.05 ? 1 : 0.6), 0)).toFixed(3);
     if (ballCover) ballCover.style.opacity = clamp(b.cover).toFixed(3);
     ballEl.style.setProperty("--star", clamp(b.star).toFixed(3));
 
