@@ -13,7 +13,7 @@ Fiecare fază se încheie cu verificări și un commit. Dacă lucrul se întreru
 | 7. Admin | gata |
 | 8. SEO, GDPR, securitate, performanță, accesibilitate | gata |
 | 9. Deploy | gata |
-| 10. QA final | — |
+| 10. QA final | gata |
 
 ## Faza 2: Fundație
 
@@ -149,6 +149,20 @@ Fiecare fază se încheie cu verificări și un commit. Dacă lucrul se întreru
   contact (inclusiv eroare fără pierderea textului), autentificare greșită, axe pe paginile publice
   (fiecare scenă cinematică la poziția ei) și pe admin la 1440 și 390 px. 8 teste, toate trec.
 
-## Următorul pas
+## Faza 10: QA final
 
-Faza 10: QA final și raportul.
+- `npm run lint`, `npm run typecheck`: fără erori. `npm test`: 52 de teste. `npm run test:e2e`:
+  8 teste (rezervare, rezervare simultană, confirmare, anulare, contact, login greșit, axe public și
+  admin). `npm audit`: 0 vulnerabilități.
+- Pornire de la zero dintr-o clonă curată: `npm install`, migrări + seed (de două ori, a doua oară
+  nu adaugă nimic), `npm run dev` generează imaginile și pornește; toate rutele publice răspund 200.
+- Verificarea diacriticelor din criteriile de acceptare, pe clona curată: nimic găsit.
+- Lighthouse mobil pe build-ul de producție: accesibilitate, bune practici și SEO 100 pe toate
+  paginile; performanță 89–91 pe pagina principală și 91–94 pe celelalte (simulare, server local
+  HTTP/1.1; cu încetinire reală, pagina principală are 98). CLS 0 peste tot.
+- Corectat în această fază: textul animat cu SplitText avea `aria-label` pe elemente care nu îl
+  permit (acum cititoarele de ecran primesc o copie ascunsă vizual), formularul de anulare
+  ocolea handler-ul care păstrează textul, verificarea diacriticelor din CI conținea chiar
+  caracterele căutate.
+
+Proiectul e complet. Ce rămâne de completat de antrenor: `CONTENT-TODO.md`.
