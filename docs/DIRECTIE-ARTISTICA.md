@@ -33,10 +33,10 @@ doar cu acordul scris al părinților.
 
 ---
 
-## Prima variantă: zgură, tipografie de academie, 3D
+## Prima variantă: zgură, tipografie de academie
 
-Site-ul arată ca o academie de tenis: culorile terenului de zgură, titluri în majuscule condensate,
-o scenă 3D în timp real pe pagina principală și fotografii reale acolo unde contează. Documentul
+Site-ul arată ca o academie de tenis: culorile terenului de zgură, titluri în majuscule condensate
+și fotografii reale acolo unde contează. (Scena 3D a primei variante a fost scoasă.) Documentul
 spune ce e fiecare element și, mai ales, **cum să faci fotografiile** care completează designul.
 
 ## Paleta
@@ -60,21 +60,6 @@ altfel contrastul nu ajunge la nivelul AA.
 - **Text**: Inter. Paragrafe de 2–4 fraze, fără jargon inutil, dar cu termenii corecți de
   specialitate (lanț kinetic, obiectiv operațional, periodizare).
 - **Etichetele** de deasupra titlurilor: Inter 600, majuscule spațiate, cu o linie galbenă.
-
-## Scena 3D
-
-- **Pagina principală**: un meci pe zgură, la lumina de după-amiază. Doi jucători schimbă mingi cu
-  traiectorii calculate fizic (efect liftat, ricoșeu pe zgură, urme de minge și praf), cu serviciu,
-  schimburi și punct câștigător; camera schimbă unghiul la fiecare punct.
-- **Laboratorul tehnic** (secțiunea „Metoda”): același teren, un singur jucător care repetă
-  dreapta, reverul sau serviciul cu încetinitorul. Vizitatorul oprește mișcarea, alege faza și
-  rotește camera.
-- **Jucătorii sunt manechine biomecanice**, nu personaje fotorealiste. Oameni care să pară filmați
-  cer modele scanate și animații înregistrate cu motion capture, realizate de un artist 3D; pentru
-  un astfel de proiect, brief-ul ar porni de la cele trei lovituri de mai sus și de la dimensiunile
-  terenului din `components/court3d/engine/court.ts`.
-- Pe dispozitive fără accelerare grafică, la „economisire date” sau dacă WebGL lipsește, apare
-  desenul static al terenului; conținutul paginii rămâne complet.
 
 ## Fotografiile tale
 

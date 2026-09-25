@@ -144,13 +144,6 @@ export function sceneSeeds(vars: Vars): SceneSeed[] {
           "4. **Check-ins.** Now and then we film, play practice matches and adjust the plan.",
         ].join("\n"),
       },
-      extra: {
-        labTitle: { ro: "Laboratorul de biomecanică", en: "The biomechanics lab" },
-        labIntro: {
-          ro: "Jucătorul 3D arată fazele fiecărei lovituri pe un teren de zgură. Alege lovitura, oprește mișcarea unde vrei și rotește camera ca să o vezi din orice unghi.",
-          en: "The 3D player shows the phases of each stroke on a clay court. Choose a stroke, pause the motion wherever you like and turn the camera to see it from any angle.",
-        },
-      },
     },
     {
       key: "clubul",

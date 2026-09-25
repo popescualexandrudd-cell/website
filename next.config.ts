@@ -40,14 +40,7 @@ const nextConfig: NextConfig = {
     },
   },
   async headers() {
-    return [
-      { source: "/:path*", headers: securityHeaders },
-      // 3D assets carry their version in the file name, so browsers may keep them for good.
-      {
-        source: "/3d/:file*",
-        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
-      },
-    ];
+    return [{ source: "/:path*", headers: securityHeaders }];
   },
 };
 

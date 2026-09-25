@@ -99,8 +99,7 @@
     "clubAddress": "Adresa",
     "clubCourts": "Terenurile",
     "clubAmenities": "Dotările",
-    "galleryVideo": "Video",
-    "labCta": "Deschide laboratorul"
+    "galleryVideo": "Video"
   },
   "programs": {
     "groups": {
@@ -430,109 +429,6 @@
     "serverTitle": "Ceva n-a mers.",
     "serverText": "A apărut o eroare de partea noastră. Încearcă din nou peste un minut. Dacă se repetă, sună-ne sau scrie-ne.",
     "retry": "Încearcă din nou"
-  },
-  "lab": {
-    "strokeLabel": "Lovitura",
-    "play": "Redă",
-    "pause": "Pauză",
-    "scrub": "Momentul loviturii",
-    "viewLabel": "Unghiul camerei",
-    "views": {
-      "lateral": "Lateral",
-      "frontal": "Din față",
-      "spate": "Din spate",
-      "sus": "De sus"
-    },
-    "phaseCount": "Faza {n} din {total}",
-    "phasesLabel": "Fazele loviturii",
-    "loading": "Se pregătește modelul 3D…",
-    "fallback": "Modelul 3D nu poate fi afișat pe acest dispozitiv. Fazele loviturii sunt descrise mai jos.",
-    "drag": "Trage de imagine ca să rotești camera.",
-    "modelNote": "Model biomecanic: poziții calculate prin cinematică inversă, pe fazele reale ale loviturii.",
-    "strokes": {
-      "forehand": {
-        "name": "Dreapta",
-        "full": "Lovitura de dreapta, cu efect liftat",
-        "phases": [
-          {
-            "title": "Poziția de așteptare",
-            "text": "Greutatea pe pingele picioarelor, genunchii ușor flexați, racheta în fața corpului. Pasul de reacție (split-step) se sincronizează cu lovitura adversarului."
-          },
-          {
-            "title": "Rotația umerilor",
-            "text": "Trunchiul se rotește în jurul axei longitudinale până când umerii depășesc 90° față de fileu. Brațul liber rămâne întins spre minge, pentru echilibru și anticipare."
-          },
-          {
-            "title": "Bucla și coborârea rachetei",
-            "text": "Racheta descrie o buclă și coboară sub nivelul mingii. Flexia genunchilor încarcă musculatura extensoare și pregătește impulsul de jos în sus."
-          },
-          {
-            "title": "Impactul",
-            "text": "Contact în fața șoldului drept, cu fața rachetei perpendiculară pe sol. Energia se transferă prin lanțul kinetic: picioare, bazin, trunchi, umăr, cot, încheietură."
-          },
-          {
-            "title": "Continuarea și finalizarea",
-            "text": "Antebrațul pronează („ștergătorul de parbriz”), racheta urcă peste umărul stâng, iar corpul revine echilibrat pentru lovitura următoare."
-          }
-        ]
-      },
-      "backhand": {
-        "name": "Rever",
-        "full": "Reverul cu două mâini",
-        "phases": [
-          {
-            "title": "Poziția de așteptare",
-            "text": "Priza pregătită pentru rever, cu mâna stângă pe mâner, deasupra celei drepte. Pasul de reacție în momentul loviturii adversarului."
-          },
-          {
-            "title": "Rotația umerilor",
-            "text": "Umerii se rotesc spre stânga peste 90°, iar ambele mâini duc racheta înapoi, lângă șoldul stâng; greutatea trece pe piciorul din spate."
-          },
-          {
-            "title": "Coborârea rachetei",
-            "text": "Capul rachetei coboară sub traiectoria mingii, pentru lovitura de jos în sus, cu genunchii flexați și trunchiul stabil."
-          },
-          {
-            "title": "Impactul",
-            "text": "Contact în fața șoldului stâng, cu brațele aproape întinse. Mâna stângă conduce lovitura, iar mâna dreaptă stabilizează racheta."
-          },
-          {
-            "title": "Finalizarea",
-            "text": "Racheta termină peste umărul drept. Rotația completă a trunchiului și transferul greutății pe piciorul din față controlează adâncimea mingii."
-          }
-        ]
-      },
-      "serve": {
-        "name": "Serviciu",
-        "full": "Serviciul",
-        "phases": [
-          {
-            "title": "Poziția inițială",
-            "text": "Picioarele în poziția de platformă, umerii perpendiculari pe fileu, mingea și racheta împreună în fața corpului."
-          },
-          {
-            "title": "Aruncarea mingii",
-            "text": "Brațul stâng urcă întins și eliberează mingea deasupra umărului drept, ușor în fața corpului, fără să-i imprime rotație."
-          },
-          {
-            "title": "Poziția „trofeu”",
-            "text": "Genunchii flexați, umerii înclinați cu umărul stâng sus, cotul drept la nivelul umărului: energia elastică se acumulează înaintea impulsului."
-          },
-          {
-            "title": "Bucla din spate și extensia",
-            "text": "Racheta cade în spatele umerilor, apoi extensia explozivă a picioarelor și rotația trunchiului accelerează lanțul kinetic de jos în sus."
-          },
-          {
-            "title": "Impactul",
-            "text": "Contact în punctul cel mai înalt, cu brațul complet întins. Pronația antebrațului și flexia încheieturii dau viteza și rotația mingii."
-          },
-          {
-            "title": "Aterizarea și finalizarea",
-            "text": "Aterizare pe piciorul stâng, în interiorul terenului, cu racheta continuând spre partea stângă a corpului; echilibrul permite reacția la retur."
-          }
-        ]
-      }
-    }
   },
   "academy": {
     "stage": {

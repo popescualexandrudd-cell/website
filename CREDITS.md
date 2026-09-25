@@ -1,12 +1,9 @@
 # Surse, licențe și mulțumiri
 
-## Imagini și 3D
+## Imagini
 
-- **Scena 3D** (teren, fileu, gard, jucători, rachetă, minge) e construită în cod pentru acest
-  proiect, din forme geometrice și texturi desenate procedural (`components/court3d/`). Nu
-  folosește modele, texturi sau fotografii preluate din alte surse.
-- **Pictograma** (`app/icon.svg`), desenele de teren (`CourtMark`, afișul scenei 3D) și ilustrația
-  paginii 404 sunt create pentru acest proiect.
+- **Pictograma** (`app/icon.svg`), desenele de teren (`CourtMark`) și ilustrația paginii 404 sunt
+  create pentru acest proiect.
 - **Fotografiile** se încarcă din admin. Când adaugi fotografii făcute de altcineva, trece aici
   autorul și acordul de folosire.
 - **Harta** (doar după click): © contribuitorii OpenStreetMap, date sub licența ODbL
@@ -28,7 +25,6 @@ Găzduite pe același server (nicio cerere către Google la vizitarea site-ului)
 | Next.js 16, React 19 | aplicația web | MIT |
 | TypeScript, ESLint, Prettier | cod și verificări | Apache-2.0 / MIT |
 | Tailwind CSS 4 | stiluri | MIT |
-| three.js | scena 3D de pe pagina principală | MIT |
 | Prisma 7, node-postgres | baza de date | Apache-2.0 / MIT |
 | PostgreSQL 16 | baza de date | PostgreSQL License |
 | next-intl | română și engleză | MIT |

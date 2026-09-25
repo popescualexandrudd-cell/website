@@ -61,7 +61,7 @@ jobs:
 
       - name: Diacritice cu virgulă (fără s și t cu sedilă)
         # Byte patterns (UTF-8) for the cedilla letters U+015E, U+015F, U+0162, U+0163, so this
-        # file itself does not contain them. Text files only (-I): images and the 3D model
+        # file itself does not contain them. Text files only (-I): images and video posters
         # contain such bytes by chance.
         run: |
           if LC_ALL=C grep -rnIE $'\xc5\x9e|\xc5\x9f|\xc5\xa2|\xc5\xa3' --exclude-dir=node_modules --exclude-dir=.git --exclude="PROMPT*.md" .; then

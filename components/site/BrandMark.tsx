@@ -15,7 +15,6 @@ export function BrandMark({ logo, monogram }: Props) {
     <picture className="brand-mark brand-logo" style={{ aspectRatio: String(ratio) }}>
       <source type="image/avif" srcSet={srcSet(logo.avif)} sizes={`${Math.round(48 * ratio)}px`} />
       <source type="image/webp" srcSet={srcSet(logo.webp)} sizes={`${Math.round(48 * ratio)}px`} />
-      {/* eslint-disable-next-line @next/next/no-img-element -- responsive AVIF/WebP from the admin */}
       <img src={logo.fallback} alt="" width={logo.width} height={logo.height} />
     </picture>
   );

@@ -51,7 +51,6 @@ export function localizedSettings(s: SettingsView, locale: Locale) {
     heroImage: resolveMedia(s.heroImage),
     heroImageAlt: s.heroImage ? t(s.heroImage.alt, locale) : "",
     colors: brandColors(s),
-    labEnabled: s.labEnabled,
     phone: s.phone,
     whatsapp: s.whatsapp,
     email: s.email,

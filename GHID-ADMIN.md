@@ -165,8 +165,6 @@ proprii:
   programe, antrenori) se calculează singure din conținut;
 - **Academia de juniori**: linkul spre pagina academiei; etapele vin din grupe;
 - **Echipa**: nota din ramele fără fotografie;
-- **Metoda**: titlul și textul laboratorului tehnic 3D (laboratorul se oprește din Setări →
-  Funcții);
 - **Baza sportivă**: nota din cadru; fotografia e cea din **Antetele paginilor → Clubul**;
 - **Galerie**: textul afișat până publici fotografii; pe pagina principală apar primele 6.
 
@@ -283,7 +281,7 @@ personal de dezabonare, pentru serviciul de email pe care îl folosești (Brevo,
   lecții, oferta pentru prima lecție, metodele de plată;
 - **Date legale**: forma de organizare, denumirea, CUI, sediul (apar în subsol și în paginile legale);
 - **Motoare de căutare**: titlul și descrierea pentru Google;
-- **Funcții**: versiunea în engleză, newsletter, laboratorul tehnic 3D, invitațiile la recenzie,
+- **Funcții**: versiunea în engleză, newsletter, invitațiile la recenzie,
   statisticile, perioada de păstrare a datelor;
 - **Email de test**: verifică dacă emailurile pleacă;
 - **Conturi**: poți crea un cont de **editor** pentru cineva care te ajută cu textele. Editorul vede

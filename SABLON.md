@@ -11,7 +11,7 @@ Acest ghid arată cum pregătești site-ul pentru un club nou, de la zero până
 - **Pagina principală cinematică**: se deschide cu un video real al clubului pe tot ecranul, care
   la derulare se retrage într-un cadru; apoi filozofia în litere mari, cifrele clubului (calculate
   din conținut), programele în carduri care se suprapun la derulare, etapele academiei de
-  juniori, echipa, metoda (cu laboratorul tehnic 3D, opțional), baza sportivă, galeria foto și
+  juniori, echipa, metoda, baza sportivă, galeria foto și
   video, tipurile de lecții, întrebările și rezervarea.
 - **Academia de juniori**: grupe pe vârste și etape (minge roșie, portocalie, verde, galbenă), cu
   program, taxă lunară și locuri; rezultatele la turnee (doar cu acordul părinților); formularul
@@ -95,7 +95,6 @@ publicare, tabloul de bord din admin arată câte câmpuri mai sunt „de comple
 
 ## Ce se poate opri
 
-- **Laboratorul tehnic 3D** (Setări → Funcții): pe pagina principală rămân pașii metodei.
 - **Versiunea în engleză**, **newsletterul**, **invitațiile la recenzie** (Setări → Funcții).
 - Orice secțiune a paginii principale (Conținut → Secțiunile paginii principale → Afișează
   secțiunea), ordinea lor se schimbă prin tragere.

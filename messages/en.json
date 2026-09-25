@@ -99,8 +99,7 @@
     "clubAddress": "Address",
     "clubCourts": "Courts",
     "clubAmenities": "Amenities",
-    "galleryVideo": "Video",
-    "labCta": "Open the lab"
+    "galleryVideo": "Video"
   },
   "programs": {
     "groups": {
@@ -430,109 +429,6 @@
     "serverTitle": "Something went wrong.",
     "serverText": "An error occurred on our side. Try again in a minute. If it happens again, call or write to us.",
     "retry": "Try again"
-  },
-  "lab": {
-    "strokeLabel": "Stroke",
-    "play": "Play",
-    "pause": "Pause",
-    "scrub": "Moment of the stroke",
-    "viewLabel": "Camera angle",
-    "views": {
-      "lateral": "Side",
-      "frontal": "Front",
-      "spate": "Behind",
-      "sus": "Above"
-    },
-    "phaseCount": "Phase {n} of {total}",
-    "phasesLabel": "Phases of the stroke",
-    "loading": "Preparing the 3D model…",
-    "fallback": "The 3D model cannot be shown on this device. The phases of the stroke are described below.",
-    "drag": "Drag the image to turn the camera.",
-    "modelNote": "Biomechanical model: positions solved with inverse kinematics along the real phases of the stroke.",
-    "strokes": {
-      "forehand": {
-        "name": "Forehand",
-        "full": "Topspin forehand",
-        "phases": [
-          {
-            "title": "Ready position",
-            "text": "Weight on the balls of the feet, knees slightly bent, racquet in front of the body. The split step is timed with the opponent's strike."
-          },
-          {
-            "title": "Shoulder turn",
-            "text": "The trunk rotates about its long axis until the shoulders pass 90° to the net. The free arm stays extended towards the ball, for balance and anticipation."
-          },
-          {
-            "title": "Loop and racquet drop",
-            "text": "The racquet traces a loop and drops below the ball. Bending the knees loads the extensor muscles and prepares the low-to-high drive."
-          },
-          {
-            "title": "Contact",
-            "text": "Contact in front of the right hip, with the racquet face perpendicular to the ground. Energy flows through the kinetic chain: legs, hips, trunk, shoulder, elbow, wrist."
-          },
-          {
-            "title": "Follow-through and finish",
-            "text": "The forearm pronates (the “windscreen wiper”), the racquet rises over the left shoulder and the body recovers its balance for the next shot."
-          }
-        ]
-      },
-      "backhand": {
-        "name": "Backhand",
-        "full": "Two-handed backhand",
-        "phases": [
-          {
-            "title": "Ready position",
-            "text": "Backhand grip prepared, with the left hand on the handle above the right. Split step as the opponent strikes."
-          },
-          {
-            "title": "Shoulder turn",
-            "text": "The shoulders turn left past 90° and both hands take the racquet back beside the left hip; the weight moves onto the back leg."
-          },
-          {
-            "title": "Racquet drop",
-            "text": "The racquet head drops below the ball's path for a low-to-high stroke, knees bent and trunk stable."
-          },
-          {
-            "title": "Contact",
-            "text": "Contact in front of the left hip, arms almost straight. The left hand drives the stroke while the right hand steadies the racquet."
-          },
-          {
-            "title": "Finish",
-            "text": "The racquet finishes over the right shoulder. A full trunk rotation and the weight transfer onto the front leg control the depth of the ball."
-          }
-        ]
-      },
-      "serve": {
-        "name": "Serve",
-        "full": "The serve",
-        "phases": [
-          {
-            "title": "Starting position",
-            "text": "Feet in the platform stance, shoulders perpendicular to the net, ball and racquet together in front of the body."
-          },
-          {
-            "title": "Ball toss",
-            "text": "The straight left arm rises and releases the ball above the right shoulder, slightly in front of the body, without spin."
-          },
-          {
-            "title": "Trophy position",
-            "text": "Knees bent, shoulders tilted with the left one high, right elbow at shoulder height: elastic energy builds before the drive."
-          },
-          {
-            "title": "Back loop and extension",
-            "text": "The racquet drops behind the shoulders, then the explosive leg drive and trunk rotation accelerate the kinetic chain from the ground up."
-          },
-          {
-            "title": "Contact",
-            "text": "Contact at the highest point with the arm fully extended. Forearm pronation and wrist flexion give the ball its speed and spin."
-          },
-          {
-            "title": "Landing and finish",
-            "text": "Landing on the left foot inside the court, with the racquet carrying on to the left side of the body; balance allows a reaction to the return."
-          }
-        ]
-      }
-    }
   },
   "academy": {
     "stage": {

@@ -129,7 +129,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       case "echipa":
         return <TeamSection key={scene.key} scene={scene} coaches={coaches} />;
       case "metoda":
-        return <MethodSection key={scene.key} scene={scene} labEnabled={settings.labEnabled} />;
+        return <MethodSection key={scene.key} scene={scene} />;
       case "clubul":
         return (
           <VenueSection

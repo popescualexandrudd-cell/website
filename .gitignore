@@ -45,5 +45,5 @@ npm-debug.log*
 docker/backup/rclone/rclone.conf
 docker/caddy/sites/*.caddy
 
-# downloaded sources of the 3D assets (scripts/build-3d-assets.ts)
+# local tool caches
 .cache/

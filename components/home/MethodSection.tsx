@@ -1,36 +1,12 @@
-import { getTranslations } from "next-intl/server";
 import type { SceneView } from "@/lib/content";
 import { orderedListItems } from "@/lib/markdown";
 import { Markdown } from "@/components/site/Markdown";
 import { TodoText } from "@/components/site/TodoText";
-import { TechniqueLab, type LabStroke } from "@/components/court3d/TechniqueLab";
-import type { StrokeName } from "@/components/court3d/engine/strokes";
 import { SectionHead } from "./SectionHead";
 
-const STROKE_KEYS: StrokeName[] = ["forehand", "backhand", "serve"];
-
-/** The method as numbered steps, then (when it is switched on) the 3D technique lab. */
-export async function MethodSection({
-  scene,
-  labEnabled,
-}: {
-  scene: SceneView;
-  labEnabled: boolean;
-}) {
-  const t = await getTranslations("lab");
+/** The method as numbered steps: assessment, plan, training, check-ins. */
+export function MethodSection({ scene }: { scene: SceneView }) {
   const steps = orderedListItems(scene.body);
-  const strokes: LabStroke[] = STROKE_KEYS.map((key) => ({
-    key,
-    name: t(`strokes.${key}.name`),
-    full: t(`strokes.${key}.full`),
-    phases: t.raw(`strokes.${key}.phases`) as { title: string; text: string }[],
-  }));
-  const views = {
-    lateral: t("views.lateral"),
-    frontal: t("views.frontal"),
-    spate: t("views.spate"),
-    sus: t("views.sus"),
-  };
   return (
     <section className="method" id={scene.key} aria-labelledby={`${scene.key}-title`}>
       <div className="method-inner">
@@ -52,39 +28,6 @@ export async function MethodSection({
         ) : (
           <Markdown source={scene.body} className="prose-ed" />
         )}
-
-        {labEnabled ? (
-          <>
-            <div className="lab-intro">
-              <h3 className="lab-title">
-                <TodoText value={scene.extra.labTitle ?? ""} />
-              </h3>
-              {scene.extra.labIntro ? (
-                <p className="lab-lead">
-                  <TodoText value={scene.extra.labIntro} />
-                </p>
-              ) : null}
-            </div>
-            <TechniqueLab
-              strokes={strokes}
-              labels={{
-                strokeLabel: t("strokeLabel"),
-                play: t("play"),
-                pause: t("pause"),
-                scrub: t("scrub"),
-                viewLabel: t("viewLabel"),
-                views,
-                phaseCount: t.raw("phaseCount") as string,
-                phasesLabel: t("phasesLabel"),
-                loading: t("loading"),
-                fallback: t("fallback"),
-                drag: t("drag"),
-                modelNote: t("modelNote"),
-                sceneLabel: scene.extra.labTitle ?? t("phasesLabel"),
-              }}
-            />
-          </>
-        ) : null}
       </div>
     </section>
   );

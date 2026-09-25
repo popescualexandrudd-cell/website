@@ -21,8 +21,7 @@ video-uri, se editează din panoul de administrare.
 
 - **Site public** în română (fără prefix) și engleză (`/en`, cu adrese traduse): pagina principală
   cu video de deschidere care se retrage într-un cadru la derulare, cifrele clubului, programe în
-  carduri suprapuse, etapele academiei de juniori, echipa, metoda cu laboratorul tehnic 3D
-  (opțional), baza sportivă, galeria; pagini pentru academia de juniori (grupe, rezultate, cerere
+  carduri suprapuse, etapele academiei de juniori, echipa, metoda, baza sportivă, galeria; pagini pentru academia de juniori (grupe, rezultate, cerere
   de evaluare), echipă și fiecare antrenor, programe, club, prețuri, rezervare, galerie foto și
   video, sfaturi, întrebări, contact, listă de așteptare, pagini legale.
 - **Identitatea clubului din admin**: nume, logo, două culori (restul paletei se calculează din
@@ -45,7 +44,7 @@ video-uri, se editează din panoul de administrare.
 
 Next.js 16 (App Router, Server Components, Server Actions), React 19, TypeScript strict,
 Tailwind CSS 4, PostgreSQL 16 + Prisma 7, next-intl, Zod, Nodemailer + React Email, sharp,
-date-fns-tz, three.js, ffmpeg, Vitest, Playwright + axe, Docker, Caddy.
+date-fns-tz, ffmpeg, Vitest, Playwright + axe, Docker, Caddy.
 
 ## Pornire locală
 
@@ -87,7 +86,7 @@ npm run admin:create                              # contul tău pentru http://lo
 
 ```
 app/            rutele: [locale]/ (site public), admin/, api/
-components/     secțiunile paginii principale (home/), academia și echipa (academy/), scena 3D (court3d/), pagini, formulare, admin
+components/     secțiunile paginii principale (home/), academia și echipa (academy/), pagini, formulare, admin
 lib/            baza de date, disponibilitate, rezervări, emailuri, autentificare, conținut, video, SEO
 emails/         șabloanele emailurilor (React Email)
 messages/       textele interfeței (ro.json, en.json)
@@ -106,9 +105,9 @@ docs/           direcția artistică, capturile ghidului
 - Teste: motorul de disponibilitate (inclusiv 29 martie și 25 octombrie), rezervări concurente,
   constrângerea din baza de date, anulări, job-uri, încărcarea imaginilor, conversia video reală
   (fără GPS), byte-range, contrastul culorilor, un singur antrenor principal, acordul părinților la
-  rezultate, GDPR, fizica mingii și animația loviturilor; end-to-end pentru rezervare, rezervare
+  rezultate, GDPR; end-to-end pentru rezervare, rezervare
   dublă simultană, confirmare din admin, anulare prin link, contact, login, cererea de evaluare
-  din academie până în admin, echipa, pagina principală cu și fără WebGL, accesibilitate axe pe
+  din academie până în admin, echipa, pagina principală, accesibilitate axe pe
   toate paginile.
 - CI în GitHub Actions (`.github/workflows/ci.yml`): lint, tipuri, teste, build, e2e, audit,
   imaginea Docker, deploy opțional prin SSH.

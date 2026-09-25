@@ -178,8 +178,6 @@ model SiteSettings {
   /// Brand colours (#rrggbb): the dark base of the design and the accent of buttons and links.
   colorBrand           String      @default("#0f3b2f")
   colorAccent          String      @default("#c24f1d")
-  /// The interactive 3D technique lab on the home page.
-  labEnabled           Boolean     @default(true)
   phone                String
   whatsapp             String
   email                String

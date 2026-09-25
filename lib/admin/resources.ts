@@ -169,14 +169,7 @@ const SCENE_EXTRAS: Record<string, { label: string; help?: string; keys: Option[
     label: "Textul din ramele fără fotografie",
     keys: [{ value: "photoNote", label: "Textul din ramă, până încarci fotografia" }],
   },
-  metoda: {
-    label: "Laboratorul tehnic 3D",
-    help: "Laboratorul apare doar dacă e activ în Setări → Funcții.",
-    keys: [
-      { value: "labTitle", label: "Titlul laboratorului" },
-      { value: "labIntro", label: "Textul de sub titlu" },
-    ],
-  },
+
   clubul: {
     label: "Textul din cadru",
     keys: [{ value: "mediaNote", label: "Textul din cadru, până încarci o fotografie" }],
@@ -1876,13 +1869,6 @@ const settings: Resource = {
       kind: "bool",
       name: "newsletterEnabled",
       label: "Formular de newsletter în subsol",
-      group: "Funcții",
-    },
-    {
-      kind: "bool",
-      name: "labEnabled",
-      label: "Laboratorul tehnic 3D pe pagina principală",
-      help: "Jucătorul 3D care arată fazele loviturilor, în secțiunea Metoda.",
       group: "Funcții",
     },
     {

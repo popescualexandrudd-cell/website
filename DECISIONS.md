@@ -634,3 +634,8 @@ cheie sub hero, secțiuni alternante deschis/închis, carduri de program, cale d
     doar paginile antrenorilor și filozofia antrenorului principal rămân la persoana întâi.
     Telefonul nu mai apare în mesajele de eroare din cod: șablonul nu are date ale unui club
     anume în afara bazei de date.
+87. **Fără laborator 3D**: la cererea clientului, jucătorul 3D și scena lui (three.js, modelul
+    MakeHuman, cerul fotografiat, afișele) au fost scoase cu totul, împreună cu setarea care îl
+    pornea (migrarea `remove_3d_lab`). Secțiunea „Metoda” rămâne cu cei patru pași; lecția
+    „Analiză biomecanică” rămâne, fiind un serviciu real al clubului. Pagina principală nu mai
+    încarcă nicio bibliotecă 3D, deci e mai ușoară pe telefon.
