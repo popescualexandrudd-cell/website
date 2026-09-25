@@ -207,3 +207,20 @@ partea a III-a (61–74).
 - Scena 3D a fost verificată vizual în Chromium (desktop și telefon) și în build-ul de producție,
   cu politica CSP activă.
 
+
+## Academia de tenis (șablon pentru club)
+
+- [x] Model de date: identitatea clubului (logo, culori verificate, deschidere video/foto), echipa
+      de antrenori, grupele academiei de juniori, rezultate, cereri de evaluare, video în Media;
+      migrarea `academy_template` testată pe o copie a bazei existente.
+- [x] Video: încărcare în flux din admin, conversie ffmpeg (720p/1080p, poster, fără GPS), reluare
+      din worker, servire cu byte-range, ffmpeg în imaginea Docker, limită separată în Caddy.
+- [x] Design nou: paleta din culorile clubului, deschidere cinematică, cifre, programe suprapuse,
+      etapele academiei, echipa, mozaicul galeriei; antet peste video.
+- [x] Pagini: Academia de juniori (grupe, rezultate, evaluare), Echipa și profilul fiecărui
+      antrenor, Despre academie, galeria cu video; sitemap și date structurate.
+- [x] Texte în vocea academiei (interfață, emailuri, întrebări, pagini legale).
+- [x] Teste: 76 unitare și de integrare (inclusiv conversia video reală), 14 end-to-end (inclusiv
+      cererea de evaluare și axe WCAG 2.2 AA pe paginile noi).
+- [ ] De la club: fotografiile și video-urile reale, programul și taxele grupelor, ceilalți
+      antrenori (`CONTENT-TODO.md`).

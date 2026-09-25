@@ -645,3 +645,10 @@
 .btn[data-invalid="true"] {
   border-color: var(--color-eroare);
 }
+
+.admin-form .input-color {
+  width: 7rem;
+  height: 3rem;
+  padding: 0.3rem;
+  cursor: pointer;
+}

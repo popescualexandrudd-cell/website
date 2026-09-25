@@ -41,6 +41,9 @@ const PUBLIC = [
   "/intrebari",
   "/galerie",
   "/despre",
+  "/academie",
+  "/echipa",
+  "/echipa/popescu-alexandru-daniel",
   "/facilitati",
   "/en",
 ];
@@ -50,6 +53,9 @@ const ADMIN = [
   "/admin/disponibilitate",
   "/admin/continut/programe",
   "/admin/continut/lectii",
+  "/admin/continut/antrenori",
+  "/admin/continut/grupe-juniori",
+  "/admin/lista-asteptare",
   "/admin/media",
   "/admin/setari",
 ];

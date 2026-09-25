@@ -460,8 +460,8 @@ function FieldControl({ field, value, media, options, error }: ControlProps) {
               type={type}
               name={name}
               defaultValue={asString(value)}
-              className="input"
-              maxLength={field.kind === "text" ? field.maxLength : undefined}
+              className={type === "color" ? "input input-color" : "input"}
+              maxLength={field.kind === "text" && type !== "color" ? field.maxLength : undefined}
               autoCapitalize={field.kind === "slug" ? "none" : undefined}
               {...numberProps}
               {...common}

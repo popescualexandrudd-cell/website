@@ -20,7 +20,7 @@ type Base = {
 
 export type FieldDef = Base &
   (
-    | { kind: "text"; maxLength?: number; inputType?: "text" | "email" | "url" | "tel" }
+    | { kind: "text"; maxLength?: number; inputType?: "text" | "email" | "url" | "tel" | "color" }
     | { kind: "textarea"; rows?: number; maxLength?: number }
     | { kind: "slug" }
     | { kind: "i18n"; maxLength?: number }

@@ -27,12 +27,14 @@ Cuprins:
 
 - **Un domeniu**, de exemplu `numele-tau-tenis.ro` (de la ROTLD prin orice registrar: ClausWeb,
   Hostico, Namecheap etc.). Cost: aproximativ 50–100 lei pe an.
-- **Un server virtual (VPS)** cu **Ubuntu 24.04**, minimum **2 GB RAM**, 2 procesoare, 40 GB disc.
+- **Un server virtual (VPS)** cu **Ubuntu 24.04**, minimum **2 GB RAM**, 2 procesoare, 40 GB disc
+  (video-urile clubului ocupă spațiu: un clip de 20 de secunde are, după conversie, 5–15 MB).
   Exemple: Hetzner Cloud CX22, DigitalOcean, OVH, un furnizor românesc. Cost: aproximativ 5–10 euro
   pe lună. Site-ul, baza de date și backup-urile stau toate pe acest server.
 - **Un serviciu de email** pentru trimiterea confirmărilor (vezi pasul 7). Varianta gratuită de la
-  Brevo (300 de emailuri pe zi) ajunge pentru un antrenor.
-- **Fișierul `config/antrenor.yml` completat** cu datele tale (nume, telefon, adresă, prețuri). Ce
+  Brevo (300 de emailuri pe zi) ajunge pentru un club.
+- **Fișierul `config/club.yml` completat** cu datele clubului (nume, culori, antrenori, grupe,
+  telefon, adresă, prețuri; vezi `SABLON.md`). Ce
   rămâne necompletat apare pe site ca `[DE COMPLETAT]` și se poate completa oricând din panoul de
   administrare. Lista completă e în `CONTENT-TODO.md`.
 
@@ -90,10 +92,10 @@ Dacă depozitul GitHub e privat, GitHub îți cere un nume și un „personal ac
 parolă (GitHub → Settings → Developer settings → Personal access tokens → acces doar de citire la
 acest depozit).
 
-**Înainte de prima pornire**, verifică `config/antrenor.yml` (datele tale):
+**Înainte de prima pornire**, verifică `config/club.yml` (datele tale):
 
 ```bash
-nano config/antrenor.yml
+nano config/club.yml
 ```
 
 (În `nano`: modifici textul, salvezi cu Ctrl+O și Enter, ieși cu Ctrl+X.) Datele din acest fișier
@@ -160,7 +162,7 @@ docker compose ps
 Toate serviciile trebuie să apară `running`, iar `app` cu `(healthy)`. Deschide
 `https://numele-tau-tenis.ro` în browser. Certificatul HTTPS se obține automat în primul minut.
 
-La prima pornire, baza de date se creează singură și se completează din `config/antrenor.yml`.
+La prima pornire, baza de date se creează singură și se completează din `config/club.yml`.
 
 ## 9. Contul tău de administrator
 
@@ -209,9 +211,19 @@ După ce ai modificat `.env` (de exemplu altă parolă de email), aplici schimba
 Actualizările de securitate ale sistemului de operare se instalează automat. O dată la câteva luni,
 repornește serverul din panoul furnizorului sau cu `sudo reboot` (site-ul pornește singur).
 
+## Video-urile
+
+Imaginea Docker conține **ffmpeg**, care convertește video-urile încărcate din admin (MP4 H.264,
+720p și 1080p, cu cadru de previzualizare). Conversia pornește imediat după încărcare; dacă
+serverul repornește în timpul ei, worker-ul o reia în cel mult un minut. Caddy acceptă fișiere
+de până la 520 MB doar pe adresa de încărcare video (`/api/admin/media/video`); restul
+formularelor rămân limitate la 12 MB. Video-urile se servesc direct de Caddy, cu derulare
+(byte-range), ca și fotografiile.
+
 ## 12. Backup și restaurare
 
-**Automat**: în fiecare noapte la 03:30 se salvează baza de date și imaginile încărcate. Se păstrează
+**Automat**: în fiecare noapte la 03:30 se salvează baza de date și fișierele încărcate (fotografii
+și video-uri). Se păstrează
 ultimele 14 zile (le poți schimba în `.env`: `BACKUP_TIME`, `BACKUP_KEEP_DAYS`).
 
 **Manual**, oricând:

@@ -75,7 +75,7 @@ Inițierea merge în lecții individuale, în doi cu un prieten, în trei sau î
 
 ## Ce aduci
 
-Pantofi sport cu talpă plată (ideal, pantofi de tenis pentru zgură), haine lejere și apă. Racheta și mingile ți le împrumut eu la început.`,
+Pantofi sport cu talpă plată (ideal, pantofi de tenis pentru zgură), haine lejere și apă. Racheta și mingile ți le împrumutăm noi la început.`,
       en: `The beginners programme is for anyone holding a racquet for the first time, or nearly. With children we start with mini tennis: a smaller court, softer balls and plenty of coordination games. With adults we go straight to the full court, with slower balls at first, so the strokes work from the first lessons.
 
 ## What we work on
@@ -95,7 +95,7 @@ You can do it in private lessons, with a friend, as three, or in a small group. 
 
 ## What to bring
 
-Flat-soled trainers (ideally clay-court tennis shoes), comfortable clothes and water. I lend you a racquet and balls at first.`,
+Flat-soled trainers (ideally clay-court tennis shoes), comfortable clothes and water. We lend you a racquet and balls at first.`,
     },
   },
   {
@@ -125,7 +125,7 @@ Flat-soled trainers (ideally clay-court tennis shoes), comfortable clothes and w
     audience: "TOATE",
     level: "COMPETITIE",
     description: {
-      ro: `Programul de competiție e pentru copii, juniori și adulți care joacă turnee sau se pregătesc pentru primele. Sunt arbitru național de tenis, așa că regulamentul și felul în care decurge un turneu le cunosc din interior. În pregătire asta înseamnă că știm dinainte ce ne așteaptă: încălzirea, pauzele, momentele tensionate, situațiile de regulament.
+      ro: `Programul de competiție e pentru copii, juniori și adulți care joacă turnee sau se pregătesc pentru primele. Antrenorul principal este arbitru național de tenis, așa că regulamentul și felul în care decurge un turneu le cunoaștem din interior. În pregătire asta înseamnă că știm dinainte ce ne așteaptă: încălzirea, pauzele, momentele tensionate, situațiile de regulament.
 
 ## Ce lucrăm
 
@@ -142,7 +142,7 @@ Discutăm meciurile: ce a mers, ce nu și ce ducem în antrenamentele următoare
 ## Cum te antrenezi
 
 De obicei în lecții individuale sau în doi, cu un partener de nivel apropiat, de 90 sau 120 de minute. O analiză biomecanică la începutul sezonului arată exact ce merită corectat.`,
-      en: `The competition programme is for children, juniors and adults who play tournaments or are getting ready for their first. I am a national tennis umpire, so I know the rules and how a tournament runs from the inside. In training that means we know in advance what to expect: the warm-up, the breaks, the tense moments, the rules situations.
+      en: `The competition programme is for children, juniors and adults who play tournaments or are getting ready for their first. Our head coach is a national tennis umpire, so we know the rules and how a tournament runs from the inside. In training that means we know in advance what to expect: the warm-up, the breaks, the tense moments, the rules situations.
 
 ## What we work on
 

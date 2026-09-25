@@ -572,3 +572,65 @@ cheie sub hero, secțiuni alternante deschis/închis, carduri de program, cale d
     linkului din antet (trebuie să conțină textul vizibil). Testele: 58 unitare și de integrare,
     10 end-to-end (inclusiv axe WCAG 2.2 AA pe toate paginile, la „reduced motion” și fără).
 74. **Pagina 404** e o minge ieșită în afara terenului („Out”): același limbaj, fără imagine.
+
+## Partea a IV-a. Programe și lecții, date club, 3D realist
+
+75. **Programe și tipuri de lecții separate**: programul (Inițiere, Competiție, Amatori) spune ce se
+    lucrează; tipul lecției (individuală, în doi, în trei, grup 4–6, analiză biomecanică) spune cu
+    cine și cât costă pe oră; durata (60, 90, 120 de minute sau mai mult) se alege la rezervare.
+    Orice lecție ocupă exclusiv timpul antrenorului, așa că excluderea din PostgreSQL acoperă acum
+    toate rezervările active; migrarea `lesson_types` anulează grupele suprapuse rămase.
+76. **Rezervarea în cinci pași** (program → lecție și durată → oră → date → confirmare), cu
+    emailuri către client și antrenor; widgetul de pe prima pagină sare direct la „Datele mele”.
+77. **Scena 3D realistă**: un om MakeHuman (CC0) cu schelet propriu și IK, terenul clubului
+    complet, cerul fotografiat (Poly Haven, CC0) ca lumină și reflexii. Afișe WebP randate din
+    aceeași scenă, pentru încărcare și fără WebGL.
+
+## Partea a V-a. Academia: șablon pentru orice club
+
+78. **Șablon, nu site de antrenor**: marca e clubul (nume, logo, două culori, descriere), iar
+    antrenorii devin o echipă (`Coach`, cu antrenor principal unic). Migrarea `academy_template`
+    mută profilul existent în echipă ca antrenor principal, cu certificările lui, și redenumește
+    secțiunile păstrate (`filozofia` → `manifest`, `terenul` → `clubul`); cele scrise pentru un
+    singur antrenor (antrenorul, prima lecție, locuri) dispar. `config/antrenor.yml` devine
+    `config/club.yml`, cu secțiunile `club`, `antrenori` și `academie_juniori` (`SABLON.md`).
+79. **Culorile clubului** sunt două variabile CSS (`--brand`, `--accent`) puse pe `<html>` din
+    setări; toate tokenurile paletei se derivă din ele cu `color-mix(in oklab)`, deci admin-ul
+    schimbă tot site-ul fără build. La salvare se verifică contrastul cu textul alb (7:1 pentru
+    bază, 4,5:1 pentru accent), iar valorile sunt validate ca `#rrggbb` înainte să ajungă în
+    atributul `style`.
+80. **Doar imagini reale**: nu există fotografii de stoc sau generate. Până încarcă clubul
+    fotografii și video-uri, fiecare loc arată terenul desenat în linii pe culorile clubului și o
+    notă „[DE COMPLETAT]” care spune ce trebuie încărcat (`MediaFrame`).
+81. **Deschiderea cinematică** (după site-urile din clipurile primite și academiile Nadal, IMG,
+    Mouratoglou): video-ul clubului pe tot ecranul, titlul pe rânduri care urcă la încărcare; la
+    derulare, pe 65% dintr-un ecran, video-ul se micșorează într-un cadru rotunjit și textul se
+    ridică (`--hero-p`, calculat într-un singur `requestAnimationFrame`). Antetul stă peste video
+    și devine opac după primii pixeli. La „reduced motion”: secțiune statică, fără animații.
+82. **Video**: încărcarea trimite fișierul brut (nu un formular), scris pe disc în flux, cu limită
+    de 500 MB, într-un folder ascuns pe care nici aplicația, nici Caddy nu îl servesc. Rândul
+    `Media` (tip `VIDEO`, stare `IN_PROCESARE`) apare doar după încărcarea completă; conversia
+    pornește cu `after()` și e revendicată atomic (`processingAt`), iar worker-ul reia la fiecare
+    minut ce a rămas (inclusiv o revendicare mai veche de 30 de minute). ffmpeg: H.264 High, CRF 23,
+    maximum 30 fps, 720p mereu și 1080p doar din surse mari, AAC stereo, `+faststart`, fără
+    metadate și capitole (GPS-ul telefonului dispare); cadrul de previzualizare e scos din fișierul
+    convertit (deja rotit corect) și codat ca imaginile (AVIF + WebP + blur). Limita de 3 minute
+    ține site-ul rapid și discul mic. Originalul se șterge după conversie, reușită sau nu.
+83. **Redarea**: `<video muted loop playsinline>` cu două surse alese prin `media` (1080p de la
+    1100 px), pornit doar cât e pe ecran (IntersectionObserver), niciodată automat la „reduced
+    motion” sau economisire de date, cu buton de pauză (WCAG 2.2.2). Ruta `/media` răspunde cu
+    byte-range (206/416), necesar în Safari; în producție Caddy face același lucru. În galerie,
+    video-ul pornește cu sunet doar la cerere, în fereastra de vizualizare.
+84. **Academia de juniori**: grupele urmează etapele ITF „Play and Stay” (minge roșie, portocalie,
+    verde, galbenă), cu descrieri generale ale etapelor; programul, taxa și locurile nu se inventează
+    (rămân „[DE COMPLETAT]” sau „la cerere”). Cererea de evaluare folosește aceeași tabelă ca lista
+    de așteptare (`kind = EVALUARE`), deci moștenește anonimizarea, exportul GDPR și inboxul din
+    admin. Rezultatele la turnee se publică doar cu acordul părinților (verificat și la salvare,
+    și la citire).
+85. **Cifrele de pe prima pagină** se calculează din conținut (terenuri, terenuri acoperite, vârsta
+    minimă din grupe și programe, programe, antrenori când sunt cel puțin doi), ca să nu existe
+    cifre de marketing nevalidate. Numărătoarea animată pornește de la valoarea reală din HTML.
+86. **Vocea**: textele site-ului vorbesc la plural, ca academie („îți răspundem”, „te anunțăm”);
+    doar paginile antrenorilor și filozofia antrenorului principal rămân la persoana întâi.
+    Telefonul nu mai apare în mesajele de eroare din cod: șablonul nu are date ale unui club
+    anume în afara bazei de date.

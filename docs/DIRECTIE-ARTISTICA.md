@@ -1,4 +1,39 @@
-# Direcția artistică: zgură, tipografie de academie, 3D
+# Direcția artistică: academia de tenis
+
+> **Varianta actuală (academie, șablon pentru club)**: paleta se calculează din cele două culori ale
+> clubului (Setări → Identitatea clubului), pagina principală se deschide cu un video real al
+> clubului, iar fotografiile și video-urile vin doar de la club. Mai jos: cum filmezi și
+> fotografiezi materialele; apoi, pentru istoric, direcția primei variante (paleta de zgură).
+
+## Video-urile clubului
+
+Pagina principală se deschide cu **un video filmat la club**, pe tot ecranul, cu titlul peste el.
+Ce arată bine:
+
+- **orizontal**, 1920 × 1080 (sau 4K, se micșorează singur), **10–20 de secunde**, care se poate
+  relua în buclă fără o tăietură bruscă (de exemplu un schimb de mingi care începe și se termină
+  la fel);
+- **stabil**: trepied, gimbal sau telefonul sprijinit; fără zoom în timpul filmării;
+- **lumină bună**: dimineața sau seara pe terenurile exterioare, lumina uniformă sub balon iarna;
+- **mișcare reală**: o grupă de juniori la exerciții, un schimb de mingi, deplasarea pe zgură,
+  serviciul la încetinitor (dacă telefonul filmează la 60–120 fps);
+- partea din stânga-jos a cadrului rămâne mai liniștită: acolo stă titlul;
+- fără text, logo sau muzică: sunetul nu se aude pe pagina principală.
+
+Clipuri scurte (10–30 de secunde) merg și în galerie și pe pagina fiecărui antrenor. Copiii apar
+doar cu acordul scris al părinților.
+
+## Fotografiile clubului
+
+- **Antrenorii**: vertical 4:5, pe teren, la lumină naturală, privind spre cameră sau în mișcare;
+  aceeași încadrare pentru toată echipa, ca paginile să arate unitar.
+- **Terenurile**: de la înălțime (tribună, un etaj), dimineața, cu liniile proaspăt măturate.
+- **Grupele și programele**: orizontal 3:2 sau 16:10, antrenamente reale, nu poze aranjate.
+- **Logoul**: PNG cu fundal transparent, cel puțin 400 px lățime.
+
+---
+
+## Prima variantă: zgură, tipografie de academie, 3D
 
 Site-ul arată ca o academie de tenis: culorile terenului de zgură, titluri în majuscule condensate,
 o scenă 3D în timp real pe pagina principală și fotografii reale acolo unde contează. Documentul

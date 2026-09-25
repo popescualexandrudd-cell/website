@@ -1,7 +1,7 @@
 # Ghidul panoului de administrare
 
-Panoul e făcut în primul rând pentru telefon: îl poți folosi pe teren, între două lecții. Adresa
-este `https://numele-tau-tenis.ro/admin`. Capturile de mai jos sunt făcute pe un telefon; pe
+Panoul e făcut în primul rând pentru telefon: îl poți folosi pe teren, între două antrenamente.
+Adresa este `https://numele-clubului.ro/admin`. Capturile de mai jos sunt făcute pe un telefon; pe
 calculator, meniul stă în stânga.
 
 **Sfat:** adaugă panoul pe ecranul principal al telefonului (Safari: Partajează → Adaugă pe ecranul
@@ -9,7 +9,8 @@ principal; Chrome: ⋮ → Adaugă pe ecranul de pornire). Rămâi autentificat 
 
 Cuprins: [Autentificare](#autentificare) · [Tabloul de bord](#tabloul-de-bord) ·
 [Azi](#azi) · [Rezervări](#rezervări) · [Disponibilitate](#disponibilitate) ·
-[Conținut](#conținut) · [Imagini](#imagini) · [Mesaje și lista de așteptare](#mesaje-și-lista-de-așteptare) ·
+[Conținut](#conținut) · [Echipa](#echipa-de-antrenori) · [Academia de juniori](#academia-de-juniori) ·
+[Fotografii și video-uri](#fotografii-și-video-uri) · [Mesaje, evaluări și lista de așteptare](#mesaje-evaluări-și-lista-de-așteptare) ·
 [Clienți](#clienți) · [Newsletter](#newsletter) · [Setări și conturi](#setări-și-conturi) ·
 [Jurnal](#jurnal) · [Dacă ceva nu merge](#dacă-ceva-nu-merge)
 
@@ -104,18 +105,17 @@ Aici spui **când pot rezerva clienții de pe site**:
 Site-ul lasă automat pauza dintre lecții (implicit 10 minute), nu acceptă rezervări cu mai puțin
 de 12 ore înainte și nici mai departe de 60 de zile. Le schimbi în **Setări → Rezervări**.
 
-Orarul grupelor (zi, oră, capacitate) se editează în **Conținut → Orarul grupelor**. Câmpul
-„Membri permanenți deja înscriși” ocupă locuri în fiecare săptămână, ca site-ul să arate doar
-locurile rămase.
+Programul grupelor academiei de juniori (zile, ore, taxă) nu ține de disponibilitate: se scrie în
+**Conținut → Grupele academiei de juniori**.
 
 ## Conținut
 
 <img src="docs/capturi/09-continut.svg" width="300" alt="Secțiunile de conținut">
 
-Orice text sau imagine de pe site se schimbă de aici, fără cod: secțiunile paginii principale,
-antetele paginilor, profilul tău, certificările, programele, prețurile și pachetele, orarul
-grupelor, locațiile, terenurile, facilitățile, întrebările frecvente, recenziile, galeria,
-articolele și paginile legale. Eticheta **„de completat”** arată unde mai e `[DE COMPLETAT]`.
+Orice text, fotografie sau video de pe site se schimbă de aici, fără cod: secțiunile paginii
+principale, antetele paginilor, echipa de antrenori și certificările lor, grupele și rezultatele
+academiei de juniori, programele, tipurile de lecții, prețurile și pachetele, locațiile, terenurile,
+facilitățile, întrebările frecvente, recenziile, galeria, articolele și paginile legale. Eticheta **„de completat”** arată unde mai e `[DE COMPLETAT]`.
 
 <img src="docs/capturi/10-lista-ordonabila.svg" width="300" alt="Reordonarea unei liste">
 
@@ -149,29 +149,58 @@ acolo.
 <img src="docs/capturi/13-sectiune.svg" width="300" alt="Editarea unei secțiuni a paginii principale">
 
 **Secțiunile paginii principale** (Conținut → Secțiunile paginii principale) au eticheta mică de
-deasupra titlului, titlul, textul și butonul. Unele au și texte proprii:
+deasupra titlului, titlul, textul și butonul; le poți ascunde sau reordona. Unele au și texte
+proprii:
 
-- **prima secțiune**: cele patru repere de sub titlu (de exemplu „4 ani” + „de activitate ca
-  antrenor”), textul celui de-al doilea buton și descrierea animației 3D pentru cititoarele de
-  ecran;
-- **Antrenorul**: titlul listei de calificări și nota din ramă, afișată până încarci fotografia;
-- **Metoda**: titlul și textul laboratorului tehnic 3D;
-- **Locuri**: textele pentru locurile libere și lista de așteptare.
+- **Deschiderea**: textul celui de-al doilea buton (duce la Academia de juniori) și nota afișată
+  până încarci video-ul. Titlul se împarte pe rânduri după fiecare propoziție („Învață. Joacă.
+  Concurează.”). **Video-ul și fotografia** de deschidere se aleg din **Setări → Deschiderea
+  paginii principale**;
+- **Cifrele clubului**: doar titlul; numerele (terenuri, terenuri acoperite, vârsta de start,
+  programe, antrenori) se calculează singure din conținut;
+- **Academia de juniori**: linkul spre pagina academiei; etapele vin din grupe;
+- **Echipa**: nota din ramele fără fotografie;
+- **Metoda**: titlul și textul laboratorului tehnic 3D (laboratorul se oprește din Setări →
+  Funcții);
+- **Baza sportivă**: nota din cadru; fotografia e cea din **Antetele paginilor → Clubul**;
+- **Galerie**: textul afișat până publici fotografii; pe pagina principală apar primele 6.
 
-În textul secțiunilor „Metoda” și „Palierele de pregătire”, o listă numerotată
-(`1. **Titlu.** text`) devine pașii afișați pe site. Animațiile 3D nu se reglează: se potrivesc
-singure. **Fotografia ta pe teren** se încarcă în **Conținut → Profilul antrenorului → Fotografia
-ta** (format vertical 4:5; sfaturi în `docs/DIRECTIE-ARTISTICA.md`).
+În textul secțiunii „Metoda”, o listă numerotată (`1. **Titlu.** text`) devine pașii afișați pe
+site.
 
 **Articolele** (Sfaturi) rămân ciorne până alegi „Publicat”. **Paginile legale** primesc automat o
 versiune nouă (data zilei) când le schimbi textul, pentru că fiecare acord salvat la rezervări și
 mesaje păstrează versiunea politicii în vigoare.
 
-## Imagini
+## Echipa de antrenori
+
+**Conținut → Echipa de antrenori**: fiecare antrenor are pagina lui pe site (`/echipa/nume`), cu
+rolul în echipă („Antrenor principal”, „Antrenor academia de juniori”, „Preparator fizic”),
+titulatura, un rezumat pentru card, parcursul, felul în care lucrează, specializările, limbile,
+fotografia (vertical 4:5) și, opțional, un video. **Antrenorul principal** apare primul și
+vorbește pentru academie; când bifezi alt antrenor ca principal, bifa se mută de la cel vechi.
+Certificările fiecăruia se adaugă în **Conținut → Certificări și diplome**, alegând antrenorul.
+
+## Academia de juniori
+
+**Conținut → Grupele academiei de juniori**: pentru fiecare grupă, etapa (minge roșie,
+portocalie, verde, galbenă), vârstele, ce lucrează copiii, **zilele și orele**, antrenamentele pe
+săptămână și durata lor, **taxa lunară** (gol = „la cerere”) și numărul maxim de copii. Pe pagina
+principală apar ca parcursul academiei; pe pagina Academia de juniori, fiecare cu detaliile ei.
+
+**Conținut → Rezultate la turnee**: sportivul (la minori, doar prenumele și inițiala), turneul,
+categoria, rezultatul, data și nivelul. Un rezultat al unui minor **nu se poate publica** fără bifa
+„Am acordul scris al părinților”.
+
+Părinții cer o **evaluare** din pagina academiei; cererea ajunge pe email și în **Evaluări și
+așteptare**.
+
+## Fotografii și video-uri
 
 <img src="docs/capturi/14-media.svg" width="300" alt="Încărcarea imaginilor">
 
-**Media** păstrează toate fotografiile. La încărcare:
+**Media** păstrează toate fotografiile și video-urile clubului. Alegi sus „O fotografie” sau
+„Un video”. La încărcarea unei fotografii:
 
 - se acceptă JPG, PNG, WebP, AVIF și HEIC (fotografiile de pe iPhone), până la 10 MB;
 - **descrierea e obligatorie**: ce se vede în fotografie, pentru cei care nu văd imaginea și pentru
@@ -181,25 +210,35 @@ mesaje păstrează versiunea politicii în vigoare.
 - bifa **„Aplică tratamentul cald”** dă fotografiilor culori ușor mai calde și granulație fină, ca
   să arate unitar pe paleta de zgură (nu o folosi pe fotografii deja editate).
 
-O fotografie folosită undeva pe site nu se poate șterge până nu o înlocuiești acolo.
+La încărcarea unui **video** (MP4, MOV sau WebM, până la 500 MB și 3 minute):
+
+- o bară arată cât s-a încărcat; nu închide pagina până la 100%;
+- serverul îl convertește apoi pentru web (două mărimi, pentru telefon și ecran mare) și îi alege
+  un cadru de previzualizare; durează de obicei 1–3 minute, iar pagina Media se actualizează
+  singură când e gata. Din video se șterg datele ascunse (locația GPS);
+- pe pagina principală video-ul e mut, pornește singur doar cât e pe ecran și are buton de pauză;
+  în galerie pornește cu sunet, doar când apasă vizitatorul.
+
+O fotografie sau un video folosit undeva pe site nu se poate șterge până nu îl înlocuiești acolo.
 
 <img src="docs/capturi/15-galerie-acord.svg" width="300" alt="Acordul pentru fotografiile cu minori">
 
-**Galerie**: dacă în fotografie apar **copii**, bifează „În fotografie apar minori”. O astfel de
-fotografie **nu se poate publica** fără bifa „Am acordul scris al părinților”. Păstrează acordurile
+**Galerie foto și video**: dacă apar **copii**, bifează „Apar minori”. O astfel de fotografie sau
+video **nu se poate publica** fără bifa „Am acordul scris al părinților”. Păstrează acordurile
 scrise; data bifării se salvează.
 
 La fel, o **recenzie** se publică doar cu acordul autorului.
 
-## Mesaje și lista de așteptare
+## Mesaje, evaluări și lista de așteptare
 
 <img src="docs/capturi/16-mesaje.svg" width="300" alt="Mesajele">
 
 **Mesaje**: ce ți se scrie din formularul de contact. Răspunzi pe email, suni sau scrii pe WhatsApp
 direct de aici, apoi marchezi mesajul **citit** sau îl **arhivezi**.
 
-**Lista de așteptare**: cei care vor un loc când se eliberează, în ordinea înscrierii, cu
-preferințele lor (zile, ore, program). Îi marchezi **contactat**, **înscris** sau **arhivat**.
+**Evaluări și așteptare**: cererile de evaluare pentru academia de juniori (copilul, vârsta, cât a
+jucat, grupa dorită, zilele care le convin) și cei care vor un loc când se eliberează, în ordinea
+înscrierii. Îi marchezi **contactat**, **înscris** sau **arhivat**.
 
 ## Clienți
 
@@ -228,14 +267,19 @@ personal de dezabonare, pentru serviciul de email pe care îl folosești (Brevo,
 
 <img src="docs/capturi/18-setari.svg" width="300" alt="Setările">
 
-- **Identitate și contact**: numele afișat, telefon, WhatsApp, email, rețele sociale;
+- **Identitatea clubului**: numele, descrierea de sub nume, **logoul** (PNG cu fundal transparent),
+  monograma (până încarci logoul) și **cele două culori**: culoarea principală (baza închisă a
+  designului) și accentul (butoane, linkuri). Restul nuanțelor se calculează din ele; o culoare
+  prea deschisă pentru text alb e refuzată la salvare, cu explicația contrastului;
+- **Deschiderea paginii principale**: video-ul și fotografia de deschidere;
+- **Contact**: telefon, WhatsApp, email, rețele sociale;
 - **Programul afișat** în subsol;
 - **Rezervări**: modul (cerere sau instant), anularea gratuită, preavizul, orizontul, pauza dintre
   lecții, oferta pentru prima lecție, metodele de plată;
 - **Date legale**: forma de organizare, denumirea, CUI, sediul (apar în subsol și în paginile legale);
 - **Motoare de căutare**: titlul și descrierea pentru Google;
-- **Funcții**: versiunea în engleză, newsletter, invitațiile la recenzie, statisticile, perioada de
-  păstrare a datelor;
+- **Funcții**: versiunea în engleză, newsletter, laboratorul tehnic 3D, invitațiile la recenzie,
+  statisticile, perioada de păstrare a datelor;
 - **Email de test**: verifică dacă emailurile pleacă;
 - **Conturi**: poți crea un cont de **editor** pentru cineva care te ajută cu textele. Editorul vede
   doar Conținut și Media, nu rezervările și datele clienților.
@@ -254,4 +298,5 @@ arată altfel decât te așteptai.
 | Ai șters ceva din greșeală | Cine administrează serverul poate restaura backup-ul de azi-noapte (`DEPLOY.md`, secțiunea 12). |
 | Pagina spune „Această secțiune e disponibilă doar contului de proprietar” | Ești autentificat cu un cont de editor. |
 | Nu apare o modificare pe site | Reîncarcă pagina site-ului. Articolele trebuie să fie „Publicat”, programele „Activ”. |
+| Un video rămâne „se convertește” sau arată „eroare” | Mesajul din Media spune motivul (de exemplu un clip mai lung de 3 minute). Dacă serverul nu are ffmpeg, vezi `FFMPEG_PATH` în `.env.example`. |
 | Ai uitat parola | `DEPLOY.md`, pasul 9. |

@@ -225,7 +225,10 @@ async function main(): Promise<void> {
     note(`antrenor ${name}`, !exists);
 
     for (const [index, certification] of entry.certificari.entries()) {
-      const id = `seed-cert-${coachIndex + 1}-${String(index + 1).padStart(2, "0")}`;
+      // The head coach keeps the ids of the first version, so an upgraded database is not
+      // given a second copy of the certifications it already has.
+      const number = String(index + 1).padStart(2, "0");
+      const id = coachIndex === 0 ? `seed-cert-${number}` : `seed-cert-${coachIndex + 1}-${number}`;
       const certExists = await db.certification.findUnique({ where: { id } });
       let data: { title: { ro: string; en: string }; issuer: string; year: number | null };
       if (certification !== null && typeof certification === "object") {

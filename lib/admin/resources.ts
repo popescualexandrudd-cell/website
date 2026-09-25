@@ -1667,8 +1667,9 @@ const settings: Resource = {
     {
       kind: "text",
       name: "colorBrand",
+      inputType: "color",
       label: "Culoarea principală",
-      help: "În formatul #rrggbb. Baza închisă a designului: antet, secțiuni întunecate, subsol.",
+      help: "Baza închisă a designului: antet, secțiuni întunecate, subsol. Alege un ton închis.",
       required: true,
       maxLength: 7,
       group: "Identitatea clubului",
@@ -1676,8 +1677,9 @@ const settings: Resource = {
     {
       kind: "text",
       name: "colorAccent",
+      inputType: "color",
       label: "Culoarea de accent",
-      help: "În formatul #rrggbb. Butoane și linkuri; trebuie să rămână lizibilă cu text alb.",
+      help: "Butoane și linkuri; trebuie să rămână lizibilă cu text alb (site-ul verifică la salvare).",
       required: true,
       maxLength: 7,
       group: "Identitatea clubului",

@@ -36,6 +36,7 @@ Găzduite pe același server (nicio cerere către Google la vizitarea site-ului)
 | date-fns, date-fns-tz | date, ore, fus orar | MIT |
 | markdown-it | textele formatate | MIT |
 | sharp | prelucrarea imaginilor | Apache-2.0 |
+| FFmpeg (în imaginea Docker, pachetul Alpine) | conversia video-urilor încărcate | LGPL-2.1+ / GPL-2.0+ (cu x264) |
 | Nodemailer, React Email | emailurile | MIT-0 / MIT |
 | node-cron | sarcinile programate | ISC |
 | dnd-kit | reordonarea prin tragere în admin | MIT |
@@ -49,3 +50,7 @@ Găzduite pe același server (nicio cerere către Google la vizitarea site-ului)
 | rclone (opțional) | copia backup-urilor în afara serverului | MIT |
 
 Lista completă a dependențelor și versiunile exacte: `package.json` și `package-lock.json`.
+
+Etapele academiei de juniori (minge roșie, portocalie, verde, galbenă) urmează programul ITF
+„Play and Stay” al Federației Internaționale de Tenis; textele descrierilor sunt scrise pentru
+acest site.

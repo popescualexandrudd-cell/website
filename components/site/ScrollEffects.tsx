@@ -171,8 +171,11 @@ export function ScrollEffects() {
       if (!frame) frame = requestAnimationFrame(update);
     };
     for (const el of titles) {
-      // A title already read (above the screen) stays lit.
-      if (el.getBoundingClientRect().bottom < 0) el.style.setProperty("--fx-p", "1");
+      // A title already on screen when the page opens, or already read above it, stays lit.
+      if (!below(el)) {
+        el.style.setProperty("--fx-p", "1");
+        continue;
+      }
       watch.observe(el);
     }
     window.addEventListener("scroll", schedule, { passive: true });
