@@ -17,3 +17,13 @@ export function luminance(hex: string): number {
 export function contrastWithWhite(hex: string): number {
   return 1.05 / (luminance(hex) + 0.05);
 }
+
+const HEX = /^#[0-9a-f]{6}$/i;
+
+/** The club's colours, safe to write into a style attribute (anything else falls back). */
+export function brandColors(s: { colorBrand: string; colorAccent: string }) {
+  return {
+    brand: HEX.test(s.colorBrand) ? s.colorBrand : "#0f3b2f",
+    accent: HEX.test(s.colorAccent) ? s.colorAccent : "#c24f1d",
+  };
+}

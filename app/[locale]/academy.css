@@ -1027,3 +1027,8 @@ body:has(.hero) .site-header[data-scrolled="true"] {
   max-height: 78vh;
   background: #000;
 }
+
+/* The statement rises straight out of the opening, without an empty band between them. */
+.home .hero + .statement {
+  padding-top: clamp(3rem, 6vw, 5.5rem);
+}

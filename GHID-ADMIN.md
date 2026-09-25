@@ -29,6 +29,11 @@ exemplu dacă ți-ai pierdut telefonul.
 
 ## Tabloul de bord
 
+Cât timp site-ul nu e complet, sus apare **Pregătirea site-ului**: ce mai trebuie de la club
+(video-ul de deschidere, logoul, fotografiile antrenorilor, programul și taxa grupelor, tarifele,
+galeria, datele legale, verificarea paginilor legale). Fiecare punct duce direct unde se
+completează; lista dispare când totul e gata.
+
 <img src="docs/capturi/02-tablou-de-bord.svg" width="300" alt="Tabloul de bord">
 
 Prima pagină după autentificare:

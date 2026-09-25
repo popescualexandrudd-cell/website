@@ -9,13 +9,8 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { fontVariables } from "../fonts";
 import { routing, type Locale } from "@/i18n/routing";
-import {
-  brandColors,
-  getLocations,
-  getPolicyVersion,
-  getSettings,
-  localizedSettings,
-} from "@/lib/content";
+import { brandColors } from "@/lib/color";
+import { getLocations, getPolicyVersion, getSettings, localizedSettings } from "@/lib/content";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { MobileBar } from "@/components/site/MobileBar";

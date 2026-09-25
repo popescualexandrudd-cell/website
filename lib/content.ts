@@ -2,6 +2,7 @@ import "server-only";
 import { cache } from "react";
 import { draftMode } from "next/headers";
 import { db } from "./db";
+import { brandColors } from "./color";
 import { resolveMedia, resolveVideo, type ResolvedImage, type ResolvedVideo } from "./media";
 import { t, tItems, tList } from "./i18n-content";
 import type { Locale } from "@/i18n/routing";
@@ -37,16 +38,6 @@ const loadSettings = cache(async () => {
   });
   return s;
 });
-
-const HEX = /^#[0-9a-f]{6}$/i;
-
-/** The club's colours, safe to write into a style attribute (anything else falls back). */
-export function brandColors(s: { colorBrand: string; colorAccent: string }) {
-  return {
-    brand: HEX.test(s.colorBrand) ? s.colorBrand : "#0f3b2f",
-    accent: HEX.test(s.colorAccent) ? s.colorAccent : "#c24f1d",
-  };
-}
 
 export const getSettings = loadSettings;
 

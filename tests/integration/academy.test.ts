@@ -5,6 +5,7 @@ import { join } from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { db } from "@/lib/db";
 import { getResource } from "@/lib/admin/resources";
+import { siteReadiness } from "@/lib/admin/readiness";
 import { getAcademyGroups, getCoaches, getGallery, getResults } from "@/lib/content";
 import {
   ffmpegAvailable,
@@ -97,6 +98,18 @@ describe("club template content", () => {
     const shown = await getResults("ro");
     expect(shown.map((r) => r.athlete)).toEqual(["Ana P."]);
     await db.result.deleteMany({ where: { event: "Turneu test" } });
+  });
+});
+
+describe("site readiness", () => {
+  it("lists what the club still has to provide, each with where to do it", async () => {
+    const items = await siteReadiness();
+    expect(items.length).toBeGreaterThanOrEqual(8);
+    for (const item of items) expect(item.href).toMatch(/^\/admin\//);
+    const groups = items.find((i) => i.label.startsWith("Programul și taxa"));
+    // The seeded groups have no schedule or fee: nothing is invented for the club.
+    expect(groups?.done).toBe(false);
+    expect(groups?.detail).toMatch(/fără taxă lunară/);
   });
 });
 

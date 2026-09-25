@@ -8,6 +8,7 @@ import { BookingActions } from "@/components/admin/BookingActions";
 import { OkNotice } from "@/components/admin/OkNotice";
 import { BOOKING_OK } from "@/lib/admin/booking-done";
 import { TODO_MARK } from "@/lib/i18n-content";
+import { siteReadiness } from "@/lib/admin/readiness";
 
 export const metadata: Metadata = { title: "Tablou de bord" };
 
@@ -66,7 +67,7 @@ export default async function DashboardPage({ searchParams }: PageProps<"/admin"
   const weekStart = zonedInstant(week[0]!, "00:00", tz);
   const weekEnd = zonedInstant(addDaysToKey(week[6]!, 1), "00:00", tz);
 
-  const [pending, weekCount, newMessages, newWaitlist, unreviewedLegal, pendingList, months] =
+  const [pending, weekCount, newMessages, newWaitlist, pendingList, months, readiness] =
     await Promise.all([
       isOwner
         ? db.booking.count({ where: { status: "IN_ASTEPTARE", startsAt: { gte: new Date() } } })
@@ -81,7 +82,6 @@ export default async function DashboardPage({ searchParams }: PageProps<"/admin"
         : 0,
       isOwner ? db.contactMessage.count({ where: { status: "NOU" } }) : 0,
       isOwner ? db.waitlistEntry.count({ where: { status: "NOU" } }) : 0,
-      db.legalPage.count({ where: { reviewedByLawyer: false } }),
       isOwner
         ? db.booking.findMany({
             where: { status: "IN_ASTEPTARE", startsAt: { gte: new Date() } },
@@ -91,7 +91,9 @@ export default async function DashboardPage({ searchParams }: PageProps<"/admin"
           })
         : [],
       isOwner ? Promise.all([0, 1, 2].map((offset) => occupancy(tz, offset))) : [],
+      siteReadiness(),
     ]);
+  const ready = readiness.filter((item) => item.done).length;
 
   const warnings: string[] = [];
   if (!process.env.COACH_NOTIFY_EMAIL && !settings.email.includes("@")) {
@@ -104,10 +106,6 @@ export default async function DashboardPage({ searchParams }: PageProps<"/admin"
       "Site-ul are încă texte marcate [DE COMPLETAT] (nume, telefon, adresă, prețuri). Lista completă e în CONTENT-TODO.md.",
     );
   }
-  if (unreviewedLegal > 0)
-    warnings.push(
-      `${unreviewedLegal} pagini legale sunt ciorne „De verificat de un jurist". Le găsești în Conținut → Pagini legale.`,
-    );
 
   return (
     <>
@@ -141,6 +139,41 @@ export default async function DashboardPage({ searchParams }: PageProps<"/admin"
           {w}
         </p>
       ))}
+
+      {ready < readiness.length ? (
+        <section className="admin-section" aria-labelledby="pregatire-title">
+          <h2 id="pregatire-title" className="admin-h2">
+            Pregătirea site-ului: {ready} din {readiness.length}
+          </h2>
+          <p className="mb-3 text-note text-cerneala-2">
+            Ce mai trebuie de la club ca site-ul să fie complet. Lista dispare când totul e gata.
+          </p>
+          <ul className="readiness">
+            {readiness.map((item) => (
+              <li key={item.label} data-done={item.done}>
+                <span className="readiness-mark" aria-hidden="true">
+                  {item.done ? "✓" : ""}
+                </span>
+                <span>
+                  {item.done ? (
+                    <>
+                      {item.label}
+                      <span className="sr-only"> (gata)</span>
+                    </>
+                  ) : (
+                    <>
+                      <Link href={item.href}>{item.label}</Link>
+                      {item.detail ? (
+                        <span className="block text-note text-cerneala-2">{item.detail}</span>
+                      ) : null}
+                    </>
+                  )}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       {isOwner ? (
         <>

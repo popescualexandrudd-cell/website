@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { db } from "@/lib/db";
 import { isFilled, t } from "@/lib/i18n-content";
+import { brandColors } from "@/lib/color";
 
 const FONT_DIR = join(process.cwd(), "node_modules", "@fontsource", "barlow-condensed", "files");
 const LEGAL: Record<string, "CONFIDENTIALITATE" | "TERMENI" | "COOKIES"> = {
@@ -30,33 +31,41 @@ function loadFonts() {
 async function describe(path: string, lang: "ro" | "en") {
   const settings = await db.siteSettings.findUniqueOrThrow({ where: { id: 1 } });
   const brand = isFilled(settings.brandName) ? settings.brandName : t(settings.tagline, lang);
+  const colors = brandColors(settings);
   const fallback = {
     title: t(settings.seoTitle, lang),
     subtitle: t(settings.tagline, lang),
     brand,
+    colors,
   };
   const [first, second] = path.split("/").filter(Boolean);
   if (!first) return fallback;
   if (first === "programe" && second) {
     const program = await db.program.findUnique({ where: { slug: second } });
     return program?.active
-      ? { title: t(program.name, lang), subtitle: t(program.summary, lang), brand }
+      ? { title: t(program.name, lang), subtitle: t(program.summary, lang), brand, colors }
+      : fallback;
+  }
+  if (first === "echipa" && second) {
+    const coach = await db.coach.findUnique({ where: { slug: second } });
+    return coach?.active
+      ? { title: coach.name, subtitle: t(coach.role, lang), brand, colors }
       : fallback;
   }
   if (first === "sfaturi" && second) {
     const post = await db.post.findUnique({ where: { slug: second } });
     return post?.status === "PUBLICAT"
-      ? { title: t(post.title, lang), subtitle: t(post.excerpt, lang), brand }
+      ? { title: t(post.title, lang), subtitle: t(post.excerpt, lang), brand, colors }
       : fallback;
   }
   const legal = LEGAL[first];
   if (legal) {
     const page = await db.legalPage.findUnique({ where: { kind: legal } });
-    return page ? { title: t(page.title, lang), subtitle: brand, brand } : fallback;
+    return page ? { title: t(page.title, lang), subtitle: brand, brand, colors } : fallback;
   }
   const header = await db.pageHeader.findUnique({ where: { key: first } });
   return header
-    ? { title: t(header.title, lang), subtitle: t(header.intro, lang), brand }
+    ? { title: t(header.title, lang), subtitle: t(header.intro, lang), brand, colors }
     : fallback;
 }
 
@@ -65,12 +74,15 @@ function clip(text: string, max: number): string {
   return clean.length > max ? `${clean.slice(0, max - 1).replace(/\s+\S*$/, "")}…` : clean;
 }
 
-/** Open Graph image (1200×630) for social previews: condensed capitals on clay, a tennis ball. */
+/**
+ * Open Graph image (1200×630) for social previews: condensed capitals on the club's dark colour,
+ * an accent band and a tennis ball.
+ */
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const path = (url.searchParams.get("path") ?? "/").slice(0, 200);
   const lang = url.searchParams.get("lang") === "en" ? "en" : "ro";
-  const { title, subtitle, brand } = await describe(path, lang);
+  const { title, subtitle, brand, colors } = await describe(path, lang);
 
   return new ImageResponse(
     <div
@@ -78,8 +90,9 @@ export async function GET(request: Request) {
         width: "100%",
         height: "100%",
         display: "flex",
-        background: "linear-gradient(135deg, #C8693C 0%, #B94C22 55%, #7A2C14 100%)",
-        color: "#FFF7EE",
+        backgroundColor: colors.brand,
+        backgroundImage: "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.35) 100%)",
+        color: "#FBFAF7",
         fontFamily: "BarlowExt, Barlow",
         padding: "64px 72px",
         position: "relative",
@@ -92,7 +105,7 @@ export async function GET(request: Request) {
           right: 0,
           bottom: 0,
           height: 14,
-          background: "#F2B134",
+          background: colors.accent,
         }}
       />
       <div
@@ -110,7 +123,7 @@ export async function GET(request: Request) {
             fontSize: 30,
             letterSpacing: 5,
             textTransform: "uppercase",
-            color: "#FBD98A",
+            color: "#EEF5A8",
           }}
         >
           {clip(brand, 60)}
@@ -131,7 +144,7 @@ export async function GET(request: Request) {
                 marginTop: 28,
                 fontSize: 34,
                 lineHeight: 1.2,
-                color: "rgba(255,247,238,0.88)",
+                color: "rgba(251,250,247,0.88)",
               }}
             >
               {clip(subtitle, 140)}
@@ -148,8 +161,8 @@ export async function GET(request: Request) {
           height: 120,
           borderRadius: 60,
           backgroundImage:
-            "radial-gradient(circle at 35% 30%, #F5F9C4 0%, #D9E453 55%, #9FAA2A 100%)",
-          boxShadow: "0 18px 40px rgba(42,19,11,0.45)",
+            "radial-gradient(circle at 35% 30%, #F5F9C4 0%, #D9E84A 55%, #9FAA2A 100%)",
+          boxShadow: "0 18px 40px rgba(0,0,0,0.45)",
         }}
       />
     </div>,
