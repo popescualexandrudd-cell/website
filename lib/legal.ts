@@ -14,8 +14,8 @@ export function fillLegalTemplate(
         ? "It is confirmed automatically."
         : "Se confirmă automat."
       : locale === "en"
-        ? "I confirm it by email, usually the same day."
-        : "O confirm pe email, de obicei în aceeași zi.";
+        ? "We confirm it by email, usually the same day."
+        : "O confirmăm pe email, de obicei în aceeași zi.";
   const values: Record<string, string> = {
     "entitate.denumire": settings.legalName,
     "entitate.forma": settings.legalForm,

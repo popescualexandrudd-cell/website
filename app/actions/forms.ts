@@ -164,6 +164,93 @@ export async function submitWaitlist(_prev: FormState, formData: FormData): Prom
   }
 }
 
+// ─── Junior academy: assessment request ──────────────────────────────────────
+
+const EXPERIENCE = ["niciodata", "putin", "regulat", "turnee"] as const;
+const EXPERIENCE_RO: Record<(typeof EXPERIENCE)[number], string> = {
+  niciodata: "nu a mai jucat tenis",
+  putin: "câteva lecții sau tenis de plăcere",
+  regulat: "se antrenează regulat",
+  turnee: "joacă turnee",
+};
+
+const evaluationSchema = z.object({
+  groupId: z
+    .string()
+    .trim()
+    .max(40)
+    .transform((value) => (value === "" ? null : value)),
+  childFirstName: z.string().trim().min(2, "childFirstName").max(60, "childFirstName"),
+  childAge: z
+    .string()
+    .trim()
+    .transform((value) => Number.parseInt(value, 10))
+    .refine((value) => Number.isInteger(value) && value >= 3 && value <= 18, "childAge"),
+  experience: z.enum(EXPERIENCE, { error: "experience" }),
+  name: fields.name,
+  email: fields.email,
+  phone: fields.phone,
+  preferences: z.string().trim().min(3, "preferences").max(500, "preferences"),
+  message: fields.optionalText(2000),
+  consent: fields.consent,
+  locale: fields.locale,
+});
+
+/** A parent asks for their child's assessment before joining a group of the junior academy. */
+export async function submitEvaluation(_prev: FormState, formData: FormData): Promise<FormState> {
+  const raw = formDataToObject(formData);
+  const parsed = evaluationSchema.safeParse(raw);
+  if (!parsed.success) return { status: "error", fieldErrors: zodFieldErrors(parsed.error) };
+  const gate = await guard("evaluation", raw, parsed.data.email);
+  if (!gate.ok) return gate.state;
+  try {
+    const data = parsed.data;
+    const group = data.groupId
+      ? await db.academyGroup.findFirst({ where: { id: data.groupId, active: true } })
+      : null;
+    const entry = await db.waitlistEntry.create({
+      data: {
+        kind: "EVALUARE",
+        groupId: group?.id ?? null,
+        programId: group?.programId ?? null,
+        childFirstName: data.childFirstName,
+        childAge: data.childAge,
+        forMinor: data.childAge < 18,
+        experience: EXPERIENCE_RO[data.experience],
+        preferences: data.preferences,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        message: data.message,
+        consent: true,
+        consentAt: new Date(),
+        policyVersion: await getPolicyVersion(),
+        locale: data.locale,
+      },
+    });
+    const ids = await queueCoachNotification(
+      "evaluation",
+      [
+        ["Copilul", `${entry.childFirstName ?? ""}, ${entry.childAge ?? "?"} ani`],
+        ["Experiență", entry.experience ?? "—"],
+        ["Grupa", group ? ((group.name as { ro?: string }).ro ?? "") : "se stabilește la evaluare"],
+        ["Preferințe", entry.preferences],
+        ["Părinte", entry.name],
+        ["Telefon", entry.phone],
+        ["Email", entry.email],
+        ["Mesaj", entry.message ?? "—"],
+      ],
+      entry.name,
+      entry.email,
+    );
+    schedule(ids);
+    return { status: "success" };
+  } catch (error) {
+    console.error("submitEvaluation", error);
+    return { status: "error", error: "server" };
+  }
+}
+
 // ─── Newsletter (double opt-in) ──────────────────────────────────────────────
 
 const newsletterSchema = z.object({

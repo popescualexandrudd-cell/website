@@ -4,10 +4,12 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
 /**
- * Scroll effects for the public site, in two parts:
+ * Scroll effects for the public site:
  *  - categories (sections) and the items inside them fade in from above as they come into
  *    view, one after another from top to bottom;
- *  - titles light up word by word while they travel up the screen (the first version's effect).
+ *  - titles light up word by word while they travel up the screen;
+ *  - the opening video draws back into a frame as the page scrolls (--hero-p), the header takes
+ *    its colour once the page has moved, lines fill (--line-p) and figures count up.
  * Only elements still below the fold are prepared, so nothing already on screen blinks. Nothing
  * happens without JavaScript or with "reduce motion": the page is then fully visible at once.
  */
@@ -20,6 +22,12 @@ const SECTIONS = [
 
 const ITEMS = [
   ".pathway-step",
+  ".stage",
+  ".coach-card",
+  ".mosaic-item",
+  ".figure",
+  ".group-card",
+  ".result-row",
   ".method-step",
   ".program-card",
   ".ed-row",
@@ -36,8 +44,37 @@ const ITEMS = [
 const STAGGER_MS = 90;
 const MAX_STAGGER = 6;
 
+/** Counts a figure up from zero to its value (the final text is already in the page). */
+function countUp(el: HTMLElement) {
+  const target = Number(el.dataset.countup);
+  if (!Number.isFinite(target) || target <= 0) return;
+  const suffix = (el.textContent ?? "").replace(/^\d+/, "");
+  const start = performance.now();
+  const duration = Math.min(1600, 500 + target * 60);
+  const tick = (now: number) => {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - t, 3);
+    el.textContent = `${Math.round(target * eased)}${suffix}`;
+    if (t < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
 export function ScrollEffects() {
   const pathname = usePathname();
+
+  // The header over the opening video takes its colour once the page has moved (any motion
+  // setting: this is not an animation).
+  useEffect(() => {
+    const header = document.querySelector<HTMLElement>("[data-site-header]");
+    if (!header) return;
+    const update = () => {
+      header.dataset.scrolled = String(window.scrollY > 24);
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, [pathname]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -78,6 +115,24 @@ export function ScrollEffects() {
     );
     targets.forEach((el) => reveal.observe(el));
 
+    // ── Figures count up the first time they come into view ──
+    const counters = [...document.querySelectorAll<HTMLElement>("[data-countup]")].filter(below);
+    const counting = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          countUp(e.target as HTMLElement);
+          counting.unobserve(e.target);
+        }
+      },
+      { threshold: 0.4 },
+    );
+    counters.forEach((el) => counting.observe(el));
+
+    // ── The opening and the lines that fill with the scroll ──
+    const hero = document.querySelector<HTMLElement>("[data-hero]");
+    const lines = [...document.querySelectorAll<HTMLElement>("[data-progress-line]")];
+
     // ── Titles, word by word, following the scroll ──
     const titles = [...document.querySelectorAll<HTMLElement>(".fx-words")];
     const visible = new Set<HTMLElement>();
@@ -95,6 +150,16 @@ export function ScrollEffects() {
     const update = () => {
       frame = 0;
       const h = window.innerHeight;
+      if (hero) {
+        const travel = Math.max(1, hero.offsetHeight - h);
+        const p = Math.min(1, Math.max(0, -hero.getBoundingClientRect().top / travel));
+        hero.style.setProperty("--hero-p", p.toFixed(4));
+      }
+      for (const el of lines) {
+        const rect = el.getBoundingClientRect();
+        const p = Math.min(1, Math.max(0, (h * 0.9 - rect.top) / (h * 0.55)));
+        el.style.setProperty("--line-p", p.toFixed(3));
+      }
       for (const el of visible) {
         const top = el.getBoundingClientRect().top;
         // 0 when the title enters at the bottom, 1 once it reaches the upper half of the screen.
@@ -119,6 +184,8 @@ export function ScrollEffects() {
       for (const el of targets) if (el.dataset.fx === "wait") delete el.dataset.fx;
       reveal.disconnect();
       watch.disconnect();
+      counting.disconnect();
+      hero?.style.removeProperty("--hero-p");
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
       if (frame) cancelAnimationFrame(frame);

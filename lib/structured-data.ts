@@ -48,7 +48,7 @@ export function personLd(
   return clean({
     "@context": "https://schema.org",
     "@type": "Person",
-    "@id": `${appUrl()}/#coach`,
+    "@id": `${url}#person`,
     name: isFilled(coach.name) ? coach.name : undefined,
     jobTitle: coach.title,
     url,

@@ -2,17 +2,19 @@ import "server-only";
 import { cache } from "react";
 import { draftMode } from "next/headers";
 import { db } from "./db";
-import { resolveMedia, type ResolvedImage } from "./media";
+import { resolveMedia, resolveVideo, type ResolvedImage, type ResolvedVideo } from "./media";
 import { t, tItems, tList } from "./i18n-content";
 import type { Locale } from "@/i18n/routing";
 import type {
   Audience,
+  BallStage,
   FacilityType,
   FaqCategory,
   GalleryCategory,
   LegalKind,
   Level,
   PriceUnit,
+  ResultLevel,
   Surface,
 } from "./generated/prisma/client";
 
@@ -29,9 +31,22 @@ export const isPreview = cache(async (): Promise<boolean> => {
 export type SettingsView = Awaited<ReturnType<typeof loadSettings>>;
 
 const loadSettings = cache(async () => {
-  const s = await db.siteSettings.findUniqueOrThrow({ where: { id: 1 } });
+  const s = await db.siteSettings.findUniqueOrThrow({
+    where: { id: 1 },
+    include: { logo: true, heroVideo: true, heroImage: true },
+  });
   return s;
 });
+
+const HEX = /^#[0-9a-f]{6}$/i;
+
+/** The club's colours, safe to write into a style attribute (anything else falls back). */
+export function brandColors(s: { colorBrand: string; colorAccent: string }) {
+  return {
+    brand: HEX.test(s.colorBrand) ? s.colorBrand : "#0f3b2f",
+    accent: HEX.test(s.colorAccent) ? s.colorAccent : "#c24f1d",
+  };
+}
 
 export const getSettings = loadSettings;
 
@@ -40,6 +55,12 @@ export function localizedSettings(s: SettingsView, locale: Locale) {
     brandName: s.brandName,
     monogram: s.monogram,
     tagline: t(s.tagline, locale),
+    logo: resolveMedia(s.logo),
+    heroVideo: resolveVideo(s.heroVideo),
+    heroImage: resolveMedia(s.heroImage),
+    heroImageAlt: s.heroImage ? t(s.heroImage.alt, locale) : "",
+    colors: brandColors(s),
+    labEnabled: s.labEnabled,
     phone: s.phone,
     whatsapp: s.whatsapp,
     email: s.email,
@@ -72,28 +93,67 @@ export function localizedSettings(s: SettingsView, locale: Locale) {
 }
 export type LocalizedSettings = ReturnType<typeof localizedSettings>;
 
-// ─── Coach ───────────────────────────────────────────────────────────────────
+// ─── Coaching team ───────────────────────────────────────────────────────────
 
-export const getCoach = cache(async (locale: Locale) => {
-  const coach = await db.coachProfile.findUniqueOrThrow({
-    where: { id: 1 },
-    include: { photo: true },
+export type CertificationView = {
+  id: string;
+  title: string;
+  issuer: string;
+  year: number | null;
+  image: ResolvedImage | null;
+  imageAlt: string;
+};
+
+export type CoachView = {
+  id: string;
+  slug: string;
+  name: string;
+  role: string;
+  title: string;
+  summary: string;
+  story: string;
+  philosophy: string;
+  results: string;
+  specialties: string[];
+  yearsExperience: number | null;
+  languages: string[];
+  photo: ResolvedImage | null;
+  photoAlt: string;
+  video: ResolvedVideo | null;
+  isHead: boolean;
+  certifications: CertificationView[];
+};
+
+/** The team, head coach first; each coach with their certifications. */
+export const getCoaches = cache(async (locale: Locale): Promise<CoachView[]> => {
+  const preview = await isPreview();
+  const coaches = await db.coach.findMany({
+    where: preview ? {} : { active: true },
+    orderBy: [{ isHead: "desc" }, { order: "asc" }],
+    include: {
+      photo: true,
+      video: true,
+      certifications: { orderBy: { order: "asc" }, include: { image: true } },
+    },
   });
-  const certifications = await db.certification.findMany({
-    orderBy: { order: "asc" },
-    include: { image: true },
-  });
-  return {
+  return coaches.map((coach) => ({
+    id: coach.id,
+    slug: coach.slug,
     name: coach.name,
+    role: t(coach.role, locale),
     title: t(coach.title, locale),
+    summary: t(coach.summary, locale),
     story: t(coach.story, locale),
-    philosophy: t(coach.philosophy, locale),
+    philosophy: coach.philosophy ? t(coach.philosophy, locale) : "",
     results: coach.results ? t(coach.results, locale) : "",
+    specialties: tList(coach.specialties, locale),
     yearsExperience: coach.yearsExperience,
     languages: tItems(coach.languages, locale),
     photo: resolveMedia(coach.photo),
-    photoAlt: coach.photo ? t(coach.photo.alt, locale) : "",
-    certifications: certifications.map((c) => ({
+    photoAlt: coach.photo ? t(coach.photo.alt, locale) : coach.name,
+    video: resolveVideo(coach.video),
+    isHead: coach.isHead,
+    certifications: coach.certifications.map((c) => ({
       id: c.id,
       title: t(c.title, locale),
       issuer: c.issuer,
@@ -101,7 +161,102 @@ export const getCoach = cache(async (locale: Locale) => {
       image: resolveMedia(c.image),
       imageAlt: c.image ? t(c.image.alt, locale) : "",
     })),
-  };
+  }));
+});
+
+export const getCoach = cache(async (slug: string, locale: Locale) => {
+  const coaches = await getCoaches(locale);
+  return coaches.find((coach) => coach.slug === slug) ?? null;
+});
+
+/** The head coach, who speaks for the academy (structured data, the "about" texts). */
+export const getHeadCoach = cache(async (locale: Locale) => {
+  const coaches = await getCoaches(locale);
+  return coaches.find((coach) => coach.isHead) ?? coaches[0] ?? null;
+});
+
+// ─── Junior academy ──────────────────────────────────────────────────────────
+
+export type AcademyGroupView = {
+  id: string;
+  slug: string;
+  name: string;
+  stage: BallStage | null;
+  ageMin: number | null;
+  ageMax: number | null;
+  level: Level;
+  summary: string;
+  focusPoints: string[];
+  sessionsPerWeek: number | null;
+  sessionMinutes: number | null;
+  schedule: string;
+  monthlyFee: string | null;
+  maxPlayers: number | null;
+  image: ResolvedImage | null;
+  imageAlt: string;
+  program: { slug: string; name: string } | null;
+};
+
+export const getAcademyGroups = cache(async (locale: Locale): Promise<AcademyGroupView[]> => {
+  const preview = await isPreview();
+  const groups = await db.academyGroup.findMany({
+    where: preview ? {} : { active: true },
+    orderBy: { order: "asc" },
+    include: { image: true, program: true },
+  });
+  return groups.map((group) => {
+    const name = t(group.name, locale);
+    return {
+      id: group.id,
+      slug: group.slug,
+      name,
+      stage: group.stage,
+      ageMin: group.ageMin,
+      ageMax: group.ageMax,
+      level: group.level,
+      summary: t(group.summary, locale),
+      focusPoints: tList(group.focusPoints, locale),
+      sessionsPerWeek: group.sessionsPerWeek,
+      sessionMinutes: group.sessionMinutes,
+      schedule: group.schedule ? t(group.schedule, locale) : "",
+      monthlyFee: group.monthlyFee ? group.monthlyFee.toString() : null,
+      maxPlayers: group.maxPlayers,
+      image: resolveMedia(group.image),
+      imageAlt: group.image ? t(group.image.alt, locale) : name,
+      program:
+        group.program && group.program.active
+          ? { slug: group.program.slug, name: t(group.program.name, locale) }
+          : null,
+    };
+  });
+});
+
+export type ResultView = {
+  id: string;
+  athlete: string;
+  event: string;
+  category: string;
+  placement: string;
+  date: Date;
+  level: ResultLevel;
+};
+
+/** Published results; those of minors only with the parents' consent on record. */
+export const getResults = cache(async (locale: Locale, limit?: number): Promise<ResultView[]> => {
+  const results = await db.result.findMany({
+    where: { published: true, OR: [{ isMinor: false }, { parentalConsent: true }] },
+    orderBy: [{ date: "desc" }, { order: "asc" }],
+    take: limit,
+  });
+  return results.map((r) => ({
+    id: r.id,
+    athlete: r.athlete,
+    event: r.event,
+    category: r.category,
+    placement: t(r.placement, locale),
+    date: r.date,
+    level: r.level,
+  }));
 });
 
 // ─── Scenes ──────────────────────────────────────────────────────────────────
@@ -537,30 +692,39 @@ export const getPost = cache(async (slug: string, locale: Locale): Promise<PostV
 
 export type GalleryView = {
   id: string;
+  kind: "image" | "video";
   image: ResolvedImage;
+  video: ResolvedVideo | null;
   alt: string;
   caption: string;
   category: GalleryCategory;
 };
 
-/** Photos with minors are shown only when the parent's consent is recorded. */
-export const getGallery = cache(async (locale: Locale): Promise<GalleryView[]> => {
+/**
+ * Published photos and videos. Those with minors are shown only when the parent's consent is
+ * recorded; a video appears once it has been converted.
+ */
+export const getGallery = cache(async (locale: Locale, limit?: number): Promise<GalleryView[]> => {
   const items = await db.galleryItem.findMany({
     where: { published: true, OR: [{ hasMinors: false }, { parentalConsent: true }] },
     orderBy: { order: "asc" },
     include: { media: true },
   });
-  return items.flatMap((item) => {
-    const image = resolveMedia(item.media);
-    if (!image) return [];
+  const views = items.flatMap((item): GalleryView[] => {
+    const video = resolveVideo(item.media);
+    const image = video ? video.poster : resolveMedia(item.media);
+    if (!image || (item.media.kind === "VIDEO" && !video)) return [];
     return [
       {
         id: item.id,
+        kind: video ? "video" : "image",
         image,
+        video,
         alt: t(item.alt, locale),
         caption: item.caption ? t(item.caption, locale) : "",
         category: item.category,
       },
     ];
   });
+  return limit === undefined ? views : views.slice(0, limit);
 });

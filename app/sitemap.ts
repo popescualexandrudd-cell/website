@@ -13,7 +13,9 @@ const STATIC: { href: Href; priority: number; changeFrequency: "weekly" | "month
     { href: "/programe", priority: 0.9, changeFrequency: "monthly" },
     { href: "/preturi", priority: 0.9, changeFrequency: "monthly" },
     { href: "/rezervare", priority: 0.9, changeFrequency: "weekly" },
-    { href: "/despre", priority: 0.8, changeFrequency: "monthly" },
+    { href: "/academie", priority: 0.9, changeFrequency: "monthly" },
+    { href: "/echipa", priority: 0.8, changeFrequency: "monthly" },
+    { href: "/despre", priority: 0.7, changeFrequency: "monthly" },
     { href: "/facilitati", priority: 0.7, changeFrequency: "monthly" },
     { href: "/intrebari", priority: 0.7, changeFrequency: "monthly" },
     { href: "/contact", priority: 0.7, changeFrequency: "yearly" },
@@ -27,7 +29,7 @@ const STATIC: { href: Href; priority: number; changeFrequency: "weekly" | "month
 
 /** Every public page, in Romanian and (when switched on) English, with hreflang alternates. */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [settings, programs, posts] = await Promise.all([
+  const [settings, programs, posts, coaches] = await Promise.all([
     db.siteSettings.findUniqueOrThrow({
       where: { id: 1 },
       select: { enEnabled: true, updatedAt: true },
@@ -37,6 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       where: { status: "PUBLICAT", publishedAt: { lte: new Date() } },
       select: { slug: true, updatedAt: true },
     }),
+    db.coach.findMany({ where: { active: true }, select: { slug: true, updatedAt: true } }),
   ]);
   const locales: Locale[] = settings.enEnabled ? ["ro", "en"] : ["ro"];
 
@@ -51,6 +54,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       href: { pathname: "/programe/[slug]" as const, params: { slug: p.slug } },
       lastModified: p.updatedAt,
       priority: 0.8,
+      changeFrequency: "monthly" as const,
+    })),
+    ...coaches.map((c) => ({
+      href: { pathname: "/echipa/[slug]" as const, params: { slug: c.slug } },
+      lastModified: c.updatedAt,
+      priority: 0.6,
       changeFrequency: "monthly" as const,
     })),
     ...posts.map((p) => ({

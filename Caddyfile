@@ -1,5 +1,5 @@
 # HTTPS with automatic Let's Encrypt certificates, compression, long cache for static files,
-# uploaded images served straight from the volume, www → apex redirect.
+# uploaded images and videos served straight from the volume, www → apex redirect.
 {
 	email {$ACME_EMAIL}
 	servers {
@@ -10,12 +10,22 @@
 {$DOMAIN} {
 	encode zstd gzip
 
-	request_body {
+	# Forms and photos stay small; only the admin's video upload may bring a large file.
+	@notVideoUpload not path /api/admin/media/video
+	request_body @notVideoUpload {
 		max_size 12MB
 	}
+	@videoUpload path /api/admin/media/video
+	request_body @videoUpload {
+		max_size 520MB
+	}
 
-	# Images uploaded from the admin (content-hashed names, never change).
+	# Images and videos uploaded from the admin (unique names, never change). Videos are
+	# served with byte ranges, so they can be seeked and play in Safari. Hidden folders (videos
+	# waiting for conversion) are never served.
 	handle /media/* {
+		@hiddenMedia path_regexp hiddenMedia ^/media/(.*/)?\.
+		respond @hiddenMedia 404
 		root * /srv
 		file_server
 		header Cache-Control "public, max-age=31536000, immutable"

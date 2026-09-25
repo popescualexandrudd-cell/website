@@ -51,11 +51,11 @@ export async function deleteMediaAction(_prev: FormState, formData: FormData): P
   if (used > 0) {
     return {
       status: "error",
-      error: `Imaginea e folosită în ${used} ${used === 1 ? "loc" : "locuri"} pe site. Înlocuiește-o acolo înainte să o ștergi.`,
+      error: `${media.kind === "VIDEO" ? "Video-ul e folosit" : "Imaginea e folosită"} în ${used} ${used === 1 ? "loc" : "locuri"} pe site. ${media.kind === "VIDEO" ? "Înlocuiește-l" : "Înlocuiește-o"} acolo înainte să ${media.kind === "VIDEO" ? "îl" : "o"} ștergi.`,
     };
   }
   await db.media.delete({ where: { id } });
-  await removeMediaFiles(media.variants);
+  await removeMediaFiles(media);
   await audit(user.id, "media.stergere", "Media", id, { path: media.path });
   revalidatePath("/admin/media");
   redirect("/admin/media?sters=1");

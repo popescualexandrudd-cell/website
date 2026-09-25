@@ -1,4 +1,6 @@
 import "../globals.css";
+import "./academy.css";
+import type { CSSProperties } from "react";
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import { headers } from "next/headers";
@@ -7,7 +9,13 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { fontVariables } from "../fonts";
 import { routing, type Locale } from "@/i18n/routing";
-import { getLocations, getPolicyVersion, getSettings, localizedSettings } from "@/lib/content";
+import {
+  brandColors,
+  getLocations,
+  getPolicyVersion,
+  getSettings,
+  localizedSettings,
+} from "@/lib/content";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { MobileBar } from "@/components/site/MobileBar";
@@ -18,12 +26,15 @@ import { appUrl } from "@/lib/paths";
 
 export const dynamic = "force-dynamic";
 
-export const viewport: Viewport = {
-  themeColor: "#2A130B",
-  colorScheme: "light",
-  width: "device-width",
-  initialScale: 1,
-};
+export async function generateViewport(): Promise<Viewport> {
+  const settings = await getSettings();
+  return {
+    themeColor: brandColors(settings).brand,
+    colorScheme: "light",
+    width: "device-width",
+    initialScale: 1,
+  };
+}
 
 /**
  * What people type into Google when they look for lessons at the club. Search engines weigh the
@@ -31,9 +42,11 @@ export const viewport: Viewport = {
  */
 const SEARCH_KEYWORDS = {
   ro: [
+    "academie de tenis Pantelimon",
     "lecții de tenis Pantelimon",
     "antrenor tenis Pantelimon",
     "școală de tenis Pantelimon",
+    "academie tenis juniori București",
     "tenis copii Pantelimon",
     "lecții tenis București",
     "antrenor tenis Ilfov",
@@ -45,6 +58,7 @@ const SEARCH_KEYWORDS = {
     "analiză biomecanică tenis",
   ],
   en: [
+    "tennis academy Bucharest",
     "tennis lessons Pantelimon",
     "tennis coach Bucharest",
     "tennis lessons for children Bucharest",
@@ -102,7 +116,14 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   const umamiId = process.env.UMAMI_WEBSITE_ID;
 
   return (
-    <html lang={locale} className={fontVariables} suppressHydrationWarning>
+    <html
+      lang={locale}
+      className={fontVariables}
+      style={
+        { "--brand": settings.colors.brand, "--accent": settings.colors.accent } as CSSProperties
+      }
+      suppressHydrationWarning
+    >
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <a href="#continut" className="skip-link">

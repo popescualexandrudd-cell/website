@@ -1,7 +1,7 @@
 // Bundles the Node programs that run next to the Next.js server in the Docker image, so the
 // runtime image needs no TypeScript tooling:
 //   dist/worker.mjs        background jobs (emails, reminders, retention)
-//   dist/seed.mjs          first content from config/antrenor.yml
+//   dist/seed.mjs          first content from config/club.yml
 //   dist/admin-create.mjs  creates an admin account / resets a password
 import { build } from "esbuild";
 import { fileURLToPath } from "node:url";

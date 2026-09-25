@@ -17,13 +17,10 @@
 }
 
 /* Shared section spacing and width */
-.coach-inner,
 .method-inner,
 .pathway-inner,
 .programs-inner,
 .venue-inner,
-.band-inner,
-.places-inner,
 .questions-inner,
 .booking-inner,
 .text-section-inner,
@@ -32,7 +29,6 @@
   margin-inline: auto;
   padding-inline: var(--page-margin);
 }
-.coach,
 .method,
 .pathway,
 .programs,
@@ -74,190 +70,6 @@
   touch-action: pan-y;
 }
 
-/* ─── Hero ────────────────────────────────────────────────────────────────── */
-.hero {
-  display: grid;
-  grid-template-rows: 1fr auto;
-  min-height: calc(100svh - var(--header-h));
-  overflow: hidden;
-  isolation: isolate;
-}
-@media (min-width: 768px) {
-  .hero {
-    min-height: max(38rem, calc(100svh - var(--header-h)));
-  }
-}
-.hero-stage {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-}
-.hero-shade {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background:
-    linear-gradient(90deg, rgb(26 11 5 / 0.82) 0%, rgb(26 11 5 / 0.55) 38%, rgb(26 11 5 / 0) 68%),
-    linear-gradient(0deg, rgb(26 11 5 / 0.7) 0%, rgb(26 11 5 / 0) 34%);
-  pointer-events: none;
-}
-@media (max-width: 767px) {
-  .hero-shade {
-    background: linear-gradient(
-      180deg,
-      rgb(26 11 5 / 0.25) 0%,
-      rgb(26 11 5 / 0.55) 45%,
-      rgb(26 11 5 / 0.88) 100%
-    );
-  }
-}
-.hero-inner {
-  align-self: center;
-  width: 100%;
-  max-width: 88rem;
-  margin-inline: auto;
-  padding: clamp(3rem, 8vh, 6rem) var(--page-margin) 2.5rem;
-}
-@media (max-width: 767px) {
-  .hero-inner {
-    align-self: end;
-  }
-}
-.hero-title {
-  max-width: 17ch;
-  margin-top: 1.25rem;
-  font-size: var(--text-hero);
-  line-height: var(--text-hero--line-height);
-  text-shadow: 0 2px 24px rgb(0 0 0 / 0.25);
-}
-.hero-lead {
-  max-width: 36rem;
-  margin-top: 1.5rem;
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  color: rgb(255 247 238 / 0.9);
-}
-@media (min-width: 768px) {
-  .hero-lead {
-    font-size: 1.25rem;
-  }
-}
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 2rem;
-}
-.hero-stats {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  width: 100%;
-  border-top: 1px solid rgb(255 247 238 / 0.18);
-  background: rgb(26 11 5 / 0.55);
-  backdrop-filter: blur(6px);
-}
-@media (min-width: 1024px) {
-  .hero-stats {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    padding-inline: max(var(--page-margin), calc((100vw - 88rem) / 2 + var(--page-margin)));
-  }
-}
-.hero-stat {
-  display: grid;
-  align-content: start;
-  gap: 0.3rem;
-  padding: 1.1rem var(--page-margin);
-  border-left: 1px solid rgb(255 247 238 / 0.12);
-}
-.hero-stat:nth-child(odd) {
-  border-left: 0;
-}
-@media (min-width: 1024px) {
-  .hero-stat {
-    padding: 1.5rem 1.75rem;
-  }
-  .hero-stat:first-child {
-    padding-left: 0;
-  }
-  .hero-stat:nth-child(odd) {
-    border-left: 1px solid rgb(255 247 238 / 0.12);
-  }
-  .hero-stat:first-child {
-    border-left: 0;
-  }
-}
-.hero-stat-value {
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 1.2rem + 1.1vw, 2.25rem);
-  font-weight: 700;
-  line-height: 1;
-  text-transform: uppercase;
-  color: var(--color-galben);
-}
-.hero-stat-label {
-  font-size: 0.8125rem;
-  line-height: 1.4;
-  color: rgb(255 247 238 / 0.82);
-}
-
-/* ─── Coach (personal section) ────────────────────────────────────────────── */
-.coach-inner {
-  display: grid;
-  gap: clamp(3rem, 6vw, 6rem);
-  align-items: center;
-}
-@media (min-width: 1024px) {
-  .coach-inner {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  }
-}
-.coach-body {
-  margin-top: 1.75rem;
-  font-size: 1.0625rem;
-}
-.coach-credentials {
-  margin-top: 2.25rem;
-  padding-top: 1.75rem;
-  border-top: 1px solid var(--color-linie);
-}
-.coach-credentials-title {
-  margin-bottom: 1rem;
-  font-family: var(--font-sans);
-  font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: var(--tracking-kicker);
-  text-transform: uppercase;
-  color: var(--color-zgura-adanc);
-}
-.coach-credentials ul {
-  display: grid;
-  gap: 0.9rem;
-}
-.coach-credentials li {
-  display: grid;
-  gap: 0.15rem;
-  padding-left: 1.4rem;
-  position: relative;
-}
-.coach-credentials li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.45em;
-  width: 0.7rem;
-  height: 0.7rem;
-  border-radius: 999px;
-  background: var(--color-zgura);
-}
-.coach-credential-title {
-  font-weight: 600;
-  line-height: 1.4;
-}
-.coach-credential-issuer {
-  font-size: 0.9rem;
-  color: var(--color-cerneala-2);
-}
-
 /* ─── Statement (philosophy) ──────────────────────────────────────────────── */
 .statement {
   overflow: hidden;
@@ -268,7 +80,7 @@
   right: -4rem;
   top: 50%;
   width: min(34rem, 60vw);
-  color: rgb(255 247 238 / 0.14);
+  color: rgb(251 250 247 / 0.14);
   transform: translateY(-50%) rotate(90deg);
   pointer-events: none;
 }
@@ -408,7 +220,7 @@
 .lab-toggle {
   min-height: 2.75rem;
   padding: 0.5rem 1.1rem;
-  border: 1px solid rgb(255 247 238 / 0.3);
+  border: 1px solid rgb(251 250 247 / 0.3);
   border-radius: 999px;
   background: transparent;
   font-size: 0.8125rem;
@@ -473,11 +285,11 @@
   margin-top: 0.75rem;
   font-size: 0.95rem;
   line-height: 1.6;
-  color: rgb(255 247 238 / 0.86);
+  color: rgb(251 250 247 / 0.86);
 }
 .lab-phases {
   display: grid;
-  border-top: 1px solid rgb(255 247 238 / 0.14);
+  border-top: 1px solid rgb(251 250 247 / 0.14);
 }
 .lab-phase {
   display: flex;
@@ -487,11 +299,11 @@
   min-height: 2.75rem;
   padding: 0.55rem 0;
   border: 0;
-  border-bottom: 1px solid rgb(255 247 238 / 0.14);
+  border-bottom: 1px solid rgb(251 250 247 / 0.14);
   background: none;
   text-align: left;
   font-size: 0.9375rem;
-  color: rgb(255 247 238 / 0.75);
+  color: rgb(251 250 247 / 0.75);
 }
 .lab-phase:hover,
 .lab-phase[aria-current="step"] {
@@ -500,7 +312,7 @@
 .lab-phase-number {
   font-size: 0.75rem;
   font-weight: 700;
-  color: rgb(255 247 238 / 0.5);
+  color: rgb(251 250 247 / 0.5);
 }
 .lab-phase[aria-current="step"] .lab-phase-number {
   color: var(--color-galben);
@@ -508,7 +320,7 @@
 .lab-note {
   font-size: 0.75rem;
   line-height: 1.5;
-  color: rgb(255 247 238 / 0.6);
+  color: rgb(251 250 247 / 0.6);
 }
 
 /* ─── Pathway (stages of development) ─────────────────────────────────────── */
@@ -569,12 +381,12 @@
 }
 .pathway-step p {
   font-size: 0.95rem;
-  color: rgb(255 247 238 / 0.82);
+  color: rgb(251 250 247 / 0.82);
 }
 .lessons-intro {
   max-width: 60ch;
   margin-top: 1.25rem;
-  color: rgb(255 247 238 / 0.82);
+  color: rgb(251 250 247 / 0.82);
 }
 .pathway-step .lessons-meta {
   font-size: 0.8125rem;
@@ -583,109 +395,16 @@
   color: var(--color-galben);
 }
 
-/* ─── Programmes ──────────────────────────────────────────────────────────── */
+/* ─── Section heads with a link on the right ─────────────────────────────── */
 .programs-head,
-.questions-head {
+.questions-head,
+.team-head,
+.mosaic-head {
   display: flex;
   flex-wrap: wrap;
   align-items: end;
   justify-content: space-between;
   gap: 1.5rem;
-}
-.program-grid {
-  display: grid;
-  gap: 1.25rem;
-  margin-top: 3rem;
-}
-@media (min-width: 640px) {
-  .program-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (min-width: 1100px) {
-  .program-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-.program-card-link {
-  display: grid;
-  grid-template-rows: auto 1fr;
-  height: 100%;
-  overflow: hidden;
-  border-radius: calc(var(--radius) * 2);
-  background: var(--color-nisip-deschis);
-  text-decoration: none;
-  box-shadow: 0 1px 0 var(--color-linie);
-  transition:
-    transform 0.25s var(--ease-scene),
-    box-shadow 0.25s var(--ease-scene);
-}
-.program-card-link:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 24px 40px -28px rgb(42 19 11 / 0.55);
-}
-.program-card-media {
-  display: grid;
-  place-items: center;
-  aspect-ratio: 16 / 10;
-  overflow: hidden;
-  background: linear-gradient(160deg, var(--color-zgura-vie), var(--color-zgura));
-  color: rgb(255 247 238 / 0.8);
-}
-.program-card-media picture,
-.program-card-img {
-  width: 100%;
-  height: 100%;
-}
-.program-card-img {
-  object-fit: cover;
-}
-.program-card-court {
-  width: 72%;
-}
-.program-card-body {
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
-  gap: 0.55rem;
-  padding: 1.35rem 1.35rem 1.25rem;
-}
-.program-card-meta {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-zgura-adanc);
-}
-.program-card-name {
-  font-family: var(--font-display);
-  font-size: 1.65rem;
-  font-weight: 700;
-  line-height: 1;
-  text-transform: uppercase;
-}
-.program-card-summary {
-  font-size: 0.9375rem;
-  line-height: 1.55;
-  color: var(--color-cerneala-2);
-}
-.program-card-foot .numerals {
-  white-space: nowrap;
-}
-.program-card-foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: 0.5rem;
-  padding-top: 0.9rem;
-  border-top: 1px solid var(--color-linie);
-  font-weight: 700;
-}
-.program-card-more {
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-zgura-adanc);
 }
 
 /* ─── Venue ───────────────────────────────────────────────────────────────── */
@@ -760,74 +479,6 @@
   font-size: 0.875rem;
   font-weight: 500;
 }
-.venue-plan {
-  display: grid;
-  justify-items: center;
-  gap: 1rem;
-  margin: 0;
-  padding: 2.5rem 2rem 1.75rem;
-  border-radius: calc(var(--radius) * 2);
-  background: linear-gradient(170deg, var(--color-zgura-vie), var(--color-zgura) 70%);
-  color: var(--color-crem);
-}
-.venue-plan-court {
-  width: min(12rem, 60%);
-}
-.venue-plan-caption {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-align: center;
-}
-
-/* ─── Bands: first lesson, places ─────────────────────────────────────────── */
-.band,
-.places {
-  padding-block: clamp(3.5rem, 7vw, 6rem);
-}
-.band-inner,
-.places-inner {
-  display: grid;
-  gap: 2rem;
-  align-items: center;
-}
-@media (min-width: 1024px) {
-  .band-inner,
-  .places-inner {
-    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-    gap: 4rem;
-  }
-}
-.band-title {
-  margin-top: 1rem;
-  font-size: clamp(2rem, 1.5rem + 2.2vw, 3.5rem);
-  line-height: 1.08;
-}
-.band-copy {
-  font-size: 1.0625rem;
-}
-.band-offer {
-  margin-bottom: 0.75rem;
-  font-size: 1.25rem;
-  font-weight: 600;
-}
-.places {
-  border-bottom: 1px solid var(--color-linie);
-}
-.places-count {
-  padding: 1.75rem;
-  border-left: 6px solid var(--color-galben);
-  border-radius: var(--radius);
-  background: var(--color-nisip-deschis);
-}
-.places-number {
-  font-family: var(--font-display);
-  font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.6rem);
-  font-weight: 700;
-  line-height: 1.05;
-  text-transform: uppercase;
-}
-
 /* ─── Questions ───────────────────────────────────────────────────────────── */
 .questions .faq-list {
   max-width: 60rem;
@@ -876,12 +527,12 @@
 .booking-contact {
   margin-top: 2.5rem;
   padding-top: 1.75rem;
-  border-top: 1px solid rgb(255 247 238 / 0.14);
+  border-top: 1px solid rgb(251 250 247 / 0.14);
 }
 .booking-contact ul {
   display: grid;
   gap: 0.5rem;
-  color: rgb(255 247 238 / 0.88);
+  color: rgb(251 250 247 / 0.88);
 }
 .booking-contact a {
   text-decoration-color: var(--color-galben);

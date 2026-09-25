@@ -1,78 +1,104 @@
+import type { CSSProperties } from "react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import type { SceneView } from "@/lib/content";
+import type { LocalizedSettings, SceneView } from "@/lib/content";
+import { TODO_MARK } from "@/lib/i18n-content";
+import { Picture } from "@/components/ui/Picture";
+import { AmbientVideo } from "@/components/ui/AmbientVideo";
+import { MediaFrame } from "@/components/ui/MediaFrame";
 import { TodoText } from "@/components/site/TodoText";
-import { Court3D } from "@/components/court3d/Court3D";
-import { CourtPoster } from "@/components/court3d/CourtPoster";
 import { safeHref } from "./links";
-import { Words } from "@/components/site/Words";
+
+/** "Învață. Joacă. Concurează." → one line per sentence. */
+function lines(title: string): string[] {
+  if (title.includes(TODO_MARK)) return [title];
+  return title.split(/(?<=[.!?])\s+/).filter(Boolean);
+}
 
 /**
- * The opening: a live 3D match on clay behind the headline, the two main actions and four
- * short facts about the coach.
+ * The opening: the club's own video (or photograph) across the whole screen, the title line by
+ * line over it. While the page scrolls, the picture draws back into a frame and the words lift
+ * away (ScrollEffects sets --hero-p), before the next section rises over it.
  */
-export async function HeroSection({ scene }: { scene: SceneView }) {
+export async function HeroSection({
+  scene,
+  settings,
+}: {
+  scene: SceneView;
+  settings: LocalizedSettings;
+}) {
   const t = await getTranslations("home");
-  const primary = safeHref(scene.ctaHref) ?? "/rezervare";
-  const stats = [1, 2, 3, 4]
-    .map((n) => ({
-      value: scene.extra[`stat${n}Value`] ?? "",
-      label: scene.extra[`stat${n}Label`] ?? "",
-    }))
-    .filter((s) => s.value.trim() !== "");
+  const href = safeHref(scene.ctaHref) ?? "/rezervare";
+  const video = settings.heroVideo;
+  const image = settings.heroImage;
   return (
     <section
-      className="hero tone-dark"
+      className="hero"
       id={scene.key}
       data-scene
+      data-hero
       aria-labelledby={`${scene.key}-title`}
     >
-      <Court3D
-        mode="rally"
-        className="hero-stage"
-        label={scene.extra.sceneLabel ?? ""}
-        poster={<CourtPoster variant="match" />}
-      />
-      <div className="hero-shade" aria-hidden="true" />
-      <div className="hero-inner">
-        <p className="kicker">
-          <TodoText value={scene.indexName} />
-        </p>
-        <h1 id={`${scene.key}-title`} className="hero-title">
-          <Words text={scene.title} />
-        </h1>
-        {scene.body ? (
-          <p className="hero-lead">
-            <TodoText value={scene.body} />
-          </p>
-        ) : null}
-        <div className="hero-actions">
-          {scene.ctaLabel ? (
-            <Link href={primary} className="btn btn-primary btn-arrow">
-              {scene.ctaLabel}
-            </Link>
-          ) : null}
-          {scene.extra.secondaryLabel ? (
-            <Link href="/programe" className="btn btn-secondary">
-              {scene.extra.secondaryLabel}
-            </Link>
-          ) : null}
+      <div className="hero-sticky">
+        <div className="hero-media">
+          {video ? (
+            <AmbientVideo
+              video={video}
+              label={settings.heroImageAlt || scene.title}
+              pauseLabel={t("videoPause")}
+              playLabel={t("videoPlay")}
+              className="hero-video"
+              priority
+            />
+          ) : image ? (
+            <Picture
+              image={image}
+              alt={settings.heroImageAlt}
+              priority
+              sizes="100vw"
+              className="hero-picture"
+              imgClassName="hero-img"
+            />
+          ) : (
+            <MediaFrame note={scene.extra.mediaNote ?? ""} className="hero-frame" />
+          )}
+          <div className="hero-shade" aria-hidden="true" />
         </div>
+        <div className="hero-content">
+          <p className="hero-kicker">
+            <TodoText value={scene.indexName} />
+          </p>
+          <h1 id={`${scene.key}-title`} className="hero-title">
+            {lines(scene.title).map((line, i) => (
+              <span key={i} className="hero-line">
+                <span style={{ "--i": i } as CSSProperties}>
+                  <TodoText value={line} />
+                </span>
+              </span>
+            ))}
+          </h1>
+          {scene.body ? (
+            <p className="hero-body">
+              <TodoText value={scene.body} />
+            </p>
+          ) : null}
+          <div className="hero-actions">
+            {scene.ctaLabel ? (
+              <Link href={href} className="btn btn-primary btn-arrow">
+                {scene.ctaLabel}
+              </Link>
+            ) : null}
+            {scene.extra.secondaryLabel ? (
+              <Link href="/academie" className="btn btn-secondary">
+                <TodoText value={scene.extra.secondaryLabel} />
+              </Link>
+            ) : null}
+          </div>
+        </div>
+        <span className="hero-cue" aria-hidden="true">
+          {t("scrollCue")}
+        </span>
       </div>
-      {stats.length > 0 ? (
-        <dl className="hero-stats" aria-label={t("statsLabel")}>
-          {stats.map((s) => (
-            <div key={s.value} className="hero-stat">
-              <dt className="hero-stat-value">
-                <TodoText value={s.value} />
-              </dt>
-              <dd className="hero-stat-label">
-                <TodoText value={s.label} />
-              </dd>
-            </div>
-          ))}
-        </dl>
-      ) : null}
     </section>
   );
 }

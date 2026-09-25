@@ -30,7 +30,7 @@
   "nav": {
     "programs": "Programmes",
     "facilities": "Facilities",
-    "about": "About me",
+    "about": "About the academy",
     "pricing": "Prices",
     "faq": "Questions",
     "tips": "Tips",
@@ -40,7 +40,10 @@
     "mainLabel": "Main navigation",
     "footerLabel": "Footer links",
     "method": "Method",
-    "menuLabel": "Full menu"
+    "menuLabel": "Full menu",
+    "juniors": "Junior academy",
+    "team": "Team",
+    "club": "The club"
   },
   "footer": {
     "contact": "Contact",
@@ -53,7 +56,7 @@
     "entity": "{name}, {form}, tax ID {cui}",
     "address": "Registered office: {address}",
     "newsletterTitle": "News from the court",
-    "newsletterText": "An email when I have free places or news about lessons. Rarely, no spam.",
+    "newsletterText": "An email when we have free places, new groups or news from the academy. Rarely, no spam.",
     "newsletterLabel": "Your email address",
     "newsletterConsent": "I agree to receive emails with news about lessons. I can unsubscribe at any time.",
     "newsletterSubmit": "Subscribe",
@@ -81,7 +84,23 @@
     "courtPlan": "Plan of a tennis court, to scale: 23.77 × 10.97 m",
     "courtDimensions": "23.77 × 10.97 m · net 0.914 m at the centre",
     "viewProgram": "Details",
-    "lessonsLabel": "Kinds of lesson"
+    "lessonsLabel": "Kinds of lesson",
+    "videoPause": "Pause the video",
+    "videoPlay": "Play the video",
+    "scrollCue": "Scroll",
+    "figCourts": "{count, plural, one {clay court} other {clay courts}}",
+    "figCovered": "{count, plural, one {court covered in winter} other {courts covered in winter}}",
+    "figAge": "years, the age children can start at",
+    "figPrograms": "{count, plural, one {training programme} other {training programmes}}",
+    "figCoaches": "{count, plural, one {coach} other {coaches}}",
+    "programNumber": "Programme {n}",
+    "stagesLabel": "The academy's stages",
+    "teamProfile": "Full profile",
+    "clubAddress": "Address",
+    "clubCourts": "Courts",
+    "clubAmenities": "Amenities",
+    "galleryVideo": "Video",
+    "labCta": "Open the lab"
   },
   "programs": {
     "groups": {
@@ -129,7 +148,7 @@
   "facilities": {
     "courts": "Courts",
     "amenities": "Venue amenities",
-    "services": "What I bring to the lesson",
+    "services": "What players get in training",
     "equipment": "Equipment",
     "surface": {
       "ZGURA": "clay",
@@ -150,7 +169,7 @@
   },
   "about": {
     "story": "Background",
-    "philosophy": "How I work",
+    "philosophy": "How we work",
     "certifications": "Certifications",
     "experience": "Experience",
     "experienceYears": "{count} years as a coach",
@@ -163,7 +182,7 @@
     "packageSessions": "{count} lessons",
     "validity": "valid for {days} days",
     "cancellation": "Cancellation",
-    "cancellationText": "Cancellation is free up to {hours} hours before the lesson, through the link in your email. After that, call me on +40 722 501 748 or write to me.",
+    "cancellationText": "Cancellation is free up to {hours} hours before the lesson, through the link in your email. After that, call or write to us.",
     "payment": "Payment",
     "paymentText": "Accepted methods:",
     "firstLesson": "First lesson",
@@ -185,6 +204,13 @@
       "TURNEE": "Tournaments",
       "TERENURI": "Courts",
       "EVENIMENTE": "Events"
+    },
+    "video": "Video",
+    "play": "Play the video: {title}",
+    "kind": {
+      "all": "All",
+      "image": "Photos",
+      "video": "Videos"
     }
   },
   "tips": {
@@ -202,17 +228,17 @@
       "COMPETITIE": "Competition"
     },
     "notFound": "Didn't find the answer?",
-    "writeMe": "Write to me"
+    "writeMe": "Write to us"
   },
   "contact": {
-    "formTitle": "Write to me",
+    "formTitle": "Write to us",
     "name": "Name",
     "email": "Email",
     "phone": "Phone (optional)",
     "subject": "Subject (optional)",
     "message": "Message",
     "submit": "Send the message",
-    "success": "Your message is sent. I will reply within one working day.",
+    "success": "Your message is sent. We will reply within one working day.",
     "phoneLabel": "Phone",
     "whatsappLabel": "WhatsApp",
     "emailLabel": "Email",
@@ -231,17 +257,18 @@
       "phone": "Write a valid phone number, for example +40 722 123 456.",
       "message": "Write a message of at least 10 characters.",
       "consent": "Tick the consent box so we can continue.",
-      "rateLimit": "You sent too many requests in a short time. Try again in a few minutes or call me.",
+      "rateLimit": "You sent too many requests in a short time. Try again in a few minutes or call us.",
       "captcha": "The anti-spam check failed. Reload the page and try again.",
-      "server": "Something went wrong on our side and the request was not saved. Try again or call me on +40 722 501 748.",
+      "server": "Something went wrong on our side and the request was not saved. Try again or call us.",
       "childFirstName": "Write the child's first name.",
-      "childAge": "Write the child's age in years (between 3 and 17).",
+      "childAge": "Enter the child's age in years (between 3 and 18).",
       "parentName": "Write the parent's name, the contact person.",
-      "preferences": "Tell me which days and times would suit you.",
+      "preferences": "Tell us which days and times would suit you.",
       "program": "Choose a programme.",
       "participants": "The number of people does not match the chosen lesson.",
       "lessonType": "This lesson type can no longer be booked. Choose another.",
-      "duration": "This length is no longer offered for this lesson. Choose another."
+      "duration": "This length is no longer offered for this lesson. Choose another.",
+      "experience": "Choose how much the child has played so far."
     }
   },
   "booking": {
@@ -257,7 +284,7 @@
     "chooseProgramHint": "Choose the programme that suits you now. We can change it at any time after the first sessions.",
     "chooseLesson": "What kind of lesson would you like?",
     "duration": "Session length",
-    "durationHint": "If you want a session longer than 3 hours, choose 180 minutes and write to me in “My details”.",
+    "durationHint": "If you want a session longer than 3 hours, choose 180 minutes and write to us in “My details”.",
     "durationOption": "{minutes} minutes",
     "participants": "How many people are taking part",
     "persons": "{count, plural, one {1 person} other {# people}}",
@@ -265,10 +292,10 @@
     "perHour": "{price} / hour",
     "perHourPerson": "{price} / hour / person",
     "estimatedPrice": "Estimated price",
-    "priceNote": "Payment is made at the court or by bank transfer. I confirm the final price together with the booking.",
+    "priceNote": "Payment is made at the court or by bank transfer. We confirm the final price together with the booking.",
     "chooseTime": "Choose a day and time",
     "timeFor": "{lesson}, {duration}",
-    "noSlots": "There are no free times in the next {days} days for this length. Try a shorter session or write to me.",
+    "noSlots": "There are no free times in the next {days} days for this length. Try a shorter session or write to us.",
     "firstFreeTimes": "First free times",
     "detailsTitle": "My details",
     "forWhom": "Who is the lesson for?",
@@ -286,9 +313,9 @@
         "AVANSAT": "I play regularly",
         "COMPETITIE": "I play competitions"
       },
-      "message": "Anything I should know (optional)",
+      "message": "Anything we should know (optional)",
       "messageHint": "For example: an old injury, what you would like to work on, a longer session.",
-      "forMinorNote": "For children I only ask for the first name and age. You remain the contact person.",
+      "forMinorNote": "For children we only ask for the first name and age. You remain the contact person.",
       "childFirstName": "Child's first name",
       "childAge": "Child's age (years)",
       "emailHint": "This is where you receive the confirmation and the cancellation link.",
@@ -310,9 +337,9 @@
     "submitRequest": "Send the booking",
     "submitInstant": "Confirm the booking",
     "successRequestTitle": "Your booking has been sent.",
-    "successRequestText": "I have emailed the booking details to {email}. I confirm it as soon as I can, usually the same day. Booking code: {code}.",
+    "successRequestText": "We have emailed the booking details to {email}. We confirm it as soon as we can, usually the same day. Booking code: {code}.",
     "successInstantTitle": "The lesson is booked.",
-    "successInstantText": "I have emailed the confirmation and the calendar file to {email}. Booking code: {code}.",
+    "successInstantText": "We have emailed the confirmation and the calendar file to {email}. Booking code: {code}.",
     "newBooking": "Make another booking",
     "fixFields": "Fill in the marked fields, then continue.",
     "status": {
@@ -325,7 +352,7 @@
     },
     "conflict": "That slot has just been taken. Choose another time.",
     "unavailable": "The time you chose is no longer available. Choose another time.",
-    "loadError": "We could not load the free times. Reload the page or call me.",
+    "loadError": "We could not load the free times. Reload the page or call us.",
     "moreDays": "More days",
     "change": "Change",
     "continue": "Continue",
@@ -337,8 +364,8 @@
     "chooseLessonError": "Choose the type of lesson to continue.",
     "forProgram": "Programme: {program}.",
     "bookingNotOnline": "This lesson cannot be booked online for now.",
-    "contactInstead": "Write to me and we will find a time.",
-    "noPrograms": "Online booking is not available right now. Call or write to me and we will find a time.",
+    "contactInstead": "Write to us and we will find a time.",
+    "noPrograms": "Online booking is not available right now. Call or write to us and we will find a time.",
     "compactHint": "Pick a time; you fill in your details on the booking page.",
     "seeAllTimes": "See all days and times",
     "emailNote": "The confirmation goes to {email}. If you do not see it within a few minutes, check your spam folder.",
@@ -357,11 +384,11 @@
     "cancelReason": "Reason (optional)",
     "cancelSubmit": "Cancel the booking",
     "cancelConfirm": "Are you sure you want to cancel? The slot becomes free for someone else.",
-    "cancelled": "The booking is cancelled. I have emailed you the confirmation.",
+    "cancelled": "The booking is cancelled. We have emailed you the confirmation.",
     "tooLate": "The free cancellation period has passed ({hours} hours before the lesson).",
-    "tooLateHelp": "If you cannot make it, call me on +40 722 501 748 or write to me and we will find a solution together.",
+    "tooLateHelp": "If you cannot make it, call or write to us and we will find a solution together.",
     "notFound": "The link is no longer valid or the booking does not exist.",
-    "notFoundHelp": "If you need help, call me on +40 722 501 748 or write to me.",
+    "notFoundHelp": "If you need help, call or write to us.",
     "alreadyCancelled": "The booking is already cancelled.",
     "past": "The lesson has taken place."
   },
@@ -371,7 +398,7 @@
     "preferences": "Days and times that would suit you",
     "preferencesHint": "For example: Tuesdays and Thursdays after 5 pm, or Saturday mornings.",
     "submit": "Join the waiting list",
-    "success": "You are on the waiting list. I will write to you when a place opens up.",
+    "success": "You are on the waiting list. We will write to you when a place opens up.",
     "childAge": "Child's age, if it is for a child (optional)"
   },
   "review": {
@@ -389,7 +416,7 @@
     "already": "You have already sent a review for this lesson. Thank you!"
   },
   "newsletter": {
-    "confirmed": "Your subscription is confirmed. I will write when I have free places or news about lessons.",
+    "confirmed": "Your subscription is confirmed. We will write when we have free places or news from the academy.",
     "unsubscribed": "You have unsubscribed. You will not receive any more emails from us.",
     "invalid": "The link is no longer valid."
   },
@@ -401,7 +428,7 @@
     "notFoundTitle": "Out: this page does not exist.",
     "notFoundText": "The link may be old or the address may have a typo. Replay the point from the home page or book a session directly.",
     "serverTitle": "Something went wrong.",
-    "serverText": "An error occurred on our side. Try again in a minute. If it happens again, call me on +40 722 501 748 or write to me.",
+    "serverText": "An error occurred on our side. Try again in a minute. If it happens again, call or write to us.",
     "retry": "Try again"
   },
   "lab": {
@@ -506,5 +533,66 @@
         ]
       }
     }
+  },
+  "academy": {
+    "stage": {
+      "ROSU": "Red ball",
+      "PORTOCALIU": "Orange ball",
+      "VERDE": "Green ball",
+      "GALBEN": "Yellow ball"
+    },
+    "ages": "Age",
+    "schedule": "Schedule",
+    "scheduleOnRequest": "on request",
+    "sessions": "{count, plural, one {one session} other {# sessions}} a week",
+    "sessionLength": "{n} minutes",
+    "fee": "Monthly fee",
+    "feeValue": "{amount} / month",
+    "feeOnRequest": "on request",
+    "places": "at most {n} children per group",
+    "focus": "What we work on",
+    "program": "Training programme",
+    "groupsTitle": "The groups",
+    "groupsIntro": "Every group has a court, racquet and ball sized for the children, and a child moves to the next stage when ready, not by the calendar.",
+    "evaluationTitle": "Ask for an assessment",
+    "evaluationIntro": "At the assessment we see how the child moves and hits, and tell you which group fits. Fill in the form and we will contact you to agree on a day.",
+    "childFirstName": "Child's first name",
+    "childAge": "Child's age",
+    "experience": "How much they have played",
+    "experienceOptions": {
+      "niciodata": "Has never played tennis",
+      "putin": "A few lessons, or played for fun",
+      "regulat": "Trains regularly",
+      "turnee": "Plays tournaments"
+    },
+    "group": "The group you think fits",
+    "groupUnsure": "Not sure, tell us at the assessment",
+    "parentName": "Parent's name",
+    "preferences": "Days and times that suit you for the assessment",
+    "preferencesHint": "For example: Tuesday or Thursday after 5 pm, Saturday morning.",
+    "submit": "Send the request",
+    "success": "We have your request. We will contact you within 1–2 working days to arrange the assessment.",
+    "resultsTitle": "Results",
+    "resultsIntro": "Results of the academy's players, published with their consent and, for minors, their parents'.",
+    "resultLevel": {
+      "REGIONAL": "regional",
+      "NATIONAL": "national",
+      "INTERNATIONAL": "international"
+    },
+    "pathwayTitle": "A child's path",
+    "choose": "Choose…"
+  },
+  "team": {
+    "specialties": "Specialties",
+    "certifications": "Education and certifications",
+    "experienceYears": "{count, plural, one {one year as a coach} other {# years as a coach}}",
+    "languages": "Languages",
+    "story": "Background",
+    "philosophy": "How they work",
+    "results": "Players' results",
+    "video": "At work",
+    "backToTeam": "The whole team",
+    "bookWith": "Book a lesson",
+    "photoAlt": "{name} on the tennis court"
   }
 }

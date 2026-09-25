@@ -101,6 +101,7 @@ export async function saveContentAction(_prev: FormState, formData: FormData): P
     throw error;
   }
 
+  await resource.afterSave?.(saved);
   await audit(
     user.id,
     before ? "continut.modificare" : "continut.creare",

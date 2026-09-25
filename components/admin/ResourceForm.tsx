@@ -357,6 +357,7 @@ function FieldControl({ field, value, media, options, error }: ControlProps) {
           <MediaPicker
             name={name}
             label={field.label}
+            accept={field.accept ?? "image"}
             initial={media}
             required={field.required}
             describedBy={describedBy}

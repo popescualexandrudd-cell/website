@@ -121,6 +121,8 @@ export async function runRetention(now = new Date()): Promise<Record<string, num
       message: null,
       preferences: "[anonimizat]",
       childAge: null,
+      childFirstName: null,
+      experience: null,
       anonymizedAt: now,
       status: "ARHIVAT",
     },

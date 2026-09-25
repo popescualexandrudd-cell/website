@@ -38,7 +38,8 @@ export type FieldDef = Base &
     | { kind: "triBool" }
     | { kind: "enum"; options: Option[] }
     | { kind: "relation"; source: RelationSource }
-    | { kind: "media" }
+    /** An uploaded photo (default), video, or either (the gallery). */
+    | { kind: "media"; accept?: MediaAccept }
     | { kind: "date" }
     | { kind: "datetime" }
     | { kind: "time" }
@@ -46,7 +47,8 @@ export type FieldDef = Base &
     | { kind: "hours" }
   );
 
-export type RelationSource = "program" | "lessonType" | "location";
+export type RelationSource = "program" | "lessonType" | "location" | "coach" | "academyGroup";
+export type MediaAccept = "image" | "video" | "any";
 
 export type I18nValue = { ro: string; en: string };
 export type MediaValue = { id: string; url: string; alt: string } | null;
@@ -118,6 +120,19 @@ export const GALLERY_CATEGORIES: Option[] = [
   { value: "TURNEE", label: "Turnee" },
   { value: "TERENURI", label: "Terenuri" },
   { value: "EVENIMENTE", label: "Evenimente" },
+];
+
+export const BALL_STAGES: Option[] = [
+  { value: "ROSU", label: "Minge roșie (teren mic)" },
+  { value: "PORTOCALIU", label: "Minge portocalie (trei sferturi de teren)" },
+  { value: "VERDE", label: "Minge verde (teren întreg)" },
+  { value: "GALBEN", label: "Minge galbenă (standard)" },
+];
+
+export const RESULT_LEVELS: Option[] = [
+  { value: "REGIONAL", label: "Regional" },
+  { value: "NATIONAL", label: "Național" },
+  { value: "INTERNATIONAL", label: "Internațional" },
 ];
 
 export const POST_STATUSES: Option[] = [

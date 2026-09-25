@@ -3,26 +3,35 @@ import { Link } from "@/i18n/navigation";
 import type { FacilityView, LocationView, SceneView } from "@/lib/content";
 import { TodoText } from "@/components/site/TodoText";
 import { TODO_MARK } from "@/lib/i18n-content";
-import { CourtMark } from "@/components/ui/CourtMark";
+import type { ResolvedImage } from "@/lib/media-shared";
+import { Picture } from "@/components/ui/Picture";
+import { MediaFrame } from "@/components/ui/MediaFrame";
 import { SectionHead } from "./SectionHead";
 import { safeHref } from "./links";
 
-/** The venue: club, surfaces, number of courts, floodlights, winter cover, amenities. */
+/**
+ * The club: a photograph of the courts beside the facts (surfaces, number of courts,
+ * floodlights, winter cover, amenities).
+ */
 export async function VenueSection({
   scene,
   location,
   amenities,
+  image,
+  imageAlt,
 }: {
   scene: SceneView;
   location: LocationView | null;
   amenities: FacilityView[];
+  image: ResolvedImage | null;
+  imageAlt: string;
 }) {
   const t = await getTranslations();
   const href = safeHref(scene.ctaHref) ?? "/facilitati";
   const flag = (value: boolean | null, yes: string, no: string) =>
     value === null ? TODO_MARK : value ? yes : no;
   return (
-    <section className="venue tone-sand-deep" id={scene.key} aria-labelledby={`${scene.key}-title`}>
+    <section className="venue" id={scene.key} aria-labelledby={`${scene.key}-title`}>
       <div className="venue-inner">
         <div className="venue-copy">
           <SectionHead id={`${scene.key}-title`} kicker={scene.indexName} title={scene.title} />
@@ -87,13 +96,23 @@ export async function VenueSection({
             </p>
           ) : null}
         </div>
-        <figure className="venue-plan">
-          <CourtMark variant="plan" className="venue-plan-court" />
-          <figcaption className="venue-plan-caption numerals">
+        <div className="venue-media">
+          {image ? (
+            <Picture
+              image={image}
+              alt={imageAlt}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="venue-picture"
+              imgClassName="venue-img"
+            />
+          ) : (
+            <MediaFrame note={scene.extra.mediaNote ?? ""} className="venue-frame" />
+          )}
+          <p className="venue-plan-caption numerals">
             <span className="sr-only">{t("home.courtPlan")}. </span>
             {t("home.courtDimensions")}
-          </figcaption>
-        </figure>
+          </p>
+        </div>
       </div>
     </section>
   );

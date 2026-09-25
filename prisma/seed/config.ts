@@ -13,16 +13,27 @@ const certification = z.union([
   z.object({ titlu: localized, emitent: scalar, an: scalar }),
 ]);
 
+const coach = z.object({
+  nume: scalar,
+  rol: localized,
+  titulatura: localized,
+  rezumat: localized,
+  specializari: z.array(localized).default([]),
+  ani_experienta: scalar,
+  certificari: z.array(certification).default([]),
+  limbi_vorbite: z.array(scalar).default([]),
+  parcurs: localized,
+  rezultate_elevi: localized,
+});
+
 const configSchema = z.object({
-  antrenor: z.object({
+  club: z.object({
     nume: scalar,
-    titulatura: localized,
-    ani_experienta: scalar,
-    certificari: z.array(certification).default([]),
-    limbi_vorbite: z.array(scalar).default([]),
-    parcurs: localized,
-    rezultate_elevi: localized,
+    monograma: scalar,
+    descriere: localized,
+    culori: z.object({ principala: scalar, accent: scalar }).optional(),
   }),
+  antrenori: z.array(coach).min(1),
   contact: z.object({
     telefon: scalar,
     whatsapp: scalar,
@@ -55,6 +66,24 @@ const configSchema = z.object({
     )
     .min(1),
   programe: z.array(z.object({ nume: scalar })).default([]),
+  academie_juniori: z
+    .object({
+      grupe: z
+        .array(
+          z.object({
+            etapa: scalar,
+            varsta: scalar,
+            program: scalar,
+            sedinte_pe_saptamana: scalar,
+            durata_min: scalar,
+            zile_ore: scalar,
+            taxa_lunara_ron: scalar,
+            locuri: scalar,
+          }),
+        )
+        .default([]),
+    })
+    .default({ grupe: [] }),
   lectii: z
     .array(
       z.object({
@@ -93,8 +122,9 @@ export type RawConfig = z.infer<typeof configSchema>;
 type Scalar = z.infer<typeof scalar>;
 export type Localized = z.infer<typeof localized>;
 export type CertificationEntry = z.infer<typeof certification>;
+export type CoachEntry = z.infer<typeof coach>;
 
-export function loadConfig(path = join(process.cwd(), "config", "antrenor.yml")): RawConfig {
+export function loadConfig(path = join(process.cwd(), "config", "club.yml")): RawConfig {
   const text = readFileSync(path, "utf8");
   return configSchema.parse(parse(text));
 }
@@ -181,6 +211,24 @@ export function hoursRange(value: Scalar): { start: string; end: string } | null
   const [, h1, m1, h2, m2] = match;
   const pad = (n: string | undefined) => (n ?? "0").padStart(2, "0");
   return { start: `${pad(h1)}:${m1}`, end: `${pad(h2)}:${m2}` };
+}
+
+/** A colour as #rrggbb (lower case), or null when missing or not a hex colour. */
+export function hexColor(value: Scalar): string | null {
+  if (isPlaceholder(value)) return null;
+  const match = String(value)
+    .trim()
+    .match(/^#?([0-9a-f]{6})$/i);
+  return match ? `#${match[1]!.toLowerCase()}` : null;
+}
+
+/** "8-10" → { min: 8, max: 10 }; "12" → { min: 12, max: 12 }; missing → nulls. */
+export function ageRange(value: Scalar): { min: number | null; max: number | null } {
+  if (isPlaceholder(value)) return { min: null, max: null };
+  const match = String(value).match(/(\d+)(?:\s*[-–]\s*(\d+))?/);
+  if (!match) return { min: null, max: null };
+  const min = Number(match[1]);
+  return { min, max: match[2] ? Number(match[2]) : min };
 }
 
 /** Digits-only international number for wa.me links ("0722 501 748" → "40722501748"), or null. */

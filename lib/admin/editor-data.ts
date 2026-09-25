@@ -35,6 +35,23 @@ async function relationOptions(
     });
     out.location = locations.map((l) => ({ value: l.id, label: l.name }));
   }
+  if (sources.has("coach")) {
+    const coaches = await db.coach.findMany({
+      orderBy: [{ isHead: "desc" }, { order: "asc" }],
+      select: { id: true, name: true, active: true },
+    });
+    out.coach = coaches.map((c) => ({
+      value: c.id,
+      label: `${c.name}${c.active ? "" : " (inactiv)"}`,
+    }));
+  }
+  if (sources.has("academyGroup")) {
+    const groups = await db.academyGroup.findMany({
+      orderBy: { order: "asc" },
+      select: { id: true, name: true, active: true },
+    });
+    out.academyGroup = groups.map(toOption);
+  }
   return out;
 }
 

@@ -11,6 +11,7 @@ import {
   openImage,
   type ImageVariant,
 } from "../images/process";
+import { incomingFile } from "../video";
 import type { Prisma } from "../generated/prisma/client";
 
 export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
@@ -19,7 +20,17 @@ const WIDTHS = [480, 960, 1440, 1920, 2560];
 /** Raster formats accepted from the admin. SVG is refused: it can carry scripts. */
 const ACCEPTED = new Set(["jpeg", "png", "webp", "avif", "heif", "tiff"]);
 
-export type MediaThumb = { id: string; url: string; alt: string; width: number; height: number };
+export type MediaThumb = {
+  id: string;
+  url: string;
+  alt: string;
+  width: number;
+  height: number;
+  kind: "IMAGINE" | "VIDEO";
+  status: "GATA" | "IN_PROCESARE" | "EROARE";
+  error: string | null;
+  durationSec: number | null;
+};
 
 function variantsOf(value: unknown): ImageVariant[] {
   if (!Array.isArray(value)) return [];
@@ -43,13 +54,23 @@ export function toThumb(media: {
   alt: unknown;
   width: number;
   height: number;
+  kind: "IMAGINE" | "VIDEO";
+  status: "GATA" | "IN_PROCESARE" | "EROARE";
+  poster: unknown;
+  error: string | null;
+  durationSec: number | null;
 }): MediaThumb {
   return {
     id: media.id,
-    url: thumbUrl(media.variants),
+    // A video is shown by its poster frame (none until it is converted).
+    url: thumbUrl(media.kind === "VIDEO" ? media.poster : media.variants),
     alt: t(media.alt, "ro"),
     width: media.width,
     height: media.height,
+    kind: media.kind,
+    status: media.status,
+    error: media.error,
+    durationSec: media.durationSec,
   };
 }
 
@@ -57,13 +78,12 @@ export function mediaRoot(): string {
   return resolve(getEnv().MEDIA_DIR);
 }
 
-/** Resolves a public /media path to a file inside MEDIA_DIR, refusing anything that escapes it. */
+/**
+ * Resolves a public /media path to a file inside MEDIA_DIR, refusing anything that escapes it
+ * and the hidden folders (videos waiting for conversion).
+ */
 export function mediaFilePath(segments: string[]): string | null {
-  if (
-    segments.some(
-      (s) => s === "" || s === "." || s === ".." || s.includes("\\") || s.includes("\0"),
-    )
-  )
+  if (segments.some((s) => s === "" || s.startsWith(".") || s.includes("\\") || s.includes("\0")))
     return null;
   const root = mediaRoot();
   const full = resolve(root, ...segments);
@@ -142,19 +162,35 @@ export async function processUpload(options: {
 }
 
 /** Deletes the files of a media row (the row itself is deleted by the caller). */
-export async function removeMediaFiles(variants: unknown): Promise<void> {
-  for (const variant of variantsOf(variants)) {
-    for (const url of [variant.avif, variant.webp]) {
-      const path = mediaFilePath(url.replace(/^\/media\//, "").split("/"));
-      if (path) await rm(path, { force: true });
+export async function removeMediaFiles(media: {
+  path: string;
+  variants: unknown;
+  poster?: unknown;
+}): Promise<void> {
+  const urls: string[] = [];
+  for (const variant of [...variantsOf(media.variants), ...variantsOf(media.poster)])
+    urls.push(variant.avif, variant.webp);
+  if (Array.isArray(media.variants)) {
+    for (const variant of media.variants) {
+      const src = (variant as { src?: unknown } | null)?.src;
+      if (typeof src === "string") urls.push(src);
     }
   }
+  for (const url of urls) {
+    const path = mediaFilePath(url.replace(/^\/media\//, "").split("/"));
+    if (path) await rm(path, { force: true });
+  }
+  await rm(incomingFile(media.path), { force: true });
 }
 
 /** How many places use a media item (a used image cannot be deleted). */
 export async function mediaUsage(id: string): Promise<number> {
   const counts = await Promise.all([
-    db.coachProfile.count({ where: { photoId: id } }),
+    db.coach.count({ where: { OR: [{ photoId: id }, { videoId: id }] } }),
+    db.siteSettings.count({
+      where: { OR: [{ logoId: id }, { heroVideoId: id }, { heroImageId: id }] },
+    }),
+    db.academyGroup.count({ where: { imageId: id } }),
     db.certification.count({ where: { imageId: id } }),
     db.program.count({ where: { imageId: id } }),
     db.facility.count({ where: { imageId: id } }),

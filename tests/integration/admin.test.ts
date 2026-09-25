@@ -54,7 +54,7 @@ describe("media upload", () => {
       expect(meta.exif).toBeUndefined();
       expect(["webp", "heif"]).toContain(meta.format);
     }
-    await removeMediaFiles(media.variants);
+    await removeMediaFiles(media);
     await db.media.delete({ where: { id: media.id } });
     expect(allFiles(mediaDir)).toHaveLength(0);
   });

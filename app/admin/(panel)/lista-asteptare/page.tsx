@@ -10,7 +10,7 @@ import { OkNotice } from "@/components/admin/OkNotice";
 import { currentPath } from "@/lib/admin/redirect";
 import type { WaitlistStatus } from "@/lib/generated/prisma/client";
 
-export const metadata: Metadata = { title: "Listă de așteptare" };
+export const metadata: Metadata = { title: "Evaluări și așteptare" };
 
 const LABEL: Record<WaitlistStatus, string> = {
   NOU: "nou",
@@ -34,7 +34,7 @@ export default async function WaitlistPage({ searchParams }: PageProps<"/admin/l
     db.waitlistEntry.findMany({
       where: { status, anonymizedAt: null },
       orderBy: { createdAt: "asc" },
-      include: { program: true },
+      include: { program: true, group: true },
       take: 300,
     }),
     db.waitlistEntry.groupBy({ by: ["status"], _count: true, where: { anonymizedAt: null } }),
@@ -45,8 +45,11 @@ export default async function WaitlistPage({ searchParams }: PageProps<"/admin/l
     <>
       <div className="admin-page-head">
         <div>
-          <h1 className="admin-title">Listă de așteptare</h1>
-          <p>Cei care vor un loc când se eliberează. Primii înscriși sunt primii în listă.</p>
+          <h1 className="admin-title">Evaluări și listă de așteptare</h1>
+          <p>
+            Cererile de evaluare pentru academia de juniori și cei care așteaptă un loc. Primii
+            înscriși sunt primii în listă.
+          </p>
         </div>
       </div>
       <OkNotice
@@ -74,7 +77,10 @@ export default async function WaitlistPage({ searchParams }: PageProps<"/admin/l
       ) : (
         <div className="admin-rows">
           {entries.map((e, index) => {
-            const text = `Bună, ${e.name}! Vă scriu legat de lista de așteptare${e.program ? ` pentru ${t(e.program.name, "ro")}` : ""}.`;
+            const evaluation = e.kind === "EVALUARE";
+            const text = evaluation
+              ? `Bună, ${e.name}! Vă scriem legat de evaluarea pentru academia de juniori${e.childFirstName ? ` (${e.childFirstName})` : ""}.`
+              : `Bună, ${e.name}! Vă scriem legat de lista de așteptare${e.program ? ` pentru ${t(e.program.name, "ro")}` : ""}.`;
             const mail = mailLink(e.email);
             const tel = telLink(e.phone);
             const wa = whatsappLink(e.phone, text);
@@ -83,13 +89,31 @@ export default async function WaitlistPage({ searchParams }: PageProps<"/admin/l
                 <div>
                   <p className="admin-row-title">
                     {index + 1}. {e.name}
-                    {e.forMinor ? ` · copil${e.childAge ? `, ${e.childAge} ani` : ""}` : ""}
+                    {e.forMinor
+                      ? ` · ${e.childFirstName ?? "copil"}${e.childAge ? `, ${e.childAge} ani` : ""}`
+                      : ""}
                   </p>
                   <p className="admin-row-meta">
-                    {e.program ? t(e.program.name, "ro") : "Orice program"} · înscris{" "}
+                    <span className="status">
+                      {evaluation ? "evaluare juniori" : "listă de așteptare"}
+                    </span>{" "}
+                    ·{" "}
+                    {e.group
+                      ? t(e.group.name, "ro")
+                      : e.program
+                        ? t(e.program.name, "ro")
+                        : evaluation
+                          ? "grupa se stabilește la evaluare"
+                          : "Orice program"}{" "}
+                    · trimis{" "}
                     {e.createdAt.toLocaleDateString("ro-RO", { timeZone: settings.timezone })} ·{" "}
                     <span className="status">{LABEL[e.status]}</span>
                   </p>
+                  {e.experience ? (
+                    <p className="mt-2">
+                      <strong className="font-medium">Experiență:</strong> {e.experience}
+                    </p>
+                  ) : null}
                   <p className="mt-2">
                     <strong className="font-medium">Preferințe:</strong> {e.preferences}
                   </p>

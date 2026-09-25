@@ -2,8 +2,10 @@ import "server-only";
 import { db } from "../db";
 import { t, TODO_MARK } from "../i18n-content";
 import { countLabel } from "./format";
+import { contrastWithWhite } from "../color";
 import {
   AUDIENCES,
+  BALL_STAGES,
   BOOKING_MODES,
   FACILITY_TYPES,
   FAQ_CATEGORIES,
@@ -11,6 +13,7 @@ import {
   LEVELS,
   POST_STATUSES,
   PRICE_UNITS,
+  RESULT_LEVELS,
   SURFACES,
   TIMEZONES,
   optionLabel,
@@ -41,8 +44,10 @@ export type ModelName =
   | "location"
   | "court"
   | "facility"
-  | "coachProfile"
+  | "coach"
   | "certification"
+  | "academyGroup"
+  | "result"
   | "faq"
   | "testimonial"
   | "galleryItem"
@@ -87,6 +92,8 @@ export type Resource = {
   prepare?: (data: Record<string, unknown>, before: Row | null) => string | null;
   /** Explains why a row cannot be deleted, or null when it can. */
   deleteBlocked?: (row: Row) => Promise<string | null>;
+  /** Keeps other rows consistent with the one just saved (e.g. a single head coach). */
+  afterSave?: (saved: Row) => Promise<void>;
 };
 
 const str = (value: unknown): string =>
@@ -127,6 +134,8 @@ const PAGE_PATHS: Record<string, string> = {
   programe: "/programe",
   facilitati: "/facilitati",
   despre: "/despre",
+  academie: "/academie",
+  echipa: "/echipa",
   preturi: "/preturi",
   rezervare: "/rezervare",
   galerie: "/galerie",
@@ -145,43 +154,36 @@ const LEGAL_PATHS: Record<string, string> = {
 /** Extra texts that only one home-page section uses, edited as a small set of fields. */
 const SCENE_EXTRAS: Record<string, { label: string; help?: string; keys: Option[] }> = {
   deschiderea: {
-    label: "Cifrele de sub titlu și al doilea buton",
-    help: "Patru repere scurte (valoare + explicație). Lasă gol un reper ca să nu apară.",
+    label: "Al doilea buton și textul din cadru",
+    help: "Video-ul (sau fotografia) de deschidere se alege din Setări → Identitatea clubului.",
     keys: [
-      { value: "stat1Value", label: "Reperul 1: valoarea" },
-      { value: "stat1Label", label: "Reperul 1: explicația" },
-      { value: "stat2Value", label: "Reperul 2: valoarea" },
-      { value: "stat2Label", label: "Reperul 2: explicația" },
-      { value: "stat3Value", label: "Reperul 3: valoarea" },
-      { value: "stat3Label", label: "Reperul 3: explicația" },
-      { value: "stat4Value", label: "Reperul 4: valoarea" },
-      { value: "stat4Label", label: "Reperul 4: explicația" },
-      { value: "secondaryLabel", label: "Al doilea buton (duce la Programe)" },
-      { value: "sceneLabel", label: "Descrierea animației 3D, pentru cititoarele de ecran" },
+      { value: "secondaryLabel", label: "Al doilea buton (duce la Academia de juniori)" },
+      { value: "mediaNote", label: "Textul din cadru, până încarci video-ul" },
     ],
   },
-  antrenorul: {
-    label: "Textele din jurul fotografiei",
-    keys: [
-      { value: "credentialsTitle", label: "Titlul listei de calificări" },
-      { value: "photoNote", label: "Textul din chenar, până încarci fotografia" },
-    ],
+  academia: {
+    label: "Linkul către pagina academiei",
+    keys: [{ value: "moreLabel", label: "Textul linkului" }],
+  },
+  echipa: {
+    label: "Textul din ramele fără fotografie",
+    keys: [{ value: "photoNote", label: "Textul din ramă, până încarci fotografia" }],
   },
   metoda: {
     label: "Laboratorul tehnic 3D",
+    help: "Laboratorul apare doar dacă e activ în Setări → Funcții.",
     keys: [
       { value: "labTitle", label: "Titlul laboratorului" },
       { value: "labIntro", label: "Textul de sub titlu" },
     ],
   },
-  locurile: {
-    label: "Texte pentru locurile libere",
-    help: "{luna} și {n} se înlocuiesc automat cu luna și numărul de locuri.",
-    keys: [
-      { value: "available", label: "Când sunt locuri" },
-      { value: "full", label: "Când luna e completă" },
-      { value: "waitlistLabel", label: "Butonul listei de așteptare" },
-    ],
+  clubul: {
+    label: "Textul din cadru",
+    keys: [{ value: "mediaNote", label: "Textul din cadru, până încarci o fotografie" }],
+  },
+  galerie: {
+    label: "Textul pentru galeria goală",
+    keys: [{ value: "emptyNote", label: "Textul afișat până publici fotografii" }],
   },
 };
 
@@ -192,7 +194,7 @@ const scene: Resource = {
   label: "Secțiunile paginii principale",
   singular: "secțiunea",
   description:
-    "Secțiunile paginii principale, de sus în jos: textele, butoanele și ordinea lor. Animațiile 3D se potrivesc singure.",
+    "Secțiunile paginii principale, de sus în jos: textele, butoanele și ordinea lor. Fotografiile, video-urile și cifrele vin din restul conținutului.",
   section: "Pagina principală",
   orderable: true,
   listOrderBy: { order: "asc" },
@@ -465,6 +467,241 @@ const lessonType: Resource = {
     },
     { kind: "bool", name: "bookableOnline", label: "Se poate rezerva online", group: "Publicare" },
     { kind: "bool", name: "active", label: "Activ (apare pe site)", group: "Publicare" },
+  ],
+};
+
+const academyGroup: Resource = {
+  key: "grupe-juniori",
+  model: "academyGroup",
+  entity: "AcademyGroup",
+  label: "Grupele academiei de juniori",
+  singular: "grupa",
+  addLabel: "Adaugă o grupă",
+  newTitle: "Grupă nouă",
+  description: "Grupele pe vârste și etape: ce lucrează, când se antrenează, taxa lunară.",
+  section: "Academia de juniori",
+  orderable: true,
+  canCreate: true,
+  canDelete: true,
+  listOrderBy: { order: "asc" },
+  title: (r) => ro(r.name),
+  meta: (r) =>
+    r.ageMin || r.ageMax
+      ? `${str(r.ageMin)}${r.ageMax && r.ageMax !== r.ageMin ? `–${str(r.ageMax)}` : ""} ani`
+      : "",
+  flags: (r) => (yes(r.active) ? [] : ["ascunsă"]),
+  publicPath: () => "/academie",
+  prepare: (data) => {
+    if (
+      typeof data.ageMin === "number" &&
+      typeof data.ageMax === "number" &&
+      data.ageMin > data.ageMax
+    )
+      return "Vârsta minimă nu poate fi mai mare decât vârsta maximă.";
+    return null;
+  },
+  fields: [
+    {
+      kind: "i18n",
+      name: "name",
+      label: "Numele grupei",
+      required: true,
+      maxLength: 80,
+      group: "Grupa",
+    },
+    {
+      kind: "slug",
+      name: "slug",
+      label: "Identificator",
+      help: "Doar litere mici, cifre și cratime.",
+      required: true,
+      group: "Grupa",
+    },
+    {
+      kind: "enum",
+      name: "stage",
+      label: "Etapa (culoarea mingii)",
+      options: BALL_STAGES,
+      group: "Grupa",
+    },
+    {
+      kind: "int",
+      name: "ageMin",
+      label: "De la vârsta",
+      nullable: true,
+      min: 3,
+      max: 25,
+      group: "Grupa",
+    },
+    {
+      kind: "int",
+      name: "ageMax",
+      label: "Până la vârsta",
+      nullable: true,
+      min: 3,
+      max: 25,
+      group: "Grupa",
+    },
+    { kind: "enum", name: "level", label: "Nivelul", options: LEVELS, group: "Grupa" },
+    {
+      kind: "relation",
+      source: "program",
+      name: "programId",
+      label: "Programul de pregătire (link „Află mai mult”)",
+      nullable: true,
+      group: "Grupa",
+    },
+    {
+      kind: "i18nText",
+      name: "summary",
+      label: "Descriere",
+      help: "Două-trei propoziții, pentru părinți.",
+      required: true,
+      rows: 4,
+      group: "Texte",
+    },
+    {
+      kind: "i18nList",
+      name: "focusPoints",
+      label: "Ce lucrăm",
+      help: "Câte un punct pe rând.",
+      group: "Texte",
+    },
+    {
+      kind: "i18nText",
+      name: "schedule",
+      label: "Zile și ore",
+      help: "Cum le citesc părinții: „Luni și miercuri, 17:00–18:30”. Gol = „la cerere”.",
+      nullable: true,
+      rows: 2,
+      group: "Program și taxă",
+    },
+    {
+      kind: "int",
+      name: "sessionsPerWeek",
+      label: "Antrenamente pe săptămână",
+      nullable: true,
+      min: 1,
+      max: 14,
+      group: "Program și taxă",
+    },
+    {
+      kind: "int",
+      name: "sessionMinutes",
+      label: "Durata unui antrenament (minute)",
+      nullable: true,
+      min: 15,
+      max: 300,
+      group: "Program și taxă",
+    },
+    {
+      kind: "decimal",
+      name: "monthlyFee",
+      label: "Taxa lunară (RON)",
+      help: "Gol = „la cerere”.",
+      nullable: true,
+      group: "Program și taxă",
+    },
+    {
+      kind: "int",
+      name: "maxPlayers",
+      label: "Copii în grupă (maximum)",
+      nullable: true,
+      min: 1,
+      max: 40,
+      group: "Program și taxă",
+    },
+    { kind: "media", name: "imageId", label: "Fotografie", nullable: true, group: "Fotografie" },
+    { kind: "bool", name: "active", label: "Apare pe site", group: "Publicare" },
+  ],
+};
+
+const result: Resource = {
+  key: "rezultate",
+  model: "result",
+  entity: "Result",
+  label: "Rezultate la turnee",
+  singular: "rezultatul",
+  addLabel: "Adaugă un rezultat",
+  newTitle: "Rezultat nou",
+  description:
+    "Rezultatele sportivilor academiei. Pentru minori: doar prenumele și inițiala, cu acordul scris al părinților.",
+  section: "Academia de juniori",
+  orderable: true,
+  canCreate: true,
+  canDelete: true,
+  listOrderBy: [{ date: "desc" }, { order: "asc" }],
+  title: (r) => `${str(r.athlete)} · ${ro(r.placement)}`,
+  meta: (r) =>
+    `${str(r.event)} · ${str(r.category)}${
+      r.date instanceof Date ? ` · ${r.date.toLocaleDateString("ro-RO")}` : ""
+    }`,
+  flags: (r) => [
+    ...(yes(r.published) ? [] : ["nepublicat"]),
+    ...(yes(r.isMinor) && !yes(r.parentalConsent) ? ["minor fără acord"] : []),
+  ],
+  publicPath: () => "/academie",
+  prepare: (data, before) => {
+    if (data.published === true && data.isMinor === true && data.parentalConsent !== true)
+      return "Sportivul e minor: rezultatul se poate publica doar după ce bifezi acordul scris al părinților.";
+    if (data.parentalConsent === true && !(before && before.parentalConsent === true))
+      data.consentAt = new Date();
+    if (data.parentalConsent !== true) data.consentAt = null;
+    return null;
+  },
+  fields: [
+    {
+      kind: "text",
+      name: "athlete",
+      label: "Sportivul",
+      help: "Pentru minori: prenumele și inițiala numelui (de exemplu „Maria P.”).",
+      required: true,
+      maxLength: 80,
+      group: "Rezultat",
+    },
+    {
+      kind: "text",
+      name: "event",
+      label: "Turneul",
+      help: "Numele oficial, de exemplu „Campionatul Național de Juniori”.",
+      required: true,
+      maxLength: 160,
+      group: "Rezultat",
+    },
+    {
+      kind: "text",
+      name: "category",
+      label: "Categoria",
+      help: "De exemplu „U12 fete, simplu”.",
+      required: true,
+      maxLength: 80,
+      group: "Rezultat",
+    },
+    {
+      kind: "i18n",
+      name: "placement",
+      label: "Rezultatul",
+      help: "De exemplu „Campioană națională”, „Finalist”, „Semifinale”.",
+      required: true,
+      maxLength: 80,
+      group: "Rezultat",
+    },
+    { kind: "date", name: "date", label: "Data", required: true, group: "Rezultat" },
+    {
+      kind: "enum",
+      name: "level",
+      label: "Nivelul turneului",
+      options: RESULT_LEVELS,
+      group: "Rezultat",
+    },
+    { kind: "bool", name: "isMinor", label: "Sportivul e minor", group: "Acord" },
+    {
+      kind: "bool",
+      name: "parentalConsent",
+      label: "Am acordul scris al părinților pentru publicare",
+      group: "Acord",
+    },
+    { kind: "bool", name: "published", label: "Publicat", group: "Publicare" },
   ],
 };
 
@@ -758,18 +995,35 @@ const facility: Resource = {
   ],
 };
 
-const profile: Resource = {
-  key: "profil",
-  model: "coachProfile",
-  entity: "CoachProfile",
-  label: "Profilul antrenorului",
-  singular: "profilul",
-  description: "Nume, titulatură, parcurs, filozofie, limbi vorbite și fotografie.",
-  section: "Despre mine",
-  singletonId: 1,
-  listOrderBy: { id: "asc" },
+const coach: Resource = {
+  key: "antrenori",
+  model: "coach",
+  entity: "Coach",
+  label: "Echipa de antrenori",
+  singular: "antrenorul",
+  addLabel: "Adaugă un antrenor",
+  newTitle: "Antrenor nou",
+  description: "Antrenorii academiei: rol, parcurs, specializări, fotografie și video.",
+  section: "Echipa",
+  orderable: true,
+  canCreate: true,
+  canDelete: true,
+  listOrderBy: [{ isHead: "desc" }, { order: "asc" }],
   title: (r) => str(r.name),
-  publicPath: () => "/despre",
+  meta: (r) => ro(r.role),
+  flags: (r) => [...(yes(r.isHead) ? ["principal"] : []), ...(yes(r.active) ? [] : ["ascuns"])],
+  publicPath: (r) => (r.slug ? `/echipa/${str(r.slug)}` : "/echipa"),
+  deleteBlocked: async (row) =>
+    yes(row.isHead)
+      ? "Antrenorul principal nu se poate șterge. Alege întâi alt antrenor principal."
+      : null,
+  afterSave: async (saved) => {
+    if (yes(saved.isHead))
+      await db.coach.updateMany({
+        where: { id: { not: String(saved.id) }, isHead: true },
+        data: { isHead: false },
+      });
+  },
   fields: [
     {
       kind: "text",
@@ -777,6 +1031,23 @@ const profile: Resource = {
       label: "Nume și prenume",
       required: true,
       maxLength: 120,
+      group: "Profil",
+    },
+    {
+      kind: "slug",
+      name: "slug",
+      label: "Adresa paginii",
+      help: "Apare în link: /echipa/adresa. Doar litere mici, cifre și cratime.",
+      required: true,
+      group: "Profil",
+    },
+    {
+      kind: "i18n",
+      name: "role",
+      label: "Rolul în echipă",
+      help: "De exemplu: Antrenor principal, Antrenor academia de juniori, Preparator fizic.",
+      required: true,
+      maxLength: 80,
       group: "Profil",
     },
     {
@@ -791,10 +1062,17 @@ const profile: Resource = {
     {
       kind: "int",
       name: "yearsExperience",
-      label: "Ani de experiență",
+      label: "Ani de experiență ca antrenor",
       nullable: true,
       min: 0,
       max: 70,
+      group: "Profil",
+    },
+    {
+      kind: "i18nList",
+      name: "specialties",
+      label: "Specializări",
+      help: "Câte una pe rând, scurt: „inițiere pentru copii”, „pregătire pentru competiție”.",
       group: "Profil",
     },
     {
@@ -805,17 +1083,41 @@ const profile: Resource = {
       group: "Profil",
     },
     {
+      kind: "bool",
+      name: "isHead",
+      label: "Antrenorul principal (apare primul și vorbește pentru academie)",
+      group: "Profil",
+    },
+    {
       kind: "media",
       name: "photoId",
-      label: "Fotografia ta",
-      help: "Pe teren, format vertical 4:5 (minimum 1200 × 1500 px). Apare în rama de pe pagina principală și pe „Despre mine”.",
+      label: "Fotografia",
+      help: "Pe teren, format vertical 4:5 (minimum 1200 × 1500 px).",
       nullable: true,
-      group: "Profil",
+      group: "Fotografie și video",
+    },
+    {
+      kind: "media",
+      accept: "video",
+      name: "videoId",
+      label: "Video (opțional)",
+      help: "Un clip scurt cu antrenorul la lucru; apare pe pagina lui.",
+      nullable: true,
+      group: "Fotografie și video",
+    },
+    {
+      kind: "i18nText",
+      name: "summary",
+      label: "Pe scurt",
+      help: "Una-două propoziții, pentru cardul din echipă.",
+      required: true,
+      rows: 3,
+      group: "Texte",
     },
     {
       kind: "i18nMarkdown",
       name: "story",
-      label: "Parcursul tău",
+      label: "Parcursul",
       required: true,
       rows: 10,
       group: "Texte",
@@ -823,9 +1125,9 @@ const profile: Resource = {
     {
       kind: "i18nMarkdown",
       name: "philosophy",
-      label: "Filozofia de lucru",
-      required: true,
-      rows: 8,
+      label: "Cum lucrează (opțional)",
+      nullable: true,
+      rows: 6,
       group: "Texte",
     },
     {
@@ -837,6 +1139,7 @@ const profile: Resource = {
       rows: 4,
       group: "Texte",
     },
+    { kind: "bool", name: "active", label: "Apare pe site", group: "Publicare" },
   ],
 };
 
@@ -848,16 +1151,24 @@ const certification: Resource = {
   singular: "certificarea",
   addLabel: "Adaugă o certificare",
   newTitle: "Certificare nouă",
-  description: "Diplome și cursuri, cu emitentul și anul.",
-  section: "Despre mine",
+  description: "Diplome și cursuri ale antrenorilor, cu emitentul și anul.",
+  section: "Echipa",
   orderable: true,
   canCreate: true,
   canDelete: true,
   listOrderBy: { order: "asc" },
   title: (r) => ro(r.title),
   meta: (r) => `${str(r.issuer)}${r.year ? ` · ${str(r.year)}` : ""}`,
-  publicPath: () => "/despre",
+  publicPath: () => "/echipa",
   fields: [
+    {
+      kind: "relation",
+      source: "coach",
+      name: "coachId",
+      label: "Antrenorul",
+      required: true,
+      group: "Certificare",
+    },
     {
       kind: "i18n",
       name: "title",
@@ -1034,11 +1345,12 @@ const gallery: Resource = {
   key: "galerie",
   model: "galleryItem",
   entity: "GalleryItem",
-  label: "Galerie",
-  singular: "fotografia",
-  addLabel: "Adaugă o fotografie",
-  newTitle: "Fotografie nouă",
-  description: "Fotografii pe categorii. Cele cu minori se publică doar cu acordul părinților.",
+  label: "Galerie foto și video",
+  singular: "elementul",
+  addLabel: "Adaugă o fotografie sau un video",
+  newTitle: "Element nou în galerie",
+  description:
+    "Fotografii și video-uri pe categorii. Cele cu minori se publică doar cu acordul părinților.",
   section: "Galerie și articole",
   orderable: true,
   canCreate: true,
@@ -1053,7 +1365,7 @@ const gallery: Resource = {
   publicPath: () => "/galerie",
   prepare: (data, before) => {
     if (data.published === true && data.hasMinors === true && data.parentalConsent !== true) {
-      return "Fotografia are minori: se poate publica doar după ce bifezi acordul scris al părinților.";
+      return "În fotografie sau video apar minori: se poate publica doar după ce bifezi acordul scris al părinților.";
     }
     if (data.parentalConsent === true && !(before && before.parentalConsent === true))
       data.consentAt = new Date();
@@ -1061,14 +1373,21 @@ const gallery: Resource = {
     return null;
   },
   fields: [
-    { kind: "media", name: "mediaId", label: "Fotografia", required: true, group: "Fotografie" },
+    {
+      kind: "media",
+      accept: "any",
+      name: "mediaId",
+      label: "Fotografia sau video-ul",
+      required: true,
+      group: "Fotografie sau video",
+    },
     {
       kind: "i18nText",
       name: "alt",
-      label: "Ce se vede în fotografie (text alternativ)",
+      label: "Ce se vede (text alternativ)",
       required: true,
       rows: 2,
-      group: "Fotografie",
+      group: "Fotografie sau video",
     },
     {
       kind: "i18n",
@@ -1076,16 +1395,16 @@ const gallery: Resource = {
       label: "Legendă (opțional)",
       nullable: true,
       maxLength: 200,
-      group: "Fotografie",
+      group: "Fotografie sau video",
     },
     {
       kind: "enum",
       name: "category",
       label: "Categoria",
       options: GALLERY_CATEGORIES,
-      group: "Fotografie",
+      group: "Fotografie sau video",
     },
-    { kind: "bool", name: "hasMinors", label: "În fotografie apar minori", group: "Acord" },
+    { kind: "bool", name: "hasMinors", label: "Apar minori", group: "Acord" },
     {
       kind: "bool",
       name: "parentalConsent",
@@ -1289,6 +1608,18 @@ const settings: Resource = {
   title: () => "Setări",
   publicPath: () => "/",
   prepare: (data) => {
+    for (const [key, label, minContrast] of [
+      ["colorBrand", "principală", 7],
+      ["colorAccent", "de accent", 4.5],
+    ] as const) {
+      const value = typeof data[key] === "string" ? data[key].trim().toLowerCase() : "";
+      if (!/^#[0-9a-f]{6}$/.test(value))
+        return `Culoarea ${label} se scrie ca #rrggbb, de exemplu #0f3b2f.`;
+      data[key] = value;
+      const ratio = contrastWithWhite(value);
+      if (ratio < minContrast)
+        return `Culoarea ${label} e prea deschisă: textul alb are pe ea un contrast de ${ratio.toFixed(1).replace(".", ",")}:1, iar minimul e ${String(minContrast).replace(".", ",")}:1. Alege un ton mai închis.`;
+    }
     if (
       typeof data.whatsapp === "string" &&
       data.whatsapp &&
@@ -1303,26 +1634,70 @@ const settings: Resource = {
     {
       kind: "text",
       name: "brandName",
-      label: "Numele afișat",
+      label: "Numele clubului",
       required: true,
       maxLength: 120,
-      group: "Identitate",
+      group: "Identitatea clubului",
+    },
+    {
+      kind: "i18n",
+      name: "tagline",
+      label: "Descrierea de sub nume",
+      help: "De exemplu „Academie de tenis”.",
+      required: true,
+      maxLength: 120,
+      group: "Identitatea clubului",
+    },
+    {
+      kind: "media",
+      name: "logoId",
+      label: "Logoul",
+      help: "PNG cu fundal transparent, cel puțin 400 px lățime. Gol = monograma de mai jos.",
+      nullable: true,
+      group: "Identitatea clubului",
     },
     {
       kind: "text",
       name: "monogram",
       label: "Monograma (inițiale)",
-      help: "Două sau trei litere. Gol = o mică minge aurie în loc de inițiale.",
+      help: "Două sau trei litere, afișate cât timp nu există logo.",
       maxLength: 4,
-      group: "Identitate",
+      group: "Identitatea clubului",
     },
     {
-      kind: "i18n",
-      name: "tagline",
-      label: "Titulatura din antet",
+      kind: "text",
+      name: "colorBrand",
+      label: "Culoarea principală",
+      help: "În formatul #rrggbb. Baza închisă a designului: antet, secțiuni întunecate, subsol.",
       required: true,
-      maxLength: 120,
-      group: "Identitate",
+      maxLength: 7,
+      group: "Identitatea clubului",
+    },
+    {
+      kind: "text",
+      name: "colorAccent",
+      label: "Culoarea de accent",
+      help: "În formatul #rrggbb. Butoane și linkuri; trebuie să rămână lizibilă cu text alb.",
+      required: true,
+      maxLength: 7,
+      group: "Identitatea clubului",
+    },
+    {
+      kind: "media",
+      accept: "video",
+      name: "heroVideoId",
+      label: "Video-ul de deschidere",
+      help: "Pagina principală se deschide cu el: orizontal, 10–20 de secunde, fără sunet (sunetul nu se aude). Filmat la club, cu antrenamente reale.",
+      nullable: true,
+      group: "Deschiderea paginii principale",
+    },
+    {
+      kind: "media",
+      name: "heroImageId",
+      label: "Fotografia de deschidere",
+      help: "Folosită până încarci un video și pe telefoanele cu economisire de date activă.",
+      nullable: true,
+      group: "Deschiderea paginii principale",
     },
     {
       kind: "text",
@@ -1503,6 +1878,13 @@ const settings: Resource = {
     },
     {
       kind: "bool",
+      name: "labEnabled",
+      label: "Laboratorul tehnic 3D pe pagina principală",
+      help: "Jucătorul 3D care arată fazele loviturilor, în secțiunea Metoda.",
+      group: "Funcții",
+    },
+    {
+      kind: "bool",
       name: "reviewInvitesEnabled",
       label: "Invitație la recenzie după lecții",
       group: "Funcții",
@@ -1539,8 +1921,10 @@ const settings: Resource = {
 export const RESOURCES: Resource[] = [
   scene,
   pageHeader,
-  profile,
+  coach,
   certification,
+  academyGroup,
+  result,
   program,
   lessonType,
   pricing,

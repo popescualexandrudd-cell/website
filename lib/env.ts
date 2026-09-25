@@ -44,6 +44,8 @@ const envSchema = z.object({
     .min(3),
   COACH_NOTIFY_EMAIL: optionalString,
   MEDIA_DIR: z.string().default("./storage/media"),
+  /** The ffmpeg program that converts uploaded videos; empty = `ffmpeg` from the PATH. */
+  FFMPEG_PATH: optionalString,
   TRUST_PROXY: booleanFromString.default(true),
   TURNSTILE_SITE_KEY: optionalString,
   TURNSTILE_SECRET_KEY: optionalString,

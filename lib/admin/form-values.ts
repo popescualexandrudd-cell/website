@@ -285,7 +285,16 @@ export function parseForm(fields: FieldDef[], form: FormData, tz: string): Parse
         const value = read(form, key);
         if (!value) {
           if (field.required)
-            fail(name, field.kind === "media" ? "Alege o imagine." : "Alege o opțiune din listă.");
+            fail(
+              name,
+              field.kind !== "media"
+                ? "Alege o opțiune din listă."
+                : field.accept === "video"
+                  ? "Alege un video."
+                  : field.accept === "any"
+                    ? "Alege o fotografie sau un video."
+                    : "Alege o imagine.",
+            );
           else data[name] = null;
         } else if (!/^[a-z0-9]{8,40}$/i.test(value)) fail(name, "Valoare necunoscută.");
         else data[name] = value;

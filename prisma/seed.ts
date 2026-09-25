@@ -1,5 +1,5 @@
 /**
- * Seed: builds the initial content from config/antrenor.yml.
+ * Seed: builds the initial content from config/club.yml.
  * Idempotent and non-destructive: every record is created only if it is missing, so running it
  * twice changes nothing and never overwrites what the coach edited in the admin.
  * To rebuild everything from the config file: `npm run db:reset`.
@@ -10,8 +10,10 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { Prisma, PrismaClient } from "../lib/generated/prisma/client";
 import {
   TODO,
+  ageRange,
   coordinates,
   decimal,
+  hexColor,
   hoursRange,
   integer,
   isPlaceholder,
@@ -25,6 +27,7 @@ import {
 } from "./seed/config";
 import { sceneSeeds } from "./seed/content/scenes";
 import { lessonContent, programContent } from "./seed/content/programs";
+import { stageContent } from "./seed/content/academy";
 import { faqContent } from "./seed/content/faqs";
 import { postContent } from "./seed/content/posts";
 import { LEGAL_VERSION, legalContent } from "./seed/content/legal";
@@ -70,9 +73,21 @@ function initials(name: string): string {
   return name
     .split(/\s+/)
     .filter(Boolean)
-    .slice(0, 2)
+    .slice(0, 3)
     .map((part) => part.charAt(0).toLocaleUpperCase("ro-RO"))
     .join("");
+}
+
+/** "Popescu Alexandru Daniel" → "popescu-alexandru-daniel". */
+function slugify(value: string): string {
+  return (
+    value
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "antrenor"
+  );
 }
 
 async function main(): Promise<void> {
@@ -91,9 +106,9 @@ async function main(): Promise<void> {
     if (wasCreated) created.push(label);
   };
 
-  const coachName = text(config.antrenor.nume);
+  const clubName = text(config.club.nume);
   const firstLocation = config.locatii[0];
-  if (!firstLocation) throw new Error("config/antrenor.yml: lipsește cel puțin o locație.");
+  if (!firstLocation) throw new Error("config/club.yml: lipsește cel puțin o locație.");
   const locationName = text(firstLocation.nume);
   const city = text(firstLocation.localitate);
 
@@ -127,9 +142,13 @@ async function main(): Promise<void> {
     update: {},
     create: {
       id: 1,
-      brandName: coachName,
-      monogram: initials(coachName),
-      tagline: localizedText(config.antrenor.titulatura, "Tennis coach"),
+      brandName: clubName,
+      monogram: isPlaceholder(config.club.monograma)
+        ? initials(clubName)
+        : String(config.club.monograma).trim().slice(0, 4),
+      tagline: localizedText(config.club.descriere, "Tennis academy"),
+      colorBrand: hexColor(config.club.culori?.principala) ?? "#0f3b2f",
+      colorAccent: hexColor(config.club.culori?.accent) ?? "#c24f1d",
       phone: text(config.contact.telefon),
       // Optional: without a WhatsApp number the WhatsApp buttons simply do not appear.
       whatsapp: phoneDigits(config.contact.whatsapp) ?? "",
@@ -138,12 +157,12 @@ async function main(): Promise<void> {
       facebookUrl: optionalText(config.contact.facebook),
       tiktokUrl: optionalText(config.contact.tiktok),
       seoTitle: {
-        ro: `Lecții de tenis ${city}: antrenor pentru copii și adulți`,
-        en: `Tennis lessons in ${city}: a coach for children and adults`,
+        ro: `Academie de tenis ${city}: copii, juniori și adulți · ${clubName}`,
+        en: `Tennis academy in ${city}: children, juniors and adults · ${clubName}`,
       },
       seoDescription: {
-        ro: `Lecții de tenis la ${locationName}, ${city}, lângă București: inițiere, competiție și amatori, pentru copii și adulți, pe zgură. Rezervi online.`,
-        en: `Tennis lessons at ${locationName}, ${city}, next to Bucharest: beginners, competition and recreational, for children and adults, on clay. Book online.`,
+        ro: `Academia de tenis de la ${locationName}, ${city}, lângă București: grupe de juniori pe vârste, pregătire pentru turnee, lecții pentru adulți, pe zgură. Rezervi online.`,
+        en: `The tennis academy at ${locationName}, ${city}, next to Bucharest: junior groups by age, tournament preparation, lessons for adults, on clay. Book online.`,
       },
       bookingMode: String(config.rezervari.mod).trim() === "instant" ? "INSTANT" : "CERERE",
       freeCancelHours: integer(config.rezervari.anulare_gratuita_ore) ?? 24,
@@ -168,57 +187,70 @@ async function main(): Promise<void> {
   });
   note("setări", !settingsExisting);
 
-  // ── Coach profile & certifications ────────────────────────────────────────
-  const coachExisting = await db.coachProfile.findUnique({ where: { id: 1 } });
-  const results = optionalLocalized(config.antrenor.rezultate_elevi);
-  await db.coachProfile.upsert({
-    where: { id: 1 },
-    update: {},
-    create: {
-      id: 1,
-      name: coachName,
-      title: localizedText(config.antrenor.titulatura, "Tennis coach"),
-      story: localizedText(config.antrenor.parcurs),
-      philosophy: coachPhilosophy,
-      results: results ?? Prisma.DbNull,
-      yearsExperience: integer(config.antrenor.ani_experienta),
-      languages: config.antrenor.limbi_vorbite
-        .filter((lang) => !isPlaceholder(lang))
-        .map((lang) => {
-          const ro = String(lang).trim();
-          const en = LANGUAGE_TRANSLATIONS[ro.toLowerCase()];
-          return en ? { ro, en } : { ro };
-        }),
-    },
-  });
-  note("profil antrenor", !coachExisting);
-
-  for (const [index, certification] of config.antrenor.certificari.entries()) {
-    const id = `seed-cert-${String(index + 1).padStart(2, "0")}`;
-    const exists = await db.certification.findUnique({ where: { id } });
-    let entry: { title: { ro: string; en: string }; issuer: string; year: number | null };
-    if (certification !== null && typeof certification === "object") {
-      entry = {
-        title: localizedText(certification.titlu),
-        issuer: text(certification.emitent),
-        year: integer(certification.an),
-      };
-    } else {
-      // Short form: "Title, Issuer".
-      const raw = text(certification);
-      const [title, ...issuerParts] = raw === TODO ? [TODO] : raw.split(",");
-      entry = {
-        title: same((title ?? TODO).trim()),
-        issuer: issuerParts.length > 0 ? issuerParts.join(",").trim() : TODO,
-        year: null,
-      };
-    }
-    await db.certification.upsert({
-      where: { id },
+  // ── Coaching team & certifications ─────────────────────────────────────────
+  for (const [coachIndex, entry] of config.antrenori.entries()) {
+    const name = text(entry.nume);
+    const slug = slugify(name === TODO ? `antrenor-${coachIndex + 1}` : name);
+    const exists = await db.coach.findUnique({ where: { slug } });
+    const results = optionalLocalized(entry.rezultate_elevi);
+    const coach = await db.coach.upsert({
+      where: { slug },
       update: {},
-      create: { id, ...entry, order: index },
+      create: {
+        slug,
+        name,
+        role: localizedText(entry.rol, coachIndex === 0 ? "Head coach" : "Coach"),
+        title: localizedText(entry.titulatura, "Tennis coach"),
+        summary: localizedText(entry.rezumat),
+        story: localizedText(entry.parcurs),
+        // The team's shared philosophy is on the home page; a coach's own text is optional.
+        philosophy: coachIndex === 0 ? coachPhilosophy : Prisma.DbNull,
+        results: results ?? Prisma.DbNull,
+        specialties: {
+          ro: entry.specializari.map((item) => localizedText(item).ro),
+          en: entry.specializari.map((item) => localizedText(item).en),
+        },
+        yearsExperience: integer(entry.ani_experienta),
+        languages: entry.limbi_vorbite
+          .filter((lang) => !isPlaceholder(lang))
+          .map((lang) => {
+            const ro = String(lang).trim();
+            const en = LANGUAGE_TRANSLATIONS[ro.toLowerCase()];
+            return en ? { ro, en } : { ro };
+          }),
+        isHead: coachIndex === 0,
+        order: coachIndex,
+      },
     });
-    note(`certificare ${index + 1}`, !exists);
+    note(`antrenor ${name}`, !exists);
+
+    for (const [index, certification] of entry.certificari.entries()) {
+      const id = `seed-cert-${coachIndex + 1}-${String(index + 1).padStart(2, "0")}`;
+      const certExists = await db.certification.findUnique({ where: { id } });
+      let data: { title: { ro: string; en: string }; issuer: string; year: number | null };
+      if (certification !== null && typeof certification === "object") {
+        data = {
+          title: localizedText(certification.titlu),
+          issuer: text(certification.emitent),
+          year: integer(certification.an),
+        };
+      } else {
+        // Short form: "Title, Issuer".
+        const raw = text(certification);
+        const [title, ...issuerParts] = raw === TODO ? [TODO] : raw.split(",");
+        data = {
+          title: same((title ?? TODO).trim()),
+          issuer: issuerParts.length > 0 ? issuerParts.join(",").trim() : TODO,
+          year: null,
+        };
+      }
+      await db.certification.upsert({
+        where: { id },
+        update: {},
+        create: { id, coachId: coach.id, ...data, order: index },
+      });
+      note(`certificare ${coachIndex + 1}.${index + 1}`, !certExists);
+    }
   }
 
   // ── Location, courts, facilities ──────────────────────────────────────────
@@ -457,6 +489,44 @@ async function main(): Promise<void> {
     note(`pachet ${index + 1}`, !exists);
   }
 
+  // ── Junior academy groups ──────────────────────────────────────────────────
+  for (const [index, group] of config.academie_juniori.grupe.entries()) {
+    const stageName = String(group.etapa ?? "")
+      .trim()
+      .toLowerCase();
+    const content = stageContent.find((stage) => stage.configName === stageName);
+    if (!content) continue;
+    const exists = await db.academyGroup.findUnique({ where: { slug: content.slug } });
+    const ages = ageRange(group.varsta);
+    const programSlug = programContent.find(
+      (program) => program.configName === String(group.program ?? "").trim(),
+    )?.slug;
+    const schedule = optionalLocalized(group.zile_ore);
+    await db.academyGroup.upsert({
+      where: { slug: content.slug },
+      update: {},
+      create: {
+        slug: content.slug,
+        name: content.name,
+        stage: content.stage,
+        ageMin: ages.min,
+        ageMax: ages.max,
+        level: content.level,
+        summary: content.summary,
+        focusPoints: content.focusPoints,
+        sessionsPerWeek: integer(group.sedinte_pe_saptamana),
+        sessionMinutes: integer(group.durata_min),
+        // Days and hours stay visibly missing until the club fills them in.
+        schedule: schedule ?? todoT,
+        monthlyFee: decimal(group.taxa_lunara_ron),
+        maxPlayers: integer(group.locuri),
+        programId: programSlug ? (programIds.get(programSlug) ?? null) : null,
+        order: index,
+      },
+    });
+    note(`grupă ${content.slug}`, !exists);
+  }
+
   // ── Availability ──────────────────────────────────────────────────────────
   const ruleDays: { days: number[]; value: typeof config.program_lucru.luni_vineri }[] = [
     { days: [1, 2, 3, 4, 5], value: config.program_lucru.luni_vineri },
@@ -479,7 +549,19 @@ async function main(): Promise<void> {
   }
 
   // ── Scenes ────────────────────────────────────────────────────────────────
-  for (const scene of sceneSeeds({ nume: coachName, locatie: locationName })) {
+  const courtRows = firstLocation.terenuri.map((court) => ({
+    count: integer(court.numar) ?? 0,
+    covered: yesNo(court.acoperit_iarna) === true,
+  }));
+  const courtTotal = courtRows.reduce((sum, court) => sum + court.count, 0);
+  const coveredTotal = courtRows.reduce((sum, court) => sum + (court.covered ? court.count : 0), 0);
+  for (const scene of sceneSeeds({
+    club: clubName,
+    locatie: locationName,
+    oras: city,
+    terenuri: courtTotal > 0 ? String(courtTotal) : TODO,
+    acoperite: coveredTotal > 0 ? String(coveredTotal) : TODO,
+  })) {
     const exists = await db.scene.findUnique({ where: { key: scene.key } });
     await db.scene.upsert({ where: { key: scene.key }, update: {}, create: scene });
     note(`scena ${scene.key}`, !exists);

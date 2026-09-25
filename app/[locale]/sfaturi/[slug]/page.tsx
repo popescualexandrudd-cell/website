@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
-import { getCoach, getPageHeader, getPost } from "@/lib/content";
+import { getHeadCoach, getSettings, getPageHeader, getPost } from "@/lib/content";
 import { formatDate } from "@/lib/format";
 import { localizedUrl, pageMetadata } from "@/lib/seo";
 import { articleLd, breadcrumbLd } from "@/lib/structured-data";
@@ -36,17 +36,18 @@ export default async function TipPage({ params }: Props) {
   setRequestLocale(locale);
   const post = await getPost(slug, locale);
   if (!post) notFound();
-  const [t, header, coach] = await Promise.all([
+  const [t, header, coach, settings] = await Promise.all([
     getTranslations(),
     getPageHeader("sfaturi", locale),
-    getCoach(locale),
+    getHeadCoach(locale),
+    getSettings(),
   ]);
   const url = localizedUrl({ pathname: "/sfaturi/[slug]", params: { slug } }, locale);
   return (
     <article>
       <JsonLd
         data={[
-          articleLd(post, url, coach.name),
+          articleLd(post, url, coach?.name ?? settings.brandName),
           breadcrumbLd([
             { name: t("common.home"), url: localizedUrl("/", locale) },
             { name: header.title, url: localizedUrl("/sfaturi", locale) },

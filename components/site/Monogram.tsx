@@ -1,19 +1,26 @@
 type Props = { letters: string; className?: string };
 
-/** The coach's initials on a clay disc with a ball-yellow ring; a ball until the name is set. */
+/** The club's initials on an accent disc with a ball-yellow ring; a ball until they are set. */
 export function Monogram({ letters, className }: Props) {
   const clean = letters.replace(/[^\p{L}]/gu, "").slice(0, 3);
   return (
     <svg viewBox="0 0 48 48" className={className} aria-hidden="true" focusable="false">
-      <circle cx="24" cy="24" r="23" fill="#B94C22" />
-      <circle cx="24" cy="24" r="20.5" fill="none" stroke="#F2B134" strokeWidth="1.5" />
+      <circle cx="24" cy="24" r="23" style={{ fill: "var(--color-zgura)" }} />
+      <circle
+        cx="24"
+        cy="24"
+        r="20.5"
+        fill="none"
+        strokeWidth="1.5"
+        style={{ stroke: "var(--color-galben)" }}
+      />
       {clean ? (
         <text
           x="24"
           y="25"
           textAnchor="middle"
           dominantBaseline="central"
-          fill="#FFF7EE"
+          fill="#FBFAF7"
           style={{
             fontFamily: "var(--font-display)",
             fontWeight: 700,
@@ -24,7 +31,7 @@ export function Monogram({ letters, className }: Props) {
           {clean}
         </text>
       ) : (
-        <circle cx="24" cy="24" r="8" fill="#D9E453" />
+        <circle cx="24" cy="24" r="8" style={{ fill: "var(--color-galben)" }} />
       )}
     </svg>
   );

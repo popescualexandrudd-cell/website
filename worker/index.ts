@@ -1,6 +1,6 @@
 /**
  * Background worker: a separate process from the same Docker image.
- *   every minute      retry emails that have not left yet
+ *   every minute      retry emails that have not left yet; convert videos still waiting
  *   every 5 minutes   24-hour reminders
  *   every 30 minutes  review invitations after a first completed lesson
  *   every day 03:15   GDPR retention (anonymisation) and cleanup of expired data
@@ -15,6 +15,7 @@ import {
   sendDueReminders,
   sendDueReviewInvites,
 } from "../lib/jobs";
+import { processPendingVideos } from "../lib/video";
 
 try {
   getEnv();
@@ -51,6 +52,11 @@ const tasks = [
   cron.schedule(
     "* * * * *",
     job("emailuri", () => retryDueEmails()),
+    { timezone },
+  ),
+  cron.schedule(
+    "* * * * *",
+    job("video", () => processPendingVideos()),
     { timezone },
   ),
   cron.schedule(

@@ -105,7 +105,7 @@
   text-decoration: none;
 }
 .admin-nav-list a:hover {
-  background: rgb(42 26 18 / 0.06);
+  background: rgb(12 20 16 / 0.06);
 }
 .admin-nav-list a[aria-current="page"] {
   background: var(--color-cerneala);
@@ -228,7 +228,7 @@
 .admin-warning {
   padding: 0.75rem 1rem;
   border-left: 3px solid var(--color-galben);
-  background: rgb(242 177 52 / 0.12);
+  background: rgb(217 232 74 / 0.12);
 }
 .admin-warning + .admin-warning {
   margin-top: 0.5rem;
@@ -282,10 +282,10 @@
   font-size: 0.8rem;
   font-weight: 500;
   white-space: nowrap;
-  background: rgb(42 26 18 / 0.08);
+  background: rgb(12 20 16 / 0.08);
 }
 .status--IN_ASTEPTARE {
-  background: rgb(242 177 52 / 0.3);
+  background: rgb(217 232 74 / 0.3);
 }
 .status--CONFIRMATA {
   background: rgb(47 93 52 / 0.16);
@@ -297,7 +297,7 @@
   color: #7a1616;
 }
 .status--EFECTUATA {
-  background: rgb(185 76 34 / 0.12);
+  background: color-mix(in oklab, var(--accent) 12%, transparent);
   color: var(--color-zgura-adanc);
 }
 
@@ -440,7 +440,7 @@
 .sortable-item[data-dragging="true"] {
   position: relative;
   z-index: 2;
-  box-shadow: 0 0.5rem 1.5rem rgb(42 26 18 / 0.2);
+  box-shadow: 0 0.5rem 1.5rem rgb(12 20 16 / 0.2);
 }
 .drag-handle {
   display: grid;
@@ -526,9 +526,50 @@
   object-fit: cover;
   background: var(--color-nisip-adanc);
 }
-.media-tile button[aria-pressed="true"] img {
+.media-tile button[aria-pressed="true"] .media-thumb {
   outline: 3px solid var(--color-zgura);
   outline-offset: 2px;
+}
+.media-thumb {
+  position: relative;
+  display: block;
+  max-width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--color-nisip-adanc);
+}
+.media-tile .media-thumb {
+  width: 100% !important;
+  height: auto !important;
+}
+.media-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.media-thumb-empty {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    135deg,
+    rgb(12 20 16 / 0.06) 0 10px,
+    rgb(12 20 16 / 0.12) 10px 20px
+  );
+}
+.media-thumb-badge {
+  position: absolute;
+  left: 0.3rem;
+  bottom: 0.3rem;
+  padding: 0.1rem 0.4rem;
+  background: rgb(20 14 10 / 0.82);
+  color: #fff;
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+.media-card video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #111;
 }
 .media-picker-dialog {
   width: min(56rem, 100%);
@@ -538,7 +579,7 @@
   background: var(--color-nisip-deschis);
 }
 .media-picker-dialog::backdrop {
-  background: rgb(42 26 18 / 0.4);
+  background: rgb(12 20 16 / 0.4);
 }
 .bar-chart {
   display: grid;
@@ -553,7 +594,7 @@
 }
 .bar-chart-track {
   height: 0.85rem;
-  background: rgb(42 26 18 / 0.08);
+  background: rgb(12 20 16 / 0.08);
 }
 .bar-chart-fill {
   height: 100%;

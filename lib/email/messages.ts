@@ -268,7 +268,7 @@ export async function queueReviewInvite(bookingId: string): Promise<string[]> {
 }
 
 export async function queueCoachNotification(
-  kind: "contact" | "waitlist" | "review",
+  kind: "contact" | "waitlist" | "evaluation" | "review",
   rows: [string, string][],
   name: string,
   replyTo?: string,
@@ -279,7 +279,7 @@ export async function queueCoachNotification(
   const link =
     kind === "contact"
       ? urls.adminMessages()
-      : kind === "waitlist"
+      : kind === "waitlist" || kind === "evaluation"
         ? urls.adminWaitlist()
         : urls.adminReviews();
   return [

@@ -3,12 +3,14 @@
 import { useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { listMediaAction } from "@/app/actions/admin-media";
+import type { MediaAccept } from "@/lib/admin/fields";
 import type { MediaThumb } from "@/lib/admin/media";
 import { MediaUploader } from "./MediaUploader";
 
 type Props = {
   name: string;
   label: string;
+  accept: MediaAccept;
   initial: MediaThumb | null;
   required?: boolean;
   describedBy?: string;
@@ -17,8 +19,61 @@ type Props = {
 
 const subscribeNoop = () => () => undefined;
 
+const WORDS: Record<MediaAccept, { none: string; noun: string; the: string; upload: string }> = {
+  image: {
+    none: "Nicio imagine",
+    noun: "imaginea",
+    the: "Imaginea",
+    upload: "Încarcă o fotografie nouă",
+  },
+  video: {
+    none: "Niciun video",
+    noun: "video-ul",
+    the: "Video-ul",
+    upload: "Încarcă un video nou",
+  },
+  any: {
+    none: "Nimic ales",
+    noun: "fotografia sau video-ul",
+    the: "Fișierul",
+    upload: "Încarcă o fotografie sau un video",
+  },
+};
+
+/** The thumbnail of a library item: the photo, or a video's poster frame and its state. */
+export function MediaThumbnail({ item, size }: { item: MediaThumb; size: number }) {
+  const label =
+    item.kind !== "VIDEO"
+      ? null
+      : item.status === "IN_PROCESARE"
+        ? "Video · se convertește"
+        : item.status === "EROARE"
+          ? "Video · eroare"
+          : `Video${item.durationSec ? ` · ${Math.round(item.durationSec)} s` : ""}`;
+  return (
+    <span className="media-thumb" style={{ width: size, height: size }}>
+      {item.url ? (
+        // eslint-disable-next-line @next/next/no-img-element -- admin thumbnail of an already optimised variant
+        <img src={item.url} alt="" loading="lazy" width={size} height={size} />
+      ) : (
+        <span className="media-thumb-empty" aria-hidden="true" />
+      )}
+      {label ? <span className="media-thumb-badge">{label}</span> : null}
+    </span>
+  );
+}
+
 /** A media field: current thumbnail, a library dialog with upload, and "remove". */
-export function MediaPicker({ name, label, initial, required, describedBy, invalid }: Props) {
+export function MediaPicker({
+  name,
+  label,
+  accept,
+  initial,
+  required,
+  describedBy,
+  invalid,
+}: Props) {
+  const words = WORDS[accept];
   const [selected, setSelected] = useState<MediaThumb | null>(initial);
   const [library, setLibrary] = useState<MediaThumb[] | null>(null);
   const [loadError, setLoadError] = useState(false);
@@ -32,7 +87,11 @@ export function MediaPicker({ name, label, initial, required, describedBy, inval
   async function load(selectId?: string) {
     setLoadError(false);
     try {
-      const items = await listMediaAction();
+      const items = (await listMediaAction()).filter(
+        (item) =>
+          accept === "any" ||
+          (accept === "video" ? item.kind === "VIDEO" : item.kind === "IMAGINE"),
+      );
       setLibrary(items);
       if (selectId) {
         const found = items.find((m) => m.id === selectId);
@@ -56,17 +115,13 @@ export function MediaPicker({ name, label, initial, required, describedBy, inval
       <input type="hidden" name={name} value={selected?.id ?? ""} />
       <div className="flex flex-wrap items-center gap-3">
         {selected ? (
-          // eslint-disable-next-line @next/next/no-img-element -- admin thumbnail of an already optimised variant
-          <img
-            src={selected.url}
-            alt={selected.alt}
-            width={96}
-            height={96}
-            className="h-24 w-24 object-cover"
-          />
+          <span className="grid gap-1">
+            <MediaThumbnail item={selected} size={96} />
+            <span className="sr-only">{selected.alt}</span>
+          </span>
         ) : (
           <span className="text-note text-cerneala-2">
-            {required ? "Nicio imagine aleasă." : "Nicio imagine (se folosește grafica implicită)."}
+            {required ? `${words.none} ales.` : `${words.none} (se folosește grafica implicită).`}
           </span>
         )}
         <div className="flex flex-wrap gap-2">
@@ -77,7 +132,7 @@ export function MediaPicker({ name, label, initial, required, describedBy, inval
             aria-describedby={describedBy}
             data-invalid={invalid ? "true" : undefined}
           >
-            {selected ? "Schimbă imaginea" : "Alege imaginea"}
+            {selected ? `Schimbă ${words.noun}` : `Alege ${words.noun}`}
           </button>
           {selected && !required ? (
             <button
@@ -85,7 +140,7 @@ export function MediaPicker({ name, label, initial, required, describedBy, inval
               className="btn btn-secondary btn-small"
               onClick={() => setSelected(null)}
             >
-              Scoate imaginea
+              Scoate {words.noun}
             </button>
           ) : null}
         </div>
@@ -105,11 +160,9 @@ export function MediaPicker({ name, label, initial, required, describedBy, inval
                 </button>
               </div>
               <details className="mb-4">
-                <summary className="btn btn-secondary btn-small list-none">
-                  Încarcă o fotografie nouă
-                </summary>
+                <summary className="btn btn-secondary btn-small list-none">{words.upload}</summary>
                 <div className="mt-3">
-                  <MediaUploader compact onUploaded={(id) => void load(id)} />
+                  <MediaUploader compact accept={accept} onUploaded={(id) => void load(id)} />
                 </div>
               </details>
               {loadError ? (
@@ -119,7 +172,11 @@ export function MediaPicker({ name, label, initial, required, describedBy, inval
               ) : library === null ? (
                 <p role="status">Se încarcă biblioteca…</p>
               ) : library.length === 0 ? (
-                <p>Biblioteca e goală. Încarcă prima fotografie mai sus.</p>
+                <p>
+                  {accept === "video"
+                    ? "Nu ai încărcat încă niciun video. Încarcă primul mai sus."
+                    : "Biblioteca e goală. Încarcă primul fișier mai sus."}
+                </p>
               ) : (
                 <ul className="media-grid">
                   {library.map((item) => (
@@ -132,8 +189,7 @@ export function MediaPicker({ name, label, initial, required, describedBy, inval
                           dialogRef.current?.close();
                         }}
                       >
-                        {/* eslint-disable-next-line @next/next/no-img-element -- admin thumbnail */}
-                        <img src={item.url} alt="" loading="lazy" width={144} height={144} />
+                        <MediaThumbnail item={item} size={144} />
                         <span className="sr-only">Alege: </span>
                         <span className="line-clamp-2 text-left">{item.alt}</span>
                       </button>

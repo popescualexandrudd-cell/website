@@ -30,7 +30,7 @@
   "nav": {
     "programs": "Programe",
     "facilities": "Facilități",
-    "about": "Despre mine",
+    "about": "Despre academie",
     "pricing": "Prețuri",
     "faq": "Întrebări",
     "tips": "Sfaturi",
@@ -40,7 +40,10 @@
     "mainLabel": "Navigare principală",
     "footerLabel": "Linkuri în subsol",
     "method": "Metoda",
-    "menuLabel": "Meniu complet"
+    "menuLabel": "Meniu complet",
+    "juniors": "Academia de juniori",
+    "team": "Echipa",
+    "club": "Clubul"
   },
   "footer": {
     "contact": "Contact",
@@ -53,7 +56,7 @@
     "entity": "{name}, {form}, CUI {cui}",
     "address": "Sediu: {address}",
     "newsletterTitle": "Noutăți de pe teren",
-    "newsletterText": "Un email când am locuri libere sau noutăți despre lecții. Rar, fără spam.",
+    "newsletterText": "Un email când avem locuri libere, grupe noi sau noutăți de la academie. Rar, fără spam.",
     "newsletterLabel": "Adresa ta de email",
     "newsletterConsent": "Sunt de acord să primesc emailuri cu noutăți despre lecții. Mă pot dezabona oricând.",
     "newsletterSubmit": "Abonează-mă",
@@ -81,7 +84,23 @@
     "courtPlan": "Planul unui teren de tenis, la scară: 23,77 × 10,97 m",
     "courtDimensions": "23,77 × 10,97 m · fileu 0,914 m la centru",
     "viewProgram": "Detalii",
-    "lessonsLabel": "Tipurile de lecții"
+    "lessonsLabel": "Tipurile de lecții",
+    "videoPause": "Oprește video-ul",
+    "videoPlay": "Pornește video-ul",
+    "scrollCue": "Derulează",
+    "figCourts": "{count, plural, one {teren de zgură} few {terenuri de zgură} other {de terenuri de zgură}}",
+    "figCovered": "{count, plural, one {teren acoperit iarna} few {terenuri acoperite iarna} other {de terenuri acoperite iarna}}",
+    "figAge": "ani, vârsta de la care pot începe copiii",
+    "figPrograms": "{count, plural, one {program de pregătire} few {programe de pregătire} other {de programe de pregătire}}",
+    "figCoaches": "{count, plural, one {antrenor} few {antrenori} other {de antrenori}}",
+    "programNumber": "Programul {n}",
+    "stagesLabel": "Etapele academiei",
+    "teamProfile": "Profilul complet",
+    "clubAddress": "Adresa",
+    "clubCourts": "Terenurile",
+    "clubAmenities": "Dotările",
+    "galleryVideo": "Video",
+    "labCta": "Deschide laboratorul"
   },
   "programs": {
     "groups": {
@@ -129,7 +148,7 @@
   "facilities": {
     "courts": "Terenuri",
     "amenities": "Dotările bazei",
-    "services": "Ce aduc eu la lecție",
+    "services": "Ce primesc elevii la antrenament",
     "equipment": "Echipament",
     "surface": {
       "ZGURA": "zgură",
@@ -150,7 +169,7 @@
   },
   "about": {
     "story": "Parcurs",
-    "philosophy": "Cum lucrez",
+    "philosophy": "Cum lucrăm",
     "certifications": "Certificări",
     "experience": "Experiență",
     "experienceYears": "{count} ani ca antrenor",
@@ -163,7 +182,7 @@
     "packageSessions": "{count} lecții",
     "validity": "valabil {days} de zile",
     "cancellation": "Anulare",
-    "cancellationText": "Anularea e gratuită până cu {hours} de ore înainte de lecție, din linkul primit pe email. După acest termen, sună-mă la 0722 501 748 sau scrie-mi.",
+    "cancellationText": "Anularea e gratuită până cu {hours} de ore înainte de lecție, din linkul primit pe email. După acest termen, sună-ne sau scrie-ne.",
     "payment": "Plată",
     "paymentText": "Metode acceptate:",
     "firstLesson": "Prima lecție",
@@ -185,6 +204,13 @@
       "TURNEE": "Turnee",
       "TERENURI": "Terenuri",
       "EVENIMENTE": "Evenimente"
+    },
+    "video": "Video",
+    "play": "Pornește video-ul: {title}",
+    "kind": {
+      "all": "Tot",
+      "image": "Fotografii",
+      "video": "Video"
     }
   },
   "tips": {
@@ -202,17 +228,17 @@
       "COMPETITIE": "Competiție"
     },
     "notFound": "N-ai găsit răspunsul?",
-    "writeMe": "Scrie-mi"
+    "writeMe": "Scrie-ne"
   },
   "contact": {
-    "formTitle": "Scrie-mi",
+    "formTitle": "Scrie-ne",
     "name": "Nume",
     "email": "Email",
     "phone": "Telefon (opțional)",
     "subject": "Subiect (opțional)",
     "message": "Mesaj",
     "submit": "Trimite mesajul",
-    "success": "Mesajul e trimis. Îți răspund în cel mult o zi lucrătoare.",
+    "success": "Mesajul e trimis. Îți răspundem în cel mult o zi lucrătoare.",
     "phoneLabel": "Telefon",
     "whatsappLabel": "WhatsApp",
     "emailLabel": "Email",
@@ -231,17 +257,18 @@
       "phone": "Scrie un număr de telefon valid, de exemplu 0722 123 456.",
       "message": "Scrie un mesaj de cel puțin 10 caractere.",
       "consent": "Bifează acordul ca să putem continua.",
-      "rateLimit": "Ai trimis prea multe cereri într-un timp scurt. Încearcă din nou peste câteva minute sau sună-mă.",
+      "rateLimit": "Ai trimis prea multe cereri într-un timp scurt. Încearcă din nou peste câteva minute sau sună-ne.",
       "captcha": "Verificarea anti-spam n-a reușit. Reîncarcă pagina și încearcă din nou.",
-      "server": "Ceva n-a mers de partea noastră și cererea nu s-a salvat. Încearcă din nou sau sună-mă la 0722 501 748.",
+      "server": "Ceva n-a mers de partea noastră și cererea nu s-a salvat. Încearcă din nou sau sună-ne.",
       "childFirstName": "Scrie prenumele copilului.",
-      "childAge": "Scrie vârsta copilului, în ani (între 3 și 17).",
+      "childAge": "Scrie vârsta copilului, în ani (între 3 și 18).",
       "parentName": "Scrie numele părintelui, persoana de contact.",
-      "preferences": "Spune-mi în ce zile și la ce ore ți-ar conveni.",
+      "preferences": "Spune-ne în ce zile și la ce ore ți-ar conveni.",
       "program": "Alege un program.",
       "participants": "Numărul de persoane nu se potrivește cu lecția aleasă.",
       "lessonType": "Tipul de lecție ales nu mai poate fi rezervat. Alege altul.",
-      "duration": "Durata aleasă nu mai e disponibilă pentru această lecție. Alege alta."
+      "duration": "Durata aleasă nu mai e disponibilă pentru această lecție. Alege alta.",
+      "experience": "Alege cât a jucat copilul până acum."
     }
   },
   "booking": {
@@ -257,7 +284,7 @@
     "chooseProgramHint": "Alege programul care ți se potrivește acum. Îl putem schimba oricând, după primele antrenamente.",
     "chooseLesson": "Ce fel de lecție vrei?",
     "duration": "Durata antrenamentului",
-    "durationHint": "Dacă vrei o ședință mai lungă de 3 ore, alege 180 de minute și scrie-mi la „Datele mele”.",
+    "durationHint": "Dacă vrei o ședință mai lungă de 3 ore, alege 180 de minute și scrie-ne la „Datele mele”.",
     "durationOption": "{minutes} de minute",
     "participants": "Câte persoane participă",
     "persons": "{count, plural, one {1 persoană} few {# persoane} other {# de persoane}}",
@@ -265,10 +292,10 @@
     "perHour": "{price} / oră",
     "perHourPerson": "{price} / oră / persoană",
     "estimatedPrice": "Preț estimat",
-    "priceNote": "Plata se face la teren sau prin transfer. Prețul final îl confirm odată cu rezervarea.",
+    "priceNote": "Plata se face la teren sau prin transfer. Prețul final îl confirmăm odată cu rezervarea.",
     "chooseTime": "Alege ziua și ora",
     "timeFor": "{lesson}, {duration}",
-    "noSlots": "Nu mai sunt ore libere în următoarele {days} de zile pentru această durată. Încearcă o durată mai scurtă sau scrie-mi.",
+    "noSlots": "Nu mai sunt ore libere în următoarele {days} de zile pentru această durată. Încearcă o durată mai scurtă sau scrie-ne.",
     "firstFreeTimes": "Primele ore libere",
     "detailsTitle": "Datele mele",
     "forWhom": "Pentru cine este lecția?",
@@ -286,7 +313,7 @@
         "AVANSAT": "Joc constant",
         "COMPETITIE": "Joc competiții"
       },
-      "message": "Ceva ce ar trebui să știu (opțional)",
+      "message": "Ceva ce ar trebui să știm (opțional)",
       "messageHint": "De exemplu: o accidentare mai veche, ce ți-ai dori să lucrezi, o durată mai lungă.",
       "forMinorNote": "Pentru copii îți cer doar prenumele și vârsta. Tu rămâi persoana de contact.",
       "childFirstName": "Prenumele copilului",
@@ -310,7 +337,7 @@
     "submitRequest": "Trimite rezervarea",
     "submitInstant": "Confirmă rezervarea",
     "successRequestTitle": "Rezervarea a fost trimisă.",
-    "successRequestText": "Ți-am trimis pe email, la {email}, detaliile rezervării. O confirm cât de repede pot, de obicei în aceeași zi. Codul rezervării: {code}.",
+    "successRequestText": "Ți-am trimis pe email, la {email}, detaliile rezervării. O confirmăm cât de repede putem, de obicei în aceeași zi. Codul rezervării: {code}.",
     "successInstantTitle": "Lecția e rezervată.",
     "successInstantText": "Ți-am trimis pe email, la {email}, confirmarea și fișierul pentru calendar. Codul rezervării: {code}.",
     "newBooking": "Fă o altă rezervare",
@@ -325,7 +352,7 @@
     },
     "conflict": "Intervalul tocmai a fost ocupat. Alege altă oră.",
     "unavailable": "Ora aleasă nu mai e disponibilă. Alege altă oră.",
-    "loadError": "Nu am putut încărca orele libere. Reîncarcă pagina sau sună-mă.",
+    "loadError": "Nu am putut încărca orele libere. Reîncarcă pagina sau sună-ne.",
     "moreDays": "Mai multe zile",
     "change": "Schimbă",
     "continue": "Continuă",
@@ -337,8 +364,8 @@
     "chooseLessonError": "Alege tipul lecției ca să mergi mai departe.",
     "forProgram": "Program: {program}.",
     "bookingNotOnline": "Lecția aceasta nu se rezervă online deocamdată.",
-    "contactInstead": "Scrie-mi și găsim o oră.",
-    "noPrograms": "Momentan nu se pot face rezervări online. Sună-mă sau scrie-mi și găsim o oră.",
+    "contactInstead": "Scrie-ne și găsim o oră.",
+    "noPrograms": "Momentan nu se pot face rezervări online. Sună-ne sau scrie-ne și găsim o oră.",
     "compactHint": "Alege o oră; completezi datele pe pagina de rezervare.",
     "seeAllTimes": "Vezi toate zilele și orele",
     "emailNote": "Confirmarea ajunge pe email, la {email}. Dacă nu o vezi în câteva minute, uită-te și în Spam.",
@@ -359,9 +386,9 @@
     "cancelConfirm": "Sigur vrei să anulezi? Ora devine liberă pentru altcineva.",
     "cancelled": "Rezervarea e anulată. Ți-am trimis confirmarea pe email.",
     "tooLate": "Termenul de anulare gratuită a trecut ({hours} de ore înainte de lecție).",
-    "tooLateHelp": "Dacă nu poți ajunge, sună-mă la 0722 501 748 sau scrie-mi și găsim împreună o soluție.",
+    "tooLateHelp": "Dacă nu poți ajunge, sună-ne sau scrie-ne și găsim împreună o soluție.",
     "notFound": "Linkul nu mai este valid sau rezervarea nu există.",
-    "notFoundHelp": "Dacă ai nevoie de ajutor, sună-mă la 0722 501 748 sau scrie-mi.",
+    "notFoundHelp": "Dacă ai nevoie de ajutor, sună-ne sau scrie-ne.",
     "alreadyCancelled": "Rezervarea este deja anulată.",
     "past": "Lecția a avut loc."
   },
@@ -371,7 +398,7 @@
     "preferences": "Zilele și orele care ți-ar conveni",
     "preferencesHint": "De exemplu: marți și joi după 17:00, sau sâmbătă dimineața.",
     "submit": "Intră pe lista de așteptare",
-    "success": "Ești pe lista de așteptare. Îți scriu când se eliberează un loc.",
+    "success": "Ești pe lista de așteptare. Îți scriem când se eliberează un loc.",
     "childAge": "Vârsta copilului, dacă e pentru un copil (opțional)"
   },
   "review": {
@@ -389,7 +416,7 @@
     "already": "Ai trimis deja o recenzie pentru această lecție. Mulțumesc!"
   },
   "newsletter": {
-    "confirmed": "Abonarea e confirmată. Îți scriu când am locuri libere sau noutăți despre lecții.",
+    "confirmed": "Abonarea e confirmată. Îți scriem când avem locuri libere sau noutăți de la academie.",
     "unsubscribed": "Te-ai dezabonat. Nu mai primești emailuri de la noi.",
     "invalid": "Linkul nu mai este valid."
   },
@@ -401,7 +428,7 @@
     "notFoundTitle": "Minge afară: pagina nu există.",
     "notFoundText": "Linkul poate fi vechi sau adresa poate avea o greșeală. Reia punctul de la prima pagină sau rezervă direct o ședință.",
     "serverTitle": "Ceva n-a mers.",
-    "serverText": "A apărut o eroare de partea noastră. Încearcă din nou peste un minut. Dacă se repetă, sună-mă la 0722 501 748 sau scrie-mi.",
+    "serverText": "A apărut o eroare de partea noastră. Încearcă din nou peste un minut. Dacă se repetă, sună-ne sau scrie-ne.",
     "retry": "Încearcă din nou"
   },
   "lab": {
@@ -506,5 +533,66 @@
         ]
       }
     }
+  },
+  "academy": {
+    "stage": {
+      "ROSU": "Minge roșie",
+      "PORTOCALIU": "Minge portocalie",
+      "VERDE": "Minge verde",
+      "GALBEN": "Minge galbenă"
+    },
+    "ages": "Vârstă",
+    "schedule": "Program",
+    "scheduleOnRequest": "la cerere",
+    "sessions": "{count, plural, one {un antrenament} few {# antrenamente} other {# de antrenamente}} pe săptămână",
+    "sessionLength": "{n} de minute",
+    "fee": "Taxa lunară",
+    "feeValue": "{amount} / lună",
+    "feeOnRequest": "la cerere",
+    "places": "maximum {n} copii în grupă",
+    "focus": "Ce lucrăm",
+    "program": "Programul de pregătire",
+    "groupsTitle": "Grupele",
+    "groupsIntro": "Fiecare grupă are teren, rachetă și minge pe măsura copiilor, iar trecerea la etapa următoare se face când copilul e pregătit, nu după calendar.",
+    "evaluationTitle": "Cere o evaluare",
+    "evaluationIntro": "La evaluare vedem cum se mișcă și cum lovește copilul și vă spunem în ce grupă se potrivește. Completați formularul și vă contactăm ca să stabilim ziua.",
+    "childFirstName": "Prenumele copilului",
+    "childAge": "Vârsta copilului",
+    "experience": "Cât a jucat până acum",
+    "experienceOptions": {
+      "niciodata": "Nu a mai jucat tenis",
+      "putin": "A făcut câteva lecții sau a jucat de plăcere",
+      "regulat": "Se antrenează regulat",
+      "turnee": "Joacă turnee"
+    },
+    "group": "Grupa care vi se pare potrivită",
+    "groupUnsure": "Nu știm, ne spuneți voi la evaluare",
+    "parentName": "Numele părintelui",
+    "preferences": "Zilele și orele care vă convin pentru evaluare",
+    "preferencesHint": "De exemplu: marți sau joi după 17:00, sâmbătă dimineața.",
+    "submit": "Trimite cererea",
+    "success": "Am primit cererea. Vă contactăm în 1–2 zile lucrătoare ca să stabilim evaluarea.",
+    "resultsTitle": "Rezultate",
+    "resultsIntro": "Rezultatele sportivilor academiei, publicate cu acordul lor și, pentru minori, al părinților.",
+    "resultLevel": {
+      "REGIONAL": "regional",
+      "NATIONAL": "național",
+      "INTERNATIONAL": "internațional"
+    },
+    "pathwayTitle": "Parcursul unui copil",
+    "choose": "Alege…"
+  },
+  "team": {
+    "specialties": "Specializări",
+    "certifications": "Formare și certificări",
+    "experienceYears": "{count, plural, one {un an ca antrenor} few {# ani ca antrenor} other {# de ani ca antrenor}}",
+    "languages": "Limbi vorbite",
+    "story": "Parcurs",
+    "philosophy": "Cum lucrează",
+    "results": "Rezultatele elevilor",
+    "video": "La antrenament",
+    "backToTeam": "Toată echipa",
+    "bookWith": "Programează o lecție",
+    "photoAlt": "{name} pe terenul de tenis"
   }
 }

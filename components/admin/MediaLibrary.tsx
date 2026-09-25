@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { deleteMediaAction, updateMediaAltAction } from "@/app/actions/admin-media";
 import { useFormAction } from "@/components/ui/useFormAction";
 import { MediaUploader } from "./MediaUploader";
@@ -16,22 +16,35 @@ export type LibraryItem = {
   size: string;
   uploaded: string;
   usage: number;
+  kind: "IMAGINE" | "VIDEO";
+  status: "GATA" | "IN_PROCESARE" | "EROARE";
+  error: string | null;
+  /** For a converted video: the smallest encoding, for the preview player. */
+  videoSrc: string | null;
+  durationSec: number | null;
 };
 
 export function MediaLibrary({ items }: { items: LibraryItem[] }) {
   const router = useRouter();
+  const converting = items.some((item) => item.status === "IN_PROCESARE");
+  // While a video is being converted, the page checks back every few seconds.
+  useEffect(() => {
+    if (!converting) return;
+    const timer = window.setInterval(() => router.refresh(), 8000);
+    return () => window.clearInterval(timer);
+  }, [converting, router]);
   return (
     <>
       <section className="admin-section">
-        <h2 className="admin-h2">Încarcă o fotografie</h2>
+        <h2 className="admin-h2">Încarcă o fotografie sau un video</h2>
         <MediaUploader onUploaded={() => router.refresh()} />
       </section>
       <section className="admin-section">
         <h2 className="admin-h2">Biblioteca ({items.length})</h2>
         {items.length === 0 ? (
           <p className="text-cerneala-2">
-            Nu ai încărcat încă nicio fotografie. Până atunci, site-ul folosește grafica implicită
-            (terenul desenat în linii) și rama de pe pagina principală rămâne goală.
+            Nu ai încărcat încă nicio fotografie sau video. Până atunci, site-ul folosește grafica
+            implicită (terenul desenat în linii) și ramele rămân goale.
           </p>
         ) : (
           <ul className="media-library">
@@ -51,16 +64,43 @@ function MediaCard({ item }: { item: LibraryItem }) {
   const save = useFormAction(updateMediaAltAction);
   const remove = useFormAction(deleteMediaAction);
   const [confirming, setConfirming] = useState(false);
+  const video = item.kind === "VIDEO";
+  const noun = video ? "video-ul" : "fotografia";
   return (
     <div className="media-card">
-      {/* eslint-disable-next-line @next/next/no-img-element -- admin thumbnail of an optimised variant */}
-      <img src={item.url} alt={item.altRo} loading="lazy" width={320} height={240} />
+      {video && item.videoSrc ? (
+        <video
+          src={item.videoSrc}
+          poster={item.url || undefined}
+          controls
+          preload="none"
+          playsInline
+          aria-label={item.altRo}
+        />
+      ) : item.url ? (
+        // eslint-disable-next-line @next/next/no-img-element -- admin thumbnail of an optimised variant
+        <img src={item.url} alt={item.altRo} loading="lazy" width={320} height={240} />
+      ) : null}
+      {video && item.status === "IN_PROCESARE" ? (
+        <p role="status" className="admin-warning mb-0">
+          Video-ul se convertește pentru web. Pagina se actualizează singură când e gata.
+        </p>
+      ) : null}
+      {video && item.status === "EROARE" ? (
+        <p role="alert" className="field-error">
+          {item.error ?? "Conversia video nu a reușit."}
+        </p>
+      ) : null}
       <p className="text-note text-cerneala-2">
-        {item.width} × {item.height} px · {item.size} · {item.uploaded}
+        {video ? `Video${item.durationSec ? ` · ${Math.round(item.durationSec)} s` : ""} · ` : ""}
+        {item.width > 0 ? `${item.width} × ${item.height} px · ` : ""}
+        {item.size} · {item.uploaded}
         <br />
         {item.usage > 0
-          ? `Folosită în ${item.usage} ${item.usage === 1 ? "loc" : "locuri"}`
-          : "Nefolosită"}
+          ? `${video ? "Folosit" : "Folosită"} în ${item.usage} ${item.usage === 1 ? "loc" : "locuri"}`
+          : video
+            ? "Nefolosit"
+            : "Nefolosită"}
       </p>
       <form {...save.formProps} className="grid gap-2">
         <input type="hidden" name="id" value={item.id} />
@@ -115,7 +155,7 @@ function MediaCard({ item }: { item: LibraryItem }) {
         <form {...remove.formProps} className="flex flex-wrap gap-2">
           <input type="hidden" name="id" value={item.id} />
           <button type="submit" className="btn btn-danger btn-small" disabled={remove.pending}>
-            Da, șterge fotografia
+            Da, șterge {noun}
           </button>
           <button
             type="button"
@@ -131,7 +171,7 @@ function MediaCard({ item }: { item: LibraryItem }) {
           className="btn btn-secondary btn-small w-fit"
           onClick={() => setConfirming(true)}
         >
-          Șterge fotografia
+          Șterge {noun}
         </button>
       )}
     </div>

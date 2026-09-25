@@ -1,13 +1,17 @@
 import "./home.css";
 import type { Metadata } from "next";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import {
-  getCoach,
+  getAcademyGroups,
+  getCoaches,
   getFacilities,
   getFaqs,
+  getGallery,
+  getHeadCoach,
   getLessonTypes,
   getLocations,
+  getPageHeader,
   getPrograms,
   getScenes,
   getSettings,
@@ -15,18 +19,16 @@ import {
   localizedSettings,
   type SceneView,
 } from "@/lib/content";
-import { loadEngineInput } from "@/lib/availability-data";
-import { freePlacesThisMonth } from "@/lib/availability";
-import { formatMonth } from "@/lib/format";
 import { HeroSection } from "@/components/home/HeroSection";
-import { CoachSection } from "@/components/home/CoachSection";
 import { StatementSection } from "@/components/home/StatementSection";
-import { MethodSection } from "@/components/home/MethodSection";
+import { FiguresSection, type Figure } from "@/components/home/FiguresSection";
 import { ProgramsSection } from "@/components/home/ProgramsSection";
-import { LessonsSection } from "@/components/home/LessonsSection";
+import { AcademySection } from "@/components/home/AcademySection";
+import { TeamSection } from "@/components/home/TeamSection";
+import { MethodSection } from "@/components/home/MethodSection";
 import { VenueSection } from "@/components/home/VenueSection";
-import { FirstLessonSection } from "@/components/home/FirstLessonSection";
-import { PlacesSection } from "@/components/home/PlacesSection";
+import { GallerySection } from "@/components/home/GallerySection";
+import { LessonsSection } from "@/components/home/LessonsSection";
 import { QuestionsSection } from "@/components/home/QuestionsSection";
 import { BookingSection } from "@/components/home/BookingSection";
 import { TextSection } from "@/components/home/TextSection";
@@ -56,59 +58,91 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     scenes,
     programs,
     lessons,
+    groups,
+    coaches,
+    headCoach,
     locations,
     facilities,
     faqs,
     testimonials,
+    gallery,
+    venueHeader,
     settingsRow,
-    engine,
-    coach,
+    t,
   ] = await Promise.all([
     getScenes(locale),
     getPrograms(locale),
     getLessonTypes(locale),
+    getAcademyGroups(locale),
+    getCoaches(locale),
+    getHeadCoach(locale),
     getLocations(locale),
     getFacilities(locale),
     getFaqs(locale, "home"),
     getTestimonials(locale, 3),
+    getGallery(locale, 6),
+    getPageHeader("facilitati", locale),
     getSettings(),
-    loadEngineInput(),
-    getCoach(locale),
+    getTranslations("home"),
   ]);
   const settings = localizedSettings(settingsRow, locale);
   const location = locations[0] ?? null;
   const amenities = facilities.filter((f) => f.type === "DOTARE_BAZA");
-  const places = freePlacesThisMonth(engine);
-  const month = formatMonth(engine.now, settings.timezone, locale);
+
+  // The numbers of the club, counted from the content.
+  const courts = location?.courts ?? [];
+  const courtCount = courts.reduce((sum, c) => sum + (c.count ?? 0), 0);
+  const coveredCount = courts.reduce((sum, c) => sum + (c.coveredInWinter ? (c.count ?? 0) : 0), 0);
+  const ages = [...groups.map((g) => g.ageMin), ...programs.map((p) => p.ageMin)].filter(
+    (age): age is number => age !== null,
+  );
+  const figures: Figure[] = [
+    ...(courtCount > 0
+      ? [{ value: courtCount, label: t("figCourts", { count: courtCount }) }]
+      : []),
+    ...(coveredCount > 0
+      ? [{ value: coveredCount, label: t("figCovered", { count: coveredCount }) }]
+      : []),
+    ...(ages.length > 0 ? [{ value: Math.min(...ages), suffix: "+", label: t("figAge") }] : []),
+    ...(programs.length > 0
+      ? [{ value: programs.length, label: t("figPrograms", { count: programs.length }) }]
+      : []),
+    ...(coaches.length > 1
+      ? [{ value: coaches.length, label: t("figCoaches", { count: coaches.length }) }]
+      : []),
+  ].slice(0, 4);
 
   const render = (scene: SceneView) => {
     switch (scene.key) {
       case "deschiderea":
-        return <HeroSection key={scene.key} scene={scene} />;
-      case "antrenorul":
-        return <CoachSection key={scene.key} scene={scene} coach={coach} />;
-      case "filozofia":
+        return <HeroSection key={scene.key} scene={scene} settings={settings} />;
+      case "manifest":
         return <StatementSection key={scene.key} scene={scene} />;
-      case "metoda":
-        return <MethodSection key={scene.key} scene={scene} />;
-      case "lectii":
-        return <LessonsSection key={scene.key} scene={scene} lessons={lessons} />;
+      case "cifre":
+        return <FiguresSection key={scene.key} scene={scene} figures={figures} />;
       case "programe":
         return <ProgramsSection key={scene.key} scene={scene} programs={programs} />;
-      case "terenul":
+      case "academia":
+        return <AcademySection key={scene.key} scene={scene} groups={groups} />;
+      case "echipa":
+        return <TeamSection key={scene.key} scene={scene} coaches={coaches} />;
+      case "metoda":
+        return <MethodSection key={scene.key} scene={scene} labEnabled={settings.labEnabled} />;
+      case "clubul":
         return (
-          <VenueSection key={scene.key} scene={scene} location={location} amenities={amenities} />
-        );
-      case "prima-lectie":
-        return (
-          <FirstLessonSection
+          <VenueSection
             key={scene.key}
             scene={scene}
-            firstLessonText={settings.firstLessonText}
+            location={location}
+            amenities={amenities}
+            image={venueHeader.image}
+            imageAlt={venueHeader.imageAlt}
           />
         );
-      case "locurile":
-        return <PlacesSection key={scene.key} scene={scene} month={month} count={places} />;
+      case "galerie":
+        return <GallerySection key={scene.key} scene={scene} items={gallery} />;
+      case "lectii":
+        return <LessonsSection key={scene.key} scene={scene} lessons={lessons} />;
       case "intrebari":
         return (
           <QuestionsSection key={scene.key} scene={scene} faqs={faqs} testimonials={testimonials} />
@@ -133,7 +167,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       <JsonLd
         data={[
           businessLd(settings, location, settings.seoDescription, lessons),
-          personLd(settings, coach, localizedUrl("/despre", locale)),
+          ...(headCoach ? [personLd(settings, headCoach, localizedUrl("/echipa", locale))] : []),
         ]}
       />
       {scenes.map(render)}

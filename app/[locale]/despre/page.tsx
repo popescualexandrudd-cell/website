@@ -1,23 +1,17 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
-import {
-  getCoach,
-  getGallery,
-  getPageHeader,
-  getScenes,
-  getSettings,
-  localizedSettings,
-} from "@/lib/content";
-import { TODO_MARK } from "@/lib/i18n-content";
+import { Link } from "@/i18n/navigation";
+import { getCoaches, getPageHeader, getScenes } from "@/lib/content";
+import { orderedListItems } from "@/lib/markdown";
 import { localizedUrl, pageMetadata } from "@/lib/seo";
-import { personLd } from "@/lib/structured-data";
+import { breadcrumbLd } from "@/lib/structured-data";
 import { PageHero, PageSection } from "@/components/pages/PageHero";
 import { JsonLd } from "@/components/pages/JsonLd";
 import { Markdown } from "@/components/site/Markdown";
 import { TodoText } from "@/components/site/TodoText";
-import { Picture } from "@/components/ui/Picture";
-import { CoachPortrait } from "@/components/home/CoachPortrait";
+import { Words } from "@/components/site/Words";
+import { CoachCard } from "@/components/academy/CoachCard";
 
 export async function generateMetadata({
   params,
@@ -32,122 +26,92 @@ export async function generateMetadata({
   });
 }
 
+/** The academy itself: what it believes, how it works, who leads the training. */
 export default async function AboutPage({ params }: PageProps<"/[locale]/despre">) {
   const locale = (await params).locale as Locale;
   setRequestLocale(locale);
-  const [header, coach, gallery, settingsRow, scenes, t] = await Promise.all([
+  const [header, scenes, coaches, t] = await Promise.all([
     getPageHeader("despre", locale),
-    getCoach(locale),
-    getGallery(locale),
-    getSettings(),
     getScenes(locale),
+    getCoaches(locale),
     getTranslations(),
   ]);
-  const settings = localizedSettings(settingsRow, locale);
-  const photos = gallery.slice(0, 6);
-  // The same note as the home page's portrait frame, until the photo is uploaded.
-  const photoNote = scenes.find((s) => s.key === "antrenorul")?.extra.photoNote ?? "";
+  const manifest = scenes.find((s) => s.key === "manifest");
+  const method = scenes.find((s) => s.key === "metoda");
+  const team = scenes.find((s) => s.key === "echipa");
+  const steps = method ? orderedListItems(method.body) : [];
 
   return (
     <>
-      <JsonLd data={personLd(settings, coach, localizedUrl("/despre", locale))} />
+      <JsonLd
+        data={breadcrumbLd([
+          { name: t("common.home"), url: localizedUrl("/", locale) },
+          { name: header.title, url: localizedUrl("/despre", locale) },
+        ])}
+      />
       <PageHero
         title={header.title}
         intro={header.intro}
         image={header.image}
         imageAlt={header.imageAlt}
-      >
-        <p className="about-name">
-          <TodoText value={coach.name} />
-          <span className="about-role">{coach.title}</span>
-        </p>
-      </PageHero>
+      />
 
-      <section className="about-story" aria-labelledby="parcurs-title" id="parcurs">
-        <CoachPortrait
-          photo={coach.photo}
-          alt={coach.photoAlt || t("home.coachPhotoAlt", { name: coach.name })}
-          note={photoNote}
-          priority
-        />
-        <div className="about-story-copy">
-          <h2 id="parcurs-title" className="section-title">
-            {t("about.story")}
+      {manifest ? (
+        <section className="about-manifest" aria-labelledby="filozofie-title" id="filozofie">
+          <p className="kicker">
+            <TodoText value={manifest.indexName} />
+          </p>
+          <h2 id="filozofie-title" className="about-manifest-title">
+            <Words text={manifest.title} />
           </h2>
-          <Markdown source={coach.story} />
-          <dl className="fact-list mt-10">
-            <div>
-              <dt>{t("about.experience")}</dt>
-              <dd>
-                <TodoText
-                  value={
-                    coach.yearsExperience === null
-                      ? TODO_MARK
-                      : t("about.experienceYears", { count: coach.yearsExperience })
-                  }
-                />
-              </dd>
-            </div>
-            <div>
-              <dt>{t("about.languages")}</dt>
-              <dd>{coach.languages.join(", ")}</dd>
-            </div>
-          </dl>
-        </div>
-      </section>
+          {manifest.body ? (
+            <p className="about-manifest-body">
+              <TodoText value={manifest.body} />
+            </p>
+          ) : null}
+        </section>
+      ) : null}
 
-      <PageSection id="filozofie" title={t("about.philosophy")} className="page-section--narrow">
-        <Markdown source={coach.philosophy} />
-      </PageSection>
-
-      {coach.certifications.length > 0 ? (
-        <PageSection
-          id="certificari"
-          title={t("about.certifications")}
-          className="page-section--narrow"
-        >
-          <ul>
-            {coach.certifications.map((c) => (
-              <li key={c.id} className={`ed-row ${c.image ? "" : "ed-row--no-image"}`}>
-                {c.image ? (
-                  <span className="ed-row-image">
-                    <Picture image={c.image} alt={c.imageAlt} sizes="9rem" />
+      {method ? (
+        <PageSection id="metoda" title={method.title}>
+          {steps.length > 0 ? (
+            <ol className="method-steps">
+              {steps.map((step, i) => (
+                <li key={i} className="method-step">
+                  <span className="method-number numerals" aria-hidden="true">
+                    {String(i + 1).padStart(2, "0")}
                   </span>
-                ) : null}
-                <div>
-                  <h3 className="ed-row-title">
-                    <TodoText value={c.title} />
-                  </h3>
-                  <p className="ed-row-meta">
-                    <TodoText value={c.issuer} />
+                  {step.title ? <h3 className="method-step-title">{step.title}</h3> : null}
+                  <p>
+                    <TodoText value={step.text} />
                   </p>
-                </div>
-                <span className="ed-row-aside numerals">{c.year ?? ""}</span>
-              </li>
-            ))}
-          </ul>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <Markdown source={method.body} />
+          )}
         </PageSection>
       ) : null}
 
-      {coach.results ? (
-        <PageSection id="rezultate" title={t("about.results")} className="page-section--narrow">
-          <Markdown source={coach.results} />
-        </PageSection>
-      ) : null}
-
-      {photos.length > 0 ? (
-        <PageSection id="fotografii" title={t("about.photos")}>
-          <ul className="gallery-grid">
-            {photos.map((photo) => (
-              <li key={photo.id} className="gallery-item">
-                <Picture
-                  image={photo.image}
-                  alt={photo.alt}
-                  sizes="(min-width: 1024px) 30vw, 50vw"
-                />
-              </li>
+      {coaches.length > 0 ? (
+        <PageSection id="echipa" title={team?.title ?? t("nav.team")}>
+          <div className="team-grid" data-count={Math.min(coaches.length, 4)}>
+            {coaches.map((coach) => (
+              <CoachCard key={coach.id} coach={coach} photoNote={team?.extra.photoNote ?? ""} />
             ))}
-          </ul>
+          </div>
+          <p className="mt-10 flex flex-wrap gap-6">
+            <Link href="/echipa" className="link-quiet">
+              {t("team.backToTeam")}
+            </Link>
+            <Link href="/facilitati" className="link-quiet">
+              {t("nav.club")}
+            </Link>
+            <Link href="/academie" className="link-quiet">
+              {t("nav.juniors")}
+            </Link>
+          </p>
         </PageSection>
       ) : null}
     </>

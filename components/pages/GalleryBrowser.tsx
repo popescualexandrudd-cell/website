@@ -4,20 +4,26 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { GalleryView } from "@/lib/content";
 import { Picture } from "@/components/ui/Picture";
+import { videoSourcesFor } from "@/lib/media-shared";
 
 type Props = { items: GalleryView[]; categories: string[] };
 
 /**
- * Filterable photo grid with a lightbox on the native <dialog>: focus stays inside, Escape
- * closes, arrow keys move between photos, and focus returns to the photo that opened it.
+ * Filterable grid of photos and videos with a lightbox on the native <dialog>: focus stays
+ * inside, Escape closes, arrow keys move between items, and focus returns to the one that
+ * opened it. Videos play there with their controls (and sound), only when asked.
  */
 export function GalleryBrowser({ items, categories }: Props) {
   const t = useTranslations("gallery");
   const [filter, setFilter] = useState<string | null>(null);
+  const [kind, setKind] = useState<"image" | "video" | null>(null);
   const [index, setIndex] = useState<number | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const openerRef = useRef<HTMLButtonElement | null>(null);
-  const visible = filter ? items.filter((i) => i.category === filter) : items;
+  const bothKinds = items.some((i) => i.kind === "video") && items.some((i) => i.kind === "image");
+  const visible = items.filter(
+    (i) => (filter === null || i.category === filter) && (kind === null || i.kind === kind),
+  );
   const current = index !== null ? visible[index] : null;
 
   useEffect(() => {
@@ -36,6 +42,27 @@ export function GalleryBrowser({ items, categories }: Props) {
 
   return (
     <>
+      {bothKinds ? (
+        <div className="gallery-filters" role="group" aria-label={t("filterLabel")}>
+          {(
+            [
+              [null, "all"],
+              ["image", "image"],
+              ["video", "video"],
+            ] as const
+          ).map(([value, key]) => (
+            <button
+              key={key}
+              type="button"
+              className="chip"
+              aria-pressed={kind === value}
+              onClick={() => setKind(value)}
+            >
+              {t(`kind.${key}`)}
+            </button>
+          ))}
+        </div>
+      ) : null}
       {categories.length > 1 ? (
         <div className="gallery-filters" role="group" aria-label={t("filterLabel")}>
           <button
@@ -61,15 +88,21 @@ export function GalleryBrowser({ items, categories }: Props) {
       ) : null}
       <ul className="gallery-grid">
         {visible.map((item, i) => (
-          <li key={item.id} className="gallery-item">
+          <li key={item.id} className="gallery-item" data-kind={item.kind}>
             <button
               type="button"
+              aria-label={item.kind === "video" ? t("play", { title: item.alt }) : undefined}
               onClick={(event) => {
                 openerRef.current = event.currentTarget;
                 setIndex(i);
               }}
             >
               <Picture image={item.image} alt={item.alt} sizes="(min-width: 1024px) 30vw, 50vw" />
+              {item.kind === "video" ? (
+                <span className="gallery-play" aria-hidden="true">
+                  {t("video")}
+                </span>
+              ) : null}
             </button>
             {item.caption ? <p className="mt-2 text-note text-cerneala-2">{item.caption}</p> : null}
           </li>
@@ -96,7 +129,26 @@ export function GalleryBrowser({ items, categories }: Props) {
               </button>
             </div>
             <figure>
-              <Picture image={current.image} alt={current.alt} sizes="90vw" priority />
+              {current.video ? (
+                <video
+                  key={current.id}
+                  className="lightbox-video"
+                  controls
+                  autoPlay
+                  playsInline
+                  poster={current.image.fallback}
+                  aria-label={current.alt}
+                >
+                  <source
+                    src={videoSourcesFor(current.video).large.src}
+                    type="video/mp4"
+                    media="(min-width: 1100px)"
+                  />
+                  <source src={videoSourcesFor(current.video).small.src} type="video/mp4" />
+                </video>
+              ) : (
+                <Picture image={current.image} alt={current.alt} sizes="90vw" priority />
+              )}
               {current.caption ? <figcaption>{current.caption}</figcaption> : null}
             </figure>
             {visible.length > 1 ? (

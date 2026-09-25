@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { Monogram } from "./Monogram";
+import { BrandMark } from "./BrandMark";
 import { MenuDialog } from "./MenuDialog";
 import { LanguageSwitch } from "./LanguageSwitch";
 import type { LocalizedSettings } from "@/lib/content";
@@ -13,27 +13,29 @@ export async function Header({ settings }: Props) {
   const t = await getTranslations();
   const primary = [
     { href: "/programe", label: t("nav.programs") },
-    { href: "/despre", label: t("nav.about") },
-    { href: "/facilitati", label: t("nav.facilities") },
+    { href: "/academie", label: t("nav.juniors") },
+    { href: "/echipa", label: t("nav.team") },
+    { href: "/facilitati", label: t("nav.club") },
     { href: "/preturi", label: t("nav.pricing") },
     { href: "/contact", label: t("nav.contact") },
   ] as const;
   const links = [
     { href: "/programe", label: t("nav.programs") },
-    { href: "/facilitati", label: t("nav.facilities") },
+    { href: "/academie", label: t("nav.juniors") },
+    { href: "/echipa", label: t("nav.team") },
     { href: "/despre", label: t("nav.about") },
+    { href: "/facilitati", label: t("nav.club") },
     { href: "/preturi", label: t("nav.pricing") },
-    { href: "/intrebari", label: t("nav.faq") },
-    { href: "/sfaturi", label: t("nav.tips") },
+    { href: "/galerie", label: t("nav.gallery") },
     { href: "/contact", label: t("nav.contact") },
   ] as const;
   const whatsapp = whatsappLink(settings.whatsapp);
   const tel = telLink(settings.phone);
   return (
-    <header className="site-header">
+    <header className="site-header" data-site-header>
       <div className="site-header-bar">
         <Link href="/" className="site-monogram">
-          <Monogram letters={settings.monogram} className="size-10 shrink-0 md:size-11" />
+          <BrandMark logo={settings.logo} monogram={settings.monogram} />
           <span className="site-brand">
             <span className="site-brand-name">
               <TodoText value={settings.brandName} />
@@ -68,7 +70,10 @@ export async function Header({ settings }: Props) {
               </ul>
               <ul className="menu-secondary">
                 <li>
-                  <Link href="/galerie">{t("nav.gallery")}</Link>
+                  <Link href="/intrebari">{t("nav.faq")}</Link>
+                </li>
+                <li>
+                  <Link href="/sfaturi">{t("nav.tips")}</Link>
                 </li>
                 <li>
                   <Link href="/rezervare">{t("common.bookLesson")}</Link>

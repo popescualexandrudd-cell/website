@@ -7,6 +7,8 @@ const INTERNAL: StaticPathname[] = [
   "/programe",
   "/facilitati",
   "/despre",
+  "/academie",
+  "/echipa",
   "/preturi",
   "/rezervare",
   "/galerie",
@@ -19,8 +21,16 @@ const INTERNAL: StaticPathname[] = [
   "/cookies",
 ];
 
-/** Scene links are edited in the admin; only known internal pages are turned into links. */
-export function safeHref(href: string | null | undefined): StaticPathname | null {
+export type SafeHref = StaticPathname | { pathname: StaticPathname; hash: string };
+
+/**
+ * Scene links are edited in the admin; only known internal pages (optionally with an anchor,
+ * "/academie#evaluare") are turned into links.
+ */
+export function safeHref(href: string | null | undefined): SafeHref | null {
   if (!href) return null;
-  return (INTERNAL as string[]).includes(href) ? (href as StaticPathname) : null;
+  const [path = "", hash] = href.split("#", 2);
+  if (!(INTERNAL as string[]).includes(path)) return null;
+  const pathname = path as StaticPathname;
+  return hash && /^[a-z0-9-]{1,40}$/.test(hash) ? { pathname, hash } : pathname;
 }

@@ -1,6 +1,6 @@
 #!/bin/sh
 # Runs before the app starts: applies database migrations and, on a brand-new database only,
-# loads the initial content from config/antrenor.yml. The worker skips this (RUN_MIGRATIONS=0).
+# loads the initial content from config/club.yml. The worker skips this (RUN_MIGRATIONS=0).
 set -eu
 
 if [ "${RUN_MIGRATIONS:-1}" = "1" ]; then

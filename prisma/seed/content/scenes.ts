@@ -2,116 +2,145 @@ import type { Prisma } from "../../../lib/generated/prisma/client";
 
 type SceneSeed = Prisma.SceneCreateInput;
 
+type Vars = {
+  /** The club's name. */
+  club: string;
+  /** The venue and its town. */
+  locatie: string;
+  oras: string;
+  /** Number of courts and how many of them are covered, from config/club.yml. */
+  terenuri: string;
+  acoperite: string;
+};
+
 /**
- * The sections of the home page, top to bottom. `{nume}` and `{locatie}` are replaced at seed
- * time from config/antrenor.yml. Plain, friendly wording, short enough to read on a phone.
+ * The sections of the home page, top to bottom. `{club}`, `{locatie}`, `{oras}`, `{terenuri}`
+ * and `{acoperite}` are replaced at seed time from config/club.yml. The academy speaks as "we":
+ * the club and its coaches.
  */
-export function sceneSeeds(vars: { nume: string; locatie: string }): SceneSeed[] {
+export function sceneSeeds(vars: Vars): SceneSeed[] {
   const fill = (value: string) =>
-    value.replaceAll("{nume}", vars.nume).replaceAll("{locatie}", vars.locatie);
+    value
+      .replaceAll("{club}", vars.club)
+      .replaceAll("{locatie}", vars.locatie)
+      .replaceAll("{oras}", vars.oras)
+      .replaceAll("{terenuri}", vars.terenuri)
+      .replaceAll("{acoperite}", vars.acoperite);
 
   return [
     {
       key: "deschiderea",
       order: 1,
       indexName: {
-        ro: fill("{nume} · Antrenor de tenis"),
-        en: fill("{nume} · Tennis coach"),
+        ro: fill("Academie de tenis · {oras}"),
+        en: fill("Tennis academy · {oras}"),
       },
-      title: {
-        ro: "Lecții de tenis pentru copii și adulți, de la primele lovituri la turnee.",
-        en: "Tennis lessons for children and adults, from the first strokes to tournaments.",
-      },
+      title: { ro: "Învață. Joacă. Concurează.", en: "Learn. Play. Compete." },
       body: {
         ro: fill(
-          "Sunt antrenor la {locatie}, în Pantelimon, lângă București. Lucrez cu începători, cu jucători care joacă de plăcere și cu cei care merg la turnee: individual, în doi, în trei sau în grup, pe zgură, tot anul.",
+          "Academia de tenis de la {locatie}, lângă București: copii de la 4 ani, juniori care joacă turnee și adulți care vor să învețe sau doar să joace, pe zgură, tot anul.",
         ),
         en: fill(
-          "I coach at {locatie} in Pantelimon, next to Bucharest. I work with beginners, with people who play for fun and with those who play tournaments: one to one, in twos, threes or groups, on clay, all year round.",
+          "The tennis academy at {locatie}, next to Bucharest: children from the age of 4, juniors who play tournaments and adults who want to learn or simply play, on clay, all year round.",
         ),
       },
-      ctaLabel: { ro: "Rezervă prima lecție", en: "Book your first lesson" },
+      ctaLabel: { ro: "Programează o lecție", en: "Book a lesson" },
       ctaHref: "/rezervare",
       extra: {
-        stat1Value: { ro: "4 ani", en: "4 years" },
-        stat1Label: { ro: "ca antrenor de tenis", en: "as a tennis coach" },
-        stat2Value: { ro: "Nivel european", en: "European level" },
-        stat2Label: {
-          ro: "rezultate ale copiilor pe care i-am pregătit",
-          en: "results of the children I have coached",
-        },
-        stat3Value: { ro: "UNEFS", en: "UNEFS" },
-        stat3Label: {
-          ro: "licență în performanță sportivă, specializarea tenis",
-          en: "degree in sports performance, tennis specialisation",
-        },
-        stat4Value: { ro: "Arbitru FRT", en: "FRT umpire" },
-        stat4Label: {
-          ro: "arbitru național de tenis",
-          en: "national tennis umpire",
-        },
-        secondaryLabel: { ro: "Vezi programele", en: "See the programmes" },
-        sceneLabel: {
-          ro: "Animație 3D: doi jucători într-un schimb de mingi pe un teren de zgură.",
-          en: "3D animation: two players in a rally on a clay court.",
+        secondaryLabel: { ro: "Academia de juniori", en: "Junior academy" },
+        mediaNote: {
+          ro: "[DE COMPLETAT] Video cu antrenamentele clubului, 10–20 de secunde, orizontal",
+          en: "[DE COMPLETAT] A video of training at the club, 10–20 seconds, landscape",
         },
       },
     },
     {
-      key: "antrenorul",
+      key: "manifest",
       order: 2,
-      indexName: { ro: "Antrenorul", en: "The coach" },
-      title: { ro: fill("{nume}"), en: fill("{nume}") },
-      body: {
-        ro: fill(
-          "Sunt antrenor la {locatie} de patru ani. Am jucat tenis ca sportiv, am terminat facultatea de sport la UNEFS, cu specializarea tenis, și am făcut formarea psihopedagogică, așa că pe teren îmbin experiența de jucător cu partea de metodică.\n\nLucrez cu toate nivelurile, de la copii care abia încep până la juniori care joacă turnee. Câțiva dintre copiii pe care i-am pregătit au avut rezultate bune la nivel național și european, inclusiv titluri de campion al României.",
-        ),
-        en: fill(
-          "I have been coaching at {locatie} for four years. I played as an athlete, graduated in sport from UNEFS with a tennis specialisation and completed teacher training, so on court I combine a player's experience with sound method.\n\nI work with every level, from children who are just starting to juniors who play tournaments. Several of the children I have coached have done well nationally and in Europe, including Romanian champions.",
-        ),
-      },
-      ctaLabel: { ro: "Parcursul complet", en: "Full background" },
-      ctaHref: "/despre",
-      extra: {
-        credentialsTitle: { ro: "Formare și certificări", en: "Education and certifications" },
-        photoNote: {
-          ro: "[DE COMPLETAT] Fotografia ta pe teren, format vertical 4:5",
-          en: "[DE COMPLETAT] Your photo on court, portrait 4:5",
-        },
-      },
-    },
-    {
-      key: "filozofia",
-      order: 3,
       indexName: { ro: "Filozofia", en: "Philosophy" },
       title: {
-        ro: "Înțelegi de ce, nu doar ce. Fiecare lecție are un obiectiv.",
-        en: "You learn why, not just what. Every lesson has one goal.",
+        ro: "Înțelegi de ce, nu doar ce. Fiecare antrenament are un obiectiv.",
+        en: "You learn why, not just what. Every session has one goal.",
       },
       body: {
-        ro: "O lovitură bună pornește din picioare, trece prin șold și trunchi și abia la final ajunge în braț și în rachetă. Când corectez ceva, îți explic de ce, ca să poți repeta singur. Apoi exersăm până când mișcarea iese și în meci, nu doar la coșul cu mingi.",
-        en: "A good stroke starts in the legs, passes through the hips and trunk and only at the end reaches the arm and the racquet. When I correct something, I explain why, so you can repeat it on your own. Then we practise until it works in a match, not just from the ball basket.",
+        ro: "O lovitură bună pornește din picioare, trece prin șold și trunchi și abia la final ajunge în braț și în rachetă. Când corectăm ceva, explicăm de ce, ca jucătorul să poată repeta singur. Apoi exersăm până când mișcarea iese și în meci, nu doar la coșul cu mingi.",
+        en: "A good stroke starts in the legs, passes through the hips and trunk and only at the end reaches the arm and the racquet. When we correct something, we explain why, so the player can repeat it on their own. Then we practise until it works in a match, not just from the ball basket.",
+      },
+    },
+    {
+      key: "cifre",
+      order: 3,
+      indexName: { ro: "Clubul", en: "The club" },
+      title: { ro: fill("{club} în cifre"), en: fill("{club} in numbers") },
+      body: { ro: "", en: "" },
+    },
+    {
+      key: "programe",
+      order: 4,
+      indexName: { ro: "Programe de pregătire", en: "Training programmes" },
+      title: {
+        ro: "Inițiere, competiție sau tenis de plăcere",
+        en: "Beginners, competition or tennis for fun",
+      },
+      body: {
+        ro: "Programul spune ce lucrăm și pentru cine. Fiecare jucător începe cu o evaluare, apoi primește un plan pe câteva luni.",
+        en: "The programme says what we work on and for whom. Every player starts with an assessment, then gets a plan for the next few months.",
+      },
+      ctaLabel: { ro: "Toate programele", en: "All programmes" },
+      ctaHref: "/programe",
+    },
+    {
+      key: "academia",
+      order: 5,
+      indexName: { ro: "Academia de juniori", en: "Junior academy" },
+      title: { ro: "De la mingea roșie la turnee", en: "From the red ball to tournaments" },
+      body: {
+        ro: "Copiii cresc în tenis pe etape: teren, rachetă și minge pe măsura lor, apoi terenul mare. Fiecare copil începe cu o evaluare, ca să intre în grupa potrivită vârstei și nivelului său.",
+        en: "Children grow into tennis in stages: a court, racquet and ball their size, then the full court. Every child starts with an assessment, so they join the group that fits their age and level.",
+      },
+      ctaLabel: { ro: "Cere o evaluare", en: "Ask for an assessment" },
+      ctaHref: "/academie#evaluare",
+      extra: {
+        moreLabel: { ro: "Despre academia de juniori", en: "About the junior academy" },
+      },
+    },
+    {
+      key: "echipa",
+      order: 6,
+      indexName: { ro: "Echipa", en: "The team" },
+      title: { ro: "Antrenorii academiei", en: "The academy's coaches" },
+      body: {
+        ro: "Oamenii care conduc antrenamentele, cu pregătirea și experiența fiecăruia.",
+        en: "The people who run the sessions, with each one's training and experience.",
+      },
+      ctaLabel: { ro: "Toată echipa", en: "The whole team" },
+      ctaHref: "/echipa",
+      extra: {
+        photoNote: {
+          ro: "[DE COMPLETAT] Fotografia antrenorului pe teren, vertical 4:5",
+          en: "[DE COMPLETAT] The coach's photo on court, portrait 4:5",
+        },
       },
     },
     {
       key: "metoda",
-      order: 4,
+      order: 7,
       indexName: { ro: "Metoda", en: "Method" },
       title: {
-        ro: "Un plan, nu doar lecții una după alta",
-        en: "A plan, not just one lesson after another",
+        ro: "Un plan, nu doar antrenamente unul după altul",
+        en: "A plan, not just one session after another",
       },
       body: {
         ro: [
-          "1. **Evaluare.** La prima lecție văd cum lovești, cum te miști și ce îți dorești de la tenis.",
-          "2. **Plan.** Stabilim obiective pe 8–12 săptămâni, potrivite vârstei și timpului pe care îl ai.",
-          "3. **Antrenament.** Fiecare lecție are un obiectiv: îți arăt, exersăm, corectăm pe loc, apoi îl punem în joc.",
+          "1. **Evaluare.** La început vedem cum lovește jucătorul, cum se mișcă și ce își dorește de la tenis.",
+          "2. **Plan.** Stabilim obiective pe 8–12 săptămâni, potrivite vârstei și timpului pe care îl are.",
+          "3. **Antrenament.** Fiecare antrenament are un obiectiv: arătăm, exersăm, corectăm pe loc, apoi îl punem în joc.",
           "4. **Verificare.** Din când în când filmăm, jucăm meciuri de verificare și ajustăm planul.",
         ].join("\n"),
         en: [
-          "1. **Assessment.** In the first lesson I see how you hit, how you move and what you want from tennis.",
-          "2. **Plan.** We set goals for 8–12 weeks that suit your age and the time you have.",
-          "3. **Training.** Every lesson has one goal: I show you, we practise, I correct on the spot, then we use it in play.",
+          "1. **Assessment.** At the start we see how the player hits, how they move and what they want from tennis.",
+          "2. **Plan.** We set goals for 8–12 weeks that suit their age and the time they have.",
+          "3. **Training.** Every session has one goal: we show, practise, correct on the spot, then use it in play.",
           "4. **Check-ins.** Now and then we film, play practice matches and adjust the plan.",
         ].join("\n"),
       },
@@ -124,20 +153,48 @@ export function sceneSeeds(vars: { nume: string; locatie: string }): SceneSeed[]
       },
     },
     {
-      key: "programe",
-      order: 5,
-      indexName: { ro: "Programe de pregătire", en: "Training programmes" },
-      title: {
-        ro: "Inițiere, competiție sau tenis de plăcere",
-        en: "Beginners, competition or tennis for fun",
+      key: "clubul",
+      order: 8,
+      indexName: { ro: "Baza sportivă", en: "The venue" },
+      title: { ro: "Zgură, tot anul.", en: "Clay, all year round." },
+      body: {
+        ro: fill(
+          "{locatie} are {terenuri} terenuri de zgură; {acoperite} sunt acoperite iarna, așa că antrenamentele continuă și în sezonul rece.",
+        ),
+        en: fill(
+          "{locatie} has {terenuri} clay courts; {acoperite} are covered in winter, so training goes on through the cold season.",
+        ),
       },
-      body: { ro: "", en: "" },
-      ctaLabel: { ro: "Toate programele", en: "All programmes" },
-      ctaHref: "/programe",
+      ctaLabel: { ro: "Vezi facilitățile", en: "See the facilities" },
+      ctaHref: "/facilitati",
+      extra: {
+        mediaNote: {
+          ro: "[DE COMPLETAT] Fotografie cu terenurile clubului, orizontal",
+          en: "[DE COMPLETAT] A photo of the club's courts, landscape",
+        },
+      },
+    },
+    {
+      key: "galerie",
+      order: 9,
+      indexName: { ro: "Galerie", en: "Gallery" },
+      title: { ro: "Din antrenamente și turnee", en: "From training and tournaments" },
+      body: {
+        ro: "Fotografii și filmări de pe terenurile clubului.",
+        en: "Photos and videos from the club's courts.",
+      },
+      ctaLabel: { ro: "Toată galeria", en: "The whole gallery" },
+      ctaHref: "/galerie",
+      extra: {
+        emptyNote: {
+          ro: "[DE COMPLETAT] Fotografii și video-uri reale din antrenamente (admin → Galerie)",
+          en: "[DE COMPLETAT] Real photos and videos from training (admin → Gallery)",
+        },
+      },
     },
     {
       key: "lectii",
-      order: 6,
+      order: 10,
       indexName: { ro: "Tipuri de lecții", en: "Kinds of lesson" },
       title: { ro: "Singur, în doi sau în grup", en: "On your own, in pairs or in a group" },
       body: {
@@ -148,59 +205,17 @@ export function sceneSeeds(vars: { nume: string; locatie: string }): SceneSeed[]
       ctaHref: "/preturi",
     },
     {
-      key: "terenul",
-      order: 7,
-      indexName: { ro: "Baza sportivă", en: "The venue" },
-      title: { ro: "Unde ne antrenăm", en: "Where we train" },
-      body: { ro: "", en: "" },
-      ctaLabel: { ro: "Vezi facilitățile", en: "See the facilities" },
-      ctaHref: "/facilitati",
-    },
-    {
-      key: "prima-lectie",
-      order: 8,
-      indexName: { ro: "Prima lecție", en: "First lesson" },
-      title: {
-        ro: "Prima lecție e o evaluare.",
-        en: "The first lesson is an assessment.",
-      },
-      body: {
-        ro: "Lovim câteva mingi, vorbim despre ce îți dorești și stabilim cum continuăm. Fără abonament obligatoriu.",
-        en: "We hit some balls, talk about what you want and agree on how to continue. No subscription required.",
-      },
-      ctaLabel: { ro: "Vezi prețurile", en: "See the prices" },
-      ctaHref: "/preturi",
-    },
-    {
-      key: "locurile",
-      order: 9,
-      indexName: { ro: "Locuri", en: "Places" },
-      title: { ro: "Număr limitat de elevi.", en: "A limited number of players." },
-      body: {
-        ro: "Lucrez cu un număr limitat de elevi, ca fiecare să aibă atenția mea la fiecare lecție.",
-        en: "I keep the number of players I coach limited, so everyone gets my full attention in every lesson.",
-      },
-      extra: {
-        available: { ro: "Locuri libere în {luna}: {n}", en: "Places left in {luna}: {n}" },
-        full: {
-          ro: "Luna aceasta e completă. Poți intra pe lista de așteptare.",
-          en: "This month is full. You can join the waiting list.",
-        },
-        waitlistLabel: { ro: "Intră pe lista de așteptare", en: "Join the waiting list" },
-      },
-    },
-    {
       key: "intrebari",
-      order: 10,
+      order: 11,
       indexName: { ro: "Întrebări", en: "Questions" },
-      title: { ro: "Înainte de prima lecție", en: "Before the first lesson" },
+      title: { ro: "Înainte de primul antrenament", en: "Before the first session" },
       body: { ro: "", en: "" },
       ctaLabel: { ro: "Toate întrebările", en: "All questions" },
       ctaHref: "/intrebari",
     },
     {
       key: "rezervare",
-      order: 11,
+      order: 12,
       indexName: { ro: "Rezervare", en: "Booking" },
       title: { ro: "Rezervă o lecție.", en: "Book a lesson." },
       body: {

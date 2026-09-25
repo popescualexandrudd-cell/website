@@ -14,23 +14,55 @@ export const pageHeaderContent: {
     title: { ro: "Programe și lecții", en: "Programmes and lessons" },
     intro: {
       ro: "Trei programe de pregătire (Inițiere, Competiție și Amatori) și cinci feluri de lecții: individuală, în doi, în trei, de grup sau analiză biomecanică. Le combini cum ți se potrivește.",
-      en: "Three training programmes (Beginners, Competition and Recreational) and five kinds of lesson: private, for two, for three, group or biomechanical analysis. Combine them however suits you.",
+      en: "Three training programmes (Beginners, Competition and Recreational) and five kinds of lesson: private, in pairs, in threes, in a group or a biomechanical analysis. Combine them as it suits you.",
     },
     seoTitle: {
-      ro: "Lecții de tenis în Pantelimon: inițiere, competiție, amatori",
-      en: "Tennis lessons in Pantelimon: beginners, competition, recreational",
+      ro: "Programe de tenis în Pantelimon: inițiere, competiție, amatori",
+      en: "Tennis programmes in Pantelimon: beginners, competition, recreational",
     },
     seoDescription: {
-      ro: "Lecții de tenis pentru copii și adulți la Elite Tennis Club Pantelimon: individuale, în doi, în trei sau în grup, de 60, 90 sau 120 de minute.",
-      en: "Tennis lessons for children and adults at Elite Tennis Club Pantelimon: private, for two, for three or in a group, 60, 90 or 120 minutes.",
+      ro: "Programele academiei de tenis de la Elite Tennis Club Pantelimon, pentru copii și adulți: lecții individuale, în doi, în trei sau în grup, de 60, 90 sau 120 de minute.",
+      en: "The tennis academy's programmes at Elite Tennis Club Pantelimon, for children and adults: private, pair, three-player or group lessons of 60, 90 or 120 minutes.",
+    },
+  },
+  {
+    key: "academie",
+    title: { ro: "Academia de juniori", en: "Junior academy" },
+    intro: {
+      ro: "Grupe pe vârste și pe etape, de la mini tenis la juniorii care joacă turnee. Fiecare copil începe cu o evaluare, ca să intre în grupa potrivită.",
+      en: "Groups by age and stage, from mini tennis to juniors who play tournaments. Every child starts with an assessment, so they join the right group.",
+    },
+    seoTitle: {
+      ro: "Academie de tenis pentru copii și juniori în Pantelimon",
+      en: "Tennis academy for children and juniors in Pantelimon",
+    },
+    seoDescription: {
+      ro: "Grupe de tenis pentru copii de la 4 ani și juniori la Elite Tennis Club Pantelimon, pe etapele minge roșie, portocalie, verde și galbenă. Cere o evaluare.",
+      en: "Tennis groups for children from 4 and juniors at Elite Tennis Club Pantelimon, by red, orange, green and yellow ball stages. Ask for an assessment.",
+    },
+  },
+  {
+    key: "echipa",
+    title: { ro: "Echipa de antrenori", en: "The coaching team" },
+    intro: {
+      ro: "Antrenorii academiei, cu pregătirea, experiența și felul în care lucrează fiecare.",
+      en: "The academy's coaches, with each one's training, experience and way of working.",
+    },
+    seoTitle: {
+      ro: "Antrenori de tenis în Pantelimon",
+      en: "Tennis coaches in Pantelimon",
+    },
+    seoDescription: {
+      ro: "Antrenorii academiei de tenis de la Elite Tennis Club Pantelimon: formare, certificări și experiență cu copii, juniori și adulți.",
+      en: "The coaches of the tennis academy at Elite Tennis Club Pantelimon: education, certifications and experience with children, juniors and adults.",
     },
   },
   {
     key: "facilitati",
-    title: { ro: "Terenuri și facilități", en: "Courts and facilities" },
+    title: { ro: "Clubul", en: "The club" },
     intro: {
-      ro: "Ne antrenăm la Elite Tennis Club din Pantelimon, pe zgură, inclusiv iarna, pe terenurile acoperite. Aici găsești terenurile, dotările bazei și ce aduc eu la fiecare lecție.",
-      en: "We train at Elite Tennis Club in Pantelimon, on clay, in winter too, on the covered courts. Here you will find the courts, the venue's amenities and what I bring to every lesson.",
+      ro: "Ne antrenăm la Elite Tennis Club din Pantelimon, pe zgură, inclusiv iarna, pe terenurile acoperite. Aici găsești terenurile, dotările clubului și ce primesc elevii la antrenamente.",
+      en: "We train at Elite Tennis Club in Pantelimon, on clay, in winter too, on the covered courts. Here are the courts, the club's amenities and what players get in training.",
     },
     seoTitle: {
       ro: "Terenuri de tenis pe zgură în Pantelimon, acoperite iarna",
@@ -43,18 +75,18 @@ export const pageHeaderContent: {
   },
   {
     key: "despre",
-    title: { ro: "Despre mine", en: "About me" },
+    title: { ro: "Despre academie", en: "About the academy" },
     intro: {
-      ro: "Cum am ajuns antrenor, ce am studiat și cum lucrez cu elevii mei, de la primele lecții la turnee.",
-      en: "How I became a coach, what I studied and how I work with my players, from the first lessons to tournaments.",
+      ro: "Ce credem despre tenis, cum lucrăm cu fiecare jucător și cine conduce antrenamentele.",
+      en: "What we believe about tennis, how we work with every player and who runs the sessions.",
     },
     seoTitle: {
-      ro: "Antrenor de tenis Pantelimon: Popescu Alexandru Daniel",
-      en: "Tennis coach in Pantelimon: Popescu Alexandru Daniel",
+      ro: "Despre academia de tenis Elite Tennis Club Pantelimon",
+      en: "About the Elite Tennis Club tennis academy, Pantelimon",
     },
     seoDescription: {
-      ro: "Antrenor de tenis la Elite Tennis Club Pantelimon, absolvent UNEFS (specializarea tenis) și arbitru național de tenis.",
-      en: "Tennis coach at Elite Tennis Club Pantelimon, UNEFS graduate (tennis specialisation) and national tennis umpire.",
+      ro: "Filozofia și metoda academiei de tenis de la Elite Tennis Club Pantelimon: evaluare, plan pe 8–12 săptămâni, antrenamente cu obiectiv și verificări.",
+      en: "The philosophy and method of the tennis academy at Elite Tennis Club Pantelimon: assessment, an 8–12 week plan, sessions with a goal, and check-ins.",
     },
   },
   {
@@ -62,15 +94,15 @@ export const pageHeaderContent: {
     title: { ro: "Prețuri", en: "Prices" },
     intro: {
       ro: "Tariful pe oră pentru fiecare tip de lecție, prețul pe durată, pachetele și regulile de anulare și plată.",
-      en: "The hourly rate for each kind of lesson, the price by length, packages and the cancellation and payment rules.",
+      en: "The hourly rate for each kind of lesson, the price by length, the packages and the cancellation and payment rules.",
     },
     seoTitle: {
       ro: "Prețuri lecții de tenis Pantelimon: individual, în doi, grup",
-      en: "Tennis lesson prices in Pantelimon: private, for two, group",
+      en: "Tennis lesson prices in Pantelimon: private, pairs, group",
     },
     seoDescription: {
       ro: "Cât costă o lecție de tenis la Elite Tennis Club Pantelimon: individuală, în doi, în trei, de grup sau analiză biomecanică, pe 60, 90 sau 120 de minute.",
-      en: "What a tennis lesson costs at Elite Tennis Club Pantelimon: private, for two, for three, group or biomechanical analysis, for 60, 90 or 120 minutes.",
+      en: "What a tennis lesson costs at Elite Tennis Club Pantelimon: private, in pairs, in threes, in a group or a biomechanical analysis, for 60, 90 or 120 minutes.",
     },
   },
   {
@@ -78,7 +110,7 @@ export const pageHeaderContent: {
     title: { ro: "Rezervă o lecție", en: "Book a lesson" },
     intro: {
       ro: "Alegi programul, tipul lecției și durata, apoi ziua și ora. Confirmarea vine pe email.",
-      en: "Choose the programme, the kind of lesson and its length, then the day and time. The confirmation arrives by email.",
+      en: "Choose the programme, the kind of lesson and its length, then the day and time. The confirmation comes by email.",
     },
     seoTitle: {
       ro: "Rezervă online o lecție de tenis în Pantelimon",
@@ -86,19 +118,19 @@ export const pageHeaderContent: {
     },
     seoDescription: {
       ro: "Vezi orele libere și rezervă online o lecție de tenis la Elite Tennis Club Pantelimon, pentru copii sau adulți, de 60, 90 sau 120 de minute.",
-      en: "See the free times and book a tennis lesson online at Elite Tennis Club Pantelimon, for children or adults, 60, 90 or 120 minutes.",
+      en: "See the free times and book a tennis lesson online at Elite Tennis Club Pantelimon, for children or adults, of 60, 90 or 120 minutes.",
     },
   },
   {
     key: "galerie",
-    title: { ro: "Galerie", en: "Gallery" },
+    title: { ro: "Galerie foto și video", en: "Photos and videos" },
     intro: {
-      ro: "Fotografii de la lecții, turnee și de pe terenuri. Le public doar cu acordul celor din imagini.",
-      en: "Photos from lessons, tournaments and the courts. I publish them only with the consent of the people in them.",
+      ro: "Fotografii și filmări de la antrenamente, turnee și de pe terenuri. Le publicăm doar cu acordul celor din imagini.",
+      en: "Photos and videos from training, tournaments and the courts. We publish them only with the consent of the people in them.",
     },
     seoDescription: {
-      ro: "Fotografii de la lecțiile de tenis de la Elite Tennis Club Pantelimon.",
-      en: "Photos from tennis lessons at Elite Tennis Club Pantelimon.",
+      ro: "Fotografii și video-uri de la antrenamentele academiei de tenis de la Elite Tennis Club Pantelimon.",
+      en: "Photos and videos from the tennis academy's training at Elite Tennis Club Pantelimon.",
     },
   },
   {
@@ -110,15 +142,15 @@ export const pageHeaderContent: {
     },
     seoDescription: {
       ro: "Sfaturi practice de tenis: rachete pentru copii, pantofi pentru zgură, primele luni ca adult.",
-      en: "Practical tennis tips: racquets for children, clay-court shoes, the first months as an adult.",
+      en: "Practical tennis tips: racquets for children, clay-court shoes, your first months as an adult.",
     },
   },
   {
     key: "intrebari",
     title: { ro: "Întrebări frecvente", en: "Frequently asked questions" },
     intro: {
-      ro: "Ce mă întreabă oamenii cel mai des înainte de prima lecție. Dacă nu găsești ce cauți, scrie-mi.",
-      en: "What people ask me most often before the first lesson. If you cannot find what you need, write to me.",
+      ro: "Ce ne întreabă oamenii cel mai des înainte de primul antrenament. Dacă nu găsești ce cauți, scrie-ne.",
+      en: "What people ask us most often before their first session. If you cannot find your answer, write to us.",
     },
     seoDescription: {
       ro: "Echipament, vârsta de început, durata lecției, vreme, anulare, plată: răspunsuri despre lecțiile de tenis din Pantelimon.",
@@ -129,12 +161,12 @@ export const pageHeaderContent: {
     key: "contact",
     title: { ro: "Contact", en: "Contact" },
     intro: {
-      ro: "Pentru o rezervare, cel mai repede e din pagina de rezervare. Pentru orice altceva, sună-mă la 0722 501 748 sau scrie-mi aici.",
-      en: "For a booking, the booking page is quickest. For anything else, call me on 0722 501 748 or write to me here.",
+      ro: "Pentru o rezervare, cel mai repede e din pagina de rezervare. Pentru orice altceva, sună-ne la 0722 501 748 sau scrie-ne aici.",
+      en: "To book, the booking page is quickest. For anything else, call us on 0722 501 748 or write to us here.",
     },
     seoTitle: {
-      ro: "Contact: lecții de tenis la Elite Tennis Club Pantelimon",
-      en: "Contact: tennis lessons at Elite Tennis Club Pantelimon",
+      ro: "Contact: academia de tenis Elite Tennis Club Pantelimon",
+      en: "Contact: the Elite Tennis Club tennis academy, Pantelimon",
     },
     seoDescription: {
       ro: "Elite Tennis Club, Bulevardul Biruinței 19-21, Pantelimon, Ilfov. Telefon 0722 501 748, email elite_tenis_club@yahoo.ro.",
@@ -145,8 +177,8 @@ export const pageHeaderContent: {
     key: "lista-asteptare",
     title: { ro: "Lista de așteptare", en: "Waiting list" },
     intro: {
-      ro: "Nu găsești o oră potrivită? Lasă-mi datele și ce zile îți convin; îți scriu când se eliberează un loc.",
-      en: "Cannot find a time that suits you? Leave your details and the days that work; I will write when a place opens up.",
+      ro: "Nu găsești o oră potrivită? Lasă-ne datele și ce zile îți convin; îți scriem când se eliberează un loc.",
+      en: "Can't find a time that suits you? Leave us your details and the days that work; we will write when a place opens up.",
     },
     seoDescription: {
       ro: "Înscrie-te pe lista de așteptare pentru lecții de tenis în Pantelimon.",

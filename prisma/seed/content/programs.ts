@@ -5,7 +5,7 @@ type Text = { ro: string; en: string };
 /** A training programme: what we work on and for whom. */
 export type ProgramContent = {
   slug: string;
-  /** The name under `programe:` in config/antrenor.yml. */
+  /** The name under `programe:` in config/club.yml. */
   configName: string;
   name: Text;
   summary: Text;
@@ -20,7 +20,7 @@ export type ProgramContent = {
 /** A kind of lesson: with how many people, for how long, at what hourly rate. */
 export type LessonContent = {
   slug: string;
-  /** The name under `lectii:` in config/antrenor.yml. */
+  /** The name under `lectii:` in config/club.yml. */
   configName: string;
   name: Text;
   summary: Text;

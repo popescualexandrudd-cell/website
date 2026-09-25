@@ -21,9 +21,9 @@ export const strings = {
     },
     requestReceived: {
       subject: (code: string) => `Am primit cererea de rezervare (${code})`,
-      preview: "Îți confirm în cel mai scurt timp.",
+      preview: "Îți confirmăm în cel mai scurt timp.",
       title: "Am primit cererea ta.",
-      body: "Verific programul și îți confirm pe email, de obicei în aceeași zi. Până atunci, ora rămâne rezervată pentru tine.",
+      body: "Verificăm programul și îți confirmăm pe email, de obicei în aceeași zi. Până atunci, ora rămâne rezervată pentru tine.",
     },
     confirmed: {
       subject: (code: string) => `Lecția e confirmată (${code})`,
@@ -41,7 +41,7 @@ export const strings = {
       bodyByClient:
         "Am primit anularea. Dacă vrei să alegi altă oră, pagina de rezervare e deschisă oricând.",
       bodyByCoach:
-        "Îmi pare rău, dar trebuie să anulez această lecție. Scrie-mi sau alege altă oră din pagina de rezervare, iar dacă ai plătit în avans, îți returnez suma.",
+        "Ne pare rău, dar trebuie să anulăm această lecție. Scrie-ne sau alege altă oră din pagina de rezervare, iar dacă ai plătit în avans, îți returnăm suma.",
       reason: "Motiv",
       bookAgain: "Alege altă oră",
     },
@@ -49,7 +49,7 @@ export const strings = {
       subject: (code: string) => `Mâine ai lecție de tenis (${code})`,
       preview: "Un memento scurt.",
       title: "Ne vedem mâine.",
-      body: "Un memento scurt pentru lecția de mâine. Dacă plouă tare, te anunț eu din timp.",
+      body: "Un memento scurt pentru lecția de mâine. Dacă plouă tare, te anunțăm din timp.",
     },
     review: {
       subject: "Cum a fost prima lecție?",
@@ -62,7 +62,7 @@ export const strings = {
       subject: "Confirmă abonarea",
       preview: "Un singur clic.",
       title: "Confirmă abonarea.",
-      body: "Apasă butonul de mai jos ca să primești un email când am locuri libere sau noutăți despre lecții. Dacă nu tu ai cerut abonarea, ignoră acest mesaj.",
+      body: "Apasă butonul de mai jos ca să primești un email când avem locuri libere sau noutăți de la academie. Dacă nu tu ai cerut abonarea, ignoră acest mesaj.",
       button: "Confirmă abonarea",
       unsubscribe: "Dezabonare",
     },
@@ -91,9 +91,9 @@ export const strings = {
     },
     requestReceived: {
       subject: (code: string) => `Your booking request is in (${code})`,
-      preview: "I will confirm shortly.",
-      title: "I have your request.",
-      body: "I will check the schedule and confirm by email, usually the same day. Until then, the slot is held for you.",
+      preview: "We will confirm shortly.",
+      title: "We have your request.",
+      body: "We will check the schedule and confirm by email, usually the same day. Until then, the slot is held for you.",
     },
     confirmed: {
       subject: (code: string) => `Your lesson is confirmed (${code})`,
@@ -107,11 +107,11 @@ export const strings = {
       subject: (code: string) => `Booking ${code} is cancelled`,
       preview: "The slot has been released.",
       titleByClient: "Your booking is cancelled.",
-      titleByCoach: "I have cancelled the booking.",
+      titleByCoach: "We have cancelled the booking.",
       bodyByClient:
-        "I have received your cancellation. If you would like another time, the booking page is always open.",
+        "We have received your cancellation. If you would like another time, the booking page is always open.",
       bodyByCoach:
-        "I am sorry, but I have to cancel this lesson. Write to me or choose another time on the booking page; if you paid in advance, I will refund you.",
+        "We are sorry, but we have to cancel this lesson. Write to us or choose another time on the booking page; if you paid in advance, we will refund you.",
       reason: "Reason",
       bookAgain: "Choose another time",
     },
@@ -119,7 +119,7 @@ export const strings = {
       subject: (code: string) => `Tennis lesson tomorrow (${code})`,
       preview: "A short reminder.",
       title: "See you tomorrow.",
-      body: "A short reminder about tomorrow's lesson. If it rains heavily, I will let you know in good time.",
+      body: "A short reminder about tomorrow's lesson. If it rains heavily, we will let you know in good time.",
     },
     review: {
       subject: "How was your first lesson?",
@@ -132,7 +132,7 @@ export const strings = {
       subject: "Confirm your subscription",
       preview: "One click.",
       title: "Confirm your subscription.",
-      body: "Press the button below to get an email when I have free places or news about lessons. If you did not ask to subscribe, ignore this message.",
+      body: "Press the button below to get an email when we have free places or news from the academy. If you did not ask to subscribe, ignore this message.",
       button: "Confirm subscription",
       unsubscribe: "Unsubscribe",
     },
@@ -170,6 +170,11 @@ export const coachStrings = {
     subject: (name: string) => `Listă de așteptare: ${name}`,
     title: "Cerere nouă pe lista de așteptare",
     open: "Deschide lista",
+  },
+  evaluation: {
+    subject: (name: string) => `Cerere de evaluare (academia de juniori): ${name}`,
+    title: "Cerere nouă de evaluare pentru academia de juniori",
+    open: "Deschide cererile",
   },
   review: {
     subject: (name: string) => `Recenzie nouă de la ${name}`,

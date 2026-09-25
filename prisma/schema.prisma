@@ -122,6 +122,38 @@ enum EmailStatus {
   ESUAT
 }
 
+enum MediaKind {
+  IMAGINE
+  VIDEO
+}
+
+/// Videos are converted in the background after upload; images are ready at once.
+enum MediaStatus {
+  GATA
+  IN_PROCESARE
+  EROARE
+}
+
+/// The ITF Play and Stay stages of junior tennis: ball, court and racquet grow with the child.
+enum BallStage {
+  ROSU
+  PORTOCALIU
+  VERDE
+  GALBEN
+}
+
+enum ResultLevel {
+  REGIONAL
+  NATIONAL
+  INTERNATIONAL
+}
+
+/// A waiting-list entry, or a request for a junior's assessment before joining a group.
+enum WaitlistKind {
+  LISTA
+  EVALUARE
+}
+
 enum LegalKind {
   CONFIDENTIALITATE
   TERMENI
@@ -135,6 +167,19 @@ model SiteSettings {
   brandName            String
   monogram             String
   tagline              Json
+  /// The club's logo (a raster image with transparency); without one, the monogram is shown.
+  logoId               String?
+  logo                 Media?      @relation("SiteLogo", fields: [logoId], references: [id], onDelete: SetNull)
+  /// Opening of the home page: a real video of the club (muted, looped), or a photograph.
+  heroVideoId          String?
+  heroVideo            Media?      @relation("HeroVideo", fields: [heroVideoId], references: [id], onDelete: SetNull)
+  heroImageId          String?
+  heroImage            Media?      @relation("HeroImage", fields: [heroImageId], references: [id], onDelete: SetNull)
+  /// Brand colours (#rrggbb): the dark base of the design and the accent of buttons and links.
+  colorBrand           String      @default("#0f3b2f")
+  colorAccent          String      @default("#c24f1d")
+  /// The interactive 3D technique lab on the home page.
+  labEnabled           Boolean     @default(true)
   phone                String
   whatsapp             String
   email                String
@@ -168,23 +213,41 @@ model SiteSettings {
   updatedAt            DateTime    @updatedAt
 }
 
-model CoachProfile {
-  id              Int      @id @default(1)
+/// A member of the coaching team. The head coach comes first and speaks for the academy.
+model Coach {
+  id              String          @id @default(cuid())
+  slug            String          @unique
   name            String
+  /// Role in the team: head coach, junior academy coach, fitness coach…
+  role            Json
+  /// Title as on the diploma.
   title           Json
+  /// One or two sentences for the team cards.
+  summary         Json
   story           Json
-  philosophy      Json
+  philosophy      Json?
   results         Json?
+  specialties     Json
   yearsExperience Int?
   languages       Json
   photoId         String?
-  photo           Media?   @relation("CoachPhoto", fields: [photoId], references: [id], onDelete: SetNull)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  photo           Media?          @relation("CoachPhoto", fields: [photoId], references: [id], onDelete: SetNull)
+  videoId         String?
+  video           Media?          @relation("CoachVideo", fields: [videoId], references: [id], onDelete: SetNull)
+  isHead          Boolean         @default(false)
+  order           Int             @default(0)
+  active          Boolean         @default(true)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  certifications  Certification[]
+
+  @@index([order])
 }
 
 model Certification {
   id        String   @id @default(cuid())
+  coachId   String?
+  coach     Coach?   @relation(fields: [coachId], references: [id], onDelete: Cascade)
   title     Json
   issuer    String
   year      Int?
@@ -194,7 +257,7 @@ model Certification {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([order])
+  @@index([coachId, order])
 }
 
 model Scene {
@@ -237,6 +300,7 @@ model Program {
   bookings       Booking[]
   faqs           Faq[]
   waitlist       WaitlistEntry[]
+  academyGroups  AcademyGroup[]
 
   @@index([order])
   @@index([active])
@@ -267,6 +331,58 @@ model LessonType {
   @@index([order])
 }
 
+/// A group of the junior academy, by age and stage: who it is for, what it works on, when it
+/// trains. Parents ask for an assessment before a child joins (WaitlistEntry, kind EVALUARE).
+model AcademyGroup {
+  id                 String          @id @default(cuid())
+  slug               String          @unique
+  name               Json
+  stage              BallStage?
+  ageMin             Int?
+  ageMax             Int?
+  level              Level           @default(TOATE)
+  summary            Json
+  focusPoints        Json
+  sessionsPerWeek    Int?
+  sessionMinutes     Int?
+  /// Days and hours, as parents read them: "Monday and Wednesday, 17:00–18:30".
+  schedule           Json?
+  monthlyFee         Decimal?        @db.Decimal(10, 2)
+  maxPlayers         Int?
+  imageId            String?
+  image              Media?          @relation("AcademyGroupImage", fields: [imageId], references: [id], onDelete: SetNull)
+  programId          String?
+  program            Program?        @relation(fields: [programId], references: [id], onDelete: SetNull)
+  order              Int             @default(0)
+  active             Boolean         @default(true)
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  evaluationRequests WaitlistEntry[]
+
+  @@index([order])
+}
+
+/// A tournament result of an academy player, entered by the admin. Results of minors are
+/// published only with the parents' written consent.
+model Result {
+  id              String      @id @default(cuid())
+  athlete         String
+  event           String
+  category        String
+  placement       Json
+  date            DateTime    @db.Date
+  level           ResultLevel @default(NATIONAL)
+  isMinor         Boolean     @default(true)
+  parentalConsent Boolean     @default(false)
+  consentAt       DateTime?
+  published       Boolean     @default(false)
+  order           Int         @default(0)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([published, date])
+}
+
 model PricingPlan {
   id           String      @id @default(cuid())
   lessonTypeId String?
@@ -295,7 +411,9 @@ model Location {
   name              String
   address           String
   city              String
-  /** County and postal code, for the address search engines read (schema.org PostalAddress). */
+  /**
+   * County and postal code, for the address search engines read (schema.org PostalAddress).
+   */
   region            String?
   postalCode        String?
   lat               Float?
@@ -445,17 +563,32 @@ model PageHeader {
 model Media {
   id             String          @id @default(cuid())
   path           String          @unique
+  kind           MediaKind       @default(IMAGINE)
+  status         MediaStatus     @default(GATA)
   mimeType       String
   width          Int
   height         Int
   blurDataURL    String
   alt            Json
   size           Int
+  /// Images: [{ w, avif, webp }]. Videos: [{ w, h, mp4 }].
   variants       Json
+  /// Videos: a frame of the video as image variants [{ w, avif, webp }], shown before it plays.
+  poster         Json?
+  durationSec    Float?
+  /// Why a video could not be converted, for the admin.
+  error          String?
+  /// When a process took the video for conversion (a stale claim is taken over).
+  processingAt   DateTime?
   originalName   String?
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
-  coachPhotos    CoachProfile[]  @relation("CoachPhoto")
+  coachPhotos    Coach[]         @relation("CoachPhoto")
+  coachVideos    Coach[]         @relation("CoachVideo")
+  siteLogos      SiteSettings[]  @relation("SiteLogo")
+  heroVideos     SiteSettings[]  @relation("HeroVideo")
+  heroImages     SiteSettings[]  @relation("HeroImage")
+  academyGroups  AcademyGroup[]  @relation("AcademyGroupImage")
   certifications Certification[] @relation("CertificationImage")
   programs       Program[]       @relation("ProgramImage")
   facilities     Facility[]      @relation("FacilityImage")
@@ -465,6 +598,7 @@ model Media {
   pageHeaders    PageHeader[]    @relation("PageHeaderImage")
 
   @@index([createdAt])
+  @@index([kind, status])
 }
 
 // ─── Schedule & bookings ─────────────────────────────────────────────────────
@@ -551,24 +685,30 @@ model Booking {
 }
 
 model WaitlistEntry {
-  id            String         @id @default(cuid())
-  programId     String?
-  program       Program?       @relation(fields: [programId], references: [id], onDelete: SetNull)
-  preferences   String
-  name          String
-  email         String
-  phone         String
-  message       String?
-  forMinor      Boolean        @default(false)
-  childAge      Int?
-  consent       Boolean
-  consentAt     DateTime
-  policyVersion String
-  status        WaitlistStatus @default(NOU)
-  locale        String         @default("ro")
-  anonymizedAt  DateTime?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  id             String         @id @default(cuid())
+  kind           WaitlistKind   @default(LISTA)
+  programId      String?
+  program        Program?       @relation(fields: [programId], references: [id], onDelete: SetNull)
+  groupId        String?
+  group          AcademyGroup?  @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  childFirstName String?
+  /// How much the child has played so far, in the parent's words.
+  experience     String?
+  preferences    String
+  name           String
+  email          String
+  phone          String
+  message        String?
+  forMinor       Boolean        @default(false)
+  childAge       Int?
+  consent        Boolean
+  consentAt      DateTime
+  policyVersion  String
+  status         WaitlistStatus @default(NOU)
+  locale         String         @default("ro")
+  anonymizedAt   DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 
   @@index([status])
   @@index([email])

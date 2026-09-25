@@ -19,8 +19,8 @@ export const faqContent: FaqContent[] = [
       en: "What equipment do I need for the first lesson?",
     },
     answer: {
-      ro: "Pantofi de tenis sau, la început, pantofi sport cu talpă plată care nu lasă urme; haine în care te miști ușor; o sticlă de apă și, vara, o șapcă. Racheta și mingile ți le împrumut eu.",
-      en: "Tennis shoes or, at first, flat-soled trainers that do not mark the court; clothes you can move in; a bottle of water and, in summer, a cap. I lend you the racquet and balls.",
+      ro: "Pantofi de tenis sau, la început, pantofi sport cu talpă plată care nu lasă urme; haine în care te miști ușor; o sticlă de apă și, vara, o șapcă. Racheta și mingile ți le împrumutăm noi.",
+      en: "Tennis shoes or, at first, flat-soled trainers that do not mark the court; clothes you can move in; a bottle of water and, in summer, a cap. We lend you the racquet and balls.",
     },
   },
   {
@@ -46,8 +46,8 @@ export const faqContent: FaqContent[] = [
       en: "What happens when it rains?",
     },
     answer: {
-      ro: "Pe zgură udă nu se joacă: suprafața devine alunecoasă și se strică. Dacă plouă înainte de lecție, te anunț din timp și o mutăm fără cost. Dacă ploaia începe în timpul lecției, timpul rămas se recuperează la următoarea întâlnire.",
-      en: "We do not play on wet clay: it becomes slippery and gets damaged. If it rains before the lesson, I let you know in good time and we move it at no cost. If the rain starts during the lesson, the remaining time is made up at the next session.",
+      ro: "Pe zgură udă nu se joacă: suprafața devine alunecoasă și se strică. Dacă plouă înainte de lecție, te anunțăm din timp și o mutăm fără cost. Dacă ploaia începe în timpul lecției, timpul rămas se recuperează la următoarea întâlnire.",
+      en: "We do not play on wet clay: it becomes slippery and gets damaged. If it rains before the lesson, we let you know in good time and we move it at no cost. If the rain starts during the lesson, the remaining time is made up at the next session.",
     },
   },
   {
@@ -59,8 +59,8 @@ export const faqContent: FaqContent[] = [
       en: "How do I cancel a lesson?",
     },
     answer: {
-      ro: "Din linkul din emailul de confirmare, gratuit până cu {ore} de ore înainte de lecție. După acest termen, sună-mă sau scrie-mi. Anularea mai târzie nu mai e gratuită, dar în caz de boală sau de urgență vorbim și găsim o soluție.",
-      en: "Through the link in your confirmation email, free of charge up to {ore} hours before the lesson. After that, call or write to me. Later cancellations are no longer free, but in case of illness or an emergency we talk and find a solution.",
+      ro: "Din linkul din emailul de confirmare, gratuit până cu {ore} de ore înainte de lecție. După acest termen, sună-ne sau scrie-ne. Anularea mai târzie nu mai e gratuită, dar în caz de boală sau de urgență vorbim și găsim o soluție.",
+      en: "Through the link in your confirmation email, free of charge up to {ore} hours before the lesson. After that, call or write to us. Later cancellations are no longer free, but in case of illness or an emergency we talk and find a solution.",
     },
   },
   {
@@ -72,8 +72,8 @@ export const faqContent: FaqContent[] = [
       en: "How do I pay?",
     },
     answer: {
-      ro: "Numerar la teren sau prin transfer bancar. Lecțiile se plătesc la lecție, iar pachetele la prima ședință din pachet. Prețul depinde de tipul lecției și de durata aleasă; datele pentru transfer ți le trimit după confirmarea rezervării.",
-      en: "In cash at the court or by bank transfer. Lessons are paid at the lesson and packages at the first session of the package. The price depends on the kind of lesson and the length you choose; I send you the transfer details once your booking is confirmed.",
+      ro: "Numerar la teren sau prin transfer bancar. Lecțiile se plătesc la lecție, iar pachetele la prima ședință din pachet. Prețul depinde de tipul lecției și de durata aleasă; datele pentru transfer ți le trimitem după confirmarea rezervării.",
+      en: "In cash at the court or by bank transfer. Lessons are paid at the lesson and packages at the first session of the package. The price depends on the kind of lesson and the length you choose; we send you the transfer details once your booking is confirmed.",
     },
   },
   {
@@ -85,8 +85,8 @@ export const faqContent: FaqContent[] = [
       en: "Do I need my own racquet?",
     },
     answer: {
-      ro: "Nu la început. După o lună-două în care vii constant, merită o rachetă a ta. Te ajut să alegi mărimea, greutatea și racordajul potrivite; nu e nevoie de cel mai scump model, ci de unul pe măsura ta.",
-      en: "Not at first. After a month or two of coming regularly, it is worth getting your own. I help you choose the right size, weight and strings; you do not need the most expensive model, just one that fits you.",
+      ro: "Nu la început. După o lună-două în care vii constant, merită o rachetă a ta. Te ajutăm să alegi mărimea, greutatea și racordajul potrivite; nu e nevoie de cel mai scump model, ci de unul pe măsura ta.",
+      en: "Not at first. After a month or two of coming regularly, it is worth getting your own. We help you choose the right size, weight and strings; you do not need the most expensive model, just one that fits you.",
     },
   },
   {
@@ -137,8 +137,8 @@ export const faqContent: FaqContent[] = [
       en: "Can I take lessons together with my child?",
     },
     answer: {
-      ro: "Da, ca lecție în doi, dacă nivelurile sunt apropiate. Funcționează foarte bine cu copii de peste 10–11 ani. Pentru copiii mai mici, recomand lecții separate: cel mic la Inițiere, dumneavoastră în ritmul vostru. Așa progresați amândoi și puteți juca apoi împreună în weekend.",
-      en: "Yes, as a lesson for two, if your levels are close. It works very well with children over 10 or 11. For younger children, I recommend separate lessons: the little one in the Beginners programme, you at your own pace. That way you both progress and can then play together at weekends.",
+      ro: "Da, ca lecție în doi, dacă nivelurile sunt apropiate. Funcționează foarte bine cu copii de peste 10–11 ani. Pentru copiii mai mici, recomandăm lecții separate: cel mic la Inițiere, dumneavoastră în ritmul vostru. Așa progresați amândoi și puteți juca apoi împreună în weekend.",
+      en: "Yes, as a lesson for two, if your levels are close. It works very well with children over 10 or 11. For younger children, we recommend separate lessons: the little one in the Beginners programme, you at your own pace. That way you both progress and can then play together at weekends.",
     },
   },
   {
@@ -164,8 +164,8 @@ export const faqContent: FaqContent[] = [
       en: "What is the first lesson like?",
     },
     answer: {
-      ro: "Prima lecție e o evaluare. Lovim câteva mingi ca să văd tehnica și mișcarea, vorbim despre ce îți dorești de la tenis și stabilim primele obiective. La final știi ce urmează și cât de des ar fi bine să vii. Durata și prețul le găsești pe pagina de prețuri.",
-      en: "The first lesson is an assessment. We hit a few balls so I can see your technique and movement, we talk about what you want from tennis and set the first goals. By the end you know what comes next and how often it would be good to come. You will find the length and price on the pricing page.",
+      ro: "Prima lecție e o evaluare. Lovim câteva mingi ca antrenorul să vadă tehnica și mișcarea, vorbim despre ce îți dorești de la tenis și stabilim primele obiective. La final știi ce urmează și cât de des ar fi bine să vii. Durata și prețul le găsești pe pagina de prețuri.",
+      en: "The first lesson is an assessment. We hit a few balls so the coach can see your technique and movement, we talk about what you want from tennis and set the first goals. By the end you know what comes next and how often it would be good to come. You will find the length and price on the pricing page.",
     },
   },
   {
@@ -177,8 +177,8 @@ export const faqContent: FaqContent[] = [
       en: "Can parents watch the lesson?",
     },
     answer: {
-      ro: "Da, de pe marginea terenului. La copiii mici, primele ședințe merg mai ușor dacă părintele e aproape. Vă rog doar să lăsați indicațiile în seama mea în timpul lecției; copilul se concentrează mai bine când aude o singură voce.",
-      en: "Yes, from the side of the court. With young children, the first sessions go more smoothly if a parent is nearby. I only ask you to leave the instructions to me during the lesson; children focus better when they hear one voice.",
+      ro: "Da, de pe marginea terenului. La copiii mici, primele ședințe merg mai ușor dacă părintele e aproape. Vă rugăm doar să lăsați indicațiile în seama antrenorului în timpul lecției; copilul se concentrează mai bine când aude o singură voce.",
+      en: "Yes, from the side of the court. With young children, the first sessions go more smoothly if a parent is nearby. We only ask you to leave the instructions to the coach during the lesson; children focus better when they hear one voice.",
     },
   },
   {
@@ -190,8 +190,8 @@ export const faqContent: FaqContent[] = [
       en: "I am over 40 and have never played. Is it too late?",
     },
     answer: {
-      ro: "Nu. Adaptăm ritmul și exercițiile la corpul tău, cu încălzire atentă pentru umeri, genunchi și glezne. Dacă ai probleme de sănătate cunoscute, vorbește întâi cu medicul și spune-mi la prima lecție. Mulți adulți care încep după 40 de ani joacă apoi ani la rând, cu plăcere.",
-      en: "No. We adapt the pace and drills to your body, with a careful warm-up for shoulders, knees and ankles. If you have known health issues, talk to your doctor first and tell me at the first lesson. Many adults who start after 40 go on to play happily for years.",
+      ro: "Nu. Adaptăm ritmul și exercițiile la corpul tău, cu încălzire atentă pentru umeri, genunchi și glezne. Dacă ai probleme de sănătate cunoscute, vorbește întâi cu medicul și spune-i antrenorului la prima lecție. Mulți adulți care încep după 40 de ani joacă apoi ani la rând, cu plăcere.",
+      en: "No. We adapt the pace and drills to your body, with a careful warm-up for shoulders, knees and ankles. If you have known health issues, talk to your doctor first and tell the coach at the first lesson. Many adults who start after 40 go on to play happily for years.",
     },
   },
   {
@@ -203,8 +203,8 @@ export const faqContent: FaqContent[] = [
       en: "How does a group lesson work?",
     },
     answer: {
-      ro: "Lecția de grup e pentru 4–6 jucători de nivel apropiat și se rezervă pentru tot grupul, cu numărul de persoane ales la rezervare. Dacă vii singur și vrei să intri într-o grupă, scrie-mi la „Datele mele” sau intră pe lista de așteptare și te anunț când se formează una pe nivelul tău.",
-      en: "A group lesson is for 4–6 players of a similar level and is booked for the whole group, with the number of people chosen when you book. If you are on your own and want to join a group, tell me in “My details” or join the waiting list and I will let you know when one forms at your level.",
+      ro: "Lecția de grup e pentru 4–6 jucători de nivel apropiat și se rezervă pentru tot grupul, cu numărul de persoane ales la rezervare. Dacă vii singur și vrei să intri într-o grupă, scrie-ne la „Datele mele” sau intră pe lista de așteptare și te anunțăm când se formează una pe nivelul tău.",
+      en: "A group lesson is for 4–6 players of a similar level and is booked for the whole group, with the number of people chosen when you book. If you are on your own and want to join a group, tell us in “My details” or join the waiting list and we will let you know when one forms at your level.",
     },
   },
   {
