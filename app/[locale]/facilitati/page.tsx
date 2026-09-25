@@ -33,7 +33,7 @@ export default async function FacilitiesPage({ params }: PageProps<"/[locale]/fa
     getTranslations(),
   ]);
   const yesNo = (value: boolean | null) =>
-    value === null ? TODO_MARK : value ? t("common.yes") : t("common.no");
+    value === null ? "—" : value ? t("common.yes") : t("common.no");
   const amenities = facilities.filter((f) => f.type === "DOTARE_BAZA");
   const services = facilities.filter((f) => f.type !== "DOTARE_BAZA");
 
@@ -116,11 +116,19 @@ export default async function FacilitiesPage({ params }: PageProps<"/[locale]/fa
                     </p>
                   ) : null}
                 </>
-              ) : (
-                <p className="notice">
-                  <TodoText value={TODO_MARK} />
+              ) : location.mapUrl ? (
+                <p>
+                  <span className="block">{location.address}</span>
+                  <a
+                    href={location.mapUrl}
+                    className="btn btn-secondary mt-4"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {t("facilities.openInMaps")}
+                  </a>
                 </p>
-              )}
+              ) : null}
             </div>
             {location.directions ? (
               <div>

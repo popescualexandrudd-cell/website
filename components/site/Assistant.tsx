@@ -29,7 +29,7 @@ const SUGGESTIONS = ["age", "groups", "prices", "start"] as const;
 
 /** The teaser's two questions, chosen for the page the visitor is on. */
 const TEASER: { prefix: string; keys: [string, string] }[] = [
-  { prefix: "/academie", keys: ["groups", "age"] },
+  { prefix: "/programe", keys: ["groups", "age"] },
   { prefix: "/preturi", keys: ["prices", "start"] },
   { prefix: "/inchiriere-teren", keys: ["court", "courtPrice"] },
   { prefix: "/turnee", keys: ["tournaments", "groups"] },
@@ -79,8 +79,8 @@ export function Assistant({ locale, evaluationHref, bookingHref, privacyHref }: 
 
   useEffect(() => () => abortRef.current?.abort(), []);
 
-  // "Ask us something": a small bubble after a few seconds or once the visitor has scrolled a
-  // third of the page, never over an open window, and only once per visit.
+  // "Ask us something": a small bubble after four seconds or once the visitor has scrolled a
+  // fifth of the page, never over an open window, and only once per visit.
   useEffect(() => {
     if (teaserDone) return;
     const reveal = () => {
@@ -90,9 +90,9 @@ export function Assistant({ locale, evaluationHref, bookingHref, privacyHref }: 
     };
     const onScroll = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
-      if (max > 0 && window.scrollY / max > 0.33) reveal();
+      if (max > 0 && window.scrollY / max > 0.2) reveal();
     };
-    const timer = window.setTimeout(reveal, 9000);
+    const timer = window.setTimeout(reveal, 4000);
     window.addEventListener("scroll", onScroll, { passive: true });
     function cleanup() {
       window.clearTimeout(timer);

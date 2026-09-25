@@ -5,7 +5,7 @@ import type { LegalKind } from "../../../lib/generated/prisma/client";
  * render time from the settings (lib/legal.ts), so they update when the admin edits the data.
  * Every page is flagged "De verificat de un jurist" in the admin until a lawyer reviews it.
  */
-export const LEGAL_VERSION = "2026-09-27";
+export const LEGAL_VERSION = "2026-10-01";
 
 type LegalContent = {
   kind: LegalKind;
@@ -26,9 +26,15 @@ Operatorul datelor este {{entitate.denumire}} ({{entitate.forma}}), CUI {{entita
 
 ## Ce date colectăm și de ce
 
-**Rezervări.** Numele, emailul, telefonul, programul și lecția alese, data și ora, nivelul declarat și mesajul tău. Pentru lecțiile copiilor, datele părintelui ca persoană de contact și doar prenumele și vârsta copilului. Temei: executarea contractului (art. 6 alin. 1 lit. b GDPR), adică organizarea lecției.
+**Rezervări.** Numele, emailul, telefonul, programul și antrenamentul alese, data și ora, nivelul declarat, mesajul tău și, dacă îl folosești, codul cardului cadou. Pentru antrenamentele copiilor, datele părintelui ca persoană de contact și doar prenumele și vârsta copilului. Temei: executarea contractului (art. 6 alin. 1 lit. b GDPR), adică organizarea antrenamentului.
 
-**Cereri de evaluare pentru academia de juniori.** Datele părintelui (nume, email, telefon), prenumele și vârsta copilului, cât a jucat până acum, grupa dorită și zilele care vă convin. Temei: demersurile făcute la cererea ta înainte de înscriere (art. 6 alin. 1 lit. b).
+**Înscrierea copiilor la grupe (inclusiv cele 2 ședințe gratuite).** Datele părintelui (nume, email, telefon), prenumele și vârsta copilului, cât a jucat până acum, grupa dorită și zilele care vă convin. Temei: demersurile făcute la cererea ta înainte de înscriere (art. 6 alin. 1 lit. b).
+
+**Închirierea terenurilor.** Numele, telefonul, emailul, ziua, ora, durata și terenul dorit. Temei: demersurile înainte de contract și executarea lui (art. 6 alin. 1 lit. b).
+
+**Carduri cadou.** Numele, emailul și telefonul cumpărătorului, numele celui care primește cardul și mesajul de pe card. Temei: executarea contractului (art. 6 alin. 1 lit. b).
+
+**Liga amatorilor și „Găsește partener”.** Numele, emailul, telefonul, nivelul, când joci și rezultatele meciurilor. Pe site apar doar prenumele și inițiala, nivelul și, dacă ai cerut, când joci; datele de contact nu sunt publicate. Temei: consimțământul tău (art. 6 alin. 1 lit. a).
 
 **Formularul de contact.** Numele, emailul, telefonul (opțional) și mesajul. Temei: interesul legitim de a-ți răspunde (art. 6 alin. 1 lit. f) și demersurile înainte de un eventual contract (lit. b).
 
@@ -50,15 +56,16 @@ Operatorul datelor este {{entitate.denumire}} ({{entitate.forma}}), CUI {{entita
 
 ## Cât timp păstrăm datele
 
-- datele din rezervări: {{retentie.luni}} luni de la data lecției, apoi sunt anonimizate automat;
-- mesajele din formularul de contact, cererile de evaluare și lista de așteptare: {{retentie.luni}} luni, apoi sunt anonimizate;
+- datele din rezervări: {{retentie.luni}} luni de la data antrenamentului, apoi sunt anonimizate automat;
+- mesajele din formularul de contact, înscrierile, cererile de teren, înscrierile în ligă și lista de așteptare: {{retentie.luni}} luni, apoi sunt anonimizate;
+- cardurile cadou: pe durata valabilității și cât cere legislația fiscală;
 - documentele contabile (facturi, chitanțe): cât cere legislația fiscală;
 - abonarea la newsletter: până te dezabonezi;
 - fotografiile, video-urile și rezultatele publicate: până când tu (sau părintele) îți retragi acordul.
 
 ## Cine mai are acces la date
 
-Datele sunt stocate pe un server închiriat de la un furnizor de găzduire din Uniunea Europeană: [DE COMPLETAT]. Emailurile sunt trimise printr-un furnizor de email: [DE COMPLETAT]. Ambii acționează ca persoane împuternicite, pe bază de contract, și nu folosesc datele în scop propriu. {{furnizori.extra}}
+Datele sunt stocate pe un server închiriat de la un furnizor de găzduire din Uniunea Europeană, iar emailurile sunt trimise printr-un furnizor de servicii de email. Ambii acționează ca persoane împuternicite, pe bază de contract, și nu folosesc datele în scop propriu. Lista actualizată a acestor furnizori ți-o trimitem la cerere, la {{contact.email}}. {{furnizori.extra}}
 
 {{transfer}}
 
@@ -83,9 +90,15 @@ The data controller is {{entitate.denumire}} ({{entitate.forma}}), tax ID {{enti
 
 ## What data we collect and why
 
-**Bookings.** Your name, email, phone, chosen programme and lesson, date and time, declared level and your message. For children's lessons, the parent's details as the contact person and only the child's first name and age. Legal basis: performance of a contract (Art. 6(1)(b) GDPR), that is, organising the lesson.
+**Bookings.** Your name, email, phone, chosen programme and session, date and time, declared level, your message and, if you use one, the gift card code. For children's sessions, the parent's details as the contact person and only the child's first name and age. Legal basis: performance of the contract (Art. 6(1)(b) GDPR), that is, organising the session.
 
-**Assessment requests for the junior academy.** The parent's details (name, email, phone), the child's first name and age, how much they have played, the group you would like and the days that suit you. Legal basis: steps taken at your request before enrolment (Art. 6(1)(b)).
+**Signing children up for groups (including the 2 free sessions).** The parent's details (name, email, phone), the child's first name and age, how much they have played, the group you would like and the days that suit you. Legal basis: steps taken at your request before enrolment (Art. 6(1)(b)).
+
+**Court hire.** Name, phone, email, the day, time, length and court you want. Legal basis: steps before a contract and its performance (Art. 6(1)(b)).
+
+**Gift cards.** The buyer's name, email and phone, the recipient's name and the message on the card. Legal basis: performance of the contract (Art. 6(1)(b)).
+
+**Amateur league and "Find a partner".** Name, email, phone, level, when you play and match results. The site shows only your first name and initial, level and, if you asked, when you play; contact details are never published. Legal basis: your consent (Art. 6(1)(a)).
 
 **Contact form.** Your name, email, phone (optional) and message. Legal basis: legitimate interest in replying to you (Art. 6(1)(f)) and steps prior to a possible contract (Art. 6(1)(b)).
 
@@ -107,15 +120,16 @@ The data controller is {{entitate.denumire}} ({{entitate.forma}}), tax ID {{enti
 
 ## How long we keep data
 
-- booking data: {{retentie.luni}} months after the lesson, then automatically anonymised;
-- contact form messages, assessment requests and waiting list entries: {{retentie.luni}} months, then anonymised;
+- booking data: {{retentie.luni}} months after the session, then automatically anonymised;
+- contact form messages, sign-ups, court requests, league sign-ups and waiting list entries: {{retentie.luni}} months, then anonymised;
+- gift cards: while they are valid and as long as tax law requires;
 - accounting documents (invoices, receipts): as long as tax law requires;
 - newsletter subscription: until you unsubscribe;
 - published photos, videos and results: until you (or the parent) withdraw consent.
 
 ## Who else has access
 
-The data is stored on a server rented from a hosting provider in the European Union: [DE COMPLETAT]. Emails are sent through an email provider: [DE COMPLETAT]. Both act as processors under contract and do not use the data for their own purposes. {{furnizori.extra}}
+The data is stored on a server rented from a hosting provider in the European Union, and emails are sent through an email service provider. Both act as processors under contract and do not use the data for their own purposes. We will send you the current list of these providers on request, at {{contact.email}}. {{furnizori.extra}}
 
 {{transfer}}
 
@@ -138,74 +152,82 @@ Version of this policy: {{versiune}}. When we change it, we update the version, 
     kind: "TERMENI",
     title: { ro: "Termeni și condiții", en: "Terms and conditions" },
     body: {
-      ro: `Acești termeni se aplică rezervărilor făcute prin acest site și lecțiilor de tenis oferite de {{entitate.denumire}} ({{entitate.forma}}), CUI {{entitate.cui}}, cu sediul în {{entitate.sediu}}.
+      ro: `Acești termeni se aplică rezervărilor făcute prin acest site și antrenamentelor de tenis, închirierii terenurilor și cardurilor cadou oferite de {{entitate.denumire}} ({{entitate.forma}}), CUI {{entitate.cui}}, cu sediul în {{entitate.sediu}}.
 
 ## Rezervarea
 
-O rezervare făcută pe site este o cerere. {{rezervare.mod}} Primești pe email confirmarea, cu detaliile lecției și un link personal prin care poți vedea sau anula rezervarea.
+O rezervare făcută pe site este o cerere. {{rezervare.mod}} Primești pe email confirmarea, cu detaliile antrenamentului și un link personal prin care poți vedea sau anula rezervarea.
 
-Pentru academia de juniori, înscrierea într-o grupă pornește de la o cerere de evaluare făcută pe site. Locul în grupă se confirmă după evaluare, iar taxa lunară și programul grupei sunt cele afișate pe pagina academiei.
+Înscrierea copiilor într-o grupă pornește de la o cerere făcută pe site sau la telefon. Copiii care se înscriu la grupele de inițiere au primele 2 ședințe gratuite. Locul în grupă se confirmă după aceste ședințe, iar abonamentul lunar și programul grupei se comunică la înscriere.
+
+Terenurile se închiriază la telefon sau cu cererea de pe pagina Închiriere teren; rezervarea e confirmată de club. Tarifele sunt cele afișate pe site la data rezervării. Oferta cu mingile Dunlop pentru minimum 2 ore închiriate în weekend este valabilă doar pentru rezervările făcute direct la club.
+
+Cardurile cadou sunt valabile 12 luni de la plată, dacă pe card nu scrie altfel. Un card se folosește o singură dată, la rezervarea antrenamentelor pe care le conține; dacă antrenamentul se anulează în termenul de anulare gratuită, cardul redevine valabil. Cardurile nu se preschimbă în bani.
 
 ## Anularea
 
-Poți anula gratuit din linkul primit pe email până cu {{anulare.ore}} de ore înainte de începerea lecției. După acest termen, anularea nu mai este gratuită; în caz de boală sau de urgență, contactează-ne și căutăm împreună o soluție.
+Poți anula gratuit din linkul primit pe email până cu {{anulare.ore}} de ore înainte de începerea antrenamentului. După acest termen, anularea nu mai este gratuită; în caz de boală sau de urgență, contactează-ne și căutăm împreună o soluție.
 
-Dacă noi trebuie să anulăm (vreme nepotrivită, teren indisponibil, boala antrenorului), te anunțăm cât mai repede și reprogramăm lecția fără niciun cost pentru tine.
+Dacă noi trebuie să anulăm (vreme nepotrivită, teren indisponibil, boala antrenorului), te anunțăm cât mai repede și reprogramăm antrenamentul fără niciun cost pentru tine.
 
 ## Plata
 
-Metodele de plată acceptate: {{plata.metode}}. Prețurile sunt afișate pe pagina de prețuri, în lei. Pachetele de lecții sunt valabile numărul de zile menționat la fiecare pachet, de la prima ședință.
+Metodele de plată acceptate: {{plata.metode}}. Prețurile sunt afișate pe pagina de prețuri, în lei. Pachetele de antrenamente sunt valabile numărul de zile menționat la fiecare pachet, de la prima ședință.
 
 ## Sănătate și siguranță
 
 Tenisul este o activitate fizică. Participi pe propria răspundere și ne spui înainte de primul antrenament dacă ai probleme de sănătate care pot fi afectate de efort. Pentru minori, părintele confirmă că acest copil poate face sport.
 
-Respectă regulile bazei sportive, poartă încălțăminte potrivită suprafeței și anunță-l imediat pe antrenor dacă te doare ceva în timpul lecției.
+Respectă regulile bazei sportive, poartă încălțăminte potrivită suprafeței și anunță-l imediat pe antrenor dacă te doare ceva în timpul antrenamentului.
 
 ## Minori
 
-Rezervările pentru copii se fac de părinte sau de tutorele legal, care este persoana de contact. Dacă un adult trebuie să rămână la bază pe durata lecțiilor copiilor mici: [DE COMPLETAT].
+Rezervările și înscrierile pentru copii se fac de părinte sau de tutorele legal, care este persoana de contact. Părintele sau adultul care îl aduce pe copil îl predă antrenorului la începutul antrenamentului și îl preia la final, la club.
 
 ## Fotografii și filmări
 
-Filmările făcute pentru analiza tehnicii sunt folosite doar pentru antrenament. Orice publicare se face numai cu acordul scris al persoanei filmate sau, pentru minori, al părintelui.
+Orice publicare a fotografiilor sau filmărilor se face numai cu acordul scris al persoanei filmate sau, pentru minori, al părintelui.
 
 ## Litigii
 
 Neînțelegerile se rezolvă mai întâi pe cale amiabilă, prin discuție directă. Dacă nu reușim, se aplică legea română, iar competența aparține instanțelor de la sediul operatorului.
 
 Versiunea acestor termeni: {{versiune}}.`,
-      en: `These terms apply to bookings made through this website and to the tennis lessons provided by {{entitate.denumire}} ({{entitate.forma}}), tax ID {{entitate.cui}}, registered at {{entitate.sediu}}.
+      en: `These terms apply to bookings made through this website and to the tennis sessions, court hire and gift cards provided by {{entitate.denumire}} ({{entitate.forma}}), tax ID {{entitate.cui}}, registered at {{entitate.sediu}}.
 
 ## Booking
 
-A booking made on the site is a request. {{rezervare.mod}} You receive a confirmation by email, with the lesson details and a personal link to view or cancel the booking.
+A booking made on the site is a request. {{rezervare.mod}} You receive a confirmation by email, with the session details and a personal link to view or cancel the booking.
 
-For the junior academy, joining a group starts with an assessment request made on the site. The place in the group is confirmed after the assessment, and the group's monthly fee and schedule are those shown on the academy page.
+Children join a group through a request made on the site or by phone. Children joining a beginners group get the first 2 sessions free. The place in the group is confirmed after these sessions, and the monthly membership and the group's schedule are given when you join.
+
+Courts are hired by phone or with the request on the Court hire page; the booking is confirmed by the club. The rates are those shown on the site on the day you book. The Dunlop ball offer for at least 2 hours hired at the weekend applies only to bookings made directly with the club.
+
+Gift cards are valid for 12 months from payment, unless the card says otherwise. A card is used once, when booking the sessions it holds; if the session is cancelled within the free cancellation period, the card becomes valid again. Cards cannot be exchanged for cash.
 
 ## Cancellation
 
-You can cancel free of charge from the link in your email up to {{anulare.ore}} hours before the lesson starts. After that, cancellation is no longer free; in case of illness or an emergency, contact us and we will find a solution together.
+You can cancel free of charge from the link in your email up to {{anulare.ore}} hours before the session starts. After that, cancellation is no longer free; in case of illness or an emergency, contact us and we will find a solution together.
 
-If we have to cancel (bad weather, court unavailable, the coach's illness), we let you know as soon as possible and we reschedule the lesson at no cost to you.
+If we have to cancel (bad weather, court unavailable, the coach's illness), we let you know as soon as possible and we reschedule the session at no cost to you.
 
 ## Payment
 
-Accepted payment methods: {{plata.metode}}. Prices are shown on the pricing page, in lei (RON). Lesson packages are valid for the number of days stated for each package, from the first session.
+Accepted payment methods: {{plata.metode}}. Prices are shown on the pricing page, in lei (RON). Session packs are valid for the number of days stated for each package, from the first session.
 
 ## Health and safety
 
 Tennis is physical activity. You take part at your own risk and tell us before the first session about any health condition that exertion may affect. For minors, the parent confirms the child is fit to do sport.
 
-Follow the venue's rules, wear footwear suited to the surface and tell the coach immediately if anything hurts during the lesson.
+Follow the venue's rules, wear footwear suited to the surface and tell the coach immediately if anything hurts during the session.
 
 ## Minors
 
-Bookings for children are made by a parent or legal guardian, who is the contact person. Whether an adult must stay at the venue during young children's lessons: [DE COMPLETAT].
+Bookings and sign-ups for children are made by a parent or legal guardian, who is the contact person. The parent or adult who brings the child hands them over to the coach at the start of the session and collects them at the end, at the club.
 
 ## Photos and video
 
-Video recorded for technique analysis is used only for training. Anything published requires the written consent of the person filmed or, for minors, of a parent.
+Anything published requires the written consent of the person filmed or, for minors, of a parent.
 
 ## Disputes
 
@@ -232,7 +254,7 @@ Dacă protecția anti-spam Cloudflare Turnstile este activă pe formulare, aceas
 
 ## În panoul de administrare
 
-Pentru echipa academiei, panoul de administrare folosește doar cookie-uri strict necesare:
+Pentru echipa clubului, panoul de administrare folosește doar cookie-uri strict necesare:
 
 | Cookie | Scop | Durată |
 | --- | --- | --- |
@@ -260,7 +282,7 @@ If Cloudflare Turnstile anti-spam protection is active on the forms, it may use 
 
 ## In the admin panel
 
-For the academy team, the admin panel uses only strictly necessary cookies:
+For the club's team, the admin panel uses only strictly necessary cookies:
 
 | Cookie | Purpose | Duration |
 | --- | --- | --- |

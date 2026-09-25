@@ -7,148 +7,139 @@
 # Ghidul complet: SABLON.md.
 
 club:
-  nume: "Elite Tenis Club"
+  nume: "Clubul Tenis Elite"
   # Două-trei litere, afișate cât timp nu e încărcat un logo (admin → Setări → Logo).
-  monograma: "ETC"
+  monograma: "CTE"
   # Apare sub nume, în antet, și în titlul paginilor.
   descriere:
-    ro: "Academie de tenis"
-    en: "Tennis academy"
+    ro: "Club de tenis · Pantelimon"
+    en: "Tennis club · Pantelimon"
   # Culorile clubului, în formatul #rrggbb: baza închisă a designului și accentul (butoane,
   # linkuri). Se schimbă oricând din admin → Setări; accentul trebuie să rămână lizibil cu text alb.
+  # Verdele din logoul clubului: verde de pădure pentru bază, verde de frunză pentru accent.
   culori:
-    # Verdele din logoul clubului: verde de pădure pentru bază, verde de frunză pentru accent.
     principala: "#16351b"
     accent: "#3a7a1e"
-  # Anul în care s-a deschis clubul (din prezentarea publică a clubului: patru terenuri de zgură
-  # în aer liber în 2013, apoi sala acoperită cu încă patru). Apare în povestea clubului.
+  # Anul în care s-a deschis clubul: patru terenuri de zgură în aer liber în 2013, apoi sala
+  # acoperită cu încă patru.
   infiintat: 2013
 
-# Echipa de antrenori. Primul din listă e antrenorul principal. Pentru fiecare antrenor nou:
-# nume, rol, titulatura, rezumat și parcurs; restul e opțional. Fotografiile se încarcă din admin.
+# Echipa de antrenori a clubului. Primul din listă e antrenorul principal. Fotografiile se
+# încarcă din admin → Echipa.
 antrenori:
-  - nume: "Popescu Alexandru Daniel"
-    rol:
-      ro: "Antrenor principal"
-      en: "Head coach"
-    # Una-două propoziții pentru cardul din echipă.
+  - nume: "Vlad Moșteanu"
+    rol: { ro: "Antrenor principal", en: "Head coach" }
+    titulatura: { ro: "Antrenor principal", en: "Head coach" }
     rezumat:
-      ro: "Licențiat UNEFS, specializarea tenis, și arbitru național FRT. Lucrează cu copii, juniori și adulți, de la inițiere la turnee."
-      en: "UNEFS graduate in tennis and a national FRT umpire. Works with children, juniors and adults, from first lessons to tournaments."
+      ro: "Conduce echipa de antrenori a clubului și coordonează grupele, de la minitenis la juniorii care joacă turnee."
+      en: "Leads the club's coaching team and coordinates the groups, from mini tennis to the juniors who play tournaments."
+    specializari:
+      - { ro: "coordonarea grupelor și a programelor", en: "coordinating groups and programmes" }
+      - { ro: "înaltă performanță", en: "high performance" }
+      - { ro: "pregătire pentru turnee", en: "tournament preparation" }
+    parcurs:
+      ro: |-
+        Vlad Moșteanu este antrenorul principal al Clubului Tenis Elite. Coordonează echipa de antrenori, grupele de copii, juniori și adulți și programul de înaltă performanță.
+
+        Împreună cu ceilalți antrenori ai clubului stabilește parcursul fiecărei grupe, de la mingea roșie la turneele federației, și ține legătura cu părinții pe tot parcursul sezonului.
+      en: |-
+        Vlad Moșteanu is the head coach of Clubul Tenis Elite. He leads the coaching team, the groups of children, juniors and adults, and the high-performance programme.
+
+        Together with the club's other coaches he shapes the path of every group, from the red ball to federation tournaments, and keeps in touch with parents throughout the season.
+  - nume: "Popescu Alexandru Daniel"
+    rol: { ro: "Antrenor", en: "Coach" }
+    titulatura: { ro: "Antrenor de tenis", en: "Tennis coach" }
+    rezumat:
+      ro: "Licențiat UNEFS, specializarea tenis, și arbitru național FRT. Lucrează cu copii, juniori și adulți."
+      en: "UNEFS graduate in tennis and a national FRT umpire. Works with children, juniors and adults."
     specializari:
       - { ro: "inițiere pentru copii și adulți", en: "beginners, children and adults" }
       - { ro: "pregătire pentru competiție", en: "competition preparation" }
-      - { ro: "analiză biomecanică a loviturilor", en: "biomechanical stroke analysis" }
-    titulatura:
-      ro: "Antrenor de tenis"
-      en: "Tennis coach"
     ani_experienta: 4
-    # Fiecare certificare: titlul (ro/en), emitentul și, opțional, anul.
     certificari:
       - titlu:
-          ro: "Licență în performanță sportivă, specializarea tenis și performanță motrică"
-          en: "Bachelor's degree in sports performance, specialising in tennis and motor performance"
-        emitent: "Universitatea Națională de Educație Fizică și Sport (UNEFS)"
-        an: "[anul absolvirii]"
-      - titlu:
-          ro: "Master în management și marketing în structuri sportive (în curs)"
-          en: "Master's in management and marketing of sports organisations (in progress)"
+          ro: "Licență în performanță sportivă, specializarea tenis"
+          en: "Bachelor's degree in sports performance, specialising in tennis"
         emitent: "Universitatea Națională de Educație Fizică și Sport (UNEFS)"
         an: ""
       - titlu:
           ro: "Arbitru național de tenis"
           en: "National tennis umpire"
         emitent: "Federația Română de Tenis"
-        an: "[anul certificării]"
-      - titlu:
-          ro: "Program de formare psihopedagogică, cu atestat pentru activitatea didactică"
-          en: "Teacher training programme in psychology and pedagogy, certified to teach"
-        emitent: "[instituția care a eliberat atestatul]"
-        an: "[anul absolvirii]"
+        an: ""
     limbi_vorbite: ["română", "engleză"]
     parcurs:
       ro: |-
-        Am început tenisul ca sportiv, într-un liceu cu program sportiv. Am mers apoi la Universitatea Națională de Educație Fizică și Sport din București, unde am terminat licența în performanță sportivă, cu specializarea tenis. Acum urmez masterul de management și marketing în structuri sportive, tot la UNEFS.
+        Absolvent al Universității Naționale de Educație Fizică și Sport din București, specializarea tenis, și arbitru național certificat de Federația Română de Tenis.
 
-        Sunt arbitru național de tenis, certificat de Federația Română de Tenis. Faptul că știu regulamentul și cum decurge un turneu din interior mă ajută mult când pregătesc copiii pentru competiții. Am făcut și formarea psihopedagogică, așa că îmi pregătesc fiecare lecție cu un obiectiv clar și cresc efortul treptat, în ritmul fiecăruia.
-
-        Antrenez de patru ani. La Elite Tenis Club, în Pantelimon, lucrez cu copii și adulți de toate nivelurile, de la primii pași până la juniorii care joacă turnee.
+        La Clubul Tenis Elite lucrează cu copii și adulți de toate nivelurile, de la primii pași la juniorii care joacă turnee.
       en: |-
-        I started tennis as an athlete, at a sports high school. I then went to the National University of Physical Education and Sport in Bucharest, where I earned a bachelor's degree in sports performance, specialising in tennis. I am now doing a master's in management and marketing of sports organisations, also at UNEFS.
+        A graduate of the National University of Physical Education and Sport in Bucharest, specialising in tennis, and a national umpire certified by the Romanian Tennis Federation.
 
-        I am a national tennis umpire certified by the Romanian Tennis Federation. Knowing the rules and how a tournament runs from the inside helps a lot when I prepare children for competitions. I have also completed teacher training, so I plan every lesson around one clear goal and build up the effort gradually, at each player's pace.
-
-        I have been coaching for four years. At Elite Tenis Club in Pantelimon I work with children and adults of every level, from first steps to juniors who play tournaments.
-    rezultate_elevi:
-      ro: "Câțiva dintre copiii pe care i-am pregătit au avut rezultate bune la nivel național și european, inclusiv titluri de campion al României."
-      en: "Several of the children I have coached have done well nationally and in Europe, including Romanian champions."
-
-  # Antrenorii prezentați pe site-ul actual al clubului (elitetenisclub.ro). Rămân nepublicați
-  # (publicat: false) până confirmă clubul rolurile, scrierea numelor și acordul fiecăruia;
-  # apoi se completează și se publică din admin → Echipa.
-  - nume: "Vlad Moșteanu"
-    publicat: false
-    rol: { ro: "Antrenor principal", en: "Head coach" }
-    rezumat: { ro: "[ ]", en: "[ ]" }
-    specializari: []
-    titulatura: { ro: "Antrenor de tenis", en: "Tennis coach" }
-    ani_experienta: "[ ]"
-    certificari: []
-    limbi_vorbite: []
-    parcurs: { ro: "[ ]", en: "[ ]" }
-  - nume: "Cristian Tănase"
-    publicat: false
-    rol: { ro: "Antrenor de performanță", en: "Performance coach" }
-    rezumat: { ro: "[ ]", en: "[ ]" }
-    specializari: []
-    titulatura: { ro: "Antrenor de tenis", en: "Tennis coach" }
-    ani_experienta: "[ ]"
-    certificari: []
-    limbi_vorbite: []
-    parcurs: { ro: "[ ]", en: "[ ]" }
-  - nume: "Doru Bolinu"
-    publicat: false
+        At Clubul Tenis Elite he works with children and adults of every level, from first steps to juniors who play tournaments.
+  - nume: "Croitoru Mihai"
     rol: { ro: "Antrenor", en: "Coach" }
-    rezumat: { ro: "[ ]", en: "[ ]" }
-    specializari: []
     titulatura: { ro: "Antrenor de tenis", en: "Tennis coach" }
-    ani_experienta: "[ ]"
-    certificari: []
-    limbi_vorbite: []
-    parcurs: { ro: "[ ]", en: "[ ]" }
-  - nume: "Dragoș Popeangă"
-    publicat: false
+    rezumat:
+      ro: "Antrenor al clubului, cu grupe de copii și adulți, de la inițiere la jocul de competiție."
+      en: "A club coach working with groups of children and adults, from beginners to competitive play."
+    specializari: []
+    parcurs:
+      ro: "Face parte din echipa de antrenori a Clubului Tenis Elite și lucrează cu grupe de copii și adulți, pe toate nivelurile."
+      en: "A member of the Clubul Tenis Elite coaching team, working with groups of children and adults at every level."
+  - nume: "Godniac Ana"
+    rol: { ro: "Antrenoare", en: "Coach" }
+    titulatura: { ro: "Antrenoare de tenis", en: "Tennis coach" }
+    rezumat:
+      ro: "Antrenoare a clubului, cu grupele de minitenis și cu jucătorii aflați la început de drum."
+      en: "A club coach working with the mini tennis groups and players at the start of their journey."
+    specializari: []
+    parcurs:
+      ro: "Face parte din echipa de antrenori a Clubului Tenis Elite și lucrează cu grupele de minitenis și cu jucătorii la început de drum."
+      en: "A member of the Clubul Tenis Elite coaching team, working with the mini tennis groups and players at the start of their journey."
+  - nume: "Arin Hrista"
     rol: { ro: "Antrenor", en: "Coach" }
-    rezumat: { ro: "[ ]", en: "[ ]" }
-    specializari: []
     titulatura: { ro: "Antrenor de tenis", en: "Tennis coach" }
-    ani_experienta: "[ ]"
-    certificari: []
-    limbi_vorbite: []
-    parcurs: { ro: "[ ]", en: "[ ]" }
+    rezumat:
+      ro: "Antrenor al clubului, cu grupe de copii, juniori și adulți."
+      en: "A club coach working with groups of children, juniors and adults."
+    specializari: []
+    parcurs:
+      ro: "Face parte din echipa de antrenori a Clubului Tenis Elite și lucrează cu grupe de copii, juniori și adulți."
+      en: "A member of the Clubul Tenis Elite coaching team, working with groups of children, juniors and adults."
+  - nume: "Bogdan"
+    rol: { ro: "Antrenor", en: "Coach" }
+    titulatura: { ro: "Antrenor de tenis", en: "Tennis coach" }
+    rezumat:
+      ro: "Antrenor al clubului, cu grupe de copii și adulți."
+      en: "A club coach working with groups of children and adults."
+    specializari: []
+    parcurs:
+      ro: "Face parte din echipa de antrenori a Clubului Tenis Elite și lucrează cu grupe de copii și adulți."
+      en: "A member of the Clubul Tenis Elite coaching team, working with groups of children and adults."
 
 contact:
   telefon: "0722 501 748"
   # Numărul de WhatsApp, dacă ai unul; gol = butoanele WhatsApp nu apar pe site.
-  whatsapp: "[opțional: +40 7xx xxx xxx]"
+  whatsapp: "0722 501 748"
   email: "elite_tenis_club@yahoo.ro"
   # Profilurile oficiale ale clubului: apar în subsol și îi spun lui Google că site-ul și
   # profilurile sunt același club.
   instagram: "https://www.instagram.com/elite.tenis.club/"
   facebook: "https://www.facebook.com/EliteTenisClub/"
-  tiktok: "[url sau gol]"
+  tiktok: ""
 
 locatii:
-  - nume: "Elite Tenis Club"
-    adresa: "Bulevardul Biruinței 19-21, Pantelimon, Ilfov"
+  - nume: "Clubul Tenis Elite"
+    adresa: "Bulevardul Biruinței 19/21, Pantelimon"
     cod_postal: "077145"
     localitate: "Pantelimon"
     judet: "Ilfov"
-    coordonate: "[opțional: lat, lng]"
+    coordonate: ""
     # Din datele publice ale clubului: 8 terenuri de zgură, dintre care 4 acoperite, folosite tot anul.
     terenuri:
       - { suprafata: "zgură", numar: "4", acoperit_iarna: "da", nocturna: "da" }
-      - { suprafata: "zgură", numar: "4", acoperit_iarna: "nu", nocturna: "[da/nu]" }
+      - { suprafata: "zgură", numar: "4", acoperit_iarna: "nu", nocturna: "da" }
     # Din prezentarea publică a clubului: vestiare separate pentru bărbați și femei, cu toalete și
     # dușuri, sală de fitness, recepție și magazin cu echipament și răcoritoare.
     # (Dotările noi se adaugă la sfârșitul listei.)
@@ -158,168 +149,86 @@ locatii:
 programe:
   - { nume: "Inițiere" }
   - { nume: "Competiție" }
+  - { nume: "Înaltă performanță" }
   - { nume: "Amatori" }
+  - { nume: "Tabere" }
+  - { nume: "Team building" }
 
-# Academia de juniori: grupele, pe vârste și pe etapele ITF „Play and Stay" (minge roșie,
-# portocalie, verde, apoi minge galbenă pe terenul mare). Confirmă vârstele și completează
-# zilele, orele, taxa lunară și numărul de locuri; o grupă ștearsă de aici nu apare pe site.
+# Grupele clubului, pe etapele ITF „Play and Stay”: minitenis cu mingea roșie, portocalie și
+# verde, apoi juniori și seniori cu mingea galbenă, de la 11 ani. Zilele, orele, taxa lunară și
+# locurile se completează din admin → Grupe; câmpurile goale nu apar pe site.
 academie_juniori:
   grupe:
-    - {
-        etapa: "roșu",
-        varsta: "4-7",
-        program: "Inițiere",
-        sedinte_pe_saptamana: "[ ]",
-        durata_min: 60,
-        zile_ore: "[ex. luni și miercuri, 17:00–18:00]",
-        taxa_lunara_ron: "[ ]",
-        locuri: "[ ]",
-      }
-    - {
-        etapa: "portocaliu",
-        varsta: "8-9",
-        program: "Inițiere",
-        sedinte_pe_saptamana: "[ ]",
-        durata_min: 90,
-        zile_ore: "[ex. marți și joi, 17:00–18:30]",
-        taxa_lunara_ron: "[ ]",
-        locuri: "[ ]",
-      }
-    - {
-        etapa: "verde",
-        varsta: "9-11",
-        program: "Competiție",
-        sedinte_pe_saptamana: "[ ]",
-        durata_min: 90,
-        zile_ore: "[ ]",
-        taxa_lunara_ron: "[ ]",
-        locuri: "[ ]",
-      }
-    - {
-        etapa: "galben",
-        varsta: "11-18",
-        program: "Competiție",
-        sedinte_pe_saptamana: "[ ]",
-        durata_min: 120,
-        zile_ore: "[ ]",
-        taxa_lunara_ron: "[ ]",
-        locuri: "[ ]",
-      }
+    - { etapa: "roșu", varsta: "4-7", program: "Inițiere", durata_min: 60 }
+    - { etapa: "portocaliu", varsta: "8-9", program: "Inițiere", durata_min: 60 }
+    - { etapa: "verde", varsta: "9-11", program: "Competiție", durata_min: 90 }
+    - { etapa: "galben", varsta: "11+", program: "Competiție", durata_min: 90 }
 
-# Tipurile de lecții care se rezervă online. Tariful e pe oră; prețul unei lecții se calculează
-# din durata aleasă la rezervare (90 de minute = 1,5 × tariful). tarif_pe: "lecție" sau "persoană".
+# Tipurile de antrenament care se rezervă online. Tariful e pe oră (gol = „tarif la recepție”);
+# prețul se calculează din durata aleasă. tarif_pe: "lecție" sau "persoană".
 lectii:
-  - {
-      nume: "Lecție individuală",
-      persoane: "1",
-      durate_min: [60, 90, 120, 150, 180],
-      tarif_ora_ron: "[ ]",
-      tarif_pe: "lecție",
-    }
-  - {
-      nume: "Lecție în doi",
-      persoane: "2",
-      durate_min: [60, 90, 120, 150, 180],
-      tarif_ora_ron: "[ ]",
-      tarif_pe: "persoană",
-    }
-  - {
-      nume: "Lecție în trei",
-      persoane: "3",
-      durate_min: [60, 90, 120, 150, 180],
-      tarif_ora_ron: "[ ]",
-      tarif_pe: "persoană",
-    }
-  - {
-      nume: "Lecție de grup",
-      persoane: "4-6",
-      durate_min: [60, 90, 120, 150, 180],
-      tarif_ora_ron: "[ ]",
-      tarif_pe: "persoană",
-    }
-  - {
-      nume: "Analiză biomecanică",
-      persoane: "1",
-      durate_min: [60, 90, 120],
-      tarif_ora_ron: "[ ]",
-      tarif_pe: "lecție",
-    }
+  - { nume: "Antrenament individual", persoane: "1", durate_min: [60, 90, 120], tarif_pe: "lecție" }
+  - { nume: "Antrenament în 2", persoane: "2", durate_min: [60, 90, 120], tarif_pe: "persoană" }
+  - { nume: "Antrenament în 3", persoane: "3", durate_min: [60, 90, 120], tarif_pe: "persoană" }
+  - { nume: "Antrenament de grup", persoane: "4-6", durate_min: [60, 90, 120], tarif_pe: "persoană" }
 
-pachete:
-  - { nume: "[ex. 5 lecții individuale]", pret_ron: "[ ]", valabilitate_zile: 60 }
-  - { nume: "[ex. 10 lecții individuale]", pret_ron: "[ ]", valabilitate_zile: 120 }
+# Pachetele de antrenamente (se adaugă din admin → Prețuri, cu prețul lor).
+pachete: []
 
-servicii_incluse: # ce primesc elevii academiei, pe lângă teren
-  - "Evaluare inițială și plan de antrenament personalizat"
-  - "Rachete și mingi de împrumut pentru începători"
-  - "Mașină de aruncat mingi"
-  - "Analiză video a loviturilor, trimisă după lecție"
-  - "[Racordare rachete, dacă e cazul]"
-  - "[Pregătire și însoțire la turnee, dacă e cazul]"
+# Ce primesc jucătorii clubului, pe lângă teren.
+servicii_incluse:
+  - "Evaluare la prima ședință și grupă potrivită vârstei și nivelului"
+  - "Rachete și mingi pentru începători"
+  - "Pregătire pentru turneele Federației Române de Tenis și Tenis10"
 
 # Când e deschis clubul (închirierea terenurilor): apare pe site, în subsol și la contact.
-# Din afișul cu tarifele clubului: terenurile se închiriază de la 08:00 până la 01:00.
 program_club:
-  zilnic: "08:00–01:00"
+  zilnic: "07:00–22:00"
 
 # Închirierea terenurilor: tarifele pe oră, în Markdown (tabele, titluri, liste).
-# Gol sau „[ ]" = pe site scrie că tarifele se află la telefon.
-# Din afișul clubului; iarna fiecare oră costă cu 10 lei mai mult.
 inchiriere:
   tarife: |-
+    ### Campania de iarnă: 60 de lei pe oră
+
+    Pe toată durata sezonului de iarnă, orice teren de zgură se închiriază cu **60 de lei pe oră**, zilnic, între 07:00 și 22:00.
+
     ### Tarife de vară (de la 1 mai)
 
-    | Tarif pe oră | 08:00–17:00 | 17:00–01:00 |
+    | Tarif pe oră | 07:00–17:00 | 17:00–22:00 |
     | --- | --- | --- |
     | Teren afară, luni–vineri | 40 lei | 80 lei |
     | Teren în sală, luni–vineri | 50 lei | 80 lei |
     | Weekend, tarif unic | 50 lei | 80 lei |
 
-    ### Tarife de iarnă
-
-    Iarna, fiecare oră costă cu 10 lei mai mult.
-
-    | Tarif pe oră | 08:00–17:00 | 17:00–01:00 |
-    | --- | --- | --- |
-    | Teren afară, luni–vineri | 50 lei | 90 lei |
-    | Teren în sală, luni–vineri | 60 lei | 90 lei |
-    | Weekend, tarif unic | 60 lei | 90 lei |
-
-    **Joacă mereu cu mingi noi.** Închiriezi în weekend cel puțin 2 ore de teren și primești cadou o cutie de 4 mingi Dunlop ATP Championship. Oferta e valabilă doar pentru rezervările făcute direct la club.
+    **Joacă mereu cu mingi noi.** Închiriezi în weekend cel puțin 2 ore de teren și primești cadou o cutie de 4 mingi Dunlop ATP Championship. Oferta este valabilă doar pentru rezervările făcute direct la club.
   tarife_en: |-
+    ### Winter campaign: 60 lei an hour
+
+    Throughout the winter season, any clay court can be hired for **60 lei an hour**, every day between 07:00 and 22:00.
+
     ### Summer rates (from 1 May)
 
-    | Rate per hour | 08:00–17:00 | 17:00–01:00 |
+    | Rate per hour | 07:00–17:00 | 17:00–22:00 |
     | --- | --- | --- |
     | Outdoor court, Monday–Friday | 40 lei | 80 lei |
     | Indoor court, Monday–Friday | 50 lei | 80 lei |
     | Weekend, single rate | 50 lei | 80 lei |
 
-    ### Winter rates
-
-    In winter every hour costs 10 lei more.
-
-    | Rate per hour | 08:00–17:00 | 17:00–01:00 |
-    | --- | --- | --- |
-    | Outdoor court, Monday–Friday | 50 lei | 90 lei |
-    | Indoor court, Monday–Friday | 60 lei | 90 lei |
-    | Weekend, single rate | 60 lei | 90 lei |
-
     **Always play with new balls.** Book a court for at least 2 hours at the weekend and get a can of 4 Dunlop ATP Championship balls as a gift. Only for bookings made directly with the club.
 
-# Recenziile clubului pe Google (profilul de companie): nota medie și numărul de recenzii, copiate
-# de pe Google (se actualizează din admin → Setări), și linkul „Scrie o recenzie” din Google
-# Business Profile → „Cere recenzii” (gol = linkul duce la căutarea clubului pe Google Maps).
+# Recenziile clubului pe Google: nota medie și numărul de recenzii (se actualizează din admin →
+# Setări) și linkul „Scrie o recenzie” din Google Business Profile (gol = căutarea clubului pe
+# Google Maps).
 recenzii_google:
   nota: 4.5
   numar: 257
-  link: "[url sau gol]"
+  link: ""
 
-# Orele în care academia primește rezervări de lecții (clubul e deschis zilnic 08–01).
+# Orele în care se primesc rezervări de antrenamente online.
 program_lucru:
-  luni_vineri: "08:00–21:00"
-  sambata: "08:00–14:00"
-  duminica: "închis"
+  luni_vineri: "07:00–22:00"
+  sambata: "07:00–22:00"
+  duminica: "07:00–22:00"
 
 rezervari:
   mod: "cerere" # "cerere" = fiecare rezervare e confirmată din admin | "instant"
@@ -327,20 +236,20 @@ rezervari:
   rezervare_minim_ore_inainte: 12
   orizont_zile: 60
   pauza_intre_lectii_min: 10
-  prima_lectie: "[ex. evaluare de 30 de minute, gratuită / la preț redus]"
+  prima_lectie: "2 ședințe gratuite pentru copiii care se înscriu la grupele de inițiere"
 
 plata:
   metode: ["numerar la teren", "transfer bancar"]
   plata_online_stripe: false # true = activează modulul Stripe
 
 site:
-  domeniu: "[numele-tau-tenis.ro]"
+  domeniu: "elitetenisclub.ro"
   limbi: ["ro", "en"] # șterge "en" dacă vrei doar română
   fus_orar: "Europe/Bucharest"
   moneda: "RON"
 
 entitate_legala:
-  forma: "[PFA / II / SRL]"
-  denumire: "[ ]"
-  cui: "[ ]"
-  sediu: "[ ]"
+  forma: "Asociație sportivă"
+  denumire: "Asociația Club Sportiv Elite Tenis"
+  cui: "33026880"
+  sediu: "Calea Bucureștilor nr. 1, Pantelimon, județul Ilfov"

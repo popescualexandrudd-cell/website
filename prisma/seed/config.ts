@@ -235,6 +235,8 @@ export function ageRange(value: Scalar): { min: number | null; max: number | nul
   const match = String(value).match(/(\d+)(?:\s*[-–]\s*(\d+))?/);
   if (!match) return { min: null, max: null };
   const min = Number(match[1]);
+  // "11+" has no upper age.
+  if (String(value).trim().endsWith("+")) return { min, max: null };
   return { min, max: match[2] ? Number(match[2]) : min };
 }
 

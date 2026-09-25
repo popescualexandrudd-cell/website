@@ -56,8 +56,8 @@ export const tournamentContent: {
     organizer: "TENIS10",
     category: { ro: "Tenis10, copii până la 10 ani", en: "Tenis10, children up to 10" },
     summary: {
-      ro: "Turneul campionilor din circuitul Tenis10, găzduit la Elite Tenis Club.",
-      en: "The champions' tournament of the Tenis10 circuit, hosted at Elite Tenis Club.",
+      ro: "Turneul campionilor din circuitul Tenis10, găzduit de Clubul Tenis Elite.",
+      en: "The champions' tournament of the Tenis10 circuit, hosted by Clubul Tenis Elite.",
     },
   },
 ];

@@ -75,7 +75,7 @@ export default async function SchoolsPage({ params }: PageProps<"/[locale]/scoli
         <div className="schools-path">
           <h3 className="section-subtitle">{t("schools.pathTitle")}</h3>
           <p className="measure">{t("schools.pathText")}</p>
-          <Link href="/academie" className="link">
+          <Link href={{ pathname: "/programe", hash: "grupe" }} className="link">
             {t("schools.pathCta")}
           </Link>
         </div>

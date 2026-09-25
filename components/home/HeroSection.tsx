@@ -98,7 +98,7 @@ export async function HeroSection({
               </Link>
             ) : null}
             {scene.extra.secondaryLabel ? (
-              <Link href="/academie" className="btn btn-secondary">
+              <Link href="/inchiriere-teren" className="btn btn-secondary">
                 <TodoText value={scene.extra.secondaryLabel} />
               </Link>
             ) : null}

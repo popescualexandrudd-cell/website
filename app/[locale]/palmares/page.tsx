@@ -189,7 +189,10 @@ export default async function HonoursPage({ params }: PageProps<"/[locale]/palma
         <div className="honours-cta">
           <h2 className="section-subtitle">{t("honours.ctaTitle")}</h2>
           <p>{t("honours.ctaText")}</p>
-          <Link href="/academie" className="btn btn-primary btn-arrow">
+          <Link
+            href={{ pathname: "/programe", hash: "inscriere" }}
+            className="btn btn-primary btn-arrow"
+          >
             {t("honours.ctaButton")}
           </Link>
         </div>

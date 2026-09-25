@@ -15,6 +15,8 @@ export type ProgramContent = {
   level: Level;
   ageMin?: number;
   ageMax?: number;
+  /** Booked online as lessons (false: camps and corporate events, arranged by phone). */
+  bookableOnline?: boolean;
 };
 
 /** A kind of lesson: with how many people, for how long, at what hourly rate. */
@@ -35,20 +37,20 @@ export const programContent: ProgramContent[] = [
     configName: "Inițiere",
     name: { ro: "Inițiere", en: "Beginners" },
     summary: {
-      ro: "Pentru cei care încep: copii de la 4 ani și adulți care n-au mai jucat. Învățăm loviturile de bază, mișcarea în teren și regulile, fără grabă.",
-      en: "For people starting out: children from 4 and adults who have never played. We learn the basic strokes, how to move on court and the rules, without rushing.",
+      ro: "Primii pași în tenis, pentru copii de la 4 ani și pentru adulți care n-au mai jucat. Copiii încep cu 2 ședințe gratuite.",
+      en: "First steps in tennis, for children from 4 and adults who have never played. Children start with 2 free sessions.",
     },
     focusPoints: {
       ro: [
-        "priza și poziția de așteptare",
+        "priza, poziția de așteptare și primele lovituri",
+        "coordonare, echilibru și deplasare în teren",
         "forehand, rever și primul serviciu",
-        "deplasarea în teren și echilibrul la lovire",
         "regulile și numărătoarea, ca să poți juca un meci",
       ],
       en: [
-        "the grip and the ready position",
+        "the grip, the ready position and the first strokes",
+        "coordination, balance and moving on court",
         "forehand, backhand and a first serve",
-        "moving on court and staying balanced when you hit",
         "the rules and scoring, so you can play a match",
       ],
     },
@@ -56,46 +58,46 @@ export const programContent: ProgramContent[] = [
     level: "INCEPATOR",
     ageMin: 4,
     description: {
-      ro: `Inițierea e pentru cine ține racheta în mână pentru prima dată sau aproape. La copii începem cu mini-tenis: teren mai mic, mingi mai moi și multe jocuri de coordonare. La adulți mergem direct pe terenul mare, dar cu mingi mai lente la început, ca loviturile să iasă din primele lecții.
+      ro: `Inițierea este locul în care tenisul devine joacă, apoi pasiune. Copiii încep cu minitenisul: teren mic, rachete pe măsura lor și mingi mai moi, care sar încet și le lasă timp să lovească. Adulții merg direct pe terenul mare, cu mingi mai lente la început, ca loviturile să iasă din primele antrenamente.
+
+## Oferta de bun venit
+
+Toți copiii care se înscriu la grupele de inițiere primesc **primele 2 ședințe gratuit**. Fără obligații, iar echipamentul îl asigurăm noi.
 
 ## Ce lucrăm
 
-- priza și poziția de așteptare;
+- priza, poziția de așteptare și primele lovituri;
+- coordonare, echilibru și deplasare în teren;
 - forehand, rever și primul serviciu;
-- deplasarea în teren și echilibrul la lovire;
 - regulile și numărătoarea, ca să poți juca un meci.
 
-## Cât durează
+## Ritmul
 
-Cei mai mulți țin un schimb de mingi după câteva lecții. Cu una sau două lecții pe săptămână, după trei-patru luni poți juca un set cu cineva de nivel apropiat.
-
-## Cum te antrenezi
-
-Inițierea merge în lecții individuale, în doi cu un prieten, în trei sau într-o grupă mică. Durata o alegi la rezervare; la început, 60 de minute sunt de obicei de ajuns.
+Cu două antrenamente pe săptămână, cei mai mulți țin un schimb de mingi după câteva săptămâni, iar după câteva luni joacă primele meciuri.
 
 ## Ce aduci
 
-Pantofi sport cu talpă plată (ideal, pantofi de tenis pentru zgură), haine lejere și apă. Racheta și mingile ți le împrumutăm noi la început.`,
-      en: `The beginners programme is for anyone holding a racquet for the first time, or nearly. With children we start with mini tennis: a smaller court, softer balls and plenty of coordination games. With adults we go straight to the full court, with slower balls at first, so the strokes work from the first lessons.
+Pantofi sport cu talpă plată (ideal, pantofi de tenis pentru zgură), haine lejere și o sticlă cu apă. Rachetele și mingile le primești de la club.`,
+      en: `Beginners is where tennis becomes play, then a passion. Children start with mini tennis: a small court, racquets their size and softer balls that bounce slowly and give them time to hit. Adults go straight to the full court, with slower balls at first, so the strokes work from the first sessions.
+
+## Our welcome offer
+
+Every child who joins a beginners group gets **the first 2 sessions free**. No commitment, and we provide the equipment.
 
 ## What we work on
 
-- the grip and the ready position;
+- the grip, the ready position and the first strokes;
+- coordination, balance and moving on court;
 - forehand, backhand and a first serve;
-- moving on court and staying balanced when you hit;
 - the rules and scoring, so you can play a match.
 
-## How long it takes
+## The pace
 
-Most people can keep a rally going after a few lessons. With one or two lessons a week, after three or four months you can play a set with someone of a similar level.
-
-## How you train
-
-You can do it in private lessons, with a friend, as three, or in a small group. You choose the length when you book; at first, 60 minutes is usually enough.
+With two sessions a week, most players keep a rally going within a few weeks and play their first matches within a few months.
 
 ## What to bring
 
-Flat-soled trainers (ideally clay-court tennis shoes), comfortable clothes and water. We lend you a racquet and balls at first.`,
+Flat-soled trainers (ideally clay-court tennis shoes), comfortable clothes and a bottle of water. The club provides racquets and balls.`,
     },
   },
   {
@@ -103,62 +105,127 @@ Flat-soled trainers (ideally clay-court tennis shoes), comfortable clothes and w
     configName: "Competiție",
     name: { ro: "Competiție", en: "Competition" },
     summary: {
-      ro: "Pentru jucătorii care participă la turnee sau vor să înceapă. Plan de sezon, pregătire tehnică, tactică și fizică, apoi discuția fiecărui meci.",
-      en: "For players who compete or want to start. A season plan, technical, tactical and physical preparation, then a review of every match.",
+      ro: "Pentru copii, juniori și adulți care joacă turnee sau se pregătesc pentru primul. Tehnică, tactică, pregătire fizică și meciuri oficiale acasă.",
+      en: "For children, juniors and adults who play tournaments or are getting ready for their first. Technique, tactics, conditioning and official matches at home.",
     },
     focusPoints: {
       ro: [
-        "plan de sezon, cu turneele alese după nivel și vârstă",
-        "lovituri care rezistă la viteză și presiune de meci",
+        "lovituri care rezistă la viteză și la presiunea meciului",
         "tactică: construcția punctului, serviciu și retur",
         "pregătire fizică specifică tenisului",
-        "rutine între puncte și gestionarea emoțiilor",
+        "calendarul de turnee ales după vârstă și nivel",
+        "rutine între puncte și controlul emoțiilor",
       ],
       en: [
-        "a season plan, with tournaments chosen by level and age",
         "strokes that hold up at match speed and under pressure",
         "tactics: building the point, serve and return",
         "tennis-specific conditioning",
+        "a tournament calendar chosen by age and level",
         "routines between points and handling nerves",
       ],
     },
     audience: "TOATE",
     level: "COMPETITIE",
     description: {
-      ro: `Programul de competiție e pentru copii, juniori și adulți care joacă turnee sau se pregătesc pentru primele. Antrenorul principal este arbitru național de tenis, așa că regulamentul și felul în care decurge un turneu le cunoaștem din interior. În pregătire asta înseamnă că știm dinainte ce ne așteaptă: încălzirea, pauzele, momentele tensionate, situațiile de regulament.
+      ro: `Programul de competiție pregătește jucătorii pentru turneele Federației Române de Tenis și Tenis10. Avantajul clubului: multe dintre aceste turnee se joacă chiar pe terenurile noastre, așa că primele meciuri oficiale au loc într-un loc cunoscut, cu antrenorii aproape.
 
 ## Ce lucrăm
 
-- plan de sezon, cu turneele alese după nivel și vârstă;
-- lovituri care rezistă la viteză și presiune de meci;
+- lovituri care rezistă la viteză și la presiunea meciului;
 - tactică: construcția punctului, serviciu și retur;
 - pregătire fizică specifică tenisului;
-- rutine între puncte și gestionarea emoțiilor.
+- calendarul de turnee ales după vârstă și nivel;
+- rutine între puncte și controlul emoțiilor.
 
 ## După fiecare turneu
 
-Discutăm meciurile: ce a mers, ce nu și ce ducem în antrenamentele următoare. Când ajută, ne uităm și pe filmări.
+Antrenorii clubului discută meciurile cu jucătorul: ce a mers, ce nu și ce ducem în antrenamentele următoare.
 
 ## Cum te antrenezi
 
-De obicei în lecții individuale sau în doi, cu un partener de nivel apropiat, de 90 sau 120 de minute. O analiză biomecanică la începutul sezonului arată exact ce merită corectat.`,
-      en: `The competition programme is for children, juniors and adults who play tournaments or are getting ready for their first. Our head coach is a national tennis umpire, so we know the rules and how a tournament runs from the inside. In training that means we know in advance what to expect: the warm-up, the breaks, the tense moments, the rules situations.
+În grupe mici de nivel apropiat, completate cu antrenamente individuale sau în doi.`,
+      en: `The competition programme prepares players for Romanian Tennis Federation and Tenis10 tournaments. The club's advantage: many of these tournaments are played on our own courts, so the first official matches happen somewhere familiar, with the coaches close by.
 
 ## What we work on
 
-- a season plan, with tournaments chosen by level and age;
 - strokes that hold up at match speed and under pressure;
 - tactics: building the point, serve and return;
 - tennis-specific conditioning;
+- a tournament calendar chosen by age and level;
 - routines between points and handling nerves.
 
 ## After every tournament
 
-We go through the matches: what worked, what did not, and what we take into the next sessions. When it helps, we look at video too.
+The club's coaches go through the matches with the player: what worked, what did not, and what we take into the next sessions.
 
 ## How you train
 
-Usually in private lessons or with a partner of a similar level, for 90 or 120 minutes. A biomechanical analysis at the start of the season shows exactly what is worth correcting.`,
+In small groups of a similar level, together with private or paired sessions.`,
+    },
+  },
+  {
+    slug: "inalta-performanta",
+    configName: "Înaltă performanță",
+    name: { ro: "Înaltă performanță", en: "High performance" },
+    summary: {
+      ro: "Pentru juniorii care țintesc titluri naționale și turnee internaționale. Mai multe antrenamente pe săptămână, pregătire fizică și un plan de sezon.",
+      en: "For juniors aiming at national titles and international tournaments. More sessions a week, conditioning and a season plan.",
+    },
+    focusPoints: {
+      ro: [
+        "plan de sezon cu obiective clare și turnee alese atent",
+        "antrenamente tehnice și tactice de intensitate mare",
+        "pregătire fizică și prevenirea accidentărilor",
+        "pregătire mentală pentru meciurile importante",
+        "legătura constantă între antrenor, jucător și părinți",
+      ],
+      en: [
+        "a season plan with clear goals and carefully chosen tournaments",
+        "high-intensity technical and tactical sessions",
+        "conditioning and injury prevention",
+        "mental preparation for big matches",
+        "constant contact between coach, player and parents",
+      ],
+    },
+    audience: "JUNIORI",
+    level: "COMPETITIE",
+    ageMin: 10,
+    ageMax: 18,
+    description: {
+      ro: `Înalta performanță este pasul următor pentru juniorii care joacă deja turnee și vor mai mult: clasament național, titluri, turnee internaționale. Programul este coordonat de antrenorul principal al clubului, împreună cu echipa de antrenori.
+
+## Ce lucrăm
+
+- plan de sezon cu obiective clare și turnee alese atent;
+- antrenamente tehnice și tactice de intensitate mare;
+- pregătire fizică și prevenirea accidentărilor;
+- pregătire mentală pentru meciurile importante;
+- legătura constantă între antrenor, jucător și părinți.
+
+## Cum intri în program
+
+Accesul se face după o evaluare cu antrenorul principal, care ține cont de rezultate, de nivelul de joc și de timpul pe care juniorul îl poate dedica tenisului.
+
+## Sala acoperită
+
+Terenurile de zgură acoperite permit pregătirea fără întrerupere și iarna, exact în perioada în care se construiește forma pentru sezonul următor.`,
+      en: `High performance is the next step for juniors who already play tournaments and want more: a national ranking, titles, international events. The programme is led by the club's head coach together with the coaching team.
+
+## What we work on
+
+- a season plan with clear goals and carefully chosen tournaments;
+- high-intensity technical and tactical sessions;
+- conditioning and injury prevention;
+- mental preparation for big matches;
+- constant contact between coach, player and parents.
+
+## How to join
+
+Entry follows an assessment with the head coach, who looks at results, level of play and the time the junior can give to tennis.
+
+## The covered hall
+
+The covered clay courts allow uninterrupted training in winter too, exactly when the form for next season is built.`,
     },
   },
   {
@@ -166,69 +233,191 @@ Usually in private lessons or with a partner of a similar level, for 90 or 120 m
     configName: "Amatori",
     name: { ro: "Amatori", en: "Recreational" },
     summary: {
-      ro: "Tenis de plăcere, pentru adulți care joacă sau vor să joace constant: lovituri mai sigure, mai multă mișcare și meciuri mai bune cu prietenii.",
-      en: "Tennis for fun, for adults who play or want to play regularly: more reliable strokes, more exercise and better matches with friends.",
+      ro: "Tenis de plăcere pentru adulți: lovituri mai sigure, mai multă mișcare și meciuri mai bune cu prietenii. Orice nivel.",
+      en: "Tennis for fun for adults: more reliable strokes, more exercise and better matches with friends. Any level.",
     },
     focusPoints: {
       ro: [
-        "lovituri mai sigure și mai blânde cu încheietura și umărul",
+        "lovituri mai sigure, blânde cu încheietura și umărul",
         "serviciu și retur, care decid cele mai multe puncte",
         "jocul la fileu și dublul",
-        "tactică simplă pentru meciurile cu prietenii sau de club",
+        "tactică simplă pentru meciurile de club",
       ],
       en: [
-        "more reliable strokes that are kinder to wrist and shoulder",
+        "more reliable strokes, kinder to wrist and shoulder",
         "serve and return, which decide most points",
         "net play and doubles",
-        "simple tactics for matches with friends or at the club",
+        "simple tactics for club matches",
       ],
     },
     audience: "ADULTI",
     level: "TOATE",
     description: {
-      ro: `Programul pentru amatori e pentru cei care joacă din plăcere: după program, în weekend, cu prietenii. Nu cere un anumit nivel. Unii vin să repare o lovitură care îi încurcă de ani buni, alții vor să se miște mai mult sau să câștige mai des meciurile de sâmbătă.
+      ro: `Programul pentru amatori este pentru adulții care joacă din plăcere: după serviciu, în weekend, cu prietenii. Nu cere un anumit nivel. Unii vin să repare o lovitură care îi încurcă de ani buni, alții vor să se miște mai mult sau să câștige mai des meciul de sâmbătă.
 
 ## Ce lucrăm
 
-- lovituri mai sigure și mai blânde cu încheietura și umărul;
+- lovituri mai sigure, blânde cu încheietura și umărul;
 - serviciu și retur, care decid cele mai multe puncte;
 - jocul la fileu și dublul;
-- tactică simplă pentru meciurile cu prietenii sau de club.
+- tactică simplă pentru meciurile de club.
 
 ## Ritmul
 
-Vii cât îți permite programul. O lecție pe săptămână te ține în formă; două aduc progres vizibil. Dacă joci și turnee de amatori, pregătim și meciurile.
+Vii cât îți permite programul. Un antrenament pe săptămână te ține în formă; două aduc progres vizibil.
 
-## Cum te antrenezi
+## Mai mult decât antrenament
 
-Merge foarte bine în doi sau în trei, cu prietenii, dar și în lecții individuale sau într-o grupă. La rezervare alegi 60, 90 sau 120 de minute.`,
-      en: `The recreational programme is for people who play for fun: after work, at weekends, with friends. No particular level is needed. Some come to fix a stroke that has bothered them for years, others want more exercise or to win Saturday's match more often.
+Liga amatorilor și lista „Găsește partener” te pun în legătură cu jucători de nivelul tău, pentru meciuri adevărate.`,
+      en: `The recreational programme is for adults who play for fun: after work, at weekends, with friends. No particular level is needed. Some come to fix a stroke that has bothered them for years, others want more exercise or to win Saturday's match more often.
 
 ## What we work on
 
-- more reliable strokes that are kinder to wrist and shoulder;
+- more reliable strokes, kinder to wrist and shoulder;
 - serve and return, which decide most points;
 - net play and doubles;
-- simple tactics for matches with friends or at the club.
+- simple tactics for club matches.
 
 ## The pace
 
-Come as often as your schedule allows. One lesson a week keeps you in shape; two bring visible progress. If you also play amateur tournaments, we prepare for those matches too.
+Come as often as your schedule allows. One session a week keeps you in shape; two bring visible progress.
 
-## How you train
+## More than training
 
-It works very well as two or three friends, but also in private lessons or a group. When you book you choose 60, 90 or 120 minutes.`,
+The amateur league and the "Find a partner" list put you in touch with players of your level, for real matches.`,
+    },
+  },
+  {
+    slug: "tabere",
+    configName: "Tabere",
+    name: { ro: "Tabere de tenis", en: "Tennis camps" },
+    summary: {
+      ro: "În vacanțele școlare, zile întregi de tenis, mișcare și jocuri pentru copii, cu antrenorii clubului, pe zgură.",
+      en: "In the school holidays, full days of tennis, exercise and games for children, with the club's coaches, on clay.",
+    },
+    focusPoints: {
+      ro: [
+        "antrenamente de tenis pe grupe de vârstă și nivel",
+        "jocuri de coordonare și pregătire fizică adaptată vârstei",
+        "mini-turnee la final de săptămână",
+        "prieteni noi și o vacanță activă, departe de ecrane",
+      ],
+      en: [
+        "tennis sessions by age and level",
+        "coordination games and age-appropriate conditioning",
+        "mini tournaments at the end of the week",
+        "new friends and an active holiday, away from screens",
+      ],
+    },
+    audience: "COPII",
+    level: "TOATE",
+    ageMin: 5,
+    ageMax: 14,
+    bookableOnline: false,
+    description: {
+      ro: `Taberele de tenis transformă vacanța școlară într-o săptămână activă, pe zgură, alături de antrenorii clubului. Copiii sunt împărțiți pe grupe de vârstă și nivel, așa că fiecare lucrează în ritmul lui, de la primii pași până la jucătorii de turneu.
+
+## O zi de tabără
+
+- antrenamente de tenis pe grupe de vârstă și nivel;
+- jocuri de coordonare și pregătire fizică adaptată vârstei;
+- mini-turnee la final de săptămână;
+- prieteni noi și o vacanță activă, departe de ecrane.
+
+## Pe orice vreme
+
+Dacă plouă, tabăra continuă pe terenurile acoperite.
+
+## Înscrierea
+
+Perioadele taberelor le anunțăm pe site, pe Facebook și pe Instagram. Pentru locuri și detalii, sună-ne sau scrie-ne.`,
+      en: `Tennis camps turn the school holidays into an active week on clay with the club's coaches. Children are split by age and level, so each works at their own pace, from first steps to tournament players.
+
+## A day at camp
+
+- tennis sessions by age and level;
+- coordination games and age-appropriate conditioning;
+- mini tournaments at the end of the week;
+- new friends and an active holiday, away from screens.
+
+## Whatever the weather
+
+If it rains, the camp carries on in the covered courts.
+
+## Signing up
+
+We announce the camp dates on the site, on Facebook and on Instagram. For places and details, call or write to us.`,
+    },
+  },
+  {
+    slug: "team-building",
+    configName: "Team building",
+    name: { ro: "Team building și evenimente corporate", en: "Team building and corporate events" },
+    summary: {
+      ro: "Tenis pentru echipa ta: inițiere pentru colegi, turnee interne și evenimente de firmă, cu terenuri, antrenori și echipament asigurate.",
+      en: "Tennis for your team: taster sessions for colleagues, in-house tournaments and company events, with courts, coaches and equipment provided.",
+    },
+    focusPoints: {
+      ro: [
+        "inițiere în tenis pentru colegii care n-au jucat niciodată",
+        "turneu intern de simplu sau dublu, cu tablou și premiere",
+        "antrenori ai clubului pe fiecare teren",
+        "rachete și mingi pentru toți participanții",
+      ],
+      en: [
+        "a tennis taster for colleagues who have never played",
+        "an in-house singles or doubles tournament, with a draw and prize-giving",
+        "club coaches on every court",
+        "racquets and balls for everyone",
+      ],
+    },
+    audience: "ADULTI",
+    level: "TOATE",
+    bookableOnline: false,
+    description: {
+      ro: `Un team building pe terenul de tenis leagă echipa altfel decât o ședință: colegii se mișcă, râd și joacă împreună. Clubul organizează evenimente pentru firme de la câteva persoane până la echipe mari, pe cele 8 terenuri de zgură.
+
+## Ce putem organiza
+
+- inițiere în tenis pentru colegii care n-au jucat niciodată;
+- turneu intern de simplu sau dublu, cu tablou și premiere;
+- antrenori ai clubului pe fiecare teren;
+- rachete și mingi pentru toți participanții.
+
+## Pe orice vreme
+
+Terenurile acoperite fac evenimentul posibil în orice anotimp.
+
+## Oferta
+
+Spune-ne câți colegi vin, ce dată preferați și ce vă doriți, iar noi îți trimitem propunerea.`,
+      en: `A team building day on the tennis court brings a team together differently from a meeting: colleagues move, laugh and play together. The club runs events for companies from a handful of people to large teams, on its 8 clay courts.
+
+## What we can organise
+
+- a tennis taster for colleagues who have never played;
+- an in-house singles or doubles tournament, with a draw and prize-giving;
+- club coaches on every court;
+- racquets and balls for everyone.
+
+## Whatever the weather
+
+The covered courts make the event possible in any season.
+
+## Your quote
+
+Tell us how many colleagues are coming, the date you prefer and what you would like, and we will send you a proposal.`,
     },
   },
 ];
 
 export const lessonContent: LessonContent[] = [
   {
-    slug: "lectie-individuala",
-    configName: "Lecție individuală",
-    name: { ro: "Lecție individuală", en: "Private lesson" },
+    slug: "antrenament-individual",
+    configName: "Antrenament individual",
+    name: { ro: "Antrenament individual", en: "Private session" },
     summary: {
-      ro: "Doar tu și antrenorul. Tot timpul e al tău: corecturi pe loc, în ritmul tău.",
+      ro: "Doar tu și antrenorul. Tot timpul este al tău: corecturi pe loc, în ritmul tău.",
       en: "Just you and the coach. All the time is yours: on-the-spot corrections, at your pace.",
     },
     minParticipants: 1,
@@ -236,21 +425,21 @@ export const lessonContent: LessonContent[] = [
     priceUnit: "LECTIE",
   },
   {
-    slug: "lectie-in-doi",
-    configName: "Lecție în doi",
-    name: { ro: "Lecție în doi", en: "Lesson for two" },
+    slug: "antrenament-in-2",
+    configName: "Antrenament în 2",
+    name: { ro: "Antrenament în 2", en: "Session for 2" },
     summary: {
-      ro: "Doi jucători de nivel apropiat: prieteni, frați, părinte și copil. Mult joc în schimburi și puncte jucate.",
-      en: "Two players of a similar level: friends, siblings, parent and child. Plenty of rallying and points played.",
+      ro: "Doi jucători de nivel apropiat: prieteni, frați, părinte și copil. Multe schimburi de mingi și puncte jucate.",
+      en: "Two players of a similar level: friends, siblings, parent and child. Plenty of rallies and points played.",
     },
     minParticipants: 2,
     maxParticipants: 2,
     priceUnit: "PERSOANA",
   },
   {
-    slug: "lectie-in-trei",
-    configName: "Lecție în trei",
-    name: { ro: "Lecție în trei", en: "Lesson for three" },
+    slug: "antrenament-in-3",
+    configName: "Antrenament în 3",
+    name: { ro: "Antrenament în 3", en: "Session for 3" },
     summary: {
       ro: "Trei jucători pe un teren. Ritm alert, exerciții prin rotație și jocuri cu puncte.",
       en: "Three players on one court. A brisk pace, rotation drills and point games.",
@@ -260,9 +449,9 @@ export const lessonContent: LessonContent[] = [
     priceUnit: "PERSOANA",
   },
   {
-    slug: "lectie-de-grup",
-    configName: "Lecție de grup",
-    name: { ro: "Lecție de grup", en: "Group lesson" },
+    slug: "antrenament-de-grup",
+    configName: "Antrenament de grup",
+    name: { ro: "Antrenament de grup", en: "Group session" },
     summary: {
       ro: "Între 4 și 6 jucători de nivel apropiat. Exerciții pe stații, jocuri și multă mișcare.",
       en: "Four to six players of a similar level. Drill stations, games and plenty of movement.",
@@ -270,17 +459,5 @@ export const lessonContent: LessonContent[] = [
     minParticipants: 4,
     maxParticipants: 6,
     priceUnit: "PERSOANA",
-  },
-  {
-    slug: "analiza-biomecanica",
-    configName: "Analiză biomecanică",
-    name: { ro: "Analiză biomecanică", en: "Biomechanical analysis" },
-    summary: {
-      ro: "Filmăm loviturile și le analizăm cadru cu cadru: priza, lanțul kinetic, punctul de impact. După ședință primești observațiile și exercițiile de corectare.",
-      en: "We film your strokes and go through them frame by frame: grip, kinetic chain, contact point. Afterwards you get the notes and the corrective drills.",
-    },
-    minParticipants: 1,
-    maxParticipants: 1,
-    priceUnit: "LECTIE",
   },
 ];

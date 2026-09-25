@@ -17,6 +17,7 @@ import { breadcrumbLd, courtHireLd } from "@/lib/structured-data";
 import { PageHero, PageSection } from "@/components/pages/PageHero";
 import { JsonLd } from "@/components/pages/JsonLd";
 import { CourtRequestForm } from "@/components/pages/CourtRequestForm";
+import { WinterOffer } from "@/components/pages/WinterOffer";
 import { CourtMark } from "@/components/ui/CourtMark";
 import { Markdown } from "@/components/site/Markdown";
 import { TodoText } from "@/components/site/TodoText";
@@ -105,6 +106,10 @@ export default async function CourtHirePage({ params }: PageProps<"/[locale]/inc
           </a>
         </div>
       </PageHero>
+
+      <PageSection id="oferta-iarna">
+        <WinterOffer onRentalPage />
+      </PageSection>
 
       {courts.length > 0 ? (
         <PageSection id="terenuri" title={t("rental.courtsTitle")}>

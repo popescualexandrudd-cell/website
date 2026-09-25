@@ -3,10 +3,10 @@ import type { BallStage, Level } from "../../../lib/generated/prisma/client";
 type Text = { ro: string; en: string };
 
 /**
- * The stages of the junior academy, as the ITF "Play and Stay" programme defines them: the
- * court, the racquet and the ball grow with the child, so the strokes are learnt at a speed and
- * height a child can control. What differs from club to club (days, hours, fees, places) comes
- * from config/club.yml and the admin.
+ * The club's groups, on the ITF "Play and Stay" stages: mini tennis with the red, orange and
+ * green ball (the court, racquet and ball grow with the child), then juniors and seniors with
+ * the yellow ball from 11. What differs from club to club (days, hours, fees, places) comes from
+ * config/club.yml and the admin.
  */
 export type StageContent = {
   stage: BallStage;
@@ -24,7 +24,7 @@ export const stageContent: StageContent[] = [
     stage: "ROSU",
     configName: "roșu",
     slug: "minge-rosie",
-    name: { ro: "Mini tenis · minge roșie", en: "Mini tennis · red ball" },
+    name: { ro: "Minitenis · minge roșie", en: "Mini tennis · red ball" },
     summary: {
       ro: "Primii pași: teren mic, rachetă scurtă și o minge moale, care sare jos și încet. Copiii învață să lovească și să se miște prin joc, iar după câteva săptămâni țin deja un schimb de mingi.",
       en: "First steps: a small court, a short racquet and a soft ball that bounces low and slow. Children learn to hit and move through games, and within a few weeks they can keep a rally going.",
@@ -49,7 +49,7 @@ export const stageContent: StageContent[] = [
     stage: "PORTOCALIU",
     configName: "portocaliu",
     slug: "minge-portocalie",
-    name: { ro: "Minge portocalie", en: "Orange ball" },
+    name: { ro: "Minitenis · minge portocalie", en: "Mini tennis · orange ball" },
     summary: {
       ro: "Terenul crește la trei sferturi, mingea e ceva mai rapidă. Copiii lovesc cu direcție, servesc de sus și joacă primele meciuri de antrenament.",
       en: "The court grows to three quarters and the ball gets a little faster. Children hit with direction, serve overhead and play their first practice matches.",
@@ -74,7 +74,7 @@ export const stageContent: StageContent[] = [
     stage: "VERDE",
     configName: "verde",
     slug: "minge-verde",
-    name: { ro: "Minge verde", en: "Green ball" },
+    name: { ro: "Minitenis · minge verde", en: "Mini tennis · green ball" },
     summary: {
       ro: "Terenul întreg, cu o minge puțin mai lentă decât cea standard. Apar efectele, serviciul devine o armă, iar jocul capătă tactică: pregătirea pentru primele competiții.",
       en: "The full court, with a ball slightly slower than the standard one. Spin comes in, the serve becomes a weapon and the game gets tactical: preparation for the first competitions.",
@@ -98,24 +98,24 @@ export const stageContent: StageContent[] = [
   {
     stage: "GALBEN",
     configName: "galben",
-    slug: "juniori-minge-galbena",
-    name: { ro: "Juniori · minge galbenă", en: "Juniors · yellow ball" },
+    slug: "juniori-seniori-minge-galbena",
+    name: { ro: "Juniori și seniori · minge galbenă", en: "Juniors and seniors · yellow ball" },
     summary: {
-      ro: "Terenul și mingea standard. Pentru juniorii care joacă turnee sau vor să înceapă: plan de sezon, pregătire tehnică, tactică și fizică, apoi discuția fiecărui meci.",
-      en: "The standard court and ball. For juniors who play tournaments or want to start: a season plan, technical, tactical and physical preparation, then a review of every match.",
+      ro: "De la 11 ani: terenul și mingea standard. Grupe pe niveluri pentru juniori și adulți, de la jocul de club până la turneele federației.",
+      en: "From 11: the standard court and ball. Groups by level for juniors and adults, from club play to federation tournaments.",
     },
     focusPoints: {
       ro: [
-        "plan de sezon, cu turneele alese după nivel și vârstă",
-        "lovituri care rezistă la viteză și presiune de meci",
+        "lovituri complete, cu efect și control",
+        "tactică: construcția punctului, serviciu și retur",
         "pregătire fizică specifică tenisului",
-        "rutine între puncte și gestionarea emoțiilor",
+        "meciuri de antrenament și turnee, pentru cine vrea",
       ],
       en: [
-        "a season plan, with tournaments chosen by level and age",
-        "strokes that hold up at match speed and under pressure",
+        "complete strokes, with spin and control",
+        "tactics: building the point, serve and return",
         "tennis-specific conditioning",
-        "routines between points and handling nerves",
+        "practice matches and tournaments, for those who want them",
       ],
     },
     level: "COMPETITIE",

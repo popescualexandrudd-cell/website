@@ -28,7 +28,7 @@ export function TeamSection({ scene, coaches }: { scene: SceneView; coaches: Coa
         </div>
         <div className="team-grid" data-count={Math.min(coaches.length, 4)}>
           {coaches.map((coach) => (
-            <CoachCard key={coach.id} coach={coach} photoNote={scene.extra.photoNote ?? ""} />
+            <CoachCard key={coach.id} coach={coach} />
           ))}
         </div>
       </div>

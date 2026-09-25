@@ -21,12 +21,11 @@ import {
   type SceneView,
 } from "@/lib/content";
 import { HeroSection } from "@/components/home/HeroSection";
-import { StatementSection } from "@/components/home/StatementSection";
+import { CampaignSection } from "@/components/home/CampaignSection";
 import { FiguresSection, type Figure } from "@/components/home/FiguresSection";
 import { ProgramsSection } from "@/components/home/ProgramsSection";
 import { AcademySection } from "@/components/home/AcademySection";
 import { TeamSection } from "@/components/home/TeamSection";
-import { MethodSection } from "@/components/home/MethodSection";
 import { VenueSection } from "@/components/home/VenueSection";
 import { GallerySection } from "@/components/home/GallerySection";
 import { LessonsSection } from "@/components/home/LessonsSection";
@@ -37,7 +36,6 @@ import { StorySection } from "@/components/home/StorySection";
 import { PillarsSection } from "@/components/home/PillarsSection";
 import { FinderSection } from "@/components/home/FinderSection";
 import { TournamentsSection } from "@/components/home/TournamentsSection";
-import { SocialSection } from "@/components/home/SocialSection";
 import { assistantAvailable } from "@/lib/assistant/load";
 import { BookingWidget } from "@/components/booking/BookingWidget";
 import { JsonLd } from "@/components/pages/JsonLd";
@@ -147,8 +145,13 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     switch (scene.key) {
       case "deschiderea":
         return <HeroSection key={scene.key} scene={scene} settings={settings} />;
+      case "campanie":
+        return <CampaignSection key={scene.key} scene={scene} />;
+      // Sections of earlier versions that the club's site no longer shows.
       case "manifest":
-        return <StatementSection key={scene.key} scene={scene} />;
+      case "metoda":
+      case "social":
+        return null;
       case "cifre":
         return <FiguresSection key={scene.key} scene={scene} figures={figures} />;
       case "programe":
@@ -157,8 +160,6 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         return <AcademySection key={scene.key} scene={scene} groups={groups} />;
       case "echipa":
         return <TeamSection key={scene.key} scene={scene} coaches={coaches} />;
-      case "metoda":
-        return <MethodSection key={scene.key} scene={scene} />;
       case "poveste":
         return <StorySection key={scene.key} scene={scene} />;
       case "piloni":
@@ -187,10 +188,9 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             upcoming={tournaments.upcoming}
             hosted={tournaments.hosted}
             locale={locale}
+            video={settings.heroVideo}
           />
         );
-      case "social":
-        return <SocialSection key={scene.key} scene={scene} settings={settings} />;
       case "clubul":
         return (
           <VenueSection

@@ -19,8 +19,8 @@ type Vars = {
 /**
  * The sections of the home page, top to bottom. `{club}`, `{locatie}`, `{oras}`, `{terenuri}`,
  * `{acoperite}`, `{exterior}` and `{an}` are replaced at seed time from config/club.yml. The
- * academy speaks as "we": the club and its coaches. The story follows the club's own public
- * presentation (elitetenisclub.ro) and the tournament calendars of frt.ro and tenis10.ro.
+ * site speaks as the club ("we": the club and its coaches). The story follows the club's own
+ * public presentation and the tournament calendars of frt.ro and tenis10.ro.
  */
 export function sceneSeeds(vars: Vars): SceneSeed[] {
   const fill = (value: string) =>
@@ -38,186 +38,175 @@ export function sceneSeeds(vars: Vars): SceneSeed[] {
       key: "deschiderea",
       order: 1,
       indexName: {
-        ro: fill("Academie de tenis · {oras}"),
-        en: fill("Tennis academy · {oras}"),
+        ro: fill("Club de tenis · {oras}"),
+        en: fill("Tennis club · {oras}"),
       },
-      // The club's own line, from the opening of elitetenisclub.ro.
       title: {
         ro: "Experiență de elită în lumea tenisului.",
         en: "An elite experience in the world of tennis.",
       },
       body: {
         ro: fill(
-          "Școală de tenis pentru copii și adulți la {locatie}, lângă București: copii de la 4 ani, juniori care joacă turnee și adulți care vor să învețe sau doar să joace, pe zgură, tot anul.",
+          "{club}, în {oras}, lângă București: {terenuri} terenuri de zgură, {acoperite} acoperite, deschise zilnic între 07:00 și 22:00. Tenis pentru copii de la 4 ani, juniori și adulți, tot anul.",
         ),
         en: fill(
-          "A tennis school for children and adults at {locatie}, next to Bucharest: children from the age of 4, juniors who play tournaments and adults who want to learn or simply play, on clay, all year round.",
+          "{club}, in {oras}, next to Bucharest: {terenuri} clay courts, {acoperite} of them covered, open every day from 07:00 to 22:00. Tennis for children from 4, juniors and adults, all year round.",
         ),
       },
-      ctaLabel: { ro: "Programează o lecție", en: "Book a lesson" },
+      ctaLabel: { ro: "Rezervă un antrenament", en: "Book a session" },
       ctaHref: "/rezervare",
       extra: {
-        secondaryLabel: { ro: "Academia de juniori", en: "Junior academy" },
-        mediaNote: {
-          ro: "[DE COMPLETAT] Video cu antrenamentele clubului, 10–20 de secunde, orizontal",
-          en: "[DE COMPLETAT] A video of training at the club, 10–20 seconds, landscape",
-        },
+        secondaryLabel: { ro: "Închiriază un teren", en: "Hire a court" },
+      },
+    },
+    {
+      key: "campanie",
+      order: 2,
+      indexName: { ro: "Campania de iarnă", en: "Winter campaign" },
+      title: {
+        ro: "Campania de iarnă la Clubul Tenis Elite!",
+        en: "The winter campaign at Clubul Tenis Elite!",
+      },
+      body: {
+        ro: "Ai cel mai mic preț din București la închirierea terenului: doar **60 RON/oră**.\nCopilul tău vrea să învețe tenis? Oferim **2 ședințe GRATUITE** pentru toți copiii care se înscriu la grupele de inițiere!",
+        en: "The lowest court hire price in Bucharest: just **60 RON an hour**.\nDoes your child want to learn tennis? We offer **2 FREE sessions** to every child who joins a beginners group!",
+      },
+      ctaLabel: { ro: "Rezervă terenul", en: "Book a court" },
+      ctaHref: "/inchiriere-teren",
+      extra: {
+        secondaryLabel: { ro: "Înscrie copilul", en: "Sign your child up" },
       },
     },
     {
       key: "poveste",
-      order: 2,
-      indexName: { ro: "Povestea clubului", en: "Our story" },
+      order: 3,
+      indexName: { ro: "Povestea noastră", en: "Our story" },
       title: { ro: fill("Din {an}, pe zgură."), en: fill("On clay since {an}.") },
       body: {
         ro: fill(
           [
-            "Clubul a pornit în {an} cu {exterior} terenuri de zgură în aer liber, în {oras}. Apoi a ridicat o sală cu încă {acoperite} terenuri de zgură sub acoperiș, ca tenisul să nu se oprească iarna. Azi e unul dintre puținele cluburi din România cu terenuri acoperite profesional, folosite tot anul.",
+            "Totul a început în {an}, cu {exterior} terenuri de zgură în aer liber, în {oras}. Pentru ca tenisul să nu se oprească odată cu primul frig, clubul a ridicat apoi o sală cu încă {acoperite} terenuri de zgură acoperite, în care se joacă tot anul. De atunci, pe terenurile noastre se organizează turnee ale Federației Române de Tenis și Tenis10, iar de peste zece ani ducem tenisul în școli și grădinițe din București și Ilfov, ca tot mai mulți copii să țină o rachetă în mână.",
             "1. **{an}.** Primele {exterior} terenuri de zgură, în aer liber.",
-            "2. **Sala acoperită.** Încă {acoperite} terenuri de zgură, pe orice vreme, tot anul.",
-            "3. **Școli și grădinițe.** De peste zece ani, tenis pentru copii împreună cu școli și grădinițe din București și Ilfov.",
-            "4. **Turnee.** Turnee ale Federației Române de Tenis și Tenis10, jucate pe terenurile clubului.",
-            "5. **Azi.** Mini-tenis, inițiere, avansați și performanță, lecții pentru adulți și pregătire fizică.",
+            "2. **Sala acoperită.** Încă {acoperite} terenuri de zgură, pe orice vreme.",
+            "3. **Turneele federației.** Competiții FRT și Tenis10, organizate pe terenurile clubului.",
+            "4. **Școli și grădinițe.** Tenis pentru copii, împreună cu școli și grădinițe din București și Ilfov.",
+            "5. **Azi.** Minitenis, juniori, seniori, înaltă performanță, tabere și team building.",
           ].join("\n"),
         ),
         en: fill(
           [
-            "The club started in {an} with {exterior} outdoor clay courts in {oras}. It then built a hall with {acoperite} more clay courts under a roof, so tennis does not stop in winter. Today it is one of the few clubs in Romania with professionally covered courts used all year round.",
+            "It all began in {an}, with {exterior} outdoor clay courts in {oras}. So that tennis would not stop with the first cold day, the club then built a hall with {acoperite} more covered clay courts, played on all year. Since then our courts have hosted Romanian Tennis Federation and Tenis10 tournaments, and for more than ten years we have taken tennis into schools and kindergartens in Bucharest and Ilfov, so that more and more children hold a racquet.",
             "1. **{an}.** The first {exterior} clay courts, outdoors.",
-            "2. **The covered hall.** {acoperite} more clay courts, in any weather, all year.",
-            "3. **Schools and kindergartens.** For more than ten years, tennis for children with schools and kindergartens in Bucharest and Ilfov.",
-            "4. **Tournaments.** Romanian Tennis Federation and Tenis10 tournaments, played on the club's courts.",
-            "5. **Today.** Mini tennis, beginners, advanced and performance players, lessons for adults and fitness training.",
+            "2. **The covered hall.** {acoperite} more clay courts, in any weather.",
+            "3. **Federation tournaments.** FRT and Tenis10 competitions, held on the club's courts.",
+            "4. **Schools and kindergartens.** Tennis for children, with schools and kindergartens in Bucharest and Ilfov.",
+            "5. **Today.** Mini tennis, juniors, seniors, high performance, camps and team building.",
           ].join("\n"),
         ),
       },
-      ctaLabel: { ro: "Povestea completă", en: "The whole story" },
-      ctaHref: "/despre#poveste",
-    },
-    {
-      key: "manifest",
-      order: 8,
-      indexName: { ro: "Filozofia", en: "Philosophy" },
-      title: {
-        ro: "Înțelegi de ce, nu doar ce. Fiecare antrenament are un obiectiv.",
-        en: "You learn why, not just what. Every session has one goal.",
-      },
-      body: {
-        ro: "O lovitură bună pornește din picioare, trece prin șold și trunchi și abia la final ajunge în braț și în rachetă. Când corectăm ceva, explicăm de ce, ca jucătorul să poată repeta singur. Apoi exersăm până când mișcarea iese și în meci, nu doar la coșul cu mingi.",
-        en: "A good stroke starts in the legs, passes through the hips and trunk and only at the end reaches the arm and the racquet. When we correct something, we explain why, so the player can repeat it on their own. Then we practise until it works in a match, not just from the ball basket.",
-      },
+      ctaLabel: { ro: "Palmaresul clubului", en: "The club's honours" },
+      ctaHref: "/palmares",
     },
     {
       key: "cifre",
-      order: 3,
+      order: 4,
       indexName: { ro: "Clubul", en: "The club" },
       title: { ro: fill("{club} în cifre"), en: fill("{club} in numbers") },
       body: { ro: "", en: "" },
     },
     {
       key: "piloni",
-      order: 4,
+      order: 5,
       indexName: { ro: "Ce ne definește", en: "What defines us" },
       title: { ro: "Ce face diferența", en: "What makes the difference" },
       body: {
         ro: fill(
           [
-            "1. **Zgură, tot anul.** {acoperite} terenuri acoperite profesional și {exterior} în aer liber: antrenamentele nu se opresc pentru ploaie sau frig.",
-            "2. **De la mingea roșie la turnee.** Copiii cresc pe etapele ITF, cu teren, rachetă și minge pe măsura lor.",
-            "3. **Turnee acasă.** Turnee ale Federației Române de Tenis și Tenis10 găzduite la club: juniorii pot juca meciuri oficiale pe terenurile unde se antrenează.",
-            "4. **Deschis de dimineața până seara.** Terenurile se pot închiria zilnic, iar pe cele acoperite se joacă și seara, la nocturnă.",
+            "1. **Zgură totală.** Toate cele {terenuri} terenuri sunt de zgură, iar {acoperite} sunt acoperite: antrenamentele nu se opresc pentru ploaie sau frig.",
+            "2. **De la mingea roșie la turnee.** Copiii cresc pe etapele ITF, cu teren, rachetă și minge pe măsura lor, până la primele meciuri oficiale.",
+            "3. **Turnee acasă.** Turnee ale Federației Române de Tenis și Tenis10 găzduite la club: juniorii joacă meciuri oficiale pe terenurile unde se antrenează.",
+            "4. **De dimineața până seara.** Clubul este deschis zilnic, de luni până duminică, între 07:00 și 22:00, cu nocturnă pe toate terenurile.",
           ].join("\n"),
         ),
         en: fill(
           [
-            "1. **Clay, all year round.** {acoperite} professionally covered courts and {exterior} outdoors: training does not stop for rain or cold.",
-            "2. **From the red ball to tournaments.** Children grow through the ITF stages, with a court, racquet and ball their size.",
-            "3. **Tournaments at home.** Romanian Tennis Federation and Tenis10 tournaments hosted at the club: juniors can play official matches on the courts where they train.",
-            "4. **Open from morning to night.** Courts can be hired every day, and the covered ones are floodlit for evening play.",
+            "1. **Clay all round.** All {terenuri} courts are clay and {acoperite} are covered: training does not stop for rain or cold.",
+            "2. **From the red ball to tournaments.** Children grow through the ITF stages, with a court, racquet and ball their size, up to their first official matches.",
+            "3. **Tournaments at home.** Romanian Tennis Federation and Tenis10 tournaments hosted at the club: juniors play official matches on the courts where they train.",
+            "4. **From morning to night.** The club is open every day, Monday to Sunday, from 07:00 to 22:00, with floodlights on every court.",
           ].join("\n"),
         ),
       },
     },
     {
       key: "programe",
-      order: 5,
+      order: 6,
       indexName: { ro: "Programe de pregătire", en: "Training programmes" },
       title: {
-        ro: "Inițiere, competiție sau tenis de plăcere",
-        en: "Beginners, competition or tennis for fun",
+        ro: "Un program pentru fiecare jucător",
+        en: "A programme for every player",
       },
       body: {
-        ro: "Programul spune ce lucrăm și pentru cine. Fiecare jucător începe cu o evaluare, apoi primește un plan pe câteva luni.",
-        en: "The programme says what we work on and for whom. Every player starts with an assessment, then gets a plan for the next few months.",
+        ro: "Inițiere, competiție, înaltă performanță, amatori, tabere și team building. Antrenorii clubului te ajută să alegi de la prima ședință.",
+        en: "Beginners, competition, high performance, recreational, camps and team building. The club's coaches help you choose from the first session.",
       },
       ctaLabel: { ro: "Toate programele", en: "All programmes" },
       ctaHref: "/programe",
     },
     {
       key: "academia",
-      order: 6,
-      indexName: { ro: "Academia de juniori", en: "Junior academy" },
-      title: { ro: "De la mingea roșie la turnee", en: "From the red ball to tournaments" },
-      body: {
-        ro: "Copiii cresc în tenis pe etape: teren, rachetă și minge pe măsura lor, apoi terenul mare. Fiecare copil începe cu o evaluare, ca să intre în grupa potrivită vârstei și nivelului său.",
-        en: "Children grow into tennis in stages: a court, racquet and ball their size, then the full court. Every child starts with an assessment, so they join the group that fits their age and level.",
+      order: 7,
+      indexName: { ro: "Clubul Tenis Elite", en: "Clubul Tenis Elite" },
+      title: {
+        ro: "De la mingea roșie la mingea galbenă",
+        en: "From the red ball to the yellow ball",
       },
-      ctaLabel: { ro: "Cere o evaluare", en: "Ask for an assessment" },
-      ctaHref: "/academie#evaluare",
+      body: {
+        ro: "Minitenisul crește odată cu copilul: mingea roșie, apoi portocalie și verde, pe terenuri pe măsura lui. De la 11 ani, juniorii și seniorii joacă cu mingea galbenă, pe terenul mare.",
+        en: "Mini tennis grows with the child: the red ball, then orange and green, on courts their size. From 11, juniors and seniors play with the yellow ball on the full court.",
+      },
+      ctaLabel: { ro: "Înscrie copilul", en: "Sign your child up" },
+      ctaHref: "/programe#inscriere",
       extra: {
-        moreLabel: { ro: "Despre academia de juniori", en: "About the junior academy" },
+        moreLabel: { ro: "Grupele clubului", en: "The club's groups" },
       },
     },
     {
       key: "potrivire",
-      order: 7,
+      order: 8,
       indexName: { ro: "Găsește-ți programul", en: "Find your programme" },
-      title: { ro: "Trei întrebări, pasul potrivit", en: "Three questions, the right next step" },
+      title: { ro: "3 întrebări, pasul potrivit", en: "3 questions, the right next step" },
       body: {
-        ro: "Spune-ne pentru cine e tenisul, cât a jucat până acum și ce își dorește. Îți arătăm programul sau grupa potrivită și ce urmează.",
-        en: "Tell us who the tennis is for, how much they have played and what they want from it. We show you the programme or group that fits and what comes next.",
+        ro: "Spune-ne pentru cine e tenisul, cât ai jucat până acum și ce îți dorești. Îți arătăm programul sau grupa potrivită.",
+        en: "Tell us who the tennis is for, how much you have played and what you want. We show you the programme or group that fits.",
       },
     },
     {
       key: "echipa",
       order: 9,
       indexName: { ro: "Echipa", en: "The team" },
-      title: { ro: "Antrenorii academiei", en: "The academy's coaches" },
+      title: { ro: "Antrenorii clubului", en: "The club's coaches" },
       body: {
-        ro: "Oamenii care conduc antrenamentele, cu pregătirea și experiența fiecăruia.",
-        en: "The people who run the sessions, with each one's training and experience.",
+        ro: "Tenisul, simplu: joc, răbdare și multe mingi lovite. Șase antrenori, coordonați de antrenorul principal Vlad Moșteanu.",
+        en: "Tennis, made simple: play, patience and plenty of balls hit. Six coaches, led by head coach Vlad Moșteanu.",
       },
       ctaLabel: { ro: "Toată echipa", en: "The whole team" },
       ctaHref: "/echipa",
-      extra: {
-        photoNote: {
-          ro: "[DE COMPLETAT] Fotografia antrenorului pe teren, vertical 4:5",
-          en: "[DE COMPLETAT] The coach's photo on court, portrait 4:5",
-        },
-      },
     },
     {
-      key: "metoda",
+      key: "lectii",
       order: 10,
-      indexName: { ro: "Metoda", en: "Method" },
+      indexName: { ro: "Tipuri de antrenament", en: "Kinds of session" },
       title: {
-        ro: "Un plan, nu doar antrenamente unul după altul",
-        en: "A plan, not just one session after another",
+        ro: "Individual, în 2, în 3 sau în grup",
+        en: "Private, for 2, for 3 or in a group",
       },
       body: {
-        ro: [
-          "1. **Evaluare.** La început vedem cum lovește jucătorul, cum se mișcă și ce își dorește de la tenis.",
-          "2. **Plan.** Stabilim obiective pe 8–12 săptămâni, potrivite vârstei și timpului pe care îl are.",
-          "3. **Antrenament.** Fiecare antrenament are un obiectiv: arătăm, exersăm, corectăm pe loc, apoi îl punem în joc.",
-          "4. **Verificare.** Din când în când filmăm, jucăm meciuri de verificare și ajustăm planul.",
-        ].join("\n"),
-        en: [
-          "1. **Assessment.** At the start we see how the player hits, how they move and what they want from tennis.",
-          "2. **Plan.** We set goals for 8–12 weeks that suit their age and the time they have.",
-          "3. **Training.** Every session has one goal: we show, practise, correct on the spot, then use it in play.",
-          "4. **Check-ins.** Now and then we film, play practice matches and adjust the plan.",
-        ].join("\n"),
+        ro: "Programul spune ce lucrezi; antrenamentul, cu cine și cât timp. Durata o alegi la rezervare: 60, 90 sau 120 de minute.",
+        en: "The programme says what you work on; the session, with whom and for how long. You choose the length when you book: 60, 90 or 120 minutes.",
       },
+      ctaLabel: { ro: "Vezi prețurile", en: "See the prices" },
+      ctaHref: "/preturi",
     },
     {
       key: "turnee",
@@ -225,8 +214,8 @@ export function sceneSeeds(vars: Vars): SceneSeed[] {
       indexName: { ro: "Turnee", en: "Tournaments" },
       title: { ro: "Meciuri oficiale, acasă", en: "Official matches, at home" },
       body: {
-        ro: "Clubul găzduiește turnee ale Federației Române de Tenis și Tenis10. Juniorii pot juca meciuri oficiale pe terenurile pe care se antrenează, cu antrenorii lângă ei.",
-        en: "The club hosts Romanian Tennis Federation and Tenis10 tournaments. Juniors can play official matches on the courts where they train, with their coaches close by.",
+        ro: "Clubul găzduiește turnee ale Federației Române de Tenis și Tenis10. Juniorii joacă meciuri oficiale pe terenurile pe care se antrenează, cu antrenorii aproape.",
+        en: "The club hosts Romanian Tennis Federation and Tenis10 tournaments. Juniors play official matches on the courts where they train, with their coaches close by.",
       },
       ctaLabel: { ro: "Toate turneele", en: "All tournaments" },
       ctaHref: "/turnee",
@@ -238,64 +227,30 @@ export function sceneSeeds(vars: Vars): SceneSeed[] {
       title: { ro: "Zgură, tot anul.", en: "Clay, all year round." },
       body: {
         ro: fill(
-          "{locatie} are {terenuri} terenuri de zgură; {acoperite} sunt acoperite iarna, așa că antrenamentele continuă și în sezonul rece.",
+          "{terenuri} terenuri de zgură, dintre care {acoperite} acoperite profesional, vestiare cu dușuri, sală de fitness, recepție cu magazin și parcare, deschise zilnic între 07:00 și 22:00.",
         ),
         en: fill(
-          "{locatie} has {terenuri} clay courts; {acoperite} are covered in winter, so training goes on through the cold season.",
+          "{terenuri} clay courts, {acoperite} of them professionally covered, changing rooms with showers, a fitness room, a reception with a shop and parking, open every day from 07:00 to 22:00.",
         ),
       },
       ctaLabel: { ro: "Vezi facilitățile", en: "See the facilities" },
       ctaHref: "/facilitati",
-      extra: {
-        mediaNote: {
-          ro: "[DE COMPLETAT] Fotografie cu terenurile clubului, orizontal",
-          en: "[DE COMPLETAT] A photo of the club's courts, landscape",
-        },
-      },
     },
     {
       key: "galerie",
       order: 13,
       indexName: { ro: "Galerie", en: "Gallery" },
-      title: { ro: "Din antrenamente și turnee", en: "From training and tournaments" },
+      title: { ro: "Pe terenurile clubului", en: "On the club's courts" },
       body: {
-        ro: "Fotografii și filmări de pe terenurile clubului.",
-        en: "Photos and videos from the club's courts.",
+        ro: "Imagini de la antrenamente, de la turnee și de pe podium.",
+        en: "Pictures from training, tournaments and the podium.",
       },
       ctaLabel: { ro: "Toată galeria", en: "The whole gallery" },
       ctaHref: "/galerie",
-      extra: {
-        emptyNote: {
-          ro: "[DE COMPLETAT] Fotografii și video-uri reale din antrenamente (admin → Galerie)",
-          en: "[DE COMPLETAT] Real photos and videos from training (admin → Gallery)",
-        },
-      },
-    },
-    {
-      key: "social",
-      order: 14,
-      indexName: { ro: "Comunitatea", en: "Community" },
-      title: { ro: "Urmărește clubul", en: "Follow the club" },
-      body: {
-        ro: "Anunțuri, oferte și imagini de pe teren, pe Instagram și pe Facebook.",
-        en: "News, offers and pictures from the courts, on Instagram and Facebook.",
-      },
-    },
-    {
-      key: "lectii",
-      order: 15,
-      indexName: { ro: "Tipuri de lecții", en: "Kinds of lesson" },
-      title: { ro: "Singur, în doi sau în grup", en: "On your own, in pairs or in a group" },
-      body: {
-        ro: "Programul spune ce lucrăm; lecția, cu cine și cât timp. Durata o alegi la rezervare: 60, 90, 120 de minute sau mai mult.",
-        en: "The programme says what we work on; the lesson, with whom and for how long. You choose the length when you book: 60, 90, 120 minutes or more.",
-      },
-      ctaLabel: { ro: "Vezi prețurile", en: "See the prices" },
-      ctaHref: "/preturi",
     },
     {
       key: "intrebari",
-      order: 16,
+      order: 14,
       indexName: { ro: "Întrebări", en: "Questions" },
       title: { ro: "Înainte de primul antrenament", en: "Before the first session" },
       body: { ro: "", en: "" },
@@ -304,12 +259,12 @@ export function sceneSeeds(vars: Vars): SceneSeed[] {
     },
     {
       key: "rezervare",
-      order: 17,
+      order: 15,
       indexName: { ro: "Rezervare", en: "Booking" },
-      title: { ro: "Rezervă o lecție.", en: "Book a lesson." },
+      title: { ro: "Rezervă un antrenament.", en: "Book a session." },
       body: {
-        ro: "Alege programul, tipul lecției și durata. Vezi imediat primele ore libere.",
-        en: "Choose the programme, the kind of lesson and its length. You see the first free times straight away.",
+        ro: "Alege programul, tipul antrenamentului și durata. Vezi imediat primele ore libere.",
+        en: "Choose the programme, the kind of session and its length. You see the first free times straight away.",
       },
     },
   ];

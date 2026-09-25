@@ -37,10 +37,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!program) return {};
   const city = (await getLocations(locale))[0]?.city;
   const where = city && isFilled(city) ? (locale === "en" ? ` in ${city}` : ` în ${city}`) : "";
-  const title =
-    locale === "en"
+  // Lessons for the training programmes; camps and corporate events are named as they are.
+  const title = !program.bookableOnline
+    ? `${program.name}${where}`
+    : locale === "en"
       ? `${program.name}: tennis lessons${where}`
-      : `${program.name}: lecții de tenis${where}`;
+      : `${program.name}: cursuri de tenis${where}`;
   return pageMetadata({
     locale,
     href: { pathname: "/programe/[slug]", params: { slug } },

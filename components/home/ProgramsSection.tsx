@@ -10,8 +10,8 @@ import { programMeta } from "./programMeta";
 import { safeHref } from "./links";
 
 /**
- * The programmes as large cards that stack on top of each other while the page scrolls: each
- * one stops under the header and the next slides over it.
+ * The programmes as a grid of cards (photo, name, who it is for, one sentence), each leading to
+ * the programme's page.
  */
 export async function ProgramsSection({
   scene,
@@ -51,7 +51,7 @@ export async function ProgramsSection({
                     <Picture
                       image={program.image}
                       alt=""
-                      sizes="(min-width: 1024px) 50vw, 100vw"
+                      sizes="(min-width: 1100px) 30vw, (min-width: 700px) 46vw, 92vw"
                       imgClassName="program-slab-img"
                     />
                   ) : (

@@ -197,7 +197,10 @@ export default async function CampaignsPage({ searchParams }: PageProps<"/admin/
           pages={[
             { label: "Pagina principală", url: `${base}/` },
             { label: "Academia de juniori", url: `${base}/academie` },
-            { label: "Cererea de evaluare", url: `${base}/academie#evaluare` },
+            {
+              label: "Înscrierea copiilor (2 ședințe gratuite)",
+              url: `${base}/programe#inscriere`,
+            },
             { label: "Rezervare", url: `${base}/rezervare` },
             { label: "Programe", url: `${base}/programe` },
             { label: "Prețuri", url: `${base}/preturi` },

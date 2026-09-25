@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
-import {
-  getCoaches,
-  getPageHeader,
-  getScenes,
-  getSettings,
-  localizedSettings,
-} from "@/lib/content";
+import { getCoaches, getPageHeader, getSettings, localizedSettings } from "@/lib/content";
 import { localizedUrl, pageMetadata } from "@/lib/seo";
 import { breadcrumbLd, personLd } from "@/lib/structured-data";
 import { PageHero, PageSection } from "@/components/pages/PageHero";
@@ -30,15 +24,13 @@ export async function generateMetadata({
 export default async function TeamPage({ params }: PageProps<"/[locale]/echipa">) {
   const locale = (await params).locale as Locale;
   setRequestLocale(locale);
-  const [header, coaches, scenes, settingsRow, t] = await Promise.all([
+  const [header, coaches, settingsRow, t] = await Promise.all([
     getPageHeader("echipa", locale),
     getCoaches(locale),
-    getScenes(locale),
     getSettings(),
     getTranslations(),
   ]);
   const settings = localizedSettings(settingsRow, locale);
-  const photoNote = scenes.find((s) => s.key === "echipa")?.extra.photoNote ?? "";
   return (
     <>
       <JsonLd
@@ -65,9 +57,17 @@ export default async function TeamPage({ params }: PageProps<"/[locale]/echipa">
       <PageSection>
         <div className="team-grid" data-count={Math.min(coaches.length, 4)}>
           {coaches.map((coach) => (
-            <CoachCard key={coach.id} coach={coach} photoNote={photoNote} headingLevel="h2" />
+            <CoachCard key={coach.id} coach={coach} headingLevel="h2" />
           ))}
         </div>
+      </PageSection>
+      <PageSection id="filozofie" className="page-section--narrow">
+        <aside className="team-philosophy" aria-labelledby="filozofie-title">
+          <h2 id="filozofie-title" className="section-subtitle">
+            {t("team.philosophyTitle")}
+          </h2>
+          <p>{t("team.philosophyText")}</p>
+        </aside>
       </PageSection>
     </>
   );

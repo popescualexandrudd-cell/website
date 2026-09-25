@@ -12,7 +12,7 @@ describe("where a visit came from", () => {
   it("reads UTM tags first", () => {
     expect(
       visit(
-        "https://elitetenisclub.ro/academie?utm_source=Facebook&utm_medium=paid_social&utm_campaign=Inscrieri-Toamna&fbclid=abc",
+        "https://elitetenisclub.ro/programe?utm_source=Facebook&utm_medium=paid_social&utm_campaign=Inscrieri-Toamna&fbclid=abc",
       ),
     ).toEqual({
       source: "facebook",
@@ -21,7 +21,7 @@ describe("where a visit came from", () => {
       term: undefined,
       content: undefined,
       adClick: "meta",
-      landing: "/academie",
+      landing: "/programe",
     });
   });
 
@@ -95,13 +95,13 @@ describe("campaign report", () => {
 
   it("builds campaign links with clean UTM tags", () => {
     expect(
-      campaignUrl("https://elitetenisclub.ro/academie#evaluare", {
+      campaignUrl("https://elitetenisclub.ro/programe#inscriere", {
         source: "facebook",
         medium: "paid_social",
         campaign: "Înscrieri toamnă 2026",
       }),
     ).toBe(
-      "https://elitetenisclub.ro/academie?utm_source=facebook&utm_medium=paid_social&utm_campaign=inscrieri-toamna-2026#evaluare",
+      "https://elitetenisclub.ro/programe?utm_source=facebook&utm_medium=paid_social&utm_campaign=inscrieri-toamna-2026#evaluare",
     );
     expect(campaignUrl("https://x.ro/", { source: "a", medium: "b", campaign: "  " })).toBeNull();
   });
@@ -185,8 +185,8 @@ describe("legal texts follow the tools in use", () => {
 describe("site paths in each language", () => {
   it("follows the translated routes", async () => {
     const { sitePath } = await import("@/lib/paths");
-    expect(sitePath("/academie", "ro")).toBe("/academie");
-    expect(sitePath("/academie", "en")).toBe("/en/junior-academy");
+    expect(sitePath("/programe", "ro")).toBe("/programe");
+    expect(sitePath("/programe", "en")).toBe("/en/programs");
     expect(sitePath("/", "en")).toBe("/en");
     expect(sitePath("/echipa/[slug]", "en", { slug: "ana-pop" })).toBe("/en/team/ana-pop");
     expect(sitePath("/contact", "en")).toBe("/en/contact");

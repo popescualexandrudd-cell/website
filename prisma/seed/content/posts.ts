@@ -61,7 +61,7 @@ Racheta merge împreună cu mingea. Copiii mici încep cu mingi roșii (mai mari
 
 Nu la început. O rachetă de copii din aluminiu sau compozit, de la un producător de tenis cunoscut, ajunge pentru primii doi-trei ani. Banii se duc mai bine pe pantofi buni și pe mingile potrivite etapei.
 
-Până vă hotărâți, copilul poate folosi la lecții rachetele de împrumut. Vă spun eu când a venit momentul pentru una proprie și ce mărime să căutați.`,
+Până vă hotărâți, copilul folosește la antrenamente rachetele clubului. Antrenorii vă spun când a venit momentul pentru una proprie și ce mărime să căutați.`,
       en: `The most common mistake with a first racquet is buying "a bigger one, so it lasts a few years". A racquet that is too long and too heavy makes a child hold it by the throat, hit late and strain the wrist. Instead of learning the movement, they learn to cope with an awkward object.
 
 ## Length by age and height
@@ -92,7 +92,7 @@ The racquet goes together with the ball. Young children start with red balls (bi
 
 Not at first. An aluminium or composite junior racquet from a known tennis brand is enough for the first two or three years. The money is better spent on good shoes and the right balls for the stage.
 
-Until you decide, your child can use the loan racquets at lessons. I will tell you when the time has come for their own and what size to look for.`,
+Until you decide, your child uses the club's racquets in training. The coaches will tell you when the time has come for their own and what size to look for.`,
     },
   },
   {
@@ -294,9 +294,9 @@ Dacă nu sunteți siguri, o primă ședință de probă spune repede dacă e mom
 
 La 4–6 ani, o lecție e mai mult joc decât exercițiu: coordonare, echilibru, prins și aruncat, apoi primele lovituri cu mingea roșie. Copiii învață prin jocuri scurte, cu reguli simple, și pleacă de pe teren cu chef să revină. Racheta potrivită contează mult: una prea lungă îl obligă pe copil să lovească greșit.
 
-## La academia noastră
+## La Clubul Tenis Elite
 
-Fiecare copil începe cu o evaluare: vedem cum se mișcă și cum lovește și vă spunem în ce grupă se potrivește. Grupele, vârstele și programul lor sunt pe pagina Academiei de juniori.`,
+Toți copiii care se înscriu la grupele de inițiere primesc primele 2 ședințe gratuit. În acest timp, antrenorii văd cum se mișcă și cum lovește copilul și vă recomandă grupa potrivită. Grupele, vârstele și programul lor sunt pe pagina Programe.`,
       en: `A child can start tennis from 4 or 5. What matters is not strength but a court, racquet and ball sized for them. That is why children's tennis does not start on the full court with the standard ball.
 
 ## The ball-colour stages
@@ -323,9 +323,9 @@ If you are not sure, a first trial session quickly shows whether it is time or w
 
 At 4–6, a lesson is more play than drill: coordination, balance, catching and throwing, then the first strokes with the red ball. Children learn through short games with simple rules and leave the court wanting to come back. The right racquet matters a lot: one that is too long forces the child to hit the wrong way.
 
-## At our academy
+## At Clubul Tenis Elite
 
-Every child starts with an assessment: we see how they move and hit, and tell you which group fits. The groups, their ages and schedules are on the Junior academy page.`,
+Every child who joins a beginners group gets the first 2 sessions free. Meanwhile the coaches see how your child moves and hits and recommend the right group. The groups, their ages and schedules are on the Programmes page.`,
     },
   },
   {
@@ -375,7 +375,7 @@ Zgura e suprafața pe care mingea sare mai încet și mai sus decât pe hard. Pe
 
 ## La noi
 
-Patru dintre terenurile clubului sunt de zgură și acoperite iarna, așa că lecțiile și grupele academiei continuă tot anul. Orele libere le vezi în pagina de rezervare.`,
+Patru dintre terenurile clubului sunt de zgură și acoperite, așa că antrenamentele și grupele continuă tot anul. Iarna, orice teren se închiriază cu doar 60 de lei pe oră.`,
       en: `Many players, children and adults, stop from November to March. In spring the first weeks go on recovering what was lost. A covered court changes that: training carries on at the same pace, on the same surface.
 
 ## What four months off cost you
@@ -404,29 +404,29 @@ Clay is the surface on which the ball bounces slower and higher than on hard cou
 
 ## At our club
 
-Four of the club's courts are clay and covered in winter, so lessons and academy groups carry on all year. You can see the free times on the booking page.`,
+Four of the club's courts are clay and covered, so training and groups carry on all year. In winter, any court can be hired for just 60 lei an hour.`,
     },
   },
   {
-    slug: "cum-alegi-academia-de-tenis-pentru-copil",
+    slug: "cum-alegi-clubul-de-tenis-pentru-copil",
     title: {
-      ro: "Cum alegi o academie de tenis pentru copil: 8 întrebări de pus",
-      en: "How to choose a tennis academy for your child: 8 questions to ask",
+      ro: "Cum alegi un club de tenis pentru copil: 8 întrebări de pus",
+      en: "How to choose a tennis club for your child: 8 questions to ask",
     },
     excerpt: {
       ro: "Câți copii sunt în grupă, cu ce mingi lucrează, ce pregătire au antrenorii și ce se întâmplă iarna: ce merită întrebat înainte de înscriere.",
       en: "How many children per group, which balls they use, the coaches' training and what happens in winter: what to ask before enrolling.",
     },
     seoTitle: {
-      ro: "Cum alegi un curs de tenis pentru copii: 8 întrebări pentru academie",
-      en: "Choosing tennis lessons for children: 8 questions for the academy",
+      ro: "Cum alegi un curs de tenis pentru copii: 8 întrebări pentru club",
+      en: "Choosing tennis lessons for children: 8 questions for the club",
     },
     seoDescription: {
-      ro: "Ce să întrebi înainte să înscrii copilul la tenis: mărimea grupei, etapele pe culori de minge, antrenorii, evaluarea, terenurile de iarnă.",
-      en: "What to ask before enrolling your child in tennis: group size, ball-colour stages, the coaches, the assessment, winter courts.",
+      ro: "Ce să întrebi înainte să înscrii copilul la tenis: mărimea grupei, etapele pe culori de minge, antrenorii, primele ședințe, terenurile de iarnă.",
+      en: "What to ask before enrolling your child in tennis: group size, ball-colour stages, the coaches, the first sessions, winter courts.",
     },
     body: {
-      ro: `Două academii pot avea același preț și un rezultat foarte diferit pentru copil. Iată ce merită întrebat, la orice club, înainte de înscriere.
+      ro: `Două cluburi pot avea același preț și un rezultat foarte diferit pentru copil. Iată ce merită întrebat, la orice club, înainte de înscriere.
 
 ## 1. Câți copii sunt într-o grupă, la un antrenor?
 
@@ -440,9 +440,9 @@ Copiii de 5–8 ani ar trebui să joace cu mingi roșii, pe teren mic. Dacă un 
 
 O facultate de sport cu specializarea tenis, cursurile federației și experiența cu copii contează. Nu ezita să întrebi cine anume va lucra cu copilul tău.
 
-## 4. Există o evaluare la început?
+## 4. Poate încerca înainte de înscriere?
 
-O evaluare arată nivelul real al copilului și grupa potrivită. Fără ea, copilul ajunge fie într-o grupă prea ușoară, fie într-una în care se descurajează.
+Primele ședințe arată nivelul real al copilului și grupa potrivită. Fără ele, copilul ajunge fie într-o grupă prea ușoară, fie într-una în care se descurajează.
 
 ## 5. Ce se întâmplă iarna?
 
@@ -460,10 +460,10 @@ Trecerea ar trebui să depindă de ce știe copilul, nu doar de vârstă sau de 
 
 Nu orice copil vrea să joace turnee, dar e bine să știi că drumul există: pregătire pentru competiții, alegerea turneelor potrivite, însoțire.
 
-## La academia noastră
+## La Clubul Tenis Elite
 
-Răspunsurile noastre le găsești pe pagina Academiei de juniori: grupele pe etape și vârste, programul, antrenorii. Și, ca la orice academie serioasă, totul începe cu o evaluare.`,
-      en: `Two academies can charge the same and give a child a very different result. Here is what is worth asking, at any club, before enrolling.
+Răspunsurile noastre le găsești pe pagina Programe: grupele pe etape și vârste, programul, antrenorii. Iar primele 2 ședințe ale copilului la grupele de inițiere sunt gratuite.`,
+      en: `Two clubs can charge the same and give a child a very different result. Here is what is worth asking, at any club, before enrolling.
 
 ## 1. How many children per group, per coach?
 
@@ -477,9 +477,9 @@ Children aged 5–8 should play with red balls on a small court. If a six-year-o
 
 A sports degree specialising in tennis, federation courses and experience with children all matter. Feel free to ask who exactly will work with your child.
 
-## 4. Is there an assessment at the start?
+## 4. Can your child try it before enrolling?
 
-An assessment shows the child's real level and the right group. Without one, a child ends up either in a group that is too easy or in one that discourages them.
+The first sessions show the child's real level and the right group. Without them, a child ends up either in a group that is too easy or in one that discourages them.
 
 ## 5. What happens in winter?
 
@@ -497,9 +497,9 @@ Moving up should depend on what the child can do, not only on age or the year th
 
 Not every child wants to play tournaments, but it is good to know the path exists: competition preparation, choosing the right tournaments, support at events.
 
-## At our academy
+## At Clubul Tenis Elite
 
-Our answers are on the Junior academy page: the groups by stage and age, the schedule, the coaches. And, as at any serious academy, everything starts with an assessment.`,
+Our answers are on the Programmes page: the groups by stage and age, the schedule, the coaches. And your child's first 2 sessions in a beginners group are free.`,
     },
   },
   {

@@ -112,7 +112,7 @@ export function businessLd(
       price: l.hourlyRate ?? undefined,
       priceCurrency: l.hourlyRate ? settings.currency : undefined,
       unitText: l.hourlyRate ? "oră" : undefined,
-      itemOffered: { "@type": "Service", name: l.name, serviceType: "Lecții de tenis" },
+      itemOffered: { "@type": "Service", name: l.name, serviceType: "Antrenamente de tenis" },
     }),
   );
   const groupOffers = groups.map((g) =>
@@ -138,14 +138,18 @@ export function businessLd(
     "@type": ["SportsClub", "SportsActivityLocation"],
     "@id": businessId(),
     name: isFilled(settings.brandName) ? settings.brandName : settings.tagline,
-    alternateName: isFilled(settings.tagline)
-      ? `${settings.brandName} · ${settings.tagline}`
-      : undefined,
+    // The names people already know the club by (its social profiles and its logo).
+    alternateName: ["Elite Tenis Club", "Club Sportiv Elite Tenis"],
+    legalName: isFilled(settings.legalName) ? settings.legalName : undefined,
+    taxID: isFilled(settings.legalCui) ? settings.legalCui : undefined,
     description,
     sport: "Tenis",
     url: appUrl(),
     logo: imageUrl(settings.logo),
-    image: imageUrl(settings.heroImage) ?? `${appUrl()}/api/og?path=%2F&lang=ro`,
+    image:
+      imageUrl(settings.heroImage) ??
+      imageUrl(settings.heroVideo?.poster ?? null) ??
+      `${appUrl()}/api/og?path=%2F&lang=ro`,
     telephone: isFilled(settings.phone) ? settings.phone : undefined,
     email: isFilled(settings.email) ? settings.email : undefined,
     foundingDate: settings.foundedYear ? String(settings.foundedYear) : undefined,
@@ -195,7 +199,7 @@ export function businessLd(
     knowsAbout: [
       "Tenis",
       "Tenis pentru copii",
-      "Mini tenis",
+      "Minitenis",
       "Tenis de competiție",
       "Tenis pe zgură",
     ],

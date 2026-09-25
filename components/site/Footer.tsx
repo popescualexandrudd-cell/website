@@ -55,7 +55,29 @@ export async function Footer({ settings, location, policyVersion, cookieSettings
           ) : null}
         </div>
 
-        <div className="col-span-4 md:col-span-2 lg:col-span-3 lg:col-start-6">
+        <nav className="col-span-4 md:col-span-2 lg:col-span-2" aria-label={t("footer.siteLabel")}>
+          <h2 className="footer-heading">{t("footer.site")}</h2>
+          <ul className="footer-list">
+            {(
+              [
+                ["/programe", "nav.programs"],
+                ["/inchiriere-teren", "nav.rental"],
+                ["/turnee", "nav.tournaments"],
+                ["/echipa", "nav.team"],
+                ["/facilitati", "nav.facilities"],
+                ["/preturi", "nav.pricing"],
+                ["/galerie", "nav.gallery"],
+                ["/contact", "nav.contact"],
+              ] as const
+            ).map(([href, key]) => (
+              <li key={href}>
+                <Link href={href}>{t(key)}</Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="col-span-4 md:col-span-2 lg:col-span-2">
           <h2 className="footer-heading">{t("footer.contact")}</h2>
           <ul className="footer-list">
             <li>
@@ -110,9 +132,6 @@ export async function Footer({ settings, location, policyVersion, cookieSettings
                 <CookieSettingsButton label={t("consent.settings")} />
               </li>
             ) : null}
-            <li>
-              <Link href="/contact">{t("nav.contact")}</Link>
-            </li>
             {settings.enEnabled ? (
               <li>
                 <LanguageSwitch

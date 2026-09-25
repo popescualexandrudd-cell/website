@@ -4,7 +4,7 @@ import type { Locale } from "@/i18n/routing";
 import type { LegalKind } from "@/lib/generated/prisma/client";
 import { getLegalPage, getSettings, localizedSettings } from "@/lib/content";
 import { fillLegalTemplate } from "@/lib/legal";
-import { assistantAvailable } from "@/lib/assistant/load";
+import { assistantUsesModel } from "@/lib/assistant/load";
 import { campaignConfig } from "@/lib/campaigns";
 import { formatDate } from "@/lib/format";
 import { PageSection } from "./PageHero";
@@ -26,7 +26,7 @@ export async function LegalPageView({ kind, locale }: { kind: LegalKind; locale:
     locale,
     settingsRow.retentionMonths,
     {
-      assistant: assistantAvailable(settingsRow),
+      assistant: assistantUsesModel(settingsRow),
       analytics: Boolean(campaigns.gaId),
       googleAds: Boolean(campaigns.adsId),
       metaPixel: Boolean(campaigns.metaPixelId),

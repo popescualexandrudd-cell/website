@@ -140,8 +140,6 @@ const seoFields = (group = "Motoare de căutare (opțional)"): FieldDef[] => [
 const PAGE_PATHS: Record<string, string> = {
   programe: "/programe",
   facilitati: "/facilitati",
-  despre: "/despre",
-  academie: "/academie",
   echipa: "/echipa",
   preturi: "/preturi",
   rezervare: "/rezervare",
@@ -168,29 +166,17 @@ const LEGAL_PATHS: Record<string, string> = {
 /** Extra texts that only one home-page section uses, edited as a small set of fields. */
 const SCENE_EXTRAS: Record<string, { label: string; help?: string; keys: Option[] }> = {
   deschiderea: {
-    label: "Al doilea buton și textul din cadru",
+    label: "Al doilea buton",
     help: "Video-ul (sau fotografia) de deschidere se alege din Setări → Identitatea clubului.",
-    keys: [
-      { value: "secondaryLabel", label: "Al doilea buton (duce la Academia de juniori)" },
-      { value: "mediaNote", label: "Textul din cadru, până încarci video-ul" },
-    ],
+    keys: [{ value: "secondaryLabel", label: "Al doilea buton (duce la Închiriere teren)" }],
+  },
+  campanie: {
+    label: "Al doilea buton",
+    keys: [{ value: "secondaryLabel", label: "Al doilea buton (duce la înscrierea copiilor)" }],
   },
   academia: {
-    label: "Linkul către pagina academiei",
+    label: "Linkul către grupe",
     keys: [{ value: "moreLabel", label: "Textul linkului" }],
-  },
-  echipa: {
-    label: "Textul din ramele fără fotografie",
-    keys: [{ value: "photoNote", label: "Textul din ramă, până încarci fotografia" }],
-  },
-
-  clubul: {
-    label: "Textul din cadru",
-    keys: [{ value: "mediaNote", label: "Textul din cadru, până încarci o fotografie" }],
-  },
-  galerie: {
-    label: "Textul pentru galeria goală",
-    keys: [{ value: "emptyNote", label: "Textul afișat până publici fotografii" }],
   },
 };
 
@@ -497,7 +483,7 @@ const academyGroup: Resource = {
       ? `${str(r.ageMin)}${r.ageMax && r.ageMax !== r.ageMin ? `–${str(r.ageMax)}` : ""} ani`
       : "",
   flags: (r) => (yes(r.active) ? [] : ["ascunsă"]),
-  publicPath: () => "/academie",
+  publicPath: () => "/programe",
   prepare: (data) => {
     if (
       typeof data.ageMin === "number" &&
@@ -647,7 +633,7 @@ const result: Resource = {
     ...(yes(r.published) ? [] : ["nepublicat"]),
     ...(yes(r.isMinor) && !yes(r.parentalConsent) ? ["minor fără acord"] : []),
   ],
-  publicPath: () => "/academie",
+  publicPath: () => "/programe",
   prepare: (data, before) => {
     if (data.published === true && data.isMinor === true && data.parentalConsent !== true)
       return "Sportivul e minor: rezultatul se poate publica doar după ce bifezi acordul scris al părinților.";

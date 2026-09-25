@@ -48,8 +48,8 @@ export const urls = {
 };
 
 /**
- * A site page's path in the given language, from the routes in i18n/routing.ts ("/academie" →
- * "/en/junior-academy"), without the navigation helpers, so plain server code can use it.
+ * A site page's path in the given language, from the routes in i18n/routing.ts ("/programe" →
+ * "/en/programs"), without the navigation helpers, so plain server code can use it.
  */
 export function sitePath(
   pathname: AppPathname,

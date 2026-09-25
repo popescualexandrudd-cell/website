@@ -12,6 +12,8 @@ import {
 import { formatPrice } from "@/lib/format";
 import { pageMetadata } from "@/lib/seo";
 import { PageHero, PageSection } from "@/components/pages/PageHero";
+import { WinterOffer } from "@/components/pages/WinterOffer";
+import { Markdown } from "@/components/site/Markdown";
 import { TodoText } from "@/components/site/TodoText";
 import { LessonTypeList } from "@/components/pages/LessonTypeList";
 
@@ -49,13 +51,31 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/pretu
         imageAlt={header.imageAlt}
       />
 
+      <PageSection id="oferta-iarna">
+        <WinterOffer />
+      </PageSection>
+
+      {settings.rentalRates ? (
+        <PageSection id="teren" title={t("pricing.courtRates")} className="page-section--narrow">
+          <Markdown source={settings.rentalRates} className="prose-ed" />
+          <p className="mt-6">
+            <Link href="/inchiriere-teren" className="link">
+              {t("pricing.courtCta")}
+            </Link>
+          </p>
+        </PageSection>
+      ) : null}
+
       <PageSection
-        id="prima-lectie"
+        id="oferta-copii"
         title={t("pricing.firstLesson")}
         className="page-section--narrow"
       >
-        <p className="text-lead leading-snug">
-          <TodoText value={settings.firstLessonText} />
+        <p className="text-lead leading-snug">{settings.firstLessonText}</p>
+        <p className="mt-6">
+          <Link href={{ pathname: "/programe", hash: "inscriere" }} className="btn btn-primary">
+            {t("programs.offerCta")}
+          </Link>
         </p>
       </PageSection>
 

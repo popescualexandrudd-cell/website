@@ -37,7 +37,7 @@ import { roCount } from "../lib/format";
 import {
   amenityDescriptions,
   amenityNames,
-  coachPhilosophy,
+  locationDirections,
   conditionalServices,
   clubTestimonials,
   pageHeaderContent,
@@ -276,22 +276,16 @@ async function main(): Promise<void> {
       instagramUrl: optionalText(config.contact.instagram),
       facebookUrl: optionalText(config.contact.facebook),
       tiktokUrl: optionalText(config.contact.tiktok),
-      // What people type into Google first ("academie de tenis Pantelimon", "tenis copii"), then
-      // the club's name; the description leads with what sets the club apart.
+      // What people type into Google first ("tenis Pantelimon", "cursuri tenis copii", "închiriere
+      // teren tenis"), then the club's name; the description leads with the offers.
       seoTitle: {
-        ro: `Academie de tenis ${city}: copii și adulți · ${clubName}`,
-        en: `Tennis academy in ${city}: children and adults · ${clubName}`,
+        ro: `Tenis ${city}: cursuri copii și adulți, închiriere teren · ${clubName}`,
+        en: `Tennis in ${city}: courses for children and adults, court hire · ${clubName}`,
       },
-      seoDescription:
-        coveredTotal > 0
-          ? {
-              ro: `Școala de tenis de la ${locationName}, ${city}, lângă București: grupe pentru copii de la 4 ani, juniori și adulți, pe ${coveredTotal} terenuri de zgură acoperite iarna. Rezervi online.`,
-              en: `The tennis school at ${locationName}, ${city}, next to Bucharest: groups for children from 4, juniors and adults, on ${coveredTotal} clay courts covered in winter. Book online.`,
-            }
-          : {
-              ro: `Școala de tenis de la ${locationName}, ${city}, lângă București: grupe pentru copii de la 4 ani, juniori și adulți, pe zgură. Rezervi online.`,
-              en: `The tennis school at ${locationName}, ${city}, next to Bucharest: groups for children from 4, juniors and adults, on clay. Book online.`,
-            },
+      seoDescription: {
+        ro: `${clubName}, ${city}, lângă București: 8 terenuri de zgură, ${coveredTotal} acoperite, deschise zilnic 07:00–22:00. Minitenis de la 4 ani, juniori, adulți. Iarna, teren 60 lei/oră; 2 ședințe gratuite pentru copii.`,
+        en: `${clubName}, ${city}, next to Bucharest: 8 clay courts, ${coveredTotal} covered, open daily 07:00–22:00. Mini tennis from 4, juniors, adults. Winter courts 60 lei an hour; 2 free sessions for children.`,
+      },
       bookingMode: String(config.rezervari.mod).trim() === "instant" ? "INSTANT" : "CERERE",
       freeCancelHours: integer(config.rezervari.anulare_gratuita_ore) ?? 24,
       minNoticeHours: integer(config.rezervari.rezervare_minim_ore_inainte) ?? 12,
@@ -354,7 +348,7 @@ async function main(): Promise<void> {
         summary: localizedText(entry.rezumat),
         story: localizedText(entry.parcurs),
         // The team's shared philosophy is on the home page; a coach's own text is optional.
-        philosophy: coachIndex === 0 ? coachPhilosophy : Prisma.DbNull,
+        philosophy: Prisma.DbNull,
         results: results ?? Prisma.DbNull,
         specialties: {
           ro: entry.specializari.map((item) => localizedText(item).ro),
@@ -431,7 +425,7 @@ async function main(): Promise<void> {
         : address === TODO
           ? null
           : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${locationName}, ${address}`)}`,
-      directions: todoT,
+      directions: locationDirections,
     },
   });
   note("locație", !locationExists);
@@ -572,7 +566,7 @@ async function main(): Promise<void> {
         ageMin: content.ageMin ?? null,
         ageMax: content.ageMax ?? null,
         order: index,
-        bookableOnline: true,
+        bookableOnline: content.bookableOnline ?? true,
         active: inConfig,
       },
     });
@@ -617,7 +611,7 @@ async function main(): Promise<void> {
     note(`tip de lecție ${content.slug}`, !exists);
   }
 
-  const individualId = lessonIds.get("lectie-individuala") ?? null;
+  const individualId = lessonIds.get("antrenament-individual") ?? null;
   for (const [index, pack] of config.pachete.entries()) {
     const id = `seed-package-${String(index + 1).padStart(2, "0")}`;
     const exists = await db.pricingPlan.findUnique({ where: { id } });
@@ -675,7 +669,7 @@ async function main(): Promise<void> {
         sessionsPerWeek: integer(group.sedinte_pe_saptamana),
         sessionMinutes: integer(group.durata_min),
         // Days and hours stay visibly missing until the club fills them in.
-        schedule: schedule ?? todoT,
+        schedule: schedule ?? Prisma.DbNull,
         monthlyFee: decimal(group.taxa_lunara_ron),
         maxPlayers: integer(group.locuri),
         programId: programSlug ? (programIds.get(programSlug) ?? null) : null,
@@ -744,13 +738,18 @@ async function main(): Promise<void> {
     note(`întrebare ${index + 1}`, !exists);
   }
 
-  // ── Posts (drafts) ────────────────────────────────────────────────────────
-  for (const post of postContent) {
+  // ── Posts: the club's tennis tips, published ───────────────────────────────
+  for (const [index, post] of postContent.entries()) {
     const exists = await db.post.findUnique({ where: { slug: post.slug } });
     await db.post.upsert({
       where: { slug: post.slug },
       update: {},
-      create: { ...post, status: "CIORNA" },
+      // One day apart, so the list keeps the order they are written in.
+      create: {
+        ...post,
+        status: "PUBLICAT",
+        publishedAt: new Date(Date.now() - (index + 1) * 86_400_000),
+      },
     });
     note(`articol ${post.slug}`, !exists);
   }

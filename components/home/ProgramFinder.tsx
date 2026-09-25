@@ -73,8 +73,12 @@ export function ProgramFinder({ programs, groups, assistant }: Props) {
         answers.who === "copil" && answers.age !== null
           ? t("ageOption", { age: answers.age })
           : null,
-        t(`experienceOptions.${answers.experience}`),
-        t(`goalOptions.${answers.goal}`),
+        answers.who === "adult"
+          ? t(`experienceOptionsAdult.${answers.experience}`)
+          : t(`experienceOptions.${answers.experience}`),
+        answers.who === "adult"
+          ? t(`goalOptionsAdult.${answers.goal}`)
+          : t(`goalOptions.${answers.goal}`),
       ]
         .filter(Boolean)
         .join(", ")
@@ -108,18 +112,33 @@ export function ProgramFinder({ programs, groups, assistant }: Props) {
             </div>
           </fieldset>
         ) : null}
+        {/* An adult is spoken to directly; a parent is asked about the child. */}
         <fieldset className="finder-question">
-          <legend>{t("experience")}</legend>
+          <legend>{who === "adult" ? t("experienceAdult") : t("experience")}</legend>
           <div className="finder-options">
             {EXPERIENCE.map((v) =>
-              chip("experience", v, experience, setExperience, t(`experienceOptions.${v}`)),
+              chip(
+                "experience",
+                v,
+                experience,
+                setExperience,
+                who === "adult" ? t(`experienceOptionsAdult.${v}`) : t(`experienceOptions.${v}`),
+              ),
             )}
           </div>
         </fieldset>
         <fieldset className="finder-question">
-          <legend>{t("goal")}</legend>
+          <legend>{who === "adult" ? t("goalAdult") : t("goal")}</legend>
           <div className="finder-options">
-            {GOALS.map((v) => chip("goal", v, goal, setGoal, t(`goalOptions.${v}`)))}
+            {GOALS.map((v) =>
+              chip(
+                "goal",
+                v,
+                goal,
+                setGoal,
+                who === "adult" ? t(`goalOptionsAdult.${v}`) : t(`goalOptions.${v}`),
+              ),
+            )}
           </div>
         </fieldset>
       </form>
@@ -146,7 +165,7 @@ export function ProgramFinder({ programs, groups, assistant }: Props) {
             <div className="finder-actions">
               {result.next === "evaluation" ? (
                 <Link
-                  href={{ pathname: "/academie", hash: "evaluare" }}
+                  href={{ pathname: "/programe", hash: "inscriere" }}
                   className="btn btn-primary btn-arrow"
                 >
                   {t("nextEvaluation")}

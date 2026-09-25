@@ -11,34 +11,31 @@ type Props = { settings: LocalizedSettings };
 
 export async function Header({ settings }: Props) {
   const t = await getTranslations();
+  // The five sections at the top; the full menu adds the rest of the site.
   const primary = [
-    { href: "/academie", label: t("nav.juniors") },
     { href: "/programe", label: t("nav.programs") },
     { href: "/inchiriere-teren", label: t("nav.rental") },
     { href: "/turnee", label: t("nav.tournaments") },
     { href: "/echipa", label: t("nav.team") },
-    { href: "/despre", label: t("nav.club") },
     { href: "/contact", label: t("nav.contact") },
   ] as const;
   const links = [
-    { href: "/academie", label: t("nav.juniors") },
     { href: "/programe", label: t("nav.programs") },
     { href: "/inchiriere-teren", label: t("nav.rental") },
     { href: "/turnee", label: t("nav.tournaments") },
+    { href: "/echipa", label: t("nav.team") },
+    { href: "/facilitati", label: t("nav.facilities") },
+    { href: "/preturi", label: t("nav.pricing") },
+    { href: "/galerie", label: t("nav.gallery") },
     { href: "/palmares", label: t("nav.honours") },
+    ...(settings.giftCardsEnabled ? [{ href: "/card-cadou" as const, label: t("nav.gift") }] : []),
     ...(settings.leagueEnabled
       ? [
           { href: "/liga-amatori" as const, label: t("nav.league") },
           { href: "/partener-de-joc" as const, label: t("nav.partner") },
         ]
       : []),
-    ...(settings.giftCardsEnabled ? [{ href: "/card-cadou" as const, label: t("nav.gift") }] : []),
-    { href: "/echipa", label: t("nav.team") },
-    { href: "/despre", label: t("nav.about") },
-    { href: "/facilitati", label: t("nav.facilities") },
-    { href: "/preturi", label: t("nav.pricing") },
     { href: "/scoli-gradinite", label: t("nav.schools") },
-    { href: "/galerie", label: t("nav.gallery") },
     { href: "/contact", label: t("nav.contact") },
   ] as const;
   const whatsapp = whatsappLink(settings.whatsapp);

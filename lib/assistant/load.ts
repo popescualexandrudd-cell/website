@@ -19,10 +19,91 @@ import {
 import { sitePath } from "@/lib/paths";
 import { roCount } from "@/lib/format";
 import { formatKnowledge, known, type KnowledgePaths } from "./knowledge";
+import type { LocalClub } from "./local";
 
-/** Whether the assistant shows on the site: switched on in the admin and a key on the server. */
+/**
+ * Whether the assistant shows on the site: switched on in the admin. Without an Anthropic key it
+ * still answers, from the club's own data (lib/assistant/local.ts).
+ */
 export function assistantAvailable(settings: { assistantEnabled: boolean }): boolean {
+  return settings.assistantEnabled;
+}
+
+/** Whether questions go to the AI model (Anthropic): switched on and a key on the server. */
+export function assistantUsesModel(settings: { assistantEnabled: boolean }): boolean {
   return settings.assistantEnabled && Boolean(process.env.ANTHROPIC_API_KEY);
+}
+
+/** The club's data for the assistant's own answers (no AI model). */
+export async function loadLocalClub(locale: Locale): Promise<LocalClub> {
+  const [row, groups, coaches, programs, faqs, tournaments, locations] = await Promise.all([
+    getSettings(),
+    getAcademyGroups(locale),
+    getCoaches(locale),
+    getPrograms(locale),
+    getFaqs(locale),
+    getTournaments(locale),
+    getLocations(locale),
+  ]);
+  const settings = localizedSettings(row, locale);
+  const paths = knowledgePaths(locale);
+  const en = locale === "en";
+  const location = locations[0];
+  const hours = settings.workingHours[0]?.hours ?? "";
+  // The winter campaign first; the summer table stays on the court hire page.
+  const rates = settings.rentalRates
+    .split("\n")
+    .filter((line) => line.trim() && !line.startsWith("|") && !line.startsWith("#"))
+    .slice(0, 1)
+    .join(" ");
+  return {
+    locale,
+    clubName: settings.brandName,
+    phone: settings.phone,
+    whatsapp: Boolean(settings.whatsapp),
+    email: settings.email,
+    address: location
+      ? `${location.address}${location.city && !location.address.includes(location.city) ? `, ${location.city}` : ""}`
+      : settings.legalAddress,
+    hours: hours.replace("–", en ? " to " : " – "),
+    rentalRates: rates,
+    firstSessions: settings.firstLessonText,
+    groups: groups.map((g) => ({
+      name: g.name,
+      ages:
+        g.ageMin !== null && g.ageMax !== null && g.ageMax !== g.ageMin
+          ? en
+            ? `${g.ageMin}–${g.ageMax} years`
+            : `${g.ageMin}–${g.ageMax} ani`
+          : g.ageMin !== null
+            ? en
+              ? `from ${g.ageMin}`
+              : `de la ${g.ageMin} ani`
+            : "",
+    })),
+    coaches: coaches.map((c) => ({ name: c.name, role: c.role })),
+    programs: programs.map((p) => ({
+      name: p.name,
+      path: sitePath("/programe/[slug]", locale, { slug: p.slug }),
+    })),
+    tournaments: [...tournaments.upcoming, ...tournaments.hosted].map((x) => x.name).slice(0, 4),
+    faqs: faqs.map((f) => ({ question: f.question, answer: f.answer })),
+    paths: {
+      booking: paths.booking,
+      rental: paths.rental,
+      programs: paths.programs,
+      signup: paths.evaluation,
+      pricing: paths.pricing,
+      team: paths.team,
+      tournaments: paths.tournaments,
+      contact: paths.contact,
+      giftCard: paths.giftCard,
+      league: paths.league,
+      partner: paths.partner,
+      schools: paths.schools,
+      facilities: paths.facilities,
+    },
+  };
 }
 
 export function knowledgePaths(locale: Locale): KnowledgePaths {
@@ -30,8 +111,8 @@ export function knowledgePaths(locale: Locale): KnowledgePaths {
   return {
     home: path("/"),
     programs: path("/programe"),
-    academy: path("/academie"),
-    evaluation: `${path("/academie")}#evaluare`,
+    academy: `${path("/programe")}#grupe`,
+    evaluation: `${path("/programe")}#inscriere`,
     waitlist: path("/lista-asteptare"),
     team: path("/echipa"),
     pricing: path("/preturi"),

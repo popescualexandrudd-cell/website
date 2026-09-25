@@ -20,8 +20,6 @@ export const routing = defineRouting({
     "/programe": { ro: "/programe", en: "/programs" },
     "/programe/[slug]": { ro: "/programe/[slug]", en: "/programs/[slug]" },
     "/facilitati": { ro: "/facilitati", en: "/facilities" },
-    "/despre": { ro: "/despre", en: "/about" },
-    "/academie": { ro: "/academie", en: "/junior-academy" },
     "/echipa": { ro: "/echipa", en: "/team" },
     "/echipa/[slug]": { ro: "/echipa/[slug]", en: "/team/[slug]" },
     "/preturi": { ro: "/preturi", en: "/pricing" },

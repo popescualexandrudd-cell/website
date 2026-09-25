@@ -39,6 +39,17 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "2mb",
     },
   },
+  // The former junior academy and "about" pages now live on the programmes page and the home
+  // page; old links (and Google) are sent there for good.
+  async redirects() {
+    return [
+      { source: "/academie", destination: "/programe#grupe", permanent: true },
+      { source: "/en/junior-academy", destination: "/en/programs#grupe", permanent: true },
+      { source: "/despre", destination: "/#poveste", permanent: true },
+      { source: "/en/about", destination: "/en#poveste", permanent: true },
+      { source: "/programe/analiza-biomecanica", destination: "/programe", permanent: true },
+    ];
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

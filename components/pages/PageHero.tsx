@@ -1,27 +1,54 @@
 import type { ReactNode } from "react";
+import { getTranslations } from "next-intl/server";
 import type { ResolvedImage } from "@/lib/media-shared";
+import { getSettings, localizedSettings } from "@/lib/content";
 import { Picture } from "@/components/ui/Picture";
-import { CourtMark } from "@/components/ui/CourtMark";
+import { AmbientVideo } from "@/components/ui/AmbientVideo";
 import { TodoText } from "@/components/site/TodoText";
 import { Words } from "@/components/site/Words";
 
 type Props = {
   title: string;
   intro?: string;
-  image: ResolvedImage | null;
+  /** The page's own photo, used behind the text when the club has no presentation video. */
+  image?: ResolvedImage | null;
   imageAlt?: string;
   children?: ReactNode;
   eyebrow?: ReactNode;
 };
 
 /**
- * Interior page header: a dark clay-brick band with the title in condensed capitals, the
- * introduction, and either the page's photo (uploaded from the admin) or a court drawn in lines.
+ * Interior page header: the club's presentation video running behind the page (muted, looped,
+ * with a pause button), a dark shade over it, and the title and introduction in front. Without a
+ * video, the page's photo takes its place; without either, the dark band alone.
  */
-export function PageHero({ title, intro, image, imageAlt = "", children, eyebrow }: Props) {
+export async function PageHero({ title, intro, image, imageAlt = "", children, eyebrow }: Props) {
+  const [row, t] = await Promise.all([getSettings(), getTranslations("home")]);
+  const settings = localizedSettings(row, "ro");
+  const video = settings.heroVideo;
+  const backdrop = video ?? image ?? settings.heroImage;
   return (
-    <header className="page-hero tone-dark">
-      <div className="page-hero-inner">
+    <header className={`page-hero tone-dark${backdrop ? "page-hero--media" : ""}`}>
+      {video ? (
+        <AmbientVideo
+          video={video}
+          label=""
+          pauseLabel={t("videoPause")}
+          playLabel={t("videoPlay")}
+          className="page-hero-backdrop"
+        />
+      ) : image || settings.heroImage ? (
+        <Picture
+          image={(image ?? settings.heroImage)!}
+          alt={image ? imageAlt : ""}
+          priority
+          sizes="100vw"
+          className="page-hero-backdrop"
+          imgClassName="page-hero-img"
+        />
+      ) : null}
+      {backdrop ? <div className="page-hero-shade" aria-hidden="true" /> : null}
+      <div className="page-hero-inner page-hero-inner--single">
         <div className="page-hero-copy">
           {eyebrow}
           <h1 className="page-title">
@@ -34,20 +61,6 @@ export function PageHero({ title, intro, image, imageAlt = "", children, eyebrow
           ) : null}
           {children}
         </div>
-        {image ? (
-          <figure className="page-hero-figure">
-            <Picture
-              image={image}
-              alt={imageAlt}
-              priority
-              sizes="(min-width: 1024px) 40vw, 100vw"
-              className="page-hero-picture"
-              imgClassName="page-hero-img"
-            />
-          </figure>
-        ) : (
-          <CourtMark className="page-hero-court" />
-        )}
       </div>
     </header>
   );

@@ -1,9 +1,9 @@
 /**
- * The club's own logo and photos, shipped with the site in config/assets and imported into
- * the media library once. Each file name is recorded in SiteSettings.seededAssets, so an image
- * the club later deletes in the admin never comes back.
+ * The club's own logo, photos and presentation video, shipped with the site in config/assets and
+ * imported into the media library once. Each file name is recorded in SiteSettings.seededAssets,
+ * so an image the club later deletes in the admin never comes back.
  */
-import { readFile } from "node:fs/promises";
+import { copyFile, mkdir, readFile, stat } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import type { Prisma, PrismaClient } from "../../lib/generated/prisma/client";
 import { encodeVariants } from "../../lib/images/process";
@@ -14,9 +14,17 @@ type Asset = {
   file: string;
   mimeType: string;
   alt: { ro: string; en: string };
-  /** Where it goes: the site's logo, or a gallery photo. */
+  /** Where it goes: the site's logo, the opening video, or a gallery photo. */
   use:
     | { kind: "logo" }
+    /** The photo of a training programme (its card and page). */
+    | { kind: "program"; slug: string }
+    | {
+        kind: "video";
+        /** The encoded files next to it: [width, height, file]. */
+        sources: [number, number, string][];
+        durationSec: number;
+      }
     | {
         kind: "gallery";
         category: "GRUPE" | "TURNEE";
@@ -31,15 +39,32 @@ const ASSETS: Asset[] = [
   {
     file: "elite-logo.webp",
     mimeType: "image/webp",
-    alt: { ro: "Logoul Club Sportiv Elite Tenis", en: "The Elite Tenis sports club logo" },
+    alt: { ro: "Logoul Clubului Tenis Elite", en: "The Clubul Tenis Elite logo" },
     use: { kind: "logo" },
+  },
+  {
+    // A poster frame; the video itself was composed from the club's photos (config/assets).
+    file: "elite-prezentare-cadru.jpg",
+    mimeType: "video/mp4",
+    alt: {
+      ro: "Copiii clubului pe terenurile de zgură și pe podiumul unui turneu",
+      en: "The club's children on the clay courts and on a tournament podium",
+    },
+    use: {
+      kind: "video",
+      sources: [
+        [1280, 720, "elite-prezentare-720.mp4"],
+        [1920, 1080, "elite-prezentare-1080.mp4"],
+      ],
+      durationSec: 18,
+    },
   },
   {
     file: "elite-podium.jpg",
     mimeType: "image/jpeg",
     alt: {
-      ro: "Patru jucătoare cu medalii și diplome pe podiumul Elite Tenis Club",
-      en: "Four girls with medals and diplomas on the Elite Tenis Club podium",
+      ro: "Patru jucătoare cu medalii și diplome pe podiumul Clubului Tenis Elite",
+      en: "Four girls with medals and diplomas on the Clubul Tenis Elite podium",
     },
     use: {
       kind: "gallery",
@@ -59,9 +84,63 @@ const ASSETS: Asset[] = [
     use: {
       kind: "gallery",
       category: "GRUPE",
-      caption: { ro: "Copiii academiei, pe zgură", en: "The academy's children, on clay" },
+      caption: { ro: "Copiii clubului, pe zgură", en: "The club's children, on clay" },
       order: 1,
     },
+  },
+  {
+    file: "program-initiere.jpg",
+    mimeType: "image/jpeg",
+    alt: {
+      ro: "Grupă de copii cu rachete pe terenul de zgură al clubului",
+      en: "A group of children with racquets on the club's clay court",
+    },
+    use: { kind: "program", slug: "initiere" },
+  },
+  {
+    file: "program-competitie.jpg",
+    mimeType: "image/jpeg",
+    alt: {
+      ro: "Jucătoare cu trofeul ridicat pe podiumul unui turneu la club",
+      en: "A player lifting the trophy on the podium of a club tournament",
+    },
+    use: { kind: "program", slug: "competitie" },
+  },
+  {
+    file: "program-inalta-performanta.jpg",
+    mimeType: "image/jpeg",
+    alt: {
+      ro: "Podiumul unui turneu la Clubul Tenis Elite",
+      en: "The podium of a tournament at Clubul Tenis Elite",
+    },
+    use: { kind: "program", slug: "inalta-performanta" },
+  },
+  {
+    file: "program-amatori.jpg",
+    mimeType: "image/jpeg",
+    alt: {
+      ro: "Terenurile de zgură și sala acoperită a clubului",
+      en: "The club's clay courts and covered hall",
+    },
+    use: { kind: "program", slug: "amatori" },
+  },
+  {
+    file: "program-tabere.jpg",
+    mimeType: "image/jpeg",
+    alt: {
+      ro: "Copii cu rachete pe terenul de zgură, cu sala acoperită în spate",
+      en: "Children with racquets on the clay court, the covered hall behind them",
+    },
+    use: { kind: "program", slug: "tabere" },
+  },
+  {
+    file: "program-team-building.jpg",
+    mimeType: "image/jpeg",
+    alt: {
+      ro: "Premierea unui turneu la Clubul Tenis Elite",
+      en: "Prize-giving at a Clubul Tenis Elite tournament",
+    },
+    use: { kind: "program", slug: "team-building" },
   },
 ];
 
@@ -69,7 +148,7 @@ const ASSETS: Asset[] = [
 export async function syncClubAssets(db: PrismaClient): Promise<string[]> {
   const settings = await db.siteSettings.findUnique({
     where: { id: 1 },
-    select: { seededAssets: true, logoId: true },
+    select: { seededAssets: true, logoId: true, heroVideoId: true },
   });
   if (!settings) return [];
   const mediaRoot = resolve(process.env.MEDIA_DIR ?? "./storage/media");
@@ -77,7 +156,10 @@ export async function syncClubAssets(db: PrismaClient): Promise<string[]> {
   for (const asset of ASSETS) {
     if (settings.seededAssets.includes(asset.file)) continue;
     // A logo the club already uploaded stays; the shipped one is then simply not used.
-    if (asset.use.kind === "logo" && settings.logoId) {
+    if (
+      (asset.use.kind === "logo" && settings.logoId) ||
+      (asset.use.kind === "video" && settings.heroVideoId)
+    ) {
       await markImported(db, asset.file);
       continue;
     }
@@ -90,6 +172,40 @@ export async function syncClubAssets(db: PrismaClient): Promise<string[]> {
       baseName,
       publicPrefix: "/media/club",
     });
+    if (asset.use.kind === "video") {
+      const sources = [];
+      let size = 0;
+      for (const [w, h, file] of asset.use.sources) {
+        await mkdir(join(mediaRoot, "club"), { recursive: true });
+        await copyFile(
+          join(process.cwd(), "config", "assets", file),
+          join(mediaRoot, "club", file),
+        );
+        size += (await stat(join(mediaRoot, "club", file))).size;
+        sources.push({ w, h, src: `/media/club/${file}` });
+      }
+      const video = await db.media.create({
+        data: {
+          path: `club/${baseName}`,
+          kind: "VIDEO",
+          status: "GATA",
+          mimeType: "video/mp4",
+          width: encoded.width,
+          height: encoded.height,
+          blurDataURL: encoded.blurDataURL,
+          alt: asset.alt,
+          size,
+          variants: sources as unknown as Prisma.InputJsonValue,
+          poster: encoded.variants as unknown as Prisma.InputJsonValue,
+          durationSec: asset.use.durationSec,
+          originalName: asset.file,
+        },
+      });
+      await db.siteSettings.update({ where: { id: 1 }, data: { heroVideoId: video.id } });
+      await markImported(db, asset.file);
+      added.push("video-ul de prezentare");
+      continue;
+    }
     const media = await db.media.create({
       data: {
         path: `club/${baseName}`,
@@ -105,6 +221,11 @@ export async function syncClubAssets(db: PrismaClient): Promise<string[]> {
     });
     if (asset.use.kind === "logo") {
       await db.siteSettings.update({ where: { id: 1 }, data: { logoId: media.id } });
+    } else if (asset.use.kind === "program") {
+      await db.program.updateMany({
+        where: { slug: asset.use.slug, imageId: null },
+        data: { imageId: media.id },
+      });
     } else {
       // Photos the club published itself; the club confirms it holds the parents' consent
       // (CONTENT-TODO.md), and can unpublish them from the admin at any time.

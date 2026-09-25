@@ -3,7 +3,6 @@ import { Link } from "@/i18n/navigation";
 import type { LessonTypeView } from "@/lib/content";
 import { formatPrice } from "@/lib/format";
 import { durationLabel, formatAmount, lessonPrice } from "@/lib/pricing";
-import { TodoText } from "@/components/site/TodoText";
 
 type T = Awaited<ReturnType<typeof getTranslations>>;
 
@@ -23,8 +22,8 @@ export function peopleText(lesson: LessonTypeView, t: T): string {
 }
 
 /**
- * The kinds of lesson (individual, for two, for three, group, biomechanical analysis) with who
- * they are for, the durations on offer and the hourly rate; each links to the booking flow with
+ * The kinds of session (private, for 2, for 3, group) with who they are for, the durations on
+ * offer and the hourly rate (or where to ask for it); each links to the booking flow with
  * the lesson (and, on a programme page, the programme) already chosen.
  */
 export async function LessonTypeList({
@@ -56,9 +55,7 @@ export async function LessonTypeList({
               <p className="ed-row-meta">
                 {peopleText(lesson, t)} · {durationsText(lesson.durations, t)}
               </p>
-              <p className="ed-row-text">
-                <TodoText value={lesson.summary} />
-              </p>
+              <p className="ed-row-text">{lesson.summary}</p>
               {withPrices && lesson.hourlyRate !== null ? (
                 <p className="lesson-prices numerals">
                   {lesson.durations
@@ -81,12 +78,16 @@ export async function LessonTypeList({
                 </p>
               ) : null}
             </div>
-            <p className="ed-row-aside numerals">
-              <TodoText value={formatPrice(lesson.hourlyRate, currency, locale)} />{" "}
-              <span className="text-note text-cerneala-2">
-                {perPerson ? t("programs.perHourPerson") : t("programs.perHour")}
-              </span>
-            </p>
+            {lesson.hourlyRate !== null ? (
+              <p className="ed-row-aside numerals">
+                {formatPrice(lesson.hourlyRate, currency, locale)}{" "}
+                <span className="text-note text-cerneala-2">
+                  {perPerson ? t("programs.perHourPerson") : t("programs.perHour")}
+                </span>
+              </p>
+            ) : (
+              <p className="ed-row-aside text-note">{t("programs.rateOnRequest")}</p>
+            )}
           </li>
         );
       })}

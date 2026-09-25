@@ -77,7 +77,8 @@ export function AmbientVideo({ video, label, pauseLabel, playLabel, className, p
         playsInline
         preload={priority ? "auto" : "metadata"}
         poster={poster?.fallback}
-        aria-label={label}
+        aria-label={label || undefined}
+        aria-hidden={label ? undefined : true}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
         style={

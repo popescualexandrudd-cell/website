@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { Link } from "@/i18n/navigation";
-import { getCoach, getPageHeader, getScenes, getSettings, localizedSettings } from "@/lib/content";
+import { getCoach, getPageHeader, getSettings, localizedSettings } from "@/lib/content";
 import { isFilled } from "@/lib/i18n-content";
 import { localizedUrl, pageMetadata } from "@/lib/seo";
 import { breadcrumbLd, personLd } from "@/lib/structured-data";
@@ -14,6 +14,7 @@ import { Markdown } from "@/components/site/Markdown";
 import { TodoText } from "@/components/site/TodoText";
 import { Picture } from "@/components/ui/Picture";
 import { MediaFrame } from "@/components/ui/MediaFrame";
+import { initialsOf } from "@/components/academy/CoachCard";
 import { AmbientVideo } from "@/components/ui/AmbientVideo";
 
 type Props = PageProps<"/[locale]/echipa/[slug]">;
@@ -38,15 +39,13 @@ export default async function CoachPage({ params }: Props) {
   setRequestLocale(locale);
   const coach = await getCoach(slug, locale);
   if (!coach) notFound();
-  const [header, scenes, settingsRow, t] = await Promise.all([
+  const [header, settingsRow, t] = await Promise.all([
     getPageHeader("echipa", locale),
-    getScenes(locale),
     getSettings(),
     getTranslations(),
   ]);
   const settings = localizedSettings(settingsRow, locale);
   const url = localizedUrl({ pathname: "/echipa/[slug]", params: { slug } }, locale);
-  const photoNote = scenes.find((s) => s.key === "echipa")?.extra.photoNote ?? "";
 
   return (
     <>
@@ -105,7 +104,11 @@ export default async function CoachPage({ params }: Props) {
                 imgClassName="coach-hero-img"
               />
             ) : (
-              <MediaFrame note={photoNote} variant="plan" className="coach-hero-frame" />
+              <MediaFrame variant="plan" className="coach-hero-frame">
+                <span className="coach-card-initials" aria-hidden="true">
+                  {initialsOf(coach.name)}
+                </span>
+              </MediaFrame>
             )}
           </div>
         </div>
@@ -113,26 +116,47 @@ export default async function CoachPage({ params }: Props) {
 
       <PageSection id="parcurs" title={t("team.story")} className="page-section--narrow">
         <Markdown source={coach.story} />
-        <dl className="fact-list mt-10">
-          {coach.yearsExperience !== null ? (
-            <div>
-              <dt>{t("about.experience")}</dt>
-              <dd>{t("team.experienceYears", { count: coach.yearsExperience })}</dd>
-            </div>
-          ) : null}
-          {coach.languages.length > 0 ? (
-            <div>
-              <dt>{t("team.languages")}</dt>
-              <dd>{coach.languages.join(", ")}</dd>
-            </div>
-          ) : null}
-          {coach.specialties.length > 0 ? (
-            <div>
-              <dt>{t("team.specialties")}</dt>
-              <dd>{coach.specialties.join(", ")}</dd>
-            </div>
-          ) : null}
-        </dl>
+        {coach.yearsExperience !== null ||
+        coach.languages.length > 0 ||
+        coach.specialties.length > 0 ? (
+          <dl className="fact-list coach-facts mt-10">
+            {coach.yearsExperience !== null ? (
+              <div>
+                <dt>{t("about.experience")}</dt>
+                <dd>{t("team.experienceYears", { count: coach.yearsExperience })}</dd>
+              </div>
+            ) : null}
+            {coach.specialties.length > 0 ? (
+              <div>
+                <dt>{t("team.specialties")}</dt>
+                <dd>{coach.specialties.join(", ")}</dd>
+              </div>
+            ) : null}
+            {coach.languages.length > 0 ? (
+              <div>
+                <dt>{t("team.languages")}</dt>
+                <dd>{coach.languages.join(", ")}</dd>
+              </div>
+            ) : null}
+          </dl>
+        ) : null}
+        {coach.certifications.length > 0 ? (
+          <>
+            <h3 className="section-subtitle mt-10">{t("team.certifications")}</h3>
+            <ul className="coach-certs">
+              {coach.certifications.map((c) => (
+                <li key={c.id}>
+                  <strong>{c.title}</strong>
+                  <span className="text-cerneala-2">
+                    {" · "}
+                    {c.issuer}
+                    {c.year ? `, ${c.year}` : ""}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : null}
       </PageSection>
 
       {coach.video ? (
@@ -144,47 +168,6 @@ export default async function CoachPage({ params }: Props) {
             playLabel={t("home.videoPlay")}
             className="coach-video"
           />
-        </PageSection>
-      ) : null}
-
-      {coach.philosophy ? (
-        <PageSection id="filozofie" title={t("team.philosophy")} className="page-section--narrow">
-          <Markdown source={coach.philosophy} />
-        </PageSection>
-      ) : null}
-
-      {coach.certifications.length > 0 ? (
-        <PageSection
-          id="certificari"
-          title={t("team.certifications")}
-          className="page-section--narrow"
-        >
-          <ul>
-            {coach.certifications.map((c) => (
-              <li key={c.id} className={`ed-row ${c.image ? "" : "ed-row--no-image"}`}>
-                {c.image ? (
-                  <span className="ed-row-image">
-                    <Picture image={c.image} alt={c.imageAlt} sizes="9rem" />
-                  </span>
-                ) : null}
-                <div>
-                  <h3 className="ed-row-title">
-                    <TodoText value={c.title} />
-                  </h3>
-                  <p className="ed-row-meta">
-                    <TodoText value={c.issuer} />
-                  </p>
-                </div>
-                <span className="ed-row-aside numerals">{c.year ?? ""}</span>
-              </li>
-            ))}
-          </ul>
-        </PageSection>
-      ) : null}
-
-      {coach.results ? (
-        <PageSection id="rezultate" title={t("team.results")} className="page-section--narrow">
-          <Markdown source={coach.results} />
         </PageSection>
       ) : null}
     </>

@@ -2,7 +2,13 @@ import Anthropic from "@anthropic-ai/sdk";
 import { getSettings } from "@/lib/content";
 import { rateLimit } from "@/lib/rate-limit";
 import { getClientIp, isSameOrigin } from "@/lib/request";
-import { assistantAvailable, loadClubKnowledge } from "@/lib/assistant/load";
+import {
+  assistantAvailable,
+  assistantUsesModel,
+  loadClubKnowledge,
+  loadLocalClub,
+} from "@/lib/assistant/load";
+import { localAnswer } from "@/lib/assistant/local";
 import { assistantInstructions, parseAssistantRequest } from "@/lib/assistant/prompt";
 import type { AssistantEvent } from "@/lib/assistant/shared";
 
@@ -35,7 +41,8 @@ export async function POST(request: Request) {
   }
   const input = parseAssistantRequest(body);
   if (!input) return fail("invalid", 400);
-  if (!assistantAvailable(await getSettings())) return fail("unavailable", 404);
+  const settings = await getSettings();
+  if (!assistantAvailable(settings)) return fail("unavailable", 404);
 
   // Per visitor and for the whole site, so a script cannot run up the bill.
   const ip = await getClientIp();
@@ -45,6 +52,22 @@ export async function POST(request: Request) {
     (await rateLimit(`assistant:ip-day:${ip}`, 60, 24 * 60 * 60)) &&
     (await rateLimit("assistant:site-day", dailyLimit, 24 * 60 * 60));
   if (!allowed) return fail("busy", 429);
+
+  const question = input.messages.at(-1)?.content ?? "";
+  // Without an Anthropic key the assistant answers from the club's own data.
+  if (!assistantUsesModel(settings)) {
+    const answer = localAnswer(question, await loadLocalClub(input.locale));
+    return new Response(
+      [{ type: "text", text: answer }, { type: "done" }].map((e) => JSON.stringify(e)).join("\n") +
+        "\n",
+      {
+        headers: {
+          "Content-Type": "application/x-ndjson; charset=utf-8",
+          "Cache-Control": "no-store",
+        },
+      },
+    );
+  }
 
   const knowledge = await loadClubKnowledge(input.locale);
   const instructions = assistantInstructions({
@@ -87,9 +110,11 @@ export async function POST(request: Request) {
       const send = (event: AssistantEvent) => {
         if (!closed) controller.enqueue(encoder.encode(`${JSON.stringify(event)}\n`));
       };
+      let wrote = false;
       try {
         for await (const event of stream) {
           if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
+            wrote = true;
             send({ type: "text", text: event.delta.text });
           }
         }
@@ -103,6 +128,19 @@ export async function POST(request: Request) {
       } catch (error) {
         if (!request.signal.aborted) {
           console.error("[asistent]", error instanceof Error ? error.message : error);
+          // The model could not answer: the visitor still gets the club's own answer.
+          if (!wrote) {
+            try {
+              send({
+                type: "text",
+                text: localAnswer(question, await loadLocalClub(input.locale)),
+              });
+              send({ type: "done" });
+              return;
+            } catch {
+              // Fall through to the error message.
+            }
+          }
           send({
             type: "error",
             code:

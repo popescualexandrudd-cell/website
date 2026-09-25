@@ -5,14 +5,25 @@ import { Picture } from "@/components/ui/Picture";
 import { MediaFrame } from "@/components/ui/MediaFrame";
 import { TodoText } from "@/components/site/TodoText";
 
-/** A member of the team: portrait (or its empty frame), name, role, a sentence, specialties. */
+/** "Vlad Moșteanu" → "VM". */
+export function initialsOf(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part.charAt(0).toUpperCase())
+    .join("");
+}
+
+/**
+ * A member of the team: portrait (or, until the club uploads one, the coach's initials on a
+ * court drawing), name, role, a sentence, specialties.
+ */
 export async function CoachCard({
   coach,
-  photoNote,
   headingLevel = "h3",
 }: {
   coach: CoachView;
-  photoNote: string;
   headingLevel?: "h2" | "h3";
 }) {
   const t = await getTranslations();
@@ -32,7 +43,11 @@ export async function CoachCard({
               imgClassName="coach-card-img"
             />
           ) : (
-            <MediaFrame note={photoNote} variant="plan" className="coach-card-frame" />
+            <MediaFrame variant="plan" className="coach-card-frame">
+              <span className="coach-card-initials" aria-hidden="true">
+                {initialsOf(coach.name)}
+              </span>
+            </MediaFrame>
           )}
         </span>
         <span className="coach-card-role">

@@ -152,7 +152,7 @@ export default async function TournamentsPage({ params }: PageProps<"/[locale]/t
           <p className="measure">{t("tournaments.playText")}</p>
           <div className="cta-panel-actions">
             <Link
-              href={{ pathname: "/academie", hash: "evaluare" }}
+              href={{ pathname: "/programe", hash: "inscriere" }}
               className="btn btn-primary btn-arrow"
             >
               {t("tournaments.evaluationCta")}
