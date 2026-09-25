@@ -168,6 +168,11 @@ export const coachStrings = {
     title: "Mesaj nou din formularul de contact",
     open: "Deschide inboxul",
   },
+  court: {
+    subject: (name: string) => `Cerere de teren: ${name}`,
+    title: "Cerere nouă de închiriere a unui teren",
+    open: "Deschide inboxul",
+  },
   waitlist: {
     subject: (name: string) => `Listă de așteptare: ${name}`,
     title: "Cerere nouă pe lista de așteptare",

@@ -18,9 +18,12 @@ import {
 export function ContactForm({
   turnstileSiteKey,
   nonce,
+  defaultSubject,
 }: {
   turnstileSiteKey?: string | null;
   nonce?: string;
+  /** Filled in when a page links here for a purpose (?subiect=…), e.g. a school partnership. */
+  defaultSubject?: string;
 }) {
   const t = useTranslations("contact");
   const locale = useLocale();
@@ -55,7 +58,7 @@ export function ContactForm({
           label={t("phone")}
           error={errorText(state.fieldErrors?.phone)}
         />
-        <TextField name="subject" optional label={t("subject")} />
+        <TextField name="subject" optional label={t("subject")} defaultValue={defaultSubject} />
       </div>
       <TextArea
         name="message"

@@ -15,6 +15,7 @@ import {
   getScenes,
   getSettings,
   getTestimonials,
+  getTournaments,
   localizedSettings,
   type SceneView,
 } from "@/lib/content";
@@ -31,6 +32,12 @@ import { LessonsSection } from "@/components/home/LessonsSection";
 import { QuestionsSection } from "@/components/home/QuestionsSection";
 import { BookingSection } from "@/components/home/BookingSection";
 import { TextSection } from "@/components/home/TextSection";
+import { StorySection } from "@/components/home/StorySection";
+import { PillarsSection } from "@/components/home/PillarsSection";
+import { FinderSection } from "@/components/home/FinderSection";
+import { TournamentsSection } from "@/components/home/TournamentsSection";
+import { SocialSection } from "@/components/home/SocialSection";
+import { assistantAvailable } from "@/lib/assistant/load";
 import { BookingWidget } from "@/components/booking/BookingWidget";
 import { JsonLd } from "@/components/pages/JsonLd";
 import { pageMetadata, localizedUrl } from "@/lib/seo";
@@ -66,6 +73,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     gallery,
     venueHeader,
     settingsRow,
+    tournaments,
     t,
   ] = await Promise.all([
     getScenes(locale),
@@ -80,6 +88,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     getGallery(locale, 6),
     getPageHeader("facilitati", locale),
     getSettings(),
+    getTournaments(locale),
     getTranslations("home"),
   ]);
   const settings = localizedSettings(settingsRow, locale);
@@ -93,6 +102,13 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const ages = [...groups.map((g) => g.ageMin), ...programs.map((p) => p.ageMin)].filter(
     (age): age is number => age !== null,
   );
+  // Years since the club opened, counted from the settings (the current year in the club's zone).
+  const thisYear = Number(
+    new Intl.DateTimeFormat("en", { year: "numeric", timeZone: settings.timezone }).format(
+      new Date(),
+    ),
+  );
+  const years = settings.foundedYear ? thisYear - settings.foundedYear : 0;
   const figures: Figure[] = [
     ...(courtCount > 0
       ? [{ value: courtCount, label: t("figCourts", { count: courtCount }) }]
@@ -100,6 +116,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     ...(coveredCount > 0
       ? [{ value: coveredCount, label: t("figCovered", { count: coveredCount }) }]
       : []),
+    ...(years > 0 ? [{ value: years, label: t("figYears", { count: years }) }] : []),
     ...(ages.length > 0 ? [{ value: Math.min(...ages), suffix: "+", label: t("figAge") }] : []),
     ...(programs.length > 0
       ? [{ value: programs.length, label: t("figPrograms", { count: programs.length }) }]
@@ -130,6 +147,38 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         return <TeamSection key={scene.key} scene={scene} coaches={coaches} />;
       case "metoda":
         return <MethodSection key={scene.key} scene={scene} />;
+      case "poveste":
+        return <StorySection key={scene.key} scene={scene} />;
+      case "piloni":
+        return <PillarsSection key={scene.key} scene={scene} />;
+      case "potrivire":
+        return (
+          <FinderSection
+            key={scene.key}
+            scene={scene}
+            programs={programs.map((p) => ({ slug: p.slug, name: p.name, summary: p.summary }))}
+            groups={groups.map((g) => ({
+              name: g.name,
+              summary: g.summary,
+              ageMin: g.ageMin,
+              ageMax: g.ageMax,
+              programSlug: g.program?.slug ?? null,
+            }))}
+            assistant={assistantAvailable(settingsRow)}
+          />
+        );
+      case "turnee":
+        return (
+          <TournamentsSection
+            key={scene.key}
+            scene={scene}
+            upcoming={tournaments.upcoming}
+            hosted={tournaments.hosted}
+            locale={locale}
+          />
+        );
+      case "social":
+        return <SocialSection key={scene.key} scene={scene} settings={settings} />;
       case "clubul":
         return (
           <VenueSection

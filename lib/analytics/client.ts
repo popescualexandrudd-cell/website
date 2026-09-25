@@ -24,6 +24,7 @@ export type ConversionEvent =
   | "evaluation_request"
   | "waitlist_request"
   | "contact_message"
+  | "court_request"
   | "phone_click"
   | "whatsapp_click"
   | "assistant_open"
@@ -137,6 +138,7 @@ const GA_EVENT: Record<ConversionEvent, [string, Params?]> = {
   evaluation_request: ["generate_lead", { form: "evaluation" }],
   waitlist_request: ["generate_lead", { form: "waitlist" }],
   contact_message: ["generate_lead", { form: "contact" }],
+  court_request: ["generate_lead", { form: "court" }],
   phone_click: ["contact_click", { method: "phone" }],
   whatsapp_click: ["contact_click", { method: "whatsapp" }],
   assistant_open: ["assistant_open"],
@@ -149,6 +151,7 @@ const META_EVENT: Partial<Record<ConversionEvent, string>> = {
   evaluation_request: "Lead",
   waitlist_request: "Lead",
   contact_message: "Contact",
+  court_request: "Lead",
   phone_click: "Contact",
   whatsapp_click: "Contact",
 };
@@ -172,7 +175,8 @@ export function track(event: ConversionEvent, params: Params = {}): void {
         ? config.adsBookingLabel
         : event === "evaluation_request" ||
             event === "waitlist_request" ||
-            event === "contact_message"
+            event === "contact_message" ||
+            event === "court_request"
           ? config.adsLeadLabel
           : null;
     if (label) window.gtag("event", "conversion", { send_to: `${config.adsId}/${label}` });

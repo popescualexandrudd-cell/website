@@ -29,6 +29,9 @@ export type KnowledgePaths = {
   contact: string;
   tips: string;
   privacy: string;
+  rental: string;
+  tournaments: string;
+  schools: string;
 };
 
 export type KnowledgeInput = {
@@ -60,6 +63,8 @@ export type KnowledgeInput = {
   coaches: (CoachView & { path: string })[];
   faqs: FaqView[];
   posts: { title: string; excerpt: string; path: string }[];
+  /** Further sections already written in the page's language (story, court hire, tournaments). */
+  sections?: { title: string; body: string }[];
   paths: KnowledgePaths;
 };
 
@@ -71,7 +76,7 @@ const LABELS = {
     contact: "Contact",
     phone: "Telefon",
     email: "Email",
-    hours: "Program de lucru",
+    hours: "Programul clubului (deschis pentru închirieri de teren)",
     contactPage: "Pagina de contact",
     location: "Baza sportivă",
     directions: "Cum ajungi",
@@ -146,6 +151,9 @@ const LABELS = {
       faq: "Întrebări frecvente",
       contact: "Contact",
       tips: "Sfaturi",
+      rental: "Închiriere teren",
+      tournaments: "Turnee",
+      schools: "Tenis pentru școli și grădinițe",
       privacy: "Confidențialitate",
     },
     audience: { COPII: "copii", JUNIORI: "juniori", ADULTI: "adulți", TOATE: "orice vârstă" },
@@ -184,7 +192,7 @@ const LABELS = {
     contact: "Contact",
     phone: "Phone",
     email: "Email",
-    hours: "Opening hours",
+    hours: "Club opening hours (court hire)",
     contactPage: "Contact page",
     location: "The venue",
     directions: "Getting there",
@@ -259,6 +267,9 @@ const LABELS = {
       faq: "Frequently asked questions",
       contact: "Contact",
       tips: "Tips",
+      rental: "Court hire",
+      tournaments: "Tournaments",
+      schools: "Tennis for schools and kindergartens",
       privacy: "Privacy",
     },
     audience: { COPII: "children", JUNIORI: "juniors", ADULTI: "adults", TOATE: "all ages" },
@@ -569,6 +580,12 @@ export function formatKnowledge(input: KnowledgeInput): string {
     for (const f of faqs) {
       out.push("", `${L.q}: ${oneLine(f.question)}`, `${L.a}: ${oneLine(f.answer)}`);
     }
+  }
+
+  for (const section of input.sections ?? []) {
+    const body = known(section.body);
+    if (!body) continue;
+    out.push("", `## ${section.title}`, body);
   }
 
   if (input.posts.length > 0) {

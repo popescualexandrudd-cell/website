@@ -19,6 +19,9 @@ const INTERNAL: StaticPathname[] = [
   "/confidentialitate",
   "/termeni",
   "/cookies",
+  "/inchiriere-teren",
+  "/turnee",
+  "/scoli-gradinite",
 ];
 
 export type SafeHref = StaticPathname | { pathname: StaticPathname; hash: string };

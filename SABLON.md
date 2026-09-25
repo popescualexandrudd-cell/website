@@ -33,14 +33,15 @@ Copiază proiectul și deschide `config/club.yml`. Completezi, de sus în jos:
 
 | Secțiune | Ce scrii |
 | --- | --- |
-| `club` | numele, monograma (2–3 litere, până încarci logoul), descrierea de sub nume („Academie de tenis”), cele două culori |
-| `antrenori` | fiecare antrenor: nume, rol, titulatură, un rezumat, specializări, ani de experiență, certificări, limbi, parcurs. Primul e antrenorul principal |
+| `club` | numele, monograma (2–3 litere, până încarci logoul), descrierea de sub nume („Academie de tenis”), cele două culori, anul înființării (`infiintat`) |
+| `antrenori` | fiecare antrenor: nume, rol, titulatură, un rezumat, specializări, ani de experiență, certificări, limbi, parcurs. Primul e antrenorul principal; `publicat: false` îl lasă doar în admin |
 | `contact` | telefon, email (primește și notificările), opțional WhatsApp și rețelele sociale |
 | `locatii` | adresa, codul poștal, județul, terenurile (suprafață, număr, acoperit iarna, nocturnă) și dotările |
 | `programe` | care dintre cele trei programe (Inițiere, Competiție, Amatori) le oferă clubul |
 | `academie_juniori` | grupele: etapa, vârstele, programul, antrenamentele pe săptămână, durata, zilele și orele, taxa lunară, locurile |
 | `lectii`, `pachete` | tipurile de lecții rezervabile online, cu tariful pe oră, și pachetele |
-| `program_lucru`, `rezervari`, `plata` | orele în care se primesc rezervări și regulile lor |
+| `program_club`, `inchiriere` | când e deschis clubul și tarifele de închiriere a terenurilor |
+| `program_lucru`, `rezervari`, `plata` | orele în care se primesc rezervări de lecții și regulile lor |
 | `site`, `entitate_legala` | domeniul, limbile și datele firmei sau ale clubului sportiv |
 
 Orice valoare lăsată între paranteze pătrate apare pe site ca **[DE COMPLETAT]**, ca să nu scape

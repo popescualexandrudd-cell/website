@@ -699,3 +699,28 @@ cheie sub hero, secțiuni alternante deschis/închis, carduri de program, cale d
     ei; migrarea `content_fixes` o corectează doar dacă textul nu a fost editat), textul despre
     tarife care nu mai presupune ce lecții sunt „de persoană”, iar rularea ffmpeg nu mai face
     ca build-ul să includă tot proiectul în imagine.
+
+## Partea a VII-a. Site-ul clubului Elite, la nivel de academie de top
+
+96. **Doar fapte publice**: povestea (2013, sala acoperită, școlile de peste 10 ani, turneele FRT
+    și Tenis10), programul 08–23, dotările și echipa vin din prezentarea publică a clubului și din
+    calendarele frt.ro și tenis10.ro (Instagram și Facebook nu se pot citi direct de aici; au fost
+    verificate prin căutare). Ce nu e confirmat (tarife, anul sălii) rămâne „[DE COMPLETAT]”, iar
+    antrenorii de pe site-ul actual al clubului intră nepublicați, până confirmă clubul rolurile.
+97. **Structura** după academiile de top: poveste → cifre (inclusiv anii de la înființare) →
+    piloni → programe → etapele academiei → „Găsește-ți programul” → filozofie → echipă → metodă →
+    turnee → baza sportivă (cu închiriere) → galerie → comunitate → lecții → întrebări → rezervare.
+    Secțiunile noi se creează singure pe un site existent (seed-ul completează structura lipsă),
+    iar ordinea se schimbă din admin.
+98. **Pagini noi**: „Închiriere teren” (cererea ajunge în Mesaje și pe email, conversia
+    `court_request`), „Turnee” (model `Tournament`, admin, JSON-LD `SportsEvent` pentru edițiile cu
+    date), „Școli și grădinițe” (contactul vine cu subiectul completat). Meniul pune academia,
+    programele, închirierea și turneele în față.
+99. **Asistentul**: pop-up-ul „Întreabă-ne ceva” apare o singură dată pe vizită (după 9 secunde
+    sau o treime din pagină), cu întrebări potrivite paginii; pe telefon e un singur rând.
+    Asistentul primește acum și povestea, închirierea, turneele și școlile; „Găsește-ți programul”
+    îi poate trimite răspunsurile ca întrebare.
+100. **Efecte**: bară de progres a lecturii, bandă cu numele turneelor, carduri care se ridică la
+     hover, cronologia care apare pas cu pas, mingea animată; toate se opresc la „reduced motion”.
+     **/llms.txt** descrie clubul pentru motoarele de căutare cu AI.
+

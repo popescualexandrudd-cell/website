@@ -44,3 +44,16 @@ export function orderedListItems(source: string): { title: string; text: string 
       return { title: "", text: content };
     });
 }
+
+/** A text followed by a numbered list: the paragraphs before the list, then its items. */
+export function textAndList(source: string): {
+  intro: string;
+  items: { title: string; text: string }[];
+} {
+  const intro = source
+    .split("\n")
+    .filter((line) => !/^\s*\d+\.\s/.test(line))
+    .join("\n")
+    .trim();
+  return { intro, items: orderedListItems(source) };
+}

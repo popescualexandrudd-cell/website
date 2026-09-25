@@ -31,8 +31,10 @@ import { stageContent } from "./seed/content/academy";
 import { faqContent } from "./seed/content/faqs";
 import { postContent } from "./seed/content/posts";
 import { LEGAL_VERSION, legalContent } from "./seed/content/legal";
+import { tournamentContent } from "./seed/content/tournaments";
 import { roCount } from "../lib/format";
 import {
+  amenityDescriptions,
   amenityNames,
   coachPhilosophy,
   conditionalServices,
@@ -115,6 +117,59 @@ async function syncLegalDrafts(): Promise<Map<string, "created" | "updated" | "k
   return result;
 }
 
+/** The template variables of the home page texts, from config/club.yml. */
+function sceneVars(config: ReturnType<typeof loadConfig>) {
+  const location = config.locatii[0];
+  const courts = (location?.terenuri ?? []).map((court) => ({
+    count: integer(court.numar) ?? 0,
+    covered: yesNo(court.acoperit_iarna) === true,
+  }));
+  const total = courts.reduce((sum, court) => sum + court.count, 0);
+  const covered = courts.reduce((sum, court) => sum + (court.covered ? court.count : 0), 0);
+  const founded = integer(config.club.infiintat);
+  return {
+    club: text(config.club.nume),
+    locatie: text(location?.nume),
+    oras: text(location?.localitate),
+    terenuri: total > 0 ? String(total) : TODO,
+    acoperite: covered > 0 ? String(covered) : TODO,
+    exterior: total - covered > 0 ? String(total - covered) : TODO,
+    an: founded ? String(founded) : TODO,
+  };
+}
+
+/**
+ * The home page sections and the page headers: the site's structure, which the admin edits but
+ * cannot delete. Missing ones are created at every start, so a new version's sections appear on
+ * an existing site; texts the club edited are never touched.
+ */
+async function syncStructure(
+  config: ReturnType<typeof loadConfig>,
+): Promise<Map<string, "created" | "kept">> {
+  const result = new Map<string, "created" | "kept">();
+  for (const scene of sceneSeeds(sceneVars(config))) {
+    const exists = await db.scene.findUnique({ where: { key: scene.key } });
+    await db.scene.upsert({ where: { key: scene.key }, update: {}, create: scene });
+    result.set(`scena ${scene.key}`, exists ? "kept" : "created");
+  }
+  for (const header of pageHeaderContent) {
+    const exists = await db.pageHeader.findUnique({ where: { key: header.key } });
+    await db.pageHeader.upsert({
+      where: { key: header.key },
+      update: {},
+      create: {
+        key: header.key,
+        title: header.title,
+        intro: header.intro,
+        seoTitle: header.seoTitle ?? Prisma.DbNull,
+        seoDescription: header.seoDescription,
+      },
+    });
+    result.set(`antet ${header.key}`, exists ? "kept" : "created");
+  }
+  return result;
+}
+
 async function main(): Promise<void> {
   // In the Docker image the seed runs at every start with --if-empty: only a brand-new database
   // gets the initial content, so what the coach deleted in the admin never comes back.
@@ -123,9 +178,16 @@ async function main(): Promise<void> {
     (await db.siteSettings.findUnique({ where: { id: 1 } }))
   ) {
     const updated = [...(await syncLegalDrafts())].filter(([, state]) => state === "updated");
+    const added = [...(await syncStructure(loadConfig()))].filter(
+      ([, state]) => state === "created",
+    );
+    const changes = [
+      ...updated.map(([kind]) => `ciorna legală ${kind} actualizată`),
+      ...added.map(([label]) => label),
+    ];
     console.info(
-      updated.length > 0
-        ? `Seed: baza de date are deja conținut; am actualizat ciornele legale: ${updated.map(([kind]) => kind).join(", ")}.`
+      changes.length > 0
+        ? `Seed: baza de date are deja conținut; am adăugat sau actualizat: ${changes.join(", ")}.`
         : "Seed: baza de date are deja conținut, nu adaug nimic.",
     );
     return;
@@ -146,11 +208,12 @@ async function main(): Promise<void> {
     count: integer(court.numar) ?? 0,
     covered: yesNo(court.acoperit_iarna) === true,
   }));
-  const courtTotal = courtRows.reduce((sum, court) => sum + court.count, 0);
   const coveredTotal = courtRows.reduce((sum, court) => sum + (court.covered ? court.count : 0), 0);
 
   // ── Settings ──────────────────────────────────────────────────────────────
-  const workingHours = [
+  // The club's opening hours (court hire) when given; otherwise the lesson hours.
+  const clubHours = hoursRange(config.program_club?.zilnic);
+  const lessonHours = [
     { label: { ro: "Luni–vineri", en: "Monday–Friday" }, value: config.program_lucru.luni_vineri },
     { label: { ro: "Sâmbătă", en: "Saturday" }, value: config.program_lucru.sambata },
     { label: { ro: "Duminică", en: "Sunday" }, value: config.program_lucru.duminica },
@@ -163,6 +226,18 @@ async function main(): Promise<void> {
       hours: raw.toLowerCase() === "închis" ? { ro: "închis", en: "closed" } : same(raw),
     };
   });
+  const workingHours = clubHours
+    ? [
+        {
+          label: { ro: "Zilnic", en: "Every day" },
+          hours: same(`${clubHours.start}–${clubHours.end}`),
+        },
+      ]
+    : lessonHours;
+  const foundedYear = integer(config.club.infiintat);
+  const rentalRates = isPlaceholder(config.inchiriere?.tarife)
+    ? todoT
+    : { ro: text(config.inchiriere?.tarife) };
 
   const paymentMethods = config.plata.metode
     .filter((method) => !isPlaceholder(method))
@@ -219,6 +294,8 @@ async function main(): Promise<void> {
         : { ro: text(config.rezervari.prima_lectie) },
       paymentMethods,
       workingHours,
+      foundedYear,
+      rentalRates,
       legalForm: text(config.entitate_legala.forma),
       legalName: text(config.entitate_legala.denumire),
       legalCui: text(config.entitate_legala.cui),
@@ -231,6 +308,17 @@ async function main(): Promise<void> {
     },
   });
   note("setări", !settingsExisting);
+  // Fields added in later versions are filled in on an existing site, never overwritten.
+  if (settingsExisting) {
+    const fill: Prisma.SiteSettingsUpdateInput = {};
+    if (settingsExisting.foundedYear === null && foundedYear !== null)
+      fill.foundedYear = foundedYear;
+    if (settingsExisting.rentalRates === null) fill.rentalRates = rentalRates;
+    if (Object.keys(fill).length > 0) {
+      await db.siteSettings.update({ where: { id: 1 }, data: fill });
+      note("setări noi", true);
+    }
+  }
 
   // ── Coaching team & certifications ─────────────────────────────────────────
   for (const [coachIndex, entry] of config.antrenori.entries()) {
@@ -265,6 +353,8 @@ async function main(): Promise<void> {
           }),
         isHead: coachIndex === 0,
         order: coachIndex,
+        // Coaches listed publicly but not yet confirmed by the club wait in the admin.
+        active: yesNo(entry.publicat) !== false,
       },
     });
     note(`antrenor ${name}`, !exists);
@@ -391,14 +481,17 @@ async function main(): Promise<void> {
     const id = `seed-amenity-${facilityOrder + 1}`;
     const exists = await db.facility.findUnique({ where: { id } });
     const name = isPlaceholder(amenity) ? todoT : (amenityNames[key] ?? { ro: capitalize(key) });
+    const description = amenityDescriptions[key];
     await db.facility.upsert({
       where: { id },
-      update: {},
+      // A description added in a later version fills an empty one; an edited one stays.
+      update: description && exists && exists.description === null ? { description } : {},
       create: {
         id,
         locationId,
         type: "DOTARE_BAZA",
         name,
+        description: description ?? Prisma.DbNull,
         illustration: key || "altele",
         order: facilityOrder,
       },
@@ -596,17 +689,17 @@ async function main(): Promise<void> {
     }
   }
 
-  // ── Scenes ────────────────────────────────────────────────────────────────
-  for (const scene of sceneSeeds({
-    club: clubName,
-    locatie: locationName,
-    oras: city,
-    terenuri: courtTotal > 0 ? String(courtTotal) : TODO,
-    acoperite: coveredTotal > 0 ? String(coveredTotal) : TODO,
-  })) {
-    const exists = await db.scene.findUnique({ where: { key: scene.key } });
-    await db.scene.upsert({ where: { key: scene.key }, update: {}, create: scene });
-    note(`scena ${scene.key}`, !exists);
+  for (const [key, state] of await syncStructure(config)) note(key, state === "created");
+
+  // ── Tournaments hosted at the club ──────────────────────────────────────────
+  for (const [index, tournament] of tournamentContent.entries()) {
+    const exists = await db.tournament.findUnique({ where: { slug: tournament.slug } });
+    await db.tournament.upsert({
+      where: { slug: tournament.slug },
+      update: {},
+      create: { ...tournament, order: index },
+    });
+    note(`turneu ${tournament.slug}`, !exists);
   }
 
   // ── FAQ ───────────────────────────────────────────────────────────────────
@@ -662,22 +755,6 @@ async function main(): Promise<void> {
       `pagina legală ${kind}${state === "updated" ? " (actualizată)" : ""}`,
       state === "created",
     );
-  }
-
-  for (const header of pageHeaderContent) {
-    const exists = await db.pageHeader.findUnique({ where: { key: header.key } });
-    await db.pageHeader.upsert({
-      where: { key: header.key },
-      update: {},
-      create: {
-        key: header.key,
-        title: header.title,
-        intro: header.intro,
-        seoTitle: header.seoTitle ?? Prisma.DbNull,
-        seoDescription: header.seoDescription,
-      },
-    });
-    note(`antet ${header.key}`, !exists);
   }
 
   if (created.length === 0) {

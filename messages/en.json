@@ -30,7 +30,7 @@
   "nav": {
     "programs": "Programmes",
     "facilities": "Facilities",
-    "about": "About the academy",
+    "about": "About the club",
     "pricing": "Prices",
     "faq": "Questions",
     "tips": "Tips",
@@ -43,7 +43,10 @@
     "menuLabel": "Full menu",
     "juniors": "Junior academy",
     "team": "Team",
-    "club": "The club"
+    "club": "The club",
+    "rental": "Court hire",
+    "tournaments": "Tournaments",
+    "schools": "Schools"
   },
   "footer": {
     "contact": "Contact",
@@ -99,7 +102,9 @@
     "clubAddress": "Address",
     "clubCourts": "Courts",
     "clubAmenities": "Amenities",
-    "galleryVideo": "Video"
+    "galleryVideo": "Video",
+    "figYears": "{count, plural, one {year} other {years}} of tennis at the club",
+    "rentalCta": "Hire a court"
   },
   "programs": {
     "groups": {
@@ -267,7 +272,9 @@
       "participants": "The number of people does not match the chosen lesson.",
       "lessonType": "This lesson type can no longer be booked. Choose another.",
       "duration": "This length is no longer offered for this lesson. Choose another.",
-      "experience": "Choose how much the child has played so far."
+      "experience": "Choose how much the child has played so far.",
+      "date": "Choose a day, from today on.",
+      "time": "Choose the start time."
     }
   },
   "booking": {
@@ -524,6 +531,19 @@
       "failed": "We couldn't answer just now. Please try again, or call us.",
       "refused": "I can't help with that. Ask me anything about the club: groups, schedule, prices, booking.",
       "tooLong": "That question is too long: please keep it under {max} characters."
+    },
+    "teaserTitle": "Ask us anything",
+    "teaserText": "The club's assistant answers now, from our own information.",
+    "teaserClose": "Close",
+    "teaserQuestions": {
+      "age": "From what age can my child start?",
+      "start": "How do we get started?",
+      "groups": "Which groups do you have, and on which days?",
+      "prices": "How much is a lesson?",
+      "court": "How do I hire a court?",
+      "courtPrice": "Are the covered courts open in the evening?",
+      "tournaments": "Which tournaments are played at the club?",
+      "schools": "How do you work with schools and kindergartens?"
     }
   },
   "consent": {
@@ -543,5 +563,129 @@
     "customize": "Let me choose",
     "save": "Save my choice",
     "settings": "Cookie settings"
+  },
+  "rental": {
+    "callCta": "Call: {phone}",
+    "whatsappCta": "Message us on WhatsApp",
+    "requestCta": "Request a court online",
+    "courtsTitle": "The courts",
+    "covered": "Covered, all year",
+    "outdoor": "Outdoors",
+    "courtsCount": "{count, plural, one {# {surface} court} other {# {surface} courts}}",
+    "floodlights": "floodlit",
+    "hoursTitle": "Opening hours",
+    "ratesTitle": "Rates",
+    "howTitle": "How to book",
+    "steps": {
+      "one": "Pick the day and time",
+      "oneText": "Tell us when you want to play, for how long and whether you prefer a covered or an outdoor court.",
+      "two": "We confirm by phone",
+      "twoText": "We call or write back with the free court and the price.",
+      "three": "Come and play",
+      "threeText": "Changing rooms and showers are ready for you, and reception has equipment and refreshments."
+    },
+    "formTitle": "Request a court",
+    "formIntro": "Fill in the form and we will call you to confirm. For today or tomorrow, the phone is quickest.",
+    "date": "Day",
+    "time": "Start time",
+    "duration": "Length",
+    "durationOption": "{minutes, plural, one {# minute} other {# minutes}}",
+    "court": "Court",
+    "courtOptions": {
+      "oricare": "Whichever is free",
+      "acoperit": "Covered",
+      "exterior": "Outdoors"
+    },
+    "message": "Anything we should know (optional)",
+    "messageHint": "For example: how many players, or whether you would like a coach too.",
+    "submit": "Send the request",
+    "success": "We have your request. We will call you as soon as we can to confirm the court.",
+    "amenitiesTitle": "What you will find at the club",
+    "lessonsTitle": "Would you like a coach too?",
+    "lessonsText": "You can book a private, pair or group lesson with the club's coaches.",
+    "lessonsCta": "See the lessons"
+  },
+  "tournaments": {
+    "upcomingTitle": "Coming tournaments",
+    "upcomingEmpty": "New editions appear here, with dates and registration, as soon as they are announced. Until then, the news is on Instagram and Facebook.",
+    "hostedTitle": "Tournaments hosted at the club",
+    "organizer": {
+      "FRT": "Romanian Tennis Federation",
+      "TENIS10": "Tenis10",
+      "SPORTYA": "Sportya",
+      "CLUB": "Organised by the club",
+      "ALTUL": "Other organiser"
+    },
+    "register": "Register",
+    "results": "Results",
+    "past": "The {date} edition",
+    "playTitle": "Would you like to play a tournament?",
+    "playText": "The academy's coaches help you choose tournaments that suit your age and level, and at the home ones you play on the court where you train.",
+    "contactCta": "Write to us",
+    "evaluationCta": "Ask for an assessment",
+    "follow": "Follow the club"
+  },
+  "schools": {
+    "factsTitle": "Why us",
+    "facts": {
+      "years": "More than 10 years of partnerships",
+      "yearsText": "We have worked with schools and kindergartens in Bucharest and Ilfov for more than ten years.",
+      "weather": "In any weather",
+      "weatherText": "Professionally covered courts keep lessons on schedule, whatever the rain, the cold or the season.",
+      "gear": "Equipment included",
+      "gearText": "Mobile nets, junior racquets and special balls for children, at no extra cost.",
+      "play": "Through play",
+      "playText": "Lessons are fun and lively, so the little ones come to love moving and tennis."
+    },
+    "learnTitle": "What children learn",
+    "learn": {
+      "one": "how to behave on court and the basic rules",
+      "two": "the tennis strokes: forehand and backhand",
+      "three": "positioning to the ball",
+      "four": "moving around the court",
+      "five": "playing tennis",
+      "six": "tennis-specific physical exercises"
+    },
+    "pathTitle": "And afterwards?",
+    "pathText": "With patience and perseverance, many children come to love tennis and choose to carry on, up to the club's performance courses.",
+    "pathCta": "Junior academy",
+    "contactTitle": "Shall we talk about your school or kindergarten?",
+    "contactText": "Tell us how many children there are, their ages and which days would suit you. We will reply with a proposal.",
+    "contactCta": "Write to us",
+    "subject": "School or kindergarten partnership"
+  },
+  "finder": {
+    "who": "Who is the tennis for?",
+    "whoOptions": {
+      "copil": "My child",
+      "adult": "Me (an adult)"
+    },
+    "age": "How old is your child?",
+    "ageOption": "{age}",
+    "experience": "How much have they played?",
+    "experienceOptions": {
+      "niciodata": "Not at all",
+      "putin": "A few lessons",
+      "regulat": "Plays regularly",
+      "turnee": "Plays tournaments"
+    },
+    "goal": "What do they want from tennis?",
+    "goalOptions": {
+      "placere": "Exercise and fun",
+      "progres": "Steady progress",
+      "competitie": "Competition"
+    },
+    "resultTitle": "Our suggestion",
+    "resultGroup": "The group that fits",
+    "resultProgram": "The programme that fits",
+    "resultNone": "Let's talk: we will suggest the right next step.",
+    "nextEvaluation": "Ask for an assessment",
+    "nextBooking": "Book a lesson",
+    "nextContact": "Write to us",
+    "details": "See the details",
+    "ask": "Ask the assistant",
+    "askQuestion": "My answers: {answers}. What would you recommend?",
+    "restart": "Start again",
+    "note": "This is a first suggestion; at the assessment or first lesson the coach confirms the group and the plan."
   }
 }

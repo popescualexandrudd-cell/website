@@ -19,6 +19,9 @@ club:
   culori:
     principala: "#0f3b2f"
     accent: "#c24f1d"
+  # Anul în care s-a deschis clubul (din prezentarea publică a clubului: patru terenuri de zgură
+  # în aer liber în 2013, apoi sala acoperită cu încă patru). Apare în povestea clubului.
+  infiintat: 2013
 
 # Echipa de antrenori. Primul din listă e antrenorul principal. Pentru fiecare antrenor nou:
 # nume, rol, titulatura, rezumat și parcurs; restul e opțional. Fotografiile se încarcă din admin.
@@ -79,6 +82,50 @@ antrenori:
       ro: "Câțiva dintre copiii pe care i-am pregătit au avut rezultate bune la nivel național și european, inclusiv titluri de campion al României."
       en: "Several of the children I have coached have done well nationally and in Europe, including Romanian champions."
 
+  # Antrenorii prezentați pe site-ul actual al clubului (elitetenisclub.ro). Rămân nepublicați
+  # (publicat: false) până confirmă clubul rolurile, scrierea numelor și acordul fiecăruia;
+  # apoi se completează și se publică din admin → Echipa.
+  - nume: "Vlad Moșteanu"
+    publicat: false
+    rol: { ro: "Antrenor principal", en: "Head coach" }
+    rezumat: { ro: "[ ]", en: "[ ]" }
+    specializari: []
+    titulatura: { ro: "Antrenor de tenis", en: "Tennis coach" }
+    ani_experienta: "[ ]"
+    certificari: []
+    limbi_vorbite: []
+    parcurs: { ro: "[ ]", en: "[ ]" }
+  - nume: "Cristian Tănase"
+    publicat: false
+    rol: { ro: "Antrenor de performanță", en: "Performance coach" }
+    rezumat: { ro: "[ ]", en: "[ ]" }
+    specializari: []
+    titulatura: { ro: "Antrenor de tenis", en: "Tennis coach" }
+    ani_experienta: "[ ]"
+    certificari: []
+    limbi_vorbite: []
+    parcurs: { ro: "[ ]", en: "[ ]" }
+  - nume: "Doru Bolinu"
+    publicat: false
+    rol: { ro: "Antrenor", en: "Coach" }
+    rezumat: { ro: "[ ]", en: "[ ]" }
+    specializari: []
+    titulatura: { ro: "Antrenor de tenis", en: "Tennis coach" }
+    ani_experienta: "[ ]"
+    certificari: []
+    limbi_vorbite: []
+    parcurs: { ro: "[ ]", en: "[ ]" }
+  - nume: "Dragoș Popeangă"
+    publicat: false
+    rol: { ro: "Antrenor", en: "Coach" }
+    rezumat: { ro: "[ ]", en: "[ ]" }
+    specializari: []
+    titulatura: { ro: "Antrenor de tenis", en: "Tennis coach" }
+    ani_experienta: "[ ]"
+    certificari: []
+    limbi_vorbite: []
+    parcurs: { ro: "[ ]", en: "[ ]" }
+
 contact:
   telefon: "0722 501 748"
   # Numărul de WhatsApp, dacă ai unul; gol = butoanele WhatsApp nu apar pe site.
@@ -101,7 +148,10 @@ locatii:
     terenuri:
       - { suprafata: "zgură", numar: "4", acoperit_iarna: "da", nocturna: "da" }
       - { suprafata: "zgură", numar: "4", acoperit_iarna: "nu", nocturna: "[da/nu]" }
-    dotari: ["vestiare", "dușuri", "parcare", "sală de fitness"]
+    # Din prezentarea publică a clubului: vestiare separate pentru bărbați și femei, cu toalete și
+    # dușuri, sală de fitness, recepție și magazin cu echipament și răcoritoare.
+    # (Dotările noi se adaugă la sfârșitul listei.)
+    dotari: ["vestiare", "dușuri", "parcare", "sală de fitness", "recepție și magazin"]
 
 # Programele de pregătire: ce lucrăm și pentru cine. Textele se editează din admin.
 programe:
@@ -205,6 +255,15 @@ servicii_incluse: # ce primesc elevii academiei, pe lângă teren
   - "Analiză video a loviturilor, trimisă după lecție"
   - "[Racordare rachete, dacă e cazul]"
   - "[Pregătire și însoțire la turnee, dacă e cazul]"
+
+# Când e deschis clubul (închirierea terenurilor): apare pe site, în subsol și la contact.
+program_club:
+  zilnic: "08:00–23:00"
+
+# Închirierea terenurilor: tarifele pe oră, pe scurt (de exemplu „Teren acoperit, zi: … lei").
+# Gol sau „[ ]" = pe site scrie că tarifele se află la telefon.
+inchiriere:
+  tarife: "[ ]"
 
 # Orele în care academia primește rezervări de lecții (clubul e deschis zilnic 08–23).
 program_lucru:

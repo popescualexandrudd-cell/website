@@ -18,6 +18,9 @@ const PATHS = {
   contact: "/contact",
   tips: "/sfaturi",
   privacy: "/confidentialitate",
+  rental: "/inchiriere-teren",
+  tournaments: "/turnee",
+  schools: "/scoli-gradinite",
 };
 
 function input(overrides: Partial<KnowledgeInput> = {}): KnowledgeInput {

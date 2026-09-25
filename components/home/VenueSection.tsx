@@ -88,13 +88,16 @@ export async function VenueSection({
               ))}
             </ul>
           ) : null}
-          {scene.ctaLabel ? (
-            <p className="mt-8">
+          <p className="venue-actions mt-8">
+            <Link href="/inchiriere-teren" className="btn btn-primary btn-arrow">
+              {t("home.rentalCta")}
+            </Link>
+            {scene.ctaLabel ? (
               <Link href={href} className="link-quiet">
                 {scene.ctaLabel}
               </Link>
-            </p>
-          ) : null}
+            ) : null}
+          </p>
         </div>
         <div className="venue-media">
           {image ? (

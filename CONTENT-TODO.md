@@ -46,6 +46,7 @@ limbile vorbite, doar din informațiile primite. Au rămas:
 | Instituția care a eliberat atestatul de formare psihopedagogică | Conținut → Certificări și diplome | `antrenori[0].certificari[3].emitent` |
 | Anii: licența UNEFS, certificarea de arbitru FRT, atestatul psihopedagogic (opțional; goi = nu apar) | Conținut → Certificări și diplome → Anul | `antrenori[0].certificari[].an` |
 | **Ceilalți antrenori ai academiei**, dacă sunt: nume, rol, titulatură, parcurs, fotografie | Conținut → Echipa de antrenori → Adaugă un antrenor | `antrenori[]` |
+| **De confirmat: antrenorii de pe site-ul actual al clubului** (elitetenisclub.ro): Vlad Moșteanu (acolo, antrenor principal), Cristian Tănase (antrenor de performanță), Doru Bolinu, Dragoș Popeangă. Sunt adăugați **nepublicați**: verifică scrierea numelor, rolurile (cine e antrenorul principal), acordul fiecăruia, apoi completează parcursul și fotografia și bifează „Activ” | Conținut → Echipa de antrenori | `antrenori[].publicat` |
 
 ## 3. Academia de juniori
 
@@ -86,6 +87,22 @@ Cererile de evaluare trimise de părinți ajung în **Evaluări și așteptare**
 | Pachetele: numele, prețul | Conținut → Prețuri și pachete | `pachete` |
 | Oferta pentru prima lecție (ex. „evaluare de 30 de minute, gratuită”) | Setări → Rezervări | `rezervari.prima_lectie` |
 | Intervalele în care se primesc rezervări online (acum: programul de lucru) | Disponibilitate | `program_lucru` |
+| **Tarifele de închiriere a terenurilor** (zi / nocturnă, acoperit / în aer liber). Pe site-ul actual scria „de la 30 lei/oră”: confirmă tarifele de azi | Setări → Program de lucru → Tarifele de închiriere | `inchiriere.tarife` |
+| Programul clubului: pus **zilnic 08:00–23:00**, din prezentarea publică a clubului; corectează dacă diferă | Setări → Programul clubului | `program_club.zilnic` |
+| Nocturnă pe terenurile în aer liber (da/nu) | Conținut → Terenuri | `locatii[0].terenuri[1].nocturna` |
+
+## 6b. Povestea clubului și turneele (verifică faptele)
+
+Povestea de pe prima pagină și de pe „Despre” folosește doar ce spune public clubul și calendarele
+FRT și Tenis10. Confirmă sau corectează din Conținut → Secțiunile paginii principale → „Povestea
+clubului”:
+
+- **2013**: anul în care s-au deschis primele 4 terenuri în aer liber (din prezentarea clubului pe
+  platformele de rezervare); anul sălii acoperite nu e public, deci nu apare;
+- **peste 10 ani** de colaborare cu școli și grădinițe din București și Ilfov;
+- turneele găzduite: Cupa Elite Pantelimon și Cupa Elite Tenis (FRT), Cupa Elite Tenis Challenge
+  și Super-Turneul Campionilor (Tenis10). Pentru fiecare ediție nouă: Conținut → Turnee → datele și
+  linkul de înscriere, ca să apară la „Turnee care urmează” și în Google.
 
 ## 7. Date legale și paginile legale
 

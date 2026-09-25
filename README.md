@@ -34,6 +34,9 @@ video-uri, se editează din panoul de administrare.
   lecții, preaviz, orizont și ora de vară/iarnă; programe, tipuri de lecții și durată aleasă;
   rezervarea dublă e imposibilă (blocare în tranzacție + constrângere de excludere în PostgreSQL);
   emailuri cu `.ics`, anulare prin link, memento, invitație la recenzie.
+- **Clubul complet**: povestea clubului, închirierea terenurilor cu cerere online, turneele
+  găzduite (FRT, Tenis10) cu edițiile următoare, programul pentru școli și grădinițe, „Găsește-ți
+  programul” (recomandare în 3 întrebări), secțiunea de social media, `/llms.txt`.
 - **Asistentul AI** (Claude, opțional): răspunde vizitatorilor la orice oră despre vârste, grupe,
   prețuri și program, doar din conținutul publicat, și îi trimite spre evaluare sau rezervare.
   Nu salvează conversațiile; limite pe vizitator și pe zi.

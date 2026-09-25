@@ -38,6 +38,9 @@ export const routing = defineRouting({
     "/confidentialitate": { ro: "/confidentialitate", en: "/privacy" },
     "/termeni": { ro: "/termeni", en: "/terms" },
     "/cookies": "/cookies",
+    "/inchiriere-teren": { ro: "/inchiriere-teren", en: "/court-hire" },
+    "/turnee": { ro: "/turnee", en: "/tournaments" },
+    "/scoli-gradinite": { ro: "/scoli-gradinite", en: "/schools" },
   },
 });
 

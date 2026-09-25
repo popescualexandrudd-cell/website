@@ -176,6 +176,38 @@ bun”, „numărul 1”). Cifrele doar dacă sunt reale.
 Culorile de pe site sunt provizorii: dacă clubul are culori în logo, le punem pe acelea.
 Fotografii și video-uri **doar reale**, filmate la club (ghid: `docs/DIRECTIE-ARTISTICA.md`).
 
+## 5b. Ce am luat de la academiile de top
+
+Am studiat cum își spun povestea Rafa Nadal Academy, Mouratoglou Academy, IMG Academy,
+Sánchez-Casal și Evert Tennis Academy. Ce au în comun și cum am adaptat la Elite (doar cu fapte
+reale ale clubului):
+
+| La ei | La Elite Tenis Club |
+| --- | --- |
+| Povestea fondatorului și a locului (Manacor, Nice, Bradenton) | „Din 2013, pe zgură.”: 4 terenuri în aer liber, apoi sala acoperită, școlile, turneele (prima pagină și „Despre”) |
+| Valori/piloni clari (Nadal: efort, umilință, respect; Mouratoglou: metodă personalizată) | „Ce face diferența”: zgură tot anul, etapele ITF, turnee acasă, deschis de dimineața până seara |
+| Parcurs pe etape, vizual (ROGY: red, orange, green, yellow) | Academia de juniori pe etape, cu mingea colorată; „Găsește-ți programul” recomandă grupa în 3 întrebări |
+| Turnee și evenimente proprii, cu înscriere | Pagina „Turnee”, cu edițiile următoare (date, înscriere, Google Events) și turneele găzduite |
+| Facilitățile ca argument (terenuri, sală, fitness) | Pagina „Închiriere teren” cu terenurile acoperite, programul 08–23, dotările și cererea online |
+| Programe pentru școli și parteneri | Pagina „Școli și grădinițe”, cu peste 10 ani de parteneriate |
+| Comunitate și social media | Secțiunea „Urmărește clubul” (Instagram, Facebook), fără scripturi de la rețele |
+| Contact imediat („Book now”, chat) | Asistentul AI cu „Întreabă-ne ceva”, butoane de rezervare și evaluare peste tot |
+
+Ce nu am copiat: cifre de marketing nevalidate („X campioni”, „nr. 1”), stock foto, promisiuni de
+rezultate. Pentru nivelul vizual al acestor academii lipsește un singur lucru: **fotografiile și
+video-urile reale ale clubului** (vezi `docs/DIRECTIE-ARTISTICA.md` și ziua de filmare).
+
+### Storytelling: cum spunem povestea
+
+1. **Locul**: Pantelimon, zgură, tot anul (sala acoperită e „eroul” poveștii: iarna nu e pauză).
+2. **Oamenii**: antrenorii, cu parcursul lor real (după confirmarea echipei).
+3. **Drumul copilului**: de la mingea roșie la primul turneu jucat acasă.
+4. **Comunitatea**: școlile și grădinițele, turneele, jucătorii de weekend.
+
+Pe Instagram, aceeași poveste în serii: „Din 2013” (imagini de arhivă ale clubului), „Prima
+minge” (copii la mini-tenis, cu acordul părinților), „Acasă la turneu” (Cupa Elite), „Seara pe
+zgură” (nocturna pe terenurile acoperite).
+
 ## 6. Google Business Profile (pentru Google Maps și rezultatele locale)
 
 Pentru „tenis lângă mine”, „tenis Pantelimon” sau „club tenis Ilfov”, Google arată întâi o
@@ -287,6 +319,11 @@ funcționează evaluarea la academie”.
 - **Google Analytics, Google Ads, Meta Pixel** (opțional, doar cu acordul vizitatorului):
   conversiile `booking_request` și `generate_lead` pentru optimizarea reclamelor; pașii sunt în
   `DEPLOY.md`.
+- **Cereri de teren**: din pagina „Închiriere teren” ajung în Mesaje, cu sursa vizitei (vezi
+  Campanii); cuvântul cheie principal al site-ului vechi, „închiriere teren tenis Pantelimon”,
+  are acum o pagină dedicată.
+- **/llms.txt**: rezumatul clubului pentru motoarele de căutare cu AI (ChatGPT, Perplexity,
+  Google AI), generat din același conținut ca asistentul.
 - **Asistentul AI**: întrebările pe care le pun părinții arată ce lipsește din site; dacă
   asistentul răspunde des „nu am informația”, completează acel conținut (tarife, program, taxă).
 

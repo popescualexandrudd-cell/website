@@ -11,12 +11,16 @@ type Vars = {
   /** Number of courts and how many of them are covered, from config/club.yml. */
   terenuri: string;
   acoperite: string;
+  /** Outdoor courts and the year the club opened. */
+  exterior: string;
+  an: string;
 };
 
 /**
- * The sections of the home page, top to bottom. `{club}`, `{locatie}`, `{oras}`, `{terenuri}`
- * and `{acoperite}` are replaced at seed time from config/club.yml. The academy speaks as "we":
- * the club and its coaches.
+ * The sections of the home page, top to bottom. `{club}`, `{locatie}`, `{oras}`, `{terenuri}`,
+ * `{acoperite}`, `{exterior}` and `{an}` are replaced at seed time from config/club.yml. The
+ * academy speaks as "we": the club and its coaches. The story follows the club's own public
+ * presentation (elitetenisclub.ro) and the tournament calendars of frt.ro and tenis10.ro.
  */
 export function sceneSeeds(vars: Vars): SceneSeed[] {
   const fill = (value: string) =>
@@ -25,7 +29,9 @@ export function sceneSeeds(vars: Vars): SceneSeed[] {
       .replaceAll("{locatie}", vars.locatie)
       .replaceAll("{oras}", vars.oras)
       .replaceAll("{terenuri}", vars.terenuri)
-      .replaceAll("{acoperite}", vars.acoperite);
+      .replaceAll("{acoperite}", vars.acoperite)
+      .replaceAll("{exterior}", vars.exterior)
+      .replaceAll("{an}", vars.an);
 
   return [
     {
@@ -55,8 +61,38 @@ export function sceneSeeds(vars: Vars): SceneSeed[] {
       },
     },
     {
-      key: "manifest",
+      key: "poveste",
       order: 2,
+      indexName: { ro: "Povestea clubului", en: "Our story" },
+      title: { ro: fill("Din {an}, pe zgură."), en: fill("On clay since {an}.") },
+      body: {
+        ro: fill(
+          [
+            "Clubul a pornit în {an} cu {exterior} terenuri de zgură în aer liber, în {oras}. Apoi a ridicat o sală cu încă {acoperite} terenuri de zgură sub acoperiș, ca tenisul să nu se oprească iarna. Azi e unul dintre puținele cluburi din România cu terenuri acoperite profesional, folosite tot anul.",
+            "1. **{an}.** Primele {exterior} terenuri de zgură, în aer liber.",
+            "2. **Sala acoperită.** Încă {acoperite} terenuri de zgură, pe orice vreme, tot anul.",
+            "3. **Școli și grădinițe.** De peste zece ani, tenis pentru copii împreună cu școli și grădinițe din București și Ilfov.",
+            "4. **Turnee.** Turnee ale Federației Române de Tenis și Tenis10, jucate pe terenurile clubului.",
+            "5. **Azi.** Mini-tenis, inițiere, avansați și performanță, lecții pentru adulți și pregătire fizică.",
+          ].join("\n"),
+        ),
+        en: fill(
+          [
+            "The club started in {an} with {exterior} outdoor clay courts in {oras}. It then built a hall with {acoperite} more clay courts under a roof, so tennis does not stop in winter. Today it is one of the few clubs in Romania with professionally covered courts used all year round.",
+            "1. **{an}.** The first {exterior} clay courts, outdoors.",
+            "2. **The covered hall.** {acoperite} more clay courts, in any weather, all year.",
+            "3. **Schools and kindergartens.** For more than ten years, tennis for children with schools and kindergartens in Bucharest and Ilfov.",
+            "4. **Tournaments.** Romanian Tennis Federation and Tenis10 tournaments, played on the club's courts.",
+            "5. **Today.** Mini tennis, beginners, advanced and performance players, lessons for adults and fitness training.",
+          ].join("\n"),
+        ),
+      },
+      ctaLabel: { ro: "Povestea completă", en: "The whole story" },
+      ctaHref: "/despre#poveste",
+    },
+    {
+      key: "manifest",
+      order: 8,
       indexName: { ro: "Filozofia", en: "Philosophy" },
       title: {
         ro: "Înțelegi de ce, nu doar ce. Fiecare antrenament are un obiectiv.",
@@ -75,8 +111,32 @@ export function sceneSeeds(vars: Vars): SceneSeed[] {
       body: { ro: "", en: "" },
     },
     {
-      key: "programe",
+      key: "piloni",
       order: 4,
+      indexName: { ro: "Ce ne definește", en: "What defines us" },
+      title: { ro: "Ce face diferența", en: "What makes the difference" },
+      body: {
+        ro: fill(
+          [
+            "1. **Zgură, tot anul.** {acoperite} terenuri acoperite profesional și {exterior} în aer liber: antrenamentele nu se opresc pentru ploaie sau frig.",
+            "2. **De la mingea roșie la turnee.** Copiii cresc pe etapele ITF, cu teren, rachetă și minge pe măsura lor.",
+            "3. **Turnee acasă.** Turnee ale Federației Române de Tenis și Tenis10 găzduite la club: juniorii pot juca meciuri oficiale pe terenurile unde se antrenează.",
+            "4. **Deschis de dimineața până seara.** Terenurile se pot închiria zilnic, iar pe cele acoperite se joacă și seara, la nocturnă.",
+          ].join("\n"),
+        ),
+        en: fill(
+          [
+            "1. **Clay, all year round.** {acoperite} professionally covered courts and {exterior} outdoors: training does not stop for rain or cold.",
+            "2. **From the red ball to tournaments.** Children grow through the ITF stages, with a court, racquet and ball their size.",
+            "3. **Tournaments at home.** Romanian Tennis Federation and Tenis10 tournaments hosted at the club: juniors can play official matches on the courts where they train.",
+            "4. **Open from morning to night.** Courts can be hired every day, and the covered ones are floodlit for evening play.",
+          ].join("\n"),
+        ),
+      },
+    },
+    {
+      key: "programe",
+      order: 5,
       indexName: { ro: "Programe de pregătire", en: "Training programmes" },
       title: {
         ro: "Inițiere, competiție sau tenis de plăcere",
@@ -91,7 +151,7 @@ export function sceneSeeds(vars: Vars): SceneSeed[] {
     },
     {
       key: "academia",
-      order: 5,
+      order: 6,
       indexName: { ro: "Academia de juniori", en: "Junior academy" },
       title: { ro: "De la mingea roșie la turnee", en: "From the red ball to tournaments" },
       body: {
@@ -105,8 +165,18 @@ export function sceneSeeds(vars: Vars): SceneSeed[] {
       },
     },
     {
+      key: "potrivire",
+      order: 7,
+      indexName: { ro: "Găsește-ți programul", en: "Find your programme" },
+      title: { ro: "Trei întrebări, pasul potrivit", en: "Three questions, the right next step" },
+      body: {
+        ro: "Spune-ne pentru cine e tenisul, cât a jucat până acum și ce își dorește. Îți arătăm programul sau grupa potrivită și ce urmează.",
+        en: "Tell us who the tennis is for, how much they have played and what they want from it. We show you the programme or group that fits and what comes next.",
+      },
+    },
+    {
       key: "echipa",
-      order: 6,
+      order: 9,
       indexName: { ro: "Echipa", en: "The team" },
       title: { ro: "Antrenorii academiei", en: "The academy's coaches" },
       body: {
@@ -124,7 +194,7 @@ export function sceneSeeds(vars: Vars): SceneSeed[] {
     },
     {
       key: "metoda",
-      order: 7,
+      order: 10,
       indexName: { ro: "Metoda", en: "Method" },
       title: {
         ro: "Un plan, nu doar antrenamente unul după altul",
@@ -146,8 +216,20 @@ export function sceneSeeds(vars: Vars): SceneSeed[] {
       },
     },
     {
+      key: "turnee",
+      order: 11,
+      indexName: { ro: "Turnee", en: "Tournaments" },
+      title: { ro: "Meciuri oficiale, acasă", en: "Official matches, at home" },
+      body: {
+        ro: "Clubul găzduiește turnee ale Federației Române de Tenis și Tenis10. Juniorii pot juca meciuri oficiale pe terenurile pe care se antrenează, cu antrenorii lângă ei.",
+        en: "The club hosts Romanian Tennis Federation and Tenis10 tournaments. Juniors can play official matches on the courts where they train, with their coaches close by.",
+      },
+      ctaLabel: { ro: "Toate turneele", en: "All tournaments" },
+      ctaHref: "/turnee",
+    },
+    {
       key: "clubul",
-      order: 8,
+      order: 12,
       indexName: { ro: "Baza sportivă", en: "The venue" },
       title: { ro: "Zgură, tot anul.", en: "Clay, all year round." },
       body: {
@@ -169,7 +251,7 @@ export function sceneSeeds(vars: Vars): SceneSeed[] {
     },
     {
       key: "galerie",
-      order: 9,
+      order: 13,
       indexName: { ro: "Galerie", en: "Gallery" },
       title: { ro: "Din antrenamente și turnee", en: "From training and tournaments" },
       body: {
@@ -186,8 +268,18 @@ export function sceneSeeds(vars: Vars): SceneSeed[] {
       },
     },
     {
+      key: "social",
+      order: 14,
+      indexName: { ro: "Comunitatea", en: "Community" },
+      title: { ro: "Urmărește clubul", en: "Follow the club" },
+      body: {
+        ro: "Anunțuri, oferte și imagini de pe teren, pe Instagram și pe Facebook.",
+        en: "News, offers and pictures from the courts, on Instagram and Facebook.",
+      },
+    },
+    {
       key: "lectii",
-      order: 10,
+      order: 15,
       indexName: { ro: "Tipuri de lecții", en: "Kinds of lesson" },
       title: { ro: "Singur, în doi sau în grup", en: "On your own, in pairs or in a group" },
       body: {
@@ -199,7 +291,7 @@ export function sceneSeeds(vars: Vars): SceneSeed[] {
     },
     {
       key: "intrebari",
-      order: 11,
+      order: 16,
       indexName: { ro: "Întrebări", en: "Questions" },
       title: { ro: "Înainte de primul antrenament", en: "Before the first session" },
       body: { ro: "", en: "" },
@@ -208,7 +300,7 @@ export function sceneSeeds(vars: Vars): SceneSeed[] {
     },
     {
       key: "rezervare",
-      order: 12,
+      order: 17,
       indexName: { ro: "Rezervare", en: "Booking" },
       title: { ro: "Rezervă o lecție.", en: "Book a lesson." },
       body: {

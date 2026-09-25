@@ -45,6 +45,9 @@ const PUBLIC = [
   "/echipa",
   "/echipa/popescu-alexandru-daniel",
   "/facilitati",
+  "/inchiriere-teren",
+  "/turnee",
+  "/scoli-gradinite",
   "/en",
 ];
 const ADMIN = [

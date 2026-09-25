@@ -1,0 +1,857 @@
+/* ─── The club: story, pillars, finder, tournaments, court hire, schools, social ────────────
+   Shared by the home page and the interior pages that reuse its sections. Colours come from the
+   club's two brand colours through the palette tokens; motion stops with reduced motion. */
+
+.story-inner,
+.pillars-inner,
+.finder-section-inner,
+.tournaments-band-inner,
+.social-inner {
+  max-width: 88rem;
+  margin-inline: auto;
+  padding-inline: var(--page-margin);
+}
+.story,
+.pillars,
+.finder-section,
+.social {
+  padding-block: clamp(4rem, 9vw, 8rem);
+}
+
+/* ─── Shared cards ────────────────────────────────────────────────────────── */
+.lift {
+  transition:
+    transform 0.35s var(--ease-scene),
+    box-shadow 0.35s var(--ease-scene);
+}
+.pillar-card,
+.step-card,
+.amenity-card,
+.tournament-card,
+.court-card,
+.social-card {
+  transition:
+    transform 0.35s var(--ease-scene),
+    box-shadow 0.35s var(--ease-scene),
+    border-color 0.35s var(--ease-scene);
+}
+@media (hover: hover) {
+  .pillar-card:hover,
+  .step-card:hover,
+  .amenity-card:hover,
+  .tournament-card:hover,
+  .court-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 44px -26px rgb(5 8 7 / 0.45);
+  }
+}
+
+/* ─── Story: from 2013 to today ───────────────────────────────────────────── */
+.story {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      90% 70% at 100% 0%,
+      color-mix(in oklab, var(--accent) 16%, transparent),
+      transparent 60%
+    ),
+    var(--color-caramida-adanc);
+  color: var(--color-crem);
+}
+.story .kicker {
+  color: var(--color-galben);
+}
+.story .home-title {
+  color: var(--color-crem);
+}
+.story-head {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 58rem;
+}
+.story-intro {
+  font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.3125rem);
+  line-height: 1.6;
+  color: rgb(251 250 247 / 0.86);
+}
+.story .link-quiet {
+  justify-self: start;
+  color: var(--color-crem);
+}
+.story-line {
+  position: relative;
+  display: grid;
+  gap: 2rem;
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+  padding-left: 1.75rem;
+}
+.story-line::before {
+  content: "";
+  position: absolute;
+  top: 0.4rem;
+  bottom: 0.4rem;
+  left: 0.4rem;
+  width: 2px;
+  background: linear-gradient(var(--color-galben), color-mix(in oklab, var(--accent) 80%, white));
+  opacity: 0.6;
+}
+.story-step {
+  position: relative;
+}
+.story-dot {
+  position: absolute;
+  top: 0.35rem;
+  left: -1.75rem;
+  width: 0.95rem;
+  height: 0.95rem;
+  border: 3px solid var(--color-caramida-adanc);
+  border-radius: 999px;
+  background: var(--color-galben);
+  box-shadow: 0 0 0 2px var(--color-galben);
+}
+.story-step-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+.story-step p {
+  margin-top: 0.4rem;
+  max-width: 40ch;
+  color: rgb(251 250 247 / 0.78);
+}
+@media (min-width: 1000px) {
+  .story-line {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    padding-left: 0;
+    padding-top: 2.25rem;
+  }
+  .story-line::before {
+    top: 0.45rem;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    width: auto;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      var(--color-galben),
+      color-mix(in oklab, var(--accent) 80%, white)
+    );
+  }
+  .story-dot {
+    top: -2.25rem;
+    left: 0;
+  }
+}
+/* ─── Pillars ─────────────────────────────────────────────────────────────── */
+.pillars {
+  background: var(--color-nisip);
+}
+.pillar-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 3rem;
+}
+@media (min-width: 700px) {
+  .pillar-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1200px) {
+  .pillar-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.pillar-card {
+  position: relative;
+  overflow: hidden;
+  padding: 2rem 1.75rem 2.25rem;
+  border: 1px solid var(--color-linie);
+  border-radius: 14px;
+  background: var(--color-nisip-deschis);
+}
+.pillar-card::after {
+  /* a ball's seam, drawn in the corner */
+  content: "";
+  position: absolute;
+  right: -2.5rem;
+  bottom: -2.5rem;
+  width: 7rem;
+  height: 7rem;
+  border: 2px solid color-mix(in oklab, var(--accent) 22%, transparent);
+  border-radius: 999px;
+  transition: transform 0.6s var(--ease-scene);
+}
+@media (hover: hover) {
+  .pillar-card:hover::after {
+    transform: scale(1.15) rotate(20deg);
+  }
+}
+.pillar-number {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-zgura);
+}
+.pillar-title {
+  margin-block: 0.9rem 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+.pillar-card p {
+  color: var(--color-cerneala-2);
+}
+
+/* ─── Programme finder ────────────────────────────────────────────────────── */
+.finder-section {
+  background: linear-gradient(180deg, var(--color-nisip-deschis), var(--color-nisip));
+}
+.finder {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+@media (min-width: 1000px) {
+  .finder-result {
+    position: sticky;
+    top: 6rem;
+  }
+  .finder {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: start;
+    gap: 2.5rem;
+  }
+}
+.finder-form {
+  display: grid;
+  gap: 1.75rem;
+}
+.finder-question legend {
+  margin-bottom: 0.75rem;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.finder-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.finder-chip {
+  position: relative;
+  cursor: pointer;
+}
+.finder-chip input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+}
+.finder-chip span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.4rem 1.05rem;
+  border: 1.5px solid color-mix(in oklab, var(--color-cerneala) 28%, transparent);
+  border-radius: 999px;
+  background: white;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    border-color 0.2s,
+    transform 0.2s;
+}
+.finder-chip:hover span {
+  border-color: var(--color-zgura);
+}
+.finder-chip input:checked + span {
+  border-color: var(--color-caramida);
+  background: var(--color-caramida);
+  color: var(--color-crem);
+}
+.finder-chip input:focus-visible + span {
+  outline: 3px solid var(--color-zgura);
+  outline-offset: 2px;
+}
+.finder-options--ages .finder-chip span {
+  min-width: 3.4rem;
+  justify-content: center;
+  padding-inline: 0.8rem;
+}
+.finder-result {
+  min-height: 16rem;
+  padding: 2rem 1.75rem;
+  border-radius: 16px;
+  background: var(--color-caramida-adanc);
+  color: var(--color-crem);
+  box-shadow: 0 30px 60px -34px rgb(5 8 7 / 0.6);
+}
+.finder-result .kicker {
+  color: var(--color-galben);
+}
+.finder-result-label {
+  margin-top: 1.25rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(251 250 247 / 0.7);
+}
+.finder-result-title {
+  margin-top: 0.35rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 1.5rem + 1.5vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.02;
+  text-transform: uppercase;
+}
+.finder-result-text {
+  margin-top: 0.75rem;
+  color: rgb(251 250 247 / 0.82);
+}
+.finder-result[data-ready="true"] > * {
+  animation: finder-in 0.45s var(--ease-scene) both;
+}
+@keyframes finder-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+.finder-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+.finder-result .btn-secondary {
+  color: var(--color-crem);
+}
+.finder-restart {
+  padding: 0.5rem 0.25rem;
+  font-size: 0.875rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: rgb(251 250 247 / 0.8);
+  cursor: pointer;
+}
+.finder-note {
+  margin-top: 1.25rem;
+  font-size: 0.8125rem;
+  color: rgb(251 250 247 / 0.65);
+}
+.finder-placeholder {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  min-height: 12rem;
+}
+.finder-ball,
+.assistant-teaser-ball {
+  display: block;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 35% 30%, rgb(255 255 255 / 0.55), transparent 40%),
+    var(--color-galben);
+  box-shadow: inset 0 -6px 12px rgb(0 0 0 / 0.18);
+  position: relative;
+}
+.finder-ball::before,
+.assistant-teaser-ball::before {
+  content: "";
+  position: absolute;
+  inset: 12% -30% 12% 58%;
+  border: 3px solid rgb(255 255 255 / 0.85);
+  border-radius: 999px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .finder-ball {
+    animation: ball-bounce 1.6s cubic-bezier(0.3, 0, 0.7, 1) infinite alternate;
+  }
+}
+@keyframes ball-bounce {
+  from {
+    transform: translateY(-18px) rotate(0);
+  }
+  to {
+    transform: translateY(18px) rotate(40deg);
+  }
+}
+
+/* ─── Tournaments ─────────────────────────────────────────────────────────── */
+.tournaments-band {
+  position: relative;
+  overflow: hidden;
+  padding-top: clamp(4rem, 9vw, 7rem);
+  background: var(--color-caramida);
+  color: var(--color-crem);
+}
+.tournaments-band .kicker {
+  color: var(--color-galben);
+}
+.tournaments-band .home-title {
+  color: var(--color-crem);
+}
+.tournaments-band .section-lead {
+  color: rgb(251 250 247 / 0.84);
+}
+.tournaments-band-inner {
+  display: grid;
+  gap: 1.75rem;
+  padding-bottom: 2.5rem;
+}
+.tournaments-band-inner > .btn {
+  justify-self: start;
+}
+.tournaments-next {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgb(251 250 247 / 0.2);
+  border-radius: 12px;
+  font-size: 1.0625rem;
+}
+.marquee {
+  overflow: hidden;
+  padding-block: 1.1rem;
+  border-block: 1px solid rgb(251 250 247 / 0.14);
+  background: var(--color-caramida-adanc);
+  color: var(--color-crem);
+  mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 3rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .marquee-track {
+    animation: marquee 40s linear infinite;
+  }
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 3rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 1.1rem + 1.2vw, 2.25rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.marquee-item::after {
+  content: "";
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: var(--color-galben);
+}
+.tournament-list {
+  display: grid;
+  gap: 1rem;
+}
+.tournament-row {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 1px solid var(--color-linie);
+  border-left: 5px solid var(--color-zgura);
+  border-radius: 12px;
+  background: var(--color-nisip-deschis);
+}
+@media (min-width: 800px) {
+  .tournament-row {
+    grid-template-columns: 12rem minmax(0, 1fr) auto;
+    align-items: center;
+  }
+}
+.tournament-date {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-zgura-adanc);
+}
+.tournament-name {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+.tournament-meta {
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-cerneala-2);
+}
+.tournament-summary {
+  margin-top: 0.6rem;
+  color: var(--color-cerneala-2);
+}
+.tournament-grid {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 700px) {
+  .tournament-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.tournament-card {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  padding: 1.75rem 1.5rem;
+  border: 1px solid var(--color-linie);
+  border-radius: 14px;
+  background: var(--color-nisip-deschis);
+}
+.tournament-badge {
+  justify-self: start;
+  margin-bottom: 0.6rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--brand) 12%, white);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-caramida);
+}
+.tournament-card[data-organizer="TENIS10"] .tournament-badge {
+  background: color-mix(in oklab, var(--accent) 14%, white);
+  color: var(--color-zgura-adanc);
+}
+
+/* ─── Calls to action ─────────────────────────────────────────────────────── */
+.cta-panel {
+  padding: clamp(2rem, 5vw, 3.5rem);
+  border-radius: 18px;
+  background:
+    radial-gradient(
+      80% 90% at 0% 100%,
+      color-mix(in oklab, var(--accent) 22%, transparent),
+      transparent 70%
+    ),
+    var(--color-caramida-adanc);
+  color: var(--color-crem);
+}
+.cta-panel .section-title {
+  color: var(--color-crem);
+}
+.cta-panel p {
+  margin-top: 1rem;
+  color: rgb(251 250 247 / 0.84);
+}
+.cta-panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+.cta-panel .btn-secondary {
+  color: var(--color-crem);
+}
+.page-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+.page-hero .page-hero-actions .btn-secondary {
+  color: var(--color-crem);
+}
+.venue-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* ─── Court hire ──────────────────────────────────────────────────────────── */
+.court-cards {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 760px) {
+  .court-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.court-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  align-items: center;
+  gap: 1.5rem;
+  overflow: hidden;
+  padding: 1.75rem;
+  border-radius: 16px;
+  background: var(--color-caramida);
+  color: var(--color-crem);
+}
+.court-card[data-covered="true"] {
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--brand) 70%, black),
+    var(--color-caramida-adanc)
+  );
+}
+.court-card[data-covered="false"] {
+  background: linear-gradient(135deg, var(--color-zgura), var(--color-zgura-adanc));
+}
+.court-card .kicker {
+  color: var(--color-galben);
+}
+.court-card-mark {
+  width: 5rem;
+  height: auto;
+  color: rgb(251 250 247 / 0.7);
+}
+.court-card-title {
+  margin-top: 0.4rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 1.4rem + 1vw, 2.3rem);
+  font-weight: 700;
+  line-height: 1.02;
+  text-transform: uppercase;
+}
+.court-card-note {
+  margin-top: 0.4rem;
+  color: rgb(251 250 247 / 0.82);
+}
+.rental-facts-grid {
+  display: grid;
+  gap: 2.5rem;
+}
+@media (min-width: 900px) {
+  .rental-facts-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.step-cards {
+  display: grid;
+  gap: 1rem;
+  counter-reset: step;
+}
+@media (min-width: 900px) {
+  .step-cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.step-card {
+  padding: 1.75rem 1.5rem;
+  border-top: 4px solid var(--color-zgura);
+  border-radius: 12px;
+  background: var(--color-nisip-deschis);
+}
+.step-card-number {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-zgura);
+}
+.step-card-title {
+  margin-block: 0.75rem 0.4rem;
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+.step-card p {
+  color: var(--color-cerneala-2);
+}
+.amenity-cards {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 700px) {
+  .amenity-cards {
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  }
+}
+.amenity-card {
+  padding: 1.5rem;
+  border: 1px solid var(--color-linie);
+  border-radius: 12px;
+  background: var(--color-nisip-deschis);
+}
+.amenity-card-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.amenity-card p {
+  margin-top: 0.4rem;
+  color: var(--color-cerneala-2);
+}
+.rental-lessons {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+  margin-top: 3rem;
+  padding: 2rem;
+  border-radius: 16px;
+  background: color-mix(in oklab, var(--accent) 9%, var(--color-nisip-deschis));
+}
+
+/* ─── Schools ─────────────────────────────────────────────────────────────── */
+.learn-list {
+  display: grid;
+  gap: 0.75rem;
+}
+@media (min-width: 700px) {
+  .learn-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.learn-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  background: var(--color-nisip-deschis);
+  font-size: 1.0625rem;
+}
+.learn-list li::before {
+  content: "";
+  flex: none;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 999px;
+  background: var(--color-galben);
+  box-shadow: 0 0 0 2px var(--color-caramida);
+}
+.schools-path {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+  margin-top: 3rem;
+}
+
+/* ─── Social ──────────────────────────────────────────────────────────────── */
+.social-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+@media (min-width: 760px) {
+  .social-grid {
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  }
+}
+.social-card {
+  position: relative;
+  display: grid;
+  gap: 0.35rem;
+  min-height: 11rem;
+  align-content: end;
+  padding: 1.75rem;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--color-caramida-adanc);
+  color: var(--color-crem);
+  text-decoration: none;
+}
+.social-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    70% 90% at 100% 0%,
+    color-mix(in oklab, var(--accent) 45%, transparent),
+    transparent 70%
+  );
+  opacity: 0.55;
+  transition: opacity 0.4s var(--ease-scene);
+}
+.social-card:hover::before {
+  opacity: 1;
+}
+.social-card > * {
+  position: relative;
+}
+.social-network {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-galben);
+}
+.social-handle {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 1.3rem + 1.5vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.02;
+  overflow-wrap: anywhere;
+}
+.social-arrow {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.5rem;
+  font-size: 1.75rem;
+  transition: transform 0.35s var(--ease-scene);
+}
+.social-card:hover .social-arrow {
+  transform: translate(4px, -4px);
+}
+.social-card:focus-visible {
+  outline: 3px solid var(--color-zgura);
+  outline-offset: 3px;
+}
+
+/* ─── Reading progress ────────────────────────────────────────────────────── */
+.scroll-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 60;
+  height: 3px;
+  transform-origin: 0 50%;
+  transform: scaleX(var(--scroll-p, 0));
+  background: linear-gradient(90deg, var(--color-galben), var(--accent));
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress {
+    display: none;
+  }
+  .pillar-card,
+  .step-card,
+  .amenity-card,
+  .tournament-card,
+  .court-card,
+  .social-card {
+    transition: none;
+  }
+}

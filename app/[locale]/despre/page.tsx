@@ -12,6 +12,8 @@ import { Markdown } from "@/components/site/Markdown";
 import { TodoText } from "@/components/site/TodoText";
 import { Words } from "@/components/site/Words";
 import { CoachCard } from "@/components/academy/CoachCard";
+import { StorySection } from "@/components/home/StorySection";
+import { PillarsSection } from "@/components/home/PillarsSection";
 
 export async function generateMetadata({
   params,
@@ -37,6 +39,8 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/despre"
     getTranslations(),
   ]);
   const manifest = scenes.find((s) => s.key === "manifest");
+  const story = scenes.find((s) => s.key === "poveste");
+  const pillars = scenes.find((s) => s.key === "piloni");
   const method = scenes.find((s) => s.key === "metoda");
   const team = scenes.find((s) => s.key === "echipa");
   const steps = method ? orderedListItems(method.body) : [];
@@ -55,6 +59,9 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/despre"
         image={header.image}
         imageAlt={header.imageAlt}
       />
+
+      {story ? <StorySection scene={{ ...story, ctaLabel: "", ctaHref: null }} /> : null}
+      {pillars ? <PillarsSection scene={pillars} /> : null}
 
       {manifest ? (
         <section className="about-manifest" aria-labelledby="filozofie-title" id="filozofie">

@@ -30,7 +30,7 @@
   "nav": {
     "programs": "Programe",
     "facilities": "Facilități",
-    "about": "Despre academie",
+    "about": "Despre club",
     "pricing": "Prețuri",
     "faq": "Întrebări",
     "tips": "Sfaturi",
@@ -43,7 +43,10 @@
     "menuLabel": "Meniu complet",
     "juniors": "Academia de juniori",
     "team": "Echipa",
-    "club": "Clubul"
+    "club": "Clubul",
+    "rental": "Închiriere teren",
+    "tournaments": "Turnee",
+    "schools": "Școli și grădinițe"
   },
   "footer": {
     "contact": "Contact",
@@ -99,7 +102,9 @@
     "clubAddress": "Adresa",
     "clubCourts": "Terenurile",
     "clubAmenities": "Dotările",
-    "galleryVideo": "Video"
+    "galleryVideo": "Video",
+    "figYears": "{count, plural, one {an} few {ani} other {de ani}} de tenis la club",
+    "rentalCta": "Închiriază un teren"
   },
   "programs": {
     "groups": {
@@ -267,7 +272,9 @@
       "participants": "Numărul de persoane nu se potrivește cu lecția aleasă.",
       "lessonType": "Tipul de lecție ales nu mai poate fi rezervat. Alege altul.",
       "duration": "Durata aleasă nu mai e disponibilă pentru această lecție. Alege alta.",
-      "experience": "Alege cât a jucat copilul până acum."
+      "experience": "Alege cât a jucat copilul până acum.",
+      "date": "Alege o zi, de azi înainte.",
+      "time": "Alege ora de început."
     }
   },
   "booking": {
@@ -524,6 +531,19 @@
       "failed": "Nu am putut răspunde acum. Încearcă din nou sau sună-ne.",
       "refused": "La asta nu pot răspunde. Te ajut cu orice despre club: grupe, program, prețuri, rezervări.",
       "tooLong": "Întrebarea e prea lungă: scrie-o în cel mult {max} de caractere."
+    },
+    "teaserTitle": "Întreabă-ne ceva",
+    "teaserText": "Asistentul clubului îți răspunde acum, din informațiile noastre.",
+    "teaserClose": "Închide",
+    "teaserQuestions": {
+      "age": "De la ce vârstă poate începe copilul?",
+      "start": "Cum începem?",
+      "groups": "Ce grupe aveți și în ce zile?",
+      "prices": "Cât costă o lecție?",
+      "court": "Cum închiriez un teren?",
+      "courtPrice": "Aveți terenuri acoperite seara?",
+      "tournaments": "Ce turnee se joacă la club?",
+      "schools": "Cum lucrați cu școlile și grădinițele?"
     }
   },
   "consent": {
@@ -543,5 +563,129 @@
     "customize": "Aleg eu",
     "save": "Salvez alegerea",
     "settings": "Setări cookie-uri"
+  },
+  "rental": {
+    "callCta": "Sună: {phone}",
+    "whatsappCta": "Scrie pe WhatsApp",
+    "requestCta": "Cere un teren online",
+    "courtsTitle": "Terenurile",
+    "covered": "Acoperite, tot anul",
+    "outdoor": "În aer liber",
+    "courtsCount": "{count, plural, one {un teren} few {# terenuri} other {# de terenuri}} de {surface}",
+    "floodlights": "cu nocturnă",
+    "hoursTitle": "Program",
+    "ratesTitle": "Tarife",
+    "howTitle": "Cum rezervi",
+    "steps": {
+      "one": "Alegi ziua și ora",
+      "oneText": "Spune-ne când vrei să joci, cât timp și dacă preferi un teren acoperit sau în aer liber.",
+      "two": "Confirmăm la telefon",
+      "twoText": "Te sunăm sau îți scriem cu terenul liber și prețul.",
+      "three": "Vii și joci",
+      "threeText": "Vestiarele și dușurile te așteaptă, iar la recepție găsești echipament și răcoritoare."
+    },
+    "formTitle": "Cere un teren",
+    "formIntro": "Completează formularul și te sunăm ca să confirmăm. Pentru azi sau mâine, cel mai repede e la telefon.",
+    "date": "Ziua",
+    "time": "Ora de început",
+    "duration": "Durata",
+    "durationOption": "{minutes, plural, one {# minut} few {# minute} other {# de minute}}",
+    "court": "Terenul",
+    "courtOptions": {
+      "oricare": "Oricare e liber",
+      "acoperit": "Acoperit",
+      "exterior": "În aer liber"
+    },
+    "message": "Ceva ce ar trebui să știm (opțional)",
+    "messageHint": "De exemplu: câți jucători sunteți sau dacă vreți și un antrenor.",
+    "submit": "Trimite cererea",
+    "success": "Am primit cererea. Te sunăm cât de repede putem ca să confirmăm terenul.",
+    "amenitiesTitle": "Ce găsești la club",
+    "lessonsTitle": "Vrei și un antrenor?",
+    "lessonsText": "Poți rezerva o lecție individuală, în doi sau în grup cu antrenorii clubului.",
+    "lessonsCta": "Vezi lecțiile"
+  },
+  "tournaments": {
+    "upcomingTitle": "Turnee care urmează",
+    "upcomingEmpty": "Edițiile noi apar aici, cu datele și înscrierea, imediat ce sunt anunțate. Până atunci, noutățile le găsești pe Instagram și Facebook.",
+    "hostedTitle": "Turnee găzduite la club",
+    "organizer": {
+      "FRT": "Federația Română de Tenis",
+      "TENIS10": "Tenis10",
+      "SPORTYA": "Sportya",
+      "CLUB": "Organizat de club",
+      "ALTUL": "Alt organizator"
+    },
+    "register": "Înscriere",
+    "results": "Rezultate",
+    "past": "Ediția din {date}",
+    "playTitle": "Vrei să joci într-un turneu?",
+    "playText": "Antrenorii academiei te ajută să alegi turneele potrivite vârstei și nivelului, iar la cele de acasă ești pe terenul pe care te antrenezi.",
+    "contactCta": "Scrie-ne",
+    "evaluationCta": "Cere o evaluare",
+    "follow": "Urmărește clubul"
+  },
+  "schools": {
+    "factsTitle": "De ce la noi",
+    "facts": {
+      "years": "Peste 10 ani de parteneriate",
+      "yearsText": "Lucrăm de peste zece ani cu școli și grădinițe din București și Ilfov.",
+      "weather": "Pe orice vreme",
+      "weatherText": "Terenurile acoperite profesional țin lecțiile în program, indiferent de ploaie, frig sau anotimp.",
+      "gear": "Echipament inclus",
+      "gearText": "Fileuri mobile, rachete de juniori și mingi speciale pentru copii, fără cost suplimentar.",
+      "play": "Prin joc",
+      "playText": "Lecțiile sunt amuzante și antrenante, ca cei mici să îndrăgească mișcarea și tenisul."
+    },
+    "learnTitle": "Ce învață copiii",
+    "learn": {
+      "one": "atitudinea pe teren și regulile de bază",
+      "two": "loviturile specifice: forehand și rever",
+      "three": "poziționarea față de minge",
+      "four": "deplasarea în teren",
+      "five": "jocul de tenis",
+      "six": "exerciții fizice specifice tenisului"
+    },
+    "pathTitle": "Și după?",
+    "pathText": "Cu răbdare și perseverență, mulți copii îndrăgesc tenisul și aleg să continue, până la cursurile de performanță ale clubului.",
+    "pathCta": "Academia de juniori",
+    "contactTitle": "Vorbim despre școala sau grădinița voastră?",
+    "contactText": "Spune-ne câți copii sunt, ce vârste au și ce zile v-ar conveni. Îți răspundem cu o propunere.",
+    "contactCta": "Scrie-ne",
+    "subject": "Parteneriat școală sau grădiniță"
+  },
+  "finder": {
+    "who": "Pentru cine e tenisul?",
+    "whoOptions": {
+      "copil": "Pentru copilul meu",
+      "adult": "Pentru mine (adult)"
+    },
+    "age": "Câți ani are copilul?",
+    "ageOption": "{age} ani",
+    "experience": "Cât a jucat până acum?",
+    "experienceOptions": {
+      "niciodata": "Deloc",
+      "putin": "Câteva lecții",
+      "regulat": "Joacă regulat",
+      "turnee": "Joacă turnee"
+    },
+    "goal": "Ce își dorește de la tenis?",
+    "goalOptions": {
+      "placere": "Mișcare și distracție",
+      "progres": "Să progreseze constant",
+      "competitie": "Competiție"
+    },
+    "resultTitle": "Recomandarea noastră",
+    "resultGroup": "Grupa potrivită",
+    "resultProgram": "Programul potrivit",
+    "resultNone": "Hai să vorbim: îți recomandăm noi pasul potrivit.",
+    "nextEvaluation": "Cere o evaluare",
+    "nextBooking": "Rezervă o lecție",
+    "nextContact": "Scrie-ne",
+    "details": "Vezi detaliile",
+    "ask": "Întreabă asistentul",
+    "askQuestion": "Am răspuns: {answers}. Ce îmi recomandați?",
+    "restart": "Încearcă din nou",
+    "note": "Recomandarea e orientativă; la evaluare sau la prima lecție, antrenorul confirmă grupa și planul."
   }
 }

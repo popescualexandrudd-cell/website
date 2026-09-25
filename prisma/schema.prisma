@@ -154,6 +154,15 @@ enum WaitlistKind {
   EVALUARE
 }
 
+/// Who runs a tournament held at the club.
+enum TournamentOrganizer {
+  FRT
+  TENIS10
+  SPORTYA
+  CLUB
+  ALTUL
+}
+
 enum LegalKind {
   CONFIDENTIALITATE
   TERMENI
@@ -206,6 +215,10 @@ model SiteSettings {
   newsletterEnabled    Boolean     @default(true)
   /// The AI assistant on the site (it also needs ANTHROPIC_API_KEY on the server).
   assistantEnabled     Boolean     @default(true)
+  /// The year the club opened; shown in its story and figures.
+  foundedYear          Int?
+  /// Court hire rates, as Markdown ({ ro, en }); empty = "ask on the phone".
+  rentalRates          Json?
   retentionMonths      Int         @default(24)
   timezone             String      @default("Europe/Bucharest")
   currency             String      @default("RON")
@@ -846,4 +859,26 @@ model RateLimit {
   updatedAt   DateTime @updatedAt
 
   @@index([expiresAt])
+}
+
+/// A tournament held at the club: upcoming ones with dates and registration, and the recurring
+/// ones the club hosts (no dates needed).
+model Tournament {
+  id              String              @id @default(cuid())
+  slug            String              @unique
+  name            Json
+  organizer       TournamentOrganizer
+  /// Age group or level, e.g. "Tenis10, până la 10 ani".
+  category        Json?
+  summary         Json?
+  startsOn        DateTime?           @db.Date
+  endsOn          DateTime?           @db.Date
+  registrationUrl String?
+  resultsUrl      String?
+  published       Boolean             @default(true)
+  order           Int                 @default(0)
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  @@index([startsOn])
 }

@@ -12,20 +12,24 @@ type Props = { settings: LocalizedSettings };
 export async function Header({ settings }: Props) {
   const t = await getTranslations();
   const primary = [
-    { href: "/programe", label: t("nav.programs") },
     { href: "/academie", label: t("nav.juniors") },
+    { href: "/programe", label: t("nav.programs") },
+    { href: "/inchiriere-teren", label: t("nav.rental") },
+    { href: "/turnee", label: t("nav.tournaments") },
     { href: "/echipa", label: t("nav.team") },
-    { href: "/facilitati", label: t("nav.club") },
-    { href: "/preturi", label: t("nav.pricing") },
+    { href: "/despre", label: t("nav.club") },
     { href: "/contact", label: t("nav.contact") },
   ] as const;
   const links = [
-    { href: "/programe", label: t("nav.programs") },
     { href: "/academie", label: t("nav.juniors") },
+    { href: "/programe", label: t("nav.programs") },
+    { href: "/inchiriere-teren", label: t("nav.rental") },
+    { href: "/turnee", label: t("nav.tournaments") },
     { href: "/echipa", label: t("nav.team") },
     { href: "/despre", label: t("nav.about") },
-    { href: "/facilitati", label: t("nav.club") },
+    { href: "/facilitati", label: t("nav.facilities") },
     { href: "/preturi", label: t("nav.pricing") },
+    { href: "/scoli-gradinite", label: t("nav.schools") },
     { href: "/galerie", label: t("nav.gallery") },
     { href: "/contact", label: t("nav.contact") },
   ] as const;

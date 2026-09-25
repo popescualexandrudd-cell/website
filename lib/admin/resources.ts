@@ -48,6 +48,7 @@ export type ModelName =
   | "certification"
   | "academyGroup"
   | "result"
+  | "tournament"
   | "faq"
   | "testimonial"
   | "galleryItem"
@@ -143,6 +144,9 @@ const PAGE_PATHS: Record<string, string> = {
   intrebari: "/intrebari",
   contact: "/contact",
   "lista-asteptare": "/lista-asteptare",
+  inchiriere: "/inchiriere-teren",
+  turnee: "/turnee",
+  scoli: "/scoli-gradinite",
 };
 
 const LEGAL_PATHS: Record<string, string> = {
@@ -693,6 +697,113 @@ const result: Resource = {
       name: "parentalConsent",
       label: "Am acordul scris al părinților pentru publicare",
       group: "Acord",
+    },
+    { kind: "bool", name: "published", label: "Publicat", group: "Publicare" },
+  ],
+};
+
+const TOURNAMENT_ORGANIZERS: Option[] = [
+  { value: "FRT", label: "Federația Română de Tenis" },
+  { value: "TENIS10", label: "Tenis10" },
+  { value: "SPORTYA", label: "Sportya" },
+  { value: "CLUB", label: "Clubul" },
+  { value: "ALTUL", label: "Alt organizator" },
+];
+
+const tournament: Resource = {
+  key: "turnee",
+  model: "tournament",
+  entity: "Tournament",
+  label: "Turnee",
+  singular: "turneul",
+  addLabel: "Adaugă un turneu",
+  newTitle: "Turneu nou",
+  description:
+    "Turneele jucate la club. Cu date apar la „Turnee care urmează”, cu linkul de înscriere; fără date, la „Turnee găzduite”.",
+  section: "Academia de juniori",
+  orderable: true,
+  canCreate: true,
+  canDelete: true,
+  listOrderBy: [{ startsOn: "desc" }, { order: "asc" }],
+  title: (r) => ro(r.name),
+  meta: (r) =>
+    `${optionLabel(TOURNAMENT_ORGANIZERS, str(r.organizer))}${
+      r.startsOn instanceof Date ? ` · ${r.startsOn.toLocaleDateString("ro-RO")}` : ""
+    }`,
+  flags: (r) => (yes(r.published) ? [] : ["nepublicat"]),
+  publicPath: () => "/turnee",
+  prepare: (data) => {
+    if (data.endsOn instanceof Date && !(data.startsOn instanceof Date))
+      return "Ai completat data de sfârșit: completează și data de început.";
+    if (
+      data.endsOn instanceof Date &&
+      data.startsOn instanceof Date &&
+      data.endsOn.getTime() < data.startsOn.getTime()
+    )
+      return "Data de sfârșit e înaintea datei de început.";
+    return null;
+  },
+  fields: [
+    {
+      kind: "i18n",
+      name: "name",
+      label: "Numele turneului",
+      required: true,
+      maxLength: 160,
+      group: "Turneu",
+    },
+    { kind: "slug", name: "slug", label: "Adresa (slug)", required: true, group: "Turneu" },
+    {
+      kind: "enum",
+      name: "organizer",
+      label: "Organizatorul",
+      options: TOURNAMENT_ORGANIZERS,
+      group: "Turneu",
+    },
+    {
+      kind: "i18n",
+      name: "category",
+      label: "Categoria",
+      help: "De exemplu „Tenis10, până la 10 ani” sau „U14 fete și băieți”.",
+      nullable: true,
+      maxLength: 120,
+      group: "Turneu",
+    },
+    {
+      kind: "i18nText",
+      name: "summary",
+      label: "Descriere scurtă",
+      nullable: true,
+      rows: 3,
+      group: "Turneu",
+    },
+    {
+      kind: "date",
+      name: "startsOn",
+      label: "Începe pe",
+      help: "Gol = turneul apare la „Turnee găzduite”, fără dată.",
+      nullable: true,
+      group: "Ediția",
+    },
+    { kind: "date", name: "endsOn", label: "Se termină pe", nullable: true, group: "Ediția" },
+    {
+      kind: "text",
+      name: "registrationUrl",
+      label: "Linkul de înscriere",
+      help: "Pagina turneului pe frt.ro, tenis10.ro sau sportya.net.",
+      inputType: "url",
+      nullable: true,
+      maxLength: 300,
+      group: "Ediția",
+    },
+    {
+      kind: "text",
+      name: "resultsUrl",
+      label: "Linkul rezultatelor",
+      inputType: "url",
+      nullable: true,
+      maxLength: 300,
+      group: "Ediția",
     },
     { kind: "bool", name: "published", label: "Publicat", group: "Publicare" },
   ],
@@ -1749,7 +1860,32 @@ const settings: Resource = {
       maxLength: 300,
       group: "Contact",
     },
-    { kind: "hours", name: "workingHours", label: "Programul afișat", group: "Program de lucru" },
+    {
+      kind: "hours",
+      name: "workingHours",
+      label: "Programul clubului",
+      help: "Când e deschis clubul (și se pot închiria terenuri): apare în subsol, la contact și pe pagina de închiriere. Orele lecțiilor se stabilesc din Disponibilitate.",
+      group: "Program de lucru",
+    },
+    {
+      kind: "i18nMarkdown",
+      name: "rentalRates",
+      label: "Tarifele de închiriere",
+      help: "Pe scurt, de exemplu „- Teren acoperit, zi: … lei/oră”. Apar pe pagina „Închiriere teren”.",
+      nullable: true,
+      rows: 5,
+      group: "Program de lucru",
+    },
+    {
+      kind: "int",
+      name: "foundedYear",
+      label: "Anul înființării clubului",
+      help: "Apare în povestea clubului și în datele pentru Google.",
+      nullable: true,
+      min: 1900,
+      max: 2100,
+      group: "Identitatea clubului",
+    },
     {
       kind: "enum",
       name: "bookingMode",
@@ -1921,6 +2057,7 @@ export const RESOURCES: Resource[] = [
   certification,
   academyGroup,
   result,
+  tournament,
   program,
   lessonType,
   pricing,

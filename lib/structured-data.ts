@@ -7,6 +7,7 @@ import type {
   LocationView,
   PostView,
   ProgramView,
+  TournamentView,
 } from "./content";
 import { appUrl } from "./paths";
 import type { ResolvedImage } from "./media-shared";
@@ -18,7 +19,11 @@ const clean = <T extends Record<string, unknown>>(value: T): T =>
     Object.entries(value).filter(([, v]) => v !== undefined && v !== null && v !== ""),
   ) as T;
 
+const EVERY_DAY = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
 const OPENING_DAYS: Record<string, string[]> = {
+  Zilnic: EVERY_DAY,
+  "Every day": EVERY_DAY,
   "Luni–vineri": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
   "Monday–Friday": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
   Sâmbătă: ["Saturday"],
@@ -143,6 +148,7 @@ export function businessLd(
     image: imageUrl(settings.heroImage) ?? `${appUrl()}/api/og?path=%2F&lang=ro`,
     telephone: isFilled(settings.phone) ? settings.phone : undefined,
     email: isFilled(settings.email) ? settings.email : undefined,
+    foundingDate: settings.foundedYear ? String(settings.foundedYear) : undefined,
     currenciesAccepted: settings.currency,
     paymentAccepted: settings.paymentMethods.join(", "),
     openingHoursSpecification: openingHours(settings),
@@ -284,6 +290,70 @@ export function serviceLd(
     provider: { "@id": businessId() },
     areaServed: undefined,
     offers: offers.length > 0 ? offers : undefined,
+  });
+}
+
+/** Court hire at the club, with its opening hours. */
+export function courtHireLd(
+  settings: LocalizedSettings,
+  name: string,
+  description: string,
+  url: string,
+) {
+  return clean({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name,
+    description,
+    serviceType: "Tennis court hire",
+    url,
+    provider: { "@id": businessId() },
+    hoursAvailable: openingHours(settings),
+  });
+}
+
+/** A tournament with dates, held at the club (tournaments without dates are left out). */
+export function tournamentLd(
+  tournament: TournamentView,
+  url: string,
+  location: LocationView | null,
+  organizerName: string,
+) {
+  if (!tournament.startsOn) return null;
+  const day = (date: Date) => date.toISOString().slice(0, 10);
+  return clean({
+    "@context": "https://schema.org",
+    "@type": "SportsEvent",
+    name: tournament.name,
+    description: isFilled(tournament.summary) ? tournament.summary : undefined,
+    sport: "Tenis",
+    startDate: day(tournament.startsOn),
+    endDate: tournament.endsOn ? day(tournament.endsOn) : undefined,
+    eventStatus: "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    url,
+    location: location
+      ? clean({
+          "@type": "Place",
+          name: location.name,
+          address: clean({
+            "@type": "PostalAddress",
+            streetAddress: streetOf(location),
+            addressLocality: location.city,
+            addressRegion: location.region ?? undefined,
+            postalCode: location.postalCode ?? undefined,
+            addressCountry: "RO",
+          }),
+        })
+      : { "@id": businessId() },
+    organizer: { "@type": "Organization", name: organizerName },
+    offers: tournament.registrationUrl
+      ? {
+          "@type": "Offer",
+          url: tournament.registrationUrl,
+          availability: "https://schema.org/InStock",
+        }
+      : undefined,
   });
 }
 

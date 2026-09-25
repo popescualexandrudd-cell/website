@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { usePathname } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { track } from "@/lib/analytics/client";
+import { ASSISTANT_OPEN_EVENT } from "@/lib/assistant/events";
 import { parseAnswer, type Inline } from "@/lib/assistant/render";
 import { MAX_QUESTION_CHARS, type AssistantEvent, type ChatMessage } from "@/lib/assistant/shared";
 
@@ -25,6 +26,18 @@ class AssistantError extends Error {
 }
 
 const SUGGESTIONS = ["age", "groups", "prices", "start"] as const;
+
+/** The teaser's two questions, chosen for the page the visitor is on. */
+const TEASER: { prefix: string; keys: [string, string] }[] = [
+  { prefix: "/academie", keys: ["groups", "age"] },
+  { prefix: "/preturi", keys: ["prices", "start"] },
+  { prefix: "/inchiriere-teren", keys: ["court", "courtPrice"] },
+  { prefix: "/turnee", keys: ["tournaments", "groups"] },
+  { prefix: "/scoli-gradinite", keys: ["schools", "age"] },
+];
+
+/** Shown once per visit: after it is closed, moving to another page does not bring it back. */
+let teaserDone = false;
 
 function finePointer(): boolean {
   return window.matchMedia("(pointer: fine)").matches;
@@ -48,6 +61,8 @@ export function Assistant({ locale, evaluationHref, bookingHref, privacyHref }: 
   const [error, setError] = useState<ErrorCode | null>(null);
   const pathname = usePathname();
   const id = useId();
+  const [teaser, setTeaser] = useState(false);
+  const askRef = useRef<(question: string) => void>(() => undefined);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -64,6 +79,39 @@ export function Assistant({ locale, evaluationHref, bookingHref, privacyHref }: 
 
   useEffect(() => () => abortRef.current?.abort(), []);
 
+  // "Ask us something": a small bubble after a few seconds or once the visitor has scrolled a
+  // third of the page, never over an open window, and only once per visit.
+  useEffect(() => {
+    if (teaserDone) return;
+    const reveal = () => {
+      if (teaserDone || dialogRef.current?.open) return;
+      setTeaser(true);
+      cleanup();
+    };
+    const onScroll = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (max > 0 && window.scrollY / max > 0.33) reveal();
+    };
+    const timer = window.setTimeout(reveal, 9000);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    function cleanup() {
+      window.clearTimeout(timer);
+      window.removeEventListener("scroll", onScroll);
+    }
+    return cleanup;
+  }, []);
+
+  // Other parts of the page (the programme finder, the teaser) open the window with a question.
+  useEffect(() => {
+    const onOpen = (event: Event) => {
+      const question = (event as CustomEvent<{ question?: string }>).detail?.question;
+      show();
+      if (question) askRef.current(question);
+    };
+    window.addEventListener(ASSISTANT_OPEN_EVENT, onOpen);
+    return () => window.removeEventListener(ASSISTANT_OPEN_EVENT, onOpen);
+  }, []);
+
   useEffect(() => {
     const log = logRef.current;
     if (log) log.scrollTop = log.scrollHeight;
@@ -74,6 +122,8 @@ export function Assistant({ locale, evaluationHref, bookingHref, privacyHref }: 
     if (!dialog || dialog.open) return;
     dialog.showModal();
     setOpen(true);
+    teaserDone = true;
+    setTeaser(false);
     track("assistant_open");
     // With a mouse, straight to the question field; on a phone the keyboard stays closed
     // until the visitor taps it, so the suggestions stay in view.
@@ -157,6 +207,8 @@ export function Assistant({ locale, evaluationHref, bookingHref, privacyHref }: 
     }
   }
 
+  askRef.current = (question: string) => void ask(question);
+
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     void ask(draft);
@@ -185,9 +237,58 @@ export function Assistant({ locale, evaluationHref, bookingHref, privacyHref }: 
     });
 
   const waiting = streaming && messages.at(-1)?.content === "";
+  const teaserKeys =
+    TEASER.find((entry) => pathname.startsWith(entry.prefix))?.keys ?? (["age", "start"] as const);
+  const closeTeaser = () => {
+    teaserDone = true;
+    setTeaser(false);
+  };
 
   return (
     <>
+      {teaser && !open ? (
+        <aside className="assistant-teaser" aria-label={t("teaserTitle")}>
+          <button
+            type="button"
+            className="assistant-teaser-close"
+            onClick={closeTeaser}
+            aria-label={t("teaserClose")}
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path
+                d="M6 6l12 12M18 6L6 18"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+          <button type="button" className="assistant-teaser-open" onClick={show}>
+            <span className="assistant-teaser-avatar" aria-hidden="true">
+              <span className="assistant-teaser-ball" />
+            </span>
+            <span>
+              <strong className="assistant-teaser-title">{t("teaserTitle")}</strong>
+              <span className="assistant-teaser-text">{t("teaserText")}</span>
+            </span>
+          </button>
+          <ul className="assistant-teaser-chips">
+            {teaserKeys.map((key) => (
+              <li key={key}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    show();
+                    void ask(t(`teaserQuestions.${key}`));
+                  }}
+                >
+                  {t(`teaserQuestions.${key}`)}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      ) : null}
       <button
         type="button"
         className="assistant-launcher"

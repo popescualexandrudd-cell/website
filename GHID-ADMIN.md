@@ -11,7 +11,8 @@ Cuprins: [Autentificare](#autentificare) · [Tabloul de bord](#tabloul-de-bord) 
 [Azi](#azi) · [Rezervări](#rezervări) · [Disponibilitate](#disponibilitate) ·
 [Conținut](#conținut) · [Echipa](#echipa-de-antrenori) · [Academia de juniori](#academia-de-juniori) ·
 [Fotografii și video-uri](#fotografii-și-video-uri) · [Mesaje, evaluări și lista de așteptare](#mesaje-evaluări-și-lista-de-așteptare) ·
-[Clienți](#clienți) · [Newsletter](#newsletter) · [Campanii](#campanii) ·
+[Clienți](#clienți) · [Newsletter](#newsletter) · [Turnee și închirieri](#turnee-și-închirieri) ·
+[Campanii](#campanii) ·
 [Asistentul AI](#asistentul-ai) · [Setări și conturi](#setări-și-conturi) ·
 [Jurnal](#jurnal) · [Dacă ceva nu merge](#dacă-ceva-nu-merge)
 
@@ -266,6 +267,16 @@ Datele clienților mai vechi de 24 de luni se anonimizează automat (perioada se
 Lista celor care s-au abonat din subsolul site-ului. Abonarea are **dublă confirmare** (abonatul
 confirmă din email). **Descarcă lista (CSV)** îți dă adresele confirmate, fiecare cu linkul lui
 personal de dezabonare, pentru serviciul de email pe care îl folosești (Brevo, Mailchimp).
+
+## Turnee și închirieri
+
+- **Conținut → Turnee**: fiecare ediție nouă, cu datele, organizatorul (FRT, Tenis10, Sportya,
+  clubul) și linkul de înscriere. Cu date, apare sus la „Turnee care urmează”, pe prima pagină și
+  în Google (ca eveniment); fără date, la „Turnee găzduite”.
+- **Cererile de teren** din pagina „Închiriere teren” ajung în **Mesaje** (subiectul începe cu
+  „Închiriere teren”) și pe email. Suni clientul și confirmi terenul.
+- **Setări → Program de lucru**: programul clubului (apare în subsol, la contact și la închiriere)
+  și tarifele de închiriere. Orele lecțiilor rămân în **Disponibilitate**.
 
 ## Campanii
 

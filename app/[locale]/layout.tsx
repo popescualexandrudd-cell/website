@@ -1,5 +1,6 @@
 import "../globals.css";
 import "./academy.css";
+import "./club.css";
 import "./overlays.css";
 import type { CSSProperties } from "react";
 import type { Metadata, Viewport } from "next";
@@ -44,6 +45,10 @@ export async function generateViewport(): Promise<Viewport> {
 const SEARCH_KEYWORDS = {
   ro: [
     "academie de tenis Pantelimon",
+    "închiriere teren tenis Pantelimon",
+    "teren tenis acoperit Pantelimon",
+    "turnee tenis copii Tenis10 Pantelimon",
+    "tenis pentru școli și grădinițe București",
     "școală de tenis Pantelimon",
     "lecții de tenis Pantelimon",
     "tenis copii Pantelimon",
@@ -60,6 +65,7 @@ const SEARCH_KEYWORDS = {
   en: [
     "tennis academy Bucharest",
     "tennis lessons Pantelimon",
+    "tennis court hire Bucharest",
     "tennis for children Bucharest",
     "indoor clay tennis courts Bucharest",
     "Elite Tenis Club",
@@ -130,6 +136,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
           <a href="#continut" className="skip-link">
             {t("skipToContent")}
           </a>
+          <div className="scroll-progress" aria-hidden="true" />
           <PreviewBanner />
           <Header settings={settings} />
           <main id="continut" tabIndex={-1}>

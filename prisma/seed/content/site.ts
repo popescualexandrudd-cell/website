@@ -10,6 +10,54 @@ export const pageHeaderContent: {
   seoDescription: T;
 }[] = [
   {
+    key: "inchiriere",
+    title: { ro: "Închiriere teren de tenis", en: "Tennis court hire" },
+    intro: {
+      ro: "Opt terenuri de zgură în Pantelimon, patru acoperite profesional și patru în aer liber. Clubul e deschis zilnic, de dimineața până seara: suni, alegi ora și vii să joci.",
+      en: "Eight clay courts in Pantelimon, four professionally covered and four outdoors. The club is open every day, from morning to night: call, pick a time and come and play.",
+    },
+    seoTitle: {
+      ro: "Închiriere teren tenis Pantelimon: zgură, acoperit tot anul",
+      en: "Tennis court hire in Pantelimon: clay, covered all year",
+    },
+    seoDescription: {
+      ro: "Închiriază un teren de tenis la Elite Tenis Club Pantelimon: 8 terenuri de zgură, 4 acoperite tot anul, cu nocturnă, vestiare și dușuri. Deschis zilnic 08–23.",
+      en: "Hire a tennis court at Elite Tenis Club Pantelimon: 8 clay courts, 4 covered all year, floodlights, changing rooms and showers. Open daily 08–23.",
+    },
+  },
+  {
+    key: "turnee",
+    title: { ro: "Turnee la Elite Tenis Club", en: "Tournaments at Elite Tenis Club" },
+    intro: {
+      ro: "Pe terenurile clubului se joacă turnee ale Federației Române de Tenis și Tenis10. Aici găsești edițiile următoare, cu înscrierea, și turneele pe care le găzduim.",
+      en: "Romanian Tennis Federation and Tenis10 tournaments are played on the club's courts. Here you find the next editions, with registration, and the tournaments we host.",
+    },
+    seoTitle: {
+      ro: "Turnee de tenis în Pantelimon: FRT și Tenis10 pentru copii",
+      en: "Tennis tournaments in Pantelimon: FRT and Tenis10 for children",
+    },
+    seoDescription: {
+      ro: "Turneele de tenis găzduite la Elite Tenis Club Pantelimon: Cupa Elite, competiții ale Federației Române de Tenis și turnee Tenis10 pentru copii.",
+      en: "The tennis tournaments hosted at Elite Tenis Club Pantelimon: the Elite Cup, Romanian Tennis Federation events and Tenis10 tournaments for children.",
+    },
+  },
+  {
+    key: "scoli",
+    title: { ro: "Tenis pentru școli și grădinițe", en: "Tennis for schools and kindergartens" },
+    intro: {
+      ro: "De peste zece ani lucrăm cu școli și grădinițe din București și Ilfov. Copiii învață tenis prin joc, cu echipament pe măsura lor, pe terenuri acoperite care nu depind de vreme.",
+      en: "For more than ten years we have worked with schools and kindergartens in Bucharest and Ilfov. Children learn tennis through play, with equipment their size, on covered courts that do not depend on the weather.",
+    },
+    seoTitle: {
+      ro: "Tenis pentru școli și grădinițe în București și Ilfov",
+      en: "Tennis for schools and kindergartens in Bucharest and Ilfov",
+    },
+    seoDescription: {
+      ro: "Programe de tenis pentru școli și grădinițe la Elite Tenis Club Pantelimon: mini-tenis, echipament adaptat inclus și terenuri acoperite tot anul. Parteneriat de peste 10 ani.",
+      en: "Tennis programmes for schools and kindergartens at Elite Tenis Club Pantelimon: mini tennis, adapted equipment included and courts covered all year. Over 10 years of partnerships.",
+    },
+  },
+  {
     key: "programe",
     title: { ro: "Programe și lecții", en: "Programmes and lessons" },
     intro: {
@@ -237,6 +285,23 @@ export const amenityNames: Record<string, T> = {
   dușuri: { ro: "Dușuri", en: "Showers" },
   parcare: { ro: "Parcare", en: "Parking" },
   "sală de fitness": { ro: "Sală de fitness", en: "Fitness room" },
+  "recepție și magazin": { ro: "Recepție și magazin", en: "Reception and shop" },
+};
+
+/** What the club says about its amenities (its own public presentation). */
+export const amenityDescriptions: Record<string, T> = {
+  vestiare: {
+    ro: "Vestiare separate pentru bărbați și femei, cu toalete și dușuri.",
+    en: "Separate changing rooms for men and women, with toilets and showers.",
+  },
+  "sală de fitness": {
+    ro: "Sală de fitness echipată, pentru pregătirea fizică de lângă teren.",
+    en: "An equipped fitness room, for physical training next to the courts.",
+  },
+  "recepție și magazin": {
+    ro: "La recepție găsești echipament de tenis și răcoritoare.",
+    en: "At reception you will find tennis equipment and refreshments.",
+  },
 };
 
 /** Conditional services from the config ("[…, dacă e cazul]") keep their name but carry a visible marker. */

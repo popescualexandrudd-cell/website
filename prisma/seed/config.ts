@@ -15,6 +15,8 @@ const certification = z.union([
 
 const coach = z.object({
   nume: scalar,
+  /** false = the coach is added to the admin but not shown on the site until confirmed. */
+  publicat: scalar,
   rol: localized,
   titulatura: localized,
   rezumat: localized,
@@ -32,6 +34,7 @@ const configSchema = z.object({
     monograma: scalar,
     descriere: localized,
     culori: z.object({ principala: scalar, accent: scalar }).optional(),
+    infiintat: scalar,
   }),
   antrenori: z.array(coach).min(1),
   contact: z.object({
@@ -99,6 +102,9 @@ const configSchema = z.object({
     .array(z.object({ nume: scalar, pret_ron: scalar, valabilitate_zile: scalar }))
     .default([]),
   servicii_incluse: z.array(scalar).default([]),
+  /** When the club is open (court hire); falls back to the lesson hours when missing. */
+  program_club: z.object({ zilnic: scalar }).optional(),
+  inchiriere: z.object({ tarife: scalar }).optional(),
   program_lucru: z.object({ luni_vineri: scalar, sambata: scalar, duminica: scalar }),
   rezervari: z.object({
     mod: scalar,

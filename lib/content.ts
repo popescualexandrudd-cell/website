@@ -14,6 +14,7 @@ import type {
   GalleryCategory,
   LegalKind,
   Level,
+  TournamentOrganizer,
   PriceUnit,
   ResultLevel,
   Surface,
@@ -79,6 +80,8 @@ export function localizedSettings(s: SettingsView, locale: Locale) {
     newsletterEnabled: s.newsletterEnabled,
     timezone: s.timezone,
     currency: s.currency,
+    foundedYear: s.foundedYear,
+    rentalRates: s.rentalRates ? t(s.rentalRates, locale) : "",
   };
 }
 export type LocalizedSettings = ReturnType<typeof localizedSettings>;
@@ -248,6 +251,62 @@ export const getResults = cache(async (locale: Locale, limit?: number): Promise<
     level: r.level,
   }));
 });
+
+// ─── Tournaments ─────────────────────────────────────────────────────────────
+
+export type TournamentView = {
+  id: string;
+  slug: string;
+  name: string;
+  organizer: TournamentOrganizer;
+  category: string;
+  summary: string;
+  startsOn: Date | null;
+  endsOn: Date | null;
+  registrationUrl: string | null;
+  resultsUrl: string | null;
+};
+
+/**
+ * Published tournaments: the coming editions (with dates, soonest first) and the ones the club
+ * hosts or has hosted (past editions and entries without dates).
+ */
+export const getTournaments = cache(
+  async (locale: Locale): Promise<{ upcoming: TournamentView[]; hosted: TournamentView[] }> => {
+    const rows = await db.tournament.findMany({
+      where: { published: true },
+      orderBy: [{ startsOn: "asc" }, { order: "asc" }],
+    });
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    const views = rows.map((r) => ({
+      id: r.id,
+      slug: r.slug,
+      name: t(r.name, locale),
+      organizer: r.organizer,
+      category: r.category ? t(r.category, locale) : "",
+      summary: r.summary ? t(r.summary, locale) : "",
+      startsOn: r.startsOn,
+      endsOn: r.endsOn,
+      registrationUrl: r.registrationUrl,
+      resultsUrl: r.resultsUrl,
+    }));
+    const isUpcoming = (v: TournamentView) =>
+      v.startsOn !== null && (v.endsOn ?? v.startsOn).getTime() >= today.getTime();
+    return {
+      upcoming: views.filter(isUpcoming),
+      hosted: views
+        .filter((v) => !isUpcoming(v))
+        .sort((a, b) => {
+          // Past editions, most recent first, then the recurring tournaments in their order.
+          if (a.startsOn && b.startsOn) return b.startsOn.getTime() - a.startsOn.getTime();
+          if (a.startsOn) return -1;
+          if (b.startsOn) return 1;
+          return 0;
+        }),
+    };
+  },
+);
 
 // ─── Scenes ──────────────────────────────────────────────────────────────────
 

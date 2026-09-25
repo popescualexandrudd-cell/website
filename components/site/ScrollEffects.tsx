@@ -21,6 +21,14 @@ const SECTIONS = [
 ].join(",");
 
 const ITEMS = [
+  ".story-step",
+  ".pillar-card",
+  ".step-card",
+  ".amenity-card",
+  ".tournament-card",
+  ".tournament-row",
+  ".court-card",
+  ".social-card",
   ".pathway-step",
   ".stage",
   ".coach-card",
@@ -68,8 +76,12 @@ export function ScrollEffects() {
   useEffect(() => {
     const header = document.querySelector<HTMLElement>("[data-site-header]");
     if (!header) return;
+    const root = document.documentElement;
     const update = () => {
       header.dataset.scrolled = String(window.scrollY > 24);
+      // How far down the page the visitor is, for the thin progress bar at the top.
+      const max = root.scrollHeight - window.innerHeight;
+      root.style.setProperty("--scroll-p", max > 0 ? (window.scrollY / max).toFixed(4) : "0");
     };
     update();
     window.addEventListener("scroll", update, { passive: true });

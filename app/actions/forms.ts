@@ -93,6 +93,92 @@ export async function submitContact(_prev: FormState, formData: FormData): Promi
   }
 }
 
+// ─── Court hire request ──────────────────────────────────────────────────────
+
+const COURT_KINDS = ["acoperit", "exterior", "oricare"] as const;
+const COURT_LABEL: Record<(typeof COURT_KINDS)[number], string> = {
+  acoperit: "acoperit",
+  exterior: "în aer liber",
+  oricare: "oricare",
+};
+
+const courtSchema = z.object({
+  name: fields.name,
+  email: fields.email,
+  phone: fields.phone,
+  date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "date")
+    .refine((value) => {
+      const day = new Date(`${value}T00:00:00Z`).getTime();
+      const today = new Date();
+      today.setUTCHours(0, 0, 0, 0);
+      return day >= today.getTime() - 24 * 60 * 60 * 1000 && day <= today.getTime() + 120 * 864e5;
+    }, "date"),
+  time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "time"),
+  duration: z.enum(["60", "90", "120"], { error: "duration" }),
+  court: z.enum(COURT_KINDS).catch("oricare"),
+  message: fields.optionalText(1000),
+  consent: fields.consent,
+  locale: fields.locale,
+});
+
+/**
+ * A request to hire a court: it lands in the admin's inbox (Messages) and in the club's email;
+ * the club confirms by phone, as it does today.
+ */
+export async function submitCourtRequest(_prev: FormState, formData: FormData): Promise<FormState> {
+  const raw = formDataToObject(formData);
+  const parsed = courtSchema.safeParse(raw);
+  if (!parsed.success) return { status: "error", fieldErrors: zodFieldErrors(parsed.error) };
+  const gate = await guard("court", raw, parsed.data.email);
+  if (!gate.ok) return gate.state;
+  try {
+    const data = parsed.data;
+    const [year, month, day] = data.date.split("-");
+    const when = `${day}.${month}.${year}, ${data.time}, ${data.duration} de minute`;
+    const message = await db.contactMessage.create({
+      data: {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        subject: `Închiriere teren: ${when}`,
+        message: [
+          `Data și ora: ${when}`,
+          `Teren: ${COURT_LABEL[data.court]}`,
+          data.message ? `Mesaj: ${data.message}` : null,
+        ]
+          .filter(Boolean)
+          .join("\n"),
+        consent: true,
+        consentAt: new Date(),
+        policyVersion: await getPolicyVersion(),
+        locale: data.locale,
+        attribution: parseAttributionField(raw.attribution) ?? undefined,
+      },
+    });
+    const ids = await queueCoachNotification(
+      "court",
+      [
+        ["Nume", message.name],
+        ["Telefon", message.phone ?? "—"],
+        ["Email", message.email],
+        ["Data și ora", when],
+        ["Teren", COURT_LABEL[data.court]],
+        ["Mesaj", data.message ?? "—"],
+        ["Sursa vizitei", attributionLabel(message.attribution) ?? "direct sau necunoscută"],
+      ],
+      message.name,
+      message.email,
+    );
+    schedule(ids);
+    return { status: "success" };
+  } catch (error) {
+    console.error("submitCourtRequest", error);
+    return { status: "error", error: "server" };
+  }
+}
+
 // ─── Waiting list ────────────────────────────────────────────────────────────
 
 const waitlistSchema = z.object({

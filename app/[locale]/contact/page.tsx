@@ -22,8 +22,12 @@ export async function generateMetadata({
   });
 }
 
-export default async function ContactPage({ params }: PageProps<"/[locale]/contact">) {
+export default async function ContactPage({
+  params,
+  searchParams,
+}: PageProps<"/[locale]/contact">) {
   const locale = (await params).locale as Locale;
+  const subject = (await searchParams).subiect;
   setRequestLocale(locale);
   const [header, settingsRow, locations, t, h] = await Promise.all([
     getPageHeader("contact", locale),
@@ -55,6 +59,7 @@ export default async function ContactPage({ params }: PageProps<"/[locale]/conta
                 process.env.TURNSTILE_SECRET_KEY ? (process.env.TURNSTILE_SITE_KEY ?? null) : null
               }
               nonce={h.get("x-nonce") ?? undefined}
+              defaultSubject={typeof subject === "string" ? subject.slice(0, 120) : undefined}
             />
           </div>
           <address className="not-italic">
