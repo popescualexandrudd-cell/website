@@ -7,7 +7,10 @@ type PostContent = {
   seoDescription: { ro: string; en: string };
 };
 
-/** Three short articles, seeded as drafts (CIORNA) for the coach to review before publishing. */
+/**
+ * Short articles for players and parents, each written around what people search for (the SEO
+ * title and description). Seeded as drafts (CIORNA), to be reviewed before publishing.
+ */
 export const postContent: PostContent[] = [
   {
     slug: "prima-racheta-pentru-copil",
@@ -244,6 +247,332 @@ One lesson a week brings progress. Two lessons, or a lesson plus an hour of play
 - **Remembering why you started.** Movement, fresh air, a game you can lose yourself in for an hour.
 
 Tennis is not learned in one summer. But after three months you already know enough to enjoy it, and that is where the good part begins.`,
+    },
+  },
+  {
+    slug: "la-ce-varsta-poate-incepe-copilul-tenisul",
+    title: {
+      ro: "La ce vârstă poate începe un copil tenisul?",
+      en: "At what age can a child start tennis?",
+    },
+    excerpt: {
+      ro: "De la 4–5 ani, cu mingi mai lente și terenuri mai mici. Cum arată etapele minge roșie, portocalie, verde și galbenă și cum știi că e momentul.",
+      en: "From 4 or 5, with slower balls and smaller courts. What the red, orange, green and yellow ball stages look like and how to tell it is time.",
+    },
+    seoTitle: {
+      ro: "Tenis pentru copii: de la ce vârstă și cum începe (minge roșie, portocalie, verde)",
+      en: "Tennis for children: from what age and how it starts (red, orange, green ball)",
+    },
+    seoDescription: {
+      ro: "Vârsta potrivită pentru primele lecții de tenis, etapele pe culori de minge și semnele că un copil e pregătit. Ghid pentru părinți.",
+      en: "The right age for a first tennis lesson, the ball-colour stages and the signs a child is ready. A guide for parents.",
+    },
+    body: {
+      ro: `Un copil poate începe tenisul de la 4–5 ani. Condiția nu e forța, ci ca terenul, racheta și mingea să fie pe măsura lui. De aceea tenisul pentru copii nu se joacă de la început pe terenul mare, cu mingea obișnuită.
+
+## Etapele pe culori de minge
+
+Federația Internațională de Tenis împarte primii ani în etape, după culoarea mingii:
+
+- **Minge roșie** (aproximativ 5–8 ani): teren mic, rachetă scurtă, minge moale care sare jos și încet. Copilul are timp să ajungă la minge și să lovească corect.
+- **Minge portocalie** (aproximativ 8–10 ani): terenul crește, mingea e ceva mai rapidă. Apar serviciul de sus și primele meciuri.
+- **Minge verde** (aproximativ 9–10 ani și peste): terenul întreg, cu o minge puțin mai lentă decât cea standard.
+- **Minge galbenă**: mingea și terenul obișnuite, pentru juniorii pregătiți.
+
+Vârstele sunt orientative. Trecerea la etapa următoare se face când copilul stăpânește loviturile și jocul din etapa în care e, nu după calendar.
+
+## Semne că e momentul
+
+- urmează indicații simple, de două-trei pași;
+- poate sta concentrat 10–15 minute pe un joc;
+- îi place să alerge și să prindă mingea;
+- vrea el să vină, nu doar părinții.
+
+Dacă nu sunteți siguri, o primă ședință de probă spune repede dacă e momentul sau dacă mai așteptați câteva luni.
+
+## Cum arată primele lecții
+
+La 4–6 ani, o lecție e mai mult joc decât exercițiu: coordonare, echilibru, prins și aruncat, apoi primele lovituri cu mingea roșie. Copiii învață prin jocuri scurte, cu reguli simple, și pleacă de pe teren cu chef să revină. Racheta potrivită contează mult: una prea lungă îl obligă pe copil să lovească greșit.
+
+## La academia noastră
+
+Fiecare copil începe cu o evaluare: vedem cum se mișcă și cum lovește și vă spunem în ce grupă se potrivește. Grupele, vârstele și programul lor sunt pe pagina Academiei de juniori.`,
+      en: `A child can start tennis from 4 or 5. What matters is not strength but a court, racquet and ball sized for them. That is why children's tennis does not start on the full court with the standard ball.
+
+## The ball-colour stages
+
+The International Tennis Federation divides the first years into stages, by the colour of the ball:
+
+- **Red ball** (roughly 5–8): a small court, a short racquet and a soft ball that bounces low and slow. The child has time to reach the ball and hit it properly.
+- **Orange ball** (roughly 8–10): the court grows and the ball gets a little faster. The overhead serve and first matches appear.
+- **Green ball** (roughly 9–10 and up): the full court, with a ball slightly slower than the standard one.
+- **Yellow ball**: the standard ball and court, for juniors who are ready.
+
+The ages are a guide. A child moves to the next stage when they master the strokes and play of the current one, not by the calendar.
+
+## Signs it is time
+
+- they follow simple two- or three-step instructions;
+- they can focus on a game for 10–15 minutes;
+- they enjoy running and catching a ball;
+- they want to come, not just their parents.
+
+If you are not sure, a first trial session quickly shows whether it is time or whether to wait a few months.
+
+## What the first lessons look like
+
+At 4–6, a lesson is more play than drill: coordination, balance, catching and throwing, then the first strokes with the red ball. Children learn through short games with simple rules and leave the court wanting to come back. The right racquet matters a lot: one that is too long forces the child to hit the wrong way.
+
+## At our academy
+
+Every child starts with an assessment: we see how they move and hit, and tell you which group fits. The groups, their ages and schedules are on the Junior academy page.`,
+    },
+  },
+  {
+    slug: "tenis-iarna-teren-acoperit-zgura",
+    title: {
+      ro: "Tenis iarna: de ce contează terenul acoperit și de ce zgura",
+      en: "Tennis in winter: why a covered court matters, and why clay",
+    },
+    excerpt: {
+      ro: "Pauza de iarnă șterge mult din progresul verii. Ce câștigi dacă te antrenezi tot anul și ce are special zgura.",
+      en: "A winter break wipes out much of the summer's progress. What you gain by training all year and what is special about clay.",
+    },
+    seoTitle: {
+      ro: "Tenis iarna pe teren acoperit de zgură: de ce să nu faci pauză",
+      en: "Winter tennis on a covered clay court: why not to take a break",
+    },
+    seoDescription: {
+      ro: "De ce antrenamentul continuu contează, ce avantaje are zgura pentru copii și adulți și cum te pregătești pentru tenisul de iarnă.",
+      en: "Why continuous training matters, what clay offers children and adults and how to get ready for winter tennis.",
+    },
+    body: {
+      ro: `Mulți jucători, copii sau adulți, se opresc din noiembrie până în martie. Primăvara, primele săptămâni se duc pe recuperarea a ce s-a pierdut. Un teren acoperit schimbă asta: antrenamentul continuă în același ritm, pe aceeași suprafață.
+
+## Ce pierzi într-o pauză de patru luni
+
+- **Ritmul mingii.** Ochiul și picioarele se dezobișnuiesc repede de viteza schimburilor.
+- **Automatismele.** O mișcare nouă, învățată vara, nu e încă fixată; fără repetiție, se întoarce vechiul obicei.
+- **Condiția fizică specifică.** Pornirile scurte, frânările și schimbările de direcție nu se antrenează la fel în sală.
+
+La copii, pauza lungă mai are un cost: pierd legătura cu grupa și cu plăcerea jocului.
+
+## De ce zgura
+
+Zgura e suprafața pe care mingea sare mai încet și mai sus decât pe hard. Pentru cine învață, asta înseamnă:
+
+- **mai mult timp** pentru pregătirea loviturii și pentru poziția corectă;
+- **schimburi mai lungi**, deci mai multe mingi lovite în aceeași oră;
+- **alunecarea** controlată în lovitură, care se învață doar pe zgură;
+- **impact mai blând** pentru articulații decât suprafețele dure.
+
+## Cum te pregătești pentru tenisul de iarnă
+
+- Încălzirea durează mai mult când afară e frig: 10–15 minute de mișcare înainte de primele lovituri.
+- Haine în straturi: te încălzești repede, dar pauzele sunt reci.
+- Pantofi pentru zgură, cu model în zigzag, ca și vara.
+- Apă, chiar dacă nu ți-e sete: iarna uiți să bei.
+
+## La noi
+
+Patru dintre terenurile clubului sunt de zgură și acoperite iarna, așa că lecțiile și grupele academiei continuă tot anul. Orele libere le vezi în pagina de rezervare.`,
+      en: `Many players, children and adults, stop from November to March. In spring the first weeks go on recovering what was lost. A covered court changes that: training carries on at the same pace, on the same surface.
+
+## What four months off cost you
+
+- **The pace of the ball.** Eyes and feet quickly lose the speed of rallies.
+- **Automatic movement.** A new stroke learned in summer is not yet fixed; without repetition, the old habit returns.
+- **Tennis-specific fitness.** Short sprints, braking and changes of direction are not trained the same way in a gym.
+
+For children, a long break has another cost: they lose touch with their group and with the joy of playing.
+
+## Why clay
+
+Clay is the surface on which the ball bounces slower and higher than on hard courts. For anyone learning, that means:
+
+- **more time** to prepare the stroke and get into position;
+- **longer rallies**, so more balls hit in the same hour;
+- **controlled sliding** into the shot, which can only be learned on clay;
+- **a softer impact** on the joints than hard surfaces.
+
+## Getting ready for winter tennis
+
+- Warm up for longer when it is cold outside: 10–15 minutes of movement before the first strokes.
+- Dress in layers: you warm up quickly, but the breaks are cold.
+- Clay-court shoes with a zigzag sole, as in summer.
+- Water, even if you are not thirsty: in winter you forget to drink.
+
+## At our club
+
+Four of the club's courts are clay and covered in winter, so lessons and academy groups carry on all year. You can see the free times on the booking page.`,
+    },
+  },
+  {
+    slug: "cum-alegi-academia-de-tenis-pentru-copil",
+    title: {
+      ro: "Cum alegi o academie de tenis pentru copil: 8 întrebări de pus",
+      en: "How to choose a tennis academy for your child: 8 questions to ask",
+    },
+    excerpt: {
+      ro: "Câți copii sunt în grupă, cu ce mingi lucrează, ce pregătire au antrenorii și ce se întâmplă iarna: ce merită întrebat înainte de înscriere.",
+      en: "How many children per group, which balls they use, the coaches' training and what happens in winter: what to ask before enrolling.",
+    },
+    seoTitle: {
+      ro: "Cum alegi un curs de tenis pentru copii: 8 întrebări pentru academie",
+      en: "Choosing tennis lessons for children: 8 questions for the academy",
+    },
+    seoDescription: {
+      ro: "Ce să întrebi înainte să înscrii copilul la tenis: mărimea grupei, etapele pe culori de minge, antrenorii, evaluarea, terenurile de iarnă.",
+      en: "What to ask before enrolling your child in tennis: group size, ball-colour stages, the coaches, the assessment, winter courts.",
+    },
+    body: {
+      ro: `Două academii pot avea același preț și un rezultat foarte diferit pentru copil. Iată ce merită întrebat, la orice club, înainte de înscriere.
+
+## 1. Câți copii sunt într-o grupă, la un antrenor?
+
+Într-o grupă mică, fiecare copil lovește multe mingi și primește corecturi. Întreabă numărul maxim, nu cel „de obicei”.
+
+## 2. Cu ce mingi și pe ce teren lucrează cei mici?
+
+Copiii de 5–8 ani ar trebui să joace cu mingi roșii, pe teren mic. Dacă un copil de 6 ani lovește mingi galbene pe terenul mare, învață să se descurce, nu să joace corect.
+
+## 3. Ce pregătire au antrenorii?
+
+O facultate de sport cu specializarea tenis, cursurile federației și experiența cu copii contează. Nu ezita să întrebi cine anume va lucra cu copilul tău.
+
+## 4. Există o evaluare la început?
+
+O evaluare arată nivelul real al copilului și grupa potrivită. Fără ea, copilul ajunge fie într-o grupă prea ușoară, fie într-una în care se descurajează.
+
+## 5. Ce se întâmplă iarna?
+
+Cu terenuri acoperite, antrenamentele continuă tot anul. Fără ele, urmează o pauză lungă sau mutarea într-o sală, pe altă suprafață.
+
+## 6. Cum aflați cum progresează copilul?
+
+Un plan pe câteva luni, obiective clare și o discuție din când în când cu antrenorul valorează mai mult decât o diplomă la final de an.
+
+## 7. Cum se trece de la o grupă la alta?
+
+Trecerea ar trebui să depindă de ce știe copilul, nu doar de vârstă sau de anul de înscriere.
+
+## 8. Poate participa la competiții, dacă vrea?
+
+Nu orice copil vrea să joace turnee, dar e bine să știi că drumul există: pregătire pentru competiții, alegerea turneelor potrivite, însoțire.
+
+## La academia noastră
+
+Răspunsurile noastre le găsești pe pagina Academiei de juniori: grupele pe etape și vârste, programul, antrenorii. Și, ca la orice academie serioasă, totul începe cu o evaluare.`,
+      en: `Two academies can charge the same and give a child a very different result. Here is what is worth asking, at any club, before enrolling.
+
+## 1. How many children per group, per coach?
+
+In a small group every child hits plenty of balls and gets corrected. Ask for the maximum, not the "usual" number.
+
+## 2. Which balls and which court do the youngest use?
+
+Children aged 5–8 should play with red balls on a small court. If a six-year-old hits yellow balls on the full court, they learn to cope, not to play properly.
+
+## 3. What training do the coaches have?
+
+A sports degree specialising in tennis, federation courses and experience with children all matter. Feel free to ask who exactly will work with your child.
+
+## 4. Is there an assessment at the start?
+
+An assessment shows the child's real level and the right group. Without one, a child ends up either in a group that is too easy or in one that discourages them.
+
+## 5. What happens in winter?
+
+With covered courts, training goes on all year. Without them, there is a long break or a move indoors onto another surface.
+
+## 6. How will you know how your child is progressing?
+
+A plan for a few months, clear goals and the occasional talk with the coach are worth more than a certificate at the end of the year.
+
+## 7. How do children move from one group to the next?
+
+Moving up should depend on what the child can do, not only on age or the year they joined.
+
+## 8. Can they compete, if they want to?
+
+Not every child wants to play tournaments, but it is good to know the path exists: competition preparation, choosing the right tournaments, support at events.
+
+## At our academy
+
+Our answers are on the Junior academy page: the groups by stage and age, the schedule, the coaches. And, as at any serious academy, everything starts with an assessment.`,
+    },
+  },
+  {
+    slug: "ce-castiga-un-copil-din-tenis",
+    title: {
+      ro: "Ce câștigă un copil din tenis, dincolo de teren",
+      en: "What a child gains from tennis, beyond the court",
+    },
+    excerpt: {
+      ro: "Coordonare, răbdare, decizii rapide și obiceiul de a o lua de la capăt după o greșeală: de ce tenisul e o școală bună pentru copii.",
+      en: "Coordination, patience, quick decisions and the habit of starting again after a mistake: why tennis is a good school for children.",
+    },
+    seoTitle: {
+      ro: "Beneficiile tenisului pentru copii: ce dezvoltă și de ce contează",
+      en: "The benefits of tennis for children: what it develops and why it matters",
+    },
+    seoDescription: {
+      ro: "Ce dezvoltă tenisul la copii: coordonare, atenție, gestionarea emoțiilor, responsabilitate. Ce să urmărești în primul an.",
+      en: "What tennis develops in children: coordination, focus, handling emotions, responsibility. What to look for in the first year.",
+    },
+    body: {
+      ro: `Tenisul e un sport individual jucat cu un partener: fiecare punct e al tău, dar nu se joacă fără celălalt. Din această combinație vin multe dintre lucrurile pe care copiii le iau cu ei și în afara terenului.
+
+## Coordonare și mișcare
+
+Un copil care joacă tenis urmărește o minge în zbor, își mișcă picioarele ca să ajungă la ea și coordonează brațul cu tot corpul ca să o lovească. Echilibrul, reacția și orientarea în spațiu se lucrează la fiecare minge.
+
+## Atenție și decizii rapide
+
+Fiecare minge cere o decizie: unde lovesc, cât de tare, înainte sau înapoi. Copiii învață să se concentreze câteva secunde intens, apoi să se relaxeze între puncte, și iar să se concentreze.
+
+## Emoțiile
+
+În tenis greșești des, chiar și la nivel mare. Copilul învață că o greșeală e doar un punct, că poate respira și o poate lua de la capăt. Rutinele dintre puncte sunt, de fapt, lecții despre calm.
+
+## Responsabilitate și fair-play
+
+Pe terenul de antrenament și în meciurile între copii, jucătorii își anunță singuri mingile out. Asta înseamnă onestitate, respect pentru adversar și asumarea propriilor decizii.
+
+## Ce să urmărești în primul an
+
+- dacă vine cu plăcere la antrenament;
+- dacă ține un schimb de mingi mai lung decât la început;
+- dacă își revine mai repede după o greșeală;
+- dacă vorbește acasă despre ce a învățat.
+
+Rezultatele în turnee vin mai târziu, pentru cine le vrea. În primul an contează ca tenisul să devină jocul preferat al copilului.`,
+      en: `Tennis is an individual sport played with a partner: every point is yours, but there is no game without the other player. Many of the things children take off the court come from that combination.
+
+## Coordination and movement
+
+A child playing tennis tracks a ball in flight, moves their feet to reach it and coordinates the arm with the whole body to hit it. Balance, reaction and spatial awareness are trained with every ball.
+
+## Focus and quick decisions
+
+Every ball asks for a decision: where to hit, how hard, move forward or back. Children learn to focus intensely for a few seconds, relax between points, and focus again.
+
+## Emotions
+
+In tennis you make mistakes often, even at the top level. A child learns that a mistake is just one point, that they can breathe and start again. The routines between points are really lessons in staying calm.
+
+## Responsibility and fair play
+
+In practice and in children's matches, players call their own balls out. That means honesty, respect for the opponent and owning your decisions.
+
+## What to look for in the first year
+
+- whether they enjoy coming to training;
+- whether they keep a rally going longer than at the start;
+- whether they bounce back faster after a mistake;
+- whether they talk at home about what they learned.
+
+Tournament results come later, for those who want them. In the first year, what matters is that tennis becomes the child's favourite game.`,
     },
   },
 ];

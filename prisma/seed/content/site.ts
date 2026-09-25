@@ -17,12 +17,12 @@ export const pageHeaderContent: {
       en: "Three training programmes (Beginners, Competition and Recreational) and five kinds of lesson: private, in pairs, in threes, in a group or a biomechanical analysis. Combine them as it suits you.",
     },
     seoTitle: {
-      ro: "Programe de tenis în Pantelimon: inițiere, competiție, amatori",
-      en: "Tennis programmes in Pantelimon: beginners, competition, recreational",
+      ro: "Lecții de tenis în Pantelimon: inițiere, competiție, amatori",
+      en: "Tennis lessons in Pantelimon: beginners, competition, recreational",
     },
     seoDescription: {
-      ro: "Programele academiei de tenis de la Elite Tennis Club Pantelimon, pentru copii și adulți: lecții individuale, în doi, în trei sau în grup, de 60, 90 sau 120 de minute.",
-      en: "The tennis academy's programmes at Elite Tennis Club Pantelimon, for children and adults: private, pair, three-player or group lessons of 60, 90 or 120 minutes.",
+      ro: "Programele academiei de tenis de la Elite Tenis Club Pantelimon, pentru copii și adulți: lecții individuale, în doi, în trei sau în grup, de 60, 90 sau 120 de minute.",
+      en: "The tennis academy's programmes at Elite Tenis Club Pantelimon, for children and adults: private, pair, three-player or group lessons of 60, 90 or 120 minutes.",
     },
   },
   {
@@ -33,12 +33,12 @@ export const pageHeaderContent: {
       en: "Groups by age and stage, from mini tennis to juniors who play tournaments. Every child starts with an assessment, so they join the right group.",
     },
     seoTitle: {
-      ro: "Academie de tenis pentru copii și juniori în Pantelimon",
-      en: "Tennis academy for children and juniors in Pantelimon",
+      ro: "Tenis pentru copii în Pantelimon: grupe de la 4 ani",
+      en: "Tennis for children in Pantelimon: groups from age 4",
     },
     seoDescription: {
-      ro: "Grupe de tenis pentru copii de la 4 ani și juniori la Elite Tennis Club Pantelimon, pe etapele minge roșie, portocalie, verde și galbenă. Cere o evaluare.",
-      en: "Tennis groups for children from 4 and juniors at Elite Tennis Club Pantelimon, by red, orange, green and yellow ball stages. Ask for an assessment.",
+      ro: "Grupe de tenis pentru copii de la 4 ani și juniori la Elite Tenis Club Pantelimon, pe etapele minge roșie, portocalie, verde și galbenă. Cere o evaluare.",
+      en: "Tennis groups for children from 4 and juniors at Elite Tenis Club Pantelimon, by red, orange, green and yellow ball stages. Ask for an assessment.",
     },
   },
   {
@@ -49,28 +49,28 @@ export const pageHeaderContent: {
       en: "The academy's coaches, with each one's training, experience and way of working.",
     },
     seoTitle: {
-      ro: "Antrenori de tenis în Pantelimon",
-      en: "Tennis coaches in Pantelimon",
+      ro: "Antrenori de tenis în Pantelimon, pentru copii și adulți",
+      en: "Tennis coaches in Pantelimon, for children and adults",
     },
     seoDescription: {
-      ro: "Antrenorii academiei de tenis de la Elite Tennis Club Pantelimon: formare, certificări și experiență cu copii, juniori și adulți.",
-      en: "The coaches of the tennis academy at Elite Tennis Club Pantelimon: education, certifications and experience with children, juniors and adults.",
+      ro: "Antrenorii academiei de tenis de la Elite Tenis Club Pantelimon: formare, certificări și experiență cu copii, juniori și adulți.",
+      en: "The coaches of the tennis academy at Elite Tenis Club Pantelimon: education, certifications and experience with children, juniors and adults.",
     },
   },
   {
     key: "facilitati",
     title: { ro: "Clubul", en: "The club" },
     intro: {
-      ro: "Ne antrenăm la Elite Tennis Club din Pantelimon, pe zgură, inclusiv iarna, pe terenurile acoperite. Aici găsești terenurile, dotările clubului și ce primesc elevii la antrenamente.",
-      en: "We train at Elite Tennis Club in Pantelimon, on clay, in winter too, on the covered courts. Here are the courts, the club's amenities and what players get in training.",
+      ro: "Ne antrenăm la Elite Tenis Club din Pantelimon, pe zgură, inclusiv iarna, pe terenurile acoperite. Aici găsești terenurile, dotările clubului și ce primesc elevii la antrenamente.",
+      en: "We train at Elite Tenis Club in Pantelimon, on clay, in winter too, on the covered courts. Here are the courts, the club's amenities and what players get in training.",
     },
     seoTitle: {
-      ro: "Terenuri de tenis pe zgură în Pantelimon, acoperite iarna",
-      en: "Clay tennis courts in Pantelimon, covered in winter",
+      ro: "Terenuri de tenis acoperite pe zgură în Pantelimon",
+      en: "Covered clay tennis courts in Pantelimon",
     },
     seoDescription: {
-      ro: "Elite Tennis Club Pantelimon: 8 terenuri de zgură, dintre care 4 acoperite, sală de fitness, rachete de împrumut și analiză video a loviturilor.",
-      en: "Elite Tennis Club Pantelimon: 8 clay courts, 4 of them covered, a fitness room, loan racquets and video analysis of your strokes.",
+      ro: "Elite Tenis Club Pantelimon: 8 terenuri de zgură, dintre care 4 acoperite, sală de fitness, rachete de împrumut și analiză video a loviturilor.",
+      en: "Elite Tenis Club Pantelimon: 8 clay courts, 4 of them covered, a fitness room, loan racquets and video analysis of your strokes.",
     },
   },
   {
@@ -81,12 +81,12 @@ export const pageHeaderContent: {
       en: "What we believe about tennis, how we work with every player and who runs the sessions.",
     },
     seoTitle: {
-      ro: "Despre academia de tenis Elite Tennis Club Pantelimon",
-      en: "About the Elite Tennis Club tennis academy, Pantelimon",
+      ro: "Despre academia de tenis Elite Tenis Club Pantelimon",
+      en: "About the Elite Tenis Club tennis academy, Pantelimon",
     },
     seoDescription: {
-      ro: "Filozofia și metoda academiei de tenis de la Elite Tennis Club Pantelimon: evaluare, plan pe 8–12 săptămâni, antrenamente cu obiectiv și verificări.",
-      en: "The philosophy and method of the tennis academy at Elite Tennis Club Pantelimon: assessment, an 8–12 week plan, sessions with a goal, and check-ins.",
+      ro: "Filozofia și metoda academiei de tenis de la Elite Tenis Club Pantelimon: evaluare, plan pe 8–12 săptămâni, antrenamente cu obiectiv și verificări.",
+      en: "The philosophy and method of the tennis academy at Elite Tenis Club Pantelimon: assessment, an 8–12 week plan, sessions with a goal, and check-ins.",
     },
   },
   {
@@ -101,8 +101,8 @@ export const pageHeaderContent: {
       en: "Tennis lesson prices in Pantelimon: private, pairs, group",
     },
     seoDescription: {
-      ro: "Cât costă o lecție de tenis la Elite Tennis Club Pantelimon: individuală, în doi, în trei, de grup sau analiză biomecanică, pe 60, 90 sau 120 de minute.",
-      en: "What a tennis lesson costs at Elite Tennis Club Pantelimon: private, in pairs, in threes, in a group or a biomechanical analysis, for 60, 90 or 120 minutes.",
+      ro: "Cât costă o lecție de tenis la Elite Tenis Club Pantelimon: individuală, în doi, în trei, de grup sau analiză biomecanică, pe 60, 90 sau 120 de minute.",
+      en: "What a tennis lesson costs at Elite Tenis Club Pantelimon: private, in pairs, in threes, in a group or a biomechanical analysis, for 60, 90 or 120 minutes.",
     },
   },
   {
@@ -117,8 +117,8 @@ export const pageHeaderContent: {
       en: "Book a tennis lesson online in Pantelimon",
     },
     seoDescription: {
-      ro: "Vezi orele libere și rezervă online o lecție de tenis la Elite Tennis Club Pantelimon, pentru copii sau adulți, de 60, 90 sau 120 de minute.",
-      en: "See the free times and book a tennis lesson online at Elite Tennis Club Pantelimon, for children or adults, of 60, 90 or 120 minutes.",
+      ro: "Vezi orele libere și rezervă online o lecție de tenis la Elite Tenis Club Pantelimon, pentru copii sau adulți, de 60, 90 sau 120 de minute.",
+      en: "See the free times and book a tennis lesson online at Elite Tenis Club Pantelimon, for children or adults, of 60, 90 or 120 minutes.",
     },
   },
   {
@@ -129,8 +129,8 @@ export const pageHeaderContent: {
       en: "Photos and videos from training, tournaments and the courts. We publish them only with the consent of the people in them.",
     },
     seoDescription: {
-      ro: "Fotografii și video-uri de la antrenamentele academiei de tenis de la Elite Tennis Club Pantelimon.",
-      en: "Photos and videos from the tennis academy's training at Elite Tennis Club Pantelimon.",
+      ro: "Fotografii și video-uri de la antrenamentele academiei de tenis de la Elite Tenis Club Pantelimon.",
+      en: "Photos and videos from the tennis academy's training at Elite Tenis Club Pantelimon.",
     },
   },
   {
@@ -165,12 +165,12 @@ export const pageHeaderContent: {
       en: "To book, the booking page is quickest. For anything else, call us on 0722 501 748 or write to us here.",
     },
     seoTitle: {
-      ro: "Contact: academia de tenis Elite Tennis Club Pantelimon",
-      en: "Contact: the Elite Tennis Club tennis academy, Pantelimon",
+      ro: "Contact: academia de tenis Elite Tenis Club Pantelimon",
+      en: "Contact: the Elite Tenis Club tennis academy, Pantelimon",
     },
     seoDescription: {
-      ro: "Elite Tennis Club, Bulevardul Biruinței 19-21, Pantelimon, Ilfov. Telefon 0722 501 748, email elite_tenis_club@yahoo.ro.",
-      en: "Elite Tennis Club, Bulevardul Biruinței 19-21, Pantelimon, Ilfov. Phone 0722 501 748, email elite_tenis_club@yahoo.ro.",
+      ro: "Elite Tenis Club, Bulevardul Biruinței 19-21, Pantelimon, Ilfov. Telefon 0722 501 748, email elite_tenis_club@yahoo.ro.",
+      en: "Elite Tenis Club, Bulevardul Biruinței 19-21, Pantelimon, Ilfov. Phone 0722 501 748, email elite_tenis_club@yahoo.ro.",
     },
   },
   {

@@ -1,7 +1,7 @@
 # Site pentru o academie de tenis
 
 Site de prezentare cu rezervări online și panou de administrare, construit ca **șablon pentru
-orice club sau academie de tenis**; datele de pornire sunt ale academiei de la Elite Tennis Club
+orice club sau academie de tenis**; datele de pornire sunt ale academiei de la Elite Tenis Club
 (Pantelimon). Nivelul și structura urmează marile academii (Rafa Nadal Academy, IMG, Mouratoglou):
 deschidere cinematică cu video real al clubului, programe, academie de juniori pe etape, echipa de
 antrenori, galerie foto și video. Totul, de la culori și logo la texte, prețuri, fotografii și
@@ -11,6 +11,8 @@ video-uri, se editează din panoul de administrare.
 - **Pentru club**: cum se folosește panoul → [`GHID-ADMIN.md`](GHID-ADMIN.md); ce mai trebuie
   completat, inclusiv fotografiile și video-urile → [`CONTENT-TODO.md`](CONTENT-TODO.md).
 - **Pentru punerea online**: pas cu pas, fără cunoștințe tehnice → [`DEPLOY.md`](DEPLOY.md).
+- **SEO, brand și marketing**: cercetarea cuvintelor cheie, poziționarea, Google Business,
+  recenzii, conținut și campanii → [`docs/SEO-MARKETING.md`](docs/SEO-MARKETING.md).
 - **Designul**: [`docs/DIRECTIE-ARTISTICA.md`](docs/DIRECTIE-ARTISTICA.md) și
   [`DECISIONS.md`](DECISIONS.md) (partea V: academia); progresul pe faze:
   [`PROGRESS.md`](PROGRESS.md); licențe: [`CREDITS.md`](CREDITS.md).

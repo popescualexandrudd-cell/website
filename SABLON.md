@@ -84,7 +84,7 @@ cu **ffmpeg**, în 1–3 minute. Imaginea Docker îl are; local îl instalezi o 
 ## Pasul 4: textele
 
 Textele de pe pagina principală (Conținut → Secțiunile paginii principale), antetele paginilor,
-descrierile programelor, întrebările frecvente și paginile legale sunt scrise pentru Elite Tennis
+descrierile programelor, întrebările frecvente și paginile legale sunt scrise pentru Elite Tenis
 Club. Pentru alt club, citește-le din admin și adaptează-le; paginile legale trebuie verificate de
 un jurist.
 

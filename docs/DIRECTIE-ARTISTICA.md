@@ -93,7 +93,7 @@ Apare în secțiunea „Antrenorul” de pe pagina principală și pe „Despre 
 - **Cadru**: de la genunchi în sus sau întreg, cu racheta în mână; privirea spre cameră sau spre
   teren. Lasă puțin spațiu deasupra capului.
 - **Unde o încarci**: admin → Conținut → Profilul antrenorului → **Fotografia ta**. Scrie și
-  descrierea (de exemplu „Alexandru Daniel Popescu pe terenul de zgură de la Elite Tennis Club”).
+  descrierea (de exemplu „Alexandru Daniel Popescu pe terenul de zgură de la Elite Tenis Club”).
 
 ### 2. Fotografii pentru programe (opționale)
 

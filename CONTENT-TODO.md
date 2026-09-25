@@ -9,7 +9,9 @@ de la club. Se completează în două feluri:
   mai sunt marcate, iar în Conținut fiecare listă are eticheta „de completat” la elementele
   neterminate.
 
-Pentru un alt club decât Elite Tennis Club, pornește de la [`SABLON.md`](SABLON.md).
+Pentru un alt club decât Elite Tenis Club, pornește de la [`SABLON.md`](SABLON.md). Pentru SEO,
+brand și marketing (Google Business, recenzii, decizia despre domeniu, echipa reală de antrenori),
+vezi [`docs/SEO-MARKETING.md`](docs/SEO-MARKETING.md), secțiunea 11.
 
 ## 1. Fotografii și video-uri reale (cel mai important)
 

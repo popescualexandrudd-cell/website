@@ -8,7 +8,6 @@ import {
   getFacilities,
   getFaqs,
   getGallery,
-  getHeadCoach,
   getLessonTypes,
   getLocations,
   getPageHeader,
@@ -35,7 +34,7 @@ import { TextSection } from "@/components/home/TextSection";
 import { BookingWidget } from "@/components/booking/BookingWidget";
 import { JsonLd } from "@/components/pages/JsonLd";
 import { pageMetadata, localizedUrl } from "@/lib/seo";
-import { businessLd, personLd } from "@/lib/structured-data";
+import { businessLd, faqLd, personLd } from "@/lib/structured-data";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]">): Promise<Metadata> {
   const { locale } = await params;
@@ -60,7 +59,6 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     lessons,
     groups,
     coaches,
-    headCoach,
     locations,
     facilities,
     faqs,
@@ -75,7 +73,6 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     getLessonTypes(locale),
     getAcademyGroups(locale),
     getCoaches(locale),
-    getHeadCoach(locale),
     getLocations(locale),
     getFacilities(locale),
     getFaqs(locale, "home"),
@@ -111,6 +108,11 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       ? [{ value: coaches.length, label: t("figCoaches", { count: coaches.length }) }]
       : []),
   ].slice(0, 4);
+
+  const coachUrls = coaches.map((coach) => ({
+    coach,
+    url: localizedUrl({ pathname: "/echipa/[slug]", params: { slug: coach.slug } }, locale),
+  }));
 
   const render = (scene: SceneView) => {
     switch (scene.key) {
@@ -166,8 +168,13 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     <div className="home" data-home>
       <JsonLd
         data={[
-          businessLd(settings, location, settings.seoDescription, lessons),
-          ...(headCoach ? [personLd(settings, headCoach, localizedUrl("/echipa", locale))] : []),
+          businessLd(settings, location, settings.seoDescription, {
+            lessons,
+            groups,
+            coachUrls: coachUrls.map((c) => c.url),
+          }),
+          ...coachUrls.map((c) => personLd(settings, c.coach, c.url)),
+          ...(faqs.length > 0 ? [faqLd(faqs)] : []),
         ]}
       />
       {scenes.map(render)}

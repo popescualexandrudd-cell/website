@@ -552,7 +552,7 @@ cheie sub hero, secțiuni alternante deschis/închis, carduri de program, cale d
     performanță sportivă, specializarea tenis și performanță motrică; masterand UNEFS în
     management și marketing în structuri sportive; arbitru național FRT; curs de formare
     psihopedagogică cu atestat; 4 ani de antrenorat; copii cu rezultate la nivel național și
-    european, inclusiv campioni ai României; antrenor la Elite Tennis Club, pe toate palierele).
+    european, inclusiv campioni ai României; antrenor la Elite Tenis Club, pe toate palierele).
     Ce nu s-a spus rămâne marcat: anii diplomelor, instituția care a eliberat atestatul
     psihopedagogic, adresa și localitatea clubului. Registrul: terminologie de metodică și
     biomecanică (lanț kinetic, obiective operaționale, periodizare, calități motrice, învățare

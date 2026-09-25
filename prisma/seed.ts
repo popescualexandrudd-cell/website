@@ -112,6 +112,13 @@ async function main(): Promise<void> {
   const locationName = text(firstLocation.nume);
   const city = text(firstLocation.localitate);
 
+  const courtRows = firstLocation.terenuri.map((court) => ({
+    count: integer(court.numar) ?? 0,
+    covered: yesNo(court.acoperit_iarna) === true,
+  }));
+  const courtTotal = courtRows.reduce((sum, court) => sum + court.count, 0);
+  const coveredTotal = courtRows.reduce((sum, court) => sum + (court.covered ? court.count : 0), 0);
+
   // ── Settings ──────────────────────────────────────────────────────────────
   const workingHours = [
     { label: { ro: "Luni–vineri", en: "Monday–Friday" }, value: config.program_lucru.luni_vineri },
@@ -156,14 +163,22 @@ async function main(): Promise<void> {
       instagramUrl: optionalText(config.contact.instagram),
       facebookUrl: optionalText(config.contact.facebook),
       tiktokUrl: optionalText(config.contact.tiktok),
+      // What people type into Google first ("academie de tenis Pantelimon", "tenis copii"), then
+      // the club's name; the description leads with what sets the club apart.
       seoTitle: {
-        ro: `Academie de tenis ${city}: copii, juniori și adulți · ${clubName}`,
-        en: `Tennis academy in ${city}: children, juniors and adults · ${clubName}`,
+        ro: `Academie de tenis ${city}: copii și adulți · ${clubName}`,
+        en: `Tennis academy in ${city}: children and adults · ${clubName}`,
       },
-      seoDescription: {
-        ro: `Academia de tenis de la ${locationName}, ${city}, lângă București: grupe de juniori pe vârste, pregătire pentru turnee, lecții pentru adulți, pe zgură. Rezervi online.`,
-        en: `The tennis academy at ${locationName}, ${city}, next to Bucharest: junior groups by age, tournament preparation, lessons for adults, on clay. Book online.`,
-      },
+      seoDescription:
+        coveredTotal > 0
+          ? {
+              ro: `Școala de tenis de la ${locationName}, ${city}, lângă București: grupe pentru copii de la 4 ani, juniori și adulți, pe ${coveredTotal} terenuri de zgură acoperite iarna. Rezervi online.`,
+              en: `The tennis school at ${locationName}, ${city}, next to Bucharest: groups for children from 4, juniors and adults, on ${coveredTotal} clay courts covered in winter. Book online.`,
+            }
+          : {
+              ro: `Școala de tenis de la ${locationName}, ${city}, lângă București: grupe pentru copii de la 4 ani, juniori și adulți, pe zgură. Rezervi online.`,
+              en: `The tennis school at ${locationName}, ${city}, next to Bucharest: groups for children from 4, juniors and adults, on clay. Book online.`,
+            },
       bookingMode: String(config.rezervari.mod).trim() === "instant" ? "INSTANT" : "CERERE",
       freeCancelHours: integer(config.rezervari.anulare_gratuita_ore) ?? 24,
       minNoticeHours: integer(config.rezervari.rezervare_minim_ore_inainte) ?? 12,
@@ -552,12 +567,6 @@ async function main(): Promise<void> {
   }
 
   // ── Scenes ────────────────────────────────────────────────────────────────
-  const courtRows = firstLocation.terenuri.map((court) => ({
-    count: integer(court.numar) ?? 0,
-    covered: yesNo(court.acoperit_iarna) === true,
-  }));
-  const courtTotal = courtRows.reduce((sum, court) => sum + court.count, 0);
-  const coveredTotal = courtRows.reduce((sum, court) => sum + (court.covered ? court.count : 0), 0);
   for (const scene of sceneSeeds({
     club: clubName,
     locatie: locationName,

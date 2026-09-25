@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { Fragment, type CSSProperties } from "react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { LocalizedSettings, SceneView } from "@/lib/content";
@@ -65,17 +65,26 @@ export async function HeroSection({
           <div className="hero-shade" aria-hidden="true" />
         </div>
         <div className="hero-content">
-          <p className="hero-kicker">
-            <TodoText value={scene.indexName} />
-          </p>
-          <h1 id={`${scene.key}-title`} className="hero-title">
-            {lines(scene.title).map((line, i) => (
-              <span key={i} className="hero-line">
-                <span style={{ "--i": i } as CSSProperties}>
-                  <TodoText value={line} />
-                </span>
-              </span>
-            ))}
+          {/* The label is part of the heading: "Academie de tenis · Pantelimon" is what people
+              search for, the slogan is what they remember. */}
+          <h1 id={`${scene.key}-title`} className="hero-heading">
+            <span className="hero-kicker">
+              <TodoText value={scene.indexName} />
+            </span>
+            <span className="sr-only">: </span>
+            <span className="hero-title">
+              {lines(scene.title).map((line, i) => (
+                <Fragment key={i}>
+                  {/* Lines are blocks on screen; the space keeps the words apart when read. */}
+                  {i > 0 ? " " : null}
+                  <span className="hero-line">
+                    <span style={{ "--i": i } as CSSProperties}>
+                      <TodoText value={line} />
+                    </span>
+                  </span>
+                </Fragment>
+              ))}
+            </span>
           </h1>
           {scene.body ? (
             <p className="hero-body">

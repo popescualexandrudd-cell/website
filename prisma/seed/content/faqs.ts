@@ -111,8 +111,8 @@ export const faqContent: FaqContent[] = [
       en: "Do you play in winter?",
     },
     answer: {
-      ro: "Da. Elite Tennis Club are 4 terenuri de zgură acoperite, folosite tot anul, așa că lecțiile continuă și iarna. Orele libere le vezi mereu actualizate în pagina de rezervare.",
-      en: "Yes. Elite Tennis Club has 4 covered clay courts used all year round, so lessons carry on through the winter. You can always see the up-to-date free times on the booking page.",
+      ro: "Da. Elite Tenis Club are 4 terenuri de zgură acoperite, folosite tot anul, așa că lecțiile continuă și iarna. Orele libere le vezi mereu actualizate în pagina de rezervare.",
+      en: "Yes. Elite Tenis Club has 4 covered clay courts used all year round, so lessons carry on through the winter. You can always see the up-to-date free times on the booking page.",
     },
   },
   {

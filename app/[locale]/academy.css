@@ -241,8 +241,15 @@ body:has(.hero) .site-header[data-scrolled="true"] {
   opacity: calc(1 - var(--hero-p) * 1.8);
   transform: translate3d(0, calc(var(--hero-p) * -90px), 0);
 }
+.hero-heading {
+  font-family: inherit;
+  font-weight: inherit;
+  text-transform: none;
+  letter-spacing: normal;
+}
 .hero-kicker {
   display: inline-flex;
+  font-family: var(--font-sans);
   align-items: center;
   gap: 0.75rem;
   font-size: 0.8125rem;
@@ -259,7 +266,11 @@ body:has(.hero) .site-header[data-scrolled="true"] {
   background: var(--color-galben);
 }
 .hero-title {
+  display: block;
   margin-top: 1.25rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
   font-size: clamp(3.9rem, 1.3rem + 10vw, 10.5rem);
   line-height: 0.9;
   letter-spacing: -0.005em;

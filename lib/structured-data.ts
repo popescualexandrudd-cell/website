@@ -1,5 +1,6 @@
 import { isFilled } from "./i18n-content";
 import type {
+  AcademyGroupView,
   FaqView,
   LessonTypeView,
   LocalizedSettings,
@@ -8,6 +9,7 @@ import type {
   ProgramView,
 } from "./content";
 import { appUrl } from "./paths";
+import type { ResolvedImage } from "./media-shared";
 
 /** schema.org objects (JSON-LD). Missing ([DE COMPLETAT]) values are simply left out. */
 
@@ -72,33 +74,73 @@ function streetOf(location: LocationView): string {
   return street.join(", ");
 }
 
+/** The largest encoding of an uploaded image, as an absolute URL. */
+function imageUrl(image: ResolvedImage | null): string | undefined {
+  const largest = image?.webp.at(-1)?.src;
+  return largest ? `${appUrl()}${largest}` : undefined;
+}
+
+type BusinessExtras = {
+  lessons?: LessonTypeView[];
+  groups?: AcademyGroupView[];
+  /** Links to the coaches' pages, as schema.org Person ids. */
+  coachUrls?: string[];
+};
+
+/**
+ * The club: a sports club (organisation) and a place to play (local business) at once, so both
+ * the knowledge panel and the local map results can use it.
+ */
 export function businessLd(
   settings: LocalizedSettings,
   location: LocationView | null,
   description: string,
-  lessons: LessonTypeView[] = [],
+  extras: BusinessExtras = {},
 ) {
+  const { lessons = [], groups = [], coachUrls = [] } = extras;
   const town = location && isFilled(location.city) ? location.city : undefined;
-  const offers = lessons
-    .filter((l) => l.hourlyRate !== null)
-    .map((l) =>
-      clean({
-        "@type": "Offer",
-        name: `${l.name}, 60 min`,
-        price: l.hourlyRate,
-        priceCurrency: settings.currency,
+  const lessonOffers = lessons.map((l) =>
+    clean({
+      "@type": "Offer",
+      name: l.name,
+      description: isFilled(l.summary) ? l.summary : undefined,
+      price: l.hourlyRate ?? undefined,
+      priceCurrency: l.hourlyRate ? settings.currency : undefined,
+      unitText: l.hourlyRate ? "oră" : undefined,
+      itemOffered: { "@type": "Service", name: l.name, serviceType: "Lecții de tenis" },
+    }),
+  );
+  const groupOffers = groups.map((g) =>
+    clean({
+      "@type": "Offer",
+      name: g.name,
+      price: g.monthlyFee ?? undefined,
+      priceCurrency: g.monthlyFee ? settings.currency : undefined,
+      unitText: g.monthlyFee ? "lună" : undefined,
+      itemOffered: clean({
+        "@type": "Course",
+        name: g.name,
+        description: isFilled(g.summary) ? g.summary : undefined,
+        provider: { "@id": businessId() },
       }),
-    );
+    }),
+  );
+  const courts = location?.courts ?? [];
+  const covered = courts.filter((c) => c.coveredInWinter && c.count);
+  const floodlit = courts.filter((c) => c.floodlights && c.count);
   return clean({
     "@context": "https://schema.org",
-    "@type": ["SportsActivityLocation", "LocalBusiness"],
+    "@type": ["SportsClub", "SportsActivityLocation"],
     "@id": businessId(),
     name: isFilled(settings.brandName) ? settings.brandName : settings.tagline,
-    alternateName:
-      location && isFilled(location.name) ? `Lecții de tenis la ${location.name}` : undefined,
+    alternateName: isFilled(settings.tagline)
+      ? `${settings.brandName} · ${settings.tagline}`
+      : undefined,
     description,
+    sport: "Tenis",
     url: appUrl(),
-    image: `${appUrl()}/api/og?path=%2F&lang=ro`,
+    logo: imageUrl(settings.logo),
+    image: imageUrl(settings.heroImage) ?? `${appUrl()}/api/og?path=%2F&lang=ro`,
     telephone: isFilled(settings.phone) ? settings.phone : undefined,
     email: isFilled(settings.email) ? settings.email : undefined,
     currenciesAccepted: settings.currency,
@@ -123,11 +165,95 @@ export function businessLd(
     areaServed: town
       ? [town, "București", "Ilfov"].map((name) => ({ "@type": "Place", name }))
       : undefined,
+    amenityFeature: [
+      ...courts
+        .filter((c) => c.count)
+        .map((c) => ({
+          "@type": "LocationFeatureSpecification",
+          name: c.name,
+          value: c.count,
+        })),
+      ...(covered.length > 0
+        ? [
+            {
+              "@type": "LocationFeatureSpecification",
+              name: "Terenuri acoperite iarna",
+              value: true,
+            },
+          ]
+        : []),
+      ...(floodlit.length > 0
+        ? [{ "@type": "LocationFeatureSpecification", name: "Nocturnă", value: true }]
+        : []),
+    ],
+    knowsAbout: [
+      "Tenis",
+      "Tenis pentru copii",
+      "Mini tenis",
+      "Tenis de competiție",
+      "Tenis pe zgură",
+    ],
     sameAs: [settings.instagramUrl, settings.facebookUrl, settings.tiktokUrl].filter(
       (s): s is string => Boolean(s),
     ),
-    makesOffer: offers.length > 0 ? offers : undefined,
+    employee:
+      coachUrls.length > 0 ? coachUrls.map((url) => ({ "@id": `${url}#person` })) : undefined,
+    hasOfferCatalog:
+      lessonOffers.length + groupOffers.length > 0
+        ? {
+            "@type": "OfferCatalog",
+            name: "Lecții de tenis și academia de juniori",
+            itemListElement: [
+              ...(lessonOffers.length > 0
+                ? [
+                    {
+                      "@type": "OfferCatalog",
+                      name: "Lecții de tenis",
+                      itemListElement: lessonOffers,
+                    },
+                  ]
+                : []),
+              ...(groupOffers.length > 0
+                ? [
+                    {
+                      "@type": "OfferCatalog",
+                      name: "Academia de juniori",
+                      itemListElement: groupOffers,
+                    },
+                  ]
+                : []),
+            ],
+          }
+        : undefined,
   });
+}
+
+/** The junior academy's groups as courses, for the academy page. */
+export function coursesLd(groups: AcademyGroupView[], url: string, currency: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: groups.map((g, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: clean({
+        "@type": "Course",
+        name: g.name,
+        description: isFilled(g.summary) ? g.summary : g.name,
+        url: `${url}#grupe`,
+        provider: { "@id": businessId() },
+        inLanguage: "ro",
+        audience: clean({
+          "@type": "PeopleAudience",
+          suggestedMinAge: g.ageMin ?? undefined,
+          suggestedMaxAge: g.ageMax ?? undefined,
+        }),
+        offers: g.monthlyFee
+          ? { "@type": "Offer", price: g.monthlyFee, priceCurrency: currency, category: "lunar" }
+          : undefined,
+      }),
+    })),
+  };
 }
 
 export function serviceLd(

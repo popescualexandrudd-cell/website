@@ -7,7 +7,7 @@
 # Ghidul complet: SABLON.md.
 
 club:
-  nume: "Elite Tennis Club"
+  nume: "Elite Tenis Club"
   # Două-trei litere, afișate cât timp nu e încărcat un logo (admin → Setări → Logo).
   monograma: "ETC"
   # Apare sub nume, în antet, și în titlul paginilor.
@@ -68,13 +68,13 @@ antrenori:
 
         Sunt arbitru național de tenis, certificat de Federația Română de Tenis. Faptul că știu regulamentul și cum decurge un turneu din interior mă ajută mult când pregătesc copiii pentru competiții. Am făcut și formarea psihopedagogică, așa că îmi pregătesc fiecare lecție cu un obiectiv clar și cresc efortul treptat, în ritmul fiecăruia.
 
-        Antrenez de patru ani. La Elite Tennis Club, în Pantelimon, lucrez cu copii și adulți de toate nivelurile, de la primii pași până la juniorii care joacă turnee.
+        Antrenez de patru ani. La Elite Tenis Club, în Pantelimon, lucrez cu copii și adulți de toate nivelurile, de la primii pași până la juniorii care joacă turnee.
       en: |-
         I started tennis as an athlete, at a sports high school. I then went to the National University of Physical Education and Sport in Bucharest, where I earned a bachelor's degree in sports performance, specialising in tennis. I am now doing a master's in management and marketing of sports organisations, also at UNEFS.
 
         I am a national tennis umpire certified by the Romanian Tennis Federation. Knowing the rules and how a tournament runs from the inside helps a lot when I prepare children for competitions. I have also completed teacher training, so I plan every lesson around one clear goal and build up the effort gradually, at each player's pace.
 
-        I have been coaching for four years. At Elite Tennis Club in Pantelimon I work with children and adults of every level, from first steps to juniors who play tournaments.
+        I have been coaching for four years. At Elite Tenis Club in Pantelimon I work with children and adults of every level, from first steps to juniors who play tournaments.
     rezultate_elevi:
       ro: "Câțiva dintre copiii pe care i-am pregătit au avut rezultate bune la nivel național și european, inclusiv titluri de campion al României."
       en: "Several of the children I have coached have done well nationally and in Europe, including Romanian champions."
@@ -84,12 +84,14 @@ contact:
   # Numărul de WhatsApp, dacă ai unul; gol = butoanele WhatsApp nu apar pe site.
   whatsapp: "[opțional: +40 7xx xxx xxx]"
   email: "elite_tenis_club@yahoo.ro"
-  instagram: "[url sau gol]"
-  facebook: "[url sau gol]"
+  # Profilurile oficiale ale clubului: apar în subsol și îi spun lui Google că site-ul și
+  # profilurile sunt același club.
+  instagram: "https://www.instagram.com/elite.tenis.club/"
+  facebook: "https://www.facebook.com/EliteTenisClub/"
   tiktok: "[url sau gol]"
 
 locatii:
-  - nume: "Elite Tennis Club"
+  - nume: "Elite Tenis Club"
     adresa: "Bulevardul Biruinței 19-21, Pantelimon, Ilfov"
     cod_postal: "077145"
     localitate: "Pantelimon"

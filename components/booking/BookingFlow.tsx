@@ -62,7 +62,7 @@ type Props = {
   initial?: BookingSelection;
   bookingMode: "CERERE" | "INSTANT";
   currency: string;
-  /** "Elite Tennis Club, Bulevardul Biruinței 19-21, Pantelimon", shown in the summary. */
+  /** "Elite Tenis Club, Bulevardul Biruinței 19-21, Pantelimon", shown in the summary. */
   place: string | null;
   /** The home page widget: choose, see the first free times, continue on /rezervare. */
   compact?: boolean;

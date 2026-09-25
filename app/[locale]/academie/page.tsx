@@ -7,7 +7,7 @@ import { getAcademyGroups, getFaqs, getPageHeader, getResults, getSettings } fro
 import { formatDate } from "@/lib/format";
 import { formatAmount } from "@/lib/pricing";
 import { localizedUrl, pageMetadata } from "@/lib/seo";
-import { breadcrumbLd, faqLd } from "@/lib/structured-data";
+import { breadcrumbLd, coursesLd, faqLd } from "@/lib/structured-data";
 import { PageHero, PageSection } from "@/components/pages/PageHero";
 import { JsonLd } from "@/components/pages/JsonLd";
 import { Markdown } from "@/components/site/Markdown";
@@ -52,6 +52,9 @@ export default async function AcademyPage({ params }: PageProps<"/[locale]/acade
             { name: header.title, url: localizedUrl("/academie", locale) },
           ]),
           ...(childFaqs.length > 0 ? [faqLd(childFaqs)] : []),
+          ...(groups.length > 0
+            ? [coursesLd(groups, localizedUrl("/academie", locale), settings.currency)]
+            : []),
         ]}
       />
       <PageHero
