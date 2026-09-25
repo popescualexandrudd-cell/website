@@ -1,18 +1,22 @@
 import { expect, test } from "@playwright/test";
 import { loginAsAdmin, newVisitor, run } from "./helpers";
 
-test("academia de juniori: un părinte cere o evaluare și cererea ajunge în admin", async ({
+test("grupele clubului: un părinte înscrie copilul la 2 ședințe gratuite și cererea ajunge în admin", async ({
   browser,
   page,
 }) => {
   const visitor = await newVisitor(browser);
   const parent = await visitor.newPage();
-  await parent.goto("/academie");
-  await expect(parent.getByRole("heading", { level: 1 })).toContainText(/Academia de juniori/i);
+  await parent.goto("/programe");
+  await expect(parent.locator("#oferta")).toContainText(
+    "Primele 2 ședințe sunt din partea noastră!",
+  );
+  // Mini tennis (red, orange and green ball), then juniors and seniors (yellow ball).
+  await expect(parent.locator("#grupe .stage")).toHaveCount(4);
   await expect(parent.locator(".group-card")).toHaveCount(4);
 
-  await parent.getByRole("link", { name: "Cere o evaluare" }).first().click();
-  const form = parent.locator("#evaluare form");
+  await parent.locator("#oferta").getByRole("link", { name: "Înscrie copilul" }).click();
+  const form = parent.locator("#inscriere form");
   // Sending it empty points at every missing field.
   await form.getByRole("button", { name: "Trimite cererea" }).click();
   await expect(form.getByText("Scrie prenumele copilului.")).toBeVisible();
@@ -35,6 +39,6 @@ test("academia de juniori: un părinte cere o evaluare și cererea ajunge în ad
   await page.goto("/admin/lista-asteptare");
   const row = page.locator(".admin-row", { hasText: childName });
   await expect(row).toBeVisible();
-  await expect(row).toContainText("evaluare juniori");
+  await expect(row).toContainText("înscriere copil");
   await expect(row).toContainText("7 ani");
 });

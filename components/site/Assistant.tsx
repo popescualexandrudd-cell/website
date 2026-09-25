@@ -80,7 +80,8 @@ export function Assistant({ locale, evaluationHref, bookingHref, privacyHref }: 
   useEffect(() => () => abortRef.current?.abort(), []);
 
   // "Ask us something": a small bubble after four seconds or once the visitor has scrolled a
-  // fifth of the page, never over an open window, and only once per visit.
+  // fifth of the page, never over an open window, and only once per visit. On a phone it waits
+  // until the visitor has scrolled past the first screen, so it never covers the page's buttons.
   useEffect(() => {
     if (teaserDone) return;
     const reveal = () => {
@@ -88,11 +89,13 @@ export function Assistant({ locale, evaluationHref, bookingHref, privacyHref }: 
       setTeaser(true);
       cleanup();
     };
+    const phone = window.matchMedia("(max-width: 767px)").matches;
     const onScroll = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
-      if (max > 0 && window.scrollY / max > 0.2) reveal();
+      if (phone ? window.scrollY > window.innerHeight : max > 0 && window.scrollY / max > 0.2)
+        reveal();
     };
-    const timer = window.setTimeout(reveal, 4000);
+    const timer = phone ? undefined : window.setTimeout(reveal, 4000);
     window.addEventListener("scroll", onScroll, { passive: true });
     function cleanup() {
       window.clearTimeout(timer);

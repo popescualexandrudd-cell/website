@@ -26,8 +26,8 @@ export default async function NewBookingPage() {
         <div>
           <h1 className="admin-title">Rezervare nouă</h1>
           <p>
-            Pentru rezervările primite la telefon sau pe WhatsApp. Suprapunerile cu alte lecții sunt
-            verificate automat.
+            Pentru rezervările primite la telefon sau pe WhatsApp. Suprapunerile cu alte
+            antrenamente sunt verificate automat.
           </p>
         </div>
       </div>

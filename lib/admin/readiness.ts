@@ -78,9 +78,9 @@ export async function siteReadiness(): Promise<ReadinessItem[]> {
       href: "/admin/continut/grupe-juniori",
     },
     {
-      label: "Tarifele lecțiilor",
+      label: "Tarifele antrenamentelor",
       done: lessons.length > 0 && lessonsWithoutRate === 0,
-      detail: `${lessonsWithoutRate} tipuri de lecții fără tarif pe oră`,
+      detail: `${lessonsWithoutRate} tipuri de antrenament fără tarif pe oră`,
       href: "/admin/continut/lectii",
     },
     {

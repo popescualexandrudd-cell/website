@@ -101,7 +101,7 @@ describe("campaign report", () => {
         campaign: "Înscrieri toamnă 2026",
       }),
     ).toBe(
-      "https://elitetenisclub.ro/programe?utm_source=facebook&utm_medium=paid_social&utm_campaign=inscrieri-toamna-2026#evaluare",
+      "https://elitetenisclub.ro/programe?utm_source=facebook&utm_medium=paid_social&utm_campaign=inscrieri-toamna-2026#inscriere",
     );
     expect(campaignUrl("https://x.ro/", { source: "a", medium: "b", campaign: "  " })).toBeNull();
   });

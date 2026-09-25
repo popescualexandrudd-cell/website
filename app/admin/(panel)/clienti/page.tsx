@@ -76,7 +76,7 @@ export default async function ClientsPage({ searchParams }: PageProps<"/admin/cl
                   {[c.phone, c.email].filter(Boolean).join(" · ") || "fără contact"} ·{" "}
                   {countLabel(c._count.bookings, "rezervare", "rezervări")}
                   {c.sessionsRemaining !== null
-                    ? ` · ${countLabel(c.sessionsRemaining, "lecție rămasă", "lecții rămase")} în pachet`
+                    ? ` · ${countLabel(c.sessionsRemaining, "antrenament rămas", "antrenamente rămase")} în pachet`
                     : ""}
                 </span>
               </Link>

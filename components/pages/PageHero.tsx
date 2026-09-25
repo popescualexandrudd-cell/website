@@ -1,9 +1,7 @@
 import type { ReactNode } from "react";
-import { getTranslations } from "next-intl/server";
 import type { ResolvedImage } from "@/lib/media-shared";
-import { getSettings, localizedSettings } from "@/lib/content";
-import { Picture } from "@/components/ui/Picture";
-import { AmbientVideo } from "@/components/ui/AmbientVideo";
+import { getSettings } from "@/lib/content";
+import { HeroBackdrop } from "./HeroBackdrop";
 import { TodoText } from "@/components/site/TodoText";
 import { Words } from "@/components/site/Words";
 
@@ -23,31 +21,11 @@ type Props = {
  * video, the page's photo takes its place; without either, the dark band alone.
  */
 export async function PageHero({ title, intro, image, imageAlt = "", children, eyebrow }: Props) {
-  const [row, t] = await Promise.all([getSettings(), getTranslations("home")]);
-  const settings = localizedSettings(row, "ro");
-  const video = settings.heroVideo;
-  const backdrop = video ?? image ?? settings.heroImage;
+  const row = await getSettings();
+  const media = Boolean(row.heroVideoId || image || row.heroImageId);
   return (
-    <header className={`page-hero tone-dark${backdrop ? "page-hero--media" : ""}`}>
-      {video ? (
-        <AmbientVideo
-          video={video}
-          label=""
-          pauseLabel={t("videoPause")}
-          playLabel={t("videoPlay")}
-          className="page-hero-backdrop"
-        />
-      ) : image || settings.heroImage ? (
-        <Picture
-          image={(image ?? settings.heroImage)!}
-          alt={image ? imageAlt : ""}
-          priority
-          sizes="100vw"
-          className="page-hero-backdrop"
-          imgClassName="page-hero-img"
-        />
-      ) : null}
-      {backdrop ? <div className="page-hero-shade" aria-hidden="true" /> : null}
+    <header className={`page-hero tone-dark${media ? "page-hero--media has-backdrop" : ""}`}>
+      {media ? <HeroBackdrop image={image} imageAlt={imageAlt} /> : null}
       <div className="page-hero-inner page-hero-inner--single">
         <div className="page-hero-copy">
           {eyebrow}

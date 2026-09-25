@@ -42,7 +42,7 @@ test("asistentul: se deschide, răspunde și e accesibil", async ({ browser }) =
     { name: "cookie_consent", value: "a0.m0", url: test.info().project.use.baseURL! },
   ]);
   const page = await context.newPage();
-  await page.goto("/academie");
+  await page.goto("/programe");
   const launcher = page.getByRole("button", { name: "Întrebări?" });
   await launcher.waitFor({ timeout: 5_000 }).catch(() => undefined);
   test.skip((await launcher.count()) === 0, "asistentul nu e configurat pe acest server");

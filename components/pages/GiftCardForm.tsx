@@ -34,7 +34,7 @@ export type GiftLesson = {
 const AMOUNTS = [150, 250, 500] as const;
 
 /**
- * "Give a tennis lesson": what the card holds (lessons of one type, or an amount), who it is for
+ * "Give a tennis session": what the card holds (lessons of one type, or an amount), who it is for
  * and the buyer's details. The price updates as the choice changes; payment happens at the club
  * or by bank transfer, so the form only sends a request.
  */

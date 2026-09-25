@@ -30,8 +30,8 @@ type Asset = {
         category: "GRUPE" | "TURNEE";
         caption: { ro: string; en: string };
         order: number;
-        /** Also the photo at the top of this page (when the page has none). */
-        pageHeader?: string;
+        /** Also the photo of these pages' headers (when a page has none). */
+        pageHeaders?: string[];
       };
 };
 
@@ -71,7 +71,7 @@ const ASSETS: Asset[] = [
       category: "TURNEE",
       caption: { ro: "Premierea unui turneu la club", en: "Prize-giving at a club tournament" },
       order: 0,
-      pageHeader: "palmares",
+      pageHeaders: ["palmares", "turnee"],
     },
   },
   {
@@ -86,6 +86,8 @@ const ASSETS: Asset[] = [
       category: "GRUPE",
       caption: { ro: "Copiii clubului, pe zgură", en: "The club's children, on clay" },
       order: 1,
+      // The venue on the home page and the facilities page show the courts and the hall.
+      pageHeaders: ["facilitati", "inchiriere", "programe", "echipa"],
     },
   },
   {
@@ -242,10 +244,10 @@ export async function syncClubAssets(db: PrismaClient): Promise<string[]> {
           order: asset.use.order,
         },
       });
-      if (asset.use.pageHeader)
+      if (asset.use.pageHeaders)
         await db.pageHeader.updateMany({
-          where: { key: asset.use.pageHeader, imageId: null },
-          data: { imageId: media.id },
+          where: { key: { in: asset.use.pageHeaders }, imageId: null },
+          data: { imageId: media.id, imageAlt: asset.alt },
         });
     }
     await markImported(db, asset.file);

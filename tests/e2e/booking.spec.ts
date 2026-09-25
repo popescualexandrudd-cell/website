@@ -4,7 +4,7 @@ import { fillBookingDetails, loginAsAdmin, newVisitor, run, waitForEmail } from 
 const SUBMIT = "Trimite rezervarea";
 const DONE = "Rezervarea a fost trimisă.";
 
-test("pașii se parcurg în ordine: program, lecție și durată, apoi orele libere", async ({
+test("pașii se parcurg în ordine: program, antrenament și durată, apoi orele libere", async ({
   browser,
 }) => {
   const context = await newVisitor(browser);
@@ -12,10 +12,12 @@ test("pașii se parcurg în ordine: program, lecție și durată, apoi orele lib
   await page.goto("/rezervare");
   const flow = page.locator(".booking-flow");
 
-  // Step 1: the three training programmes, and a clear message when none is chosen.
+  // Step 1: the programmes booked online (camps and team building are arranged by phone),
+  // and a clear message when none is chosen.
   await expect(flow.locator(".booking-option-name")).toHaveText([
     "Inițiere",
     "Competiție",
+    "Înaltă performanță",
     "Amatori",
   ]);
   await flow.getByRole("button", { name: "Continuă" }).click();
@@ -23,16 +25,14 @@ test("pașii se parcurg în ordine: program, lecție și durată, apoi orele lib
   await flow.getByLabel(/Amatori/).check();
   await flow.getByRole("button", { name: "Continuă" }).click();
 
-  // Step 2: the lesson types and the duration dropdown.
-  await expect(flow.getByRole("heading", { name: "Ce fel de lecție vrei?" })).toBeVisible();
-  await flow.getByLabel(/Lecție individuală/).check();
+  // Step 2: the kinds of session and the duration dropdown.
+  await expect(flow.getByRole("heading", { name: "Ce fel de antrenament vrei?" })).toBeVisible();
+  await flow.getByLabel(/Antrenament individual/).check();
   const duration = flow.getByLabel("Durata antrenamentului");
   await expect(duration.locator("option")).toHaveText([
     /60 de minute/,
     /90 de minute/,
     /120 de minute/,
-    /150 de minute/,
-    /180 de minute/,
   ]);
   await duration.selectOption("120");
   await flow.getByRole("button", { name: "Continuă" }).click();
@@ -48,7 +48,7 @@ test("pașii se parcurg în ordine: program, lecție și durată, apoi orele lib
   // Step 4 follows the click, with the choice summarised.
   await first.click();
   await expect(flow.getByRole("heading", { name: "Datele mele" })).toBeVisible();
-  await expect(flow.getByText(/Lecție individuală, 120 de minute/)).toBeVisible();
+  await expect(flow.getByText(/Antrenament individual, 120 de minute/)).toBeVisible();
   await flow.getByRole("button", { name: "Verifică și trimite" }).click();
   await expect(flow.getByText("Completează câmpurile marcate")).toBeVisible();
   await context.close();
@@ -61,15 +61,17 @@ test("widgetul de pe prima pagină duce direct la „Datele mele”", async ({ b
   const card = page.locator("#rezervare .booking-card");
   await card.scrollIntoViewIfNeeded();
   await card.getByLabel("Programul").selectOption({ label: "Inițiere" });
-  await card.getByLabel("Lecția").selectOption({ label: "Lecție în doi" });
+  await card
+    .getByLabel(/^Antrenamentul/)
+    .selectOption({ label: "Antrenament în 2" });
   await card.getByLabel("Durata antrenamentului").selectOption("90");
   const slot = card.locator(".slot").first();
   await expect(slot).toBeVisible();
   await slot.click();
-  await expect(page).toHaveURL(/\/rezervare\?.*tip=lectie-in-doi/);
+  await expect(page).toHaveURL(/\/rezervare\?.*tip=antrenament-in-2/);
   const flow = page.locator(".booking-flow");
   await expect(flow.getByRole("heading", { name: "Datele mele" })).toBeVisible();
-  await expect(flow.getByText(/Lecție în doi, 90 de minute/)).toBeVisible();
+  await expect(flow.getByText(/Antrenament în 2, 90 de minute/)).toBeVisible();
   await context.close();
 });
 
@@ -78,16 +80,16 @@ test.describe.serial("rezervare de la cap la coadă", () => {
   let code = "";
   let manageUrl = "";
 
-  test("clientul rezervă o lecție; el și antrenorul primesc emailul", async ({ browser }) => {
+  test("clientul rezervă un antrenament; el și antrenorul primesc emailul", async ({ browser }) => {
     const context = await newVisitor(browser);
     const page = await context.newPage();
-    await page.goto("/rezervare?program=initiere&tip=lectie-individuala&durata=90");
+    await page.goto("/rezervare?program=initiere&tip=antrenament-individual&durata=90");
     // The last interval shown is several days away, so it can still be cancelled free of charge.
     await page.locator(".slot").last().click();
     await fillBookingDetails(page, { name: "Client E2E", email });
     const review = page.locator(".booking-review");
     await expect(review).toContainText("Inițiere");
-    await expect(review).toContainText("Lecție individuală");
+    await expect(review).toContainText("Antrenament individual");
     await expect(review).toContainText("90 de minute");
     await page.getByRole("button", { name: SUBMIT }).click();
 
@@ -121,7 +123,10 @@ test.describe.serial("rezervare de la cap la coadă", () => {
     await page.getByRole("button", { name: "Confirmă rezervarea" }).click();
     await expect(page.getByText(/Rezervarea e confirmată/)).toBeVisible();
 
-    const message = await waitForEmail(email, new RegExp(`Lecția e confirmată \\(${code}\\)`));
+    const message = await waitForEmail(
+      email,
+      new RegExp(`Antrenamentul e confirmat \\(${code}\\)`),
+    );
     expect(message.Attachments).toBeGreaterThan(0);
     await context.close();
   });
@@ -142,7 +147,9 @@ test("două rezervări simultane pe același interval: doar una reușește", asy
   const [first, second] = await Promise.all([newVisitor(browser), newVisitor(browser)]);
   const pages = await Promise.all([first.newPage(), second.newPage()]);
   await Promise.all(
-    pages.map((page) => page.goto("/rezervare?program=amatori&tip=lectie-individuala&durata=60")),
+    pages.map((page) =>
+      page.goto("/rezervare?program=amatori&tip=antrenament-individual&durata=60"),
+    ),
   );
 
   // Both visitors pick the same (first free) interval.

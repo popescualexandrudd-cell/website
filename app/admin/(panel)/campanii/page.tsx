@@ -196,7 +196,7 @@ export default async function CampaignsPage({ searchParams }: PageProps<"/admin/
         <CampaignLinkBuilder
           pages={[
             { label: "Pagina principală", url: `${base}/` },
-            { label: "Academia de juniori", url: `${base}/academie` },
+            { label: "Grupele clubului", url: `${base}/programe#grupe` },
             {
               label: "Înscrierea copiilor (2 ședințe gratuite)",
               url: `${base}/programe#inscriere`,

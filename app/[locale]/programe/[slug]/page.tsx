@@ -15,6 +15,7 @@ import { isFilled } from "@/lib/i18n-content";
 import { localizedUrl, pageMetadata } from "@/lib/seo";
 import { breadcrumbLd, serviceLd } from "@/lib/structured-data";
 import { PageSection } from "@/components/pages/PageHero";
+import { HeroBackdrop } from "@/components/pages/HeroBackdrop";
 import { Breadcrumbs } from "@/components/pages/Breadcrumbs";
 import { JsonLd } from "@/components/pages/JsonLd";
 import { Picture } from "@/components/ui/Picture";
@@ -97,7 +98,8 @@ export default async function ProgramPage({ params }: Props) {
           ]),
         ]}
       />
-      <header className="grid-page program-hero tone-dark">
+      <header className="grid-page program-hero tone-dark has-backdrop">
+        <HeroBackdrop />
         <div className="program-hero-copy">
           <Breadcrumbs
             label={t("nav.programs")}

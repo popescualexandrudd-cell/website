@@ -73,9 +73,10 @@ describe("club identity", () => {
   });
 
   it("links section buttons only to known pages, with an optional anchor", () => {
-    expect(safeHref("/academie")).toBe("/academie");
-    expect(safeHref("/academie#evaluare")).toEqual({ pathname: "/academie", hash: "evaluare" });
-    expect(safeHref("/academie#<script>")).toBe("/academie");
+    expect(safeHref("/programe")).toBe("/programe");
+    expect(safeHref("/programe#inscriere")).toEqual({ pathname: "/programe", hash: "inscriere" });
+    expect(safeHref("/programe#<script>")).toBe("/programe");
+    expect(safeHref("/academie")).toBeNull();
     expect(safeHref("https://example.com")).toBeNull();
     expect(safeHref("/admin")).toBeNull();
   });

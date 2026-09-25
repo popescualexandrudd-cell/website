@@ -84,7 +84,7 @@ export async function eraseClient(clientId: string, now = new Date()): Promise<E
   if (upcoming > 0) {
     return {
       ok: false,
-      error: `Clientul are ${upcoming === 1 ? "o lecție viitoare activă" : `${upcoming} lecții viitoare active`}. Anulează-le mai întâi, apoi șterge datele.`,
+      error: `Clientul are ${upcoming === 1 ? "un antrenament viitor activ" : `${upcoming} antrenamente viitoare active`}. Anulează-le mai întâi, apoi șterge datele.`,
     };
   }
   return db.$transaction(async (tx) => {

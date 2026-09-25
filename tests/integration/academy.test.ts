@@ -27,17 +27,19 @@ afterAll(() => {
 });
 
 describe("club template content", () => {
-  it("seeds the club, its head coach and the junior academy's stages from config/club.yml", async () => {
+  it("seeds the club, its head coach and the groups' stages from config/club.yml", async () => {
     const settings = await db.siteSettings.findUniqueOrThrow({ where: { id: 1 } });
     expect(settings.colorBrand).toMatch(/^#[0-9a-f]{6}$/);
     const coaches = await getCoaches("ro");
     expect(coaches[0]?.isHead).toBe(true);
-    expect(coaches[0]?.certifications.length).toBeGreaterThan(0);
+    expect(coaches[0]?.name).toBe("Vlad Moșteanu");
+    expect(coaches.some((coach) => coach.certifications.length > 0)).toBe(true);
     const groups = await getAcademyGroups("ro");
     expect(groups.map((g) => g.stage)).toEqual(["ROSU", "PORTOCALIU", "VERDE", "GALBEN"]);
-    // Nothing about the club's schedule is invented: it stays visibly missing.
-    expect(groups[0]?.schedule).toContain("[DE COMPLETAT]");
+    // The schedule is agreed at sign-up and the fee shown as "from 240 lei": nothing invented.
+    expect(groups[0]?.schedule).toBeFalsy();
     expect(groups[0]?.monthlyFee).toBeNull();
+    expect(groups.at(-1)?.ageMax).toBeNull();
   });
 
   it("keeps a single head coach", async () => {

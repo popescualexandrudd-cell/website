@@ -6,8 +6,8 @@ import { parseAnswer, parseInline, safeLink } from "@/lib/assistant/render";
 const PATHS = {
   home: "/",
   programs: "/programe",
-  academy: "/academie",
-  evaluation: "/academie#evaluare",
+  academy: "/programe#grupe",
+  evaluation: "/programe#inscriere",
   waitlist: "/lista-asteptare",
   team: "/echipa",
   pricing: "/preturi",
@@ -134,7 +134,7 @@ describe("assistant knowledge", () => {
     expect(text).toContain("Anulare fără cost cu cel puțin 24 de ore înainte");
     expect(text).toContain("cu cel puțin 12 ore înainte și cel mult 60 de zile în avans");
     expect(text).toContain("Întrebare: Ce echipament îmi trebuie?");
-    expect(text).toContain("Cerere de evaluare pentru copii: /academie#evaluare");
+    expect(text).toContain("Înscriere la 2 ședințe gratuite pentru copii: /programe#inscriere");
   });
 
   it("marks what the club has not filled in instead of inventing it", () => {
@@ -200,12 +200,12 @@ describe("assistant requests", () => {
     const text = assistantInstructions({
       clubName: "Elite Tenis Club",
       locale: "ro",
-      evaluationPath: "/academie#evaluare",
+      evaluationPath: "/programe#inscriere",
       bookingPath: "/rezervare",
       contactPath: "/contact",
     });
     expect(text).toContain("Answer only from the club information");
-    expect(text).toContain("/academie#evaluare");
+    expect(text).toContain("/programe#inscriere");
     expect(text).toContain("Write in Romanian");
     expect(text).toContain("comma below");
   });
@@ -214,7 +214,7 @@ describe("assistant requests", () => {
 describe("assistant answers", () => {
   it("renders paragraphs, lists, bold and safe links only", () => {
     const blocks = parseAnswer(
-      "Avem **4 grupe**.\nVezi [academia](/academie).\n\n- roșie\n- verde\n\n[rău](javascript:void)",
+      "Avem **4 grupe**.\nVezi [grupele](/programe).\n\n- roșie\n- verde\n\n[rău](javascript:void)",
     );
     expect(blocks[0]).toEqual({
       kind: "p",
@@ -226,7 +226,7 @@ describe("assistant answers", () => {
         ],
         [
           { kind: "text", text: "Vezi " },
-          { kind: "link", text: "academia", href: "/academie", internal: true },
+          { kind: "link", text: "grupele", href: "/programe", internal: true },
           { kind: "text", text: "." },
         ],
       ],

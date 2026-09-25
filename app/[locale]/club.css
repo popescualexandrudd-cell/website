@@ -1345,7 +1345,7 @@
 .page-hero--media {
   display: grid;
   align-items: end;
-  min-height: min(70svh, 40rem);
+  min-height: min(52svh, 30rem);
   background: #0b0f0d;
 }
 .page-hero--media::before {
@@ -1659,4 +1659,53 @@
     transition: none;
     transform: none;
   }
+}
+
+/* Tables written in markdown (court rates): ruled rows, numbers aligned, readable on a phone. */
+.prose-ed table {
+  width: 100%;
+  margin-block: 1rem 1.25rem;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+}
+.prose-ed th,
+.prose-ed td {
+  padding: 0.6rem 0.75rem 0.6rem 0;
+  border-bottom: 1px solid var(--color-linie, rgb(18 32 20 / 0.12));
+  text-align: left;
+  vertical-align: top;
+}
+.prose-ed thead th {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.prose-ed td:not(:first-child),
+.prose-ed th:not(:first-child) {
+  text-align: right;
+  white-space: nowrap;
+}
+.prose-ed th:last-child,
+.prose-ed td:last-child {
+  padding-right: 0;
+}
+
+/* Any header with the club's video behind it: the video and shade fill it, the content sits on top. */
+.has-backdrop {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: #0b0f0d;
+}
+.has-backdrop::before {
+  display: none;
+}
+.has-backdrop > :not(.page-hero-backdrop, .page-hero-shade) {
+  position: relative;
+  z-index: 1;
+}
+.has-backdrop .page-hero-shade {
+  z-index: 0;
 }

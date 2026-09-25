@@ -45,9 +45,9 @@ beforeAll(async () => {
   initiereId = (await db.program.findUniqueOrThrow({ where: { slug: "initiere" } })).id;
   competitieId = (await db.program.findUniqueOrThrow({ where: { slug: "competitie" } })).id;
   const lesson = (slug: string) => db.lessonType.findUniqueOrThrow({ where: { slug } });
-  individualId = (await lesson("lectie-individuala")).id;
-  pairId = (await lesson("lectie-in-doi")).id;
-  groupId = (await lesson("lectie-de-grup")).id;
+  individualId = (await lesson("antrenament-individual")).id;
+  pairId = (await lesson("antrenament-in-2")).id;
+  groupId = (await lesson("antrenament-de-grup")).id;
 });
 
 beforeEach(async () => {

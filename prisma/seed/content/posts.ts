@@ -207,12 +207,12 @@ Legăm loviturile într-un punct: serviciu, retur, câteva schimburi. Învăță
 
 ## Cât de des
 
-O lecție pe săptămână aduce progres. Două lecții, sau o lecție plus o oră de joc cu un prieten, îl dublează. Cel mai mult ajută regularitatea: patru săptămâni la rând valorează mai mult decât opt lecții înghesuite într-o lună și apoi o pauză.
+Un antrenament pe săptămână aduce progres. Două antrenamente, sau un antrenament plus o oră de joc cu un prieten, îl dublează. Cel mai mult ajută regularitatea: patru săptămâni la rând valorează mai mult decât opt antrenamente înghesuite într-o lună și apoi o pauză.
 
 ## Ce te ajută să nu renunți
 
 - **Obiective mici.** Nu „să joc bine”, ci „zece forehanduri la rând peste fileu”.
-- **Un partener.** Cineva cu care să joci între lecții, la același nivel.
+- **Un partener.** Cineva cu care să joci între antrenamente, la același nivel.
 - **Răbdare cu umărul.** Serviciul vine ultimul. Forțat prea devreme, doare.
 - **Să-ți amintești de ce ai început.** Mișcare, aer liber, un joc în care te poți pierde o oră.
 
@@ -264,7 +264,7 @@ Tennis is not learned in one summer. But after three months you already know eno
       en: "Tennis for children: from what age and how it starts (red, orange, green ball)",
     },
     seoDescription: {
-      ro: "Vârsta potrivită pentru primele lecții de tenis, etapele pe culori de minge și semnele că un copil e pregătit. Ghid pentru părinți.",
+      ro: "Vârsta potrivită pentru primele antrenamente de tenis, etapele pe culori de minge și semnele că un copil e pregătit. Ghid pentru părinți.",
       en: "The right age for a first tennis lesson, the ball-colour stages and the signs a child is ready. A guide for parents.",
     },
     body: {
@@ -290,9 +290,9 @@ Vârstele sunt orientative. Trecerea la etapa următoare se face când copilul s
 
 Dacă nu sunteți siguri, o primă ședință de probă spune repede dacă e momentul sau dacă mai așteptați câteva luni.
 
-## Cum arată primele lecții
+## Cum arată primele antrenamente
 
-La 4–6 ani, o lecție e mai mult joc decât exercițiu: coordonare, echilibru, prins și aruncat, apoi primele lovituri cu mingea roșie. Copiii învață prin jocuri scurte, cu reguli simple, și pleacă de pe teren cu chef să revină. Racheta potrivită contează mult: una prea lungă îl obligă pe copil să lovească greșit.
+La 4–6 ani, un antrenament e mai mult joc decât exercițiu: coordonare, echilibru, prins și aruncat, apoi primele lovituri cu mingea roșie. Copiii învață prin jocuri scurte, cu reguli simple, și pleacă de pe teren cu chef să revină. Racheta potrivită contează mult: una prea lungă îl obligă pe copil să lovească greșit.
 
 ## La Clubul Tenis Elite
 

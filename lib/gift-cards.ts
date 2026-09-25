@@ -43,7 +43,7 @@ export type GiftCardValue = {
   amountRon: number | null;
 };
 
-/** "5 lecții · Lecție individuală, 60 de minute" or "Card valoric: 200 de lei". */
+/** "5 antrenamente · Antrenament individual, 60 de minute" or "Card valoric: 200 de lei". */
 export function describeGiftCard(card: GiftCardValue, locale: string): string {
   if (card.amountRon !== null) {
     return locale === "en"
@@ -51,7 +51,7 @@ export function describeGiftCard(card: GiftCardValue, locale: string): string {
       : `Card valoric: ${roCount(card.amountRon, "un leu", "lei")}`;
   }
   const lessons = card.lessons ?? 1;
-  const name = card.lessonName ?? (locale === "en" ? "Tennis lesson" : "Lecție de tenis");
+  const name = card.lessonName ?? (locale === "en" ? "Tennis session" : "Antrenament de tenis");
   const duration = card.durationMin
     ? locale === "en"
       ? `, ${card.durationMin} minutes`
@@ -59,8 +59,8 @@ export function describeGiftCard(card: GiftCardValue, locale: string): string {
     : "";
   const count =
     locale === "en"
-      ? `${lessons} ${lessons === 1 ? "lesson" : "lessons"}`
-      : roCount(lessons, "o lecție", "lecții");
+      ? `${lessons} ${lessons === 1 ? "session" : "sessions"}`
+      : roCount(lessons, "un antrenament", "antrenamente");
   return `${count} · ${name}${duration}`;
 }
 

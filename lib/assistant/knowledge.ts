@@ -109,8 +109,8 @@ const LABELS = {
     packages: "Pachete",
     sessions: "ședințe",
     validDays: "valabil {n} zile",
-    academy: "Academia de juniori",
-    evaluation: "Cererea de evaluare",
+    academy: "Grupele clubului (minitenis, juniori și seniori)",
+    evaluation: "Înscrierea copiilor la 2 ședințe gratuite",
     waitlist: "Lista de așteptare",
     stage: "Etapa",
     training: "Antrenamente",
@@ -144,8 +144,8 @@ const LABELS = {
     pageNames: {
       home: "Pagina principală",
       programs: "Programe",
-      academy: "Academia de juniori",
-      evaluation: "Cerere de evaluare pentru copii",
+      academy: "Grupele clubului (minitenis, juniori și seniori)",
+      evaluation: "Înscriere la 2 ședințe gratuite pentru copii",
       waitlist: "Lista de așteptare",
       team: "Echipa de antrenori",
       pricing: "Prețuri",
@@ -158,7 +158,7 @@ const LABELS = {
       rental: "Închiriere teren",
       tournaments: "Turnee",
       schools: "Tenis pentru școli și grădinițe",
-      giftCard: "Card cadou („Oferă o lecție de tenis”)",
+      giftCard: "Card cadou („Oferă un antrenament de tenis”)",
       league: "Liga amatorilor",
       partner: "Găsește partener de joc",
       honours: "Palmaresul clubului",
@@ -229,8 +229,8 @@ const LABELS = {
     packages: "Packages",
     sessions: "sessions",
     validDays: "valid for {n} days",
-    academy: "Junior academy",
-    evaluation: "Assessment request",
+    academy: "The club's groups (mini tennis, juniors and seniors)",
+    evaluation: "Children's sign-up for 2 free sessions",
     waitlist: "Waiting list",
     stage: "Stage",
     training: "Training",
@@ -264,8 +264,8 @@ const LABELS = {
     pageNames: {
       home: "Home page",
       programs: "Programmes",
-      academy: "Junior academy",
-      evaluation: "Assessment request for children",
+      academy: "The club's groups (mini tennis, juniors and seniors)",
+      evaluation: "Sign-up for 2 free sessions for children",
       waitlist: "Waiting list",
       team: "The coaching team",
       pricing: "Prices",
@@ -278,7 +278,7 @@ const LABELS = {
       rental: "Court hire",
       tournaments: "Tournaments",
       schools: "Tennis for schools and kindergartens",
-      giftCard: "Gift card (“Give a tennis lesson”)",
+      giftCard: "Gift card (“Give a tennis session”)",
       league: "Amateur league",
       partner: "Find a hitting partner",
       honours: "The club's honours",
@@ -354,7 +354,7 @@ function plain(text: string): string {
 
 /**
  * Everything the assistant may say about the club, as plain text in the page's language: contact,
- * venue, programmes, lessons and prices, the junior academy, the coaches, the booking rules, the
+ * venue, programmes, lessons and prices, the club's groups, the coaches, the booking rules, the
  * FAQ and the site's pages. Values the club has not filled in are marked as not published, so
  * the assistant says it does not know instead of guessing.
  */

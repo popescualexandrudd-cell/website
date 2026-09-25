@@ -53,8 +53,8 @@ export default async function AvailabilityPage() {
         <div>
           <h1 className="admin-title">Disponibilitate</h1>
           <p>
-            Orele în care clienții pot rezerva lecții (individuale, în doi, în trei, de grup sau
-            analiză biomecanică). Pauza dintre lecții ({settings.bufferMinutes} min), preavizul (
+            Orele în care clienții pot rezerva antrenamente (individuale, în 2, în 3 sau de grup).
+            Pauza dintre antrenamente ({settings.bufferMinutes} min), preavizul (
             {settings.minNoticeHours} h) și orizontul (
             {roCount(settings.horizonDays, "o zi", "zile")}) se schimbă din{" "}
             <Link href="/admin/setari" className="link">

@@ -212,13 +212,13 @@ export function businessLd(
       lessonOffers.length + groupOffers.length > 0
         ? {
             "@type": "OfferCatalog",
-            name: "Lecții de tenis și academia de juniori",
+            name: "Antrenamente de tenis și grupele clubului",
             itemListElement: [
               ...(lessonOffers.length > 0
                 ? [
                     {
                       "@type": "OfferCatalog",
-                      name: "Lecții de tenis",
+                      name: "Antrenamente de tenis",
                       itemListElement: lessonOffers,
                     },
                   ]
@@ -227,7 +227,7 @@ export function businessLd(
                 ? [
                     {
                       "@type": "OfferCatalog",
-                      name: "Academia de juniori",
+                      name: "Grupe de minitenis, juniori și seniori",
                       itemListElement: groupOffers,
                     },
                   ]
@@ -238,7 +238,7 @@ export function businessLd(
   });
 }
 
-/** The junior academy's groups as courses, for the academy page. */
+/** The club's groups as courses, for the programmes page. */
 export function coursesLd(groups: AcademyGroupView[], url: string, currency: string) {
   return {
     "@context": "https://schema.org",

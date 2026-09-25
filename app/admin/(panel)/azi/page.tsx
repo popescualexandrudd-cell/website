@@ -62,7 +62,7 @@ export default async function TodayPage({ searchParams }: PageProps<"/admin/azi"
 
       <OkNotice code={params.ok} messages={BOOKING_OK} />
       {bookings.length === 0 ? (
-        <p className="text-cerneala-2">Nicio lecție în această zi.</p>
+        <p className="text-cerneala-2">Niciun antrenament în această zi.</p>
       ) : null}
 
       <div className="admin-rows">

@@ -12,10 +12,12 @@ test.describe.serial("cardul cadou: comandă, activare, rezervare cu codul", () 
     const context = await newVisitor(browser);
     const page = await context.newPage();
     await page.goto("/card-cadou");
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Oferă o lecție de tenis");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Oferă un antrenament de tenis",
+    );
     const form = page.locator("#comanda form");
-    await form.getByRole("radio", { name: "5 lecții" }).check();
-    await expect(page.locator(".gift-card-value")).toContainText("5 lecții");
+    await form.getByRole("radio", { name: "5 antrenamente" }).check();
+    await expect(page.locator(".gift-card-value")).toContainText("5 antrenamente");
     await form.getByLabel("Pentru cine e cardul").fill(recipient);
     await form.getByLabel("Numele tău").fill(`Mihai ${run}`);
     await form.getByRole("textbox", { name: /^Telefon/ }).fill("0722 123 456");
@@ -53,7 +55,7 @@ test.describe.serial("cardul cadou: comandă, activare, rezervare cu codul", () 
     const flow = page.locator(".booking-flow");
     await flow.getByLabel(/Amatori/).check();
     await flow.getByRole("button", { name: "Continuă" }).click();
-    await flow.getByLabel(/Lecție individuală/).check();
+    await flow.getByLabel(/Antrenament individual/).check();
     await flow.getByRole("button", { name: "Continuă" }).click();
     await flow.locator(".slot").first().click();
     await expect(flow.getByLabel("Cod de card cadou (opțional)")).toHaveValue(code);

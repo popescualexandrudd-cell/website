@@ -48,7 +48,7 @@ export default async function WaitlistPage({ searchParams }: PageProps<"/admin/l
         <div>
           <h1 className="admin-title">Evaluări și listă de așteptare</h1>
           <p>
-            Cererile de evaluare pentru academia de juniori și cei care așteaptă un loc. Primii
+            Înscrierile copiilor la cele 2 ședințe gratuite și cei care așteaptă un loc. Primii
             înscriși sunt primii în listă.
           </p>
         </div>
@@ -80,7 +80,7 @@ export default async function WaitlistPage({ searchParams }: PageProps<"/admin/l
           {entries.map((e, index) => {
             const evaluation = e.kind === "EVALUARE";
             const text = evaluation
-              ? `Bună, ${e.name}! Vă scriem legat de evaluarea pentru academia de juniori${e.childFirstName ? ` (${e.childFirstName})` : ""}.`
+              ? `Bună, ${e.name}! Vă scriem legat de înscrierea la cele 2 ședințe gratuite${e.childFirstName ? ` (${e.childFirstName})` : ""}.`
               : `Bună, ${e.name}! Vă scriem legat de lista de așteptare${e.program ? ` pentru ${t(e.program.name, "ro")}` : ""}.`;
             const mail = mailLink(e.email);
             const tel = telLink(e.phone);
@@ -96,7 +96,7 @@ export default async function WaitlistPage({ searchParams }: PageProps<"/admin/l
                   </p>
                   <p className="admin-row-meta">
                     <span className="status">
-                      {evaluation ? "evaluare juniori" : "listă de așteptare"}
+                      {evaluation ? "înscriere copil" : "listă de așteptare"}
                     </span>{" "}
                     ·{" "}
                     {e.group

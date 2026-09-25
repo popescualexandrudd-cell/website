@@ -8,6 +8,7 @@ import { isFilled } from "@/lib/i18n-content";
 import { localizedUrl, pageMetadata } from "@/lib/seo";
 import { breadcrumbLd, personLd } from "@/lib/structured-data";
 import { PageSection } from "@/components/pages/PageHero";
+import { HeroBackdrop } from "@/components/pages/HeroBackdrop";
 import { Breadcrumbs } from "@/components/pages/Breadcrumbs";
 import { JsonLd } from "@/components/pages/JsonLd";
 import { Markdown } from "@/components/site/Markdown";
@@ -59,7 +60,8 @@ export default async function CoachPage({ params }: Props) {
           ]),
         ]}
       />
-      <header className="coach-hero tone-dark">
+      <header className="coach-hero tone-dark has-backdrop">
+        <HeroBackdrop />
         <div className="coach-hero-inner">
           <div className="coach-hero-copy">
             <Breadcrumbs
@@ -76,9 +78,11 @@ export default async function CoachPage({ params }: Props) {
             <h1 className="page-title">
               <TodoText value={coach.name} />
             </h1>
-            <p className="page-intro">
-              <TodoText value={coach.title} />
-            </p>
+            {coach.title && coach.title !== coach.role ? (
+              <p className="page-intro">
+                <TodoText value={coach.title} />
+              </p>
+            ) : null}
             {coach.summary ? (
               <p className="coach-hero-summary">
                 <TodoText value={coach.summary} />

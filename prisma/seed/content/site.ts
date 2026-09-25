@@ -209,18 +209,18 @@ export const pageHeaderContent: {
   },
   {
     key: "card-cadou",
-    title: { ro: "Oferă o lecție de tenis", en: "Give a tennis lesson" },
+    title: { ro: "Oferă un antrenament de tenis", en: "Give a tennis session" },
     intro: {
       ro: "Un card cadou pentru un antrenament, un pachet de antrenamente sau o sumă la alegere, la Clubul Tenis Elite. Pentru copii și adulți, începători sau jucători care vor să urce un nivel.",
       en: "A gift card for a session, a pack of sessions or an amount of your choice at Clubul Tenis Elite. For children and adults, beginners or players who want to move up a level.",
     },
     seoTitle: {
-      ro: "Card cadou tenis: oferă o lecție de tenis în Pantelimon",
+      ro: "Card cadou tenis: oferă un antrenament de tenis în Pantelimon",
       en: "Tennis gift card: give a tennis lesson in Pantelimon",
     },
     seoDescription: {
-      ro: "Oferă o lecție de tenis la Clubul Tenis Elite din Pantelimon: card cadou pentru un antrenament, un pachet sau o sumă, valabil un an, gata de tipărit.",
-      en: "Give a tennis lesson at Clubul Tenis Elite in Pantelimon: a gift card for a session, a pack or an amount, valid for a year, ready to print.",
+      ro: "Oferă un antrenament de tenis la Clubul Tenis Elite din Pantelimon: card cadou pentru un antrenament, un pachet sau o sumă, valabil un an, gata de tipărit.",
+      en: "Give a tennis session at Clubul Tenis Elite in Pantelimon: a gift card for a session, a pack or an amount, valid for a year, ready to print.",
     },
   },
   {

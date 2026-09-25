@@ -355,10 +355,10 @@ const lessonType: Resource = {
   key: "lectii",
   model: "lessonType",
   entity: "LessonType",
-  label: "Tipuri de lecții",
-  singular: "tipul de lecție",
-  addLabel: "Adaugă un tip de lecție",
-  newTitle: "Tip de lecție nou",
+  label: "Tipuri de antrenament",
+  singular: "tipul de antrenament",
+  addLabel: "Adaugă un tip de antrenament",
+  newTitle: "Tip de antrenament nou",
   description:
     "Individuală, în doi, în trei, de grup, analiză biomecanică: câte persoane, ce durate se pot alege la rezervare, tariful pe oră.",
   section: "Programe și prețuri",
@@ -394,7 +394,7 @@ const lessonType: Resource = {
   deleteBlocked: async (r) => {
     const bookings = await db.booking.count({ where: { lessonTypeId: String(r.id) } });
     return bookings > 0
-      ? `Tipul de lecție are ${countLabel(bookings, "rezervare", "rezervări")} în istoric și nu poate fi șters. Debifează „Activ” ca să nu mai apară pe site.`
+      ? `Tipul de antrenament are ${countLabel(bookings, "rezervare", "rezervări")} în istoric și nu poate fi șters. Debifează „Activ” ca să nu mai apară pe site.`
       : null;
   },
   fields: [
@@ -447,7 +447,7 @@ const lessonType: Resource = {
       kind: "decimal",
       name: "hourlyRate",
       label: "Tarif pe oră",
-      help: "Doar cifre, de exemplu 150. Prețul unei lecții se calculează din durată (90 min = 1,5 × tariful). Gol = „[DE COMPLETAT]” pe site.",
+      help: "Doar cifre, de exemplu 150. Prețul unui antrenament se calculează din durată (90 min = 1,5 × tariful). Gol = „[DE COMPLETAT]” pe site.",
       nullable: true,
       group: "Tarif",
     },
@@ -467,12 +467,12 @@ const academyGroup: Resource = {
   key: "grupe-juniori",
   model: "academyGroup",
   entity: "AcademyGroup",
-  label: "Grupele academiei de juniori",
+  label: "Grupele clubului",
   singular: "grupa",
   addLabel: "Adaugă o grupă",
   newTitle: "Grupă nouă",
   description: "Grupele pe vârste și etape: ce lucrează, când se antrenează, taxa lunară.",
-  section: "Academia de juniori",
+  section: "Grupe, rezultate și turnee",
   orderable: true,
   canCreate: true,
   canDelete: true,
@@ -618,8 +618,8 @@ const result: Resource = {
   addLabel: "Adaugă un rezultat",
   newTitle: "Rezultat nou",
   description:
-    "Rezultatele sportivilor academiei. Pentru minori: doar prenumele și inițiala, cu acordul scris al părinților.",
-  section: "Academia de juniori",
+    "Rezultatele sportivilor clubului. Pentru minori: doar prenumele și inițiala, cu acordul scris al părinților.",
+  section: "Grupe, rezultate și turnee",
   orderable: true,
   canCreate: true,
   canDelete: true,
@@ -716,7 +716,7 @@ const tournament: Resource = {
   newTitle: "Turneu nou",
   description:
     "Turneele jucate la club. Cu date apar la „Turnee care urmează”, cu linkul de înscriere; fără date, la „Turnee găzduite”.",
-  section: "Academia de juniori",
+  section: "Grupe, rezultate și turnee",
   orderable: true,
   canCreate: true,
   canDelete: true,
@@ -823,7 +823,7 @@ const giftCard: Resource = {
   addLabel: "Adaugă un card vândut la club",
   newTitle: "Card cadou nou",
   description:
-    "Cererile de pe site („Oferă o lecție de tenis”) și cardurile active. După plată alegi „Activ” și salvezi: cardul primește un cod, e valabil un an și pleacă automat pe email la cumpărător. Codul se folosește o singură dată, la rezervare; dacă rezervarea se anulează, cardul redevine activ.",
+    "Cererile de pe site („Oferă un antrenament de tenis”) și cardurile active. După plată alegi „Activ” și salvezi: cardul primește un cod, e valabil un an și pleacă automat pe email la cumpărător. Codul se folosește o singură dată, la rezervare; dacă rezervarea se anulează, cardul redevine activ.",
   section: "Carduri cadou și liga amatorilor",
   ownerOnly: true,
   canCreate: true,
@@ -848,7 +848,7 @@ const giftCard: Resource = {
   prepare: (data, before) => {
     const hasValue = typeof data.amountRon === "number" || typeof data.lessonTypeId === "string";
     if (!hasValue)
-      return "Alege lecția (cu durata și numărul de lecții) sau scrie valoarea cardului în lei.";
+      return "Alege antrenamentul (cu durata și numărul de antrenamente) sau scrie valoarea cardului în lei.";
     const now = new Date();
     if (!before) {
       // A card sold at the reception: the buyer's details are kept for the card only.
@@ -900,7 +900,7 @@ const giftCard: Resource = {
     {
       kind: "relation",
       name: "lessonTypeId",
-      label: "Lecția",
+      label: "Antrenamentul",
       source: "lessonType",
       nullable: true,
       group: "Ce oferă cardul",
@@ -908,7 +908,7 @@ const giftCard: Resource = {
     {
       kind: "int",
       name: "durationMin",
-      label: "Durata unei lecții (minute)",
+      label: "Durata unui antrenament (minute)",
       nullable: true,
       min: 15,
       max: 600,
@@ -917,7 +917,7 @@ const giftCard: Resource = {
     {
       kind: "int",
       name: "lessons",
-      label: "Numărul de lecții",
+      label: "Numărul de antrenamente",
       nullable: true,
       min: 1,
       max: 50,
@@ -927,7 +927,7 @@ const giftCard: Resource = {
       kind: "int",
       name: "amountRon",
       label: "Sau: valoarea în lei",
-      help: "Pentru un card valoric (lecții, teren sau magazin). Lasă lecția goală.",
+      help: "Pentru un card valoric (antrenamente, teren sau magazin). Lasă antrenamentul gol.",
       nullable: true,
       min: 10,
       max: 10000,
@@ -1283,7 +1283,7 @@ const pricing: Resource = {
   addLabel: "Adaugă un preț sau pachet",
   newTitle: "Preț nou",
   description:
-    "Pachete de lecții și alte tarife fixe. Tariful pe oră al fiecărei lecții se schimbă din „Tipuri de lecții”.",
+    "Pachete de antrenamente și alte tarife fixe. Tariful pe oră al fiecărui antrenament se schimbă din „Tipuri de antrenament”.",
   section: "Programe și prețuri",
   orderable: true,
   canCreate: true,
@@ -1305,7 +1305,7 @@ const pricing: Resource = {
     {
       kind: "relation",
       name: "lessonTypeId",
-      label: "Tipul de lecție (opțional)",
+      label: "Tipul de antrenament (opțional)",
       source: "lessonType",
       nullable: true,
       group: "Preț",
@@ -1327,11 +1327,11 @@ const pricing: Resource = {
       group: "Preț",
     },
     { kind: "enum", name: "unit", label: "Unitatea", options: PRICE_UNITS, group: "Preț" },
-    { kind: "bool", name: "isPackage", label: "Este un pachet de lecții", group: "Pachet" },
+    { kind: "bool", name: "isPackage", label: "Este un pachet de antrenamente", group: "Pachet" },
     {
       kind: "int",
       name: "sessions",
-      label: "Câte lecții conține",
+      label: "Câte antrenamente conține",
       nullable: true,
       min: 1,
       max: 200,
@@ -1572,7 +1572,7 @@ const coach: Resource = {
   singular: "antrenorul",
   addLabel: "Adaugă un antrenor",
   newTitle: "Antrenor nou",
-  description: "Antrenorii academiei: rol, parcurs, specializări, fotografie și video.",
+  description: "Antrenorii clubului: rol, parcurs, specializări, fotografie și video.",
   section: "Echipa",
   orderable: true,
   canCreate: true,
@@ -1614,7 +1614,7 @@ const coach: Resource = {
       kind: "i18n",
       name: "role",
       label: "Rolul în echipă",
-      help: "De exemplu: Antrenor principal, Antrenor academia de juniori, Preparator fizic.",
+      help: "De exemplu: Antrenor principal, Antrenor, Antrenoare, Preparator fizic.",
       required: true,
       maxLength: 80,
       group: "Profil",
@@ -1654,7 +1654,7 @@ const coach: Resource = {
     {
       kind: "bool",
       name: "isHead",
-      label: "Antrenorul principal (apare primul și vorbește pentru academie)",
+      label: "Antrenorul principal (apare primul pe pagina echipei)",
       group: "Profil",
     },
     {
@@ -1875,7 +1875,7 @@ const testimonial: Resource = {
       kind: "i18n",
       name: "role",
       label: "Descriere scurtă",
-      help: "De exemplu „elevă, 2 ani la lecții individuale”.",
+      help: "De exemplu „elevă, 2 ani la antrenamente individuale”.",
       maxLength: 120,
       group: "Recenzie",
     },
@@ -2213,7 +2213,7 @@ const settings: Resource = {
       kind: "i18n",
       name: "tagline",
       label: "Descrierea de sub nume",
-      help: "De exemplu „Academie de tenis”.",
+      help: "De exemplu „Club de tenis · Pantelimon”.",
       required: true,
       maxLength: 120,
       group: "Identitatea clubului",
@@ -2329,7 +2329,7 @@ const settings: Resource = {
       kind: "hours",
       name: "workingHours",
       label: "Programul clubului",
-      help: "Când e deschis clubul (și se pot închiria terenuri): apare în subsol, la contact și pe pagina de închiriere. Orele lecțiilor se stabilesc din Disponibilitate.",
+      help: "Când e deschis clubul (și se pot închiria terenuri): apare în subsol, la contact și pe pagina de închiriere. Orele antrenamentelor se stabilesc din Disponibilitate.",
       group: "Program de lucru",
     },
     {
@@ -2366,7 +2366,7 @@ const settings: Resource = {
       kind: "text",
       name: "googleReviewUrl",
       label: "Linkul „Scrie o recenzie”",
-      help: "Din Google Business Profile → „Cere recenzii”. Gol = linkul deschide clubul pe Google Maps. Îl folosesc site-ul, emailul de după prima lecție și codul QR.",
+      help: "Din Google Business Profile → „Cere recenzii”. Gol = linkul deschide clubul pe Google Maps. Îl folosesc site-ul, emailul de după primul antrenament și codul QR.",
       inputType: "url",
       nullable: true,
       maxLength: 300,
@@ -2419,7 +2419,7 @@ const settings: Resource = {
     {
       kind: "int",
       name: "bufferMinutes",
-      label: "Pauză între lecții (minute)",
+      label: "Pauză între antrenamente (minute)",
       min: 0,
       max: 120,
       required: true,
@@ -2438,7 +2438,7 @@ const settings: Resource = {
     {
       kind: "i18nText",
       name: "firstLessonText",
-      label: "Oferta pentru prima lecție",
+      label: "Oferta pentru copii (primele ședințe)",
       rows: 3,
       required: true,
       group: "Rezervări",
@@ -2507,13 +2507,13 @@ const settings: Resource = {
     {
       kind: "bool",
       name: "reviewInvitesEnabled",
-      label: "Invitație la recenzie după lecții",
+      label: "Invitație la recenzie după antrenamente",
       group: "Funcții",
     },
     {
       kind: "bool",
       name: "giftCardsEnabled",
-      label: "Carduri cadou („Oferă o lecție de tenis”)",
+      label: "Carduri cadou („Oferă un antrenament de tenis”)",
       group: "Funcții",
     },
     {

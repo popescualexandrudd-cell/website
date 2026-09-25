@@ -8,6 +8,7 @@ import { formatDate } from "@/lib/format";
 import { localizedUrl, pageMetadata } from "@/lib/seo";
 import { articleLd, breadcrumbLd } from "@/lib/structured-data";
 import { PageSection } from "@/components/pages/PageHero";
+import { HeroBackdrop } from "@/components/pages/HeroBackdrop";
 import { Breadcrumbs } from "@/components/pages/Breadcrumbs";
 import { JsonLd } from "@/components/pages/JsonLd";
 import { Markdown } from "@/components/site/Markdown";
@@ -55,7 +56,8 @@ export default async function TipPage({ params }: Props) {
           ]),
         ]}
       />
-      <header className="page-hero tone-dark">
+      <header className="page-hero tone-dark page-hero--media has-backdrop">
+        <HeroBackdrop />
         <div className="page-hero-inner page-hero-inner--single">
           <div className="page-hero-copy">
             <Breadcrumbs

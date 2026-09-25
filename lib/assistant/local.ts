@@ -259,6 +259,7 @@ function topics(ro: boolean): Topic[] {
       key: "camps",
       stems: [
         "tabar",
+        "taber",
         "vacant",
         "camp",
         "holiday",
@@ -339,11 +340,12 @@ export function localAnswer(question: string, club: LocalClub): string {
       bestFaq = { answer: faq.answer, points };
   }
 
-  const parts: string[] = [];
-  if (bestFaq && (ranked.length === 0 || bestFaq.points >= (ranked[0]?.points ?? 0))) {
-    parts.push(bestFaq.answer);
-  }
-  for (const { topic } of ranked.slice(0, bestFaq ? 1 : 2)) parts.push(topic.answer(club));
+  // The club's own FAQ answer wins when it fits at least as well as a topic; otherwise the one or
+  // two closest topics (a question about "the programme" can mean the hours or the courses).
+  const parts: string[] =
+    bestFaq && (ranked.length === 0 || bestFaq.points >= (ranked[0]?.points ?? 0))
+      ? [bestFaq.answer]
+      : ranked.slice(0, 2).map(({ topic }) => topic.answer(club));
 
   if (parts.length === 0) {
     return ro

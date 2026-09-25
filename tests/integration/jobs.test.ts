@@ -34,7 +34,7 @@ beforeEach(async () => {
   await db.$executeRawUnsafe(
     'TRUNCATE "EmailLog", "Booking", "Client", "ContactMessage" RESTART IDENTITY CASCADE',
   );
-  programId = (await db.program.findUniqueOrThrow({ where: { slug: "lectie-individuala" } })).id;
+  programId = (await db.program.findUniqueOrThrow({ where: { slug: "initiere" } })).id;
 });
 
 describe("background jobs", () => {

@@ -41,7 +41,7 @@ export default async function QrCodesPage() {
       ? [
           {
             key: "gift",
-            title: "Oferă o lecție de tenis",
+            title: "Oferă un antrenament de tenis",
             note: "Pagina cardurilor cadou.",
             url: urls.giftCards("ro"),
           },
@@ -74,7 +74,7 @@ export default async function QrCodesPage() {
           <p>
             De tipărit pentru recepție, terenuri și afișe (Ctrl+P sau „Tipărește” din browser).
             Recenziile de pe Google sunt primul lucru pe care îl citesc părinții care caută un club.
-            Invitația la recenzie pleacă și automat, pe email, după prima lecție efectuată (
+            Invitația la recenzie pleacă și automat, pe email, după primul antrenament efectuat (
             <Link href="/admin/setari">Setări → Funcții</Link>).
           </p>
         </div>

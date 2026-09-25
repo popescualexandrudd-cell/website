@@ -608,26 +608,20 @@ body:has(.hero) .site-header[data-scrolled="true"] {
 [data-stage="VERDE"] {
   --next: #d6e33f;
 }
-/* Vertical connector on phones: from under this ball down to the next one. */
+/* Vertical connector on phones: in the gap under this stage, down to the next ball. */
 .stage:not(:last-child)::after {
   content: "";
   position: absolute;
   left: 50%;
-  top: 3.3rem;
+  top: calc(100% + 0.35rem);
   width: 3px;
-  height: calc(100% - 0.6rem);
+  height: calc(2.75rem - 0.7rem);
   border-radius: 3px;
   background: linear-gradient(180deg, var(--ball), var(--next, var(--ball)));
-  -webkit-mask-image: linear-gradient(180deg, transparent, #000 25%, #000 75%, transparent);
-  mask-image: linear-gradient(180deg, transparent, #000 25%, #000 75%, transparent);
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
   transform: translateX(-50%);
-  opacity: 0.85;
-  z-index: -1;
-}
-.stage > :not(.stage-ball) {
-  position: relative;
-  padding-inline: 0.25rem;
-  background: var(--color-nisip-adanc);
+  opacity: 0.9;
 }
 @media (min-width: 900px) {
   .stage-bands {
@@ -653,9 +647,6 @@ body:has(.hero) .site-header[data-scrolled="true"] {
     grid-template-columns: repeat(var(--stages, 4), minmax(0, 1fr));
     gap: 1.75rem;
     margin-top: 2rem;
-  }
-  .stage > :not(.stage-ball) {
-    background: none;
   }
   /* Horizontal connector: from the right of this ball to the left of the next one. */
   .stage:not(:last-child)::after {

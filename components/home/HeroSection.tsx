@@ -65,7 +65,7 @@ export async function HeroSection({
           <div className="hero-shade" aria-hidden="true" />
         </div>
         <div className="hero-content">
-          {/* The label is part of the heading: "Academie de tenis · Pantelimon" is what people
+          {/* The label is part of the heading: "Club de tenis · Pantelimon" is what people
               search for, the slogan is what they remember. */}
           <h1 id={`${scene.key}-title`} className="hero-heading">
             <span className="hero-kicker">

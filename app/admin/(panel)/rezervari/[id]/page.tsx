@@ -54,7 +54,7 @@ export default async function BookingDetailPage({
   const rows: [string, string][] = [
     ["Cod", booking.code],
     ["Program", programName(booking)],
-    ["Lecția", booking.lessonType ? t(booking.lessonType.name, "ro") : "—"],
+    ["Antrenamentul", booking.lessonType ? t(booking.lessonType.name, "ro") : "—"],
     ["Durata", roCount(booking.durationMin, "un minut", "minute")],
     ["Când", when(booking.startsAt, booking.endsAt, tz)],
     ["Participanți", String(booking.participants)],

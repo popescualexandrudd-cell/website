@@ -31,13 +31,13 @@ describe("gift cards", () => {
   it("describes what a card holds, in Romanian grammar", () => {
     expect(
       describeGiftCard(
-        { lessonName: "Lecție individuală", lessons: 1, durationMin: 60, amountRon: null },
+        { lessonName: "Antrenament individual", lessons: 1, durationMin: 60, amountRon: null },
         "ro",
       ),
-    ).toBe("o lecție · Lecție individuală, 60 de minute");
+    ).toBe("un antrenament · Antrenament individual, 60 de minute");
     expect(
       describeGiftCard({ lessonName: null, lessons: 5, durationMin: 90, amountRon: null }, "ro"),
-    ).toBe("5 lecții · Lecție de tenis, 90 de minute");
+    ).toBe("5 antrenamente · Antrenament de tenis, 90 de minute");
     expect(
       describeGiftCard(
         { lessonName: null, lessons: null, durationMin: null, amountRon: 250 },
@@ -49,7 +49,7 @@ describe("gift cards", () => {
         { lessonName: "Private", lessons: 10, durationMin: 60, amountRon: null },
         "en",
       ),
-    ).toBe("10 lessons · Private, 60 minutes");
+    ).toBe("10 sessions · Private, 60 minutes");
   });
 
   it("prices lesson cards from the hourly rate, or leaves the price to the club", () => {

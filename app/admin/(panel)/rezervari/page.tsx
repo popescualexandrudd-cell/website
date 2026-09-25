@@ -156,7 +156,9 @@ export default async function BookingsPage({ searchParams }: PageProps<"/admin/r
       <div className="admin-page-head">
         <div>
           <h1 className="admin-title">Rezervări</h1>
-          <p>{!status && !from && !to && !q ? "Lecțiile de azi încolo." : `${total} rezultate`}</p>
+          <p>
+            {!status && !from && !to && !q ? "Antrenamentele de azi încolo." : `${total} rezultate`}
+          </p>
         </div>
         <div className="admin-row-actions">
           <Link href="/admin/rezervari/noua" className="btn btn-primary btn-small">

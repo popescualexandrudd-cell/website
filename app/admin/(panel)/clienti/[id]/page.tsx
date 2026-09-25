@@ -54,7 +54,7 @@ export default async function ClientPage({ params }: PageProps<"/admin/clienti/[
           <p>
             Client din {client.createdAt.toLocaleDateString("ro-RO", { timeZone: tz })} ·{" "}
             {countLabel(client.bookings.length, "rezervare", "rezervări")} ·{" "}
-            {countLabel(done, "lecție efectuată", "lecții efectuate")}
+            {countLabel(done, "antrenament efectuat", "antrenamente efectuate")}
           </p>
         </div>
         <div className="admin-row-actions">
@@ -82,7 +82,7 @@ export default async function ClientPage({ params }: PageProps<"/admin/clienti/[
           <p className="mb-3">
             Pachet activ: <strong className="font-medium">{t(client.activePlan.name, "ro")}</strong>
             {client.sessionsRemaining !== null
-              ? ` · ${countLabel(client.sessionsRemaining, "lecție rămasă", "lecții rămase")}`
+              ? ` · ${countLabel(client.sessionsRemaining, "antrenament rămas", "antrenamente rămase")}`
               : ""}
             {client.packageValidUntil
               ? ` · valabil până la ${client.packageValidUntil.toLocaleDateString("ro-RO", { timeZone: "UTC" })}`
@@ -95,7 +95,7 @@ export default async function ClientPage({ params }: PageProps<"/admin/clienti/[
           id={client.id}
           plans={plans.map((p) => ({
             id: p.id,
-            label: `${t(p.name, "ro")}${p.price !== null ? ` · ${formatPrice(p.price.toString(), p.currency, "ro")}` : ""}${p.sessions ? ` · ${p.sessions} lecții` : ""}`,
+            label: `${t(p.name, "ro")}${p.price !== null ? ` · ${formatPrice(p.price.toString(), p.currency, "ro")}` : ""}${p.sessions ? ` · ${p.sessions} antrenamente` : ""}`,
           }))}
         />
       </section>

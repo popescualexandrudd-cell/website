@@ -105,7 +105,9 @@ describe("the site's assistant", () => {
     const system = request.body.system as { text: string; cache_control: unknown }[];
     expect(system[0]?.cache_control).toEqual({ type: "ephemeral" });
     expect(system[0]?.text).toContain("Answer only from the club information");
-    expect(system[0]?.text).toContain("## Academia de juniori (/academie)");
+    expect(system[0]?.text).toContain(
+      "## Grupele clubului (minitenis, juniori și seniori) (/programe#grupe)",
+    );
     expect(system[0]?.text).not.toContain("[DE COMPLETAT]");
   });
 

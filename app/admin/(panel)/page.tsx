@@ -184,7 +184,7 @@ export default async function DashboardPage({ searchParams }: PageProps<"/admin"
             </Link>
             <Link href="/admin/rezervari?vedere=saptamana" className="admin-stat">
               <strong>{weekCount}</strong>
-              <span>lecții săptămâna aceasta</span>
+              <span>antrenamente săptămâna aceasta</span>
             </Link>
             <Link href="/admin/mesaje" className="admin-stat">
               <strong>{newMessages}</strong>
@@ -220,7 +220,7 @@ export default async function DashboardPage({ searchParams }: PageProps<"/admin"
           <section className="admin-section">
             <h2 className="admin-h2">Gradul de ocupare</h2>
             <p className="mb-3 text-note text-cerneala-2">
-              Ore de lecții individuale rezervate din orele deschise în disponibilitate.
+              Ore de antrenament individual rezervate din orele deschise în disponibilitate.
             </p>
             <div className="bar-chart">
               {months.map((month) => (

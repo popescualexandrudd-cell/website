@@ -6,7 +6,7 @@ test("închirierea: cererea de teren ajunge în inbox și pe email", async ({ br
   const page = await context.newPage();
   await page.goto("/inchiriere-teren");
   await expect(page.getByRole("heading", { level: 1 })).toContainText(/Închiriere/i);
-  await expect(page.locator("#program").getByText("08:00–01:00")).toBeVisible();
+  await expect(page.locator("#program").getByText("07:00–22:00")).toBeVisible();
 
   const form = page.locator("#cerere form");
   const name = `Jucător ${run}`;
@@ -50,7 +50,8 @@ test("turneele, școlile și povestea clubului", async ({ page }) => {
   await expect(page.locator("#poveste .story-step")).toHaveCount(5);
   await expect(page.locator("#piloni .pillar-card")).toHaveCount(4);
   await page.getByRole("radio", { name: "Pentru mine (adult)" }).check();
-  await page.getByRole("radio", { name: "Deloc", exact: true }).check();
-  await page.getByRole("radio", { name: "Mișcare și distracție" }).check();
+  // Adults are asked directly, with their own answers.
+  await page.getByRole("radio", { name: "Niciodată", exact: true }).check();
+  await page.getByRole("radio", { name: "Nu joc turnee: mișcare și plăcere" }).check();
   await expect(page.locator(".finder-result-title")).toHaveText(/Inițiere/i);
 });
