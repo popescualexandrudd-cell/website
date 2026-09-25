@@ -17,6 +17,7 @@ import { pageMetadata } from "@/lib/seo";
 import { PageHero, PageSection } from "@/components/pages/PageHero";
 import { BookingFlow, type BookingSelection } from "@/components/booking/BookingFlow";
 import { toBookableLessons, toBookablePrograms } from "@/components/booking/toBookable";
+import { normalizeGiftCode } from "@/lib/gift-cards";
 
 export async function generateMetadata({
   params,
@@ -67,6 +68,7 @@ export default async function BookingPage({
     durationMin,
     participants: Number.isInteger(participantsParam) ? participantsParam : null,
     slot: null,
+    giftCode: normalizeGiftCode(param(query.cod) ?? ""),
   };
   const start = param(query.ora);
   if (program && lesson && durationMin && start && !Number.isNaN(Date.parse(start))) {

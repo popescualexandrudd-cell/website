@@ -855,3 +855,488 @@
     transition: none;
   }
 }
+
+/* ─── Google rating ─────────────────────────────────────────────────────────── */
+
+.testimonials-rating {
+  max-width: 88rem;
+  margin: 3.5rem auto 0;
+  padding-inline: var(--page-margin);
+}
+.google-rating-score {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.75rem;
+}
+.google-rating-value {
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.google-stars {
+  display: inline-flex;
+  gap: 0.15rem;
+}
+.google-star {
+  width: 1.15rem;
+  height: 1.15rem;
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+  background: color-mix(in oklab, var(--color-cerneala) 18%, transparent);
+}
+.google-star-full {
+  background: #f4b400;
+}
+.google-star-half {
+  background: linear-gradient(
+    90deg,
+    #f4b400 50%,
+    color-mix(in oklab, var(--color-cerneala) 18%, transparent) 50%
+  );
+}
+.google-rating-text {
+  font-weight: 600;
+}
+.google-rating-cta {
+  margin-top: 0.5rem;
+}
+.google-rating-compact .google-rating-value {
+  font-size: 1.5rem;
+}
+.google-rating-compact .google-star {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+.google-rating-compact .google-rating-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.footer-rating {
+  display: inline-block;
+  margin-top: 1.25rem;
+  text-decoration: none;
+}
+.footer-rating:hover .google-rating-text {
+  text-decoration: underline;
+}
+
+/* ─── Gift cards ────────────────────────────────────────────────────────────── */
+
+.gift-form {
+  display: grid;
+  gap: 2.5rem;
+}
+@media (min-width: 1000px) {
+  .gift-form {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    align-items: start;
+  }
+  .gift-preview {
+    position: sticky;
+    top: 6.5rem;
+  }
+}
+.gift-form-fields {
+  display: grid;
+  gap: 1.75rem;
+}
+.gift-card-visual {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: 0.75rem;
+  aspect-ratio: 1.6;
+  align-content: space-between;
+  padding: 1.75rem;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 88% 12%, var(--color-galben) 0 3.2rem, transparent 3.3rem),
+    linear-gradient(135deg, var(--color-caramida) 0%, var(--color-caramida-adanc) 100%);
+  color: var(--color-crem);
+  box-shadow: 0 30px 60px -34px rgb(5 8 7 / 0.6);
+}
+.gift-card-kicker {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.gift-card-value {
+  max-width: 22ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+.gift-card-code {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.gift-preview-price {
+  margin-top: 1.25rem;
+  font-size: 1.1rem;
+}
+.gift-preview-note {
+  margin-top: 0.5rem;
+  color: var(--color-cerneala-2);
+  font-size: 0.95rem;
+}
+.gift-facts {
+  display: grid;
+  gap: 0.75rem;
+  padding-left: 1.2rem;
+  list-style: disc;
+}
+
+/* The card on its own page, and on paper. */
+.gift-view {
+  display: grid;
+  justify-items: center;
+  gap: 1.5rem;
+  padding-block: 7rem 4rem;
+}
+.gift-view-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.gift-view-state {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  background: var(--color-nisip-adanc);
+  font-weight: 600;
+}
+.gift-card-print {
+  display: grid;
+  gap: 1rem;
+  width: min(100%, 36rem);
+  padding: 2rem;
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 92% 8%, var(--color-galben) 0 3.5rem, transparent 3.6rem),
+    linear-gradient(135deg, var(--color-caramida) 0%, var(--color-caramida-adanc) 100%);
+  color: var(--color-crem);
+  box-shadow: 0 30px 60px -34px rgb(5 8 7 / 0.6);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.gift-card-print-head {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+.gift-card-print-head .brand-logo {
+  height: 3.5rem;
+}
+.gift-card-print-brand {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.gift-card-print-for {
+  margin-top: 0.75rem;
+  font-size: 1.1rem;
+}
+.gift-card-print-message {
+  font-style: italic;
+}
+.gift-card-print-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+.gift-card-print-label {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+.gift-card-print-how {
+  max-width: 30ch;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+}
+.gift-card-qr {
+  padding: 0.4rem;
+  border-radius: 10px;
+  background: white;
+}
+@media print {
+  .site-header,
+  .site-footer,
+  .no-print,
+  .mobile-bar,
+  .assistant,
+  .scroll-progress {
+    display: none !important;
+  }
+  .gift-view {
+    padding: 0;
+  }
+  .gift-card-print {
+    box-shadow: none;
+  }
+}
+
+/* ─── Amateur league ────────────────────────────────────────────────────────── */
+
+.league-tables {
+  display: grid;
+  gap: 2rem;
+}
+@media (min-width: 1000px) {
+  .league-tables {
+    grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+  }
+}
+.league-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-linie);
+  border-radius: 12px;
+  background: var(--color-nisip-deschis);
+}
+.league-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+.league-table caption {
+  padding: 1rem 1rem 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: left;
+  text-transform: uppercase;
+}
+.league-table th,
+.league-table td {
+  padding: 0.6rem 0.75rem;
+  border-top: 1px solid var(--color-linie);
+  text-align: left;
+}
+.league-table thead th {
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.league-table abbr {
+  text-decoration: none;
+}
+.league-table tbody tr:first-child {
+  background: color-mix(in oklab, var(--color-galben) 30%, transparent);
+}
+.league-lists {
+  display: grid;
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+@media (min-width: 900px) {
+  .league-lists {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.league-matches {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: 1rem;
+}
+.league-match {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 0.5rem 0.75rem;
+  align-items: baseline;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--color-linie);
+}
+.league-match > :nth-child(4) {
+  text-align: right;
+}
+.league-match-date {
+  color: var(--color-cerneala-2);
+  font-size: 0.85rem;
+}
+.league-match-score {
+  font-weight: 700;
+  white-space: nowrap;
+}
+.league-match-winner {
+  font-weight: 700;
+}
+.league-match-division {
+  grid-column: 2 / -1;
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+.league-rules {
+  max-width: 44rem;
+  margin-top: 2.5rem;
+}
+
+/* ─── Hitting partners ──────────────────────────────────────────────────────── */
+
+.partner-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+.partner-filter a {
+  text-decoration: none;
+  color: inherit;
+}
+.partner-filter a[aria-current="page"] span {
+  border-color: var(--color-caramida);
+  background: var(--color-caramida);
+  color: var(--color-crem);
+}
+.partner-cards {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 700px) {
+  .partner-cards {
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  }
+}
+.partner-card {
+  display: grid;
+  gap: 0.4rem;
+  align-content: start;
+  padding: 1.5rem;
+  border: 1px solid var(--color-linie);
+  border-radius: 12px;
+  background: var(--color-nisip-deschis);
+}
+.partner-card-name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.partner-card-meta,
+.partner-card-about {
+  font-size: 0.95rem;
+}
+
+/* ─── Honours ───────────────────────────────────────────────────────────────── */
+
+.honours-figures {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 700px) {
+  .honours-figures {
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  }
+}
+.honours-figures > div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.25rem;
+  padding: 1.5rem;
+  border-top: 4px solid var(--color-galben);
+  border-radius: 12px;
+  background: var(--color-nisip-deschis);
+}
+.honours-figures dd {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.honours-years {
+  display: grid;
+  gap: 2.5rem;
+}
+.honours-year-title {
+  margin-bottom: 1rem;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+}
+.honours-list {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 800px) {
+  .honours-list {
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  }
+}
+.honours-item {
+  padding: 1.25rem 1.5rem;
+  border-left: 4px solid var(--color-zgura);
+  border-radius: 10px;
+  background: var(--color-nisip-deschis);
+}
+.honours-item[data-level="INTERNATIONAL"] {
+  border-left-color: var(--color-galben);
+}
+.honours-placement {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.honours-athlete {
+  font-weight: 700;
+}
+.honours-event {
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+}
+.honours-photos {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 900px) {
+  .honours-photos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.honours-photo {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+.honours-photos figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+.honours-tournaments {
+  display: grid;
+  gap: 0.5rem;
+}
+.honours-tournament-name {
+  font-weight: 700;
+}
+.honours-cta {
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+  padding: 2rem;
+  border-radius: 16px;
+  background: var(--color-nisip-adanc);
+}
+
+.tournaments-band-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}

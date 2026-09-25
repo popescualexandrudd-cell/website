@@ -15,6 +15,7 @@ backups
 .env.*
 !.env.example
 *.log
+app/icon.png
 app/apple-icon.png
 public/icon-512.png
 public/email/minge.png

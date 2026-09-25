@@ -5,6 +5,8 @@ import { formatDate, formatTime, roCount, whatsappLink } from "../format";
 import { buildIcs } from "../ics";
 import { deriveToken, signPayload } from "../tokens";
 import { urls } from "../paths";
+import { googleReviewLink } from "../reviews";
+import { describeGiftCard } from "../gift-cards";
 import { queueEmail } from "./send";
 import {
   ClientBookingEmail,
@@ -264,26 +266,30 @@ export async function queueReviewInvite(bookingId: string): Promise<string[]> {
           href: urls.review(reviewToken(booking.id), booking.locale),
           label: s.review.button,
         },
+        // Reviews on Google are what new families read first.
+        secondary: { href: googleReviewLink(settings), label: s.review.google },
       }),
     }),
   ];
 }
 
 export async function queueCoachNotification(
-  kind: "contact" | "court" | "waitlist" | "evaluation" | "review",
+  kind: "contact" | "court" | "waitlist" | "evaluation" | "review" | "gift" | "player" | "partner",
   rows: [string, string][],
   name: string,
   replyTo?: string,
+  adminLink?: string,
 ): Promise<string[]> {
   const { settings, coachEmail, ornamentUrl } = await context();
   if (!coachEmail) return [];
   const c = coachStrings[kind];
   const link =
-    kind === "contact" || kind === "court"
+    adminLink ??
+    (kind === "contact" || kind === "court" || kind === "partner"
       ? urls.adminMessages()
       : kind === "waitlist" || kind === "evaluation"
         ? urls.adminWaitlist()
-        : urls.adminReviews();
+        : urls.adminReviews());
   return [
     await queueEmail({
       to: coachEmail,
@@ -349,6 +355,102 @@ export async function queueTestEmail(to: string): Promise<string[]> {
         title: s.title,
         paragraphs: [s.body],
         footer: "Trimis din panoul de administrare.",
+      }),
+    }),
+  ];
+}
+
+/** "We have your request": to the buyer of a gift card, right after the form. */
+export async function queueGiftRequestReceived(cardId: string): Promise<string[]> {
+  const card = await db.giftCard.findUniqueOrThrow({ where: { id: cardId } });
+  const { settings, coachEmail, ornamentUrl } = await context();
+  const l = lang(card.locale);
+  const s = strings[l].giftRequest;
+  return [
+    await queueEmail({
+      to: card.buyerEmail,
+      template: "gift-request",
+      subject: s.subject,
+      replyTo: coachEmail ?? undefined,
+      element: createElement(SimpleEmail, {
+        lang: l,
+        brand: settings.brandName,
+        ornamentUrl,
+        preview: s.preview,
+        title: s.title,
+        paragraphs: [strings[l].greeting(card.buyerName), s.body],
+      }),
+    }),
+  ];
+}
+
+/** The active card, with its code and the links to print it and to book with it. */
+export async function queueGiftCardEmail(cardId: string): Promise<string[]> {
+  const card = await db.giftCard.findUniqueOrThrow({
+    where: { id: cardId },
+    include: { lessonType: { select: { name: true } } },
+  });
+  if (!card.code) return [];
+  const { settings, coachEmail, ornamentUrl } = await context();
+  const l = lang(card.locale);
+  const s = strings[l].giftCard;
+  const value = describeGiftCard(
+    {
+      lessonName: card.lessonType ? t(card.lessonType.name, l) : null,
+      lessons: card.lessons,
+      durationMin: card.durationMin,
+      amountRon: card.amountRon,
+    },
+    l,
+  );
+  const rows: [string, string][] = [
+    [s.code, card.code],
+    [s.value, value],
+  ];
+  if (card.expiresAt) rows.push([s.until, formatDate(card.expiresAt, "UTC", l, "d MMMM yyyy")]);
+  return [
+    await queueEmail({
+      to: card.buyerEmail,
+      template: "gift-card",
+      subject: s.subject(card.recipientName),
+      replyTo: coachEmail ?? undefined,
+      element: createElement(SimpleEmail, {
+        lang: l,
+        brand: settings.brandName,
+        ornamentUrl,
+        preview: s.preview,
+        title: s.title,
+        paragraphs: [strings[l].greeting(card.buyerName), s.body],
+        rows,
+        button: { href: urls.giftCard(card.code, card.locale), label: s.open },
+        secondary: {
+          href: `${urls.booking(card.locale)}?cod=${encodeURIComponent(card.code)}`,
+          label: s.book,
+        },
+      }),
+    }),
+  ];
+}
+
+/** "We have your sign-up": to an amateur who joined the league or the partner list. */
+export async function queuePlayerReceived(playerId: string): Promise<string[]> {
+  const player = await db.amateurPlayer.findUniqueOrThrow({ where: { id: playerId } });
+  const { settings, coachEmail, ornamentUrl } = await context();
+  const l = lang(player.locale);
+  const s = strings[l].player;
+  return [
+    await queueEmail({
+      to: player.email,
+      template: "player-received",
+      subject: s.subject,
+      replyTo: coachEmail ?? undefined,
+      element: createElement(SimpleEmail, {
+        lang: l,
+        brand: settings.brandName,
+        ornamentUrl,
+        preview: s.preview,
+        title: s.title,
+        paragraphs: [strings[l].greeting(player.name), s.body],
       }),
     }),
   ];

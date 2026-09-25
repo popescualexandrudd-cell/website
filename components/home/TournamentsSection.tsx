@@ -5,6 +5,7 @@ import { TodoText } from "@/components/site/TodoText";
 import { Marquee } from "@/components/ui/Marquee";
 import { SectionHead } from "./SectionHead";
 import { SceneLink } from "./SceneLink";
+import { Link } from "@/i18n/navigation";
 
 /**
  * Tournaments at the club: the names run across the band, the next edition (if announced) is
@@ -47,7 +48,12 @@ export async function TournamentsSection({
             </span>
           </p>
         ) : null}
-        <SceneLink scene={scene} />
+        <div className="tournaments-band-actions">
+          <SceneLink scene={scene} />
+          <Link href="/palmares" className="btn btn-secondary">
+            {t("honoursLink")}
+          </Link>
+        </div>
       </div>
       {names.length > 0 ? <Marquee items={names} label={t("hostedTitle")} /> : null}
     </section>

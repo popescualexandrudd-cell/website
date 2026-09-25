@@ -41,13 +41,17 @@ export function sceneSeeds(vars: Vars): SceneSeed[] {
         ro: fill("Academie de tenis · {oras}"),
         en: fill("Tennis academy · {oras}"),
       },
-      title: { ro: "Învață. Joacă. Concurează.", en: "Learn. Play. Compete." },
+      // The club's own line, from the opening of elitetenisclub.ro.
+      title: {
+        ro: "Experiență de elită în lumea tenisului.",
+        en: "An elite experience in the world of tennis.",
+      },
       body: {
         ro: fill(
-          "Academia de tenis de la {locatie}, lângă București: copii de la 4 ani, juniori care joacă turnee și adulți care vor să învețe sau doar să joace, pe zgură, tot anul.",
+          "Școală de tenis pentru copii și adulți la {locatie}, lângă București: copii de la 4 ani, juniori care joacă turnee și adulți care vor să învețe sau doar să joace, pe zgură, tot anul.",
         ),
         en: fill(
-          "The tennis academy at {locatie}, next to Bucharest: children from the age of 4, juniors who play tournaments and adults who want to learn or simply play, on clay, all year round.",
+          "A tennis school for children and adults at {locatie}, next to Bucharest: children from the age of 4, juniors who play tournaments and adults who want to learn or simply play, on clay, all year round.",
         ),
       },
       ctaLabel: { ro: "Programează o lecție", en: "Book a lesson" },

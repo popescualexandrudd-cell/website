@@ -3,6 +3,8 @@ import { db } from "../db";
 import { t, TODO_MARK } from "../i18n-content";
 import { countLabel } from "./format";
 import { contrastWithWhite } from "../color";
+import { describeGiftCard, generateGiftCode, giftExpiry } from "../gift-cards";
+import { parseScore, slotLabel, winnerFromScore } from "../league";
 import {
   AUDIENCES,
   BALL_STAGES,
@@ -49,6 +51,10 @@ export type ModelName =
   | "academyGroup"
   | "result"
   | "tournament"
+  | "giftCard"
+  | "amateurPlayer"
+  | "leagueSeason"
+  | "leagueMatch"
   | "faq"
   | "testimonial"
   | "galleryItem"
@@ -147,6 +153,10 @@ const PAGE_PATHS: Record<string, string> = {
   inchiriere: "/inchiriere-teren",
   turnee: "/turnee",
   scoli: "/scoli-gradinite",
+  "card-cadou": "/card-cadou",
+  liga: "/liga-amatori",
+  partener: "/partener-de-joc",
+  palmares: "/palmares",
 };
 
 const LEGAL_PATHS: Record<string, string> = {
@@ -806,6 +816,475 @@ const tournament: Resource = {
       group: "Ediția",
     },
     { kind: "bool", name: "published", label: "Publicat", group: "Publicare" },
+  ],
+};
+
+// ─── Gift cards ──────────────────────────────────────────────────────────────
+
+const GIFT_STATUSES: Option[] = [
+  { value: "CERERE", label: "Cerere (neplătit)" },
+  { value: "ACTIVA", label: "Activ (plătit, se poate folosi)" },
+  { value: "FOLOSITA", label: "Folosit" },
+  { value: "ANULATA", label: "Anulat" },
+];
+
+const giftCard: Resource = {
+  key: "carduri-cadou",
+  model: "giftCard",
+  entity: "GiftCard",
+  label: "Carduri cadou",
+  singular: "cardul",
+  addLabel: "Adaugă un card vândut la club",
+  newTitle: "Card cadou nou",
+  description:
+    "Cererile de pe site („Oferă o lecție de tenis”) și cardurile active. După plată alegi „Activ” și salvezi: cardul primește un cod, e valabil un an și pleacă automat pe email la cumpărător. Codul se folosește o singură dată, la rezervare; dacă rezervarea se anulează, cardul redevine activ.",
+  section: "Carduri cadou și liga amatorilor",
+  ownerOnly: true,
+  canCreate: true,
+  canDelete: true,
+  listOrderBy: [{ createdAt: "desc" }],
+  title: (r) => `${str(r.recipientName)} · ${str(r.code) || "fără cod încă"}`,
+  meta: (r) =>
+    `${optionLabel(GIFT_STATUSES, str(r.status))} · ${describeGiftCard(
+      {
+        lessonName: null,
+        lessons: typeof r.lessons === "number" ? r.lessons : null,
+        durationMin: typeof r.durationMin === "number" ? r.durationMin : null,
+        amountRon: typeof r.amountRon === "number" ? r.amountRon : null,
+      },
+      "ro",
+    )} · de la ${str(r.buyerName)}`,
+  flags: (r) => (r.status === "CERERE" ? ["de confirmat plata"] : []),
+  deleteBlocked: async (r) =>
+    r.status === "ACTIVA" || r.status === "FOLOSITA"
+      ? "Un card plătit nu se șterge: alege „Anulat” dacă nu mai e valabil."
+      : null,
+  prepare: (data, before) => {
+    const hasValue = typeof data.amountRon === "number" || typeof data.lessonTypeId === "string";
+    if (!hasValue)
+      return "Alege lecția (cu durata și numărul de lecții) sau scrie valoarea cardului în lei.";
+    const now = new Date();
+    if (!before) {
+      // A card sold at the reception: the buyer's details are kept for the card only.
+      data.gdprConsent = true;
+      data.gdprConsentAt = now;
+      data.policyVersion = "admin";
+    }
+    if (data.status === "ACTIVA" || data.status === "FOLOSITA") {
+      if (!before?.code) data.code = generateGiftCode();
+      const activatedAt = before?.activatedAt instanceof Date ? before.activatedAt : now;
+      data.activatedAt = activatedAt;
+      if (!(data.expiresAt instanceof Date)) data.expiresAt = giftExpiry(activatedAt);
+    }
+    if (data.status === "FOLOSITA" && !(before?.redeemedAt instanceof Date)) data.redeemedAt = now;
+    if (data.status === "ACTIVA" && before?.status === "FOLOSITA") {
+      data.bookingId = null;
+      data.redeemedAt = null;
+    }
+    return null;
+  },
+  afterSave: async (saved) => {
+    if (saved.status !== "ACTIVA" || saved.sentAt || !saved.code) return;
+    if (!str(saved.buyerEmail).includes("@")) return;
+    const { queueGiftCardEmail } = await import("../email/messages");
+    const { deliverEmails } = await import("../email/send");
+    await deliverEmails(await queueGiftCardEmail(String(saved.id)));
+    await db.giftCard.update({ where: { id: String(saved.id) }, data: { sentAt: new Date() } });
+  },
+  publicPath: (r) => (r.code && r.status !== "CERERE" ? `/card-cadou/${str(r.code)}` : null),
+  fields: [
+    { kind: "enum", name: "status", label: "Starea", options: GIFT_STATUSES, group: "Stare" },
+    {
+      kind: "text",
+      name: "code",
+      label: "Codul",
+      help: "Se generează singur când cardul devine activ.",
+      nullable: true,
+      readOnly: true,
+      group: "Stare",
+    },
+    {
+      kind: "date",
+      name: "expiresAt",
+      label: "Valabil până la",
+      help: "Gol = un an de la activare.",
+      nullable: true,
+      group: "Stare",
+    },
+    {
+      kind: "relation",
+      name: "lessonTypeId",
+      label: "Lecția",
+      source: "lessonType",
+      nullable: true,
+      group: "Ce oferă cardul",
+    },
+    {
+      kind: "int",
+      name: "durationMin",
+      label: "Durata unei lecții (minute)",
+      nullable: true,
+      min: 15,
+      max: 600,
+      group: "Ce oferă cardul",
+    },
+    {
+      kind: "int",
+      name: "lessons",
+      label: "Numărul de lecții",
+      nullable: true,
+      min: 1,
+      max: 50,
+      group: "Ce oferă cardul",
+    },
+    {
+      kind: "int",
+      name: "amountRon",
+      label: "Sau: valoarea în lei",
+      help: "Pentru un card valoric (lecții, teren sau magazin). Lasă lecția goală.",
+      nullable: true,
+      min: 10,
+      max: 10000,
+      group: "Ce oferă cardul",
+    },
+    {
+      kind: "text",
+      name: "recipientName",
+      label: "Pentru cine e cardul",
+      required: true,
+      maxLength: 120,
+      group: "Ce oferă cardul",
+    },
+    {
+      kind: "textarea",
+      name: "message",
+      label: "Mesajul de pe card",
+      nullable: true,
+      rows: 3,
+      maxLength: 300,
+      group: "Ce oferă cardul",
+    },
+    {
+      kind: "text",
+      name: "buyerName",
+      label: "Numele",
+      required: true,
+      maxLength: 120,
+      group: "Cumpărătorul",
+    },
+    {
+      kind: "text",
+      name: "buyerEmail",
+      label: "Email (aici pleacă cardul)",
+      inputType: "email",
+      required: true,
+      maxLength: 200,
+      group: "Cumpărătorul",
+    },
+    {
+      kind: "text",
+      name: "buyerPhone",
+      label: "Telefon",
+      inputType: "tel",
+      required: true,
+      maxLength: 40,
+      group: "Cumpărătorul",
+    },
+    {
+      kind: "textarea",
+      name: "internalNotes",
+      label: "Note interne (plata, ridicarea)",
+      nullable: true,
+      rows: 3,
+      maxLength: 2000,
+      group: "Cumpărătorul",
+    },
+  ],
+};
+
+// ─── Amateur league & hitting partners ───────────────────────────────────────
+
+const PLAYER_LEVELS: Option[] = LEVELS.filter((level) => level.value !== "TOATE");
+
+const amateurPlayer: Resource = {
+  key: "jucatori",
+  model: "amateurPlayer",
+  entity: "AmateurPlayer",
+  label: "Jucători: ligă și parteneri",
+  singular: "jucătorul",
+  addLabel: "Adaugă un jucător",
+  newTitle: "Jucător nou",
+  description:
+    "Înscrierile de pe site pentru liga amatorilor și pentru „Găsește partener”. Verifică nivelul, apoi bifează „Aprobat”: abia atunci jucătorul poate primi meciuri în ligă și, dacă a cerut, apare pe lista publică (doar prenumele și inițiala, nivelul și când joacă). Cererile de tipul „vreau să joc cu…” ajung la Mesaje; tu îi pui în legătură.",
+  section: "Carduri cadou și liga amatorilor",
+  ownerOnly: true,
+  canCreate: true,
+  canDelete: true,
+  listOrderBy: [{ approved: "asc" }, { createdAt: "desc" }],
+  title: (r) => str(r.name),
+  meta: (r) =>
+    [
+      optionLabel(PLAYER_LEVELS, str(r.level)),
+      yes(r.inLeague) ? "liga" : null,
+      yes(r.lookingForPartner) ? "caută partener" : null,
+      Array.isArray(r.slots)
+        ? r.slots.map((slot) => slotLabel(String(slot), "ro")).join(", ")
+        : null,
+    ]
+      .filter(Boolean)
+      .join(" · "),
+  flags: (r) => [
+    ...(yes(r.approved) ? [] : ["de aprobat"]),
+    ...(yes(r.listed) && yes(r.approved) ? ["pe lista publică"] : []),
+  ],
+  deleteBlocked: async (r) => {
+    const matches = await db.leagueMatch.count({
+      where: { OR: [{ playerAId: String(r.id) }, { playerBId: String(r.id) }] },
+    });
+    return matches > 0
+      ? `Jucătorul are ${countLabel(matches, "meci", "meciuri")} în ligă. Debifează „Aprobat” în loc să-l ștergi.`
+      : null;
+  },
+  prepare: (data, before) => {
+    if (!before) {
+      data.gdprConsent = true;
+      data.gdprConsentAt = new Date();
+      data.policyVersion = "admin";
+    }
+    if (data.lookingForPartner !== true) data.listed = false;
+    return null;
+  },
+  publicPath: (r) => (yes(r.listed) && yes(r.approved) ? "/partener-de-joc" : null),
+  fields: [
+    {
+      kind: "text",
+      name: "name",
+      label: "Numele",
+      required: true,
+      maxLength: 120,
+      group: "Jucător",
+    },
+    {
+      kind: "text",
+      name: "email",
+      label: "Email",
+      inputType: "email",
+      required: true,
+      maxLength: 200,
+      group: "Jucător",
+    },
+    {
+      kind: "text",
+      name: "phone",
+      label: "Telefon",
+      inputType: "tel",
+      required: true,
+      maxLength: 40,
+      group: "Jucător",
+    },
+    { kind: "enum", name: "level", label: "Nivelul", options: PLAYER_LEVELS, group: "Jucător" },
+    {
+      kind: "textarea",
+      name: "about",
+      label: "Despre joc (apare pe lista publică)",
+      nullable: true,
+      rows: 2,
+      maxLength: 300,
+      group: "Jucător",
+    },
+    { kind: "bool", name: "singles", label: "Joacă simplu", group: "Ce vrea" },
+    { kind: "bool", name: "doubles", label: "Joacă dublu", group: "Ce vrea" },
+    { kind: "bool", name: "inLeague", label: "În liga amatorilor", group: "Ce vrea" },
+    { kind: "bool", name: "lookingForPartner", label: "Caută partener de joc", group: "Ce vrea" },
+    {
+      kind: "bool",
+      name: "listed",
+      label: "A cerut să apară pe lista publică de parteneri",
+      group: "Ce vrea",
+    },
+    { kind: "bool", name: "approved", label: "Aprobat de club", group: "Publicare" },
+    {
+      kind: "textarea",
+      name: "internalNotes",
+      label: "Note interne",
+      nullable: true,
+      rows: 3,
+      maxLength: 2000,
+      group: "Publicare",
+    },
+  ],
+};
+
+const leagueSeason: Resource = {
+  key: "sezoane-liga",
+  model: "leagueSeason",
+  entity: "LeagueSeason",
+  label: "Liga: sezoane",
+  singular: "sezonul",
+  addLabel: "Adaugă un sezon",
+  newTitle: "Sezon nou",
+  description:
+    "Sezoanele ligii amatorilor. Sezonul publicat cel mai de sus apare pe pagina ligii, cu clasamentul calculat din meciuri; sezoanele încheiate rămân în palmares, cu câștigătorii lor.",
+  section: "Carduri cadou și liga amatorilor",
+  ownerOnly: true,
+  orderable: true,
+  canCreate: true,
+  canDelete: true,
+  listOrderBy: [{ order: "asc" }, { createdAt: "desc" }],
+  title: (r) => ro(r.name),
+  meta: (r) =>
+    [
+      r.startsOn instanceof Date ? r.startsOn.toLocaleDateString("ro-RO") : null,
+      r.endsOn instanceof Date ? r.endsOn.toLocaleDateString("ro-RO") : null,
+    ]
+      .filter(Boolean)
+      .join(" – "),
+  flags: (r) => [
+    ...(yes(r.published) ? [] : ["nepublicat"]),
+    ...(yes(r.registrationOpen) ? ["înscrieri deschise"] : []),
+  ],
+  publicPath: () => "/liga-amatori",
+  prepare: (data) => {
+    if (
+      data.endsOn instanceof Date &&
+      data.startsOn instanceof Date &&
+      data.endsOn.getTime() < data.startsOn.getTime()
+    )
+      return "Data de sfârșit e înaintea datei de început.";
+    return null;
+  },
+  fields: [
+    {
+      kind: "i18n",
+      name: "name",
+      label: "Numele sezonului",
+      help: "De exemplu „Liga de toamnă 2026”.",
+      required: true,
+      maxLength: 120,
+      group: "Sezon",
+    },
+    { kind: "slug", name: "slug", label: "Adresa (slug)", required: true, group: "Sezon" },
+    { kind: "date", name: "startsOn", label: "Începe pe", nullable: true, group: "Sezon" },
+    { kind: "date", name: "endsOn", label: "Se termină pe", nullable: true, group: "Sezon" },
+    {
+      kind: "i18nMarkdown",
+      name: "rules",
+      label: "Formatul și regulile",
+      help: "Pe scurt: grupe, câte meciuri, cum se joacă un meci, cine rezervă terenul, taxa.",
+      nullable: true,
+      rows: 8,
+      group: "Sezon",
+    },
+    {
+      kind: "int",
+      name: "pointsWin",
+      label: "Puncte pentru victorie",
+      min: 0,
+      max: 10,
+      group: "Punctaj",
+    },
+    {
+      kind: "int",
+      name: "pointsLoss",
+      label: "Puncte pentru înfrângere",
+      help: "Înfrângerea prin neprezentare (walkover) nu aduce puncte.",
+      min: 0,
+      max: 10,
+      group: "Punctaj",
+    },
+    { kind: "bool", name: "registrationOpen", label: "Înscrieri deschise", group: "Publicare" },
+    { kind: "bool", name: "published", label: "Publicat", group: "Publicare" },
+  ],
+};
+
+const MATCH_WINNERS: Option[] = [
+  { value: "", label: "Din scor (sau nejucat încă)" },
+  { value: "A", label: "Jucătorul A" },
+  { value: "B", label: "Jucătorul B" },
+];
+
+const leagueMatch: Resource = {
+  key: "meciuri-liga",
+  model: "leagueMatch",
+  entity: "LeagueMatch",
+  label: "Liga: meciuri",
+  singular: "meciul",
+  addLabel: "Adaugă un meci",
+  newTitle: "Meci nou",
+  description:
+    "Meciurile ligii. Scorul se scrie din partea jucătorului A („6-4 3-6 10-7”); câștigătorul reiese din scor. Un meci fără scor apare la „Meciuri programate”.",
+  section: "Carduri cadou și liga amatorilor",
+  ownerOnly: true,
+  canCreate: true,
+  canDelete: true,
+  listOrderBy: [{ playedOn: "desc" }, { createdAt: "desc" }],
+  title: (r) => `${str(r.division) || "Meci"} · ${str(r.score) || "de jucat"}`,
+  meta: (r) => (r.playedOn instanceof Date ? r.playedOn.toLocaleDateString("ro-RO") : ""),
+  publicPath: () => "/liga-amatori",
+  prepare: (data) => {
+    if (data.playerAId === data.playerBId) return "Alege doi jucători diferiți.";
+    if (data.winner === "") data.winner = null;
+    const score = typeof data.score === "string" ? data.score : null;
+    if (score && !parseScore(score))
+      return "Scorul nu se poate citi. Scrie seturile cu spațiu între ele, de exemplu „6-4 3-6 10-7”.";
+    if (score && !data.winner && !winnerFromScore(parseScore(score)))
+      return "Din scor nu reiese un câștigător: alege-l mai jos.";
+    if (data.walkover === true && !data.winner)
+      return "La neprezentare (walkover) alege câștigătorul.";
+    return null;
+  },
+  fields: [
+    {
+      kind: "relation",
+      name: "seasonId",
+      label: "Sezonul",
+      source: "leagueSeason",
+      required: true,
+      group: "Meci",
+    },
+    {
+      kind: "text",
+      name: "division",
+      label: "Grupa",
+      help: "De exemplu „Grupa A” sau „Avansați”. Gol = un singur clasament.",
+      nullable: true,
+      maxLength: 60,
+      group: "Meci",
+    },
+    {
+      kind: "relation",
+      name: "playerAId",
+      label: "Jucătorul A",
+      source: "amateurPlayer",
+      required: true,
+      group: "Meci",
+    },
+    {
+      kind: "relation",
+      name: "playerBId",
+      label: "Jucătorul B",
+      source: "amateurPlayer",
+      required: true,
+      group: "Meci",
+    },
+    { kind: "date", name: "playedOn", label: "Data", nullable: true, group: "Rezultat" },
+    {
+      kind: "text",
+      name: "score",
+      label: "Scorul (din partea lui A)",
+      help: "„6-4 3-6 10-7”. Gol = meciul nu s-a jucat încă.",
+      nullable: true,
+      maxLength: 60,
+      group: "Rezultat",
+    },
+    {
+      kind: "enum",
+      name: "winner",
+      label: "Câștigătorul",
+      options: MATCH_WINNERS,
+      group: "Rezultat",
+    },
+    { kind: "bool", name: "walkover", label: "Câștigat prin neprezentare", group: "Rezultat" },
   ],
 };
 
@@ -1871,10 +2350,41 @@ const settings: Resource = {
       kind: "i18nMarkdown",
       name: "rentalRates",
       label: "Tarifele de închiriere",
-      help: "Pe scurt, de exemplu „- Teren acoperit, zi: … lei/oră”. Apar pe pagina „Închiriere teren”.",
+      help: "Tabel sau listă, de exemplu „- Teren acoperit, zi: … lei/oră”. Apar pe pagina „Închiriere teren”.",
       nullable: true,
-      rows: 5,
+      rows: 12,
       group: "Program de lucru",
+    },
+    {
+      kind: "float",
+      name: "googleRating",
+      label: "Nota pe Google",
+      help: "Nota medie din profilul clubului pe Google (de exemplu 4,5). Gol = nu apare.",
+      nullable: true,
+      min: 1,
+      max: 5,
+      step: 0.1,
+      group: "Recenzii Google",
+    },
+    {
+      kind: "int",
+      name: "googleReviewCount",
+      label: "Numărul de recenzii pe Google",
+      help: "Actualizează-l din când în când, de pe profilul clubului.",
+      nullable: true,
+      min: 0,
+      max: 1000000,
+      group: "Recenzii Google",
+    },
+    {
+      kind: "text",
+      name: "googleReviewUrl",
+      label: "Linkul „Scrie o recenzie”",
+      help: "Din Google Business Profile → „Cere recenzii”. Gol = linkul deschide clubul pe Google Maps. Îl folosesc site-ul, emailul de după prima lecție și codul QR.",
+      inputType: "url",
+      nullable: true,
+      maxLength: 300,
+      group: "Recenzii Google",
     },
     {
       kind: "int",
@@ -2016,6 +2526,18 @@ const settings: Resource = {
     },
     {
       kind: "bool",
+      name: "giftCardsEnabled",
+      label: "Carduri cadou („Oferă o lecție de tenis”)",
+      group: "Funcții",
+    },
+    {
+      kind: "bool",
+      name: "leagueEnabled",
+      label: "Liga amatorilor și „Găsește partener”",
+      group: "Funcții",
+    },
+    {
+      kind: "bool",
       name: "assistantEnabled",
       label: "Asistentul AI de pe site",
       help: "Răspunde vizitatorilor doar din conținutul publicat. Necesită și cheia ANTHROPIC_API_KEY în configurarea serverului.",
@@ -2058,6 +2580,10 @@ export const RESOURCES: Resource[] = [
   academyGroup,
   result,
   tournament,
+  giftCard,
+  amateurPlayer,
+  leagueSeason,
+  leagueMatch,
   program,
   lessonType,
   pricing,

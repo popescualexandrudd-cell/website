@@ -52,6 +52,24 @@ async function relationOptions(
     });
     out.academyGroup = groups.map(toOption);
   }
+  if (sources.has("amateurPlayer")) {
+    const players = await db.amateurPlayer.findMany({
+      where: { inLeague: true },
+      orderBy: { name: "asc" },
+      select: { id: true, name: true, approved: true },
+    });
+    out.amateurPlayer = players.map((p) => ({
+      value: p.id,
+      label: `${p.name}${p.approved ? "" : " (neaprobat)"}`,
+    }));
+  }
+  if (sources.has("leagueSeason")) {
+    const seasons = await db.leagueSeason.findMany({
+      orderBy: [{ order: "asc" }, { createdAt: "desc" }],
+      select: { id: true, name: true },
+    });
+    out.leagueSeason = seasons.map((s) => ({ value: s.id, label: t(s.name, "ro") }));
+  }
   return out;
 }
 
@@ -89,7 +107,14 @@ export async function loadEditorProps(resource: Resource, row: Row | null) {
 
 /** Sensible defaults for a new row (the database defaults, where the form needs to show them). */
 function defaultFor(name: string, kind: string): unknown {
-  if (kind === "bool") return ["active", "bookableOnline"].includes(name);
+  if (kind === "bool")
+    return ["active", "bookableOnline", "singles", "registrationOpen", "gdprConsent"].includes(
+      name,
+    );
+  if (name === "status") return "ACTIVA";
+  if (name === "level") return "INTERMEDIAR";
+  if (name === "pointsWin") return 3;
+  if (name === "pointsLoss") return 1;
   if (kind === "intList" && name === "durations") return [60, 90, 120, 150, 180];
   if (name === "minParticipants" || name === "maxParticipants") return 1;
   if (name === "currency") return "RON";

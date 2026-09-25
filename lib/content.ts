@@ -3,6 +3,7 @@ import { cache } from "react";
 import { draftMode } from "next/headers";
 import { db } from "./db";
 import { brandColors } from "./color";
+import { googleReviews } from "./reviews";
 import { resolveMedia, resolveVideo, type ResolvedImage, type ResolvedVideo } from "./media";
 import { t, tItems, tList } from "./i18n-content";
 import type { Locale } from "@/i18n/routing";
@@ -82,6 +83,9 @@ export function localizedSettings(s: SettingsView, locale: Locale) {
     currency: s.currency,
     foundedYear: s.foundedYear,
     rentalRates: s.rentalRates ? t(s.rentalRates, locale) : "",
+    googleReviews: googleReviews(s),
+    giftCardsEnabled: s.giftCardsEnabled,
+    leagueEnabled: s.leagueEnabled,
   };
 }
 export type LocalizedSettings = ReturnType<typeof localizedSettings>;

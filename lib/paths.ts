@@ -12,6 +12,9 @@ const LOCALIZED = {
   booking: { ro: "/rezervare", en: "/en/booking" },
   privacy: { ro: "/confidentialitate", en: "/en/privacy" },
   waitlist: { ro: "/lista-asteptare", en: "/en/waitlist" },
+  giftCard: { ro: "/card-cadou", en: "/en/gift-card" },
+  league: { ro: "/liga-amatori", en: "/en/amateur-league" },
+  partner: { ro: "/partener-de-joc", en: "/en/hitting-partner" },
 } as const;
 
 type Lang = "ro" | "en";
@@ -28,6 +31,13 @@ export const urls = {
   booking: (locale: string) => `${appUrl()}${LOCALIZED.booking[lang(locale)]}`,
   privacy: (locale: string) => `${appUrl()}${LOCALIZED.privacy[lang(locale)]}`,
   waitlist: (locale: string) => `${appUrl()}${LOCALIZED.waitlist[lang(locale)]}`,
+  giftCards: (locale: string) => `${appUrl()}${LOCALIZED.giftCard[lang(locale)]}`,
+  giftCard: (code: string, locale: string) =>
+    `${appUrl()}${LOCALIZED.giftCard[lang(locale)]}/${encodeURIComponent(code)}`,
+  league: (locale: string) => `${appUrl()}${LOCALIZED.league[lang(locale)]}`,
+  partner: (locale: string) => `${appUrl()}${LOCALIZED.partner[lang(locale)]}`,
+  adminGiftCard: (id: string) => `${appUrl()}/admin/continut/carduri-cadou/${id}`,
+  adminPlayer: (id: string) => `${appUrl()}/admin/continut/jucatori/${id}`,
   ics: (token: string) => `${appUrl()}/api/ics/${token}`,
   adminBooking: (id: string) => `${appUrl()}/admin/rezervari/${id}`,
   adminAction: (token: string) => `${appUrl()}/admin/actiune/${token}`,

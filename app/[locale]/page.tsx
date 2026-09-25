@@ -2,6 +2,7 @@ import "./home.css";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
+import { formatRating } from "@/lib/reviews";
 import {
   getAcademyGroups,
   getCoaches,
@@ -117,6 +118,17 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       ? [{ value: coveredCount, label: t("figCovered", { count: coveredCount }) }]
       : []),
     ...(years > 0 ? [{ value: years, label: t("figYears", { count: years }) }] : []),
+    ...(settings.googleReviews
+      ? [
+          {
+            value: settings.googleReviews.count,
+            label: t("figReviews", {
+              count: settings.googleReviews.count,
+              rating: formatRating(settings.googleReviews.rating, locale),
+            }),
+          },
+        ]
+      : []),
     ...(ages.length > 0 ? [{ value: Math.min(...ages), suffix: "+", label: t("figAge") }] : []),
     ...(programs.length > 0
       ? [{ value: programs.length, label: t("figPrograms", { count: programs.length }) }]
@@ -196,7 +208,13 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         return <LessonsSection key={scene.key} scene={scene} lessons={lessons} />;
       case "intrebari":
         return (
-          <QuestionsSection key={scene.key} scene={scene} faqs={faqs} testimonials={testimonials} />
+          <QuestionsSection
+            key={scene.key}
+            scene={scene}
+            faqs={faqs}
+            testimonials={testimonials}
+            reviews={settings.googleReviews}
+          />
         );
       case "rezervare":
         return (

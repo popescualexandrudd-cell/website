@@ -3,6 +3,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { db } from "@/lib/db";
 import { hashToken } from "@/lib/tokens";
+import { getSettings } from "@/lib/content";
+import { googleReviewLink } from "@/lib/reviews";
 import { PageSection } from "@/components/pages/PageHero";
 import { ReviewForm } from "@/components/pages/ReviewForm";
 
@@ -23,6 +25,7 @@ export default async function ReviewPage({ params }: PageProps<"/[locale]/recenz
           select: { id: true },
         })
       : null;
+  const googleUrl = googleReviewLink(await getSettings());
   const already = booking
     ? await db.testimonial.findFirst({ where: { bookingId: booking.id }, select: { id: true } })
     : null;
@@ -32,11 +35,18 @@ export default async function ReviewPage({ params }: PageProps<"/[locale]/recenz
       {!booking ? (
         <p className="page-intro">{t("invalid")}</p>
       ) : already ? (
-        <p className="page-intro">{t("already")}</p>
+        <>
+          <p className="page-intro">{t("already")}</p>
+          <p className="mt-6">
+            <a href={googleUrl} rel="noopener noreferrer" target="_blank" className="btn-secondary">
+              {t("google")}
+            </a>
+          </p>
+        </>
       ) : (
         <>
           <p className="page-intro mb-8">{t("intro")}</p>
-          <ReviewForm token={token} />
+          <ReviewForm token={token} googleUrl={googleUrl} />
         </>
       )}
     </PageSection>

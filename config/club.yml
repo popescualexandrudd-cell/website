@@ -17,8 +17,9 @@ club:
   # Culorile clubului, în formatul #rrggbb: baza închisă a designului și accentul (butoane,
   # linkuri). Se schimbă oricând din admin → Setări; accentul trebuie să rămână lizibil cu text alb.
   culori:
-    principala: "#0f3b2f"
-    accent: "#c24f1d"
+    # Verdele din logoul clubului: verde de pădure pentru bază, verde de frunză pentru accent.
+    principala: "#16351b"
+    accent: "#3a7a1e"
   # Anul în care s-a deschis clubul (din prezentarea publică a clubului: patru terenuri de zgură
   # în aer liber în 2013, apoi sala acoperită cu încă patru). Apare în povestea clubului.
   infiintat: 2013
@@ -257,15 +258,64 @@ servicii_incluse: # ce primesc elevii academiei, pe lângă teren
   - "[Pregătire și însoțire la turnee, dacă e cazul]"
 
 # Când e deschis clubul (închirierea terenurilor): apare pe site, în subsol și la contact.
+# Din afișul cu tarifele clubului: terenurile se închiriază de la 08:00 până la 01:00.
 program_club:
-  zilnic: "08:00–23:00"
+  zilnic: "08:00–01:00"
 
-# Închirierea terenurilor: tarifele pe oră, pe scurt (de exemplu „Teren acoperit, zi: … lei").
+# Închirierea terenurilor: tarifele pe oră, în Markdown (tabele, titluri, liste).
 # Gol sau „[ ]" = pe site scrie că tarifele se află la telefon.
+# Din afișul clubului; iarna fiecare oră costă cu 10 lei mai mult.
 inchiriere:
-  tarife: "[ ]"
+  tarife: |-
+    ### Tarife de vară (de la 1 mai)
 
-# Orele în care academia primește rezervări de lecții (clubul e deschis zilnic 08–23).
+    | Tarif pe oră | 08:00–17:00 | 17:00–01:00 |
+    | --- | --- | --- |
+    | Teren afară, luni–vineri | 40 lei | 80 lei |
+    | Teren în sală, luni–vineri | 50 lei | 80 lei |
+    | Weekend, tarif unic | 50 lei | 80 lei |
+
+    ### Tarife de iarnă
+
+    Iarna, fiecare oră costă cu 10 lei mai mult.
+
+    | Tarif pe oră | 08:00–17:00 | 17:00–01:00 |
+    | --- | --- | --- |
+    | Teren afară, luni–vineri | 50 lei | 90 lei |
+    | Teren în sală, luni–vineri | 60 lei | 90 lei |
+    | Weekend, tarif unic | 60 lei | 90 lei |
+
+    **Joacă mereu cu mingi noi.** Închiriezi în weekend cel puțin 2 ore de teren și primești cadou o cutie de 4 mingi Dunlop ATP Championship. Oferta e valabilă doar pentru rezervările făcute direct la club.
+  tarife_en: |-
+    ### Summer rates (from 1 May)
+
+    | Rate per hour | 08:00–17:00 | 17:00–01:00 |
+    | --- | --- | --- |
+    | Outdoor court, Monday–Friday | 40 lei | 80 lei |
+    | Indoor court, Monday–Friday | 50 lei | 80 lei |
+    | Weekend, single rate | 50 lei | 80 lei |
+
+    ### Winter rates
+
+    In winter every hour costs 10 lei more.
+
+    | Rate per hour | 08:00–17:00 | 17:00–01:00 |
+    | --- | --- | --- |
+    | Outdoor court, Monday–Friday | 50 lei | 90 lei |
+    | Indoor court, Monday–Friday | 60 lei | 90 lei |
+    | Weekend, single rate | 60 lei | 90 lei |
+
+    **Always play with new balls.** Book a court for at least 2 hours at the weekend and get a can of 4 Dunlop ATP Championship balls as a gift. Only for bookings made directly with the club.
+
+# Recenziile clubului pe Google (profilul de companie): nota medie și numărul de recenzii, copiate
+# de pe Google (se actualizează din admin → Setări), și linkul „Scrie o recenzie” din Google
+# Business Profile → „Cere recenzii” (gol = linkul duce la căutarea clubului pe Google Maps).
+recenzii_google:
+  nota: 4.5
+  numar: 257
+  link: "[url sau gol]"
+
+# Orele în care academia primește rezervări de lecții (clubul e deschis zilnic 08–01).
 program_lucru:
   luni_vineri: "08:00–21:00"
   sambata: "08:00–14:00"

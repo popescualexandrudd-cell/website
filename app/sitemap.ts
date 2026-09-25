@@ -20,6 +20,7 @@ const STATIC: { href: Href; priority: number; changeFrequency: "weekly" | "month
     { href: "/inchiriere-teren", priority: 0.9, changeFrequency: "monthly" },
     { href: "/turnee", priority: 0.7, changeFrequency: "weekly" },
     { href: "/scoli-gradinite", priority: 0.6, changeFrequency: "yearly" },
+    { href: "/palmares", priority: 0.6, changeFrequency: "monthly" },
     { href: "/intrebari", priority: 0.7, changeFrequency: "monthly" },
     { href: "/contact", priority: 0.7, changeFrequency: "yearly" },
     { href: "/galerie", priority: 0.5, changeFrequency: "monthly" },
@@ -35,7 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [settings, programs, posts, coaches] = await Promise.all([
     db.siteSettings.findUniqueOrThrow({
       where: { id: 1 },
-      select: { enEnabled: true, updatedAt: true },
+      select: { enEnabled: true, updatedAt: true, giftCardsEnabled: true, leagueEnabled: true },
     }),
     db.program.findMany({ where: { active: true }, select: { slug: true, updatedAt: true } }),
     db.post.findMany({
@@ -53,6 +54,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "weekly" | "monthly" | "yearly";
   }[] = [
     ...STATIC.map((s) => ({ ...s, lastModified: settings.updatedAt })),
+    ...(settings.giftCardsEnabled
+      ? [
+          {
+            href: "/card-cadou" as const,
+            priority: 0.7,
+            changeFrequency: "monthly" as const,
+            lastModified: settings.updatedAt,
+          },
+        ]
+      : []),
+    ...(settings.leagueEnabled
+      ? (["/liga-amatori", "/partener-de-joc"] as const).map((href) => ({
+          href,
+          priority: 0.6,
+          changeFrequency: "weekly" as const,
+          lastModified: settings.updatedAt,
+        }))
+      : []),
     ...programs.map((p) => ({
       href: { pathname: "/programe/[slug]" as const, params: { slug: p.slug } },
       lastModified: p.updatedAt,

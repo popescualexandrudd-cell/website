@@ -48,6 +48,10 @@ const PUBLIC = [
   "/inchiriere-teren",
   "/turnee",
   "/scoli-gradinite",
+  "/card-cadou",
+  "/liga-amatori",
+  "/partener-de-joc",
+  "/palmares",
   "/en",
 ];
 const ADMIN = [
@@ -55,6 +59,10 @@ const ADMIN = [
   "/admin/rezervari",
   "/admin/disponibilitate",
   "/admin/continut/programe",
+  "/admin/continut/carduri-cadou",
+  "/admin/continut/jucatori",
+  "/admin/continut/meciuri-liga",
+  "/admin/coduri-qr",
   "/admin/continut/lectii",
   "/admin/continut/antrenori",
   "/admin/continut/grupe-juniori",

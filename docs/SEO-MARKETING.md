@@ -158,7 +158,7 @@ Pe ce se sprijină (doar fapte publice ale clubului):
 - **turnee FRT** găzduite la club (Cupa Elite Tenis) și pregătire pentru competiții;
 - programul pentru **școli și grădinițe** (pe site-ul oficial: colaborare de peste 10 ani, de
   confirmat de club);
-- deschis zilnic, 08–23.
+- deschis zilnic, 08:00–01:00.
 
 **Trei mesaje**, folosite peste tot (site, Instagram, reclame, afișe):
 
@@ -188,7 +188,7 @@ reale ale clubului):
 | Valori/piloni clari (Nadal: efort, umilință, respect; Mouratoglou: metodă personalizată) | „Ce face diferența”: zgură tot anul, etapele ITF, turnee acasă, deschis de dimineața până seara |
 | Parcurs pe etape, vizual (ROGY: red, orange, green, yellow) | Academia de juniori pe etape, cu mingea colorată; „Găsește-ți programul” recomandă grupa în 3 întrebări |
 | Turnee și evenimente proprii, cu înscriere | Pagina „Turnee”, cu edițiile următoare (date, înscriere, Google Events) și turneele găzduite |
-| Facilitățile ca argument (terenuri, sală, fitness) | Pagina „Închiriere teren” cu terenurile acoperite, programul 08–23, dotările și cererea online |
+| Facilitățile ca argument (terenuri, sală, fitness) | Pagina „Închiriere teren” cu terenurile acoperite, programul 08–01, dotările și cererea online |
 | Programe pentru școli și parteneri | Pagina „Școli și grădinițe”, cu peste 10 ani de parteneriate |
 | Comunitate și social media | Secțiunea „Urmărește clubul” (Instagram, Facebook), fără scripturi de la rețele |
 | Contact imediat („Book now”, chat) | Asistentul AI cu „Întreabă-ne ceva”, butoane de rezervare și evaluare peste tot |
@@ -218,7 +218,7 @@ hartă cu trei cluburi. Ordinea depinde de profilul Google Business, nu de site.
 2. **Categoria principală**: „Club de tenis”. Secundare: „Teren de tenis”, „Instructor de
    tenis”, „Școală de sport” (alege dintre cele pe care le oferă Google).
 3. **Date identice cu site-ul**: numele „Elite Tenis Club”, adresa, telefonul, programul
-   08–23, site-ul, linkul de rezervare.
+   08–01, site-ul, linkul de rezervare.
 4. **Servicii**: lecții individuale, în doi, în trei, de grup, academia de juniori pe etape,
    analiză biomecanică, închiriere teren; fiecare cu o descriere scurtă.
 5. **Fotografii**: minimum 20 la început (terenurile acoperite și exterioare, vestiarele,
@@ -232,13 +232,29 @@ hartă cu trei cluburi. Ordinea depinde de profilul Google Business, nu de site.
 
 - cere recenzia în momentul potrivit: după o lecție bună, după un turneu, la finalul unei luni
   la academie;
-- un cod QR la recepție cu linkul direct spre recenzie;
-- site-ul trimite deja o invitație pe email după prima lecție (se poate adăuga și linkul spre
-  Google);
+- un cod QR la recepție cu linkul direct spre recenzie (gata de tipărit în admin → Coduri QR);
+- site-ul trimite o invitație pe email după prima lecție, cu butonul spre Google;
 - răspunde la **toate** recenziile, în 1–2 zile, și la cele negative, calm și concret;
 - nu oferi nimic în schimbul recenziilor (e interzis de Google).
 
-Ținta realistă: 30–50 de recenzii reale în primele luni, apoi un flux constant.
+Clubul are deja **257 de recenzii, nota 4,5**: site-ul le arată (prima pagină, subsol, asistentul),
+ca text simplu, fără cod Google și fără cookie-uri. Ținta: un flux constant de recenzii noi, ca nota
+să rămână peste 4,5, și răspuns la fiecare.
+
+Nota de pe Google **nu** e pusă în datele structurate (`AggregateRating`): Google nu arată stele
+pentru recenziile unei firme despre ea însăși și interzice copierea recenziilor de pe alte site-uri
+în marcaj. Stelele apar oricum în profilul de pe Maps, unde contează.
+
+## 6b. Funcții care aduc oameni noi
+
+- **Cardul cadou** („Oferă o lecție de tenis”): campanii înainte de 1 Iunie, Crăciun, Paște și
+  în sezonul zilelor de naștere; postare fixată pe Facebook și Instagram cu linkul spre
+  `/card-cadou`; codul QR pe afișul de la recepție. Conversia se măsoară ca `gift_request`.
+- **Liga amatorilor și „Găsește partener”**: adulții care au terminat lecțiile rămân la club și
+  închiriază terenuri. Clasamentul și campionii (în Palmares) sunt conținut nou în fiecare
+  săptămână, bun pentru social media. Conversiile: `player_signup`, `partner_request`.
+- **Palmaresul**: rezultatele juniorilor (cu acordul părinților) și turneele găzduite; e pagina
+  pe care o caută părinții care aleg între cluburi.
 
 ## 7. Citări și linkuri
 

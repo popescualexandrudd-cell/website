@@ -47,7 +47,14 @@ export type FieldDef = Base &
     | { kind: "hours" }
   );
 
-export type RelationSource = "program" | "lessonType" | "location" | "coach" | "academyGroup";
+export type RelationSource =
+  | "program"
+  | "lessonType"
+  | "location"
+  | "coach"
+  | "academyGroup"
+  | "amateurPlayer"
+  | "leagueSeason";
 export type MediaAccept = "image" | "video" | "any";
 
 export type I18nValue = { ro: string; en: string };

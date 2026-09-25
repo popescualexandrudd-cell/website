@@ -46,7 +46,11 @@
     "club": "The club",
     "rental": "Court hire",
     "tournaments": "Tournaments",
-    "schools": "Schools"
+    "schools": "Schools",
+    "honours": "Honours",
+    "league": "Amateur league",
+    "partner": "Find a partner",
+    "gift": "Gift card"
   },
   "footer": {
     "contact": "Contact",
@@ -104,7 +108,8 @@
     "clubAmenities": "Amenities",
     "galleryVideo": "Video",
     "figYears": "{count, plural, one {year} other {years}} of tennis at the club",
-    "rentalCta": "Hire a court"
+    "rentalCta": "Hire a court",
+    "figReviews": "{count, plural, one {Google review, rated {rating}} other {Google reviews, average {rating}}}"
   },
   "programs": {
     "groups": {
@@ -274,7 +279,13 @@
       "duration": "This length is no longer offered for this lesson. Choose another.",
       "experience": "Choose how much the child has played so far.",
       "date": "Choose a day, from today on.",
-      "time": "Choose the start time."
+      "time": "Choose the start time.",
+      "giftCode": "This code is not valid, has already been used or has expired. Check it or call us.",
+      "recipientName": "Write the name of the person receiving the card.",
+      "amount": "Choose an amount between 50 and 5,000 lei.",
+      "lessons": "Choose how many lessons the card holds.",
+      "level": "Choose your playing level.",
+      "wants": "Choose the league, a hitting partner or both."
     }
   },
   "booking": {
@@ -325,7 +336,9 @@
       "childFirstName": "Child's first name",
       "childAge": "Child's age (years)",
       "emailHint": "This is where you receive the confirmation and the cancellation link.",
-      "levelUnset": "Not sure, we will talk at the court"
+      "levelUnset": "Not sure, we will talk at the court",
+      "giftCode": "Gift card code (optional)",
+      "giftCodeHint": "If you received a gift card, enter the code on it, like CADOU-XXXX-XXXX."
     },
     "toConfirm": "Review and send",
     "confirmTitle": "Booking confirmation",
@@ -337,7 +350,8 @@
       "when": "Date and time",
       "where": "Place",
       "contact": "Contact",
-      "child": "Child"
+      "child": "Child",
+      "giftCode": "Gift card"
     },
     "childSummary": "{name}, {age} years old",
     "submitRequest": "Send the booking",
@@ -419,7 +433,8 @@
     "submit": "Send the review",
     "success": "Your review is sent. Thank you!",
     "invalid": "The link is no longer valid.",
-    "already": "You have already sent a review for this lesson. Thank you!"
+    "already": "You have already sent a review for this lesson. Thank you!",
+    "google": "Leave us a review on Google too"
   },
   "newsletter": {
     "confirmed": "Your subscription is confirmed. We will write when we have free places or news from the academy.",
@@ -623,7 +638,8 @@
     "playText": "The academy's coaches help you choose tournaments that suit your age and level, and at the home ones you play on the court where you train.",
     "contactCta": "Write to us",
     "evaluationCta": "Ask for an assessment",
-    "follow": "Follow the club"
+    "follow": "Follow the club",
+    "honoursLink": "The club's honours"
   },
   "schools": {
     "factsTitle": "Why us",
@@ -687,5 +703,176 @@
     "askQuestion": "My answers: {answers}. What would you recommend?",
     "restart": "Start again",
     "note": "This is a first suggestion; at the assessment or first lesson the coach confirms the group and the plan."
+  },
+  "reviews": {
+    "summary": "{rating} out of 5 on Google, from {count, plural, one {one review} other {# reviews}}",
+    "readOrWrite": "Read the reviews or write one on Google",
+    "count": "{count, plural, one {one Google review} other {# Google reviews}}"
+  },
+  "gift": {
+    "orderCta": "Order a gift card",
+    "callCta": "Call: {phone}",
+    "howTitle": "How it works",
+    "steps": {
+      "one": "Choose the gift",
+      "oneText": "One lesson, a pack of lessons or an amount of your choice, for a child or an adult.",
+      "two": "Pay at the club or by transfer",
+      "twoText": "We call you about payment. No online payment needed.",
+      "three": "Get the card by email",
+      "threeText": "The card has a unique code and is valid for {months} months. Print it or pass it on."
+    },
+    "formTitle": "Order the card",
+    "formIntro": "Tell us what you want to give and to whom. The price shows alongside; we confirm it by phone.",
+    "kind": "What you give",
+    "kindLesson": "Tennis lessons",
+    "kindValue": "An amount of your choice",
+    "lesson": "Lesson type",
+    "duration": "Length of one lesson",
+    "durationOption": "{minutes} minutes",
+    "lessons": "How many lessons",
+    "lessonsOption": "{count, plural, one {one lesson} other {# lessons}}",
+    "amount": "Card value",
+    "amountOption": "{amount} lei",
+    "amountCustom": "Or another amount (lei)",
+    "amountHint": "Between {min} and {max} lei. Can be used for lessons or court hire.",
+    "recipient": "Who the card is for",
+    "recipientHint": "The name appears on the card.",
+    "message": "Message on the card (optional)",
+    "messageHint": "For example: “Happy birthday! See you on court.”",
+    "buyer": "Your name",
+    "email": "Your email",
+    "emailHint": "We send the card here once paid.",
+    "submit": "Send the request",
+    "success": "Thank you! We have your request and will call you about payment. You will get the card by email.",
+    "cardKicker": "Gift card",
+    "chooseValue": "Choose what to give",
+    "price": "Price:",
+    "priceValue": "{price} lei",
+    "priceOnRequest": "We will tell you the price by phone.",
+    "paymentNote": "Pay at the club or by bank transfer. The card is valid for a year from payment.",
+    "goodToKnow": "Good to know",
+    "facts": {
+      "valid": "The card is valid for {months} months from payment; the exact date is on the card.",
+      "book": "Whoever receives the card books the lesson on the site with the code on the card, or by phone.",
+      "cancel": "If a lesson booked with the card is cancelled in time, the card becomes valid again.",
+      "occasions": "Perfect for birthdays, Christmas, Children's Day, teams and office colleagues."
+    },
+    "print": "Print the card",
+    "bookWithCard": "Book with this card",
+    "state": {
+      "used": "This card has already been used.",
+      "expired": "This card has expired.",
+      "inactive": "This card is no longer active."
+    },
+    "for": "For {name}",
+    "codeLabel": "Card code",
+    "validUntil": "Valid until {date}",
+    "howToUse": "Book on the site under “Booking” with this code, or call {phone}.",
+    "qrAlt": "QR code that opens the booking with this card"
+  },
+  "league": {
+    "signupCta": "Join the league",
+    "partnerCta": "Find a hitting partner",
+    "table": "Table",
+    "player": "Player",
+    "played": "P",
+    "playedLong": "Played",
+    "won": "W",
+    "wonLong": "Won",
+    "lost": "L",
+    "lostLong": "Lost",
+    "sets": "Sets",
+    "points": "Points",
+    "noResults": "The season has just started: the table appears after the first matches.",
+    "results": "Results",
+    "upcoming": "Scheduled matches",
+    "rules": "Format and rules",
+    "vs": "–",
+    "walkover": "w/o",
+    "aboutTitle": "How the league works",
+    "steps": {
+      "one": "Sign up",
+      "oneText": "Tell us your level and when you can play. We check the sign-up and call you.",
+      "two": "Get your group",
+      "twoText": "Players are split into groups by level, so matches are balanced.",
+      "three": "Play and climb the table",
+      "threeText": "Arrange the matches with your opponents, book the court with the club, and the results appear here."
+    },
+    "signupTitle": "Join the league",
+    "signupIntro": "For adults, from players who have played before to those who play tournaments. Only first names and initials appear on the site.",
+    "form": {
+      "wants": "What you are interested in",
+      "inLeague": "The amateur league",
+      "lookingForPartner": "A hitting partner",
+      "wantsError": "Choose the league, a hitting partner or both.",
+      "level": "Your level",
+      "levelHint": "Don't worry if you are not sure: we will check it together.",
+      "levels": {
+        "INCEPATOR": "Beginner",
+        "INTERMEDIAR": "Intermediate",
+        "AVANSAT": "Advanced",
+        "COMPETITIE": "Competitive"
+      },
+      "when": "When you can play",
+      "slots": {
+        "DIMINEATA": "Mornings",
+        "PRANZ": "Midday",
+        "SEARA": "Evenings",
+        "WEEKEND": "Weekends"
+      },
+      "format": "What you play",
+      "singles": "Singles",
+      "doubles": "Doubles",
+      "about": "A few words about your game (optional)",
+      "aboutHint": "Shown on the public list, if you choose that. No contact details.",
+      "listed": "I want to appear on the public partner list, with my first name, initial, level and when I play.",
+      "submit": "Send the sign-up",
+      "success": "Thank you! We have your sign-up and will contact you as soon as we can."
+    }
+  },
+  "partner": {
+    "signupCta": "Find me a partner",
+    "leagueCta": "Amateur league",
+    "howTitle": "How it works",
+    "steps": {
+      "one": "Sign up",
+      "oneText": "Tell us your level, when you play and whether you prefer singles or doubles.",
+      "two": "We put you in touch",
+      "twoText": "We suggest the right players or you pick someone from the list. Contact details stay with the club.",
+      "three": "Book the court and play",
+      "threeText": "Agree on a time and book the court with the club. That's it."
+    },
+    "boardTitle": "Players looking for a partner",
+    "filterLabel": "Filter by level",
+    "allLevels": "All levels",
+    "playWith": "I want to play with {name}",
+    "noneAtLevel": "Nobody is on the list at this level yet. Sign up and we will call you when someone joins.",
+    "empty": "The list fills up as players sign up. Sign up below and we will put you in touch with someone of your level.",
+    "requestTitle": "Ask for a partner from the list",
+    "requestIntro": "The request goes to the club; we send you the contact details once the player agrees.",
+    "request": {
+      "player": "Who you want to play with",
+      "message": "Message (optional)",
+      "messageHint": "For example: when you would like to play.",
+      "submit": "Send the request",
+      "success": "Thank you! We will talk to the player and get back to you as soon as we can."
+    },
+    "signupTitle": "Sign up for a hitting partner",
+    "signupIntro": "The list shows only your first name and initial, level and when you play, and only if you want."
+  },
+  "honours": {
+    "figYears": "years of tennis at the club",
+    "figTournaments": "{count, plural, one {tournament hosted} other {tournaments hosted}}",
+    "figResults": "{count, plural, one {result by our players} other {results by our players}}",
+    "resultsTitle": "Our players' results",
+    "resultsEmpty": "The academy players' results appear here as we publish them, for children only with their parents' consent.",
+    "photosTitle": "On the podium",
+    "tournamentsTitle": "Tournaments played at the club",
+    "tournamentsLink": "See the tournament calendar",
+    "leagueTitle": "Amateur league champions",
+    "champion": "Champion",
+    "ctaTitle": "The next podium could be your child's",
+    "ctaText": "It all starts with an assessment at the junior academy.",
+    "ctaButton": "Junior academy"
   }
 }

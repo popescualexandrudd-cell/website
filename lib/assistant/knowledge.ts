@@ -32,6 +32,10 @@ export type KnowledgePaths = {
   rental: string;
   tournaments: string;
   schools: string;
+  giftCard: string;
+  league: string;
+  partner: string;
+  honours: string;
 };
 
 export type KnowledgeInput = {
@@ -154,6 +158,10 @@ const LABELS = {
       rental: "Închiriere teren",
       tournaments: "Turnee",
       schools: "Tenis pentru școli și grădinițe",
+      giftCard: "Card cadou („Oferă o lecție de tenis”)",
+      league: "Liga amatorilor",
+      partner: "Găsește partener de joc",
+      honours: "Palmaresul clubului",
       privacy: "Confidențialitate",
     },
     audience: { COPII: "copii", JUNIORI: "juniori", ADULTI: "adulți", TOATE: "orice vârstă" },
@@ -270,6 +278,10 @@ const LABELS = {
       rental: "Court hire",
       tournaments: "Tournaments",
       schools: "Tennis for schools and kindergartens",
+      giftCard: "Gift card (“Give a tennis lesson”)",
+      league: "Amateur league",
+      partner: "Find a hitting partner",
+      honours: "The club's honours",
       privacy: "Privacy",
     },
     audience: { COPII: "children", JUNIORI: "juniors", ADULTI: "adults", TOATE: "all ages" },

@@ -278,6 +278,46 @@ personal de dezabonare, pentru serviciul de email pe care îl folosești (Brevo,
 - **Setări → Program de lucru**: programul clubului (apare în subsol, la contact și la închiriere)
   și tarifele de închiriere. Orele lecțiilor rămân în **Disponibilitate**.
 
+## Carduri cadou
+
+- Cererile de pe pagina **„Oferă o lecție de tenis”** ajung în **Carduri cadou** (meniu) și pe
+  email. Cumpărătorul primește automat „Am primit cererea”.
+- Suni cumpărătorul pentru plată (la club sau prin transfer). După plată, deschizi cardul, alegi
+  **Starea → Activ** și salvezi: cardul primește un cod (`CADOU-XXXX-XXXX`), e valabil un an și
+  pleacă automat pe email la cumpărător, cu linkul spre cardul de tipărit.
+- Un card vândut direct la recepție: **Adaugă un card vândut la club**, completezi și salvezi ca
+  „Activ”.
+- Cine primește cardul scrie codul la rezervare (sau vine cu linkul din email, care îl completează
+  singur). Cardul devine „Folosit” și rezervarea are nota „Plătită cu cardul cadou …”. Dacă
+  rezervarea se anulează (de client sau de tine), cardul redevine activ.
+- Un card plătit nu se șterge: alegi „Anulat”.
+
+## Liga amatorilor și partenerii de joc
+
+- Înscrierile de pe paginile **„Liga amatorilor”** și **„Găsește partener”** ajung în **Liga și
+  parteneri** (meniu) și pe email. Verifici nivelul (un telefon sau un joc de probă) și bifezi
+  **Aprobat de club**.
+- Pe lista publică de parteneri apar doar jucătorii aprobați care au cerut asta: prenumele,
+  inițiala, nivelul și când joacă. Cererile „Vreau să joc cu…” ajung în **Mesaje**, cu datele
+  ambilor jucători; tu îi pui în legătură.
+- **Conținut → Liga: sezoane**: creezi sezonul (nume, date, regulile) și îl publici. Primul
+  sezon publicat apare pe pagina ligii.
+- **Conținut → Liga: meciuri**: pentru fiecare meci alegi sezonul, grupa, cei doi jucători și,
+  după joc, scorul din partea jucătorului A („6-4 3-6 10-7”). Clasamentul se calculează singur:
+  3 puncte victoria, 1 punct înfrângerea, 0 la neprezentare (se schimbă din sezon), apoi
+  diferența de seturi și de game-uri. Un meci fără scor apare la „Meciuri programate”.
+- Când un sezon se încheie (data de sfârșit a trecut), câștigătorul fiecărei grupe apare în
+  **Palmares**.
+
+## Recenzii Google și coduri QR
+
+- **Setări → Recenzii Google**: nota și numărul de recenzii (le copiezi de pe Google din când în
+  când) și linkul „Scrie o recenzie” din Google Business Profile.
+- După prima lecție efectuată, clientul primește automat invitația la recenzie; emailul are și
+  butonul spre Google. Cine lasă o recenzie pe site vede apoi și invitația spre Google.
+- **Coduri QR** (meniu): coduri de tipărit pentru recepție și terenuri: recenzii Google, carduri
+  cadou, liga și partenerii de joc.
+
 ## Campanii
 
 Aici vezi **ce aduce fiecare reclamă și fiecare canal**: câte rezervări făcute pe site, cereri de

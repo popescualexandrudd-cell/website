@@ -3,21 +3,26 @@ import { Link } from "@/i18n/navigation";
 import type { FaqView, SceneView, TestimonialView } from "@/lib/content";
 import { Markdown } from "@/components/site/Markdown";
 import { TodoText } from "@/components/site/TodoText";
+import { GoogleRating } from "@/components/site/GoogleRating";
+import type { GoogleReviews } from "@/lib/reviews";
 import { SectionHead } from "./SectionHead";
 import { safeHref } from "./links";
 
 /**
  * Questions before the first lesson, as <details> accordions (keyboard, screen readers and no
- * JavaScript all work). Reviews appear only when real, consented ones are published.
+ * JavaScript all work). Reviews appear only when real, consented ones are published; the club's
+ * Google rating sits above them.
  */
 export async function QuestionsSection({
   scene,
   faqs,
   testimonials,
+  reviews,
 }: {
   scene: SceneView;
   faqs: FaqView[];
   testimonials: TestimonialView[];
+  reviews: GoogleReviews | null;
 }) {
   const t = await getTranslations("home");
   const href = safeHref(scene.ctaHref) ?? "/intrebari";
@@ -48,6 +53,11 @@ export async function QuestionsSection({
           ))}
         </div>
       </div>
+      {reviews ? (
+        <div className="testimonials-rating">
+          <GoogleRating reviews={reviews} />
+        </div>
+      ) : null}
       {testimonials.length > 0 ? (
         <section className="testimonials" aria-label={t("testimonialsLabel")}>
           {testimonials.map((item) => (

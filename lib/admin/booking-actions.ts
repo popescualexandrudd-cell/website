@@ -3,6 +3,7 @@ import { db } from "../db";
 import { audit } from "../audit";
 import { deliverEmails } from "../email/send";
 import { queueCancellationEmails, queueConfirmationEmail } from "../email/messages";
+import { releaseGiftCard } from "../gift-cards-server";
 import type { BookingStatus } from "../generated/prisma/client";
 
 export type BookingTransition = "confirm" | "decline" | "cancel" | "done" | "noshow" | "reopen";
@@ -58,6 +59,9 @@ export async function transitionBooking(
   });
   if (updated.count === 0)
     return { ok: false, error: "Rezervarea tocmai a fost modificată. Reîncarcă pagina." };
+
+  // A declined or cancelled lesson gives back the gift card that paid for it.
+  if (action === "decline" || action === "cancel") await releaseGiftCard(bookingId);
 
   // A completed lesson uses one session from the client's active package.
   if (action === "done" && booking.clientId) {

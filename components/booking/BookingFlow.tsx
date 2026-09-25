@@ -55,6 +55,8 @@ export type BookingSelection = {
   durationMin?: number | null;
   participants?: number | null;
   slot?: ChosenSlot | null;
+  /** A gift card code from the card's email (?cod=…). */
+  giftCode?: string | null;
 };
 
 type Props = {
@@ -83,6 +85,7 @@ type Details = {
   childFirstName: string;
   childAge: string;
   message: string;
+  giftCode: string;
 };
 
 const EMPTY_DETAILS: Details = {
@@ -94,9 +97,18 @@ const EMPTY_DETAILS: Details = {
   childFirstName: "",
   childAge: "",
   message: "",
+  giftCode: "",
 };
 
-const DETAIL_FIELDS = new Set(["name", "email", "phone", "childFirstName", "childAge", "message"]);
+const DETAIL_FIELDS = new Set([
+  "name",
+  "email",
+  "phone",
+  "childFirstName",
+  "childAge",
+  "message",
+  "giftCode",
+]);
 const RETRY_ERRORS = new Set(["conflict", "unavailable"]);
 const COMPACT_SLOTS = 8;
 const LEVELS = ["INCEPATOR", "INTERMEDIAR", "AVANSAT", "COMPETITIE"] as const;
@@ -191,7 +203,10 @@ function FullFlow({
     initial?.participants ?? null,
   );
   const [slot, setSlot] = useState<ChosenSlot | null>(initial?.slot ?? null);
-  const [details, setDetails] = useState<Details>(EMPTY_DETAILS);
+  const [details, setDetails] = useState<Details>(() => ({
+    ...EMPTY_DETAILS,
+    giftCode: initial?.giftCode ?? "",
+  }));
   const [detailErrors, setDetailErrors] = useState<Record<string, string>>({});
   const [choiceError, setChoiceError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -775,6 +790,19 @@ function FullFlow({
               value={details.message}
               onChange={(event) => edit("message", event.target.value)}
             />
+            <TextField
+              name="giftCode"
+              optional
+              autoComplete="off"
+              autoCapitalize="characters"
+              spellCheck={false}
+              maxLength={40}
+              label={t("details.giftCode")}
+              hint={t("details.giftCodeHint")}
+              value={details.giftCode}
+              onChange={(event) => edit("giftCode", event.target.value)}
+              error={errorText(detailErrors.giftCode)}
+            />
           </div>
           <div className="booking-actions">
             <button type="submit" className="btn btn-primary">
@@ -842,6 +870,15 @@ function FullFlow({
                 {t("childSummary", { name: details.childFirstName, age: details.childAge })}
               </ReviewRow>
             ) : null}
+            {details.giftCode.trim() ? (
+              <ReviewRow
+                label={t("summary.giftCode")}
+                onChange={() => goTo(4)}
+                changeLabel={t("change")}
+              >
+                <span className="numerals">{details.giftCode.trim().toUpperCase()}</span>
+              </ReviewRow>
+            ) : null}
             {price !== null ? (
               <ReviewRow label={t("estimatedPrice")}>
                 <strong className="numerals">{formatAmount(price, currency, locale)}</strong>
@@ -860,6 +897,9 @@ function FullFlow({
           <input type="hidden" name="email" value={details.email} />
           <input type="hidden" name="phone" value={details.phone} />
           <input type="hidden" name="message" value={details.message} />
+          {details.giftCode.trim() ? (
+            <input type="hidden" name="giftCode" value={details.giftCode} />
+          ) : null}
           {details.forWhom === "self" && details.declaredLevel ? (
             <input type="hidden" name="declaredLevel" value={details.declaredLevel} />
           ) : null}

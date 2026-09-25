@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test("pagina principală: deschiderea, academia, echipa și metoda", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText(/Învață/i);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(/Experiență de elită/i);
   // The opening shows the club's video, its photograph, or the frame saying what to upload.
   await expect(page.locator(".hero .hero-media > *").first()).toBeVisible();
 

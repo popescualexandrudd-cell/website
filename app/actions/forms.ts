@@ -11,7 +11,22 @@ import { getPolicyVersion } from "@/lib/content";
 import { attributionLabel, parseAttributionField } from "@/lib/attribution";
 import { fields, formDataToObject, zodFieldErrors, type FormState } from "@/lib/validation";
 import { deliverEmails } from "@/lib/email/send";
-import { queueCoachNotification, queueNewsletterConfirmation } from "@/lib/email/messages";
+import {
+  queueCoachNotification,
+  queueGiftRequestReceived,
+  queueNewsletterConfirmation,
+  queuePlayerReceived,
+} from "@/lib/email/messages";
+import { t } from "@/lib/i18n-content";
+import { urls } from "@/lib/paths";
+import {
+  GIFT_AMOUNT_MAX,
+  GIFT_AMOUNT_MIN,
+  GIFT_LESSON_COUNTS,
+  describeGiftCard,
+  giftCardPrice,
+} from "@/lib/gift-cards";
+import { PLAY_SLOTS, publicPlayerName, slotLabel } from "@/lib/league";
 
 type Guarded = { ok: true; ip: string } | { ok: false; state: FormState };
 
@@ -481,4 +496,279 @@ export async function submitReview(_prev: FormState, formData: FormData): Promis
     ),
   );
   return { status: "success" };
+}
+
+// ─── Gift cards ──────────────────────────────────────────────────────────────
+
+const giftSchema = z
+  .object({
+    kind: z.enum(["lectie", "valoare"]).catch("lectie"),
+    lessonTypeId: z.string().trim().max(40).optional(),
+    durationMin: z.coerce.number().int().optional().catch(undefined),
+    lessons: z.coerce.number().int().optional().catch(undefined),
+    amount: z.coerce.number().int().optional().catch(undefined),
+    name: fields.name,
+    email: fields.email,
+    phone: fields.phone,
+    recipientName: z.string().trim().min(2, "recipientName").max(120, "recipientName"),
+    message: fields.optionalText(300),
+    consent: fields.consent,
+    locale: fields.locale,
+  })
+  .superRefine((data, ctx) => {
+    if (data.kind === "valoare") {
+      if (!data.amount || data.amount < GIFT_AMOUNT_MIN || data.amount > GIFT_AMOUNT_MAX)
+        ctx.addIssue({ code: "custom", path: ["amount"], message: "amount" });
+      return;
+    }
+    if (!data.lessonTypeId)
+      ctx.addIssue({ code: "custom", path: ["lessonTypeId"], message: "lessonType" });
+    if (!data.lessons || !(GIFT_LESSON_COUNTS as readonly number[]).includes(data.lessons))
+      ctx.addIssue({ code: "custom", path: ["lessons"], message: "lessons" });
+  });
+
+/**
+ * "Give a tennis lesson": the request is stored and the club calls the buyer about payment; the
+ * card (with its code) is activated and emailed from the admin once paid.
+ */
+export async function submitGiftCard(_prev: FormState, formData: FormData): Promise<FormState> {
+  const raw = formDataToObject(formData);
+  const parsed = giftSchema.safeParse(raw);
+  if (!parsed.success) return { status: "error", fieldErrors: zodFieldErrors(parsed.error) };
+  const gate = await guard("gift", raw, parsed.data.email);
+  if (!gate.ok) return gate.state;
+  try {
+    const data = parsed.data;
+    const settings = await db.siteSettings.findUniqueOrThrow({
+      where: { id: 1 },
+      select: { giftCardsEnabled: true },
+    });
+    if (!settings.giftCardsEnabled) return { status: "error", error: "server" };
+    const lessonType =
+      data.kind === "lectie" && data.lessonTypeId
+        ? await db.lessonType.findFirst({ where: { id: data.lessonTypeId, active: true } })
+        : null;
+    if (data.kind === "lectie" && !lessonType)
+      return { status: "error", fieldErrors: { lessonTypeId: "lessonType" } };
+    const durationMin =
+      lessonType && data.durationMin && lessonType.durations.includes(data.durationMin)
+        ? data.durationMin
+        : (lessonType?.durations[0] ?? null);
+    const card = await db.giftCard.create({
+      data: {
+        lessonTypeId: lessonType?.id ?? null,
+        durationMin: lessonType ? durationMin : null,
+        lessons: lessonType ? (data.lessons ?? 1) : null,
+        amountRon: data.kind === "valoare" ? (data.amount ?? null) : null,
+        buyerName: data.name,
+        buyerEmail: data.email,
+        buyerPhone: data.phone,
+        recipientName: data.recipientName,
+        message: data.message,
+        gdprConsent: true,
+        gdprConsentAt: new Date(),
+        policyVersion: await getPolicyVersion(),
+        locale: data.locale,
+        attribution: parseAttributionField(raw.attribution) ?? undefined,
+      },
+    });
+    const value = describeGiftCard(
+      {
+        lessonName: lessonType ? t(lessonType.name, "ro") : null,
+        lessons: card.lessons,
+        durationMin: card.durationMin,
+        amountRon: card.amountRon,
+      },
+      "ro",
+    );
+    const price = giftCardPrice({
+      amountRon: card.amountRon,
+      hourlyRate: lessonType?.hourlyRate?.toString() ?? null,
+      durationMin: card.durationMin,
+      lessons: card.lessons,
+    });
+    const ids = [
+      ...(await queueCoachNotification(
+        "gift",
+        [
+          ["Cumpărător", card.buyerName],
+          ["Telefon", card.buyerPhone],
+          ["Email", card.buyerEmail],
+          ["Pentru", card.recipientName],
+          ["Cardul", value],
+          ["Preț estimat", price === null ? "de stabilit" : `${price} lei`],
+          ["Mesaj pe card", card.message ?? "—"],
+          ["Sursa vizitei", attributionLabel(card.attribution) ?? "direct sau necunoscută"],
+        ],
+        card.buyerName,
+        card.buyerEmail,
+        urls.adminGiftCard(card.id),
+      )),
+      ...(await queueGiftRequestReceived(card.id)),
+    ];
+    schedule(ids);
+    return { status: "success" };
+  } catch (error) {
+    console.error("submitGiftCard", error);
+    return { status: "error", error: "server" };
+  }
+}
+
+// ─── Amateur league & hitting partners ───────────────────────────────────────
+
+const playerSchema = z
+  .object({
+    name: fields.name,
+    email: fields.email,
+    phone: fields.phone,
+    level: z.enum(["INCEPATOR", "INTERMEDIAR", "AVANSAT", "COMPETITIE"], { error: "level" }),
+    singles: z.literal("on").optional(),
+    doubles: z.literal("on").optional(),
+    inLeague: z.literal("on").optional(),
+    lookingForPartner: z.literal("on").optional(),
+    listed: z.literal("on").optional(),
+    about: fields.optionalText(300),
+    consent: fields.consent,
+    locale: fields.locale,
+  })
+  .superRefine((data, ctx) => {
+    if (!data.inLeague && !data.lookingForPartner)
+      ctx.addIssue({ code: "custom", path: ["inLeague"], message: "wants" });
+  });
+
+/** Sign-up for the amateur league, for a hitting partner, or both. The club approves it. */
+export async function submitPlayer(_prev: FormState, formData: FormData): Promise<FormState> {
+  const raw = formDataToObject(formData);
+  const parsed = playerSchema.safeParse(raw);
+  if (!parsed.success) return { status: "error", fieldErrors: zodFieldErrors(parsed.error) };
+  const gate = await guard("player", raw, parsed.data.email);
+  if (!gate.ok) return gate.state;
+  try {
+    const data = parsed.data;
+    const slots = PLAY_SLOTS.filter((slot) => raw[`slot_${slot}`] === "on");
+    const player = await db.amateurPlayer.create({
+      data: {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        level: data.level,
+        slots,
+        singles: data.singles === "on" || data.doubles !== "on",
+        doubles: data.doubles === "on",
+        inLeague: data.inLeague === "on",
+        lookingForPartner: data.lookingForPartner === "on",
+        listed: data.lookingForPartner === "on" && data.listed === "on",
+        about: data.about,
+        gdprConsent: true,
+        gdprConsentAt: new Date(),
+        policyVersion: await getPolicyVersion(),
+        locale: data.locale,
+        attribution: parseAttributionField(raw.attribution) ?? undefined,
+      },
+    });
+    const wants = [
+      player.inLeague ? "liga amatorilor" : null,
+      player.lookingForPartner ? "partener de joc" : null,
+    ]
+      .filter(Boolean)
+      .join(", ");
+    const ids = [
+      ...(await queueCoachNotification(
+        "player",
+        [
+          ["Nume", player.name],
+          ["Telefon", player.phone],
+          ["Email", player.email],
+          ["Vrea", wants],
+          ["Nivel", LEVEL_LABEL[player.level] ?? player.level],
+          ["Când joacă", slots.map((slot) => slotLabel(slot, "ro")).join(", ") || "—"],
+          ["Pe lista publică", player.listed ? "da" : "nu"],
+          ["Despre", player.about ?? "—"],
+        ],
+        player.name,
+        player.email,
+        urls.adminPlayer(player.id),
+      )),
+      ...(await queuePlayerReceived(player.id)),
+    ];
+    schedule(ids);
+    return { status: "success" };
+  } catch (error) {
+    console.error("submitPlayer", error);
+    return { status: "error", error: "server" };
+  }
+}
+
+const LEVEL_LABEL: Record<string, string> = {
+  INCEPATOR: "începător",
+  INTERMEDIAR: "intermediar",
+  AVANSAT: "avansat",
+  COMPETITIE: "competiție",
+};
+
+const partnerSchema = z.object({
+  playerId: z.string().trim().min(1).max(40),
+  name: fields.name,
+  email: fields.email,
+  phone: fields.phone,
+  message: fields.optionalText(500),
+  consent: fields.consent,
+  locale: fields.locale,
+});
+
+/**
+ * "I want to play with …": the club gets the request and puts the two players in touch, so no
+ * contact details are ever shown on the site.
+ */
+export async function submitPartnerRequest(
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  const raw = formDataToObject(formData);
+  const parsed = partnerSchema.safeParse(raw);
+  if (!parsed.success) return { status: "error", fieldErrors: zodFieldErrors(parsed.error) };
+  const gate = await guard("partner", raw, parsed.data.email);
+  if (!gate.ok) return gate.state;
+  try {
+    const data = parsed.data;
+    const player = await db.amateurPlayer.findFirst({
+      where: { id: data.playerId, approved: true, listed: true, lookingForPartner: true },
+    });
+    if (!player) return { status: "error", error: "server" };
+    const wanted = publicPlayerName(player.name);
+    const message = await db.contactMessage.create({
+      data: {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        subject: `Partener de joc: vrea să joace cu ${player.name}`,
+        message: [
+          `Vrea să joace cu: ${player.name} (${player.phone}, ${player.email}), afișat pe site ca ${wanted}.`,
+          data.message ? `Mesaj: ${data.message}` : null,
+        ]
+          .filter(Boolean)
+          .join("\n"),
+        consent: true,
+        consentAt: new Date(),
+        policyVersion: await getPolicyVersion(),
+        locale: data.locale,
+        attribution: parseAttributionField(raw.attribution) ?? undefined,
+      },
+    });
+    const ids = await queueCoachNotification(
+      "partner",
+      [
+        ["Cine", `${message.name}, ${message.phone ?? "—"}, ${message.email}`],
+        ["Vrea să joace cu", `${player.name}, ${player.phone}, ${player.email}`],
+        ["Mesaj", data.message ?? "—"],
+      ],
+      message.name,
+      message.email,
+    );
+    schedule(ids);
+    return { status: "success" };
+  } catch (error) {
+    console.error("submitPartnerRequest", error);
+    return { status: "error", error: "server" };
+  }
 }

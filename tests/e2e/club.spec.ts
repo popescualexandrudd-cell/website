@@ -6,7 +6,7 @@ test("închirierea: cererea de teren ajunge în inbox și pe email", async ({ br
   const page = await context.newPage();
   await page.goto("/inchiriere-teren");
   await expect(page.getByRole("heading", { level: 1 })).toContainText(/Închiriere/i);
-  await expect(page.locator("#program").getByText("08:00–23:00")).toBeVisible();
+  await expect(page.locator("#program").getByText("08:00–01:00")).toBeVisible();
 
   const form = page.locator("#cerere form");
   const name = `Jucător ${run}`;

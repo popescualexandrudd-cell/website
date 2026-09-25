@@ -6,6 +6,7 @@ import { TodoText } from "./TodoText";
 import { LanguageSwitch } from "./LanguageSwitch";
 import { NewsletterForm } from "./NewsletterForm";
 import { CookieSettingsButton } from "./CookieBanner";
+import { GoogleRating } from "./GoogleRating";
 
 type Props = {
   settings: LocalizedSettings;
@@ -37,6 +38,16 @@ export async function Footer({ settings, location, policyVersion, cookieSettings
             <TodoText value={settings.brandName} />
           </p>
           <p className="mt-2 text-cerneala-2">{settings.tagline}</p>
+          {settings.googleReviews ? (
+            <a
+              href={settings.googleReviews.url}
+              rel="noopener noreferrer"
+              target="_blank"
+              className="footer-rating"
+            >
+              <GoogleRating reviews={settings.googleReviews} variant="compact" />
+            </a>
+          ) : null}
           {settings.newsletterEnabled ? (
             <div className="mt-10">
               <NewsletterForm policyVersion={policyVersion} />

@@ -40,9 +40,14 @@ Copiază proiectul și deschide `config/club.yml`. Completezi, de sus în jos:
 | `programe` | care dintre cele trei programe (Inițiere, Competiție, Amatori) le oferă clubul |
 | `academie_juniori` | grupele: etapa, vârstele, programul, antrenamentele pe săptămână, durata, zilele și orele, taxa lunară, locurile |
 | `lectii`, `pachete` | tipurile de lecții rezervabile online, cu tariful pe oră, și pachetele |
-| `program_club`, `inchiriere` | când e deschis clubul și tarifele de închiriere a terenurilor |
+| `program_club`, `inchiriere` | când e deschis clubul și tarifele de închiriere a terenurilor (Markdown, cu tabele; `tarife_en` pentru engleză) |
+| `recenzii_google` | nota și numărul de recenzii de pe Google și linkul „Scrie o recenzie” |
 | `program_lucru`, `rezervari`, `plata` | orele în care se primesc rezervări de lecții și regulile lor |
 | `site`, `entitate_legala` | domeniul, limbile și datele firmei sau ale clubului sportiv |
+
+Logoul și fotografiile clubului livrate cu site-ul stau în `config/assets` (lista lor e în
+`prisma/seed/assets.ts`); se importă o singură dată în Media, iar pictogramele site-ului se
+generează din logo. Pentru alt club: înlocuiești fișierele sau golești lista.
 
 Orice valoare lăsată între paranteze pătrate apare pe site ca **[DE COMPLETAT]**, ca să nu scape
 nimic; nimic nu se inventează în locul ei.

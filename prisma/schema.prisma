@@ -163,6 +163,18 @@ enum TournamentOrganizer {
   ALTUL
 }
 
+enum GiftCardStatus {
+  CERERE
+  ACTIVA
+  FOLOSITA
+  ANULATA
+}
+
+enum MatchWinner {
+  A
+  B
+}
+
 enum LegalKind {
   CONFIDENTIALITATE
   TERMENI
@@ -219,6 +231,16 @@ model SiteSettings {
   foundedYear          Int?
   /// Court hire rates, as Markdown ({ ro, en }); empty = "ask on the phone".
   rentalRates          Json?
+  /// The club's Google Business profile: average rating and number of reviews, copied by hand
+  /// from Google (shown next to the reviews), and the link that opens "write a review".
+  googleRating         Float?
+  googleReviewCount    Int?
+  googleReviewUrl      String?
+  /// Gift cards ("Give a tennis lesson") and the amateur league / hitting partner pages.
+  giftCardsEnabled     Boolean     @default(true)
+  leagueEnabled        Boolean     @default(true)
+  /// The club's own photos and logo shipped with the site, imported once (by file name).
+  seededAssets         String[]    @default([])
   retentionMonths      Int         @default(24)
   timezone             String      @default("Europe/Bucharest")
   currency             String      @default("RON")
@@ -340,6 +362,7 @@ model LessonType {
   updatedAt       DateTime      @updatedAt
   bookings        Booking[]
   pricingPlans    PricingPlan[]
+  giftCards       GiftCard[]
 
   @@index([order])
 }
@@ -692,6 +715,7 @@ model Booking {
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   emailLogs       EmailLog[]
+  giftCard        GiftCard?
 
   @@index([startsAt])
   @@index([status])
@@ -881,4 +905,117 @@ model Tournament {
   updatedAt       DateTime            @updatedAt
 
   @@index([startsOn])
+}
+
+// ─── Gift cards ──────────────────────────────────────────────────────────────
+
+/// "Give a tennis lesson": requested on the site, paid at the club or by transfer, then activated
+/// in the admin, which gives it a code and emails the card. The code is used once, at booking.
+model GiftCard {
+  id            String         @id @default(cuid())
+  /// ELITE-XXXX-XXXX, set when the card is activated (the requests have none).
+  code          String?        @unique
+  status        GiftCardStatus @default(CERERE)
+  /// A number of lessons of one type (lessonType + duration + lessons) or an amount in lei.
+  lessonTypeId  String?
+  lessonType    LessonType?    @relation(fields: [lessonTypeId], references: [id], onDelete: SetNull)
+  durationMin   Int?
+  lessons       Int?
+  amountRon     Int?
+  buyerName     String
+  buyerEmail    String
+  buyerPhone    String
+  recipientName String
+  message       String?
+  gdprConsent   Boolean
+  gdprConsentAt DateTime
+  policyVersion String
+  locale        String         @default("ro")
+  attribution   Json?
+  internalNotes String?
+  activatedAt   DateTime?
+  expiresAt     DateTime?      @db.Date
+  sentAt        DateTime?
+  redeemedAt    DateTime?
+  bookingId     String?        @unique
+  booking       Booking?       @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([status, createdAt])
+}
+
+// ─── Amateur league & hitting partners ───────────────────────────────────────
+
+/// An adult amateur who signed up on the site for the league, for a hitting partner, or both.
+/// Appears on the site (first name and initial, level, when they play) only once the club has
+/// approved them and only if they asked to be listed.
+model AmateurPlayer {
+  id                String        @id @default(cuid())
+  name              String
+  email             String
+  phone             String
+  level             Level
+  /// When they can play: DIMINEATA, PRANZ, SEARA, WEEKEND.
+  slots             String[]      @default([])
+  singles           Boolean       @default(true)
+  doubles           Boolean       @default(false)
+  inLeague          Boolean       @default(false)
+  lookingForPartner Boolean       @default(false)
+  /// Asked to appear on the public partner list.
+  listed            Boolean       @default(false)
+  about             String?
+  approved          Boolean       @default(false)
+  gdprConsent       Boolean
+  gdprConsentAt     DateTime
+  policyVersion     String
+  locale            String        @default("ro")
+  attribution       Json?
+  internalNotes     String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  matchesAsA        LeagueMatch[] @relation("MatchPlayerA")
+  matchesAsB        LeagueMatch[] @relation("MatchPlayerB")
+
+  @@index([approved, listed])
+}
+
+/// One season of the amateur league (for example "Liga de toamnă 2026").
+model LeagueSeason {
+  id               String        @id @default(cuid())
+  slug             String        @unique
+  name             Json
+  startsOn         DateTime?     @db.Date
+  endsOn           DateTime?     @db.Date
+  /// Short rules and format, as Markdown ({ ro, en }).
+  rules            Json?
+  registrationOpen Boolean       @default(true)
+  published        Boolean       @default(false)
+  pointsWin        Int           @default(3)
+  pointsLoss       Int           @default(1)
+  order            Int           @default(0)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  matches          LeagueMatch[]
+}
+
+/// A league match. The score is written from player A's side ("6-4 3-6 10-7").
+model LeagueMatch {
+  id        String        @id @default(cuid())
+  seasonId  String
+  season    LeagueSeason  @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  /// Group or division within the season ("Grupa A", "Avansați"); empty = one table.
+  division  String?
+  playerAId String
+  playerA   AmateurPlayer @relation("MatchPlayerA", fields: [playerAId], references: [id], onDelete: Restrict)
+  playerBId String
+  playerB   AmateurPlayer @relation("MatchPlayerB", fields: [playerBId], references: [id], onDelete: Restrict)
+  playedOn  DateTime?     @db.Date
+  score     String?
+  winner    MatchWinner?
+  walkover  Boolean       @default(false)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([seasonId, playedOn])
 }

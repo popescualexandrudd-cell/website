@@ -46,7 +46,11 @@
     "club": "Clubul",
     "rental": "Închiriere teren",
     "tournaments": "Turnee",
-    "schools": "Școli și grădinițe"
+    "schools": "Școli și grădinițe",
+    "honours": "Palmares",
+    "league": "Liga amatorilor",
+    "partner": "Găsește partener",
+    "gift": "Card cadou"
   },
   "footer": {
     "contact": "Contact",
@@ -104,7 +108,8 @@
     "clubAmenities": "Dotările",
     "galleryVideo": "Video",
     "figYears": "{count, plural, one {an} few {ani} other {de ani}} de tenis la club",
-    "rentalCta": "Închiriază un teren"
+    "rentalCta": "Închiriază un teren",
+    "figReviews": "{count, plural, one {recenzie pe Google, nota {rating}} few {recenzii pe Google, nota medie {rating}} other {de recenzii pe Google, nota medie {rating}}}"
   },
   "programs": {
     "groups": {
@@ -274,7 +279,13 @@
       "duration": "Durata aleasă nu mai e disponibilă pentru această lecție. Alege alta.",
       "experience": "Alege cât a jucat copilul până acum.",
       "date": "Alege o zi, de azi înainte.",
-      "time": "Alege ora de început."
+      "time": "Alege ora de început.",
+      "giftCode": "Codul nu e valid, a fost deja folosit sau a expirat. Verifică-l sau sună-ne.",
+      "recipientName": "Scrie numele celui care primește cardul.",
+      "amount": "Alege o valoare între 50 și 5.000 de lei.",
+      "lessons": "Alege câte lecții conține cardul.",
+      "level": "Alege nivelul tău de joc.",
+      "wants": "Alege liga, partenerul de joc sau amândouă."
     }
   },
   "booking": {
@@ -325,7 +336,9 @@
       "childFirstName": "Prenumele copilului",
       "childAge": "Vârsta copilului (ani)",
       "emailHint": "Aici primești confirmarea și linkul de anulare.",
-      "levelUnset": "Nu știu, discutăm la teren"
+      "levelUnset": "Nu știu, discutăm la teren",
+      "giftCode": "Cod de card cadou (opțional)",
+      "giftCodeHint": "Dacă ai primit un card cadou, scrie codul de pe el, de forma CADOU-XXXX-XXXX."
     },
     "toConfirm": "Verifică și trimite",
     "confirmTitle": "Confirmarea rezervării",
@@ -337,7 +350,8 @@
       "when": "Data și ora",
       "where": "Locul",
       "contact": "Contact",
-      "child": "Copilul"
+      "child": "Copilul",
+      "giftCode": "Card cadou"
     },
     "childSummary": "{name}, {age} ani",
     "submitRequest": "Trimite rezervarea",
@@ -419,7 +433,8 @@
     "submit": "Trimite recenzia",
     "success": "Recenzia e trimisă. Mulțumim!",
     "invalid": "Linkul nu mai este valid.",
-    "already": "Ai trimis deja o recenzie pentru această lecție. Mulțumim!"
+    "already": "Ai trimis deja o recenzie pentru această lecție. Mulțumim!",
+    "google": "Lasă-ne o recenzie și pe Google"
   },
   "newsletter": {
     "confirmed": "Abonarea e confirmată. Îți scriem când avem locuri libere sau noutăți de la academie.",
@@ -623,7 +638,8 @@
     "playText": "Antrenorii academiei te ajută să alegi turneele potrivite vârstei și nivelului, iar la cele de acasă ești pe terenul pe care te antrenezi.",
     "contactCta": "Scrie-ne",
     "evaluationCta": "Cere o evaluare",
-    "follow": "Urmărește clubul"
+    "follow": "Urmărește clubul",
+    "honoursLink": "Palmaresul clubului"
   },
   "schools": {
     "factsTitle": "De ce la noi",
@@ -687,5 +703,176 @@
     "askQuestion": "Am răspuns: {answers}. Ce îmi recomandați?",
     "restart": "Încearcă din nou",
     "note": "Recomandarea e orientativă; la evaluare sau la prima lecție, antrenorul confirmă grupa și planul."
+  },
+  "reviews": {
+    "summary": "{rating} din 5 pe Google, din {count, plural, one {o recenzie} few {# recenzii} other {# de recenzii}}",
+    "readOrWrite": "Citește recenziile sau scrie una pe Google",
+    "count": "{count, plural, one {o recenzie pe Google} few {# recenzii pe Google} other {# de recenzii pe Google}}"
+  },
+  "gift": {
+    "orderCta": "Comandă un card cadou",
+    "callCta": "Sună: {phone}",
+    "howTitle": "Cum funcționează",
+    "steps": {
+      "one": "Alegi cadoul",
+      "oneText": "O lecție, un pachet de lecții sau o sumă la alegere, pentru un copil sau un adult.",
+      "two": "Plătești la club sau prin transfer",
+      "twoText": "Te sunăm noi pentru plată. Nu e nevoie de plată online.",
+      "three": "Primești cardul pe email",
+      "threeText": "Cardul are un cod unic și e valabil {months} de luni. Îl tipărești sau îl trimiți mai departe."
+    },
+    "formTitle": "Comandă cardul",
+    "formIntro": "Completează ce vrei să oferi și cui. Prețul se vede alături; îl confirmăm la telefon.",
+    "kind": "Ce oferi",
+    "kindLesson": "Lecții de tenis",
+    "kindValue": "O sumă la alegere",
+    "lesson": "Tipul de lecție",
+    "duration": "Durata unei lecții",
+    "durationOption": "{minutes} de minute",
+    "lessons": "Câte lecții",
+    "lessonsOption": "{count, plural, one {o lecție} few {# lecții} other {# de lecții}}",
+    "amount": "Valoarea cardului",
+    "amountOption": "{amount} de lei",
+    "amountCustom": "Sau altă sumă (lei)",
+    "amountHint": "Între {min} și {max} de lei. Se poate folosi la lecții sau la închirierea terenului.",
+    "recipient": "Pentru cine e cardul",
+    "recipientHint": "Numele apare pe card.",
+    "message": "Mesaj pe card (opțional)",
+    "messageHint": "De exemplu: „La mulți ani! Ne vedem pe teren.”",
+    "buyer": "Numele tău",
+    "email": "Emailul tău",
+    "emailHint": "Aici îți trimitem cardul, după plată.",
+    "submit": "Trimite cererea",
+    "success": "Mulțumim! Am primit cererea și te sunăm pentru plată. Cardul îl primești pe email.",
+    "cardKicker": "Card cadou",
+    "chooseValue": "Alege ce oferi",
+    "price": "Preț:",
+    "priceValue": "{price} lei",
+    "priceOnRequest": "Prețul ți-l spunem la telefon.",
+    "paymentNote": "Plătești la club sau prin transfer bancar. Cardul e valabil un an de la plată.",
+    "goodToKnow": "Bine de știut",
+    "facts": {
+      "valid": "Cardul e valabil {months} de luni de la plată; data exactă e scrisă pe card.",
+      "book": "Cine primește cardul își rezervă lecția pe site, cu codul de pe card, sau la telefon.",
+      "cancel": "Dacă lecția rezervată cu cardul se anulează la timp, cardul redevine valabil.",
+      "occasions": "Potrivit pentru zile de naștere, Crăciun, 1 Iunie, echipe și colegi de birou."
+    },
+    "print": "Tipărește cardul",
+    "bookWithCard": "Rezervă cu acest card",
+    "state": {
+      "used": "Cardul a fost deja folosit.",
+      "expired": "Cardul a expirat.",
+      "inactive": "Cardul nu mai este activ."
+    },
+    "for": "Pentru {name}",
+    "codeLabel": "Codul cardului",
+    "validUntil": "Valabil până la {date}",
+    "howToUse": "Rezervă pe site, la „Rezervare”, cu acest cod, sau sună la {phone}.",
+    "qrAlt": "Cod QR care deschide rezervarea cu acest card"
+  },
+  "league": {
+    "signupCta": "Înscrie-te în ligă",
+    "partnerCta": "Găsește partener de joc",
+    "table": "Clasament",
+    "player": "Jucător",
+    "played": "M",
+    "playedLong": "Meciuri jucate",
+    "won": "V",
+    "wonLong": "Victorii",
+    "lost": "Î",
+    "lostLong": "Înfrângeri",
+    "sets": "Seturi",
+    "points": "Puncte",
+    "noResults": "Sezonul abia a început: clasamentul apare după primele meciuri.",
+    "results": "Rezultate",
+    "upcoming": "Meciuri programate",
+    "rules": "Formatul și regulile",
+    "vs": "–",
+    "walkover": "w.o.",
+    "aboutTitle": "Cum funcționează liga",
+    "steps": {
+      "one": "Te înscrii",
+      "oneText": "Ne spui nivelul tău și când poți juca. Verificăm înscrierea și te sunăm.",
+      "two": "Primești grupa",
+      "twoText": "Jucătorii sunt împărțiți în grupe pe niveluri, ca meciurile să fie echilibrate.",
+      "three": "Joci și urci în clasament",
+      "threeText": "Stabilești meciurile cu adversarii, rezervi terenul la club, iar rezultatele apar aici."
+    },
+    "signupTitle": "Înscrierea în ligă",
+    "signupIntro": "Pentru adulți, de la jucători care au mai jucat până la cei care joacă turnee. Pe site apar doar prenumele și inițiala.",
+    "form": {
+      "wants": "Ce te interesează",
+      "inLeague": "Liga amatorilor",
+      "lookingForPartner": "Partener de joc",
+      "wantsError": "Alege liga, partenerul de joc sau amândouă.",
+      "level": "Nivelul tău",
+      "levelHint": "Nu-ți face griji dacă nu știi exact: îl verificăm împreună.",
+      "levels": {
+        "INCEPATOR": "Începător",
+        "INTERMEDIAR": "Intermediar",
+        "AVANSAT": "Avansat",
+        "COMPETITIE": "Competiție"
+      },
+      "when": "Când poți juca",
+      "slots": {
+        "DIMINEATA": "Dimineața",
+        "PRANZ": "La prânz",
+        "SEARA": "Seara",
+        "WEEKEND": "În weekend"
+      },
+      "format": "Ce joci",
+      "singles": "Simplu",
+      "doubles": "Dublu",
+      "about": "Câteva cuvinte despre jocul tău (opțional)",
+      "aboutHint": "Apare pe lista publică, dacă alegi asta. Fără date de contact.",
+      "listed": "Vreau să apar pe lista publică de parteneri, cu prenumele, inițiala, nivelul și când joc.",
+      "submit": "Trimite înscrierea",
+      "success": "Mulțumim! Am primit înscrierea și te contactăm cât de repede putem."
+    }
+  },
+  "partner": {
+    "signupCta": "Caut partener",
+    "leagueCta": "Liga amatorilor",
+    "howTitle": "Cum funcționează",
+    "steps": {
+      "one": "Te înscrii",
+      "oneText": "Ne spui nivelul, când joci și dacă preferi simplu sau dublu.",
+      "two": "Te punem în legătură",
+      "twoText": "Îți propunem jucători potriviți sau alegi tu pe cineva de pe listă. Datele de contact rămân la club.",
+      "three": "Rezervi terenul și joci",
+      "threeText": "Stabiliți ora și rezervați terenul la club. Simplu."
+    },
+    "boardTitle": "Jucători care caută partener",
+    "filterLabel": "Filtrează după nivel",
+    "allLevels": "Toate nivelurile",
+    "playWith": "Vreau să joc cu {name}",
+    "noneAtLevel": "Deocamdată nu e nimeni pe listă la acest nivel. Înscrie-te și te sunăm când apare cineva.",
+    "empty": "Lista se completează pe măsură ce jucătorii se înscriu. Înscrie-te mai jos și te punem în legătură cu cineva de nivelul tău.",
+    "requestTitle": "Cere un partener de pe listă",
+    "requestIntro": "Cererea ajunge la club; îți trimitem datele de contact după ce jucătorul este de acord.",
+    "request": {
+      "player": "Cu cine vrei să joci",
+      "message": "Mesaj (opțional)",
+      "messageHint": "De exemplu: când ai vrea să jucați.",
+      "submit": "Trimite cererea",
+      "success": "Mulțumim! Vorbim cu jucătorul și revenim cât de repede putem."
+    },
+    "signupTitle": "Înscrie-te pentru partener de joc",
+    "signupIntro": "Pe listă apar doar prenumele și inițiala, nivelul și când joci, și doar dacă vrei."
+  },
+  "honours": {
+    "figYears": "de ani de tenis la club",
+    "figTournaments": "{count, plural, one {turneu găzduit} few {turnee găzduite} other {de turnee găzduite}}",
+    "figResults": "{count, plural, one {rezultat al sportivilor noștri} few {rezultate ale sportivilor noștri} other {de rezultate ale sportivilor noștri}}",
+    "resultsTitle": "Rezultatele sportivilor",
+    "resultsEmpty": "Rezultatele sportivilor academiei apar aici pe măsură ce le publicăm, pentru copii doar cu acordul părinților.",
+    "photosTitle": "Pe podium",
+    "tournamentsTitle": "Turnee jucate la club",
+    "tournamentsLink": "Vezi calendarul turneelor",
+    "leagueTitle": "Campionii ligii amatorilor",
+    "champion": "Campion",
+    "ctaTitle": "Următorul podium poate fi al copilului tău",
+    "ctaText": "Totul începe cu o evaluare la academia de juniori.",
+    "ctaButton": "Academia de juniori"
   }
 }

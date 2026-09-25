@@ -714,3 +714,41 @@
   content: "● ";
   color: var(--color-succes);
 }
+
+/* ─── QR codes to print ─── */
+.qr-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+}
+.qr-card {
+  display: grid;
+  justify-items: center;
+  gap: 0.4rem;
+  padding: 1.5rem;
+  border: 1px solid var(--color-linie, #ddd);
+  border-radius: 12px;
+  background: white;
+  text-align: center;
+  break-inside: avoid;
+}
+.qr-title {
+  margin-top: 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.qr-brand {
+  font-weight: 600;
+}
+.qr-note,
+.qr-url {
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}
+@media print {
+  .admin-sidebar,
+  .admin-tabbar,
+  .admin-page-head p {
+    display: none !important;
+  }
+}

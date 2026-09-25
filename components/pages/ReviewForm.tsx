@@ -13,13 +13,24 @@ import {
   useErrorText,
 } from "@/components/ui/form";
 
-export function ReviewForm({ token }: { token: string }) {
+/** After the review is sent, a link to the club's Google reviews invites a public one too. */
+export function ReviewForm({ token, googleUrl }: { token: string; googleUrl: string }) {
   const t = useTranslations("review");
   const locale = useLocale();
   const errorText = useErrorText();
   const id = useId();
   const { state, pending, formProps: actionProps } = useFormAction(submitReview);
-  if (state.status === "success") return <FormStatus state={state} success={t("success")} />;
+  if (state.status === "success")
+    return (
+      <div className="grid gap-4">
+        <FormStatus state={state} success={t("success")} />
+        <p>
+          <a href={googleUrl} rel="noopener noreferrer" target="_blank" className="btn-secondary">
+            {t("google")}
+          </a>
+        </p>
+      </div>
+    );
   const general =
     state.status === "error" && state.error === "invalid"
       ? t("invalid")

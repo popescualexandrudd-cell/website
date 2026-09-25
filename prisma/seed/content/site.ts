@@ -1,4 +1,5 @@
 import type { FacilityType } from "../../../lib/generated/prisma/client";
+import { TODO } from "../config";
 
 type T = { ro: string; en: string };
 
@@ -21,8 +22,8 @@ export const pageHeaderContent: {
       en: "Tennis court hire in Pantelimon: clay, covered all year",
     },
     seoDescription: {
-      ro: "Închiriază un teren de tenis la Elite Tenis Club Pantelimon: 8 terenuri de zgură, 4 acoperite tot anul, cu nocturnă, vestiare și dușuri. Deschis zilnic 08–23.",
-      en: "Hire a tennis court at Elite Tenis Club Pantelimon: 8 clay courts, 4 covered all year, floodlights, changing rooms and showers. Open daily 08–23.",
+      ro: "Închiriază un teren de tenis la Elite Tenis Club Pantelimon: 8 terenuri de zgură, 4 acoperite tot anul, cu nocturnă, vestiare și dușuri. Deschis zilnic 08:00–01:00.",
+      en: "Hire a tennis court at Elite Tenis Club Pantelimon: 8 clay courts, 4 covered all year, floodlights, changing rooms and showers. Open daily 08:00–01:00.",
     },
   },
   {
@@ -39,6 +40,70 @@ export const pageHeaderContent: {
     seoDescription: {
       ro: "Turneele de tenis găzduite la Elite Tenis Club Pantelimon: Cupa Elite, competiții ale Federației Române de Tenis și turnee Tenis10 pentru copii.",
       en: "The tennis tournaments hosted at Elite Tenis Club Pantelimon: the Elite Cup, Romanian Tennis Federation events and Tenis10 tournaments for children.",
+    },
+  },
+  {
+    key: "card-cadou",
+    title: { ro: "Oferă o lecție de tenis", en: "Give a tennis lesson" },
+    intro: {
+      ro: "Un card cadou pentru o lecție, un pachet de lecții sau o sumă la alegere, la Elite Tenis Club. Pentru copii și adulți, începători sau jucători care vor să urce un nivel.",
+      en: "A gift card for a lesson, a pack of lessons or an amount of your choice at Elite Tenis Club. For children and adults, beginners or players who want to move up a level.",
+    },
+    seoTitle: {
+      ro: "Card cadou tenis: oferă o lecție de tenis în Pantelimon",
+      en: "Tennis gift card: give a tennis lesson in Pantelimon",
+    },
+    seoDescription: {
+      ro: "Oferă o lecție de tenis la Elite Tenis Club Pantelimon: card cadou pentru o lecție, un pachet sau o sumă, valabil un an, gata de tipărit.",
+      en: "Give a tennis lesson at Elite Tenis Club Pantelimon: a gift card for one lesson, a pack or an amount, valid for a year, ready to print.",
+    },
+  },
+  {
+    key: "liga",
+    title: { ro: "Liga amatorilor", en: "The amateur league" },
+    intro: {
+      ro: "Meciuri de simplu cu jucători de nivelul tău, pe zgura clubului, cu clasament și un campion la fiecare sezon. Pentru adulții care vor să joace, nu doar să se antreneze.",
+      en: "Singles matches with players of your level, on the club's clay, with a table and a champion every season. For adults who want to play matches, not just practise.",
+    },
+    seoTitle: {
+      ro: "Liga de tenis pentru amatori în Pantelimon",
+      en: "Amateur tennis league in Pantelimon",
+    },
+    seoDescription: {
+      ro: "Liga amatorilor de la Elite Tenis Club Pantelimon: meciuri de simplu pe niveluri, clasament actualizat și înscriere online.",
+      en: "The amateur league at Elite Tenis Club Pantelimon: singles matches by level, an up-to-date table and online sign-up.",
+    },
+  },
+  {
+    key: "partener",
+    title: { ro: "Găsește partener de joc", en: "Find a hitting partner" },
+    intro: {
+      ro: "Vrei să joci, dar n-ai cu cine? Lasă-ne nivelul tău și când joci, iar noi te punem în legătură cu jucători potriviți. Terenul îl rezervi la club.",
+      en: "Want to play but have nobody to play with? Tell us your level and when you play, and we will put you in touch with the right players. Book the court with the club.",
+    },
+    seoTitle: {
+      ro: "Partener de tenis în Pantelimon și estul Bucureștiului",
+      en: "Tennis partner in Pantelimon and east Bucharest",
+    },
+    seoDescription: {
+      ro: "Găsește un partener de tenis de nivelul tău la Elite Tenis Club Pantelimon: jucători amatori pe niveluri, contact prin club.",
+      en: "Find a tennis partner of your level at Elite Tenis Club Pantelimon: amateur players by level, contact through the club.",
+    },
+  },
+  {
+    key: "palmares",
+    title: { ro: "Palmaresul clubului", en: "The club's honours" },
+    intro: {
+      ro: "Rezultatele sportivilor noștri, turneele jucate pe terenurile clubului și campionii ligii amatorilor. Fiecare podium începe cu primul antrenament.",
+      en: "Our players' results, the tournaments played on the club's courts and the amateur league champions. Every podium starts with the first practice.",
+    },
+    seoTitle: {
+      ro: "Palmares Elite Tenis Club: rezultate și turnee",
+      en: "Elite Tenis Club honours: results and tournaments",
+    },
+    seoDescription: {
+      ro: "Palmaresul Elite Tenis Club Pantelimon: rezultatele jucătorilor academiei, turneele FRT și Tenis10 găzduite și campionii ligii amatorilor.",
+      en: "Elite Tenis Club Pantelimon's honours: the academy players' results, the FRT and Tenis10 tournaments hosted and the amateur league champions.",
     },
   },
   {
@@ -313,33 +378,57 @@ export const conditionalServices: Record<string, T> = {
   },
 };
 
-export const exampleTestimonials: { id: string; author: string; role: T; text: T }[] = [
+/**
+ * The reviews published on the club's own site (elitetenisclub.ro/testimonials). The first two
+ * are complete and published; the other two are cut off on that page, so they stay drafts until
+ * the club adds the full text and the author's name.
+ */
+export const clubTestimonials: {
+  id: string;
+  author: string;
+  role: T;
+  text: T;
+  published: boolean;
+}[] = [
   {
     id: "seed-testimonial-01",
-    author: "[EXEMPLU] Andrei, părinte",
-    role: { ro: "[EXEMPLU] părinte", en: "[EXEMPLU] parent" },
+    author: "Adrian M.",
+    role: { ro: "Profesor", en: "Teacher" },
     text: {
-      ro: "[EXEMPLU] Acesta este un text de exemplu, ca să vezi cum arată o recenzie pe site. Înlocuiește-l cu o recenzie reală, primită de la un elev sau de la un părinte, cu acordul lui de publicare.",
-      en: "[EXEMPLU] This is sample text showing how a review looks on the site. Replace it with a real review from a student or parent, with their consent to publish.",
+      ro: "Fetele mele gemene de 5 ani sunt la începutul călătoriei lor în tenis, și acest club a fost alegerea perfectă pentru ele. Antrenorii sunt răbdători și pricepuți, iar fiecare antrenament este plin de zâmbete și entuziasm.",
+      en: "My five-year-old twin girls are at the start of their tennis journey, and this club was the perfect choice for them. The coaches are patient and skilled, and every session is full of smiles and enthusiasm.",
     },
+    published: true,
   },
   {
     id: "seed-testimonial-02",
-    author: "[EXEMPLU] Ioana",
-    role: { ro: "[EXEMPLU] jucătoare amatoare", en: "[EXEMPLU] amateur player" },
+    author: "Cristian",
+    role: { ro: "Manager firmă", en: "Company manager" },
     text: {
-      ro: "[EXEMPLU] Text de exemplu. Recenziile se publică doar dacă sunt reale și dacă persoana a bifat acordul de publicare.",
-      en: "[EXEMPLU] Sample text. Reviews are published only if they are real and the person has ticked the consent to publish.",
+      ro: "Am participat la competițiile organizate de acest club și am fost impresionat de nivelul lor de organizare și profesionalism. Sunt un club care se preocupă cu adevărat de dezvoltarea tenisului la toate nivelurile.",
+      en: "I have taken part in the competitions this club organises and was impressed by how well organised and professional they are. They are a club that truly cares about developing tennis at every level.",
     },
+    published: true,
   },
   {
     id: "seed-testimonial-03",
-    author: "[EXEMPLU] Mihai",
-    role: { ro: "[EXEMPLU] junior, 14 ani", en: "[EXEMPLU] junior, 14" },
+    author: TODO,
+    role: { ro: "Părinte", en: "Parent" },
     text: {
-      ro: "[EXEMPLU] Text de exemplu, nepublicat. Poți cere recenzii automat: după prima lecție efectuată, clientul primește o invitație pe email.",
-      en: "[EXEMPLU] Sample text, not published. You can collect reviews automatically: after the first completed lesson, the client receives an email invitation.",
+      ro: `Ceea ce m-a impresionat cel mai mult este modul în care antrenorii din acest club lucrează cu copiii mici. Fiul meu se distrează enorm la ${TODO}`,
+      en: `What impressed me most is the way the coaches at this club work with young children. My son has an enormous amount of fun at ${TODO}`,
     },
+    published: false,
+  },
+  {
+    id: "seed-testimonial-04",
+    author: TODO,
+    role: { ro: TODO, en: TODO },
+    text: {
+      ro: `Orele private cu antrenorul au făcut o diferență semnificativă în abilitățile mele. Recomand cu încredere ${TODO}`,
+      en: `The private lessons with the coach made a significant difference to my game. I can confidently recommend ${TODO}`,
+    },
+    published: false,
   },
 ];
 

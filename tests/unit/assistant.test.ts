@@ -21,6 +21,10 @@ const PATHS = {
   rental: "/inchiriere-teren",
   tournaments: "/turnee",
   schools: "/scoli-gradinite",
+  giftCard: "/card-cadou",
+  league: "/liga-amatori",
+  partner: "/partener-de-joc",
+  honours: "/palmares",
 };
 
 function input(overrides: Partial<KnowledgeInput> = {}): KnowledgeInput {

@@ -24,7 +24,7 @@ câmpul potrivit.
 | --- | --- | --- |
 | **Video-ul de deschidere** a paginii principale: antrenamente reale la club (grupă de juniori, un schimb de mingi, terenurile) | orizontal, 1920 × 1080, 10–20 de secunde, fără text pe imagine; sunetul nu se aude | Setări → Deschiderea paginii principale → Video-ul de deschidere |
 | Fotografia de deschidere (se vede până se încarcă video-ul și pe telefoanele cu economisire de date) | orizontal, minimum 2400 px lățime | Setări → Deschiderea paginii principale → Fotografia de deschidere |
-| **Logoul clubului** | PNG cu fundal transparent, cel puțin 400 px lățime | Setări → Identitatea clubului → Logoul |
+| Logoul clubului: **pus deja** (logoul rotund „Club Sportiv Elite Tenis”, din `config/assets`); din el se fac și pictogramele site-ului. Un fișier mai clar (PNG sau SVG de la grafician) se poate încărca oricând | PNG cu fundal transparent, cel puțin 800 px | Setări → Identitatea clubului → Logoul |
 | **Fotografia fiecărui antrenor** pe teren | vertical 4:5, minimum 1200 × 1500 px | Conținut → Echipa de antrenori → Fotografia |
 | Un video scurt cu antrenorul la lucru (opțional) | orizontal, 10–30 de secunde | Conținut → Echipa de antrenori → Video |
 | Fotografia terenurilor (secțiunea „Zgură, tot anul” și pagina Clubul) | vertical 4:5 sau orizontal 3:2 | Conținut → Antetele paginilor → Clubul |
@@ -34,6 +34,16 @@ câmpul potrivit.
 
 Fotografiile și video-urile cu copii se publică **doar cu acordul scris al părinților** (bifa din
 Galerie). La încărcare, din fișiere se șterg datele ascunse (locația GPS, modelul telefonului).
+
+**Deja pe site**, din materialele clubului: fotografia de pe podium (galerie, „Turnee”, și sus pe
+pagina „Palmares”) și grupa de copii pe zgură (galerie, „Grupe”). Clubul le-a publicat deja, așa că
+au intrat cu bifa de acord a părinților: **confirmă că aveți acordul** sau debifează-le din
+Conținut → Galerie.
+
+**Cele două video-uri de prezentare** (linkurile mp3tourl.com) nu s-au putut descărca de aici
+(serverul de lucru nu are acces la acel site). Descarcă-le pe calculator și încarcă-le din
+**Media**: primul ca video de deschidere (Setări → Deschiderea paginii principale), al doilea în
+Galerie. Site-ul le convertește singur pentru telefon și desktop.
 
 ## 2. Echipa de antrenori
 
@@ -87,8 +97,8 @@ Cererile de evaluare trimise de părinți ajung în **Evaluări și așteptare**
 | Pachetele: numele, prețul | Conținut → Prețuri și pachete | `pachete` |
 | Oferta pentru prima lecție (ex. „evaluare de 30 de minute, gratuită”) | Setări → Rezervări | `rezervari.prima_lectie` |
 | Intervalele în care se primesc rezervări online (acum: programul de lucru) | Disponibilitate | `program_lucru` |
-| **Tarifele de închiriere a terenurilor** (zi / nocturnă, acoperit / în aer liber). Pe site-ul actual scria „de la 30 lei/oră”: confirmă tarifele de azi | Setări → Program de lucru → Tarifele de închiriere | `inchiriere.tarife` |
-| Programul clubului: pus **zilnic 08:00–23:00**, din prezentarea publică a clubului; corectează dacă diferă | Setări → Programul clubului | `program_club.zilnic` |
+| Tarifele de închiriere: **puse din afișul clubului** (vară, de la 1 mai: afară 40/80 lei, în sală 50/80 lei, weekend 50/80 lei, ziua 08–17 / seara 17–01), iarna cu 10 lei mai mult pe oră, plus oferta cu mingile Dunlop în weekend. Completează data de la care încep tarifele de iarnă, dacă vreți să apară | Setări → Program de lucru → Tarifele de închiriere | `inchiriere.tarife` |
+| Programul clubului: pus **zilnic 08:00–01:00**, din afișul cu tarifele clubului; corectează dacă diferă | Setări → Programul clubului | `program_club.zilnic` |
 | Nocturnă pe terenurile în aer liber (da/nu) | Conținut → Terenuri | `locatii[0].terenuri[1].nocturna` |
 
 ## 6b. Povestea clubului și turneele (verifică faptele)
@@ -104,6 +114,16 @@ clubului”:
   și Super-Turneul Campionilor (Tenis10). Pentru fiecare ediție nouă: Conținut → Turnee → datele și
   linkul de înscriere, ca să apară la „Turnee care urmează” și în Google.
 
+## 6c. Funcții noi: carduri cadou, liga amatorilor, palmares
+
+| Ce | Unde |
+| --- | --- |
+| Prețul cardurilor cadou cu lecții se calculează din **tariful pe oră** al lecției; până îl completezi, pe card scrie „Prețul ți-l spunem la telefon” | Conținut → Tipuri de lecții |
+| Primul sezon al ligii: numele, datele, formatul și regulile (grupe, cum se joacă un meci, taxa, cine rezervă terenul) | Conținut → Liga: sezoane |
+| Rezultatele academiei pentru **Palmares** (pentru copii doar prenumele și inițiala, cu acordul scris al părinților) | Conținut → Rezultate la turnee |
+| **WhatsApp**: site-ul vechi are butonul „Mesaj WhatsApp!”. Scrie numărul (probabil tot 0722 501 748) și apar butoanele de WhatsApp pe tot site-ul | Setări → Contact → WhatsApp |
+| Pagina „Ofertă pentru copii” de pe site-ul vechi: oferta pentru copii e acum pe „Academia de juniori”; dacă există o ofertă anume (preț, perioadă), adaug-o acolo | Conținut → Antetele paginilor → Academia |
+
 ## 7. Date legale și paginile legale
 
 | Ce | Unde apare | În admin |
@@ -118,7 +138,9 @@ clubului”:
 
 | Ce | Detalii |
 | --- | --- |
-| **Recenzii reale** | Cele 3 recenzii marcate „[EXEMPLU]” nu apar pe site. Înlocuiește-le cu recenzii reale, cu acordul autorului, sau șterge-le. |
+| **Recenziile de pe site** | Au intrat cele două recenzii complete de pe elitetenisclub.ro (Adrian M., Cristian). Alte două sunt tăiate pe site-ul vechi: sunt ciorne nepublicate, cu „[DE COMPLETAT]” (Conținut → Recenzii); completează textul întreg și numele, apoi publică-le. |
+| **Nota de pe Google** | Apare 4,5 din 257 de recenzii (prima pagină, subsol, asistentul). Actualizeaz-o din când în când în Setări → Recenzii Google. |
+| **Linkul „Scrie o recenzie”** | Din Google Business Profile → „Cere recenzii” → copiază linkul și pune-l în Setări → Recenzii Google. Până atunci, butoanele duc la club pe Google Maps. Apoi tipărește codul QR din admin → Coduri QR pentru recepție. |
 | **Articolele din Sfaturi** | 3 ciorne; citește-le, adaptează-le și publică-le din Conținut → Articole. |
 
 ## 9. Pe server

@@ -724,3 +724,29 @@ cheie sub hero, secțiuni alternante deschis/închis, carduri de program, cale d
      hover, cronologia care apare pas cu pas, mingea animată; toate se opresc la „reduced motion”.
      **/llms.txt** descrie clubul pentru motoarele de căutare cu AI.
 
+
+## Partea a VIII-a. Datele reale ale clubului și funcțiile de comunitate
+
+101. **Datele clubului**: logoul (rotunjit, cu colțurile transparente) și două fotografii ale
+     clubului stau în `config/assets` și intră o singură dată în biblioteca media
+     (`SiteSettings.seededAssets` reține ce s-a importat, ca o imagine ștearsă din admin să nu
+     revină). Pictogramele site-ului se generează din logo. Culorile vin din logo: verde de pădure
+     `#16351b` (13,5:1 cu text alb) și verde de frunză `#3a7a1e` (5,3:1). Tarifele de pe afiș
+     (vara) și cele de iarnă (+10 lei), programul 08–01, deschiderea „Experiență de elită în lumea
+     tenisului” și cele două recenzii complete de pe site-ul clubului intră prin seed pe un site nou
+     și prin migrarea `gift_cards_league` pe unul existent, doar peste valorile inițiale needitate.
+102. **Recenzii Google**: nota și numărul se scriu de mână în Setări (fără API Google, fără
+     cookie-uri); linkul „Scrie o recenzie” (sau, fără el, căutarea clubului pe Maps) apare în
+     invitația de după prima lecție, după recenzia de pe site și în codurile QR din admin. Fără
+     `AggregateRating` în JSON-LD (recenzii despre propria firmă, preluate din altă sursă).
+103. **Carduri cadou**: cerere pe site → plata la club → activarea din admin generează codul
+     (`CADOU-` + 8 caractere fără 0/O/1/I, Web Crypto) și trimite cardul pe email; valabil 12
+     luni. Codul se folosește o dată, la rezervare, verificat după limita de trimiteri (nu se pot
+     ghici coduri); rezervarea anulată eliberează cardul. Fără plată online, ca restul site-ului.
+104. **Liga și partenerii**: un singur model de jucător pentru ambele, aprobat de club înainte de a
+     apărea undeva; pe site doar prenumele și inițiala. Clasamentul se calculează din meciuri
+     (puncte, apoi seturi, game-uri, meciul direct), nu se ține de mână. Cererile de partener trec
+     prin club (Mesaje), așa că nicio dată de contact nu e publică.
+105. **Palmares**: rezultatele publicate (minorii doar cu acord), turneele găzduite, campionii
+     sezoanelor încheiate și fotografiile de premiere; nimic nu apare dacă nu există în admin.
+     Video-urile de prezentare nu s-au putut descărca din mediul de lucru; se încarcă din Media.

@@ -17,6 +17,7 @@ import {
   localizedSettings,
 } from "@/lib/content";
 import { sitePath } from "@/lib/paths";
+import { roCount } from "@/lib/format";
 import { formatKnowledge, known, type KnowledgePaths } from "./knowledge";
 
 /** Whether the assistant shows on the site: switched on in the admin and a key on the server. */
@@ -44,6 +45,10 @@ export function knowledgePaths(locale: Locale): KnowledgePaths {
     rental: path("/inchiriere-teren"),
     tournaments: path("/turnee"),
     schools: path("/scoli-gradinite"),
+    giftCard: path("/card-cadou"),
+    league: path("/liga-amatori"),
+    partner: path("/partener-de-joc"),
+    honours: path("/palmares"),
   };
 }
 
@@ -121,6 +126,36 @@ export async function loadClubKnowledge(locale: Locale) {
         .join("\n"),
     },
     { title: `${schoolsHeader.title} (${paths.schools})`, body: schoolsHeader.intro },
+    ...(settings.giftCardsEnabled
+      ? [
+          {
+            title: `${en ? "Gift cards" : "Carduri cadou"} (${paths.giftCard})`,
+            body: en
+              ? "A gift card holds one or more lessons of a chosen type, or an amount in lei. It is ordered on the gift card page and paid at the club or by bank transfer; the club then emails the card with a unique code, valid for 12 months. The person who receives it books on the site with the code (field “Gift card code”) or by phone. If that lesson is cancelled in time, the card becomes valid again."
+              : "Un card cadou conține una sau mai multe lecții de un tip ales, sau o sumă în lei. Se comandă pe pagina cardului cadou și se plătește la club sau prin transfer; apoi clubul trimite cardul pe email, cu un cod unic, valabil 12 luni. Cine îl primește rezervă pe site cu codul (câmpul „Cod de card cadou”) sau la telefon. Dacă lecția se anulează la timp, cardul redevine valabil.",
+          },
+        ]
+      : []),
+    ...(settings.leagueEnabled
+      ? [
+          {
+            title: `${en ? "Amateur league and hitting partners" : "Liga amatorilor și partenerii de joc"} (${paths.league}, ${paths.partner})`,
+            body: en
+              ? "Adults sign up on the league page or the partner page, with their level and when they play. The club checks every sign-up, splits league players into groups by level and publishes the table (first names and initials only). For a hitting partner, the club puts players in touch; contact details are never shown on the site."
+              : "Adulții se înscriu pe pagina ligii sau pe cea de parteneri, cu nivelul și când joacă. Clubul verifică fiecare înscriere, împarte jucătorii ligii în grupe pe niveluri și publică clasamentul (doar prenumele și inițiala). Pentru partener de joc, clubul pune jucătorii în legătură; datele de contact nu apar pe site.",
+          },
+        ]
+      : []),
+    ...(settings.googleReviews
+      ? [
+          {
+            title: en ? "Reviews" : "Recenzii",
+            body: en
+              ? `The club has ${settings.googleReviews.count} reviews on Google, average ${settings.googleReviews.rating} out of 5 (${settings.googleReviews.url}).`
+              : `Clubul are ${roCount(settings.googleReviews.count, "o recenzie", "recenzii")} pe Google, cu nota medie ${String(settings.googleReviews.rating).replace(".", ",")} din 5 (${settings.googleReviews.url}).`,
+          },
+        ]
+      : []),
   ];
   const text = formatKnowledge({
     locale,

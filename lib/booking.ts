@@ -11,6 +11,7 @@ import { isSlotAvailable } from "./availability";
 import { loadEngineInput } from "./availability-data";
 import { generateBookingCode, hashToken } from "./tokens";
 import { manageToken } from "./email/messages";
+import { releaseGiftCard } from "./gift-cards-server";
 import type { Attribution } from "./attribution";
 
 const MINUTE = 60_000;
@@ -266,6 +267,7 @@ export async function cancelByClient(
     data: { status: "ANULATA_CLIENT", cancelledAt: now, cancelReason: reason },
   });
   if (updated.count === 0) return { ok: false, error: "notActive" };
+  await releaseGiftCard(booking.id);
   return { ok: true, bookingId: booking.id };
 }
 

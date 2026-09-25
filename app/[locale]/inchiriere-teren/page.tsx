@@ -34,7 +34,7 @@ export async function generateMetadata({
   });
 }
 
-/** The club's opening hours ("08:00–23:00") from the settings, for the request form. */
+/** The club's opening hours ("08:00–01:00") from the settings, for the request form. */
 function openingRange(hours: { hours: string }[]): { open: string; close: string } {
   for (const row of hours) {
     const match = row.hours.match(/(\d{2}:\d{2})\s*[–-]\s*(\d{2}:\d{2})/);

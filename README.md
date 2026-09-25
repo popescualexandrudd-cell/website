@@ -37,6 +37,10 @@ video-uri, se editează din panoul de administrare.
 - **Clubul complet**: povestea clubului, închirierea terenurilor cu cerere online, turneele
   găzduite (FRT, Tenis10) cu edițiile următoare, programul pentru școli și grădinițe, „Găsește-ți
   programul” (recomandare în 3 întrebări), secțiunea de social media, `/llms.txt`.
+- **Comunitatea clubului**: carduri cadou („Oferă o lecție de tenis”: cerere, activare din admin,
+  card de tipărit cu QR, cod folosit o dată la rezervare), liga amatorilor (clasament calculat din
+  scoruri) și „Găsește partener” (listă pe niveluri, contact prin club), palmaresul clubului, nota
+  de pe Google cu invitația automată la recenzie și coduri QR de tipărit.
 - **Asistentul AI** (Claude, opțional): răspunde vizitatorilor la orice oră despre vârste, grupe,
   prețuri și program, doar din conținutul publicat, și îi trimite spre evaluare sau rezervare.
   Nu salvează conversațiile; limite pe vizitator și pe zi.
@@ -86,7 +90,7 @@ npm run admin:create                              # contul tău pentru http://lo
 | `npm run test:e2e` | teste end-to-end cu Playwright și axe (pornește singur serverul de producție pe portul 3100) |
 | `npm run db:migrate` | o migrare nouă după ce modifici `prisma/schema.prisma` |
 | `npm run db:seed`, `npm run db:reset` | date inițiale / reconstruirea bazei |
-| `npm run images` | pictogramele (apple-icon, 512 px, ornamentul din emailuri) din `app/icon.svg` |
+| `npm run images` | pictogramele site-ului din logoul clubului și ornamentul din emailuri din `art-src/icon.svg` |
 | `npm run admin:create` | cont de administrator (sau resetarea parolei) |
 | `npm run worker` | sarcinile de fundal (emailuri, conversia video-urilor rămase, mementouri, retenție) în dezvoltare |
 | `npm run build:tools` | worker-ul, seed-ul și admin-create ca fișiere JS pentru imaginea Docker |

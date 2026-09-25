@@ -18,6 +18,7 @@ import { queueCancellationEmails, queueNewBookingEmails } from "@/lib/email/mess
 import { fields, formDataToObject, zodFieldErrors, type FormState } from "@/lib/validation";
 import { urls } from "@/lib/paths";
 import { audit } from "@/lib/audit";
+import { findUsableGiftCard, redeemGiftCard } from "@/lib/gift-cards-server";
 
 export type SlotOption = { start: string; label: string };
 export type DayOption = { date: string; label: string; slots: SlotOption[] };
@@ -111,6 +112,12 @@ const bookingSchema = z
       .trim()
       .optional()
       .transform((value) => (value ? Number.parseInt(value, 10) : null)),
+    giftCode: z
+      .string()
+      .trim()
+      .max(40)
+      .optional()
+      .transform((value) => (value ? value : null)),
     consent: fields.consent,
     locale: fields.locale,
   })
@@ -149,6 +156,9 @@ export async function submitBooking(_prev: FormState, formData: FormData): Promi
     return { status: "error", error: "captcha" };
   if (!(await allowFormSubmission("booking", ip, data.email)))
     return { status: "error", error: "rateLimit" };
+  // Checked after the rate limit, so codes cannot be guessed by trying many.
+  const giftCard = data.giftCode ? await findUsableGiftCard(data.giftCode) : null;
+  if (data.giftCode && !giftCard) return { status: "error", fieldErrors: { giftCode: "giftCode" } };
 
   try {
     const result = await createBooking({
@@ -183,6 +193,7 @@ export async function submitBooking(_prev: FormState, formData: FormData): Promi
       };
       return { status: "error", error: map[result.error] ?? "server" };
     }
+    if (giftCard) await redeemGiftCard(giftCard.id, result.bookingId);
     const ids = await queueNewBookingEmails(result.bookingId);
     after(async () => {
       await deliverEmails(ids);

@@ -25,6 +25,9 @@ export type ConversionEvent =
   | "waitlist_request"
   | "contact_message"
   | "court_request"
+  | "gift_request"
+  | "player_signup"
+  | "partner_request"
   | "phone_click"
   | "whatsapp_click"
   | "assistant_open"
@@ -139,6 +142,9 @@ const GA_EVENT: Record<ConversionEvent, [string, Params?]> = {
   waitlist_request: ["generate_lead", { form: "waitlist" }],
   contact_message: ["generate_lead", { form: "contact" }],
   court_request: ["generate_lead", { form: "court" }],
+  gift_request: ["generate_lead", { form: "gift" }],
+  player_signup: ["generate_lead", { form: "league" }],
+  partner_request: ["generate_lead", { form: "partner" }],
   phone_click: ["contact_click", { method: "phone" }],
   whatsapp_click: ["contact_click", { method: "whatsapp" }],
   assistant_open: ["assistant_open"],
@@ -152,6 +158,9 @@ const META_EVENT: Partial<Record<ConversionEvent, string>> = {
   waitlist_request: "Lead",
   contact_message: "Contact",
   court_request: "Lead",
+  gift_request: "Lead",
+  player_signup: "Lead",
+  partner_request: "Lead",
   phone_click: "Contact",
   whatsapp_click: "Contact",
 };
@@ -176,7 +185,10 @@ export function track(event: ConversionEvent, params: Params = {}): void {
         : event === "evaluation_request" ||
             event === "waitlist_request" ||
             event === "contact_message" ||
-            event === "court_request"
+            event === "court_request" ||
+            event === "gift_request" ||
+            event === "player_signup" ||
+            event === "partner_request"
           ? config.adsLeadLabel
           : null;
     if (label) window.gtag("event", "conversion", { send_to: `${config.adsId}/${label}` });

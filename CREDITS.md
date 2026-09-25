@@ -2,7 +2,9 @@
 
 ## Imagini
 
-- **Pictograma** (`app/icon.svg`), desenele de teren (`CourtMark`) și ilustrația paginii 404 sunt
+- **Logoul** Club Sportiv Elite Tenis (`config/assets/elite-logo.webp`, din care se generează
+  și pictogramele site-ului) și **fotografiile** clubului din același dosar aparțin clubului.
+- **Ornamentul din emailuri** (`art-src/icon.svg`), desenele de teren (`CourtMark`) și ilustrația paginii 404 sunt
   create pentru acest proiect.
 - **Fotografiile** se încarcă din admin. Când adaugi fotografii făcute de altcineva, trece aici
   autorul și acordul de folosire.

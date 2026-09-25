@@ -15,19 +15,7 @@ import {
   Turnstile,
   useErrorText,
 } from "@/components/ui/form";
-
-/** Half-hour start times while the club is open (the last one leaves an hour to play). */
-function startTimes(open: string, close: string): string[] {
-  const toMinutes = (value: string) => {
-    const [h, m] = value.split(":").map(Number);
-    return (h ?? 0) * 60 + (m ?? 0);
-  };
-  const out: string[] = [];
-  for (let m = toMinutes(open); m <= toMinutes(close) - 60; m += 30) {
-    out.push(`${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`);
-  }
-  return out;
-}
+import { startTimes } from "@/lib/court-hours";
 
 /**
  * Asks for a court: day, time, length and covered or outdoor. The club confirms by phone; the

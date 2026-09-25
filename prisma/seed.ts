@@ -32,13 +32,14 @@ import { faqContent } from "./seed/content/faqs";
 import { postContent } from "./seed/content/posts";
 import { LEGAL_VERSION, legalContent } from "./seed/content/legal";
 import { tournamentContent } from "./seed/content/tournaments";
+import { syncClubAssets } from "./seed/assets";
 import { roCount } from "../lib/format";
 import {
   amenityDescriptions,
   amenityNames,
   coachPhilosophy,
   conditionalServices,
-  exampleTestimonials,
+  clubTestimonials,
   pageHeaderContent,
   serviceDescriptions,
 } from "./seed/content/site";
@@ -184,6 +185,7 @@ async function main(): Promise<void> {
     const changes = [
       ...updated.map(([kind]) => `ciorna legală ${kind} actualizată`),
       ...added.map(([label]) => label),
+      ...(await syncClubAssets(db)),
     ];
     console.info(
       changes.length > 0
@@ -237,7 +239,13 @@ async function main(): Promise<void> {
   const foundedYear = integer(config.club.infiintat);
   const rentalRates = isPlaceholder(config.inchiriere?.tarife)
     ? todoT
-    : { ro: text(config.inchiriere?.tarife) };
+    : isPlaceholder(config.inchiriere?.tarife_en)
+      ? { ro: text(config.inchiriere?.tarife) }
+      : { ro: text(config.inchiriere?.tarife), en: text(config.inchiriere?.tarife_en) };
+  const google = config.recenzii_google;
+  const googleRating = decimal(google?.nota);
+  const googleReviewCount = integer(google?.numar);
+  const googleReviewUrl = optionalText(google?.link);
 
   const paymentMethods = config.plata.metode
     .filter((method) => !isPlaceholder(method))
@@ -296,6 +304,9 @@ async function main(): Promise<void> {
       workingHours,
       foundedYear,
       rentalRates,
+      googleRating: googleRating === null ? null : Number(googleRating),
+      googleReviewCount,
+      googleReviewUrl,
       legalForm: text(config.entitate_legala.forma),
       legalName: text(config.entitate_legala.denumire),
       legalCui: text(config.entitate_legala.cui),
@@ -314,6 +325,12 @@ async function main(): Promise<void> {
     if (settingsExisting.foundedYear === null && foundedYear !== null)
       fill.foundedYear = foundedYear;
     if (settingsExisting.rentalRates === null) fill.rentalRates = rentalRates;
+    if (settingsExisting.googleRating === null && googleRating !== null)
+      fill.googleRating = Number(googleRating);
+    if (settingsExisting.googleReviewCount === null && googleReviewCount !== null)
+      fill.googleReviewCount = googleReviewCount;
+    if (settingsExisting.googleReviewUrl === null && googleReviewUrl)
+      fill.googleReviewUrl = googleReviewUrl;
     if (Object.keys(fill).length > 0) {
       await db.siteSettings.update({ where: { id: 1 }, data: fill });
       note("setări noi", true);
@@ -738,15 +755,21 @@ async function main(): Promise<void> {
     note(`articol ${post.slug}`, !exists);
   }
 
-  // ── Example testimonials (never published) ────────────────────────────────
-  for (const [index, testimonial] of exampleTestimonials.entries()) {
+  // ── The reviews already public on the club's own site ─────────────────────
+  for (const [index, testimonial] of clubTestimonials.entries()) {
     const exists = await db.testimonial.findUnique({ where: { id: testimonial.id } });
     await db.testimonial.upsert({
       where: { id: testimonial.id },
       update: {},
-      create: { ...testimonial, isExample: true, published: false, consent: false, order: index },
+      create: {
+        ...testimonial,
+        isExample: false,
+        consent: testimonial.published,
+        consentAt: testimonial.published ? new Date() : null,
+        order: index,
+      },
     });
-    note(`recenzie exemplu ${index + 1}`, !exists);
+    note(`recenzie ${index + 1}`, !exists);
   }
 
   // ── Legal pages & page headers ────────────────────────────────────────────
@@ -756,6 +779,8 @@ async function main(): Promise<void> {
       state === "created",
     );
   }
+
+  for (const label of await syncClubAssets(db)) note(label, true);
 
   if (created.length === 0) {
     console.info("Seed: totul exista deja, nimic de adăugat.");

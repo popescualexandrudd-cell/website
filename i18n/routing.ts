@@ -40,6 +40,11 @@ export const routing = defineRouting({
     "/cookies": "/cookies",
     "/inchiriere-teren": { ro: "/inchiriere-teren", en: "/court-hire" },
     "/turnee": { ro: "/turnee", en: "/tournaments" },
+    "/card-cadou": { ro: "/card-cadou", en: "/gift-card" },
+    "/card-cadou/[cod]": { ro: "/card-cadou/[cod]", en: "/gift-card/[cod]" },
+    "/liga-amatori": { ro: "/liga-amatori", en: "/amateur-league" },
+    "/partener-de-joc": { ro: "/partener-de-joc", en: "/hitting-partner" },
+    "/palmares": { ro: "/palmares", en: "/honours" },
     "/scoli-gradinite": { ro: "/scoli-gradinite", en: "/schools" },
   },
 });

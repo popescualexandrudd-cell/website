@@ -25,6 +25,14 @@ export async function Header({ settings }: Props) {
     { href: "/programe", label: t("nav.programs") },
     { href: "/inchiriere-teren", label: t("nav.rental") },
     { href: "/turnee", label: t("nav.tournaments") },
+    { href: "/palmares", label: t("nav.honours") },
+    ...(settings.leagueEnabled
+      ? [
+          { href: "/liga-amatori" as const, label: t("nav.league") },
+          { href: "/partener-de-joc" as const, label: t("nav.partner") },
+        ]
+      : []),
+    ...(settings.giftCardsEnabled ? [{ href: "/card-cadou" as const, label: t("nav.gift") }] : []),
     { href: "/echipa", label: t("nav.team") },
     { href: "/despre", label: t("nav.about") },
     { href: "/facilitati", label: t("nav.facilities") },
