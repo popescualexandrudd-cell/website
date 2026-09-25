@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { getLegalPage } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
@@ -10,7 +10,13 @@ export async function generateMetadata({
 }: PageProps<"/[locale]/termeni">): Promise<Metadata> {
   const locale = (await params).locale as Locale;
   const page = await getLegalPage("TERMENI", locale);
-  return pageMetadata({ locale, href: "/termeni", title: page?.title ?? "Terms" });
+  const t = await getTranslations({ locale, namespace: "legal" });
+  return pageMetadata({
+    locale,
+    href: "/termeni",
+    title: page?.title ?? "Terms",
+    description: t("descriptionTerms"),
+  });
 }
 
 export default async function TermsPage({ params }: PageProps<"/[locale]/termeni">) {

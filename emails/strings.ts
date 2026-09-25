@@ -1,3 +1,5 @@
+import { roCount } from "../lib/format";
+
 /** Email copy in both languages. Each email goes out in the client's language. */
 export type EmailLang = "ro" | "en";
 
@@ -31,7 +33,7 @@ export const strings = {
       title: "Lecția e confirmată.",
       body: "Am atașat fișierul pentru calendar. Adu pantofi de tenis, apă și haine în care te miști ușor; racheta o poți împrumuta.",
       cancelNote: (hours: number) =>
-        `Poți anula gratuit din linkul de mai jos până cu ${hours} de ore înainte.`,
+        `Poți anula gratuit din linkul de mai jos până cu ${roCount(hours, "o oră", "ore")} înainte.`,
     },
     cancelledClient: {
       subject: (code: string) => `Rezervarea ${code} e anulată`,

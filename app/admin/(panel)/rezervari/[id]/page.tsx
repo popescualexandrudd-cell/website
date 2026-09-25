@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { attributionLabel } from "@/lib/attribution";
+import { roCount } from "@/lib/format";
 import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -54,7 +55,7 @@ export default async function BookingDetailPage({
     ["Cod", booking.code],
     ["Program", programName(booking)],
     ["Lecția", booking.lessonType ? t(booking.lessonType.name, "ro") : "—"],
-    ["Durata", `${booking.durationMin} de minute`],
+    ["Durata", roCount(booking.durationMin, "un minut", "minute")],
     ["Când", when(booking.startsAt, booking.endsAt, tz)],
     ["Participanți", String(booking.participants)],
     ["Telefon", booking.phone || "—"],

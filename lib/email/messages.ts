@@ -1,7 +1,7 @@
 import { createElement } from "react";
 import { db } from "../db";
 import { t } from "../i18n-content";
-import { formatDate, formatTime, whatsappLink } from "../format";
+import { formatDate, formatTime, roCount, whatsappLink } from "../format";
 import { buildIcs } from "../ics";
 import { deriveToken, signPayload } from "../tokens";
 import { urls } from "../paths";
@@ -61,7 +61,9 @@ function describe(booking: BookingForEmail, l: EmailLang, timezone: string): Boo
   const when = `${date}, ${formatTime(booking.startsAt, timezone)}–${formatTime(booking.endsAt, timezone)}`;
   const where = booking.location ? `${booking.location.name}, ${booking.location.address}` : "—";
   const minutes =
-    l === "en" ? `${booking.durationMin} minutes` : `${booking.durationMin} de minute`;
+    l === "en"
+      ? `${booking.durationMin} minutes`
+      : roCount(booking.durationMin, "un minut", "minute");
   return {
     code: booking.code,
     program: t(booking.program.name, l),

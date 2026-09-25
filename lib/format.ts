@@ -66,3 +66,13 @@ export function mailLink(value: string | null | undefined): string | null {
   if (!value || value.includes(TODO_MARK) || !value.includes("@")) return null;
   return `mailto:${value}`;
 }
+
+/**
+ * A Romanian count with its noun: "o oră", "12 ore", "24 de ore". From 20 up (and at round
+ * hundreds) Romanian puts "de" between the number and the noun.
+ */
+export function roCount(n: number, one: string, many: string): string {
+  if (n === 1) return one;
+  const rest = n % 100;
+  return (rest === 0 && n !== 0) || rest >= 20 ? `${n} de ${many}` : `${n} ${many}`;
+}

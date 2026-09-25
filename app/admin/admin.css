@@ -318,6 +318,8 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 0.9375rem;
+  /* Long subjects and addresses wrap instead of pushing the table past a phone's width. */
+  overflow-wrap: anywhere;
 }
 .admin-table th,
 .admin-table td {

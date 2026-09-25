@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { getLegalPage } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
@@ -10,7 +10,13 @@ export async function generateMetadata({
 }: PageProps<"/[locale]/cookies">): Promise<Metadata> {
   const locale = (await params).locale as Locale;
   const page = await getLegalPage("COOKIES", locale);
-  return pageMetadata({ locale, href: "/cookies", title: page?.title ?? "Cookies" });
+  const t = await getTranslations({ locale, namespace: "legal" });
+  return pageMetadata({
+    locale,
+    href: "/cookies",
+    title: page?.title ?? "Cookies",
+    description: t("descriptionCookies"),
+  });
 }
 
 export default async function CookiesPage({ params }: PageProps<"/[locale]/cookies">) {

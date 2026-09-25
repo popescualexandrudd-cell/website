@@ -13,6 +13,7 @@ import { join, resolve } from "node:path";
 import { db } from "./db";
 import { getEnv } from "./env";
 import { encodeVariants } from "./images/process";
+import { roCount } from "./format";
 import type { Prisma } from "./generated/prisma/client";
 
 export const MAX_VIDEO_BYTES = 500 * 1024 * 1024;
@@ -49,9 +50,14 @@ function runFfmpeg(args: string[], timeoutMs: number): Promise<RunResult> {
   return new Promise((resolvePromise, reject) => {
     let child;
     try {
-      child = spawn(ffmpegPath(), ["-hide_banner", "-nostdin", ...args], {
-        stdio: ["ignore", "pipe", "pipe"],
-      });
+      // A program on the server, not a project file: nothing to trace into the build output.
+      child = spawn(
+        /* turbopackIgnore: true */ ffmpegPath(),
+        ["-hide_banner", "-nostdin", ...args],
+        {
+          stdio: ["ignore", "pipe", "pipe"],
+        },
+      );
     } catch (error) {
       reject(error);
       return;
@@ -202,7 +208,7 @@ async function convert(media: { id: string; path: string }): Promise<void> {
     throw new VideoError("Fișierul nu conține un video pe care să-l putem citi.");
   if (info.durationSec !== null && info.durationSec > MAX_VIDEO_SECONDS + 1)
     throw new VideoError(
-      `Video-ul durează ${Math.round(info.durationSec / 60)} minute; pe site folosim clipuri de cel mult ${MAX_VIDEO_SECONDS / 60} minute. Taie-l și încarcă-l din nou.`,
+      `Video-ul durează ${roCount(Math.round(info.durationSec / 60), "un minut", "minute")}; pe site folosim clipuri de cel mult ${roCount(MAX_VIDEO_SECONDS / 60, "un minut", "minute")}. Taie-l și încarcă-l din nou.`,
     );
 
   const [folderYear, folderMonth, base] = media.path.split("/");

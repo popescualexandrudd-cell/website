@@ -688,3 +688,14 @@ cheie sub hero, secțiuni alternante deschis/închis, carduri de program, cale d
     nu a editat-o nimeni și nu a verificat-o un jurist se actualizează la noua versiune a
     șablonului la pornirea serverului; una editată rămâne neatinsă.
 
+95. **Verificarea completă** (după scoaterea laboratorului 3D): 105 pagini publice, în română și
+    engleză, pe calculator și pe telefon (status, erori în consolă, cereri eșuate, imagini,
+    depășiri de lățime, un singur H1, titlu și descriere, ancore), 101 pagini din admin pe ambele
+    dimensiuni, testele unitare, de integrare și end-to-end, și cu asistentul și bannerul active.
+    Corecturi: numerele cu „de” la 20 și peste („24 de ore”, dar „12 ore”, „o oră”) în site,
+    emailuri și admin (`roCount` și plural ICU), vocea academiei („îți cerem”, „Mulțumim”),
+    descrieri pentru paginile legale, tabelul de cookie-uri și tabelele din admin fără depășire
+    pe telefon, întrebarea despre lecția de grup (trimitea spre un pas al rezervării din afara
+    ei; migrarea `content_fixes` o corectează doar dacă textul nu a fost editat), textul despre
+    tarife care nu mai presupune ce lecții sunt „de persoană”, iar rularea ffmpeg nu mai face
+    ca build-ul să includă tot proiectul în imagine.

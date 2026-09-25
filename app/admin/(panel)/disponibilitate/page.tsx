@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { roCount } from "@/lib/format";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { localDateKey, zonedInstant, addDaysToKey } from "@/lib/availability";
@@ -54,7 +55,8 @@ export default async function AvailabilityPage() {
           <p>
             Orele în care clienții pot rezerva lecții (individuale, în doi, în trei, de grup sau
             analiză biomecanică). Pauza dintre lecții ({settings.bufferMinutes} min), preavizul (
-            {settings.minNoticeHours} h) și orizontul ({settings.horizonDays} zile) se schimbă din{" "}
+            {settings.minNoticeHours} h) și orizontul (
+            {roCount(settings.horizonDays, "o zi", "zile")}) se schimbă din{" "}
             <Link href="/admin/setari" className="link">
               Setări
             </Link>

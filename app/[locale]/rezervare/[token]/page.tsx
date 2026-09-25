@@ -61,7 +61,10 @@ export default async function ManageBookingPage({
   const past = hasStarted(booking.startsAt);
   const canCancel = active && !past && canCancelFree(booking.startsAt, settings.freeCancelHours);
   const deadline = cancelDeadline(booking.startsAt, settings.freeCancelHours);
-  const deadlineText = `${formatDate(deadline, tz, locale, locale === "en" ? "EEEE d MMMM" : "EEEE, d MMMM")}, ${formatTime(deadline, tz)}`;
+  const deadlineText =
+    locale === "en"
+      ? `${formatDate(deadline, tz, locale, "EEEE d MMMM")}, ${formatTime(deadline, tz)}`
+      : `${formatDate(deadline, tz, locale, "EEEE, d MMMM")}, ora ${formatTime(deadline, tz)}`;
 
   return (
     <>

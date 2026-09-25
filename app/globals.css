@@ -1815,6 +1815,15 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 0.95rem;
+    overflow-wrap: anywhere;
+  }
+  /* On a phone, a wide table (the cookie list) scrolls sideways instead of the page. */
+  @media (max-width: 639px) {
+    .legal-prose table {
+      display: block;
+      overflow-x: auto;
+      font-size: 0.875rem;
+    }
   }
   .legal-prose th,
   .legal-prose td {

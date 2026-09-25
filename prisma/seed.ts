@@ -31,6 +31,7 @@ import { stageContent } from "./seed/content/academy";
 import { faqContent } from "./seed/content/faqs";
 import { postContent } from "./seed/content/posts";
 import { LEGAL_VERSION, legalContent } from "./seed/content/legal";
+import { roCount } from "../lib/format";
 import {
   amenityNames,
   coachPhilosophy,
@@ -619,7 +620,9 @@ async function main(): Promise<void> {
         id: faq.id,
         question: faq.question,
         answer: {
-          ro: faq.answer.ro.replaceAll("{ore}", cancelHours),
+          ro: faq.answer.ro
+            .replaceAll("{ore} de ore", roCount(Number(cancelHours), "o oră", "ore"))
+            .replaceAll("{ore}", cancelHours),
           en: faq.answer.en.replaceAll("{ore}", cancelHours),
         },
         category: faq.category,
