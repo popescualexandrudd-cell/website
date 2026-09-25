@@ -1565,6 +1565,7 @@ const legal: Resource = {
       kind: "i18nMarkdown",
       name: "body",
       label: "Text",
+      help: "Câmpurile între acolade duble ({{contact.email}}, {{sectiune.asistent}}, {{cookies.public}} …) se completează singure din setări și din instrumentele active pe site (asistentul AI, statisticile, reclamele). Lasă-le în text.",
       required: true,
       rows: 24,
       group: "Pagină",
@@ -1875,6 +1876,13 @@ const settings: Resource = {
       kind: "bool",
       name: "reviewInvitesEnabled",
       label: "Invitație la recenzie după lecții",
+      group: "Funcții",
+    },
+    {
+      kind: "bool",
+      name: "assistantEnabled",
+      label: "Asistentul AI de pe site",
+      help: "Răspunde vizitatorilor doar din conținutul publicat. Necesită și cheia ANTHROPIC_API_KEY în configurarea serverului.",
       group: "Funcții",
     },
     {

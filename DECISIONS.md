@@ -639,3 +639,52 @@ cheie sub hero, secțiuni alternante deschis/închis, carduri de program, cale d
     pornea (migrarea `remove_3d_lab`). Secțiunea „Metoda” rămâne cu cei patru pași; lecția
     „Analiză biomecanică” rămâne, fiind un serviciu real al clubului. Pagina principală nu mai
     încarcă nicio bibliotecă 3D, deci e mai ușoară pe telefon.
+
+## Partea a VI-a. Asistentul AI și măsurarea campaniilor
+
+88. **Asistentul de pe site** răspunde la întrebările părinților și ale jucătorilor (vârste, grupe,
+    prețuri, program, rezervare) doar din conținutul publicat: la fiecare întrebare, serverul
+    compune din baza de date un text cu contactul, baza sportivă, programele, lecțiile și
+    prețurile pe durată, grupele academiei, antrenorii, regulile de rezervare, întrebările
+    frecvente și paginile site-ului (`lib/assistant/knowledge.ts`). Valorile „[DE COMPLETAT]”
+    apar ca „nepublicat încă”, iar instrucțiunile îi cer să spună că nu știe și să dea telefonul,
+    niciodată să ghicească prețuri, ore sau locuri libere. Îi trimite pe copii spre evaluare și pe
+    adulți spre rezervare; fereastra are oricum cele două butoane.
+89. **Modelul**: Claude Opus 5 (`claude-opus-5`) prin SDK-ul oficial `@anthropic-ai/sdk`, cu
+    răspuns în flux (NDJSON către browser), efort `low` pentru răspunsuri rapide, textul clubului
+    în instrucțiunile de sistem cu prompt caching (aceleași pentru toate întrebările până se
+    editează conținutul) și `fallbacks: "default"` (beta `server-side-fallback-2026-07-01`): dacă
+    modelul refuză o cerere din motive de siguranță, API-ul o reia pe modelul de rezervă
+    recomandat de Anthropic. Un refuz final ajunge la vizitator ca mesaj politicos. Modelul se
+    poate schimba din `ASSISTANT_MODEL` (de exemplu `claude-sonnet-5`, mai ieftin).
+90. **Costuri și abuz**: întrebarea are cel mult 600 de caractere, conversația trimisă e limitată
+    la ultimele 12 mesaje, răspunsul la 2000 de tokeni; 12 întrebări în 10 minute și 60 pe zi de
+    la aceeași adresă IP, plus o limită pentru tot site-ul (`ASSISTANT_DAILY_LIMIT`, implicit
+    400/zi). Cererile din alte site-uri sunt refuzate (Origin). Fără `ANTHROPIC_API_KEY` sau cu
+    comutatorul din admin oprit, asistentul nu apare.
+91. **Confidențialitate**: conversațiile nu se salvează (doar în memoria ferestrei); în jurnal
+    rămân doar numărul de tokeni. Politica de confidențialitate descrie asistentul și transferul
+    către Anthropic (SUA) doar când e activ, prin câmpuri care se completează singure
+    (`{{sectiune.asistent}}`, `{{transfer}}`); fereastra îi roagă pe vizitatori să nu scrie date
+    personale.
+92. **Sursa fiecărei cereri, fără cookie-uri**: la prima încărcare, browserul citește din adresă
+    etichetele UTM și clicurile pe reclame (`gclid`, `fbclid`, `msclkid`) sau, altfel, site-ul de
+    unde a venit vizitatorul (căutare, rețea socială, alt site) și le ține în memorie cât navighează
+    pe site. Formularele de rezervare, evaluare, listă de așteptare și contact le trimit într-un
+    câmp ascuns; serverul le validează și le salvează (`attribution`), fără identificatorii
+    clicurilor. Admin → Campanii numără cererile pe sursă și campanie și construiește linkuri UTM
+    pentru postări, reclame și coduri QR. Cu acordul pentru statistici, sursa rezistă și la
+    reîncărcarea paginii (memoria de sesiune).
+93. **Google Analytics, Google Ads și Meta Pixel** se configurează din `.env` (ID-uri validate
+    după format, ca un typo să nu strice pagina sau politica CSP) și se încarcă doar după acord:
+    bannerul are „Accept” și „Refuz” la fel de vizibile și alegerea pe categorii (statistici,
+    marketing); Google primește Consent Mode v2 cu starea aleasă. Conversiile: `booking_request`
+    (rezervare), `generate_lead` (evaluare, listă, mesaj), `contact_click` (telefon, WhatsApp) și
+    evenimentele asistentului; în Google Ads, eticheta de rezervare și cea de cerere; în Meta,
+    `Schedule`, `Lead` și `Contact`. Retragerea acordului șterge cookie-urile Google și Meta și
+    reîncarcă pagina. CSP-ul se deschide doar pentru instrumentele configurate. Fără niciun cod,
+    site-ul nu arată bannerul, iar politica de cookie-uri spune asta.
+94. **Paginile legale** au acum câmpuri care descriu doar instrumentele active. O ciornă pe care
+    nu a editat-o nimeni și nu a verificat-o un jurist se actualizează la noua versiune a
+    șablonului la pornirea serverului; una editată rămâne neatinsă.
+

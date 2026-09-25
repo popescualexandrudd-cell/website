@@ -5,10 +5,17 @@ import { mailLink, telLink, whatsappLink } from "@/lib/format";
 import { TodoText } from "./TodoText";
 import { LanguageSwitch } from "./LanguageSwitch";
 import { NewsletterForm } from "./NewsletterForm";
+import { CookieSettingsButton } from "./CookieBanner";
 
-type Props = { settings: LocalizedSettings; location: LocationView | null; policyVersion: string };
+type Props = {
+  settings: LocalizedSettings;
+  location: LocationView | null;
+  policyVersion: string;
+  /** Statistics or advertising cookies are configured, so the visitor can change their choice. */
+  cookieSettings?: boolean;
+};
 
-export async function Footer({ settings, location, policyVersion }: Props) {
+export async function Footer({ settings, location, policyVersion, cookieSettings }: Props) {
   const t = await getTranslations();
   const tel = telLink(settings.phone);
   const mail = mailLink(settings.email);
@@ -87,6 +94,11 @@ export async function Footer({ settings, location, policyVersion }: Props) {
             <li>
               <Link href="/cookies">{t("footer.cookies")}</Link>
             </li>
+            {cookieSettings ? (
+              <li>
+                <CookieSettingsButton label={t("consent.settings")} />
+              </li>
+            ) : null}
             <li>
               <Link href="/contact">{t("nav.contact")}</Link>
             </li>

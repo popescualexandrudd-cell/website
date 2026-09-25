@@ -1,6 +1,7 @@
 "use client";
 
 import { useFormAction } from "@/components/ui/useFormAction";
+import { AttributionField, useConversion } from "@/components/ui/Conversion";
 import { useLocale, useTranslations } from "next-intl";
 import { submitWaitlist } from "@/app/actions/forms";
 import {
@@ -27,12 +28,14 @@ export function WaitlistForm({ programs, initialProgramId, turnstileSiteKey, non
   const locale = useLocale();
   const errorText = useErrorText();
   const { state, pending, formProps: actionProps } = useFormAction(submitWaitlist);
+  useConversion(state.status === "success", "waitlist_request");
   if (state.status === "success")
     return <FormStatus state={state} success={t("waitlist.success")} />;
   return (
     <form {...actionProps} className="grid max-w-2xl gap-5" noValidate>
       <input type="hidden" name="locale" value={locale} />
       <Honeypot />
+      <AttributionField />
       <SelectField
         name="programId"
         label={t("waitlist.program")}

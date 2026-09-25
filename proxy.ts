@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import createIntlMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
+import { campaignConfig, campaignCspSources } from "./lib/campaigns";
 
 const handleI18nRouting = createIntlMiddleware(routing);
 
@@ -17,24 +18,29 @@ function buildCsp(nonce: string): string {
   const isDev = process.env.NODE_ENV === "development";
   const turnstile = Boolean(process.env.TURNSTILE_SITE_KEY && process.env.TURNSTILE_SECRET_KEY);
   const umamiOrigin = originOf(process.env.UMAMI_SCRIPT_URL);
+  // Loaded only after the visitor's consent; the policy allows them when they are configured.
+  const campaigns = campaignCspSources(campaignConfig());
 
   const scriptSrc = ["'self'", `'nonce-${nonce}'`, "'strict-dynamic'"];
   if (isDev) scriptSrc.push("'unsafe-eval'");
   if (turnstile) scriptSrc.push("https://challenges.cloudflare.com");
   if (umamiOrigin) scriptSrc.push(umamiOrigin);
+  scriptSrc.push(...campaigns.script);
 
   const connectSrc = ["'self'"];
   if (umamiOrigin) connectSrc.push(umamiOrigin);
+  connectSrc.push(...campaigns.connect);
   if (isDev) connectSrc.push("ws:");
 
   const frameSrc = ["https://www.openstreetmap.org"];
   if (turnstile) frameSrc.push("https://challenges.cloudflare.com");
+  frameSrc.push(...campaigns.frame);
 
   const directives = [
     "default-src 'self'",
     `script-src ${scriptSrc.join(" ")}`,
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' blob: data:",
+    ["img-src 'self' blob: data:", ...campaigns.img].join(" "),
     "font-src 'self'",
     `connect-src ${connectSrc.join(" ")}`,
     `frame-src ${frameSrc.join(" ")}`,

@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useFormAction } from "@/components/ui/useFormAction";
+import { AttributionField, useConversion } from "@/components/ui/Conversion";
 import { submitEvaluation } from "@/app/actions/forms";
 import {
   ConsentField,
@@ -29,12 +30,14 @@ export function EvaluationForm({ groups, turnstileSiteKey, nonce }: Props) {
   const locale = useLocale();
   const errorText = useErrorText();
   const { state, pending, formProps } = useFormAction(submitEvaluation);
+  useConversion(state.status === "success", "evaluation_request");
   if (state.status === "success")
     return <FormStatus state={state} success={t("academy.success")} />;
   return (
     <form {...formProps} className="grid max-w-2xl gap-5" noValidate>
       <input type="hidden" name="locale" value={locale} />
       <Honeypot />
+      <AttributionField />
       <div className="booking-fields">
         <TextField
           name="childFirstName"

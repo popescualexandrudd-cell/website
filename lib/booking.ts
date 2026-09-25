@@ -11,6 +11,7 @@ import { isSlotAvailable } from "./availability";
 import { loadEngineInput } from "./availability-data";
 import { generateBookingCode, hashToken } from "./tokens";
 import { manageToken } from "./email/messages";
+import type { Attribution } from "./attribution";
 
 const MINUTE = 60_000;
 /** Every booking creation takes this lock, so availability checks never race. */
@@ -36,6 +37,8 @@ export type CreateBookingInput = {
   childAge?: number | null;
   locale: string;
   source: BookingSource;
+  /** Where a visitor who booked on the site came from (campaign, search, social). */
+  attribution?: Attribution | null;
   policyVersion: string;
   status?: BookingStatus;
   internalNotes?: string | null;
@@ -200,6 +203,7 @@ export async function createBooking(input: CreateBookingInput): Promise<CreateBo
             policyVersion: input.policyVersion,
             cancelTokenHash: hashToken(token),
             source: input.source,
+            attribution: input.attribution ?? undefined,
             internalNotes: input.internalNotes ?? null,
             locale: input.locale === "en" ? "en" : "ro",
             confirmedAt: status === "CONFIRMATA" ? new Date() : null,

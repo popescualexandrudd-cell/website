@@ -688,3 +688,27 @@
   background: var(--color-succes);
   color: #fff;
 }
+
+/* A generated link or code, easy to select and copy. */
+.admin-code {
+  display: block;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--color-linie);
+  background: white;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+.admin-checklist {
+  display: grid;
+  gap: 0.35rem;
+}
+.admin-checklist li::before {
+  content: "○ ";
+  color: var(--color-cerneala-2);
+}
+.admin-checklist li[data-on="true"]::before {
+  content: "● ";
+  color: var(--color-succes);
+}

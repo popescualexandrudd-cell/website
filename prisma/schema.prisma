@@ -204,6 +204,8 @@ model SiteSettings {
   umamiEnabled         Boolean     @default(false)
   reviewInvitesEnabled Boolean     @default(true)
   newsletterEnabled    Boolean     @default(true)
+  /// The AI assistant on the site (it also needs ANTHROPIC_API_KEY on the server).
+  assistantEnabled     Boolean     @default(true)
   retentionMonths      Int         @default(24)
   timezone             String      @default("Europe/Bucharest")
   currency             String      @default("RON")
@@ -663,6 +665,8 @@ model Booking {
   cancelTokenHash String        @unique
   reviewTokenHash String?       @unique
   source          BookingSource @default(SITE)
+  /// Where the visitor came from (campaign, search, social); see lib/attribution.ts.
+  attribution     Json?
   internalNotes   String?
   locale          String        @default("ro")
   confirmedAt     DateTime?
@@ -703,6 +707,8 @@ model WaitlistEntry {
   consentAt      DateTime
   policyVersion  String
   status         WaitlistStatus @default(NOU)
+  /// Where the visitor came from (campaign, search, social); see lib/attribution.ts.
+  attribution    Json?
   locale         String         @default("ro")
   anonymizedAt   DateTime?
   createdAt      DateTime       @default(now())
@@ -770,6 +776,8 @@ model ContactMessage {
   subject       String?
   message       String
   status        MessageStatus @default(NOU)
+  /// Where the visitor came from (campaign, search, social); see lib/attribution.ts.
+  attribution   Json?
   consent       Boolean
   consentAt     DateTime
   policyVersion String

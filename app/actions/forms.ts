@@ -8,6 +8,7 @@ import { allowFormSubmission } from "@/lib/rate-limit";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { deriveToken, generateToken, hashToken } from "@/lib/tokens";
 import { getPolicyVersion } from "@/lib/content";
+import { attributionLabel, parseAttributionField } from "@/lib/attribution";
 import { fields, formDataToObject, zodFieldErrors, type FormState } from "@/lib/validation";
 import { deliverEmails } from "@/lib/email/send";
 import { queueCoachNotification, queueNewsletterConfirmation } from "@/lib/email/messages";
@@ -68,6 +69,7 @@ export async function submitContact(_prev: FormState, formData: FormData): Promi
         consentAt: new Date(),
         policyVersion: await getPolicyVersion(),
         locale: data.locale,
+        attribution: parseAttributionField(raw.attribution) ?? undefined,
       },
     });
     const ids = await queueCoachNotification(
@@ -78,6 +80,7 @@ export async function submitContact(_prev: FormState, formData: FormData): Promi
         ["Telefon", message.phone ?? "—"],
         ["Subiect", message.subject ?? "—"],
         ["Mesaj", message.message],
+        ["Sursa vizitei", attributionLabel(message.attribution) ?? "direct sau necunoscută"],
       ],
       message.name,
       message.email,
@@ -140,6 +143,7 @@ export async function submitWaitlist(_prev: FormState, formData: FormData): Prom
         consentAt: new Date(),
         policyVersion: await getPolicyVersion(),
         locale: data.locale,
+        attribution: parseAttributionField(raw.attribution) ?? undefined,
       },
     });
     const programName = program ? ((program.name as { ro?: string }).ro ?? "") : "oricare";
@@ -152,6 +156,7 @@ export async function submitWaitlist(_prev: FormState, formData: FormData): Prom
         ["Telefon", entry.phone],
         ["Email", entry.email],
         ["Vârsta copilului", entry.childAge ? String(entry.childAge) : "—"],
+        ["Sursa vizitei", attributionLabel(entry.attribution) ?? "direct sau necunoscută"],
       ],
       entry.name,
       entry.email,
@@ -226,6 +231,7 @@ export async function submitEvaluation(_prev: FormState, formData: FormData): Pr
         consentAt: new Date(),
         policyVersion: await getPolicyVersion(),
         locale: data.locale,
+        attribution: parseAttributionField(raw.attribution) ?? undefined,
       },
     });
     const ids = await queueCoachNotification(
@@ -239,6 +245,7 @@ export async function submitEvaluation(_prev: FormState, formData: FormData): Pr
         ["Telefon", entry.phone],
         ["Email", entry.email],
         ["Mesaj", entry.message ?? "—"],
+        ["Sursa vizitei", attributionLabel(entry.attribution) ?? "direct sau necunoscută"],
       ],
       entry.name,
       entry.email,

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { mailLink, telLink, whatsappLink } from "@/lib/format";
+import { attributionLabel } from "@/lib/attribution";
 import { deleteMessageAction, setMessageStatusAction } from "@/app/actions/admin-inbox";
 import { ActionButton } from "@/components/admin/ActionButton";
 import { StatusTabs } from "@/components/admin/StatusTabs";
@@ -90,6 +91,8 @@ export default async function MessagesPage({ searchParams }: PageProps<"/admin/m
                     <dd>{m.email}</dd>
                     <dt>Telefon</dt>
                     <dd>{m.phone ?? "—"}</dd>
+                    <dt>Venit din</dt>
+                    <dd>{attributionLabel(m.attribution) ?? "direct sau necunoscut"}</dd>
                     <dt>Acord GDPR</dt>
                     <dd>
                       {m.consentAt.toLocaleString("ro-RO", { timeZone: settings.timezone })} ·

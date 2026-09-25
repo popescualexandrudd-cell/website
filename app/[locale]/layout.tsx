@@ -1,5 +1,6 @@
 import "../globals.css";
 import "./academy.css";
+import "./overlays.css";
 import type { CSSProperties } from "react";
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
@@ -16,6 +17,11 @@ import { Footer } from "@/components/site/Footer";
 import { MobileBar } from "@/components/site/MobileBar";
 import { PreviewBanner } from "@/components/site/PreviewBanner";
 import { ScrollEffects } from "@/components/site/ScrollEffects";
+import { Assistant } from "@/components/site/Assistant";
+import { CampaignTags } from "@/components/site/CampaignTags";
+import { CookieBanner } from "@/components/site/CookieBanner";
+import { assistantAvailable, knowledgePaths } from "@/lib/assistant/load";
+import { campaignConfig, needsConsent } from "@/lib/campaigns";
 import { telLink, whatsappLink } from "@/lib/format";
 import { appUrl } from "@/lib/paths";
 
@@ -106,6 +112,9 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   const nonce = requestHeaders.get("x-nonce") ?? undefined;
   const umamiUrl = process.env.UMAMI_SCRIPT_URL;
   const umamiId = process.env.UMAMI_WEBSITE_ID;
+  const campaigns = campaignConfig();
+  const paths = knowledgePaths(locale);
+  const adTools = [campaigns.adsId ? "Google Ads" : null, campaigns.metaPixelId ? "Meta" : null];
 
   return (
     <html
@@ -130,6 +139,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
             settings={settings}
             location={locations[0] ?? null}
             policyVersion={policyVersion}
+            cookieSettings={needsConsent(campaigns)}
           />
           <ScrollEffects />
           <MobileBar
@@ -139,6 +149,21 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
             callLabel={t("call")}
             telUrl={telLink(settings.phone)}
           />
+          {assistantAvailable(settingsRow) ? (
+            <Assistant
+              locale={locale}
+              evaluationHref={paths.evaluation}
+              bookingHref={paths.booking}
+              privacyHref={paths.privacy}
+            />
+          ) : null}
+          <CampaignTags config={campaigns} />
+          {needsConsent(campaigns) ? (
+            <CookieBanner
+              analytics={Boolean(campaigns.gaId)}
+              marketing={adTools.filter((tool): tool is string => tool !== null)}
+            />
+          ) : null}
         </NextIntlClientProvider>
         {settings.umamiEnabled && umamiUrl && umamiId ? (
           <Script

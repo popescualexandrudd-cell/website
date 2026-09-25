@@ -203,8 +203,8 @@ export const faqContent: FaqContent[] = [
       en: "How does a group lesson work?",
     },
     answer: {
-      ro: "Lecția de grup e pentru 4–6 jucători de nivel apropiat și se rezervă pentru tot grupul, cu numărul de persoane ales la rezervare. Dacă vii singur și vrei să intri într-o grupă, scrie-ne la „Datele mele” sau intră pe lista de așteptare și te anunțăm când se formează una pe nivelul tău.",
-      en: "A group lesson is for 4–6 players of a similar level and is booked for the whole group, with the number of people chosen when you book. If you are on your own and want to join a group, tell us in “My details” or join the waiting list and we will let you know when one forms at your level.",
+      ro: "Lecția de grup e pentru 4–6 jucători de nivel apropiat și se rezervă pentru tot grupul, cu numărul de persoane ales la rezervare. Dacă vii singur și vrei să intri într-o grupă, scrie-ne din pagina de contact sau intră pe lista de așteptare și te anunțăm când se formează una pe nivelul tău.",
+      en: "A group lesson is for 4–6 players of a similar level and is booked for the whole group, with the number of people chosen when you book. If you are on your own and want to join a group, write to us from the contact page or join the waiting list and we will let you know when one forms at your level.",
     },
   },
   {

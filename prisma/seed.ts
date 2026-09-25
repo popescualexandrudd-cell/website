@@ -90,6 +90,30 @@ function slugify(value: string): string {
   );
 }
 
+/**
+ * Creates the legal pages, and brings a draft up to the current template version while nobody
+ * has edited it or had it reviewed: a page the club changed (or a lawyer approved) stays as is.
+ */
+async function syncLegalDrafts(): Promise<Map<string, "created" | "updated" | "kept">> {
+  const result = new Map<string, "created" | "updated" | "kept">();
+  for (const legal of legalContent) {
+    const exists = await db.legalPage.findUnique({ where: { kind: legal.kind } });
+    const untouchedDraft =
+      exists !== null &&
+      !exists.reviewedByLawyer &&
+      exists.version < LEGAL_VERSION &&
+      exists.updatedAt.getTime() - exists.createdAt.getTime() < 60_000;
+    await db.legalPage.upsert({
+      where: { kind: legal.kind },
+      // createdAt moves with it, so the page still reads as untouched for the next version.
+      update: untouchedDraft ? { ...legal, version: LEGAL_VERSION, createdAt: new Date() } : {},
+      create: { ...legal, version: LEGAL_VERSION, reviewedByLawyer: false },
+    });
+    result.set(legal.kind, exists ? (untouchedDraft ? "updated" : "kept") : "created");
+  }
+  return result;
+}
+
 async function main(): Promise<void> {
   // In the Docker image the seed runs at every start with --if-empty: only a brand-new database
   // gets the initial content, so what the coach deleted in the admin never comes back.
@@ -97,7 +121,12 @@ async function main(): Promise<void> {
     process.argv.includes("--if-empty") &&
     (await db.siteSettings.findUnique({ where: { id: 1 } }))
   ) {
-    console.info("Seed: baza de date are deja conținut, nu adaug nimic.");
+    const updated = [...(await syncLegalDrafts())].filter(([, state]) => state === "updated");
+    console.info(
+      updated.length > 0
+        ? `Seed: baza de date are deja conținut; am actualizat ciornele legale: ${updated.map(([kind]) => kind).join(", ")}.`
+        : "Seed: baza de date are deja conținut, nu adaug nimic.",
+    );
     return;
   }
   const config = loadConfig();
@@ -625,14 +654,11 @@ async function main(): Promise<void> {
   }
 
   // ── Legal pages & page headers ────────────────────────────────────────────
-  for (const legal of legalContent) {
-    const exists = await db.legalPage.findUnique({ where: { kind: legal.kind } });
-    await db.legalPage.upsert({
-      where: { kind: legal.kind },
-      update: {},
-      create: { ...legal, version: LEGAL_VERSION, reviewedByLawyer: false },
-    });
-    note(`pagina legală ${legal.kind}`, !exists);
+  for (const [kind, state] of await syncLegalDrafts()) {
+    note(
+      `pagina legală ${kind}${state === "updated" ? " (actualizată)" : ""}`,
+      state === "created",
+    );
   }
 
   for (const header of pageHeaderContent) {

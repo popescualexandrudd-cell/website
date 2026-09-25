@@ -283,7 +283,7 @@
     "chooseProgramHint": "Choose the programme that suits you now. We can change it at any time after the first sessions.",
     "chooseLesson": "What kind of lesson would you like?",
     "duration": "Session length",
-    "durationHint": "If you want a session longer than 3 hours, choose 180 minutes and write to us in “My details”.",
+    "durationHint": "If you want a session longer than 3 hours, choose 180 minutes and tell us in the message at the “My details” step.",
     "durationOption": "{minutes} minutes",
     "participants": "How many people are taking part",
     "persons": "{count, plural, one {1 person} other {# people}}",
@@ -490,5 +490,55 @@
     "backToTeam": "The whole team",
     "bookWith": "Book a lesson",
     "photoAlt": "{name} on the tennis court"
+  },
+  "assistant": {
+    "launcher": "Questions?",
+    "title": "The club's assistant",
+    "subtitle": "Answers from the information the club has published",
+    "close": "Close the assistant",
+    "restart": "Start over",
+    "greeting": "Hi! I can help with the age groups, the schedule, prices and booking. What would you like to know?",
+    "suggestionsLabel": "Common questions",
+    "suggestions": {
+      "age": "From what age can my child start?",
+      "groups": "Which groups do you have, and on which days?",
+      "prices": "How much is a lesson?",
+      "start": "How do we get started?"
+    },
+    "you": "You",
+    "bot": "The assistant",
+    "thinking": "Writing the answer…",
+    "inputLabel": "Your question",
+    "placeholder": "Type your question…",
+    "send": "Send",
+    "stop": "Stop",
+    "evaluation": "Assessment for a child",
+    "booking": "Book a lesson",
+    "note": "Answers are written automatically, by AI, from the club's information only. Please don't type personal details here. What matters (a place in a group, a time) is confirmed by the club.",
+    "privacy": "Privacy",
+    "errors": {
+      "busy": "Lots of questions right now. Please try again in a few minutes, or call us.",
+      "failed": "We couldn't answer just now. Please try again, or call us.",
+      "refused": "I can't help with that. Ask me anything about the club: groups, schedule, prices, booking.",
+      "tooLong": "That question is too long: please keep it under {max} characters."
+    }
+  },
+  "consent": {
+    "title": "Cookies",
+    "intro": "The site works just the same without cookies. With your consent, we use cookies {kind, select, both {for statistics and to see which ads bring us players} analytics {for statistics about the pages people read} other {to see which ads bring us players}}.",
+    "policy": "Cookie policy",
+    "choose": "Choose which cookies you accept",
+    "necessary": "Strictly necessary",
+    "necessaryText": "They remember your choice. Always on.",
+    "analytics": "Statistics",
+    "analyticsText": "Google Analytics: which pages are read and for how long, so we can improve the site.",
+    "marketing": "Marketing",
+    "marketingText": "{tools}: which ads bring us bookings and requests.",
+    "and": " and ",
+    "acceptAll": "Accept",
+    "refuse": "Refuse",
+    "customize": "Let me choose",
+    "save": "Save my choice",
+    "settings": "Cookie settings"
   }
 }

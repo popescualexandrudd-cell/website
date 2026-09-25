@@ -51,6 +51,16 @@ const envSchema = z.object({
   TURNSTILE_SECRET_KEY: optionalString,
   UMAMI_SCRIPT_URL: optionalString,
   UMAMI_WEBSITE_ID: optionalString,
+  /** The AI assistant: an Anthropic API key, optionally another model and a daily cap. */
+  ANTHROPIC_API_KEY: optionalString,
+  ASSISTANT_MODEL: optionalString,
+  ASSISTANT_DAILY_LIMIT: z.coerce.number().int().positive().optional(),
+  /** Campaign measurement, loaded only with the visitor's consent (lib/campaigns.ts). */
+  GA_MEASUREMENT_ID: optionalString,
+  GOOGLE_ADS_ID: optionalString,
+  GOOGLE_ADS_BOOKING_LABEL: optionalString,
+  GOOGLE_ADS_LEAD_LABEL: optionalString,
+  META_PIXEL_ID: optionalString,
   /** Codes from Google Search Console and Bing Webmaster Tools (the content of their meta tag). */
   GOOGLE_SITE_VERIFICATION: optionalString,
   BING_SITE_VERIFICATION: optionalString,

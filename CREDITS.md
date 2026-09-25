@@ -28,6 +28,7 @@ Găzduite pe același server (nicio cerere către Google la vizitarea site-ului)
 | Prisma 7, node-postgres | baza de date | Apache-2.0 / MIT |
 | PostgreSQL 16 | baza de date | PostgreSQL License |
 | next-intl | română și engleză | MIT |
+| @anthropic-ai/sdk | asistentul AI (API-ul Claude) | MIT |
 | Zod | validarea datelor | MIT |
 | date-fns, date-fns-tz | date, ore, fus orar | MIT |
 | markdown-it | textele formatate | MIT |

@@ -11,7 +11,8 @@ Cuprins: [Autentificare](#autentificare) · [Tabloul de bord](#tabloul-de-bord) 
 [Azi](#azi) · [Rezervări](#rezervări) · [Disponibilitate](#disponibilitate) ·
 [Conținut](#conținut) · [Echipa](#echipa-de-antrenori) · [Academia de juniori](#academia-de-juniori) ·
 [Fotografii și video-uri](#fotografii-și-video-uri) · [Mesaje, evaluări și lista de așteptare](#mesaje-evaluări-și-lista-de-așteptare) ·
-[Clienți](#clienți) · [Newsletter](#newsletter) · [Setări și conturi](#setări-și-conturi) ·
+[Clienți](#clienți) · [Newsletter](#newsletter) · [Campanii](#campanii) ·
+[Asistentul AI](#asistentul-ai) · [Setări și conturi](#setări-și-conturi) ·
 [Jurnal](#jurnal) · [Dacă ceva nu merge](#dacă-ceva-nu-merge)
 
 ---
@@ -266,6 +267,37 @@ Lista celor care s-au abonat din subsolul site-ului. Abonarea are **dublă confi
 confirmă din email). **Descarcă lista (CSV)** îți dă adresele confirmate, fiecare cu linkul lui
 personal de dezabonare, pentru serviciul de email pe care îl folosești (Brevo, Mailchimp).
 
+## Campanii
+
+Aici vezi **ce aduce fiecare reclamă și fiecare canal**: câte rezervări făcute pe site, cereri de
+evaluare, înscrieri pe lista de așteptare și mesaje au venit din Facebook, Instagram, Google (din
+reclame sau din căutare), de pe alte site-uri sau direct, în ultimele 30 sau 90 de zile ori într-un
+an. Aceeași sursă o vezi și la fiecare rezervare, mesaj și cerere de evaluare („Venit din”), și în
+emailul de anunț.
+
+Ca o campanie să apară cu numele ei, folosește linkul făcut de **Link pentru o campanie**: alegi
+pagina, unde apare linkul (Facebook, Instagram, afiș cu cod QR…) și un nume („inscrieri-toamna”),
+apoi copiezi linkul în reclamă sau în postare. Reclamele Google Ads se recunosc și fără el.
+
+Tabelul funcționează fără cookie-uri și fără conturi Google sau Meta. Dacă agenția care face
+reclamele îți dă coduri de Google Analytics, Google Ads sau Meta Pixel, le pune cine administrează
+serverul (vezi `DEPLOY.md`); atunci site-ul arată vizitatorilor bannerul de acord pentru cookie-uri,
+iar lista „Instrumente de măsurare” de pe această pagină arată ce e activ.
+
+## Asistentul AI
+
+Butonul **Întrebări?** din colțul paginii deschide asistentul clubului. Răspunde vizitatorilor la
+orice oră despre vârste, grupe, program, prețuri și rezervare, **doar din ce e publicat pe site**:
+programele, lecțiile și tarifele, grupele academiei, echipa, întrebările frecvente, contactul și
+setările de rezervare. Ce nu e completat (de exemplu o taxă lunară „[DE COMPLETAT]”) nu inventează:
+spune că nu are informația și dă telefonul. Copiii îi trimite spre evaluare, adulții spre rezervare.
+
+- Ca răspunsurile să fie bune, **completează conținutul**: tarifele lecțiilor, programul și taxa
+  grupelor, întrebările frecvente. Asistentul vede orice modificare imediat.
+- Conversațiile nu se salvează nicăieri; rămân doar în fereastra vizitatorului.
+- Îl oprești din **Setări → Funcții → Asistentul AI de pe site**. Pe server are nevoie de o cheie
+  Anthropic (`ANTHROPIC_API_KEY`); fără ea nu apare.
+
 ## Setări și conturi
 
 <img src="docs/capturi/18-setari.svg" width="300" alt="Setările">
@@ -281,7 +313,7 @@ personal de dezabonare, pentru serviciul de email pe care îl folosești (Brevo,
   lecții, oferta pentru prima lecție, metodele de plată;
 - **Date legale**: forma de organizare, denumirea, CUI, sediul (apar în subsol și în paginile legale);
 - **Motoare de căutare**: titlul și descrierea pentru Google;
-- **Funcții**: versiunea în engleză, newsletter, invitațiile la recenzie,
+- **Funcții**: versiunea în engleză, newsletter, invitațiile la recenzie, asistentul AI,
   statisticile, perioada de păstrare a datelor;
 - **Email de test**: verifică dacă emailurile pleacă;
 - **Conturi**: poți crea un cont de **editor** pentru cineva care te ajută cu textele. Editorul vede

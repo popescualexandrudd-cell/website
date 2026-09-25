@@ -5,7 +5,7 @@ import type { LegalKind } from "../../../lib/generated/prisma/client";
  * render time from the settings (lib/legal.ts), so they update when the admin edits the data.
  * Every page is flagged "De verificat de un jurist" in the admin until a lawyer reviews it.
  */
-export const LEGAL_VERSION = "2026-09-25";
+export const LEGAL_VERSION = "2026-09-27";
 
 type LegalContent = {
   kind: LegalKind;
@@ -40,9 +40,13 @@ Operatorul datelor este {{entitate.denumire}} ({{entitate.forma}}), CUI {{entita
 
 **Fotografii, video-uri și rezultate.** Fotografiile și filmările de la antrenamente și rezultatele la turnee se publică numai cu acordul persoanelor în cauză; pentru minori, cu acordul scris al părintelui, iar la rezultate doar cu prenumele și inițiala numelui. La încărcare, din fotografii și video-uri se șterg datele ascunse (de exemplu locația GPS).
 
-**Securitate.** Adresa IP a cererilor către formulare, păstrată temporar pentru a limita abuzurile. Temei: interesul legitim de a proteja site-ul.
+**Securitate.** Adresa IP a cererilor către formulare și către asistent, păstrată temporar pentru a limita abuzurile. Temei: interesul legitim de a proteja site-ul.
 
-Nu folosim datele tale pentru publicitate, nu le vindem și nu facem profilare.
+{{sectiune.asistent}}
+
+{{sectiune.campanii}}
+
+{{publicitate}}
 
 ## Cât timp păstrăm datele
 
@@ -54,7 +58,9 @@ Nu folosim datele tale pentru publicitate, nu le vindem și nu facem profilare.
 
 ## Cine mai are acces la date
 
-Datele sunt stocate pe un server închiriat de la un furnizor de găzduire din Uniunea Europeană: [DE COMPLETAT]. Emailurile sunt trimise printr-un furnizor de email: [DE COMPLETAT]. Ambii acționează ca persoane împuternicite, pe bază de contract, și nu folosesc datele în scop propriu. Nu transferăm date în afara Spațiului Economic European.
+Datele sunt stocate pe un server închiriat de la un furnizor de găzduire din Uniunea Europeană: [DE COMPLETAT]. Emailurile sunt trimise printr-un furnizor de email: [DE COMPLETAT]. Ambii acționează ca persoane împuternicite, pe bază de contract, și nu folosesc datele în scop propriu. {{furnizori.extra}}
+
+{{transfer}}
 
 ## Drepturile tale
 
@@ -64,7 +70,7 @@ Dacă nu ești mulțumit de răspuns, poți depune o plângere la Autoritatea Na
 
 ## Cookie-uri
 
-Site-ul public nu folosește cookie-uri de marketing sau de urmărire. Detaliile sunt în politica de cookie-uri.
+{{cookies.rezumat}}
 
 ## Modificări
 
@@ -91,9 +97,13 @@ The data controller is {{entitate.denumire}} ({{entitate.forma}}), tax ID {{enti
 
 **Photos, videos and results.** Photos and videos from training and tournament results are published only with the consent of the people concerned; for minors, with a parent's written consent, and results show only the first name and the initial of the surname. On upload, hidden data (such as GPS location) is removed from photos and videos.
 
-**Security.** The IP address of form requests, kept temporarily to limit abuse. Legal basis: legitimate interest in protecting the site.
+**Security.** The IP address of requests to the forms and to the assistant, kept temporarily to limit abuse. Legal basis: legitimate interest in protecting the site.
 
-We do not use your data for advertising, we do not sell it and we do not profile you.
+{{sectiune.asistent}}
+
+{{sectiune.campanii}}
+
+{{publicitate}}
 
 ## How long we keep data
 
@@ -105,7 +115,9 @@ We do not use your data for advertising, we do not sell it and we do not profile
 
 ## Who else has access
 
-The data is stored on a server rented from a hosting provider in the European Union: [DE COMPLETAT]. Emails are sent through an email provider: [DE COMPLETAT]. Both act as processors under contract and do not use the data for their own purposes. We do not transfer data outside the European Economic Area.
+The data is stored on a server rented from a hosting provider in the European Union: [DE COMPLETAT]. Emails are sent through an email provider: [DE COMPLETAT]. Both act as processors under contract and do not use the data for their own purposes. {{furnizori.extra}}
+
+{{transfer}}
 
 ## Your rights
 
@@ -115,7 +127,7 @@ If you are not satisfied with the answer, you can lodge a complaint with the Rom
 
 ## Cookies
 
-The public site does not use marketing or tracking cookies. Details are in the cookie policy.
+{{cookies.rezumat}}
 
 ## Changes
 
@@ -210,7 +222,7 @@ Version of these terms: {{versiune}}.`,
 
 ## Pe site-ul public
 
-Site-ul public nu setează cookie-uri de marketing, de publicitate sau de urmărire. Limba o alegi din adresa paginii, nu dintr-un cookie.
+{{cookies.public}}
 
 Statisticile de vizitare, dacă sunt activate, se fac cu Umami, un instrument găzduit pe același server, care nu folosește cookie-uri și nu identifică vizitatorii.
 
@@ -220,14 +232,14 @@ Dacă protecția anti-spam Cloudflare Turnstile este activă pe formulare, aceas
 
 ## În panoul de administrare
 
-Pentru echipa academiei, panoul de administrare folosește un singur cookie strict necesar:
+Pentru echipa academiei, panoul de administrare folosește doar cookie-uri strict necesare:
 
 | Cookie | Scop | Durată |
 | --- | --- | --- |
 | \`sesiune_admin\` | păstrează autentificarea în panoul de administrare | 30 de zile sau până la ieșirea din cont |
 | \`__prerender_bypass\` | arată ciornele când echipa previzualizează site-ul | până la ieșirea din previzualizare sau închiderea browserului |
 
-Cookie-urile strict necesare nu au nevoie de consimțământ, conform art. 4 alin. (5) din Legea nr. 506/2004. De aceea site-ul nu afișează un banner de cookie-uri.
+{{cookies.consimtamant}}
 
 ## Cum ștergi cookie-urile
 
@@ -238,7 +250,7 @@ Versiunea acestei politici: {{versiune}}.`,
 
 ## On the public site
 
-The public site sets no marketing, advertising or tracking cookies. You choose the language through the page address, not through a cookie.
+{{cookies.public}}
 
 Visitor statistics, when enabled, use Umami, a tool hosted on the same server that uses no cookies and does not identify visitors.
 
@@ -248,14 +260,14 @@ If Cloudflare Turnstile anti-spam protection is active on the forms, it may use 
 
 ## In the admin panel
 
-For the academy team, the admin panel uses a single strictly necessary cookie:
+For the academy team, the admin panel uses only strictly necessary cookies:
 
 | Cookie | Purpose | Duration |
 | --- | --- | --- |
 | \`sesiune_admin\` | keeps you signed in to the admin panel | 30 days or until you sign out |
 | \`__prerender_bypass\` | shows drafts while the team previews the site | until preview ends or the browser closes |
 
-Strictly necessary cookies do not require consent under Article 4(5) of Romanian Law 506/2004. That is why the site shows no cookie banner.
+{{cookies.consimtamant}}
 
 ## How to delete cookies
 

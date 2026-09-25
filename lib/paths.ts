@@ -1,3 +1,5 @@
+import { routing, type AppPathname } from "@/i18n/routing";
+
 /** Absolute URLs used outside React (emails, calendar files). Mirrors i18n/routing.ts. */
 export function appUrl(): string {
   return (process.env.APP_URL ?? "http://localhost:3000").replace(/\/+$/, "");
@@ -34,3 +36,21 @@ export const urls = {
   adminReviews: () => `${appUrl()}/admin/continut/recenzii`,
   asset: (path: string) => `${appUrl()}${path}`,
 };
+
+/**
+ * A site page's path in the given language, from the routes in i18n/routing.ts ("/academie" →
+ * "/en/junior-academy"), without the navigation helpers, so plain server code can use it.
+ */
+export function sitePath(
+  pathname: AppPathname,
+  locale: string,
+  params: Record<string, string> = {},
+): string {
+  const entry = routing.pathnames[pathname] as string | { ro: string; en: string };
+  const localized = typeof entry === "string" ? entry : entry[lang(locale)];
+  const filled = localized.replace(/\[(\w+)\]/g, (_, key: string) =>
+    encodeURIComponent(params[key] ?? ""),
+  );
+  if (lang(locale) === "ro") return filled;
+  return filled === "/" ? "/en" : `/en${filled}`;
+}

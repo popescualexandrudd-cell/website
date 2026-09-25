@@ -9,6 +9,7 @@ import { loadEngineInput } from "@/lib/availability-data";
 import { cancelByClient, createBooking } from "@/lib/booking";
 import { formatDate, formatTime } from "@/lib/format";
 import { getPolicyVersion } from "@/lib/content";
+import { parseAttributionField } from "@/lib/attribution";
 import { getClientIp } from "@/lib/request";
 import { allowFormSubmission, rateLimit } from "@/lib/rate-limit";
 import { verifyTurnstile } from "@/lib/turnstile";
@@ -167,6 +168,7 @@ export async function submitBooking(_prev: FormState, formData: FormData): Promi
       childAge: data.childAge,
       locale: data.locale,
       source: "SITE",
+      attribution: parseAttributionField(raw.attribution),
       policyVersion: await getPolicyVersion(),
     });
     if (!result.ok) {

@@ -281,7 +281,14 @@ funcționează evaluarea la academie”.
 - **Google Business Profile → Performanță**: câte apeluri, cereri de direcții și vizite pe site
   vin de pe hartă.
 - **Umami** (opțional, fără cookie-uri): ce pagini se citesc.
-- **În admin**: rezervări și cereri de evaluare pe lună.
+- **Admin → Campanii**: câte rezervări, cereri de evaluare și mesaje a adus fiecare sursă
+  (reclamă, căutare, Instagram, afiș). Pune în fiecare postare, reclamă sau cod QR linkul făcut
+  acolo, cu numele campaniei, și vezi exact ce a adus fiecare leu.
+- **Google Analytics, Google Ads, Meta Pixel** (opțional, doar cu acordul vizitatorului):
+  conversiile `booking_request` și `generate_lead` pentru optimizarea reclamelor; pașii sunt în
+  `DEPLOY.md`.
+- **Asistentul AI**: întrebările pe care le pun părinții arată ce lipsește din site; dacă
+  asistentul răspunde des „nu am informația”, completează acel conținut (tarife, program, taxă).
 
 Ce urmărești lunar: poziția pentru cele 5–6 cuvinte cheie principale, numărul de recenzii,
 cererile de evaluare și rezervările.

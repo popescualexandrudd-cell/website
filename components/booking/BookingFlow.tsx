@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useTransition, type FormEvent, type ReactN
 import { useLocale, useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useFormAction } from "@/components/ui/useFormAction";
+import { AttributionField, useConversion } from "@/components/ui/Conversion";
 import {
   fetchAvailability,
   submitBooking,
@@ -272,6 +273,7 @@ function FullFlow({
 
   // ── Submission ──
   const { state, pending, formProps } = useFormAction(submitBooking);
+  useConversion(state.status === "success", "booking_request");
   const [handledState, setHandledState] = useState(state);
   if (state !== handledState) {
     setHandledState(state);
@@ -869,6 +871,7 @@ function FullFlow({
           ) : null}
           <input type="hidden" name="locale" value={locale} />
           <Honeypot />
+          <AttributionField />
 
           <p className="field-hint">{t("emailNote", { email: details.email })}</p>
           <ConsentField error={errorText(state.fieldErrors?.consent)} />

@@ -19,6 +19,10 @@ Acest ghid arată cum pregătești site-ul pentru un club nou, de la zero până
 - **Echipa de antrenori**: câți antrenori are clubul, fiecare cu pagina lui (parcurs, formare,
   specializări, video), antrenorul principal primul.
 - **Galerie foto și video**: video-urile se încarcă din admin și sunt convertite automat pentru web.
+- **Asistentul AI** (opțional): răspunde părinților la orice oră despre vârste, grupe, prețuri și
+  program, doar din conținutul clubului, și îi trimite spre evaluare sau rezervare.
+- **Măsurarea campaniilor**: de unde vine fiecare rezervare și cerere (reclame, căutare, rețele),
+  cu linkuri de campanie; Google Analytics, Google Ads și Meta doar cu acordul vizitatorului.
 - **Rezervări online** cu programe, tipuri de lecții și durată; emailuri, anulare prin link,
   mementouri; panou de administrare complet; SEO, GDPR, accesibilitate WCAG 2.2 AA; română și
   engleză.
@@ -95,6 +99,7 @@ publicare, tabloul de bord din admin arată câte câmpuri mai sunt „de comple
 
 ## Ce se poate opri
 
-- **Versiunea în engleză**, **newsletterul**, **invitațiile la recenzie** (Setări → Funcții).
+- **Versiunea în engleză**, **newsletterul**, **invitațiile la recenzie**, **asistentul AI**
+  (Setări → Funcții).
 - Orice secțiune a paginii principale (Conținut → Secțiunile paginii principale → Afișează
   secțiunea), ordinea lor se schimbă prin tragere.

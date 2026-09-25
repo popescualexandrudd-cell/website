@@ -4,6 +4,8 @@ import type { Locale } from "@/i18n/routing";
 import type { LegalKind } from "@/lib/generated/prisma/client";
 import { getLegalPage, getSettings, localizedSettings } from "@/lib/content";
 import { fillLegalTemplate } from "@/lib/legal";
+import { assistantAvailable } from "@/lib/assistant/load";
+import { campaignConfig } from "@/lib/campaigns";
 import { formatDate } from "@/lib/format";
 import { PageSection } from "./PageHero";
 import { Markdown } from "@/components/site/Markdown";
@@ -16,12 +18,19 @@ export async function LegalPageView({ kind, locale }: { kind: LegalKind; locale:
   ]);
   if (!page) notFound();
   const settings = localizedSettings(settingsRow, locale);
+  const campaigns = campaignConfig();
   const body = fillLegalTemplate(
     page.body,
     settings,
     page.version,
     locale,
     settingsRow.retentionMonths,
+    {
+      assistant: assistantAvailable(settingsRow),
+      analytics: Boolean(campaigns.gaId),
+      googleAds: Boolean(campaigns.adsId),
+      metaPixel: Boolean(campaigns.metaPixelId),
+    },
   );
   return (
     <>

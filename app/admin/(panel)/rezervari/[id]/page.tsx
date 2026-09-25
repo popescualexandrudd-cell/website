@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { attributionLabel } from "@/lib/attribution";
 import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -70,6 +71,13 @@ export default async function BookingDetailPage({
       "Copil",
       `${booking.childFirstName ?? "—"}${booking.childAge ? `, ${booking.childAge} ani` : ""}`,
     ]);
+  if (booking.source === "SITE") {
+    const after = rows.findIndex(([label]) => label === "Sursă") + 1;
+    rows.splice(after, 0, [
+      "Venit din",
+      attributionLabel(booking.attribution) ?? "direct sau necunoscut",
+    ]);
+  }
   if (booking.cancelReason) rows.push(["Motiv anulare", booking.cancelReason]);
 
   return (

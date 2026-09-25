@@ -3,6 +3,7 @@ import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { t } from "@/lib/i18n-content";
 import { mailLink, telLink, whatsappLink } from "@/lib/format";
+import { attributionLabel } from "@/lib/attribution";
 import { deleteWaitlistAction, setWaitlistStatusAction } from "@/app/actions/admin-inbox";
 import { ActionButton } from "@/components/admin/ActionButton";
 import { StatusTabs } from "@/components/admin/StatusTabs";
@@ -122,6 +123,9 @@ export default async function WaitlistPage({ searchParams }: PageProps<"/admin/l
                   ) : null}
                   <p className="mt-1 text-note">
                     {e.phone} · {e.email}
+                  </p>
+                  <p className="mt-1 text-note text-cerneala-2">
+                    Venit din: {attributionLabel(e.attribution) ?? "direct sau necunoscut"}
                   </p>
                 </div>
                 <div className="admin-row-actions">

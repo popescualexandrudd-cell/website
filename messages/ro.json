@@ -283,7 +283,7 @@
     "chooseProgramHint": "Alege programul care ți se potrivește acum. Îl putem schimba oricând, după primele antrenamente.",
     "chooseLesson": "Ce fel de lecție vrei?",
     "duration": "Durata antrenamentului",
-    "durationHint": "Dacă vrei o ședință mai lungă de 3 ore, alege 180 de minute și scrie-ne la „Datele mele”.",
+    "durationHint": "Dacă vrei o ședință mai lungă de 3 ore, alege 180 de minute și scrie-ne în mesajul de la pasul „Datele mele”.",
     "durationOption": "{minutes} de minute",
     "participants": "Câte persoane participă",
     "persons": "{count, plural, one {1 persoană} few {# persoane} other {# de persoane}}",
@@ -490,5 +490,55 @@
     "backToTeam": "Toată echipa",
     "bookWith": "Programează o lecție",
     "photoAlt": "{name} pe terenul de tenis"
+  },
+  "assistant": {
+    "launcher": "Întrebări?",
+    "title": "Asistentul clubului",
+    "subtitle": "Răspunde din informațiile publicate de club",
+    "close": "Închide asistentul",
+    "restart": "De la capăt",
+    "greeting": "Bună! Te ajut cu grupele pe vârste, programul, prețurile și rezervarea. Ce vrei să afli?",
+    "suggestionsLabel": "Întrebări frecvente",
+    "suggestions": {
+      "age": "De la ce vârstă poate începe copilul?",
+      "groups": "Ce grupe aveți și în ce zile?",
+      "prices": "Cât costă o lecție?",
+      "start": "Cum începem?"
+    },
+    "you": "Tu",
+    "bot": "Asistentul",
+    "thinking": "Se scrie răspunsul…",
+    "inputLabel": "Întrebarea ta",
+    "placeholder": "Scrie întrebarea…",
+    "send": "Trimite",
+    "stop": "Oprește",
+    "evaluation": "Evaluare pentru copil",
+    "booking": "Rezervă o lecție",
+    "note": "Răspunsurile sunt scrise automat, cu inteligență artificială, doar din informațiile clubului. Nu scrie date personale aici. Ce contează (loc în grupă, oră) se confirmă de club.",
+    "privacy": "Confidențialitate",
+    "errors": {
+      "busy": "Sunt multe întrebări acum. Încearcă din nou peste câteva minute sau sună-ne.",
+      "failed": "Nu am putut răspunde acum. Încearcă din nou sau sună-ne.",
+      "refused": "La asta nu pot răspunde. Te ajut cu orice despre club: grupe, program, prețuri, rezervări.",
+      "tooLong": "Întrebarea e prea lungă: scrie-o în cel mult {max} de caractere."
+    }
+  },
+  "consent": {
+    "title": "Cookie-uri",
+    "intro": "Site-ul merge la fel și fără cookie-uri. Cu acordul tău, folosim cookie-uri {kind, select, both {pentru statistici și ca să vedem ce reclame ne aduc elevi} analytics {pentru statistici despre paginile citite} other {ca să vedem ce reclame ne aduc elevi}}.",
+    "policy": "Politica de cookie-uri",
+    "choose": "Alege ce cookie-uri accepți",
+    "necessary": "Strict necesare",
+    "necessaryText": "Țin minte alegerea ta. Sunt mereu active.",
+    "analytics": "Statistici",
+    "analyticsText": "Google Analytics: ce pagini se citesc și cât, ca să îmbunătățim site-ul.",
+    "marketing": "Marketing",
+    "marketingText": "{tools}: ce reclame ne aduc rezervări și cereri.",
+    "and": " și ",
+    "acceptAll": "Accept",
+    "refuse": "Refuz",
+    "customize": "Aleg eu",
+    "save": "Salvez alegerea",
+    "settings": "Setări cookie-uri"
   }
 }

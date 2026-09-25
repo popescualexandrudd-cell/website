@@ -285,6 +285,40 @@ e sincronizat cu ultimele 14 zile.
    `UMAMI_WEBSITE_ID=...`, apoi `./scripts/deploy.sh --fara-git` și bifează în admin
    Setări → „Statistici de vizitare”.
 
+### Asistentul AI
+
+1. Creează un cont pe [console.anthropic.com](https://console.anthropic.com), adaugă o metodă de
+   plată și o limită lunară de cheltuieli (Settings → Limits), apoi o cheie (API Keys).
+2. În `.env`: `ANTHROPIC_API_KEY=...` și rulează `./scripts/deploy.sh --fara-git`. Butonul
+   „Întrebări?” apare pe site; din admin îl oprești la Setări → Funcții.
+3. Opțional: `ASSISTANT_MODEL=claude-sonnet-5` pentru costuri mai mici (implicit
+   `claude-opus-5`) și `ASSISTANT_DAILY_LIMIT` (implicit 400 de întrebări pe zi pe tot site-ul).
+
+Asistentul folosește **fallback-uri pentru refuzuri** (`fallbacks: "default"`): dacă modelul
+refuză o întrebare din motive de siguranță, Anthropic o reia automat pe modelul de rezervă
+recomandat. Costul se vede în consola Anthropic; în jurnalul aplicației apare, la fiecare
+răspuns, doar numărul de tokeni.
+
+### Măsurarea campaniilor (Google Analytics, Google Ads, Meta)
+
+Admin → Campanii arată sursa rezervărilor și a cererilor fără nimic de configurat. Codurile de
+mai jos adaugă statisticile Google și conversiile pentru reclame; se încarcă doar după acordul
+vizitatorului, iar bannerul de cookie-uri apare singur când e completat măcar unul.
+
+1. **Google Analytics 4**: Admin → Fluxuri de date → Web → ID-ul de măsurare (`G-…`) în
+   `GA_MEASUREMENT_ID`. În Analytics, marchează ca **evenimente cheie** `booking_request` și
+   `generate_lead` (apar după primele trimiteri).
+2. **Google Ads**: Obiective → Conversii → Conversie nouă → Site web → configurare manuală, una
+   pentru rezervare și una pentru cereri (evaluare, listă de așteptare, mesaj). Din „Configurarea
+   etichetei” → „Folosește Google Tag”, copiază ID-ul `AW-…` în `GOOGLE_ADS_ID` și eticheta din
+   `send_to` (partea de după `/`) în `GOOGLE_ADS_BOOKING_LABEL` și `GOOGLE_ADS_LEAD_LABEL`.
+   Activează etichetarea automată (auto-tagging) în setările contului.
+3. **Meta (Facebook, Instagram)**: Events Manager → Conectează surse de date → Web → Meta Pixel;
+   ID-ul (doar cifre) în `META_PIXEL_ID`. Evenimentele trimise: `PageView`, `Schedule`
+   (rezervare), `Lead` (evaluare, listă de așteptare), `Contact` (mesaj, telefon, WhatsApp).
+4. `./scripts/deploy.sh --fara-git`. Politica de cookie-uri și cea de confidențialitate se
+   actualizează singure cu instrumentele active.
+
 ### Anti-spam Cloudflare Turnstile
 
 Formularele au deja protecție (câmp capcană și limită de trimiteri). Dacă primești totuși spam:

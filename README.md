@@ -21,8 +21,8 @@ video-uri, se editează din panoul de administrare.
 
 - **Site public** în română (fără prefix) și engleză (`/en`, cu adrese traduse): pagina principală
   cu video de deschidere care se retrage într-un cadru la derulare, cifrele clubului, programe în
-  carduri suprapuse, etapele academiei de juniori, echipa, metoda, baza sportivă, galeria; pagini pentru academia de juniori (grupe, rezultate, cerere
-  de evaluare), echipă și fiecare antrenor, programe, club, prețuri, rezervare, galerie foto și
+  carduri suprapuse, etapele academiei de juniori, echipa, metoda, baza sportivă, galeria; pagini
+  pentru academia de juniori (grupe, rezultate, cerere de evaluare), echipă și fiecare antrenor, programe, club, prețuri, rezervare, galerie foto și
   video, sfaturi, întrebări, contact, listă de așteptare, pagini legale.
 - **Identitatea clubului din admin**: nume, logo, două culori (restul paletei se calculează din
   ele, cu verificarea contrastului), video și fotografie de deschidere.
@@ -34,9 +34,16 @@ video-uri, se editează din panoul de administrare.
   lecții, preaviz, orizont și ora de vară/iarnă; programe, tipuri de lecții și durată aleasă;
   rezervarea dublă e imposibilă (blocare în tranzacție + constrângere de excludere în PostgreSQL);
   emailuri cu `.ics`, anulare prin link, memento, invitație la recenzie.
+- **Asistentul AI** (Claude, opțional): răspunde vizitatorilor la orice oră despre vârste, grupe,
+  prețuri și program, doar din conținutul publicat, și îi trimite spre evaluare sau rezervare.
+  Nu salvează conversațiile; limite pe vizitator și pe zi.
+- **Măsurarea campaniilor**: sursa fiecărei rezervări, cereri de evaluare și mesaj (UTM, reclame,
+  căutare, rețele), raport și generator de linkuri în admin; Google Analytics, Google Ads și Meta
+  Pixel opționale, încărcate doar după acordul din bannerul de cookie-uri.
 - **Admin** mobile-first: rezervări, azi, disponibilitate, tot conținutul (RO/EN, Markdown,
   fotografii și video-uri, reordonare), echipa, grupele și rezultatele academiei, media, mesaje,
-  evaluări și listă de așteptare, clienți (pachete, GDPR), newsletter, setări, conturi, jurnal.
+  evaluări și listă de așteptare, clienți (pachete, GDPR), newsletter, campanii, setări, conturi,
+  jurnal.
 - **Producție**: Docker Compose cu Caddy (HTTPS automat), PostgreSQL, worker, backup zilnic
   (14 zile, opțional off-site cu rclone), Umami opțional.
 
