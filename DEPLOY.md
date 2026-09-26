@@ -33,10 +33,10 @@ Cuprins:
   pe lună. Site-ul, baza de date și backup-urile stau toate pe acest server.
 - **Un serviciu de email** pentru trimiterea confirmărilor (vezi pasul 7). Varianta gratuită de la
   Brevo (300 de emailuri pe zi) ajunge pentru un club.
-- **Fișierul `config/club.yml` completat** cu datele clubului (nume, culori, antrenori, grupe,
-  telefon, adresă, prețuri; vezi `SABLON.md`). Ce
-  rămâne necompletat apare pe site ca `[DE COMPLETAT]` și se poate completa oricând din panoul de
-  administrare. Lista completă e în `CONTENT-TODO.md`.
+- **Fișierul `config/club.yml`**: pentru Clubul Tenis Elite e deja completat (nume, culori,
+  antrenori, grupe, telefon, adresă, prețuri, oferte). Ce mai poate adăuga clubul (fotografii,
+  video, coordonatele hărții) se face oricând din panoul de administrare; lista e în
+  `CONTENT-TODO.md`.
 
 ## 2. Serverul
 
