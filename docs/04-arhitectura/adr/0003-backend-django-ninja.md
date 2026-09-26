@@ -1,6 +1,6 @@
 # ADR-0003: Backend Django 5.2 LTS + Django Ninja, Python ≥ 3.12
 
-- **Stare:** Propus (Etapa 0)
+- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
 - **Data:** 2026-09-26
 - **Legat de:** §4.3 („Django REST Framework sau Django Ninja; alege și justifică în ADR”), §8.1
 

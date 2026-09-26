@@ -15,7 +15,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - `MEDIE`: necesară în etapele 2–6; până atunci se lucrează cu varianta implicită, configurabilă.
 - `SCĂZUTĂ`: necesară mai târziu sau fără impact asupra arhitecturii.
 
-**Stări:** `DESCHISĂ` · `REZOLVATĂ` · `ÎNLOCUITĂ` (cu trimitere la întrebarea sau decizia nouă).
+**Stări:** `DESCHISĂ` · `PARȚIAL` (răspuns parțial, rămâne ceva de stabilit) · `REZOLVATĂ` · `ÎNLOCUITĂ` (cu trimitere la întrebarea sau decizia nouă).
 
 ## Rezumat
 
@@ -27,8 +27,8 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q4](#q4) | Prioritatea abonaților | MEDIE | Etapa 3 (liste de așteptare), Etapa 6 (turnee) | DESCHISĂ |
 | [Q5](#q5) | Limita de diferență de nivel | MEDIE | Etapa 2 (parametru al motorului; nu blochează) | DESCHISĂ |
 | [Q6](#q6) | Recompense | MEDIE | Etapa 6 (recompense de sezon) | DESCHISĂ |
-| [Q7](#q7) | Copiii | ÎNALTĂ | Etapa 1A (modelul de conturi: legătura părinte–copil) | DESCHISĂ |
-| [Q8](#q8) | Invitații fără cont | ÎNALTĂ | Etapa 1A (conturi rapide), Etapa 3 (scanarea la intrarea pe teren) | DESCHISĂ |
+| [Q7](#q7) | Copiii | ÎNALTĂ | Etapa 1A (modelul de conturi: legătura părinte–copil) | REZOLVATĂ |
+| [Q8](#q8) | Invitații fără cont | ÎNALTĂ | Etapa 1A (conturi rapide), Etapa 3 (scanarea la intrarea pe teren) | REZOLVATĂ |
 | [Q9](#q9) | Plata online cu card | MEDIE | Etapa 4 (plăți) | DESCHISĂ |
 | [Q10](#q10) | Recepția | MEDIE | Etapa 4 (plăți, registru) | DESCHISĂ |
 | [Q11](#q11) | Termenul pentru plată | MEDIE | Etapa 6 (validarea scorului prin plată) | DESCHISĂ |
@@ -40,11 +40,11 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q17](#q17) | „Telefon” | MEDIE | Etapa 12 (notificări); Etapa 1A (dacă telefonul trebuie verificat prin cod) | DESCHISĂ |
 | [Q18](#q18) | Pilates | SCĂZUTĂ | Etapa 12 (notificări pilates) | DESCHISĂ |
 | [Q19](#q19) | Grupul comunității | SCĂZUTĂ | Etapa 12 (mesaje pentru comunitate) | DESCHISĂ |
-| [Q20](#q20) | Tenis | ÎNALTĂ | Etapa 1A (modelul Locație → Resurse) | DESCHISĂ |
+| [Q20](#q20) | Tenis | ÎNALTĂ | Etapa 1A (modelul Locație → Resurse) | REZOLVATĂ |
 | [Q21](#q21) | Prețuri | MEDIE | Etapele 3–4 (valori demo); prețurile finale trebuie știute înainte de Etapa 15 (beta) | DESCHISĂ |
-| [Q22](#q22) | Serverul | URGENTĂ | Etapa 1B (unde publicăm pagina de pre-lansare) și Etapa 14 (deploy) | DESCHISĂ |
-| [Q23](#q23) | Hardware | URGENTĂ | Etapele 7–9 (drivere reale); trebuie răspuns ÎNAINTE de a cumpăra aparatele | DESCHISĂ |
-| [Q24](#q24) | Conturi externe | URGENTĂ | Etapa 1B (furnizorul de email pentru lista de așteptare), Etapa 5 (Apple/Google Wallet), Etapa 12 (cheia AI) | DESCHISĂ |
+| [Q22](#q22) | Serverul | URGENTĂ | Etapa 1B (unde publicăm pagina de pre-lansare) și Etapa 14 (deploy) | PARȚIAL |
+| [Q23](#q23) | Hardware | URGENTĂ | Etapele 7–9 (drivere reale); trebuie răspuns ÎNAINTE de a cumpăra aparatele | PARȚIAL |
+| [Q24](#q24) | Conturi externe | URGENTĂ | Etapa 1B (furnizorul de email pentru lista de așteptare), Etapa 5 (Apple/Google Wallet), Etapa 12 (cheia AI) | PARȚIAL |
 | [Q25](#q25) | Limbi suplimentare | SCĂZUTĂ | Etapa 11 (website complet) | DESCHISĂ |
 | [Q26](#q26) | Datele firmei | URGENTĂ | Etapa 1B (operatorul de date din nota de informare a listei de așteptare), Etapa 4 (bonuri, facturi), Etapa 5 (GDPR) | DESCHISĂ |
 | [Q27](#q27) | Calendarul sezoanelor | MEDIE | Etapa 6 (sezoane) | DESCHISĂ |
@@ -56,13 +56,13 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q33](#q33) | Cafeneaua | MEDIE | Etapa 4 (produse de cafenea), Etapa 8 (afișajul cafenelei) | DESCHISĂ |
 | [Q34](#q34) | Sala de evenimente | MEDIE | Etapa 3 (rezervarea sălii de evenimente) | DESCHISĂ |
 | [Q35](#q35) | Pachetele corporate | MEDIE | Etapa 4 (conturi corporate) | DESCHISĂ |
-| [Q36](#q36) | Membri fondatori | ÎNALTĂ | Etapa 1B (dacă pagina de pre-lansare oferă locuri de membru fondator) | DESCHISĂ |
-| [Q37](#q37) | Personalul | ÎNALTĂ | Etapa 1A (roluri și permisiuni), Etapa 15 (instruirea personalului) | DESCHISĂ |
+| [Q36](#q36) | Membri fondatori | ÎNALTĂ | Etapa 1B (dacă pagina de pre-lansare oferă locuri de membru fondator) | REZOLVATĂ |
+| [Q37](#q37) | Personalul | ÎNALTĂ | Etapa 1A (roluri și permisiuni), Etapa 15 (instruirea personalului) | REZOLVATĂ |
 | [Q38](#q38) | Propunerile de concept | SCĂZUTĂ | Etapa 13 (branding, marketing); numele terenurilor se pot schimba oricând din admin | DESCHISĂ |
 | [Q39](#q39) | Numele domeniului și marca „Jungle Padel” *(nouă)* | URGENTĂ | Etapa 1B (pagina de pre-lansare), Etapa 13 (branding) | DESCHISĂ |
-| [Q40](#q40) | Găzduirea paginii de pre-lansare dacă serverul propriu nu e gata *(nouă)* | URGENTĂ | Etapa 1B | DESCHISĂ |
-| [Q41](#q41) | Avocat / DPO pentru revizuirea textelor legale *(nouă)* | URGENTĂ | Etapa 1B (nota de informare pentru lista de așteptare), Etapa 5 (formularul GDPR al ligii) | DESCHISĂ |
-| [Q42](#q42) | Fluxul de aprobare pe GitHub *(nouă)* | SCĂZUTĂ | Etapa 0 (organizare) | DESCHISĂ |
+| [Q40](#q40) | Găzduirea paginii de pre-lansare dacă serverul propriu nu e gata *(nouă)* | URGENTĂ | Etapa 1B | REZOLVATĂ |
+| [Q41](#q41) | Avocat / DPO pentru revizuirea textelor legale *(nouă)* | URGENTĂ | Etapa 1B (nota de informare pentru lista de așteptare), Etapa 5 (formularul GDPR al ligii) | REZOLVATĂ |
+| [Q42](#q42) | Fluxul de aprobare pe GitHub *(nouă)* | SCĂZUTĂ | Etapa 0 (organizare) | REZOLVATĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -131,10 +131,10 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q7"></a>Q7 — Copiii
 
 - **Prioritate:** ÎNALTĂ · **Blochează:** Etapa 1A (modelul de conturi: legătura părinte–copil)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (din MEGA_PROMPT):** da, modul pregătit, activabil.
 - **Notă:** Lucrez cu varianta implicită; confirmarea schimbă doar dacă modulul e activ la lansare.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (26.09.2026):** Confirmat varianta implicită: modulul de conturi de copii este pregătit și activabil din admin (flag `child_accounts`, oprit până la activare).
 - **Textul original (§17):**
 
   > - **Q7 Copiii**: se creează conturi de copii gestionate de părinți, pentru antrenamente, fără ligă? *Implicit: da, modul pregătit, activabil.*
@@ -142,9 +142,9 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q8"></a>Q8 — Invitații fără cont
 
 - **Prioritate:** ÎNALTĂ · **Blochează:** Etapa 1A (conturi rapide), Etapa 3 (scanarea la intrarea pe teren)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (din MEGA_PROMPT):** da, cont rapid la chioșc, cu QR temporar.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (26.09.2026):** Confirmat varianta implicită: cont rapid pentru invitați (nume, telefon, email), creat de recepție sau la chioșc.
 - **Textul original (§17):**
 
   > - **Q8 Invitații fără cont** care joacă o închiriere: trebuie să-și facă cont rapid (nume, telefon, email) ca să poată scana la intrarea pe teren? *Implicit: da, cont rapid la chioșc, cu QR temporar.*
@@ -263,10 +263,10 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q20"></a>Q20 — Tenis
 
 - **Prioritate:** ÎNALTĂ · **Blochează:** Etapa 1A (modelul Locație → Resurse)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (din MEGA_PROMPT):** suport pentru mai multe locații; site-ul de tenis rămâne separat, cu legături reciproce.
 - **Notă:** Lucrez cu varianta implicită: sistemul suportă de la început mai multe locații; la lansare există doar locația Jungle Padel.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (26.09.2026):** Confirmat varianta implicită: suport pentru mai multe locații; site-ul de tenis rămâne separat, cu legături reciproce.
 - **Textul original (§17):**
 
   > - **Q20 Tenis**: sistemul gestionează și terenurile Clubului Tenis Elite (mai multe locații)? Se integrează sau se înlocuiește site-ul existent al clubului de tenis? *Implicit: suport pentru mai multe locații; site-ul de tenis rămâne separat, cu legături reciproce.*
@@ -284,10 +284,10 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q22"></a>Q22 — Serverul
 
 - **Prioritate:** URGENTĂ · **Blochează:** Etapa 1B (unde publicăm pagina de pre-lansare) și Etapa 14 (deploy)
-- **Stare:** DESCHISĂ
+- **Stare:** PARȚIAL
 - **Varianta implicită (propusă în Etapa 0):** Recomandare orientativă, de confirmat în Etapa 14: Ubuntu Server LTS; minimum 8 nuclee, 32 GB RAM, 2 × 1 TB SSD NVMe în oglindă (RAID 1); UPS; IP public fix; internet de rezervă (4G/5G) pentru chioșcuri; backup criptat în afara clubului.
 - **Notă:** Vezi și Q40 (găzduire temporară dacă serverul nu e gata).
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (26.09.2026):** „Servere avem sau închiriem.” Resursele de găzduire există; specificațiile exacte, locația și accesul se stabilesc în Etapa 14.
 - **Textul original (§17):**
 
   > - **Q22 Serverul**: sistem de operare, resurse (procesor, memorie, disc), locație (la club sau în centru de date), IP public, UPS, internet de rezervă, cine are acces fizic.
@@ -295,10 +295,10 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q23"></a>Q23 — Hardware
 
 - **Prioritate:** URGENTĂ · **Blochează:** Etapele 7–9 (drivere reale); trebuie răspuns ÎNAINTE de a cumpăra aparatele
-- **Stare:** DESCHISĂ
+- **Stare:** PARȚIAL
 - **Varianta implicită (din MEGA_PROMPT):** arhitectură pregătită pentru ambele variante.
 - **Notă:** Înainte de achiziție, trimiteți-mi modelele propuse: verific că aparatul de numerar și casa de marcat au protocol sau SDK documentat, utilizabil din Linux. Criteriile sunt în `docs/09-hardware/02-criterii-achizitie-hardware.md`.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (26.09.2026):** „Le alegem; creează sistemele până atunci.” Proprietarul alege modelele; până atunci totul se construiește și se testează cu simulatoare. Modelele alese trebuie trimise înainte de cumpărare.
 - **Textul original (§17):**
 
   > - **Q23 Hardware**: modelele exacte (aparat de numerar cu rest, casa de marcat fiscală, scannere, ecrane, mini-PC-uri); există scanner lângă fiecare teren pentru scanarea la intrare? *Implicit: arhitectură pregătită pentru ambele variante.*
@@ -306,10 +306,10 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q24"></a>Q24 — Conturi externe
 
 - **Prioritate:** URGENTĂ · **Blochează:** Etapa 1B (furnizorul de email pentru lista de așteptare), Etapa 5 (Apple/Google Wallet), Etapa 12 (cheia AI)
-- **Stare:** DESCHISĂ
+- **Stare:** PARȚIAL
 - **Varianta implicită (propusă în Etapa 0):** Toate conturile se creează pe firma clubului, de către proprietar, cu ghid pas cu pas de la mine. Parolele și cheile NU se trimit în chat și nu intră în git: se pun direct în fișierul de configurare (`.env`) de pe server.
 - **Notă:** Apple Developer pentru o firmă cere un număr D-U-N-S, care se obține în câteva zile sau săptămâni: merită început acum, ca Wallet să fie gata în decembrie.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (26.09.2026):** Nu se începe înscrierea în Apple Developer acum. Consecință: Apple Wallet se amână (adaptor pregătit, dezactivat); în Etapa 5 se livrează Google Wallet (dacă se creează contul de emitent), PDF-ul de tipar și emailul cu cardul. Furnizorul de email, emitentul Google Wallet și cheia AI rămân de stabilit.
 - **Textul original (§17):**
 
   > - **Q24 Conturi externe**: Apple Developer (pentru Wallet), emitent Google Wallet, furnizor de email, cheie API pentru AI: cine le creează și pe ce firmă?
@@ -329,7 +329,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** URGENTĂ · **Blochează:** Etapa 1B (operatorul de date din nota de informare a listei de așteptare), Etapa 4 (bonuri, facturi), Etapa 5 (GDPR)
 - **Stare:** DESCHISĂ
 - **Varianta implicită (propusă în Etapa 0):** Câmpurile firmei rămân marcate `DE_CONFIRMAT` în configurare; niciun text legal nu se publică fără ele.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (26.09.2026):** Datele firmei nu există încă. Câmpurile rămân `DE_CONFIRMAT` în configurare.
 - **Textul original (§17):**
 
   > - **Q26 Datele firmei** (denumire, CUI, adresă, date de contact pentru GDPR) și contabilul (pentru fiscal și e-Factura).
@@ -427,9 +427,9 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q36"></a>Q36 — Membri fondatori
 
 - **Prioritate:** ÎNALTĂ · **Blochează:** Etapa 1B (dacă pagina de pre-lansare oferă locuri de membru fondator)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (propusă în Etapa 0):** Pagina de pre-lansare are doar listă de așteptare, fără beneficii promise; modulul „membru fondator” e pregătit în sistem, dar dezactivat până la decizie.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (26.09.2026):** Confirmat varianta implicită: pagina de pre-lansare are doar listă de așteptare, fără beneficii promise; modulul „membru fondator” pregătit, dezactivat.
 - **Textul original (§17):**
 
   > - **Q36 Membri fondatori** (propunere: 100 de locuri cu beneficii la lansare), da sau nu?
@@ -437,9 +437,9 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q37"></a>Q37 — Personalul
 
 - **Prioritate:** ÎNALTĂ · **Blochează:** Etapa 1A (roluri și permisiuni), Etapa 15 (instruirea personalului)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (propusă în Etapa 0):** Rolurile din secțiunea 8.1: Admin, Manager, Recepție, Antrenor/Instructor, Jucător/Client, Dispozitiv. Un instructor de pilates la lansare (R-103); numărul de antrenori și de persoane la recepție e configurabil din admin.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (26.09.2026):** Confirmat varianta implicită: rolurile Admin, Manager, Recepție, Antrenor/Instructor, Jucător/Client, Dispozitiv; numărul de persoane configurabil.
 - **Textul original (§17):**
 
   > - **Q37 Personalul**: câte persoane la recepție, câți antrenori (padel, tenis), roluri?
@@ -463,31 +463,31 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Întrebarea:** Ce domeniu cumpărăm (de exemplu o variantă `.ro` a numelui)? S-a verificat disponibilitatea mărcii „Jungle Padel” la OSIM (România) și EUIPO (Uniunea Europeană)?
 - **Varianta implicită (propusă în Etapa 0):** Până la cumpărare lucrăm cu `<domeniu>` (secțiunea 4.6). Recomand verificarea mărcii ÎNAINTE de cumpărarea domeniului și de orice material tipărit.
 - **Notă:** Sursa: secțiunile 3, 4.6 și 15.4 din MEGA_PROMPT (verificarea mărcii și a domeniului).
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (26.09.2026):** Nu avem încă domeniu și nici verificarea mărcii. Se lucrează cu `<domeniu>`.
 
 ### <a id="q40"></a>Q40 — Găzduirea paginii de pre-lansare dacă serverul propriu nu e gata
 
 - **Prioritate:** URGENTĂ · **Blochează:** Etapa 1B
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Întrebarea:** Serverul propriu (Q22) va fi funcțional în octombrie–noiembrie 2026? Dacă nu, acceptați ca pagina de pre-lansare să stea temporar pe un server virtual închiriat în UE (VPS), cu codul și datele noastre, fără platforme terțe, urmând să fie mutată pe serverul propriu în Etapa 14?
 - **Varianta implicită (propusă în Etapa 0):** Da, VPS temporar în UE, cu backup; mutare pe serverul propriu în Etapa 14.
 - **Notă:** Sursa: Etapa 1B (pre-lansare devreme) vs. secțiunea 14 (server propriu).
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (26.09.2026):** Acceptat: server propriu sau închiriat (inclusiv pentru pagina de pre-lansare).
 
 ### <a id="q41"></a>Q41 — Avocat / DPO pentru revizuirea textelor legale
 
 - **Prioritate:** URGENTĂ · **Blochează:** Etapa 1B (nota de informare pentru lista de așteptare), Etapa 5 (formularul GDPR al ligii)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Întrebarea:** Aveți un avocat sau un responsabil cu protecția datelor (DPO) care să revizuiască textele legale înainte de publicare? Cine semnează?
 - **Varianta implicită (propusă în Etapa 0):** Scriu ciornele complete, marcate „necesită revizuire de către un avocat/DPO înainte de publicare” (secțiunea 12.2); nu se publică fără revizuire.
 - **Notă:** Sursa: secțiunea 12.2 din MEGA_PROMPT.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (26.09.2026):** „Fă tu în locul avocatului și modificăm dacă este cazul.” Textele legale le redactez eu, proprietarul le citește și cere modificări. Fiecare text poartă mențiunea „redactat fără revizuire juridică; recomandăm verificarea de către un avocat/DPO”, iar proprietarul își asumă publicarea.
 
 ### <a id="q42"></a>Q42 — Fluxul de aprobare pe GitHub
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** Etapa 0 (organizare)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Întrebarea:** Repository-ul se numește `website` și nu are încă un branch principal `main`. Aprobarea unei etape înseamnă: îmbinarea (merge) în `main` și un tag `etapa-N`? Păstrăm numele `website` sau îl redenumim `jungle-padel`?
 - **Varianta implicită (propusă în Etapa 0):** Da: la fiecare etapă aprobată, merge în `main` + tag (`etapa-0`, `etapa-1a` …). Numele repository-ului rămâne neschimbat.
 - **Notă:** Sursa: secțiunea 14 (tag-uri git pentru fiecare etapă aprobată).
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (26.09.2026):** De acord: la fiecare etapă aprobată, merge în `main` + tag (`etapa-0`, `etapa-1a` …); numele repository-ului rămâne `website`.

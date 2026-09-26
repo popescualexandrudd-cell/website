@@ -1,6 +1,6 @@
 # ADR-0022: Feature flags și configurare versionată, cu valori „DE_CONFIRMAT” vizibile
 
-- **Stare:** Propus (Etapa 0)
+- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
 - **Data:** 2026-09-26
 - **Legat de:** §1.1 punctul 2, §2.2, §6 (parametri versionați), §8.6, R-006, R-110
 

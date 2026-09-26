@@ -1,6 +1,6 @@
 # ADR-0006: Sarcini programate cu Celery și Celery Beat
 
-- **Stare:** Propus (Etapa 0)
+- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
 - **Data:** 2026-09-26
 - **Legat de:** §4.3, §8.1 (sarcini programate), §6.9
 

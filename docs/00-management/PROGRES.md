@@ -3,17 +3,18 @@
 > Actualizat la fiecare sesiune de lucru. Prima secțiune spune mereu **unde suntem acum**.
 
 ## Unde suntem acum
-- **Etapa curentă:** Etapa 0 — livrată pe 26.09.2026, **așteaptă aprobarea proprietarului**.
-- **Următoarea etapă:** 1A (fundația backend), apoi 1B (pagina de pre-lansare). Nu încep cod de aplicație până la aprobarea Etapei 0.
-- **Întrebări urgente:** Q22, Q23, Q24, Q26, Q39, Q40, Q41 (vezi [INTREBARI_DESCHISE.md](INTREBARI_DESCHISE.md)).
+- **Etapa curentă:** Etapa 1A (fundația backend) — în lucru din 26.09.2026.
+- **Etapa 0:** aprobată de proprietar pe 26.09.2026 (tag `etapa-0`, branch `main`).
+- **Următoarea etapă:** 1B (pagina de pre-lansare), după aprobarea Etapei 1A.
+- **Întrebări încă deschise care contează curând:** Q26 (datele firmei), Q39 (domeniu, marcă), Q24 (furnizor de email), Q23 (modelele de hardware) — vezi [INTREBARI_DESCHISE.md](INTREBARI_DESCHISE.md).
 - **Branch de lucru:** `claude/hopeful-euler-rguibn` (repository `popescualexandrudd-cell/website`).
 
 ## Starea etapelor
 
 | Etapă | Conținut | Orientativ | Stare |
 |---|---|---|---|
-| 0 | Documentație, structură, ADR-uri, întrebări, plan | oct. 2026 | Livrată, așteaptă aprobarea |
-| 1A | Fundația backend | oct. 2026 | Neîncepută |
+| 0 | Documentație, structură, ADR-uri, întrebări, plan | oct. 2026 | **Aprobată 26.09.2026** |
+| 1A | Fundația backend | oct. 2026 | În lucru |
 | 1B | Pagina de pre-lansare | oct.–nov. 2026 | Neîncepută |
 | 2 | Motorul ligii + simulări | nov. 2026 | Neîncepută |
 | 3 | Rezervări, prețuri, anulări, prezențe | nov. 2026 | Neîncepută |
@@ -43,7 +44,7 @@
 - [x] `PLAN_DETALIAT.md`, `CALENDAR.md`, `CHANGELOG.md`.
 - [x] Criterii de achiziție hardware (`docs/09-hardware/02-criterii-achizitie-hardware.md`).
 - [x] `.gitignore`, `.editorconfig`, `.gitattributes`.
-- [ ] **Aprobarea proprietarului** → apoi tag `etapa-0` (Q42).
+- [x] **Aprobată de proprietar pe 26.09.2026** → tag `etapa-0`, merge în `main` (Q42).
 
 ## Etapa 0 — cum verifici (click cu click)
 1. Deschide pe GitHub repository-ul `popescualexandrudd-cell/website` și alege branch-ul `claude/hopeful-euler-rguibn` (butonul cu numele branch-ului, sus în stânga listei de fișiere).
@@ -60,4 +61,5 @@
 - Diagramele Mermaid se randează fără erori.
 
 ## Jurnal
-- **26.09.2026** — Etapa 0 livrată: documentație, structură, ADR-uri, întrebări, plan. Așteaptă aprobarea.
+- **26.09.2026** — Etapa 0 livrată: documentație, structură, ADR-uri, întrebări, plan.
+- **26.09.2026** — Etapa 0 aprobată. Răspunsuri: Q7, Q8, Q20, Q36, Q37, Q40, Q41, Q42 rezolvate; Q22, Q23, Q24 parțial (Apple Wallet amânat); Q26, Q39 încă deschise. ADR-0001 … ADR-0022 acceptate. Început Etapa 1A.

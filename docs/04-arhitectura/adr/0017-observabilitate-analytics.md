@@ -1,6 +1,6 @@
 # ADR-0017: Monitorizare, erori și analytics auto-găzduite
 
-- **Stare:** Propus (Etapa 0)
+- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
 - **Data:** 2026-09-26
 - **Legat de:** §4.3, §12.2 (analytics fără cookie-uri), §14
 

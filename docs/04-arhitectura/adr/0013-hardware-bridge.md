@@ -1,6 +1,6 @@
 # ADR-0013: Hardware Bridge — serviciu local, mesaje semnate, jurnal de numerar pe disc
 
-- **Stare:** Propus (Etapa 0)
+- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
 - **Data:** 2026-09-26
 - **Legat de:** §4.2 punctul 9, §4.3, §8.3, §8.4, §13.4
 

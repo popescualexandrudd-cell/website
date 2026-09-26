@@ -1,6 +1,6 @@
 # ADR-0004: PostgreSQL, cu integritatea garantată în baza de date
 
-- **Stare:** Propus (Etapa 0)
+- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
 - **Data:** 2026-09-26
 - **Legat de:** §4.3, R-043, R-064, R-067, §6.16
 

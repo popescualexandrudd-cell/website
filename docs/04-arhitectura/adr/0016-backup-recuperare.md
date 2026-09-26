@@ -1,6 +1,6 @@
 # ADR-0016: Backup și recuperare după dezastru
 
-- **Stare:** Propus (Etapa 0)
+- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
 - **Data:** 2026-09-26
 - **Legat de:** §12.1, §14
 

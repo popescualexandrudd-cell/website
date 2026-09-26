@@ -1,6 +1,6 @@
 # ADR-0015: Infrastructură — Docker Compose pe serverul propriu, Caddy ca proxy
 
-- **Stare:** Propus (Etapa 0)
+- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
 - **Data:** 2026-09-26
 - **Legat de:** §4.3, §4.6, §14
 

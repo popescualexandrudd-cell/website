@@ -1,6 +1,6 @@
 # ADR-0018: Internaționalizare — cataloage comune, coduri de eroare traduse în interfață
 
-- **Stare:** Propus (Etapa 0)
+- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
 - **Data:** 2026-09-26
 - **Legat de:** R-140, §9.3, §13.3, §15.1
 

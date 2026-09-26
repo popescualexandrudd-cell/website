@@ -1,6 +1,6 @@
 # ADR-0021: Calitate — unelte, teste și verificare automată cu o singură comandă
 
-- **Stare:** Propus (Etapa 0)
+- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
 - **Data:** 2026-09-26
 - **Legat de:** §1.1 punctele 1 și 7, §4.3, §13
 

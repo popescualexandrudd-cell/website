@@ -1,6 +1,6 @@
 # ADR-0014: Chioșcuri și ecrane — Linux + Chromium în mod kiosk
 
-- **Stare:** Propus (Etapa 0)
+- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
 - **Data:** 2026-09-26
 - **Legat de:** §4.3, §8.2, §8.3, §8.5, §8.7
 

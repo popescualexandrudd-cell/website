@@ -1,6 +1,6 @@
 # ADR-0002: Monorepo cu workspace-uri pnpm (TypeScript) și uv (Python)
 
-- **Stare:** Propus (Etapa 0)
+- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
 - **Data:** 2026-09-26
 - **Legat de:** §4.4, §1.1 punctul 3
 

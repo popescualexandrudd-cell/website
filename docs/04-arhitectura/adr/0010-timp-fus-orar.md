@@ -1,6 +1,6 @@
 # ADR-0010: Timp și fus orar — `Europe/Bucharest`, cu trecerile de oră testate
 
-- **Stare:** Propus (Etapa 0)
+- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
 - **Data:** 2026-09-26
 - **Legat de:** §1.1 punctul 8, R-041, R-050, R-052, §6.9
 

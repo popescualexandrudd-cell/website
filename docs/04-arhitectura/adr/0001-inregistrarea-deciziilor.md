@@ -1,6 +1,6 @@
 # ADR-0001: Înregistrăm deciziile tehnice ca ADR-uri
 
-- **Stare:** Propus (Etapa 0). Devine „Acceptat” la aprobarea Etapei 0 de către proprietar.
+- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
 - **Data:** 2026-09-26
 - **Legat de:** §1 (mentenanța pe termen lung), §4.3, §4.5
 

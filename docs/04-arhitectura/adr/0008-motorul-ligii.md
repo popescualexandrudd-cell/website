@@ -1,6 +1,6 @@
 # ADR-0008: Motorul ligii — pachet Python pur, model Weng-Lin implementat propriu
 
-- **Stare:** Propus (Etapa 0)
+- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
 - **Data:** 2026-09-26
 - **Legat de:** §6 (în special 6.2, 6.6, 6.16, 6.17), §4.2 punctul 2
 

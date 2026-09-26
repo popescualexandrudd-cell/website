@@ -1,6 +1,6 @@
 # ADR-0009: Bani — sume întregi în bani, registru cu dublă înregistrare, idempotență
 
-- **Stare:** Propus (Etapa 0)
+- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
 - **Data:** 2026-09-26
 - **Legat de:** §1.1 punctul 8, R-060 … R-067, R-084, §8.3
 

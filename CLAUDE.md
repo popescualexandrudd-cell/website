@@ -6,8 +6,8 @@ Memoria operațională a proiectului. Se actualizează la finalul fiecărei etap
 Sistem digital propriu pentru clubul **Jungle Padel** (Șoseaua Biruinței, lângă Selgros Pantelimon): 4 terenuri de padel închise, pilates Reformer (4 → 6 aparate), sală de evenimente, cafenea, ligă de padel de tip MMR. Deschidere: **martie 2027**. Proprietarul **nu are programator**: noi construim și întreținem, în sesiuni succesive. Backend-ul și website-ul sunt singura sursă de adevăr; chioșcurile, ecranele, afișajul cafenelei și adminul sunt „ferestre” spre aceleași date, conectate live.
 
 ## Stare curentă
-- **Etapa 0 livrată pe 26.09.2026 — așteaptă aprobarea proprietarului.**
-- **NU se scrie cod de aplicație până la aprobarea explicită a Etapei 0.** După aprobare: Etapa 1A (fundația backend), apoi 1B (pagina de pre-lansare).
+- **Etapa 0 aprobată pe 26.09.2026** (tag `etapa-0`). **Etapa 1A (fundația backend) în lucru.** Apoi 1B (pagina de pre-lansare), doar după aprobarea 1A.
+- Decizii ale proprietarului din 26.09.2026: Apple Wallet amânat (Q24); textele legale le redactăm noi, fără avocat (Q41); hardware ales mai târziu, lucrăm cu simulatoare (Q23); server propriu sau închiriat (Q40).
 - Detalii: [docs/00-management/PROGRES.md](docs/00-management/PROGRES.md).
 
 ## La începutul fiecărei sesiuni, citește în ordine
@@ -43,7 +43,7 @@ Sistem digital propriu pentru clubul **Jungle Padel** (Șoseaua Biruinței, lân
 8. **Liga e 18+**; fără acord GDPR semnat la chioșc nu se intră în ligă (R-006, R-010, R-011).
 9. **Rotunjirea LP:** la cel mai apropiat întreg, .5 departe de zero. **Nu folosi `round()` din Python** (rotunjește .5 spre par).
 10. **Secrete doar în `.env` pe server**, niciodată în git sau în chat.
-11. **Textele legale** sunt ciorne marcate „necesită revizuire de către un avocat/DPO înainte de publicare”. Fiscalul se confirmă cu contabilul clubului.
+11. **Textele legale** le redactăm noi (Q41, 26.09.2026) și poartă mențiunea „Redactat fără revizuire juridică. Recomandăm verificarea de către un avocat/DPO.”; proprietarul le aprobă. Fiscalul se confirmă cu contabilul clubului.
 12. **Conținutul demo** e marcat clar; nu inventa prețuri, cifre sau recenzii prezentate ca reale.
 13. **Nu copia site-ul Clubului Tenis Elite** (texte, structură exactă, culori verde/lime, imagini, componente): doar ideea de flux (§9.1).
 14. La lansare: **fără WhatsApp**, **parkour ascuns** (feature flag), **fără credite pentru padel** (ora se plătește și se împarte între jucători).

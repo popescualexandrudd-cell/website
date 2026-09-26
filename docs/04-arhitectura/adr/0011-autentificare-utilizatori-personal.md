@@ -1,6 +1,6 @@
 # ADR-0011: Autentificarea utilizatorilor și a personalului
 
-- **Stare:** Propus (Etapa 0)
+- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
 - **Data:** 2026-09-26
 - **Legat de:** R-001, R-002, §8.1 (roluri), §8.6, §12.1
 

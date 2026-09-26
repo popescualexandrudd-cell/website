@@ -9,3 +9,7 @@
 - **R-023** Cardul din Wallet se **actualizează automat** (rang, LP) după fiecare meci validat.
 - **R-024** **Card fizic nou la promovarea în Diamant**, la care jucătorul „alege de junglă” (o temă sau emblemă din junglă dintr-o listă predefinită). **NU se face card de design personalizat** (proprietarul a refuzat explicit cardul „de design”). Detalii: Q1.
 - **R-025** Cardul se folosește peste tot: check-in, intrarea pe teren, prezențe la antrenamente și pilates, ligă, plăți, cafenea.
+
+## Modificări
+
+- **26.09.2026** (confirmat de proprietar, Q24): înscrierea în Apple Developer nu se începe acum. **Apple Wallet se amână**: adaptorul se construiește, dar rămâne dezactivat până la crearea contului. R-020 rămâne valabilă pentru Google Wallet, email și PDF.

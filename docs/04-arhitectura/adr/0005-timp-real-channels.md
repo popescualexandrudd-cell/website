@@ -1,6 +1,6 @@
 # ADR-0005: Date în timp real cu Django Channels și Redis
 
-- **Stare:** Propus (Etapa 0)
+- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
 - **Data:** 2026-09-26
 - **Legat de:** §4.1 („totul este conectat live”), §8.1, §8.5, §8.7
 
