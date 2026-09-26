@@ -1,0 +1,7 @@
+# 11. NOTIFICĂRI (email + telefon; fără WhatsApp la lansare)
+
+> **Sursa:** `MEGA_PROMPT.md` §11 (versiunea 1.0, 26.09.2026). Text preluat integral în Etapa 0, fără modificări de conținut.
+> De acum, acest fișier este referința de lucru pentru această secțiune. Orice modificare ulterioară se notează aici, cu data și sursa („confirmat de proprietar la data X”); `MEGA_PROMPT.md` rămâne neschimbat, ca referință istorică.
+
+Matrice minimă (fiecare cu șablon multilingv editabil în admin și preferințe de opt-out unde legea permite):
+confirmare cont și email · validarea nivelului · card emis (cu linkuri Wallet) · confirmare, modificare, anulare rezervare · reminder cu 24 h și cu 2 h înainte · promovare din lista de așteptare · fereastra de scor deschisă · scor propus / de confirmat · scor validat + LP câștigat sau pierdut · promovare / retrogradare în rang · atingerea rangului Diamant (card fizic) · provocare primită / acceptată / refuzată · risc de decay · „îți mai trebuie N meciuri pentru clasamentul final” · finalul sezonului și recompense · Meciul zilei (pentru cei implicați) · inactivitate și propuneri de parteneri · absențe de la antrenamente · taxă de neprezentare / anulare tardivă · blocare de rezervări (și către antrenor) · abonament: cumpărat, expiră, înghețat, sesiuni rămase · voucher primit (recomandare sau recompensă) · evenimente noi · comanda de cafenea gata (pe ecran) · alerte pentru personal (rest scăzut la chioșc, dispozitiv offline, dispută nouă, backup eșuat).

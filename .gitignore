@@ -1,0 +1,59 @@
+# --- Secrets: never commit (only .env.example files are tracked) ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.pkpass
+*.crt
+!deploy/**/ca-public/*.crt
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.hypothesis/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# --- Node / TypeScript ---
+node_modules/
+.pnpm-store/
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+.turbo/
+coverage/
+playwright-report/
+test-results/
+blob-report/
+
+# --- Local runtime data ---
+*.sqlite3
+*.sqlite3-journal
+*.db
+*.db-wal
+*.db-shm
+media/
+staticfiles/
+/tmp/
+*.log
+
+# --- Editors / OS ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
