@@ -292,3 +292,27 @@ describe("admin formatting", () => {
     expect(csvCell('Ana "Mia"')).toBe(`"Ana ""Mia"""`);
   });
 });
+
+describe("records created at install", () => {
+  it("can be saved again from the admin (ids with hyphens are valid choices)", () => {
+    const courts = getResource("terenuri");
+    if (!courts) throw new Error("missing courts resource");
+    const form = new FormData();
+    form.set("f.locationId", "seed-location-01");
+    const { data, errors } = parseForm(
+      courts.fields.filter((field) => field.name === "locationId"),
+      form,
+      "Europe/Bucharest",
+    );
+    expect(errors).toEqual({});
+    expect(data.locationId).toBe("seed-location-01");
+
+    form.set("f.locationId", "x'; DROP TABLE");
+    const bad = parseForm(
+      courts.fields.filter((field) => field.name === "locationId"),
+      form,
+      "Europe/Bucharest",
+    );
+    expect(bad.errors.locationId).toBe("Valoare necunoscută.");
+  });
+});

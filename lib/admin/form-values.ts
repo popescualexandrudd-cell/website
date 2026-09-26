@@ -282,6 +282,8 @@ export function parseForm(fields: FieldDef[], form: FormData, tz: string): Parse
       }
       case "relation":
       case "media": {
+        // Ids are cuids, or readable ids with hyphens for the records created at install
+        // ("seed-location-01"); anything else is not a record the list could have offered.
         const value = read(form, key);
         if (!value) {
           if (field.required)
@@ -296,7 +298,7 @@ export function parseForm(fields: FieldDef[], form: FormData, tz: string): Parse
                     : "Alege o imagine.",
             );
           else data[name] = null;
-        } else if (!/^[a-z0-9]{8,40}$/i.test(value)) fail(name, "Valoare necunoscută.");
+        } else if (!/^[a-z0-9][a-z0-9-]{2,59}$/i.test(value)) fail(name, "Valoare necunoscută.");
         else data[name] = value;
         break;
       }
