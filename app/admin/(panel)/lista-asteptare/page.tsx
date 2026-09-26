@@ -11,7 +11,7 @@ import { OkNotice } from "@/components/admin/OkNotice";
 import { currentPath } from "@/lib/admin/redirect";
 import type { WaitlistStatus } from "@/lib/generated/prisma/client";
 
-export const metadata: Metadata = { title: "Evaluări și așteptare" };
+export const metadata: Metadata = { title: "Înscrieri și așteptare" };
 
 const LABEL: Record<WaitlistStatus, string> = {
   NOU: "nou",
@@ -46,7 +46,7 @@ export default async function WaitlistPage({ searchParams }: PageProps<"/admin/l
     <>
       <div className="admin-page-head">
         <div>
-          <h1 className="admin-title">Evaluări și listă de așteptare</h1>
+          <h1 className="admin-title">Înscrieri și listă de așteptare</h1>
           <p>
             Înscrierile copiilor la cele 2 ședințe gratuite și cei care așteaptă un loc. Primii
             înscriși sunt primii în listă.
@@ -104,7 +104,7 @@ export default async function WaitlistPage({ searchParams }: PageProps<"/admin/l
                       : e.program
                         ? t(e.program.name, "ro")
                         : evaluation
-                          ? "grupa se stabilește la evaluare"
+                          ? "grupa se stabilește la primele ședințe"
                           : "Orice program"}{" "}
                     · trimis{" "}
                     {e.createdAt.toLocaleDateString("ro-RO", { timeZone: settings.timezone })} ·{" "}

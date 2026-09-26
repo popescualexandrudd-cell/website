@@ -283,8 +283,9 @@ async function main(): Promise<void> {
         en: `Tennis in ${city}: courses for children and adults, court hire · ${clubName}`,
       },
       seoDescription: {
-        ro: `${clubName}, ${city}, lângă București: 8 terenuri de zgură, ${coveredTotal} acoperite, deschise zilnic 07:00–22:00. Minitenis de la 4 ani, juniori, adulți. Iarna, teren 60 lei/oră; 2 ședințe gratuite pentru copii.`,
-        en: `${clubName}, ${city}, next to Bucharest: 8 clay courts, ${coveredTotal} covered, open daily 07:00–22:00. Mini tennis from 4, juniors, adults. Winter courts 60 lei an hour; 2 free sessions for children.`,
+        // Under 160 characters, so Google shows it whole.
+        ro: `8 terenuri de zgură în ${city}, ${coveredTotal} acoperite, 07:00–22:00. Tenis de la 4 ani, juniori și adulți. Iarna 60 lei/oră; copiii au 2 ședințe gratuite.`,
+        en: `8 clay courts in ${city}, ${coveredTotal} covered, open 07:00–22:00. Tennis from age 4, juniors and adults. Winter courts 60 lei/hour; 2 free sessions for kids.`,
       },
       bookingMode: String(config.rezervari.mod).trim() === "instant" ? "INSTANT" : "CERERE",
       freeCancelHours: integer(config.rezervari.anulare_gratuita_ore) ?? 24,

@@ -750,3 +750,24 @@ cheie sub hero, secțiuni alternante deschis/închis, carduri de program, cale d
 105. **Palmares**: rezultatele publicate (minorii doar cu acord), turneele găzduite, campionii
      sezoanelor încheiate și fotografiile de premiere; nimic nu apare dacă nu există în admin.
      Video-urile de prezentare nu s-au putut descărca din mediul de lucru; se încarcă din Media.
+
+## Partea a IX-a. Rebrandingul „Clubul Tenis Elite”
+
+- **Un club, nu o academie și nu o persoană.** Numele „Clubul Tenis Elite” e singurul folosit în
+  interfață; denumirea legală rămâne în subsol și în paginile legale, iar numele vechi sunt
+  `alternateName` în datele structurate. Paginile Academie și Despre dispar: grupele, înscrierea
+  și tipurile de antrenament stau pe Programe, povestea pe prima pagină. Adresele vechi fac
+  redirect permanent (308), ca linkurile și pozițiile din Google să nu se piardă.
+- **Fără texte provizorii.** Unde clubul nu a dat o informație (taxa exactă a unei grupe,
+  programul pe zile, tariful pe tip de antrenament), site-ul spune ce e adevărat și util („de la
+  240 lei / lună”, „stabilit la înscriere”, „Tarif la recepție”), nu „[DE COMPLETAT]”.
+- **Video-ul pe fundal peste tot, fără să coste viteză.** Un singur component (`HeroBackdrop`)
+  pune video-ul clubului în antetul oricărei pagini; posterul apare imediat, video-ul se descarcă
+  după încărcarea paginii, iar telefoanele primesc 360p.
+- **Oferta de iarnă ca secțiune editabilă** („campanie”), nu cod: la sfârșitul sezonului, clubul
+  o ascunde sau o rescrie din admin.
+- **Asistentul nu depinde de o cheie AI.** Fără cheie, răspunde din datele clubului (subiecte și
+  întrebările frecvente); cu cheie, modelul răspunde liber, tot doar din conținutul publicat. Dacă
+  modelul cade, vizitatorul primește tot un răspuns util.
+- **Mai puțin JavaScript pe paginile publice.** Validarea (Zod) rămâne pe server; în browser merg
+  doar traducerile folosite de componentele interactive (lista verificată de un test).

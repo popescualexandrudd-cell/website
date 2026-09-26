@@ -9,7 +9,7 @@ principal; Chrome: ⋮ → Adaugă pe ecranul de pornire). Rămâi autentificat 
 
 Cuprins: [Autentificare](#autentificare) · [Tabloul de bord](#tabloul-de-bord) ·
 [Azi](#azi) · [Rezervări](#rezervări) · [Disponibilitate](#disponibilitate) ·
-[Conținut](#conținut) · [Echipa](#echipa-de-antrenori) · [Academia de juniori](#academia-de-juniori) ·
+[Conținut](#conținut) · [Echipa](#echipa-de-antrenori) · [Grupele clubului](#grupele-clubului) ·
 [Fotografii și video-uri](#fotografii-și-video-uri) · [Mesaje, evaluări și lista de așteptare](#mesaje-evaluări-și-lista-de-așteptare) ·
 [Clienți](#clienți) · [Newsletter](#newsletter) · [Turnee și închirieri](#turnee-și-închirieri) ·
 [Campanii](#campanii) ·
@@ -42,7 +42,7 @@ Prima pagină după autentificare:
 
 - **avertismente** în chenar auriu: ce lipsește ca site-ul să fie complet (email pentru notificări,
   texte `[DE COMPLETAT]`, pagini legale neverificate);
-- **patru cifre**: rezervări care așteaptă confirmarea, lecțiile săptămânii, mesajele noi, cererile
+- **patru cifre**: rezervări care așteaptă confirmarea, antrenamentele săptămânii, mesajele noi, cererile
   de pe lista de așteptare. Fiecare cifră deschide lista respectivă;
 - **De confirmat**: rezervările noi, cu butoanele de confirmare direct acolo;
 - **Gradul de ocupare** pe trei luni: cât din timpul deschis pentru rezervări e ocupat;
@@ -55,11 +55,11 @@ câte lucruri noi te așteaptă.
 
 ## Azi
 
-<img src="docs/capturi/04-azi.svg" width="300" alt="Lecțiile de azi">
+<img src="docs/capturi/04-azi.svg" width="300" alt="Antrenamentele de azi">
 
-Lecțiile zilei, în ordine, cu numele elevului (sau al copilului și vârsta), programul și butoanele
+Antrenamentele zilei, în ordine, cu numele elevului (sau al copilului și vârsta), programul și butoanele
 **Sună** și **WhatsApp** (mesajul e deja scris, cu codul rezervării). Treci la ziua anterioară sau
-următoare cu butoanele de sus. După lecție, apasă **Marchează efectuată** sau **Neprezentare**.
+următoare cu butoanele de sus. După antrenament, apasă **Marchează efectuată** sau **Neprezentare**.
 Ședințele de grupă apar cu numărul de locuri ocupate.
 
 ## Rezervări
@@ -80,7 +80,7 @@ emailurile trimise) și să alegi ce faci:
 | **Confirmă rezervarea** | Clientul primește emailul de confirmare, cu fișierul pentru calendar (.ics). Cu o zi înainte primește automat un memento. |
 | **Refuză rezervarea** | Poți scrie un motiv (apare în emailul către client). Intervalul se eliberează. |
 | **Anulează rezervarea** | La fel, pentru o rezervare deja confirmată. |
-| **Marchează efectuată** | Lecția intră în istoric; dacă clientul are pachet, scade o lecție. După prima lecție efectuată, clientul primește (o singură dată, la două ore) invitația de a lăsa o recenzie. |
+| **Marchează efectuată** | Antrenamentul intră în istoric; dacă clientul are pachet, scade un antrenament. După primul antrenament efectuat, clientul primește (o singură dată, la două ore) invitația de a lăsa o recenzie. |
 | **Neprezentare** | Pentru evidența ta; clientul nu primește nimic. |
 
 **Note interne**: le vezi doar tu (de exemplu „accidentare veche la umăr”).
@@ -95,7 +95,7 @@ notificarea.
 
 **Adaugă o rezervare** (butonul de sus): pentru cei care te sună sau îți scriu pe WhatsApp. Alegi
 programul, ziua și ora, completezi numele și telefonul (emailul e opțional). Site-ul verifică să
-nu se suprapună cu altă lecție și, dacă există email, poate trimite confirmarea.
+nu se suprapună cu alt antrenament și, dacă există email, poate trimite confirmarea.
 
 ## Disponibilitate
 
@@ -109,11 +109,11 @@ Aici spui **când pot rezerva clienții de pe site**:
   în plus** (disponibil extra). Dacă blochezi o zi în care ai deja rezervări, pagina te avertizează
   (rezervările existente nu se anulează singure).
 
-Site-ul lasă automat pauza dintre lecții (implicit 10 minute), nu acceptă rezervări cu mai puțin
+Site-ul lasă automat pauza dintre antrenamente (implicit 10 minute), nu acceptă rezervări cu mai puțin
 de 12 ore înainte și nici mai departe de 60 de zile. Le schimbi în **Setări → Rezervări**.
 
-Programul grupelor academiei de juniori (zile, ore, taxă) nu ține de disponibilitate: se scrie în
-**Conținut → Grupele academiei de juniori**.
+Programul grupelor clubului (zile, ore, taxă) nu ține de disponibilitate: se scrie în
+**Conținut → Grupele clubului**.
 
 ## Conținut
 
@@ -121,7 +121,7 @@ Programul grupelor academiei de juniori (zile, ore, taxă) nu ține de disponibi
 
 Orice text, fotografie sau video de pe site se schimbă de aici, fără cod: secțiunile paginii
 principale, antetele paginilor, echipa de antrenori și certificările lor, grupele și rezultatele
-academiei de juniori, programele, tipurile de lecții, prețurile și pachetele, locațiile, terenurile,
+clubului, programele, tipurile de antrenament, prețurile și pachetele, locațiile, terenurile,
 facilitățile, întrebările frecvente, recenziile, galeria, articolele și paginile legale. Eticheta **„de completat”** arată unde mai e `[DE COMPLETAT]`.
 
 <img src="docs/capturi/10-lista-ordonabila.svg" width="300" alt="Reordonarea unei liste">
@@ -159,19 +159,21 @@ acolo.
 deasupra titlului, titlul, textul și butonul; le poți ascunde sau reordona. Unele au și texte
 proprii:
 
-- **Deschiderea**: textul celui de-al doilea buton (duce la Academia de juniori) și nota afișată
-  până încarci video-ul. Titlul se împarte pe rânduri după fiecare propoziție („Învață. Joacă.
-  Concurează.”). **Video-ul și fotografia** de deschidere se aleg din **Setări → Deschiderea
+- **Deschiderea**: textul celui de-al doilea buton (duce la închirierea terenurilor) și nota afișată
+  până încarci video-ul. Titlul („Experiență de elită în lumea tenisului.”) se împarte singur
+  pe rânduri, iar o propoziție nouă începe întotdeauna pe rând nou. **Video-ul și fotografia** de deschidere se aleg din **Setări → Deschiderea
   paginii principale**;
 - **Cifrele clubului**: doar titlul; numerele (terenuri, terenuri acoperite, vârsta de start,
   programe, antrenori) se calculează singure din conținut;
-- **Academia de juniori**: linkul spre pagina academiei; etapele vin din grupe;
+- **Campania de iarnă**: textul celui de-al doilea buton (înscrierea copiilor); titlul, textul
+  (cu **îngroșat** pentru preț) și butonul principal se scriu ca la orice secțiune;
+- **De la mingea roșie la mingea galbenă**: textul linkului spre grupe; etapele vin din grupe;
 - **Echipa**: nota din ramele fără fotografie;
-- **Baza sportivă**: nota din cadru; fotografia e cea din **Antetele paginilor → Clubul**;
+- **Baza sportivă**: nota din cadru; fotografia e cea din **Antetele paginilor → Facilități**;
 - **Galerie**: textul afișat până publici fotografii; pe pagina principală apar primele 6.
 
-În textul secțiunii „Metoda”, o listă numerotată (`1. **Titlu.** text`) devine pașii afișați pe
-site.
+În textul secțiunii „Povestea noastră”, o listă numerotată (`1. **Titlu.** text`) devine pașii
+afișați pe site.
 
 **Articolele** (Sfaturi) rămân ciorne până alegi „Publicat”. **Paginile legale** primesc automat o
 versiune nouă (data zilei) când le schimbi textul, pentru că fiecare acord salvat la rezervări și
@@ -180,24 +182,25 @@ mesaje păstrează versiunea politicii în vigoare.
 ## Echipa de antrenori
 
 **Conținut → Echipa de antrenori**: fiecare antrenor are pagina lui pe site (`/echipa/nume`), cu
-rolul în echipă („Antrenor principal”, „Antrenor academia de juniori”, „Preparator fizic”),
+rolul în echipă („Antrenor principal”, „Antrenor”, „Antrenoare”, „Preparator fizic”),
 titulatura, un rezumat pentru card, parcursul, felul în care lucrează, specializările, limbile,
-fotografia (vertical 4:5) și, opțional, un video. **Antrenorul principal** apare primul și
-vorbește pentru academie; când bifezi alt antrenor ca principal, bifa se mută de la cel vechi.
+fotografia (vertical 4:5) și, opțional, un video. **Antrenorul principal** apare primul pe
+pagina echipei; când bifezi alt antrenor ca principal, bifa se mută de la cel vechi.
 Certificările fiecăruia se adaugă în **Conținut → Certificări și diplome**, alegând antrenorul.
 
-## Academia de juniori
+## Grupele clubului
 
-**Conținut → Grupele academiei de juniori**: pentru fiecare grupă, etapa (minge roșie,
+**Conținut → Grupele clubului**: pentru fiecare grupă, etapa (minge roșie,
 portocalie, verde, galbenă), vârstele, ce lucrează copiii, **zilele și orele**, antrenamentele pe
 săptămână și durata lor, **taxa lunară** (gol = „la cerere”) și numărul maxim de copii. Pe pagina
-principală apar ca parcursul academiei; pe pagina Academia de juniori, fiecare cu detaliile ei.
+principală apar ca drumul de la mingea roșie la cea galbenă; pe pagina Programe, fiecare cu
+detaliile ei, împărțite în Minitenis și Juniori și seniori.
 
 **Conținut → Rezultate la turnee**: sportivul (la minori, doar prenumele și inițiala), turneul,
 categoria, rezultatul, data și nivelul. Un rezultat al unui minor **nu se poate publica** fără bifa
 „Am acordul scris al părinților”.
 
-Părinții cer o **evaluare** din pagina academiei; cererea ajunge pe email și în **Evaluări și
+Părinții își înscriu copilul la **cele 2 ședințe gratuite** din pagina Programe; cererea ajunge pe email și în **Înscrieri și
 așteptare**.
 
 ## Fotografii și video-uri
@@ -241,7 +244,7 @@ La fel, o **recenzie** se publică doar cu acordul autorului.
 **Mesaje**: ce ți se scrie din formularul de contact. Răspunzi pe email, suni sau scrii pe WhatsApp
 direct de aici, apoi marchezi mesajul **citit** sau îl **arhivezi**.
 
-**Evaluări și așteptare**: cererile de evaluare pentru academia de juniori (copilul, vârsta, cât a
+**Înscrieri și așteptare**: înscrierile copiilor la cele 2 ședințe gratuite (copilul, vârsta, cât a
 jucat, grupa dorită, zilele care le convin) și cei care vor un loc când se eliberează, în ordinea
 înscrierii. Îi marchezi **contactat**, **înscris** sau **arhivat**.
 
@@ -251,8 +254,8 @@ jucat, grupa dorită, zilele care le convin) și cei care vor un loc când se el
 
 Fiecare client se creează automat la prima rezervare. Fișa lui are:
 
-- **Pachet**: alegi pachetul vândut și apeși **Activează pachetul**; lecțiile rămase și data de
-  expirare se completează singure și scad la fiecare lecție marcată efectuată;
+- **Pachet**: alegi pachetul vândut și apeși **Activează pachetul**; antrenamentele rămase și data de
+  expirare se completează singure și scad la fiecare antrenament marcat efectuat;
 - datele de contact și **note interne**;
 - **istoricul** rezervărilor;
 - **Datele personale (GDPR)**: dacă un client îți cere datele lui, apeși **Descarcă datele
@@ -276,11 +279,11 @@ personal de dezabonare, pentru serviciul de email pe care îl folosești (Brevo,
 - **Cererile de teren** din pagina „Închiriere teren” ajung în **Mesaje** (subiectul începe cu
   „Închiriere teren”) și pe email. Suni clientul și confirmi terenul.
 - **Setări → Program de lucru**: programul clubului (apare în subsol, la contact și la închiriere)
-  și tarifele de închiriere. Orele lecțiilor rămân în **Disponibilitate**.
+  și tarifele de închiriere. Orele antrenamentelor rămân în **Disponibilitate**.
 
 ## Carduri cadou
 
-- Cererile de pe pagina **„Oferă o lecție de tenis”** ajung în **Carduri cadou** (meniu) și pe
+- Cererile de pe pagina **„Oferă un antrenament de tenis”** ajung în **Carduri cadou** (meniu) și pe
   email. Cumpărătorul primește automat „Am primit cererea”.
 - Suni cumpărătorul pentru plată (la club sau prin transfer). După plată, deschizi cardul, alegi
   **Starea → Activ** și salvezi: cardul primește un cod (`CADOU-XXXX-XXXX`), e valabil un an și
@@ -313,17 +316,17 @@ personal de dezabonare, pentru serviciul de email pe care îl folosești (Brevo,
 
 - **Setări → Recenzii Google**: nota și numărul de recenzii (le copiezi de pe Google din când în
   când) și linkul „Scrie o recenzie” din Google Business Profile.
-- După prima lecție efectuată, clientul primește automat invitația la recenzie; emailul are și
+- După primul antrenament efectuat, clientul primește automat invitația la recenzie; emailul are și
   butonul spre Google. Cine lasă o recenzie pe site vede apoi și invitația spre Google.
 - **Coduri QR** (meniu): coduri de tipărit pentru recepție și terenuri: recenzii Google, carduri
   cadou, liga și partenerii de joc.
 
 ## Campanii
 
-Aici vezi **ce aduce fiecare reclamă și fiecare canal**: câte rezervări făcute pe site, cereri de
-evaluare, înscrieri pe lista de așteptare și mesaje au venit din Facebook, Instagram, Google (din
+Aici vezi **ce aduce fiecare reclamă și fiecare canal**: câte rezervări făcute pe site, înscrieri
+ale copiilor, înscrieri pe lista de așteptare și mesaje au venit din Facebook, Instagram, Google (din
 reclame sau din căutare), de pe alte site-uri sau direct, în ultimele 30 sau 90 de zile ori într-un
-an. Aceeași sursă o vezi și la fiecare rezervare, mesaj și cerere de evaluare („Venit din”), și în
+an. Aceeași sursă o vezi și la fiecare rezervare, mesaj și înscriere („Venit din”), și în
 emailul de anunț.
 
 Ca o campanie să apară cu numele ei, folosește linkul făcut de **Link pentru o campanie**: alegi
@@ -339,11 +342,11 @@ iar lista „Instrumente de măsurare” de pe această pagină arată ce e acti
 
 Butonul **Întrebări?** din colțul paginii deschide asistentul clubului. Răspunde vizitatorilor la
 orice oră despre vârste, grupe, program, prețuri și rezervare, **doar din ce e publicat pe site**:
-programele, lecțiile și tarifele, grupele academiei, echipa, întrebările frecvente, contactul și
+programele, antrenamentele și tarifele, grupele clubului, echipa, întrebările frecvente, contactul și
 setările de rezervare. Ce nu e completat (de exemplu o taxă lunară „[DE COMPLETAT]”) nu inventează:
-spune că nu are informația și dă telefonul. Copiii îi trimite spre evaluare, adulții spre rezervare.
+spune că nu are informația și dă telefonul. Pe părinți îi trimite spre înscrierea la cele 2 ședințe gratuite, pe adulți spre rezervare.
 
-- Ca răspunsurile să fie bune, **completează conținutul**: tarifele lecțiilor, programul și taxa
+- Ca răspunsurile să fie bune, **completează conținutul**: tarifele antrenamentelor, programul și taxa
   grupelor, întrebările frecvente. Asistentul vede orice modificare imediat.
 - Conversațiile nu se salvează nicăieri; rămân doar în fereastra vizitatorului.
 - Îl oprești din **Setări → Funcții → Asistentul AI de pe site**. Pe server are nevoie de o cheie
@@ -361,7 +364,7 @@ spune că nu are informația și dă telefonul. Copiii îi trimite spre evaluare
 - **Contact**: telefon, WhatsApp, email, rețele sociale;
 - **Programul afișat** în subsol;
 - **Rezervări**: modul (cerere sau instant), anularea gratuită, preavizul, orizontul, pauza dintre
-  lecții, oferta pentru prima lecție, metodele de plată;
+  antrenamente, oferta pentru copii, metodele de plată;
 - **Date legale**: forma de organizare, denumirea, CUI, sediul (apar în subsol și în paginile legale);
 - **Motoare de căutare**: titlul și descrierea pentru Google;
 - **Funcții**: versiunea în engleză, newsletter, invitațiile la recenzie, asistentul AI,

@@ -38,8 +38,8 @@ export function sceneSeeds(vars: Vars): SceneSeed[] {
       key: "deschiderea",
       order: 1,
       indexName: {
-        ro: fill("Club de tenis · {oras}"),
-        en: fill("Tennis club · {oras}"),
+        ro: fill("Club de tenis\u00a0· {oras}"),
+        en: fill("Tennis club\u00a0· {oras}"),
       },
       title: {
         ro: "Experiență de elită în lumea tenisului.",

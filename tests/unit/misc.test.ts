@@ -120,3 +120,32 @@ describe("content helpers", () => {
     ]);
   });
 });
+
+describe("translations sent to the browser", () => {
+  it("include every namespace a component reads with useTranslations", async () => {
+    const { readdirSync, readFileSync, statSync } = await import("node:fs");
+    const { join } = await import("node:path");
+    const { CLIENT_NAMESPACES } = await import("@/i18n/client-namespaces");
+    const files: string[] = [];
+    const walk = (dir: string) => {
+      for (const name of readdirSync(dir)) {
+        const path = join(dir, name);
+        if (statSync(path).isDirectory()) walk(path);
+        else if (path.endsWith(".tsx")) files.push(path);
+      }
+    };
+    walk("components");
+    walk("app/[locale]");
+    const used = new Set<string>();
+    for (const file of files) {
+      const source = readFileSync(file, "utf8");
+      if (!source.includes("useTranslations")) continue;
+      for (const match of source.matchAll(/useTranslations\(\s*"([^".]+)/g)) used.add(match[1]!);
+      // A root useTranslations() reads keys by their full path: collect their first segment.
+      if (/useTranslations\(\s*\)/.test(source))
+        for (const match of source.matchAll(/\bt\(\s*[`"]([a-zA-Z]+)\./g)) used.add(match[1]!);
+    }
+    const listed = new Set<string>(CLIENT_NAMESPACES);
+    expect([...used].filter((ns) => !listed.has(ns))).toEqual([]);
+  });
+});

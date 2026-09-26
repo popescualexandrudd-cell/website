@@ -1,55 +1,61 @@
-# Site pentru o academie de tenis
+# Clubul Tenis Elite — site-ul clubului
 
-Site de prezentare cu rezervări online și panou de administrare, construit ca **șablon pentru
-orice club sau academie de tenis**; datele de pornire sunt ale academiei de la Elite Tenis Club
-(Pantelimon). Nivelul și structura urmează marile academii (Rafa Nadal Academy, IMG, Mouratoglou):
-deschidere cinematică cu video real al clubului, programe, academie de juniori pe etape, echipa de
-antrenori, galerie foto și video. Totul, de la culori și logo la texte, prețuri, fotografii și
-video-uri, se editează din panoul de administrare.
+Site-ul Clubului Tenis Elite din Pantelimon (8 terenuri de zgură, 4 acoperite, deschis zilnic
+07:00–22:00): prezentare, rezervări online, închirierea terenurilor, turnee, echipa de antrenori și
+panou de administrare. Totul e scris din perspectiva clubului. Codul este construit ca șablon, deci
+servește la nevoie și altui club: culorile, logoul, textele, prețurile, fotografiile și
+video-urile se editează din panoul de administrare.
 
-- **Pentru un club nou**: cum adaptezi șablonul → [`SABLON.md`](SABLON.md).
-- **Pentru club**: cum se folosește panoul → [`GHID-ADMIN.md`](GHID-ADMIN.md); ce mai trebuie
-  completat, inclusiv fotografiile și video-urile → [`CONTENT-TODO.md`](CONTENT-TODO.md).
-- **Pentru punerea online**: pas cu pas, fără cunoștințe tehnice → [`DEPLOY.md`](DEPLOY.md).
-- **SEO, brand și marketing**: cercetarea cuvintelor cheie, poziționarea, Google Business,
-  recenzii, conținut și campanii → [`docs/SEO-MARKETING.md`](docs/SEO-MARKETING.md).
+- **Pentru club**: cum se folosește panoul → [`GHID-ADMIN.md`](GHID-ADMIN.md); ce mai poate face
+  clubul (fotografii, video-uri, fapte de confirmat) → [`CONTENT-TODO.md`](CONTENT-TODO.md).
+- **Analiza completă**: marketing, brand, design, SEO cu cercetarea cuvintelor cheie, tehnic,
+  performanță și rezultatele verificărilor → [`docs/ANALIZA.md`](docs/ANALIZA.md).
+- **Pentru punerea online**: pas cu pas, fără cunoștințe tehnice → [`DEPLOY.md`](DEPLOY.md)
+  (inclusiv actualizarea unei instalări vechi la noua structură).
+- **Pentru alt club**: cum adaptezi șablonul → [`SABLON.md`](SABLON.md).
 - **Designul**: [`docs/DIRECTIE-ARTISTICA.md`](docs/DIRECTIE-ARTISTICA.md) și
-  [`DECISIONS.md`](DECISIONS.md) (partea V: academia); progresul pe faze:
-  [`PROGRESS.md`](PROGRESS.md); licențe: [`CREDITS.md`](CREDITS.md).
+  [`DECISIONS.md`](DECISIONS.md); istoricul pe faze: [`PROGRESS.md`](PROGRESS.md); licențe:
+  [`CREDITS.md`](CREDITS.md).
 
 ## Ce conține
 
-- **Site public** în română (fără prefix) și engleză (`/en`, cu adrese traduse): pagina principală
-  cu video de deschidere care se retrage într-un cadru la derulare, cifrele clubului, programe în
-  carduri suprapuse, etapele academiei de juniori, echipa, metoda, baza sportivă, galeria; pagini
-  pentru academia de juniori (grupe, rezultate, cerere de evaluare), echipă și fiecare antrenor, programe, club, prețuri, rezervare, galerie foto și
-  video, sfaturi, întrebări, contact, listă de așteptare, pagini legale.
+- **Site public** în română (fără prefix) și engleză (`/en`, cu adrese traduse). Meniul de sus are
+  cinci intrări (Programe, Închiriere teren, Turnee, Echipa, Contact), iar subsolul opt. Prima
+  pagină: video de prezentare, campania de iarnă, povestea din 2013, cifrele, „Ce face diferența”,
+  programele, drumul de la mingea roșie la cea galbenă, „3 întrebări, pasul potrivit”, antrenorii,
+  tipurile de antrenament, turneele, baza sportivă, galeria, întrebările și rezervarea. Pagini
+  pentru programe (cu grupele de minitenis, juniori și seniori și înscrierea copiilor la 2 ședințe
+  gratuite), închiriere, turnee, echipă și fiecare antrenor, facilități, prețuri, rezervare,
+  galerie, sfaturi, întrebări, contact, card cadou, liga amatorilor, partener de joc, palmares,
+  școli și pagini legale. Video-ul clubului rulează pe fundal în antetul fiecărei pagini.
 - **Identitatea clubului din admin**: nume, logo, două culori (restul paletei se calculează din
   ele, cu verificarea contrastului), video și fotografie de deschidere.
 - **Video**: încărcare din admin (până la 500 MB), conversie automată cu ffmpeg în MP4 H.264
-  (720p și 1080p) cu cadru de previzualizare, fără metadate (GPS); redare cu byte-range,
+  (360p, 720p și 1080p) cu cadru de previzualizare, fără metadate (GPS); redare cu byte-range,
   pornire doar pe ecran, buton de pauză, fără pornire automată la „reduced motion” sau economisire
   de date.
 - **Rezervări**: disponibilitate din reguli săptămânale minus excepții și rezervări, cu pauză între
-  lecții, preaviz, orizont și ora de vară/iarnă; programe, tipuri de lecții și durată aleasă;
+  antrenamente, preaviz, orizont și ora de vară/iarnă; programe, tipuri de antrenament (individual,
+  în 2, în 3, de grup) și durată aleasă;
   rezervarea dublă e imposibilă (blocare în tranzacție + constrângere de excludere în PostgreSQL);
   emailuri cu `.ics`, anulare prin link, memento, invitație la recenzie.
 - **Clubul complet**: povestea clubului, închirierea terenurilor cu cerere online, turneele
   găzduite (FRT, Tenis10) cu edițiile următoare, programul pentru școli și grădinițe, „Găsește-ți
-  programul” (recomandare în 3 întrebări), secțiunea de social media, `/llms.txt`.
-- **Comunitatea clubului**: carduri cadou („Oferă o lecție de tenis”: cerere, activare din admin,
+  programul” (recomandare în 3 întrebări), `/llms.txt`.
+- **Comunitatea clubului**: carduri cadou („Oferă un antrenament de tenis”: cerere, activare din admin,
   card de tipărit cu QR, cod folosit o dată la rezervare), liga amatorilor (clasament calculat din
   scoruri) și „Găsește partener” (listă pe niveluri, contact prin club), palmaresul clubului, nota
   de pe Google cu invitația automată la recenzie și coduri QR de tipărit.
-- **Asistentul AI** (Claude, opțional): răspunde vizitatorilor la orice oră despre vârste, grupe,
-  prețuri și program, doar din conținutul publicat, și îi trimite spre evaluare sau rezervare.
-  Nu salvează conversațiile; limite pe vizitator și pe zi.
-- **Măsurarea campaniilor**: sursa fiecărei rezervări, cereri de evaluare și mesaj (UTM, reclame,
+- **Asistentul clubului**: răspunde vizitatorilor la orice oră despre vârste, grupe, prețuri,
+  program și oferte, doar din conținutul publicat, și îi trimite spre înscriere sau rezervare.
+  Funcționează și fără cheie AI (răspunsuri construite din datele clubului); cu o cheie Anthropic
+  răspunde liber, cu aceleași reguli. Nu salvează conversațiile; limite pe vizitator și pe zi.
+- **Măsurarea campaniilor**: sursa fiecărei rezervări, înscrieri și mesaj (UTM, reclame,
   căutare, rețele), raport și generator de linkuri în admin; Google Analytics, Google Ads și Meta
   Pixel opționale, încărcate doar după acordul din bannerul de cookie-uri.
 - **Admin** mobile-first: rezervări, azi, disponibilitate, tot conținutul (RO/EN, Markdown,
-  fotografii și video-uri, reordonare), echipa, grupele și rezultatele academiei, media, mesaje,
-  evaluări și listă de așteptare, clienți (pachete, GDPR), newsletter, campanii, setări, conturi,
+  fotografii și video-uri, reordonare), echipa, grupele și rezultatele clubului, media, mesaje,
+  înscrieri și listă de așteptare, clienți (pachete, GDPR), newsletter, campanii, setări, conturi,
   jurnal.
 - **Producție**: Docker Compose cu Caddy (HTTPS automat), PostgreSQL, worker, backup zilnic
   (14 zile, opțional off-site cu rclone), Umami opțional.
@@ -100,7 +106,7 @@ npm run admin:create                              # contul tău pentru http://lo
 
 ```
 app/            rutele: [locale]/ (site public), admin/, api/
-components/     secțiunile paginii principale (home/), academia și echipa (academy/), pagini, formulare, admin
+components/     secțiunile paginii principale (home/), grupele și echipa (academy/), pagini, formulare, admin
 lib/            baza de date, disponibilitate, rezervări, emailuri, autentificare, conținut, video, SEO
 emails/         șabloanele emailurilor (React Email)
 messages/       textele interfeței (ro.json, en.json)
@@ -120,8 +126,8 @@ docs/           direcția artistică, capturile ghidului
   constrângerea din baza de date, anulări, job-uri, încărcarea imaginilor, conversia video reală
   (fără GPS), byte-range, contrastul culorilor, un singur antrenor principal, acordul părinților la
   rezultate, GDPR; end-to-end pentru rezervare, rezervare
-  dublă simultană, confirmare din admin, anulare prin link, contact, login, cererea de evaluare
-  din academie până în admin, echipa, pagina principală, accesibilitate axe pe
+  dublă simultană, confirmare din admin, anulare prin link, contact, login, înscrierea copiilor
+  la 2 ședințe gratuite până în admin, echipa, pagina principală, accesibilitate axe pe
   toate paginile.
 - CI în GitHub Actions (`.github/workflows/ci.yml`): lint, tipuri, teste, build, e2e, audit,
   imaginea Docker, deploy opțional prin SSH.

@@ -216,7 +216,7 @@ export const pageHeaderContent: {
     },
     seoTitle: {
       ro: "Card cadou tenis: oferă un antrenament de tenis în Pantelimon",
-      en: "Tennis gift card: give a tennis lesson in Pantelimon",
+      en: "Tennis gift card: give a tennis session in Pantelimon",
     },
     seoDescription: {
       ro: "Oferă un antrenament de tenis la Clubul Tenis Elite din Pantelimon: card cadou pentru un antrenament, un pachet sau o sumă, valabil un an, gata de tipărit.",

@@ -8,6 +8,9 @@ test("grupele clubului: un părinte înscrie copilul la 2 ședințe gratuite și
   const visitor = await newVisitor(browser);
   const parent = await visitor.newPage();
   await parent.goto("/programe");
+  // The club's video runs behind the header, with the light title in front.
+  await expect(parent.locator("header.page-hero")).toHaveClass(/\bpage-hero--media\b/);
+  await expect(parent.locator("header.page-hero")).toHaveClass(/\btone-dark\b/);
   await expect(parent.locator("#oferta")).toContainText(
     "Primele 2 ședințe sunt din partea noastră!",
   );

@@ -11,6 +11,7 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { fontVariables } from "../fonts";
 import { routing, type Locale } from "@/i18n/routing";
+import { CLIENT_NAMESPACES } from "@/i18n/client-namespaces";
 import { brandColors } from "@/lib/color";
 import { getLocations, getPolicyVersion, getSettings, localizedSettings } from "@/lib/content";
 import { Header } from "@/components/site/Header";
@@ -25,6 +26,12 @@ import { assistantAvailable, knowledgePaths } from "@/lib/assistant/load";
 import { campaignConfig, needsConsent } from "@/lib/campaigns";
 import { telLink, whatsappLink } from "@/lib/format";
 import { appUrl } from "@/lib/paths";
+
+function pick<T extends Record<string, unknown>>(messages: T, keys: readonly string[]): Partial<T> {
+  return Object.fromEntries(
+    Object.entries(messages).filter(([key]) => keys.includes(key)),
+  ) as Partial<T>;
+}
 
 export const dynamic = "force-dynamic";
 
@@ -132,7 +139,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
       suppressHydrationWarning
     >
       <body>
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={pick(messages, CLIENT_NAMESPACES)}>
           <a href="#continut" className="skip-link">
             {t("skipToContent")}
           </a>

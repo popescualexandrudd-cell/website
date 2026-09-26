@@ -1527,7 +1527,7 @@
   }
   .fact-list > div {
     display: grid;
-    grid-template-columns: minmax(8rem, 12rem) 1fr;
+    grid-template-columns: minmax(6.5rem, 12rem) minmax(0, 1fr);
     gap: 1rem;
     padding: 0.85rem 0;
     border-bottom: 1px solid var(--color-linie);
@@ -1537,6 +1537,7 @@
   }
   .fact-list dd {
     font-weight: 600;
+    overflow-wrap: anywhere;
   }
   .zgura {
     color: var(--color-zgura-adanc);
@@ -1805,6 +1806,7 @@
 @layer components {
   .contact-layout {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 3rem;
   }
   @media (min-width: 1024px) {

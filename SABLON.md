@@ -8,22 +8,22 @@ Acest ghid arată cum pregătești site-ul pentru un club nou, de la zero până
 
 ## Ce primește clubul
 
-- **Pagina principală cinematică**: se deschide cu un video real al clubului pe tot ecranul, care
-  la derulare se retrage într-un cadru; apoi filozofia în litere mari, cifrele clubului (calculate
-  din conținut), programele în carduri care se suprapun la derulare, etapele academiei de
-  juniori, echipa, metoda, baza sportivă, galeria foto și
-  video, tipurile de lecții, întrebările și rezervarea.
-- **Academia de juniori**: grupe pe vârste și etape (minge roșie, portocalie, verde, galbenă), cu
-  program, taxă lunară și locuri; rezultatele la turnee (doar cu acordul părinților); formularul
-  prin care părinții cer o evaluare.
+- **Pagina principală cinematică**: se deschide cu video-ul clubului pe tot ecranul, care la
+  derulare se retrage într-un cadru; apoi campania sezonului, povestea clubului, cifrele
+  (calculate din conținut), „Ce face diferența”, programele, drumul de la mingea roșie la cea
+  galbenă, recomandarea în 3 întrebări, echipa, tipurile de antrenament, turneele, baza sportivă,
+  galeria, întrebările și rezervarea. Video-ul rulează și în antetul fiecărei pagini.
+- **Grupele clubului**: minitenis pe etape (minge roșie, portocalie, verde) și juniori și seniori
+  (minge galbenă), cu program, taxă lunară și locuri; rezultatele la turnee (doar cu acordul
+  părinților); formularul de înscriere a copiilor, cu oferta de bun venit.
 - **Echipa de antrenori**: câți antrenori are clubul, fiecare cu pagina lui (parcurs, formare,
   specializări, video), antrenorul principal primul.
 - **Galerie foto și video**: video-urile se încarcă din admin și sunt convertite automat pentru web.
-- **Asistentul AI** (opțional): răspunde părinților la orice oră despre vârste, grupe, prețuri și
-  program, doar din conținutul clubului, și îi trimite spre evaluare sau rezervare.
+- **Asistentul clubului**: răspunde la orice oră despre vârste, grupe, prețuri și program, doar din
+  conținutul clubului, și trimite spre înscriere sau rezervare; merge și fără cheie AI.
 - **Măsurarea campaniilor**: de unde vine fiecare rezervare și cerere (reclame, căutare, rețele),
   cu linkuri de campanie; Google Analytics, Google Ads și Meta doar cu acordul vizitatorului.
-- **Rezervări online** cu programe, tipuri de lecții și durată; emailuri, anulare prin link,
+- **Rezervări online** cu programe, tipuri de antrenament și durată; emailuri, anulare prin link,
   mementouri; panou de administrare complet; SEO, GDPR, accesibilitate WCAG 2.2 AA; română și
   engleză.
 
@@ -33,16 +33,16 @@ Copiază proiectul și deschide `config/club.yml`. Completezi, de sus în jos:
 
 | Secțiune | Ce scrii |
 | --- | --- |
-| `club` | numele, monograma (2–3 litere, până încarci logoul), descrierea de sub nume („Academie de tenis”), cele două culori, anul înființării (`infiintat`) |
+| `club` | numele, monograma (2–3 litere, până încarci logoul), descrierea de sub nume („Club de tenis · Pantelimon”), cele două culori, anul înființării (`infiintat`) |
 | `antrenori` | fiecare antrenor: nume, rol, titulatură, un rezumat, specializări, ani de experiență, certificări, limbi, parcurs. Primul e antrenorul principal; `publicat: false` îl lasă doar în admin |
 | `contact` | telefon, email (primește și notificările), opțional WhatsApp și rețelele sociale |
 | `locatii` | adresa, codul poștal, județul, terenurile (suprafață, număr, acoperit iarna, nocturnă) și dotările |
 | `programe` | care dintre cele trei programe (Inițiere, Competiție, Amatori) le oferă clubul |
-| `academie_juniori` | grupele: etapa, vârstele, programul, antrenamentele pe săptămână, durata, zilele și orele, taxa lunară, locurile |
-| `lectii`, `pachete` | tipurile de lecții rezervabile online, cu tariful pe oră, și pachetele |
+| `academie_juniori` | grupele (minitenis, juniori și seniori): etapa, vârstele, programul, antrenamentele pe săptămână, durata, zilele și orele, taxa lunară, locurile |
+| `lectii`, `pachete` | tipurile de antrenament rezervabile online, cu tariful pe oră, și pachetele |
 | `program_club`, `inchiriere` | când e deschis clubul și tarifele de închiriere a terenurilor (Markdown, cu tabele; `tarife_en` pentru engleză) |
 | `recenzii_google` | nota și numărul de recenzii de pe Google și linkul „Scrie o recenzie” |
-| `program_lucru`, `rezervari`, `plata` | orele în care se primesc rezervări de lecții și regulile lor |
+| `program_lucru`, `rezervari`, `plata` | orele în care se primesc rezervări de antrenamente și regulile lor |
 | `site`, `entitate_legala` | domeniul, limbile și datele firmei sau ale clubului sportiv |
 
 Logoul și fotografiile clubului livrate cu site-ul stau în `config/assets` (lista lor e în

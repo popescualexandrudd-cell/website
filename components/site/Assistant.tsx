@@ -62,6 +62,27 @@ export function Assistant({ locale, evaluationHref, bookingHref, privacyHref }: 
   const pathname = usePathname();
   const id = useId();
   const [teaser, setTeaser] = useState(false);
+  // On a phone the launcher waits below the first screen, so it never covers the opening's
+  // text and buttons; on a page too short to scroll that far it shows straight away.
+  const [firstScreen, setFirstScreen] = useState(false);
+  useEffect(() => {
+    const phone = window.matchMedia("(max-width: 767px)");
+    const check = () => {
+      const room = document.documentElement.scrollHeight - window.innerHeight;
+      setFirstScreen(
+        phone.matches &&
+          room > window.innerHeight * 0.5 &&
+          window.scrollY < window.innerHeight * 0.5,
+      );
+    };
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
+  }, [pathname]);
   const askRef = useRef<(question: string) => void>(() => undefined);
 
   useEffect(() => {
@@ -295,6 +316,7 @@ export function Assistant({ locale, evaluationHref, bookingHref, privacyHref }: 
       <button
         type="button"
         className="assistant-launcher"
+        data-first-screen={firstScreen && !open ? "" : undefined}
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls={id}

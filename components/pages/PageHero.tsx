@@ -24,7 +24,7 @@ export async function PageHero({ title, intro, image, imageAlt = "", children, e
   const row = await getSettings();
   const media = Boolean(row.heroVideoId || image || row.heroImageId);
   return (
-    <header className={`page-hero tone-dark${media ? "page-hero--media has-backdrop" : ""}`}>
+    <header className={`page-hero tone-dark ${media ? "page-hero--media has-backdrop" : ""}`}>
       {media ? <HeroBackdrop image={image} imageAlt={imageAlt} /> : null}
       <div className="page-hero-inner page-hero-inner--single">
         <div className="page-hero-copy">

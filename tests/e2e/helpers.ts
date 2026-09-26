@@ -20,12 +20,26 @@ export async function newVisitor(browser: Browser): Promise<BrowserContext> {
   });
 }
 
+/** The admin session cookies, reused by every test after the first login of the run. */
+let adminCookies: Awaited<ReturnType<BrowserContext["cookies"]>> | null = null;
+
+/**
+ * Signs in to the admin. The first call logs in through the form; later calls reuse its session,
+ * so a run (or several runs in a row) stays well under the login limit of 10 per email in 15
+ * minutes, which protects the real admin from password guessing.
+ */
 export async function loginAsAdmin(page: Page) {
+  if (adminCookies) {
+    await page.context().addCookies(adminCookies);
+    await page.goto("/admin");
+    if (/\/admin(\?|$)/.test(new URL(page.url()).pathname + new URL(page.url()).search)) return;
+  }
   await page.goto("/admin/login");
   await page.getByLabel("Email").fill(ADMIN_EMAIL);
   await page.getByLabel("Parola").fill(ADMIN_PASSWORD);
   await page.getByRole("button", { name: /Intră/ }).click();
   await expect(page).toHaveURL(/\/admin(\?|$)/);
+  adminCookies = await page.context().cookies();
 }
 
 /**

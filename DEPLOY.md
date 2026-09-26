@@ -164,6 +164,24 @@ Toate serviciile trebuie să apară `running`, iar `app` cu `(healthy)`. Deschid
 
 La prima pornire, baza de date se creează singură și se completează din `config/club.yml`.
 
+### Actualizarea la „Clubul Tenis Elite” pe un server pornit cu versiunea anterioară
+
+Rebrandingul schimbă structura conținutului (programe, tipuri de antrenament, grupe, secțiunile
+primei pagini), iar conținutul inițial se încarcă doar într-o bază de date goală. Dacă site-ul a mai
+rulat cu versiunea veche și nu ai în el date de păstrat (rezervări reale, clienți), recreează doar
+baza de date; fotografiile, certificatele HTTPS și backupurile rămân:
+
+```bash
+./scripts/backup.sh                    # o copie a bazei vechi (secțiunea 12)
+docker compose down
+docker volume rm antrenor-tenis_db-data
+docker compose up -d --build
+```
+
+Apoi recreează contul de admin (`docker compose exec app node dist/admin-create.mjs`, pasul 9).
+Nu folosi `docker compose down -v`: acela șterge și fotografiile, certificatele și backupurile.
+Local, echivalentul este `npm run db:reset`.
+
 ## 9. Contul tău de administrator
 
 ```bash

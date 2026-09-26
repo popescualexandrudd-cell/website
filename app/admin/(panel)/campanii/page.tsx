@@ -17,7 +17,7 @@ const PERIODS = [
 
 const COLUMNS: { kind: SourceKind; label: string }[] = [
   { kind: "booking", label: "Rezervări" },
-  { kind: "evaluation", label: "Evaluări" },
+  { kind: "evaluation", label: "Înscrieri copii" },
   { kind: "waitlist", label: "Listă de așteptare" },
   { kind: "message", label: "Mesaje" },
 ];
@@ -77,7 +77,7 @@ export default async function CampaignsPage({ searchParams }: PageProps<"/admin/
         ? `${config.adsId}; conversii: ${
             [
               config.adsBookingLabel ? "rezervare" : null,
-              config.adsLeadLabel ? "cerere (evaluare, mesaj)" : null,
+              config.adsLeadLabel ? "cerere (înscriere, mesaj)" : null,
             ]
               .filter(Boolean)
               .join(", ") || "neconfigurate"
@@ -107,8 +107,8 @@ export default async function CampaignsPage({ searchParams }: PageProps<"/admin/
         <div>
           <h1 className="admin-title">Campanii</h1>
           <p>
-            Ce a adus fiecare sursă în ultimele {period.label}: rezervări făcute pe site, cereri de
-            evaluare, înscrieri pe lista de așteptare și mesaje.
+            Ce a adus fiecare sursă în ultimele {period.label}: rezervări făcute pe site, înscrieri
+            ale copiilor, înscrieri pe lista de așteptare și mesaje.
           </p>
         </div>
       </div>

@@ -61,9 +61,7 @@ test("widgetul de pe prima pagină duce direct la „Datele mele”", async ({ b
   const card = page.locator("#rezervare .booking-card");
   await card.scrollIntoViewIfNeeded();
   await card.getByLabel("Programul").selectOption({ label: "Inițiere" });
-  await card
-    .getByLabel(/^Antrenamentul/)
-    .selectOption({ label: "Antrenament în 2" });
+  await card.getByLabel(/^Antrenamentul/).selectOption({ label: "Antrenament în 2" });
   await card.getByLabel("Durata antrenamentului").selectOption("90");
   const slot = card.locator(".slot").first();
   await expect(slot).toBeVisible();

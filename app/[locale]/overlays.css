@@ -549,3 +549,17 @@ html:has(.assistant-dialog[open]) {
     padding-right: 0;
   }
 }
+
+/* Phones: out of the way on the first screen (Assistant.tsx), back as soon as the visitor scrolls. */
+.assistant-launcher {
+  transition:
+    transform 0.25s var(--ease-scene),
+    opacity 0.25s var(--ease-scene),
+    visibility 0.25s;
+}
+.assistant-launcher[data-first-screen] {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(1rem);
+  pointer-events: none;
+}

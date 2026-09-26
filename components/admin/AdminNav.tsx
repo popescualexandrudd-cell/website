@@ -15,7 +15,7 @@ const ITEMS: Item[] = [
   { href: "/admin/continut", label: "Conținut" },
   { href: "/admin/media", label: "Media" },
   { href: "/admin/mesaje", label: "Mesaje", ownerOnly: true },
-  { href: "/admin/lista-asteptare", label: "Evaluări și așteptare", ownerOnly: true },
+  { href: "/admin/lista-asteptare", label: "Înscrieri și așteptare", ownerOnly: true },
   { href: "/admin/clienti", label: "Clienți", ownerOnly: true },
   { href: "/admin/continut/carduri-cadou", label: "Carduri cadou", ownerOnly: true },
   { href: "/admin/continut/jucatori", label: "Liga și parteneri", ownerOnly: true },

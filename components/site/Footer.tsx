@@ -91,7 +91,15 @@ export async function Footer({ settings, location, policyVersion, cookieSettings
               </li>
             ) : null}
             <li>
-              {mail ? <a href={mail}>{settings.email}</a> : <TodoText value={settings.email} />}
+              {mail ? (
+                <a href={mail}>
+                  {/* A narrow column breaks the address before the "@", never inside a word. */}
+                  {settings.email.split("@")[0]}
+                  <wbr />@{settings.email.split("@").slice(1).join("@")}
+                </a>
+              ) : (
+                <TodoText value={settings.email} />
+              )}
             </li>
             {location ? (
               <li className="text-cerneala-2">

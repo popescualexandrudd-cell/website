@@ -33,7 +33,7 @@ export async function TournamentsSection({
   const next = upcoming[0];
   return (
     <section
-      className={`tournaments-band tone-dark${video ? "tournaments-band--video" : ""}`}
+      className={`tournaments-band tone-dark ${video ? "tournaments-band--video" : ""}`}
       id={scene.key}
       aria-labelledby={`${scene.key}-title`}
     >

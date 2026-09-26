@@ -1717,3 +1717,33 @@
   content-visibility: auto;
   contain-intrinsic-size: auto 900px;
 }
+
+/* A long email address (the club's is 25 characters) breaks instead of widening the footer:
+   before the "@" first (Footer.tsx), inside a word only as a last resort. */
+.footer-list a,
+.footer-list li {
+  overflow-wrap: break-word;
+}
+/* On the narrowest phones (320 px) the facilities table tightens instead of overflowing. */
+@media (max-width: 380px) {
+  .price-table {
+    font-size: 0.875rem;
+  }
+  .price-table th,
+  .price-table td {
+    padding-inline: 0.25rem;
+    overflow-wrap: anywhere;
+    letter-spacing: 0.02em;
+  }
+}
+
+/* The club's name stays whole in the header of the narrowest phones (320–360 px). */
+@media (max-width: 360px) {
+  .site-brand-name {
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+  }
+  .site-monogram {
+    gap: 0.5rem;
+  }
+}

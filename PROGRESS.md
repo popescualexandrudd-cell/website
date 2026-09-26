@@ -224,3 +224,25 @@ partea a III-a (61–74).
       cererea de evaluare și axe WCAG 2.2 AA pe paginile noi).
 - [ ] De la club: fotografiile și video-urile reale, programul și taxele grupelor, ceilalți
       antrenori (`CONTENT-TODO.md`).
+
+## Rebranding „Clubul Tenis Elite”
+
+- [x] Un singur nume și vocea clubului peste tot: fără „academie” și fără brand personal;
+      paginile Academie și Despre scoase, cu redirecționări permanente spre Programe și povestea
+      de pe prima pagină.
+- [x] Conținut final, fără „[DE COMPLETAT]” pe paginile publice: povestea din 2013, „Ce face
+      diferența”, șase programe (Inițiere, Competiție, Înaltă performanță, Amatori, Tabere, Team
+      building), grupele Minitenis (roșie, portocalie, verde) și Juniori și seniori (galbenă, 11+),
+      tipurile de antrenament (individual, în 2, în 3, de grup), șase antrenori, doar zgură,
+      07:00–22:00, facilitățile, contactul (0722 501 748, Bulevardul Biruinței 19/21).
+- [x] Campania de iarnă (60 RON/oră) sub video și pe Închiriere și Prețuri; oferta de 2 ședințe
+      gratuite pentru copii pe Programe, cu textele cerute de club.
+- [x] Design: video-ul clubului în antetul fiecărei pagini, drumul roșu → galben simetric cu linii
+      estompate, meniul de 5 intrări și subsolul de 8, prima pagină fără cardurile în plus.
+- [x] Asistentul funcționează și fără cheie AI (răspunsuri din datele clubului), cu teste proprii.
+- [x] Performanță: prima încărcare de la ~3 MB la 0,6 MB, JavaScript de la 270 KB la 180 KB;
+      Lighthouse desktop 99/100/100/100, telefon 85–92/100/100/100.
+- [x] Verificări: 114 teste unitare și de integrare, 21 end-to-end, 8 dispozitive × 13 pagini,
+      audit de text pe 120 de pagini; analiza completă în `docs/ANALIZA.md`.
+- [ ] De la club: fotografiile și video-ul real, fotografiile antrenorilor, profilul Google,
+      formularea „cel mai mic preț” (`CONTENT-TODO.md`).
