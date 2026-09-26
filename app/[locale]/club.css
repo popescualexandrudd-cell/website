@@ -1709,3 +1709,11 @@
 .has-backdrop .page-hero-shade {
   z-index: 0;
 }
+
+/* The home page is long: sections below the first screen skip style and layout until they come
+   near the viewport, which keeps the first paint fast on phones. Their measured size is kept once
+   known, so the scrollbar and anchors stay stable. */
+.home > section:nth-of-type(n + 3) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}

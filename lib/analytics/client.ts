@@ -1,4 +1,4 @@
-import { attributionFromVisit, type Attribution } from "@/lib/attribution";
+import { attributionFromVisit, type Attribution } from "@/lib/attribution-visit";
 
 /**
  * Consent, campaign attribution and conversion events, in the browser.

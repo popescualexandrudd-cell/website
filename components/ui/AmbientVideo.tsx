@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { srcSet, videoSourcesFor, type ResolvedVideo } from "@/lib/media-shared";
+import { srcSet, type ResolvedVideo } from "@/lib/media-shared";
 
 type Props = {
   video: ResolvedVideo;
@@ -16,14 +16,17 @@ type Props = {
 
 /**
  * A silent, looping video of the club: plays while it is on screen and stops when it leaves.
- * With "reduce motion" or data saving on, only its poster frame is shown until the visitor
+ * The poster frame paints first; the video itself starts downloading only once the page has
+ * loaded, so it never delays the text, the fonts or the first image. Phones get the lightest
+ * encoding. With "reduce motion" or data saving on, only the poster is shown until the visitor
  * presses play; a button pauses and resumes it at any time (WCAG 2.2.2).
  */
 export function AmbientVideo({ video, label, pauseLabel, playLabel, className, priority }: Props) {
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
   const [userPaused, setUserPaused] = useState(false);
-  const { small, large } = videoSourcesFor(video);
+  // Largest first: the browser takes the first source whose media query matches.
+  const sources = [...video.sources].sort((a, b) => b.w - a.w);
 
   useEffect(() => {
     const el = ref.current;
@@ -40,8 +43,23 @@ export function AmbientVideo({ video, label, pauseLabel, playLabel, className, p
       },
       { threshold: 0.15 },
     );
-    observer.observe(el);
-    return () => observer.disconnect();
+    // After the page's own resources, and when the browser is idle.
+    let idle = 0;
+    const start = () => {
+      const run = () => observer.observe(el);
+      idle =
+        typeof window.requestIdleCallback === "function"
+          ? window.requestIdleCallback(run, { timeout: 2000 })
+          : window.setTimeout(run, 300);
+    };
+    if (document.readyState === "complete") start();
+    else window.addEventListener("load", start, { once: true });
+    return () => {
+      window.removeEventListener("load", start);
+      if (typeof window.cancelIdleCallback === "function") window.cancelIdleCallback(idle);
+      window.clearTimeout(idle);
+      observer.disconnect();
+    };
   }, [userPaused]);
 
   const toggle = () => {
@@ -75,7 +93,7 @@ export function AmbientVideo({ video, label, pauseLabel, playLabel, className, p
         muted
         loop
         playsInline
-        preload={priority ? "auto" : "metadata"}
+        preload="none"
         poster={poster?.fallback}
         aria-label={label || undefined}
         aria-hidden={label ? undefined : true}
@@ -91,10 +109,17 @@ export function AmbientVideo({ video, label, pauseLabel, playLabel, className, p
             : undefined
         }
       >
-        {large !== small ? (
-          <source src={large.src} type="video/mp4" media="(min-width: 1100px)" />
-        ) : null}
-        <source src={small.src} type="video/mp4" />
+        {sources.map((source, i) => (
+          <source
+            key={source.src}
+            src={source.src}
+            type="video/mp4"
+            // 1920 wide from 1056 px screens, 1280 from 704 px, the smallest below.
+            media={
+              i < sources.length - 1 ? `(min-width: ${Math.round(source.w * 0.55)}px)` : undefined
+            }
+          />
+        ))}
       </video>
       <button
         type="button"

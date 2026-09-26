@@ -53,6 +53,7 @@ const ASSETS: Asset[] = [
     use: {
       kind: "video",
       sources: [
+        [640, 360, "elite-prezentare-360.mp4"],
         [1280, 720, "elite-prezentare-720.mp4"],
         [1920, 1080, "elite-prezentare-1080.mp4"],
       ],
