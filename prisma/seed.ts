@@ -35,6 +35,7 @@ import { tournamentContent } from "./seed/content/tournaments";
 import { syncClubAssets } from "./seed/assets";
 import { roCount } from "../lib/format";
 import {
+  homeSeo,
   amenityDescriptions,
   amenityNames,
   locationDirections,
@@ -276,17 +277,7 @@ async function main(): Promise<void> {
       instagramUrl: optionalText(config.contact.instagram),
       facebookUrl: optionalText(config.contact.facebook),
       tiktokUrl: optionalText(config.contact.tiktok),
-      // What people type into Google first ("tenis Pantelimon", "cursuri tenis copii", "închiriere
-      // teren tenis"), then the club's name; the description leads with the offers.
-      seoTitle: {
-        ro: `Tenis ${city}: cursuri copii și adulți, închiriere teren · ${clubName}`,
-        en: `Tennis in ${city}: courses for children and adults, court hire · ${clubName}`,
-      },
-      seoDescription: {
-        // Under 160 characters, so Google shows it whole.
-        ro: `8 terenuri de zgură în ${city}, ${coveredTotal} acoperite, 07:00–22:00. Tenis de la 4 ani, juniori și adulți. Iarna 60 lei/oră; copiii au 2 ședințe gratuite.`,
-        en: `8 clay courts in ${city}, ${coveredTotal} covered, open 07:00–22:00. Tennis from age 4, juniors and adults. Winter courts 60 lei/hour; 2 free sessions for kids.`,
-      },
+      ...homeSeo(city, clubName, coveredTotal),
       bookingMode: String(config.rezervari.mod).trim() === "instant" ? "INSTANT" : "CERERE",
       freeCancelHours: integer(config.rezervari.anulare_gratuita_ore) ?? 24,
       minNoticeHours: integer(config.rezervari.rezervare_minim_ore_inainte) ?? 12,

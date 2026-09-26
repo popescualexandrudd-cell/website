@@ -31,15 +31,16 @@ type Props = {
 
 type Group = { legend: string; fields: FieldDef[] };
 
+/** Fields by group, in the order each group first appears; a group is never split in two. */
 function groupFields(fields: FieldDef[]): Group[] {
-  const groups: Group[] = [];
+  const groups = new Map<string, Group>();
   for (const field of fields) {
     const legend = field.group ?? "";
-    const last = groups.at(-1);
-    if (last && last.legend === legend) last.fields.push(field);
-    else groups.push({ legend, fields: [field] });
+    const group = groups.get(legend);
+    if (group) group.fields.push(field);
+    else groups.set(legend, { legend, fields: [field] });
   }
-  return groups;
+  return [...groups.values()];
 }
 
 const asI18n = (v: FieldValue | undefined): I18nValue =>

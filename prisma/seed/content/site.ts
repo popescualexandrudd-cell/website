@@ -24,7 +24,7 @@ export const pageHeaderContent: {
       en: "Tennis courses for children and adults in Pantelimon",
     },
     seoDescription: {
-      ro: "Cursuri de tenis la Clubul Tenis Elite Pantelimon: minitenis de la 4 ani, juniori, adulți, înaltă performanță și tabere. Primele 2 ședințe gratuite pentru copii.",
+      ro: "Cursuri de tenis la Clubul Tenis Elite Pantelimon: minitenis de la 4 ani, juniori, adulți, performanță și tabere. Primele 2 ședințe gratuite pentru copii.",
       en: "Tennis courses at Clubul Tenis Elite, Pantelimon: mini tennis from 4, juniors, adults, high performance and camps. The first 2 sessions free for children.",
     },
   },
@@ -75,7 +75,7 @@ export const pageHeaderContent: {
       en: "Tennis coaches in Pantelimon, for children and adults",
     },
     seoDescription: {
-      ro: "Echipa de antrenori a Clubului Tenis Elite din Pantelimon: grupe de minitenis, juniori, seniori și înaltă performanță, coordonate de antrenorul principal Vlad Moșteanu.",
+      ro: "Antrenorii Clubului Tenis Elite din Pantelimon: minitenis, juniori, seniori și înaltă performanță, coordonați de antrenorul principal Vlad Moșteanu.",
       en: "The coaching team of Clubul Tenis Elite in Pantelimon: mini tennis, junior, senior and high-performance groups, led by head coach Vlad Moșteanu.",
     },
   },
@@ -107,8 +107,8 @@ export const pageHeaderContent: {
       en: "Tennis prices in Pantelimon: courts 60 lei an hour in winter, training",
     },
     seoDescription: {
-      ro: "Cât costă tenisul la Clubul Tenis Elite Pantelimon: teren de zgură 60 lei/oră iarna, antrenamente individuale, în 2, în 3 și de grup, 2 ședințe gratuite pentru copii.",
-      en: "What tennis costs at Clubul Tenis Elite, Pantelimon: a clay court for 60 lei an hour in winter, private, pair, three-player and group sessions, 2 free sessions for children.",
+      ro: "Prețuri la Clubul Tenis Elite Pantelimon: teren de zgură 60 lei/oră iarna, antrenamente individuale, în 2, în 3 și de grup; copiii au 2 ședințe gratuite.",
+      en: "Prices at Clubul Tenis Elite, Pantelimon: clay courts at 60 lei an hour in winter; private, pair, three-player and group sessions; 2 free sessions for kids.",
     },
   },
   {
@@ -175,7 +175,7 @@ export const pageHeaderContent: {
       en: "Contact Clubul Tenis Elite, Pantelimon: 0722 501 748",
     },
     seoDescription: {
-      ro: "Clubul Tenis Elite, Bulevardul Biruinței 19/21, Pantelimon, Ilfov. Telefon și WhatsApp 0722 501 748, email elite_tenis_club@yahoo.ro. Deschis zilnic 07:00–22:00.",
+      ro: "Clubul Tenis Elite, Bulevardul Biruinței 19/21, Pantelimon. Telefon și WhatsApp 0722 501 748, email elite_tenis_club@yahoo.ro. Deschis zilnic 07:00–22:00.",
       en: "Clubul Tenis Elite, Bulevardul Biruinței 19/21, Pantelimon, Ilfov. Phone and WhatsApp 0722 501 748, email elite_tenis_club@yahoo.ro. Open daily 07:00–22:00.",
     },
   },
@@ -382,3 +382,22 @@ export const locationDirections: T = {
   ro: "Clubul este pe Bulevardul Biruinței 19/21, în Pantelimon, la câteva minute de sectoarele 2 și 3 ale Bucureștiului. Ai parcare la club, iar recepția te îndrumă spre teren.",
   en: "The club is at Bulevardul Biruinței 19/21 in Pantelimon, a few minutes from Bucharest's sectors 2 and 3. There is parking at the club, and reception shows you to your court.",
 };
+
+/**
+ * The home page's title and description for Google. What people type first ("tenis Pantelimon",
+ * "teren de zgură"), then the club's name; the description leads with the offers. Both stay within
+ * the admin's limits (70 and 160 characters), so the club can save the settings without editing
+ * them first — tests/unit/seed-limits.test.ts checks it.
+ */
+export function homeSeo(city: string, clubName: string, covered: number) {
+  return {
+    seoTitle: {
+      ro: `Tenis ${city}: cursuri și teren de zgură · ${clubName}`,
+      en: `Tennis in ${city}: lessons and clay courts · ${clubName}`,
+    },
+    seoDescription: {
+      ro: `8 terenuri de zgură în ${city}, ${covered} acoperite, 07:00–22:00. Tenis de la 4 ani, juniori și adulți. Iarna 60 lei/oră; copiii au 2 ședințe gratuite.`,
+      en: `8 clay courts in ${city}, ${covered} covered, open 07:00–22:00. Tennis from age 4, juniors and adults. Winter courts 60 lei/hour; 2 free sessions for kids.`,
+    },
+  };
+}

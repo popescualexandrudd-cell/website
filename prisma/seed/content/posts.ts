@@ -260,8 +260,8 @@ Tennis is not learned in one summer. But after three months you already know eno
       en: "From 4 or 5, with slower balls and smaller courts. What the red, orange, green and yellow ball stages look like and how to tell it is time.",
     },
     seoTitle: {
-      ro: "Tenis pentru copii: de la ce vârstă și cum începe (minge roșie, portocalie, verde)",
-      en: "Tennis for children: from what age and how it starts (red, orange, green ball)",
+      ro: "Tenis pentru copii: de la ce vârstă începe și cum (minitenis)",
+      en: "Tennis for children: from what age and how to start",
     },
     seoDescription: {
       ro: "Vârsta potrivită pentru primele antrenamente de tenis, etapele pe culori de minge și semnele că un copil e pregătit. Ghid pentru părinți.",
@@ -514,7 +514,7 @@ Our answers are on the Programmes page: the groups by stage and age, the schedul
     },
     seoTitle: {
       ro: "Beneficiile tenisului pentru copii: ce dezvoltă și de ce contează",
-      en: "The benefits of tennis for children: what it develops and why it matters",
+      en: "Benefits of tennis for children: what it develops",
     },
     seoDescription: {
       ro: "Ce dezvoltă tenisul la copii: coordonare, atenție, gestionarea emoțiilor, responsabilitate. Ce să urmărești în primul an.",
