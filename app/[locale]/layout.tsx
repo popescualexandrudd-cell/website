@@ -138,7 +138,9 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
       }
       suppressHydrationWarning
     >
-      <body>
+      {/* Browser extensions (Grammarly and the like) add attributes to <body> before React loads;
+          that difference is theirs, not the page's, so it is not reported. */}
+      <body suppressHydrationWarning>
         <NextIntlClientProvider locale={locale} messages={pick(messages, CLIENT_NAMESPACES)}>
           <a href="#continut" className="skip-link">
             {t("skipToContent")}

@@ -18,7 +18,9 @@ export const viewport: Viewport = { themeColor: "#F6EFE6", width: "device-width"
 export default function AdminRootLayout({ children }: LayoutProps<"/admin">) {
   return (
     <html lang="ro" className={fontVariables}>
-      <body className="admin-body">
+      {/* Browser extensions (Grammarly and the like) add attributes to <body> before React loads;
+          that difference is theirs, not the page's, so it is not reported. */}
+      <body className="admin-body" suppressHydrationWarning>
         <NextIntlClientProvider locale="ro" messages={messages} timeZone="Europe/Bucharest">
           {children}
         </NextIntlClientProvider>
