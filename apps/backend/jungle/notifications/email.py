@@ -19,6 +19,7 @@ TEMPLATES = (
     "account_claim",
     "waitlist_confirm",
     "waitlist_welcome",
+    "spot_promoted",
 )
 LANGUAGES = ("ro", "en")
 

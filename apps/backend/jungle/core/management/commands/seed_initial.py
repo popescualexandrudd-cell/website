@@ -14,12 +14,14 @@ from django.db import transaction
 
 from jungle.accounts.models import AccountType, User, UserRole
 from jungle.audit.services import SYSTEM
+from jungle.configuration.models import Marker
 from jungle.configuration.services import ensure_flag_rows
 from jungle.core.permissions import Role
 from jungle.legal.management.commands.publish_legal_document import read_public_text
 from jungle.legal.models import DocumentKind, LegalDocument
 from jungle.legal.services import publish_document
 from jungle.locations.models import Location, Resource, ResourceKind
+from jungle.pricing.models import Band, PriceRate, Product
 
 # Legal texts drafted in docs/ (Q41); published as demo while they contain DE_CONFIRMAT (Q26).
 LEGAL_FILES = {
@@ -36,6 +38,23 @@ DEMO_PEOPLE = [
     ("Ana", "Recepție", "receptie@demo.invalid", Role.RECEPTION),
     ("Mihai", "Antrenor", "antrenor@demo.invalid", Role.COACH),
     ("Ioana", "Manager", "manager@demo.invalid", Role.MANAGER),
+]
+# DEMO rates in bani per 30 minutes, so bookings can be tried out. They are NOT prices of the
+# club: marked DE_STABILIT (Q21) until the owner sets them in the admin.
+DEMO_RATES: list[tuple[str, str, dict[str, int]]] = [
+    (
+        ResourceKind.PADEL_COURT,
+        Product.RENTAL,
+        {Band.PEAK: 6000, Band.SEMI_PEAK: 5000, Band.OFF_PEAK: 4000},
+    ),
+    (
+        ResourceKind.PADEL_COURT,
+        Product.LESSON,
+        {Band.PEAK: 9000, Band.SEMI_PEAK: 8000, Band.OFF_PEAK: 7000},
+    ),
+    (ResourceKind.REFORMER, Product.LESSON, dict.fromkeys(Band.values, 7500)),
+    (ResourceKind.PILATES_STUDIO, Product.CLASS, dict.fromkeys(Band.values, 4000)),
+    (ResourceKind.EVENT_ROOM, Product.EVENT, dict.fromkeys(Band.values, 10000)),
 ]
 
 
@@ -120,4 +139,18 @@ class Command(BaseCommand):
                 )
             if role is not None:
                 UserRole.objects.get_or_create(user=user, role=role, location=None)
+        location = Location.objects.get(slug="jungle-padel")
+        for resource_kind, product, bands in DEMO_RATES:
+            for band, amount in bands.items():
+                PriceRate.objects.get_or_create(
+                    location=location,
+                    resource_kind=resource_kind,
+                    product=product,
+                    band=band,
+                    defaults={
+                        "amount_per_half_hour": amount,
+                        "marker": Marker.TO_SET,
+                        "note": "DEMO — nu este un preț al clubului (Q21)",
+                    },
+                )
         self.stdout.write(self.style.WARNING("Date DEMO create (marcate is_demo / DEMO)."))

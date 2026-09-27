@@ -85,6 +85,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** MEDIE · **Blochează:** Etapa 3 (rezervări)
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** da.
+- **Folosită în Etapa 3 (27.09.2026):** Durate 60, 90, 120, 150, 180 min (`bookings.durations_minutes`).
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 
@@ -96,6 +97,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** în afara vârfului; weekend ca în cursul săptămânii.
 - **Notă:** Fără program confirmat, pagina de pre-lansare afișează „Programul se anunță în curând”.
+- **Folosită în Etapa 3 (27.09.2026):** 08:00–23:00 zilnic; benzi: vârf 15–22, semi-vârf 08–12, restul în afara vârfului; weekend ca în cursul săptămânii (`bookings.opening_hours`, `pricing.time_bands`).
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 
@@ -106,6 +108,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** MEDIE · **Blochează:** Etapa 3 (liste de așteptare), Etapa 6 (turnee)
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** prioritate pe liste de așteptare și la turnee.
+- **Folosită în Etapa 3 (27.09.2026):** Câmpul `priority` pe lista de așteptare există; se leagă de abonamente în Etapa 4.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 
@@ -209,6 +212,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** MEDIE · **Blochează:** Etapa 3 (anulări), Etapa 4 (credit în cont)
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** credit în cont; sesiunea recuperată e valabilă până la finalul perioadei abonamentului.
+- **Folosită în Etapa 3 (27.09.2026):** Anularea gratuită e marcată „eligibilă pentru recuperare”; creditul în cont vine în Etapa 4.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 
@@ -219,6 +223,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** MEDIE · **Blochează:** Etapa 3 (neprezentări și blocări)
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** 90 de zile; managerul.
+- **Folosită în Etapa 3 (27.09.2026):** 90 de zile (`bookings.no_show_window_days`); pentru închirieri se anunță managerul.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 
@@ -229,6 +234,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** MEDIE · **Blochează:** Etapa 3 (liste de așteptare)
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** da, în primele 2 ore de la promovare.
+- **Folosită în Etapa 3 (27.09.2026):** Anulare gratuită 2 h după promovare (`bookings.promotion_free_cancel_hours`).
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 
@@ -280,6 +286,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** MEDIE · **Blochează:** Etapele 3–4 (valori demo); prețurile finale trebuie știute înainte de Etapa 15 (beta)
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** valori demo marcate `DE_STABILIT`.
+- **Folosită în Etapa 3 (27.09.2026):** Tarife DEMO marcate DE_STABILIT în `seed_initial --demo`; tenisul 120 RON/oră (R-051).
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 
@@ -363,6 +370,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** MEDIE · **Blochează:** Etapa 3 (tipul sesiunii la rezervare)
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** la rezervare, modificabil până la check-in.
+- **Folosită în Etapa 3 (27.09.2026):** Ales la rezervare, schimbabil până la prima scanare.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 
@@ -413,6 +421,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** MEDIE · **Blochează:** Etapa 3 (rezervarea sălii de evenimente)
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** cerere de rezervare online, confirmată de manager.
+- **Folosită în Etapa 3 (27.09.2026):** Cerere online (`POST /api/v1/events`), aprobată de manager.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 

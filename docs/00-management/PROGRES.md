@@ -3,13 +3,13 @@
 > Actualizat la fiecare sesiune de lucru. Prima secțiune spune mereu **unde suntem acum**.
 
 ## Unde suntem acum
-- **Etapa curentă:** Etapa 3 (rezervări, prețuri, anulări, prezențe), începută pe 27.09.2026.
+- **Etapa curentă:** Etapa 3 (rezervări, prețuri, anulări, prezențe): **livrată pe 27.09.2026, așteaptă aprobarea proprietarului.** Raport: [verificare/etapa-3/RAPORT.md](verificare/etapa-3/RAPORT.md).
 - **Etapa 2 (motorul ligii + simulări):** aprobată de proprietar pe 27.09.2026 (merge în `main`). Raport: [verificare/etapa-2/RAPORT.md](verificare/etapa-2/RAPORT.md).
 - **Etapa 1B (pagina de pre-lansare, revizia 3 „Noapte și alamă”):** aprobată de proprietar pe 27.09.2026 (merge în `main`). Raport: [verificare/etapa-1b/RAPORT.md](verificare/etapa-1b/RAPORT.md).
 - **Etapa 1A:** aprobată de proprietar pe 27.09.2026 (merge în `main`). Raport: [verificare/etapa-1a/RAPORT.md](verificare/etapa-1a/RAPORT.md).
 - **Etapa 0:** aprobată de proprietar pe 26.09.2026 (tag `etapa-0`, branch `main`).
 - **Următoarea etapă:** 4 (bani, abonamente, corporate, vouchere, cafenea), după aprobarea Etapei 3.
-- **Întrebări încă deschise care contează curând:** Q26 (datele firmei: subsol și texte legale), Q39 (domeniu, marcă), Q24 (furnizor de email), Q23 (modelele de hardware), Q44 (randări sau fotografii ale spațiilor), Q45 (valorile implicite ale ligii), Q46 (un text neclar din schiță) — vezi [INTREBARI_DESCHISE.md](INTREBARI_DESCHISE.md).
+- **Întrebări încă deschise care contează curând:** Q26 (datele firmei: subsol și texte legale), Q39 (domeniu, marcă), Q24 (furnizor de email), Q23 (modelele de hardware), Q44 (randări sau fotografii ale spațiilor), Q45 (valorile implicite ale ligii), Q46 (un text neclar din schiță); pentru rezervări: Q2, Q3, Q15, Q16, Q21 (lucrăm cu variantele implicite) — vezi [INTREBARI_DESCHISE.md](INTREBARI_DESCHISE.md).
 - **Branch de lucru:** `claude/hopeful-euler-rguibn` (repository `popescualexandrudd-cell/website`).
 
 ## Starea etapelor
@@ -20,7 +20,7 @@
 | 1A | Fundația backend | oct. 2026 | **Aprobată 27.09.2026** |
 | 1B | Pagina de pre-lansare | oct.–nov. 2026 | **Aprobată 27.09.2026** |
 | 2 | Motorul ligii + simulări | nov. 2026 | **Aprobată 27.09.2026** |
-| 3 | Rezervări, prețuri, anulări, prezențe | nov. 2026 | În lucru |
+| 3 | Rezervări, prețuri, anulări, prezențe | nov. 2026 | **Livrată 27.09.2026, așteaptă aprobarea** |
 | 4 | Bani, abonamente, corporate, vouchere, cafenea | nov.–dec. 2026 | Neîncepută |
 | 5 | Carduri, Wallet, GDPR | dec. 2026 | Neîncepută |
 | 6 | Integrarea ligii | dec. 2026 | Neîncepută |
@@ -34,6 +34,11 @@
 | 14 | Deploy, securitate, backup, hardware real | feb. 2027 | Neîncepută |
 | 15 | Beta, încărcare, instruire | feb.–mar. 2027 | Neîncepută |
 | 16 | Inaugurare și go-live | mar. 2027 | Neîncepută |
+
+## Etapa 3 — cum verifici (click cu click)
+1. Pe GitHub, branch-ul `claude/hopeful-euler-rguibn`, deschide `docs/00-management/verificare/etapa-3/RAPORT.md`: ce s-a construit, rezultatele, ce s-a reparat la revizuire, ce e de confirmat.
+2. Răspunde, dacă poți, la Q2, Q3, Q15, Q16 și Q21 în `docs/00-management/INTREBARI_DESCHISE.md`.
+3. Opțional, local: `scripts/setup`, `scripts/dev`, apoi `http://localhost:8000/api/v1/docs` (secțiunile „bookings”, „classes”, „events”, „pricing”).
 
 ## Etapa 2 — cum verifici (click cu click)
 1. Pe GitHub, branch-ul `claude/hopeful-euler-rguibn`, deschide `docs/00-management/verificare/etapa-2/RAPORT.md`.

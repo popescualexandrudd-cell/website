@@ -10,7 +10,12 @@ from ninja.errors import AuthenticationError, HttpError, ValidationError
 
 from jungle.accounts.api import auth_router, me_router
 from jungle.accounts.api import staff_router as staff_users_router
+from jungle.attendance.api import staff_router as attendance_staff_router
 from jungle.audit.api import router as audit_router
+from jungle.bookings.api import classes_router, events_router
+from jungle.bookings.api import me_router as bookings_router
+from jungle.bookings.api import public_router as bookings_public_router
+from jungle.bookings.api import staff_router as bookings_staff_router
 from jungle.configuration.api import public_router as config_public_router
 from jungle.configuration.api import staff_router as config_staff_router
 from jungle.core.api import router as health_router
@@ -19,6 +24,8 @@ from jungle.devices.api import router as devices_router
 from jungle.legal.api import router as legal_router
 from jungle.locations.api import public_router as locations_router
 from jungle.locations.api import staff_router as locations_staff_router
+from jungle.pricing.api import public_router as pricing_router
+from jungle.pricing.api import staff_router as pricing_staff_router
 from jungle.waitlist.api import public_router as waitlist_router
 from jungle.waitlist.api import staff_router as waitlist_staff_router
 
@@ -44,6 +51,14 @@ api.add_router("/staff/devices", devices_router)
 api.add_router("/staff/audit", audit_router)
 api.add_router("/waitlist", waitlist_router)
 api.add_router("/staff/waitlist", waitlist_staff_router)
+api.add_router("/bookings", bookings_public_router)
+api.add_router("/bookings", bookings_router)
+api.add_router("/classes", classes_router)
+api.add_router("/events", events_router)
+api.add_router("/pricing", pricing_router)
+api.add_router("/staff", bookings_staff_router)
+api.add_router("/staff", attendance_staff_router)
+api.add_router("/staff", pricing_staff_router)
 
 
 def _error(

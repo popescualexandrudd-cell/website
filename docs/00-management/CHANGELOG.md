@@ -4,6 +4,20 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 3 — 27.09.2026 (așteaptă aprobarea)
+#### Adăugat
+- `jungle.bookings`: rezervări de terenuri și ședințe private pe Reformer (grilă de 30 min, durate Q2, program Q3, tipul sesiunii schimbabil până la check-in Q29), rezervare la recepție pentru un client, anulări gratuite/cu plată/scutite (R-070, R-071), lista de așteptare cu promovare automată și email (R-074, Q16), clase de pilates cu capacitate ≤ aparate active și listă de așteptare (R-100 … R-102), cereri pentru sala de evenimente aprobate de manager (Q34).
+- Garanții în PostgreSQL: excluderea suprapunerilor pe resursă, pe antrenor și pe sală (btree_gist), grila și duratele (CHECK); rezervările simultane se pun la rând (advisory lock), fără deadlock.
+- `jungle.pricing`: tarife pe 30 de minute pe bandă orară, sezon, tip client și produs; ofertă proporțională, corectă și în zilele cu schimbarea orei; tarife publice; modificări auditate. Tarife DEMO marcate DE_STABILIT în `seed_initial --demo`.
+- `jungle.attendance`: scanări (sosire, teren, clasă) legate automat de rezervare sau clasă; neprezentări după 15 min; blocare la a treia în 90 de zile, cu notificare pentru antrenorul/instructorul responsabil sau manager (R-072, R-073, Q15); deblocare cu motiv; comanda `process_no_shows`.
+- API: `/bookings`, `/classes`, `/events`, `/pricing`, `/staff/bookings`, `/staff/classes`, `/staff/events`, `/staff/scans`, `/staff/restrictions`, `/staff/notices`, `/staff/pricing/rates`; coduri de eroare noi traduse RO/EN; emailul `spot_promoted`.
+- 71 de teste noi (202 în backend), cu ID-ul regulii în nume.
+#### Reparat la revizuire
+- Calculele de timp pe ziua schimbării orei se fac acum în UTC.
+- Două rezervări simultane pe același teren dădeau „deadlock” în loc de „loc ocupat”.
+- Un antrenor putea fi rezervat la o lecție în timpul propriei clase de pilates.
+- Rezervarea online cere emailul confirmat.
+
 ### Etapa 1B, revizia 3 „Noapte și alamă” — 27.09.2026 (aprobată 27.09.2026)
 #### Modificat
 - Identitatea B4 aleasă de proprietar: tokeni noi (noapte, os, alamă, pădure), contrast AAA pe fundalurile întunecate; fonturile Fraunces și Instrument Sans (auto-găzduite, reduse).

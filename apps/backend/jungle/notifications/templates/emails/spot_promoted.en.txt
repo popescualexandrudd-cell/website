@@ -1,0 +1,13 @@
+{% autoescape off %}Hi {{ name }},
+
+A spot opened up and, because you were on the waiting list, we signed you up automatically:
+
+{{ what }}
+{{ when }}
+
+If you can no longer come, you can cancel free of charge until {{ free_cancel_until }}. After that, the usual cancellation rules apply.
+
+Your bookings: {{ link }}
+
+The Jungle Padel team
+{% endautoescape %}

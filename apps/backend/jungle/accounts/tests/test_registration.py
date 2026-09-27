@@ -204,7 +204,7 @@ def test_verification_token_for_old_email_or_tampered_is_invalid(api: Api, make_
 
 
 def test_resend_verification_is_rate_limited(api: Api, make_user, client) -> None:
-    user = make_user("r@example.test")
+    user = make_user("r@example.test", email_verified_at=None)
     client.force_login(user)
     assert api.post("/auth/verify-email/resend").status_code == 200
     assert len(mail.outbox) == 1

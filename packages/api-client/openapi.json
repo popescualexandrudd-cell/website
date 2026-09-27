@@ -153,6 +153,227 @@
         "title": "AuditPageOut",
         "type": "object"
       },
+      "AvailabilityOut": {
+        "properties": {
+          "close": {
+            "title": "Close",
+            "type": "string"
+          },
+          "day": {
+            "format": "date",
+            "title": "Day",
+            "type": "string"
+          },
+          "durations_minutes": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Durations Minutes",
+            "type": "array"
+          },
+          "open": {
+            "title": "Open",
+            "type": "string"
+          },
+          "resources": {
+            "items": {
+              "$ref": "#/components/schemas/ResourceAvailabilityOut"
+            },
+            "title": "Resources",
+            "type": "array"
+          }
+        },
+        "required": [
+          "day",
+          "open",
+          "close",
+          "durations_minutes",
+          "resources"
+        ],
+        "title": "AvailabilityOut",
+        "type": "object"
+      },
+      "Band": {
+        "enum": [
+          "peak",
+          "semi_peak",
+          "off_peak"
+        ],
+        "title": "Band",
+        "type": "string"
+      },
+      "BookingIn": {
+        "properties": {
+          "coach_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Coach Id"
+          },
+          "duration_minutes": {
+            "maximum": 1440,
+            "minimum": 30,
+            "title": "Duration Minutes",
+            "type": "integer"
+          },
+          "resource_id": {
+            "format": "uuid",
+            "title": "Resource Id",
+            "type": "string"
+          },
+          "session_type": {
+            "$ref": "#/components/schemas/SessionType"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "resource_id",
+          "starts_at",
+          "duration_minutes",
+          "session_type"
+        ],
+        "title": "BookingIn",
+        "type": "object"
+      },
+      "BookingOut": {
+        "properties": {
+          "cancellation_outcome": {
+            "title": "Cancellation Outcome",
+            "type": "string"
+          },
+          "cancelled_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cancelled At"
+          },
+          "coach_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Coach Id"
+          },
+          "ends_at": {
+            "format": "date-time",
+            "title": "Ends At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "price_provisional": {
+            "title": "Price Provisional",
+            "type": "boolean"
+          },
+          "price_total": {
+            "title": "Price Total",
+            "type": "integer"
+          },
+          "promoted_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Promoted At"
+          },
+          "resource_id": {
+            "format": "uuid",
+            "title": "Resource Id",
+            "type": "string"
+          },
+          "resource_name": {
+            "title": "Resource Name",
+            "type": "string"
+          },
+          "session_type": {
+            "title": "Session Type",
+            "type": "string"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "location_id",
+          "resource_id",
+          "resource_name",
+          "coach_id",
+          "starts_at",
+          "ends_at",
+          "session_type",
+          "status",
+          "source",
+          "price_total",
+          "price_provisional",
+          "promoted_at",
+          "cancelled_at",
+          "cancellation_outcome"
+        ],
+        "title": "BookingOut",
+        "type": "object"
+      },
+      "CancelIn": {
+        "properties": {
+          "reason": {
+            "default": "",
+            "maxLength": 250,
+            "title": "Reason",
+            "type": "string"
+          },
+          "waive": {
+            "default": false,
+            "title": "Waive",
+            "type": "boolean"
+          }
+        },
+        "title": "CancelIn",
+        "type": "object"
+      },
       "ChildIn": {
         "properties": {
           "date_of_birth": {
@@ -216,6 +437,113 @@
           "date_of_birth"
         ],
         "title": "ChildOut",
+        "type": "object"
+      },
+      "ClassIn": {
+        "properties": {
+          "capacity": {
+            "maximum": 50,
+            "minimum": 1,
+            "title": "Capacity",
+            "type": "integer"
+          },
+          "duration_minutes": {
+            "maximum": 240,
+            "minimum": 30,
+            "title": "Duration Minutes",
+            "type": "integer"
+          },
+          "instructor_id": {
+            "format": "uuid",
+            "title": "Instructor Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "studio_id": {
+            "format": "uuid",
+            "title": "Studio Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "studio_id",
+          "instructor_id",
+          "kind",
+          "starts_at",
+          "duration_minutes",
+          "capacity"
+        ],
+        "title": "ClassIn",
+        "type": "object"
+      },
+      "ClassOut": {
+        "properties": {
+          "capacity": {
+            "title": "Capacity",
+            "type": "integer"
+          },
+          "ends_at": {
+            "format": "date-time",
+            "title": "Ends At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "instructor_name": {
+            "title": "Instructor Name",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "places_left": {
+            "title": "Places Left",
+            "type": "integer"
+          },
+          "price_provisional": {
+            "title": "Price Provisional",
+            "type": "boolean"
+          },
+          "price_total": {
+            "title": "Price Total",
+            "type": "integer"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "studio_id": {
+            "format": "uuid",
+            "title": "Studio Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "studio_id",
+          "kind",
+          "instructor_name",
+          "starts_at",
+          "ends_at",
+          "capacity",
+          "places_left",
+          "price_total",
+          "price_provisional"
+        ],
+        "title": "ClassOut",
         "type": "object"
       },
       "CompanyOut": {
@@ -461,6 +789,34 @@
         "title": "CsrfOut",
         "type": "object"
       },
+      "CustomerType": {
+        "enum": [
+          "standard",
+          "member",
+          "corporate"
+        ],
+        "title": "CustomerType",
+        "type": "string"
+      },
+      "DecisionIn": {
+        "properties": {
+          "approve": {
+            "title": "Approve",
+            "type": "boolean"
+          },
+          "note": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Note",
+            "type": "string"
+          }
+        },
+        "required": [
+          "approve"
+        ],
+        "title": "DecisionIn",
+        "type": "object"
+      },
       "DeviceActiveIn": {
         "properties": {
           "is_active": {
@@ -595,6 +951,55 @@
         "title": "EmailIn",
         "type": "object"
       },
+      "EnrollmentOut": {
+        "properties": {
+          "cancellation_outcome": {
+            "title": "Cancellation Outcome",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "promoted_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Promoted At"
+          },
+          "session_id": {
+            "format": "uuid",
+            "title": "Session Id",
+            "type": "string"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "session_id",
+          "status",
+          "starts_at",
+          "promoted_at",
+          "cancellation_outcome"
+        ],
+        "title": "EnrollmentOut",
+        "type": "object"
+      },
       "EntryOut": {
         "properties": {
           "confirmed_at": {
@@ -717,6 +1122,111 @@
         "title": "ErrorOut",
         "type": "object"
       },
+      "EventIn": {
+        "properties": {
+          "duration_minutes": {
+            "maximum": 1440,
+            "minimum": 60,
+            "title": "Duration Minutes",
+            "type": "integer"
+          },
+          "guests": {
+            "maximum": 1000,
+            "minimum": 1,
+            "title": "Guests",
+            "type": "integer"
+          },
+          "message": {
+            "default": "",
+            "maxLength": 2000,
+            "title": "Message",
+            "type": "string"
+          },
+          "room_id": {
+            "format": "uuid",
+            "title": "Room Id",
+            "type": "string"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "room_id",
+          "starts_at",
+          "duration_minutes",
+          "guests"
+        ],
+        "title": "EventIn",
+        "type": "object"
+      },
+      "EventOut": {
+        "properties": {
+          "booking_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Booking Id"
+          },
+          "decision_note": {
+            "title": "Decision Note",
+            "type": "string"
+          },
+          "ends_at": {
+            "format": "date-time",
+            "title": "Ends At",
+            "type": "string"
+          },
+          "guests": {
+            "title": "Guests",
+            "type": "integer"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "room_id": {
+            "format": "uuid",
+            "title": "Room Id",
+            "type": "string"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "room_id",
+          "starts_at",
+          "ends_at",
+          "guests",
+          "message",
+          "status",
+          "booking_id",
+          "decision_note"
+        ],
+        "title": "EventOut",
+        "type": "object"
+      },
       "FlagIn": {
         "properties": {
           "enabled": {
@@ -812,6 +1322,26 @@
         "title": "HealthOut",
         "type": "object"
       },
+      "IntervalOut": {
+        "properties": {
+          "ends_at": {
+            "format": "date-time",
+            "title": "Ends At",
+            "type": "string"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "starts_at",
+          "ends_at"
+        ],
+        "title": "IntervalOut",
+        "type": "object"
+      },
       "LegalDocumentOut": {
         "properties": {
           "body": {
@@ -871,6 +1401,27 @@
         ],
         "title": "Level",
         "type": "string"
+      },
+      "LiftIn": {
+        "properties": {
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "reason": {
+            "maxLength": 250,
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "location_id",
+          "reason"
+        ],
+        "title": "LiftIn",
+        "type": "object"
       },
       "LocationIn": {
         "properties": {
@@ -1134,6 +1685,50 @@
         "title": "MfaSetupOut",
         "type": "object"
       },
+      "NoticeOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "payload": {
+            "additionalProperties": true,
+            "title": "Payload",
+            "type": "object"
+          },
+          "read_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Read At"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "payload",
+          "created_at",
+          "read_at"
+        ],
+        "title": "NoticeOut",
+        "type": "object"
+      },
       "OkOut": {
         "properties": {
           "ok": {
@@ -1223,6 +1818,16 @@
         "title": "PendingDecisionOut",
         "type": "object"
       },
+      "Product": {
+        "enum": [
+          "rental",
+          "lesson",
+          "class",
+          "event"
+        ],
+        "title": "Product",
+        "type": "string"
+      },
       "ProfileIn": {
         "properties": {
           "first_name": {
@@ -1278,6 +1883,156 @@
           }
         },
         "title": "ProfileIn",
+        "type": "object"
+      },
+      "QuoteOut": {
+        "properties": {
+          "provisional": {
+            "description": "cel puțin un tarif este DE_STABILIT",
+            "title": "Provisional",
+            "type": "boolean"
+          },
+          "segments": {
+            "items": {
+              "$ref": "#/components/schemas/SegmentOut"
+            },
+            "title": "Segments",
+            "type": "array"
+          },
+          "total": {
+            "description": "bani (RON × 100)",
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "total",
+          "provisional",
+          "segments"
+        ],
+        "title": "QuoteOut",
+        "type": "object"
+      },
+      "RateIn": {
+        "properties": {
+          "amount_per_half_hour": {
+            "maximum": 10000000,
+            "minimum": 0,
+            "title": "Amount Per Half Hour",
+            "type": "integer"
+          },
+          "band": {
+            "$ref": "#/components/schemas/Band"
+          },
+          "confirmed": {
+            "default": false,
+            "title": "Confirmed",
+            "type": "boolean"
+          },
+          "customer_type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CustomerType"
+              }
+            ],
+            "default": "standard"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "note": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Note",
+            "type": "string"
+          },
+          "product": {
+            "$ref": "#/components/schemas/Product"
+          },
+          "resource_kind": {
+            "$ref": "#/components/schemas/ResourceKind"
+          },
+          "season": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Season"
+              }
+            ],
+            "default": "all"
+          }
+        },
+        "required": [
+          "location_id",
+          "resource_kind",
+          "product",
+          "band",
+          "amount_per_half_hour"
+        ],
+        "title": "RateIn",
+        "type": "object"
+      },
+      "RateOut": {
+        "properties": {
+          "amount_per_half_hour": {
+            "description": "bani (RON × 100) pentru 30 de minute",
+            "title": "Amount Per Half Hour",
+            "type": "integer"
+          },
+          "band": {
+            "title": "Band",
+            "type": "string"
+          },
+          "customer_type": {
+            "title": "Customer Type",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "marker": {
+            "description": "CONFIRMED sau TO_SET (DE_STABILIT)",
+            "title": "Marker",
+            "type": "string"
+          },
+          "note": {
+            "title": "Note",
+            "type": "string"
+          },
+          "product": {
+            "title": "Product",
+            "type": "string"
+          },
+          "resource_kind": {
+            "title": "Resource Kind",
+            "type": "string"
+          },
+          "season": {
+            "title": "Season",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "resource_kind",
+          "product",
+          "season",
+          "band",
+          "customer_type",
+          "amount_per_half_hour",
+          "marker",
+          "note",
+          "updated_at"
+        ],
+        "title": "RateOut",
         "type": "object"
       },
       "ReasonIn": {
@@ -1366,6 +2121,38 @@
           "accepted_documents"
         ],
         "title": "RegisterIn",
+        "type": "object"
+      },
+      "ResourceAvailabilityOut": {
+        "properties": {
+          "busy": {
+            "items": {
+              "$ref": "#/components/schemas/IntervalOut"
+            },
+            "title": "Busy",
+            "type": "array"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "name",
+          "busy"
+        ],
+        "title": "ResourceAvailabilityOut",
         "type": "object"
       },
       "ResourceIn": {
@@ -1596,6 +2383,55 @@
         "title": "ResourcePatch",
         "type": "object"
       },
+      "RestrictionOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "lifted_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lifted At"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "no_show_count": {
+            "title": "No Show Count",
+            "type": "integer"
+          },
+          "user_id": {
+            "format": "uuid",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "user_id",
+          "name",
+          "no_show_count",
+          "created_at",
+          "lifted_at"
+        ],
+        "title": "RestrictionOut",
+        "type": "object"
+      },
       "RoleGrantIn": {
         "properties": {
           "location_id": {
@@ -1658,6 +2494,221 @@
         "title": "RoleOut",
         "type": "object"
       },
+      "RosterEntryOut": {
+        "properties": {
+          "enrollment_id": {
+            "format": "uuid",
+            "title": "Enrollment Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "user_id": {
+            "format": "uuid",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "enrollment_id",
+          "user_id",
+          "name",
+          "status"
+        ],
+        "title": "RosterEntryOut",
+        "type": "object"
+      },
+      "RosterOut": {
+        "properties": {
+          "people": {
+            "items": {
+              "$ref": "#/components/schemas/RosterEntryOut"
+            },
+            "title": "People",
+            "type": "array"
+          },
+          "session": {
+            "$ref": "#/components/schemas/ClassOut"
+          }
+        },
+        "required": [
+          "session",
+          "people"
+        ],
+        "title": "RosterOut",
+        "type": "object"
+      },
+      "ScanIn": {
+        "properties": {
+          "class_session_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Class Session Id"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/ScanKind"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "resource_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resource Id"
+          },
+          "user_id": {
+            "format": "uuid",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "location_id",
+          "kind"
+        ],
+        "title": "ScanIn",
+        "type": "object"
+      },
+      "ScanKind": {
+        "enum": [
+          "arrival",
+          "court_entry",
+          "class_entry"
+        ],
+        "title": "ScanKind",
+        "type": "string"
+      },
+      "ScanOut": {
+        "properties": {
+          "booking_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Booking Id"
+          },
+          "enrollment_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enrollment Id"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "resource_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resource Id"
+          },
+          "scanned_at": {
+            "format": "date-time",
+            "title": "Scanned At",
+            "type": "string"
+          },
+          "user_id": {
+            "format": "uuid",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "user_id",
+          "kind",
+          "resource_id",
+          "booking_id",
+          "enrollment_id",
+          "scanned_at"
+        ],
+        "title": "ScanOut",
+        "type": "object"
+      },
+      "Season": {
+        "enum": [
+          "all",
+          "summer",
+          "winter"
+        ],
+        "title": "Season",
+        "type": "string"
+      },
+      "SegmentOut": {
+        "properties": {
+          "amount": {
+            "title": "Amount",
+            "type": "integer"
+          },
+          "band": {
+            "title": "Band",
+            "type": "string"
+          },
+          "season": {
+            "title": "Season",
+            "type": "string"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "starts_at",
+          "band",
+          "season",
+          "amount"
+        ],
+        "title": "SegmentOut",
+        "type": "object"
+      },
       "SessionOut": {
         "properties": {
           "authenticated": {
@@ -1681,6 +2732,20 @@
         ],
         "title": "SessionOut",
         "type": "object"
+      },
+      "SessionType": {
+        "description": "R-044: shown on the court screen; changeable until check-in (Q29).",
+        "enum": [
+          "official_match",
+          "training",
+          "lesson",
+          "tournament",
+          "challenge",
+          "free_rental",
+          "event"
+        ],
+        "title": "SessionType",
+        "type": "string"
       },
       "SignupIn": {
         "properties": {
@@ -1754,6 +2819,267 @@
         "title": "SignupOut",
         "type": "object"
       },
+      "StaffBookingIn": {
+        "properties": {
+          "coach_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Coach Id"
+          },
+          "customer_type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CustomerType"
+              }
+            ],
+            "default": "standard"
+          },
+          "duration_minutes": {
+            "maximum": 1440,
+            "minimum": 30,
+            "title": "Duration Minutes",
+            "type": "integer"
+          },
+          "for_user_id": {
+            "format": "uuid",
+            "title": "For User Id",
+            "type": "string"
+          },
+          "resource_id": {
+            "format": "uuid",
+            "title": "Resource Id",
+            "type": "string"
+          },
+          "session_type": {
+            "$ref": "#/components/schemas/SessionType"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "resource_id",
+          "starts_at",
+          "duration_minutes",
+          "session_type",
+          "for_user_id"
+        ],
+        "title": "StaffBookingIn",
+        "type": "object"
+      },
+      "StaffBookingOut": {
+        "properties": {
+          "cancellation_outcome": {
+            "title": "Cancellation Outcome",
+            "type": "string"
+          },
+          "cancelled_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cancelled At"
+          },
+          "coach_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Coach Id"
+          },
+          "ends_at": {
+            "format": "date-time",
+            "title": "Ends At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "organizer_id": {
+            "format": "uuid",
+            "title": "Organizer Id",
+            "type": "string"
+          },
+          "organizer_name": {
+            "title": "Organizer Name",
+            "type": "string"
+          },
+          "price_provisional": {
+            "title": "Price Provisional",
+            "type": "boolean"
+          },
+          "price_total": {
+            "title": "Price Total",
+            "type": "integer"
+          },
+          "promoted_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Promoted At"
+          },
+          "resource_id": {
+            "format": "uuid",
+            "title": "Resource Id",
+            "type": "string"
+          },
+          "resource_name": {
+            "title": "Resource Name",
+            "type": "string"
+          },
+          "session_type": {
+            "title": "Session Type",
+            "type": "string"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "location_id",
+          "resource_id",
+          "resource_name",
+          "coach_id",
+          "starts_at",
+          "ends_at",
+          "session_type",
+          "status",
+          "source",
+          "price_total",
+          "price_provisional",
+          "promoted_at",
+          "cancelled_at",
+          "cancellation_outcome",
+          "organizer_id",
+          "organizer_name"
+        ],
+        "title": "StaffBookingOut",
+        "type": "object"
+      },
+      "StaffEventOut": {
+        "properties": {
+          "booking_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Booking Id"
+          },
+          "decision_note": {
+            "title": "Decision Note",
+            "type": "string"
+          },
+          "ends_at": {
+            "format": "date-time",
+            "title": "Ends At",
+            "type": "string"
+          },
+          "guests": {
+            "title": "Guests",
+            "type": "integer"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "requester_email": {
+            "title": "Requester Email",
+            "type": "string"
+          },
+          "requester_id": {
+            "format": "uuid",
+            "title": "Requester Id",
+            "type": "string"
+          },
+          "requester_name": {
+            "title": "Requester Name",
+            "type": "string"
+          },
+          "room_id": {
+            "format": "uuid",
+            "title": "Room Id",
+            "type": "string"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "room_id",
+          "starts_at",
+          "ends_at",
+          "guests",
+          "message",
+          "status",
+          "booking_id",
+          "decision_note",
+          "requester_id",
+          "requester_name",
+          "requester_email"
+        ],
+        "title": "StaffEventOut",
+        "type": "object"
+      },
       "StatsOut": {
         "properties": {
           "by_status": {
@@ -1790,6 +3116,18 @@
           "token"
         ],
         "title": "TokenIn",
+        "type": "object"
+      },
+      "TypeIn": {
+        "properties": {
+          "session_type": {
+            "$ref": "#/components/schemas/SessionType"
+          }
+        },
+        "required": [
+          "session_type"
+        ],
+        "title": "TypeIn",
         "type": "object"
       },
       "UserDetailOut": {
@@ -1991,6 +3329,48 @@
           "is_demo"
         ],
         "title": "UserSummaryOut",
+        "type": "object"
+      },
+      "WaitlistOut": {
+        "properties": {
+          "ends_at": {
+            "format": "date-time",
+            "title": "Ends At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "resource_id": {
+            "format": "uuid",
+            "title": "Resource Id",
+            "type": "string"
+          },
+          "session_type": {
+            "title": "Session Type",
+            "type": "string"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "resource_id",
+          "starts_at",
+          "ends_at",
+          "session_type",
+          "status"
+        ],
+        "title": "WaitlistOut",
         "type": "object"
       }
     },
@@ -2633,6 +4013,967 @@
         ]
       }
     },
+    "/api/v1/bookings": {
+      "post": {
+        "operationId": "jungle_bookings_api_create_booking",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookingIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Create Booking",
+        "tags": [
+          "bookings"
+        ]
+      }
+    },
+    "/api/v1/bookings/availability": {
+      "get": {
+        "description": "Occupied intervals per resource for one club-time day. No personal data (R-012).",
+        "operationId": "jungle_bookings_api_availability",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location",
+            "required": true,
+            "schema": {
+              "title": "Location",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "day",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "Day",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AvailabilityOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Availability",
+        "tags": [
+          "bookings"
+        ]
+      }
+    },
+    "/api/v1/bookings/mine": {
+      "get": {
+        "operationId": "jungle_bookings_api_my_bookings",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/BookingOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "My Bookings",
+        "tags": [
+          "bookings"
+        ]
+      }
+    },
+    "/api/v1/bookings/quote": {
+      "get": {
+        "description": "The price before booking (R-052), with the per-30-minute breakdown.",
+        "operationId": "jungle_bookings_api_get_quote",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "resource_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Resource Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "starts_at",
+            "required": true,
+            "schema": {
+              "format": "date-time",
+              "title": "Starts At",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "duration_minutes",
+            "required": true,
+            "schema": {
+              "title": "Duration Minutes",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "session_type",
+            "required": false,
+            "schema": {
+              "allOf": [
+                {
+                  "description": "R-044: shown on the court screen; changeable until check-in (Q29).",
+                  "enum": [
+                    "official_match",
+                    "training",
+                    "lesson",
+                    "tournament",
+                    "challenge",
+                    "free_rental",
+                    "event"
+                  ],
+                  "title": "SessionType",
+                  "type": "string"
+                }
+              ],
+              "default": "free_rental"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuoteOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Get Quote",
+        "tags": [
+          "bookings"
+        ]
+      }
+    },
+    "/api/v1/bookings/waitlist": {
+      "get": {
+        "operationId": "jungle_bookings_api_my_waitlist",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/WaitlistOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "My Waitlist",
+        "tags": [
+          "bookings"
+        ]
+      },
+      "post": {
+        "operationId": "jungle_bookings_api_join_waitlist",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookingIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitlistOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Join Waitlist",
+        "tags": [
+          "bookings"
+        ]
+      }
+    },
+    "/api/v1/bookings/waitlist/{entry_id}/leave": {
+      "post": {
+        "operationId": "jungle_bookings_api_leave_waitlist",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "entry_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Entry Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Leave Waitlist",
+        "tags": [
+          "bookings"
+        ]
+      }
+    },
+    "/api/v1/bookings/{booking_id}/cancel": {
+      "post": {
+        "operationId": "jungle_bookings_api_cancel_booking",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "booking_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Booking Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Cancel Booking",
+        "tags": [
+          "bookings"
+        ]
+      }
+    },
+    "/api/v1/bookings/{booking_id}/session-type": {
+      "post": {
+        "operationId": "jungle_bookings_api_change_type",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "booking_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Booking Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TypeIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Change Type",
+        "tags": [
+          "bookings"
+        ]
+      }
+    },
+    "/api/v1/classes": {
+      "get": {
+        "operationId": "jungle_bookings_api_list_classes",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location",
+            "required": true,
+            "schema": {
+              "title": "Location",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ClassOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "List Classes",
+        "tags": [
+          "classes"
+        ]
+      }
+    },
+    "/api/v1/classes/enrollments/{enrollment_id}/cancel": {
+      "post": {
+        "operationId": "jungle_bookings_api_cancel_enrollment",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "enrollment_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Enrollment Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnrollmentOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Cancel Enrollment",
+        "tags": [
+          "classes"
+        ]
+      }
+    },
+    "/api/v1/classes/mine": {
+      "get": {
+        "operationId": "jungle_bookings_api_my_enrollments",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/EnrollmentOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "My Enrollments",
+        "tags": [
+          "classes"
+        ]
+      }
+    },
+    "/api/v1/classes/{session_id}/enroll": {
+      "post": {
+        "operationId": "jungle_bookings_api_enroll",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnrollmentOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Enroll",
+        "tags": [
+          "classes"
+        ]
+      }
+    },
     "/api/v1/config/company": {
       "get": {
         "operationId": "jungle_configuration_api_company",
@@ -2678,6 +5019,124 @@
         "summary": "List Flags",
         "tags": [
           "configuration"
+        ]
+      }
+    },
+    "/api/v1/events": {
+      "post": {
+        "operationId": "jungle_bookings_api_request_event",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Request Event",
+        "tags": [
+          "events"
+        ]
+      }
+    },
+    "/api/v1/events/mine": {
+      "get": {
+        "operationId": "jungle_bookings_api_my_events",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/EventOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "My Events",
+        "tags": [
+          "events"
         ]
       }
     },
@@ -3141,6 +5600,52 @@
         ]
       }
     },
+    "/api/v1/pricing/{slug}/rates": {
+      "get": {
+        "operationId": "jungle_pricing_api_list_rates",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RateOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "summary": "List Rates",
+        "tags": [
+          "pricing"
+        ]
+      }
+    },
     "/api/v1/staff/audit": {
       "get": {
         "operationId": "jungle_audit_api_list_audit",
@@ -3239,6 +5744,348 @@
         "summary": "List Audit",
         "tags": [
           "staff: audit"
+        ]
+      }
+    },
+    "/api/v1/staff/bookings": {
+      "get": {
+        "operationId": "jungle_bookings_api_day_bookings",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "day",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "Day",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/StaffBookingOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Day Bookings",
+        "tags": [
+          "staff: bookings"
+        ]
+      },
+      "post": {
+        "operationId": "jungle_bookings_api_book_for_client",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StaffBookingIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffBookingOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Book For Client",
+        "tags": [
+          "staff: bookings"
+        ]
+      }
+    },
+    "/api/v1/staff/classes": {
+      "post": {
+        "operationId": "jungle_bookings_api_create_class",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Create Class",
+        "tags": [
+          "staff: bookings"
+        ]
+      }
+    },
+    "/api/v1/staff/classes/{session_id}/roster": {
+      "get": {
+        "operationId": "jungle_bookings_api_class_roster",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RosterOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Class Roster",
+        "tags": [
+          "staff: bookings"
         ]
       }
     },
@@ -3604,6 +6451,166 @@
         ]
       }
     },
+    "/api/v1/staff/events": {
+      "get": {
+        "operationId": "jungle_bookings_api_list_events",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/StaffEventOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "List Events",
+        "tags": [
+          "staff: bookings"
+        ]
+      }
+    },
+    "/api/v1/staff/events/{event_id}/decision": {
+      "post": {
+        "operationId": "jungle_bookings_api_decide_event",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Event Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Decide Event",
+        "tags": [
+          "staff: bookings"
+        ]
+      }
+    },
     "/api/v1/staff/flags/{key}": {
       "put": {
         "operationId": "jungle_configuration_api_set_flag",
@@ -3865,6 +6872,166 @@
         ]
       }
     },
+    "/api/v1/staff/notices": {
+      "get": {
+        "operationId": "jungle_attendance_api_list_notices",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/NoticeOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "List Notices",
+        "tags": [
+          "staff: attendance"
+        ]
+      }
+    },
+    "/api/v1/staff/notices/{notice_id}/read": {
+      "post": {
+        "operationId": "jungle_attendance_api_read_notice",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "notice_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Notice Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoticeOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Read Notice",
+        "tags": [
+          "staff: attendance"
+        ]
+      }
+    },
     "/api/v1/staff/pending-decisions": {
       "get": {
         "description": "The admin page „Ce mai trebuie confirmat”: every DE_CONFIRMAT / DE_STABILIT value.",
@@ -3914,6 +7081,83 @@
         "summary": "Pending Decisions",
         "tags": [
           "staff: configuration"
+        ]
+      }
+    },
+    "/api/v1/staff/pricing/rates": {
+      "put": {
+        "operationId": "jungle_pricing_api_set_rate",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RateIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Set Rate",
+        "tags": [
+          "staff: pricing"
         ]
       }
     },
@@ -4112,6 +7356,176 @@
         ]
       }
     },
+    "/api/v1/staff/restrictions": {
+      "get": {
+        "operationId": "jungle_attendance_api_list_restrictions",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RestrictionOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "List Restrictions",
+        "tags": [
+          "staff: attendance"
+        ]
+      }
+    },
+    "/api/v1/staff/restrictions/{restriction_id}/lift": {
+      "post": {
+        "operationId": "jungle_attendance_api_lift_restriction",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "restriction_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Restriction Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LiftIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestrictionOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Lift Restriction",
+        "tags": [
+          "staff: attendance"
+        ]
+      }
+    },
     "/api/v1/staff/roles/{role_id}/revoke": {
       "post": {
         "operationId": "jungle_accounts_api_revoke_role",
@@ -4196,6 +7610,83 @@
         "summary": "Revoke Role",
         "tags": [
           "staff: users"
+        ]
+      }
+    },
+    "/api/v1/staff/scans": {
+      "post": {
+        "operationId": "jungle_attendance_api_record_scan",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScanIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScanOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Record Scan",
+        "tags": [
+          "staff: attendance"
         ]
       }
     },

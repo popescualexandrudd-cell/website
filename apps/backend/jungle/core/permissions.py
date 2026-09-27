@@ -33,6 +33,14 @@ class Action(StrEnum):
     AUDIT_VIEW = "audit.view"
     WAITLIST_VIEW = "waitlist.view"
     WAITLIST_EXPORT = "waitlist.export"
+    BOOKINGS_VIEW = "bookings.view"
+    BOOKINGS_MANAGE = "bookings.manage"
+    PRICING_MANAGE = "pricing.manage"
+    CLASSES_MANAGE = "classes.manage"
+    ATTENDANCE_RECORD = "attendance.record"
+    ATTENDANCE_VIEW = "attendance.view"
+    RESTRICTIONS_MANAGE = "restrictions.manage"
+    EVENTS_MANAGE = "events.manage"
 
 
 ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
@@ -48,9 +56,34 @@ ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
             Action.AUDIT_VIEW,
             Action.WAITLIST_VIEW,
             Action.WAITLIST_EXPORT,
+            Action.BOOKINGS_VIEW,
+            Action.BOOKINGS_MANAGE,
+            Action.PRICING_MANAGE,
+            Action.CLASSES_MANAGE,
+            Action.ATTENDANCE_RECORD,
+            Action.ATTENDANCE_VIEW,
+            Action.RESTRICTIONS_MANAGE,
+            Action.EVENTS_MANAGE,
         }
     ),
-    Role.RECEPTION: frozenset({Action.USERS_VIEW, Action.GUEST_ACCOUNT_CREATE}),
-    # Coaches get their own actions (programme, attendance, level validation) in later stages.
-    Role.COACH: frozenset(),
+    Role.RECEPTION: frozenset(
+        {
+            Action.USERS_VIEW,
+            Action.GUEST_ACCOUNT_CREATE,
+            Action.BOOKINGS_VIEW,
+            Action.BOOKINGS_MANAGE,
+            Action.ATTENDANCE_RECORD,
+            Action.ATTENDANCE_VIEW,
+        }
+    ),
+    # Coaches and the Pilates instructor manage their programme and see attendance (R-033);
+    # they decide on players blocked after repeated no-shows (R-073).
+    Role.COACH: frozenset(
+        {
+            Action.BOOKINGS_VIEW,
+            Action.CLASSES_MANAGE,
+            Action.ATTENDANCE_VIEW,
+            Action.RESTRICTIONS_MANAGE,
+        }
+    ),
 }

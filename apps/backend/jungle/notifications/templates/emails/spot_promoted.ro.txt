@@ -1,0 +1,13 @@
+{% autoescape off %}Salut, {{ name }}!
+
+S-a eliberat un loc și, pentru că erai pe lista de așteptare, te-am înscris automat:
+
+{{ what }}
+{{ when }}
+
+Dacă nu mai poți veni, poți anula gratuit până la {{ free_cancel_until }}. După această oră se aplică regulile obișnuite de anulare.
+
+Rezervările tale: {{ link }}
+
+Echipa Jungle Padel
+{% endautoescape %}

@@ -1,6 +1,6 @@
 # Backend central (Django)
 
-> **Stare:** fundația construită în Etapa 1A (27.09.2026). **Următoarele module:** Etapele 3, 4, 5, 6, 12.
+> **Stare:** fundația construită în Etapa 1A (27.09.2026); rezervările, prețurile și prezențele în Etapa 3 (27.09.2026). **Următoarele module:** Etapele 4, 5, 6, 12.
 
 ## Ce face
 
@@ -50,6 +50,7 @@ Din rădăcina repository-ului:
 | Schema OpenAPI + client TS | `scripts/generate-api-client` |
 | Publicarea unui text legal (din `docs/07-securitate-gdpr-legal/texte/`) | `uv run python apps/backend/manage.py publish_legal_document --kind waitlist_notice --language ro --file …` |
 | Ștergerea înscrierilor neconfirmate (zilnic) | `uv run python apps/backend/manage.py purge_waitlist` |
+| Neprezentări, rezervări încheiate, blocări (la 5 minute) | `uv run python apps/backend/manage.py process_no_shows` |
 
 Baza de date: PostgreSQL (`DATABASE_URL`; implicit `postgres://jungle:jungle@localhost:5432/jungle`), de exemplu cu `docker compose -f deploy/compose/dev/compose.yaml up -d db redis`.
 Variabilele de mediu sunt descrise în [`.env.example`](.env.example). Imaginea Docker: [`Dockerfile`](Dockerfile) (se construiește din rădăcina repository-ului).
@@ -66,3 +67,6 @@ Variabilele de mediu sunt descrise în [`.env.example`](.env.example). Imaginea 
 | `jungle/devices` | dispozitivele clubului |
 | `jungle/notifications` | emailuri RO/EN |
 | `jungle/waitlist` | lista de așteptare (Etapa 1B): dublă confirmare, dezabonare cu ștergerea datelor, export CSV |
+| `jungle/pricing` | tarife pe 30 de minute (bandă, sezon, tip client, produs), oferta unei rezervări (Etapa 3) |
+| `jungle/bookings` | rezervări, anulări, lista de așteptare pe interval, clase de pilates, sala de evenimente (Etapa 3); suprapunerile sunt refuzate de PostgreSQL (btree_gist) |
+| `jungle/attendance` | scanări și prezențe, neprezentări, blocări și notificări pentru personal (Etapa 3) |

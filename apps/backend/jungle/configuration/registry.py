@@ -48,6 +48,76 @@ COMPANY_FIELDS = (
 )
 
 
+def _hhmm(value: Any) -> bool:
+    if not isinstance(value, str) or len(value) != 5 or value[2] != ":":
+        return False
+    hh, mm = value[:2], value[3:]
+    if not (hh.isdigit() and mm.isdigit()):
+        return False
+    return (0 <= int(hh) <= 23 and mm in ("00", "30")) or value == "24:00"
+
+
+def durations(value: Any) -> bool:
+    """Booking durations in minutes: 60…180, multiples of 30 (R-041)."""
+    return (
+        isinstance(value, list)
+        and len(value) > 0
+        and all(
+            isinstance(v, int) and not isinstance(v, bool) and 60 <= v <= 180 and v % 30 == 0
+            for v in value
+        )
+    )
+
+
+def opening_hours(value: Any) -> bool:
+    """{"weekday": ["08:00", "23:00"], "weekend": [...]} in club time (Q3)."""
+    return (
+        isinstance(value, dict)
+        and set(value) == {"weekday", "weekend"}
+        and all(
+            isinstance(v, list) and len(v) == 2 and _hhmm(v[0]) and _hhmm(v[1]) and v[0] < v[1]
+            for v in value.values()
+        )
+    )
+
+
+BANDS = ("peak", "semi_peak", "off_peak")
+
+
+def time_bands(value: Any) -> bool:
+    """Price bands per day type: [["08:00", "12:00", "semi_peak"], …], contiguous (R-050)."""
+    if not isinstance(value, dict) or set(value) != {"weekday", "weekend"}:
+        return False
+    for rows in value.values():
+        if not isinstance(rows, list) or not rows:
+            return False
+        previous_end = "00:00"
+        for row in rows:
+            if not (isinstance(row, list) and len(row) == 3 and row[2] in BANDS):
+                return False
+            if not (_hhmm(row[0]) and _hhmm(row[1]) and row[0] == previous_end < row[1]):
+                return False
+            previous_end = row[1]
+        if previous_end != "24:00":
+            return False
+    return True
+
+
+def season_dates(value: Any) -> bool:
+    """{"summer_start": "04-01", "winter_start": "10-01"} (MM-DD, R-051)."""
+    if not isinstance(value, dict) or set(value) != {"summer_start", "winter_start"}:
+        return False
+    for v in value.values():
+        if not (isinstance(v, str) and len(v) == 5 and v[2] == "-"):
+            return False
+        month, day = v[:2], v[3:]
+        if not (
+            month.isdigit() and day.isdigit() and 1 <= int(month) <= 12 and 1 <= int(day) <= 28
+        ):
+            return False
+    return bool(value["summer_start"] != value["winter_start"])
+
+
 def company_details(value: Any) -> bool:
     return (
         isinstance(value, dict)
@@ -142,6 +212,90 @@ CONFIG: dict[str, ConfigSpec] = {
             Marker.DEFAULT,
             "Încercări greșite de pe aceeași adresă IP în fereastra de blocare.",
             positive_int,
+        ),
+        ConfigSpec(
+            "bookings.durations_minutes",
+            [60, 90, 120, 150, 180],
+            Marker.TO_CONFIRM,
+            "Duratele permise la rezervare, în minute (R-041).",
+            durations,
+            question="Q2",
+        ),
+        ConfigSpec(
+            "bookings.opening_hours",
+            {"weekday": ["08:00", "23:00"], "weekend": ["08:00", "23:00"]},
+            Marker.TO_CONFIRM,
+            "Programul de funcționare, ora României (rezervările trebuie să încapă în el).",
+            opening_hours,
+            question="Q3",
+        ),
+        ConfigSpec(
+            "bookings.free_cancellation_hours",
+            24,
+            Marker.CONFIRMED,
+            "Anulare gratuită (recuperare) cu cel puțin atâtea ore înainte (R-070, R-071).",
+            positive_int,
+        ),
+        ConfigSpec(
+            "bookings.no_show_grace_minutes",
+            15,
+            Marker.DEFAULT,
+            "Minute după start fără nicio scanare până la „neprezentare” (R-072).",
+            positive_int,
+        ),
+        ConfigSpec(
+            "bookings.no_show_window_days",
+            90,
+            Marker.TO_CONFIRM,
+            "Fereastra în care se numără neprezentările (R-073).",
+            positive_int,
+            question="Q15",
+        ),
+        ConfigSpec(
+            "bookings.no_show_block_threshold",
+            3,
+            Marker.CONFIRMED,
+            "La a câta neprezentare se blochează rezervările până la decizia antrenorului (R-073).",
+            positive_int,
+        ),
+        ConfigSpec(
+            "bookings.promotion_free_cancel_hours",
+            2,
+            Marker.TO_CONFIRM,
+            "Ore în care cine a intrat de pe lista de așteptare poate anula gratuit (R-074).",
+            positive_int,
+            question="Q16",
+        ),
+        ConfigSpec(
+            "pricing.time_bands",
+            {
+                "weekday": [
+                    ["00:00", "08:00", "off_peak"],
+                    ["08:00", "12:00", "semi_peak"],
+                    ["12:00", "15:00", "off_peak"],
+                    ["15:00", "22:00", "peak"],
+                    ["22:00", "24:00", "off_peak"],
+                ],
+                "weekend": [
+                    ["00:00", "08:00", "off_peak"],
+                    ["08:00", "12:00", "semi_peak"],
+                    ["12:00", "15:00", "off_peak"],
+                    ["15:00", "22:00", "peak"],
+                    ["22:00", "24:00", "off_peak"],
+                ],
+            },
+            Marker.TO_CONFIRM,
+            "Benzile orare de preț (R-050): 13–15, după 22 și weekendul sunt implicite.",
+            time_bands,
+            question="Q3",
+        ),
+        ConfigSpec(
+            "pricing.seasons",
+            {"summer_start": "04-01", "winter_start": "10-01"},
+            Marker.TO_CONFIRM,
+            "Datele de schimbare a sezonului de preț, vară și iarnă (R-051).",
+            season_dates,
+            question="Q21",
         ),
         ConfigSpec(
             "auth.staff_session_hours",

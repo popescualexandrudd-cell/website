@@ -81,7 +81,9 @@ def test_q7_minor_or_unknown_age_cannot_be_guardian(api: Api, make_user, client)
 
 def test_r004_staff_sees_user_details_with_consents(api: Api, staff, make_user) -> None:
     staff(Role.RECEPTION)
-    target = make_user("ana@example.test", first_name="Ana", last_name="Zamfir")
+    target = make_user(
+        "ana@example.test", first_name="Ana", last_name="Zamfir", email_verified_at=None
+    )
     page = api.get("/staff/users?q=zamfir").json()
     assert page["total"] == 1
     assert page["items"][0]["email"] == "ana@example.test"

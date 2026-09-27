@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from collections.abc import Callable
-from datetime import date
+from datetime import UTC, date, datetime
 from typing import Any
 
 import pyotp
@@ -86,6 +86,7 @@ def make_user(db: None) -> Callable[..., User]:
         fields.setdefault("first_name", f"Prenume{n}")
         fields.setdefault("last_name", f"Nume{n}")
         fields.setdefault("date_of_birth", date(1990, 1, 1))
+        fields.setdefault("email_verified_at", datetime(2026, 1, 1, tzinfo=UTC))
         return User.objects.create_user(email or f"user{n}@example.test", password, **fields)
 
     return factory
@@ -125,3 +126,106 @@ def staff(make_user: Callable[..., User], client: Client) -> Callable[..., User]
         return user
 
     return factory
+
+
+# ---------------------------------------------------------------- Stage 3: a small club
+# Monday 15.03.2027, 09:00 club time; DST starts on Sunday 28.03.2027 (ADR-0010).
+CLUB_NOW = "2027-03-15T09:00:00+02:00"
+
+
+@pytest.fixture
+def club(location: Location, make_user: Callable[..., User], time_machine: Any) -> Any:
+    """Two padel courts, a tennis court, a Pilates studio with 4 active Reformers (Q46),
+    the event room, a coach and demo rates (DE_STABILIT, except tennis: R-051)."""
+    from types import SimpleNamespace
+
+    from jungle.configuration.models import Marker
+    from jungle.locations.models import Resource, ResourceKind
+    from jungle.pricing.models import Band, PriceRate, Product
+
+    time_machine.move_to(CLUB_NOW, tick=False)
+
+    def resource(slug: str, kind: str, **fields: Any) -> Resource:
+        return Resource.objects.create(location=location, slug=slug, name=slug, kind=kind, **fields)
+
+    court1 = resource("teren-1", ResourceKind.PADEL_COURT)
+    court2 = resource("teren-2", ResourceKind.PADEL_COURT)
+    tennis = resource("tenis-1", ResourceKind.TENNIS_COURT)
+    studio = resource("sala-pilates", ResourceKind.PILATES_STUDIO, capacity=6)
+    for n in range(1, 6):
+        resource(f"reformer-{n}", ResourceKind.REFORMER, parent=studio, is_active=n <= 4)
+    reformer = Resource.objects.get(slug="reformer-1")
+    room = resource("sala-evenimente", ResourceKind.EVENT_ROOM, capacity=20)
+    rates: list[tuple[str, str, dict[str, int]]] = [
+        (
+            ResourceKind.PADEL_COURT,
+            Product.RENTAL,
+            {Band.PEAK: 6000, Band.SEMI_PEAK: 5000, Band.OFF_PEAK: 4000},
+        ),
+        (ResourceKind.PADEL_COURT, Product.LESSON, dict.fromkeys(Band.values, 9000)),
+        (ResourceKind.REFORMER, Product.LESSON, dict.fromkeys(Band.values, 7500)),
+        (ResourceKind.PILATES_STUDIO, Product.CLASS, dict.fromkeys(Band.values, 4000)),
+        (ResourceKind.EVENT_ROOM, Product.EVENT, dict.fromkeys(Band.values, 10000)),
+    ]
+    for kind, product, bands in rates:
+        for band, amount in bands.items():
+            PriceRate.objects.create(
+                location=location,
+                resource_kind=kind,
+                product=product,
+                band=band,
+                amount_per_half_hour=amount,
+            )
+    for band in Band.values:  # tennis: 120 RON/hour (R-051), a known price
+        PriceRate.objects.create(
+            location=location,
+            resource_kind=ResourceKind.TENNIS_COURT,
+            product=Product.RENTAL,
+            band=band,
+            amount_per_half_hour=6000,
+            marker=Marker.CONFIRMED,
+        )
+    coach = make_user(first_name="Mihai")
+    grant(coach, Role.COACH)
+    return SimpleNamespace(
+        location=location,
+        court1=court1,
+        court2=court2,
+        tennis=tennis,
+        studio=studio,
+        reformer=reformer,
+        room=room,
+        coach=coach,
+    )
+
+
+def booking_body(
+    resource: Any,
+    starts_at: str,
+    minutes: int = 60,
+    session_type: str = "free_rental",
+    **extra: Any,
+) -> dict[str, Any]:
+    return {
+        "resource_id": str(resource.id),
+        "starts_at": starts_at,
+        "duration_minutes": minutes,
+        "session_type": session_type,
+        **extra,
+    }
+
+
+def set_config(key: str, value: Any) -> None:
+    """Publishes a configuration value directly (tests only), effective now."""
+    from jungle.configuration.models import ConfigVersion, Marker
+    from jungle.core import clock
+
+    last = ConfigVersion.objects.filter(key=key).order_by("-version").first()
+    ConfigVersion.objects.create(
+        key=key,
+        version=(last.version if last else 0) + 1,
+        value=value,
+        marker=Marker.CONFIRMED,
+        effective_from=clock.now(),
+        reason="test",
+    )
