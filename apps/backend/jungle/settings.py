@@ -79,6 +79,8 @@ INSTALLED_APPS = [
     "jungle.attendance",
     "jungle.ledger",
     "jungle.subscriptions",
+    "jungle.rewards",
+    "jungle.cafe",
 ]
 
 MIDDLEWARE = [

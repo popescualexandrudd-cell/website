@@ -14,6 +14,7 @@ from django.db import transaction
 
 from jungle.accounts.models import AccountType, User, UserRole
 from jungle.audit.services import SYSTEM
+from jungle.cafe.models import CafeCategory, CafeProduct
 from jungle.configuration.models import Marker
 from jungle.configuration.services import ensure_flag_rows
 from jungle.core.permissions import Role
@@ -57,6 +58,11 @@ DEMO_RATES: list[tuple[str, str, dict[str, int]]] = [
     (ResourceKind.PILATES_STUDIO, Product.CLASS, dict.fromkeys(Band.values, 4000)),
     (ResourceKind.EVENT_ROOM, Product.EVENT, dict.fromkeys(Band.values, 10000)),
 ]
+# DEMO café menu (R-112): generic items, prices DE_STABILIT (Q21, Q33), names RO/EN.
+DEMO_CAFE = {
+    ("Cafea", "Coffee"): [("Espresso", "Espresso", 1200), ("Cappuccino", "Cappuccino", 1600)],
+    ("Băuturi reci", "Cold drinks"): [("Apă plată 0,5 l", "Still water 0.5 l", 800)],
+}
 # DEMO monthly subscription prices (bani) per sport and sessions per month (R-082), DE_STABILIT.
 DEMO_SUBSCRIPTION_RATES = {
     Sport.PADEL: {4: 36000, 8: 64000, 12: 90000},
@@ -159,6 +165,19 @@ class Command(BaseCommand):
                         "marker": Marker.TO_SET,
                         "note": "DEMO — nu este un preț al clubului (Q21)",
                     },
+                )
+        for order, ((cat_ro, cat_en), items) in enumerate(DEMO_CAFE.items()):
+            category, _ = CafeCategory.objects.get_or_create(
+                location=location,
+                name_ro=f"{cat_ro} (DEMO)",
+                defaults={"name_en": f"{cat_en} (DEMO)", "sort_order": order},
+            )
+            for name_ro, name_en, price in items:
+                CafeProduct.objects.get_or_create(
+                    location=location,
+                    category=category,
+                    name_ro=name_ro,
+                    defaults={"name_en": name_en, "price": price, "marker": Marker.TO_SET},
                 )
         for sport, levels in DEMO_SUBSCRIPTION_RATES.items():
             for sessions, monthly in levels.items():

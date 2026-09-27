@@ -94,6 +94,15 @@ def intensities(value: Any) -> bool:
     )
 
 
+def band_list(value: Any) -> bool:
+    return (
+        isinstance(value, list)
+        and len(value) > 0
+        and all(v in BANDS for v in value)
+        and len(set(value)) == len(value)
+    )
+
+
 def percent(value: Any) -> bool:
     return isinstance(value, int) and not isinstance(value, bool) and 0 <= value <= 90
 
@@ -372,6 +381,28 @@ CONFIG: dict[str, ConfigSpec] = {
             "Reducerea implicită (%) pentru abonamentele corporate (R-088, Q35).",
             percent,
             question="Q35",
+        ),
+        ConfigSpec(
+            "referrals.voucher_bands",
+            ["off_peak", "semi_peak"],
+            Marker.TO_CONFIRM,
+            "Benzile orare în care e valabil voucherul „Adu un prieten” (R-120).",
+            band_list,
+            question="Q32",
+        ),
+        ConfigSpec(
+            "referrals.voucher_valid_days",
+            90,
+            Marker.DEFAULT,
+            "Câte zile e valabil voucherul „Adu un prieten” de la emitere.",
+            positive_int,
+        ),
+        ConfigSpec(
+            "referrals.claim_window_days",
+            30,
+            Marker.DEFAULT,
+            "Zile de la crearea contului în care un membru nou poate folosi un cod de recomandare.",
+            positive_int,
         ),
         ConfigSpec(
             "auth.staff_session_hours",

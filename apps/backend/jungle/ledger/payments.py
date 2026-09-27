@@ -209,6 +209,7 @@ class PaymentData:
     tendered: int = 0
     idempotency_key: str = ""
     reason: str = ""
+    voucher_id: str = ""  # set when a voucher pays (R-121)
 
 
 def pay(
@@ -217,6 +218,7 @@ def pay(
     data: PaymentData,
     *,
     device_id: uuid.UUID | None = None,
+    voucher_account: LedgerAccount | None = None,
 ) -> Payment:
     """One person pays (part of) a booking or class (R-060, R-062, R-067)."""
     if not data.idempotency_key:
@@ -262,6 +264,8 @@ def pay(
             LedgerAccount.objects.select_for_update().get(pk=source.pk)
             if customer_credit(payer) < data.amount:
                 raise DomainError(ErrorCode.PAYMENTS_INSUFFICIENT_BALANCE)
+        elif data.method == PaymentMethod.VOUCHER and voucher_account is not None:
+            source = voucher_account  # R-121: the discount is recorded when the voucher is used
         else:
             raise DomainError(ErrorCode.PAYMENTS_METHOD_UNAVAILABLE, params={"method": data.method})
         tx = post(
@@ -276,7 +280,11 @@ def pay(
             idempotency_key=data.idempotency_key,
             fingerprint=fingerprint,
             location=due.location,
-            metadata={"purpose": PURPOSE_PAYMENT, "payer": str(payer.pk)},
+            metadata={
+                "purpose": PURPOSE_PAYMENT,
+                "payer": str(payer.pk),
+                **({"voucher": data.voucher_id} if data.voucher_id else {}),
+            },
             booking_id=due.booking_id,
             enrollment_id=due.enrollment_id,
             subject=due.key,
@@ -336,6 +344,7 @@ def refund_as_credit(due: Due) -> list[LedgerTransaction]:
             and not LedgerTransaction.objects.filter(reverses=charge_tx).exists()
         ):
             posted.append(reverse_as(audit.SYSTEM, charge_tx, "Anulare gratuită (R-070)"))
+        posted.extend(_restore_vouchers(due))
         for payer_id, amount in _paid_by_payer(due).items():
             if amount <= 0:
                 continue
@@ -358,6 +367,23 @@ def refund_as_credit(due: Due) -> list[LedgerTransaction]:
                     subject=due.key,
                 )
             )
+    return posted
+
+
+def _restore_vouchers(due: Due) -> list[LedgerTransaction]:
+    """A voucher used for something cancelled in time becomes valid again; its value never
+    turns into credit that could be spent on something else."""
+    from jungle.rewards.models import Voucher, VoucherStatus
+
+    posted = []
+    used = due.transactions().filter(kind=TransactionKind.PAYMENT, metadata__has_key="voucher")
+    for tx in used.exclude(
+        pk__in=LedgerTransaction.objects.filter(reverses__isnull=False).values("reverses")
+    ):
+        posted.append(reverse_as(audit.SYSTEM, tx, "Anulare gratuită: voucherul redevine valabil"))
+        Voucher.objects.filter(pk=tx.metadata["voucher"]).update(
+            status=VoucherStatus.ACTIVE, redeemed_at=None, redeemed_subject=""
+        )
     return posted
 
 
@@ -428,9 +454,16 @@ def record_payment(request: HttpRequest, subject: Subject, data: PaymentData) ->
     return pay_for(audit.actor_from_request(request), subject, due, data)
 
 
-def pay_for(actor: audit.Actor, subject: Subject, due: Due, data: PaymentData) -> Payment:
+def pay_for(
+    actor: audit.Actor,
+    subject: Subject,
+    due: Due,
+    data: PaymentData,
+    *,
+    voucher_account: LedgerAccount | None = None,
+) -> Payment:
     """`pay`, then what a full payment unlocks (a subscription becomes active)."""
-    payment = pay(actor, due, data)
+    payment = pay(actor, due, data, voucher_account=voucher_account)
     if subject.subscription_id is not None:
         from jungle.subscriptions.services import activate_if_paid
 

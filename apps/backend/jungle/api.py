@@ -16,6 +16,8 @@ from jungle.bookings.api import classes_router, events_router
 from jungle.bookings.api import me_router as bookings_router
 from jungle.bookings.api import public_router as bookings_public_router
 from jungle.bookings.api import staff_router as bookings_staff_router
+from jungle.cafe.api import public_router as cafe_router
+from jungle.cafe.api import staff_router as cafe_staff_router
 from jungle.configuration.api import public_router as config_public_router
 from jungle.configuration.api import staff_router as config_staff_router
 from jungle.core.api import router as health_router
@@ -28,6 +30,8 @@ from jungle.locations.api import public_router as locations_router
 from jungle.locations.api import staff_router as locations_staff_router
 from jungle.pricing.api import public_router as pricing_router
 from jungle.pricing.api import staff_router as pricing_staff_router
+from jungle.rewards.api import me_router as rewards_router
+from jungle.rewards.api import staff_router as rewards_staff_router
 from jungle.subscriptions.api import me_router as subscriptions_router
 from jungle.subscriptions.api import public_router as subscriptions_public_router
 from jungle.subscriptions.api import staff_router as subscriptions_staff_router
@@ -69,6 +73,10 @@ api.add_router("/staff", payments_staff_router)
 api.add_router("/subscriptions", subscriptions_public_router)
 api.add_router("/subscriptions", subscriptions_router)
 api.add_router("/staff", subscriptions_staff_router)
+api.add_router("/account", rewards_router)
+api.add_router("/staff", rewards_staff_router)
+api.add_router("/cafe", cafe_router)
+api.add_router("/staff", cafe_staff_router)
 
 
 def _error(

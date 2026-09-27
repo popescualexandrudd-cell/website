@@ -100,7 +100,19 @@
     "subscriptions.freeze_conflict": "You have sessions booked in that period. Cancel them before freezing.",
     "corporate.not_found": "The company account does not exist.",
     "corporate.not_member": "The person is not part of the company account.",
-    "corporate.already_member": "The person is already part of the company account."
+    "corporate.already_member": "The person is already part of the company account.",
+    "vouchers.not_found": "The voucher does not exist or is not yours.",
+    "vouchers.not_valid": "The voucher has been used, has expired or is not valid yet.",
+    "vouchers.wrong_target": "The voucher cannot be used for this.",
+    "vouchers.band_not_allowed": "The voucher is valid only in these time bands: {bands}.",
+    "referrals.invalid_code": "The referral code does not exist.",
+    "referrals.self": "You cannot use your own referral code.",
+    "referrals.already_claimed": "You have already used a referral code.",
+    "referrals.not_new": "The referral code is only for new members.",
+    "cafe.product_unavailable": "A product in the order is no longer available.",
+    "cafe.order_not_found": "The order does not exist.",
+    "cafe.invalid_transition": "The order cannot move to this state.",
+    "cafe.empty_order": "The order is empty."
   },
   "web": {
     "meta": {

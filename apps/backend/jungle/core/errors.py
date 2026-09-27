@@ -112,6 +112,18 @@ class ErrorCode(StrEnum):
     CORPORATE_NOT_FOUND = "corporate.not_found"
     CORPORATE_NOT_MEMBER = "corporate.not_member"
     CORPORATE_ALREADY_MEMBER = "corporate.already_member"
+    VOUCHERS_NOT_FOUND = "vouchers.not_found"
+    VOUCHERS_NOT_VALID = "vouchers.not_valid"
+    VOUCHERS_WRONG_TARGET = "vouchers.wrong_target"
+    VOUCHERS_BAND_NOT_ALLOWED = "vouchers.band_not_allowed"
+    REFERRALS_INVALID_CODE = "referrals.invalid_code"
+    REFERRALS_SELF = "referrals.self"
+    REFERRALS_ALREADY_CLAIMED = "referrals.already_claimed"
+    REFERRALS_NOT_NEW = "referrals.not_new"
+    CAFE_PRODUCT_UNAVAILABLE = "cafe.product_unavailable"
+    CAFE_ORDER_NOT_FOUND = "cafe.order_not_found"
+    CAFE_INVALID_TRANSITION = "cafe.invalid_transition"
+    CAFE_EMPTY_ORDER = "cafe.empty_order"
 
 
 class DomainError(Exception):

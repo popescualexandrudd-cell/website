@@ -34,6 +34,7 @@ from jungle.ledger.payments import Due, charge, money_status
 from jungle.locations.models import Location, ResourceKind
 from jungle.pricing.models import Band
 from jungle.pricing.services import band_at
+from jungle.rewards import services as rewards
 from jungle.subscriptions.models import (
     PERIOD_MONTHS,
     CorporateAccount,
@@ -385,6 +386,7 @@ def activate_if_paid(subscription_id: uuid.UUID) -> Subscription:
         ):
             _activate(subscription)
             audit.record(audit.SYSTEM, "subscriptions.activated", target=subscription)
+            rewards.on_subscription_activated(subscription.user)  # R-120
     return subscription
 
 

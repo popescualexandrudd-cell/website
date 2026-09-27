@@ -100,7 +100,19 @@
     "subscriptions.freeze_conflict": "Ai sesiuni programate în acea perioadă. Anulează-le înainte de înghețare.",
     "corporate.not_found": "Contul de firmă nu există.",
     "corporate.not_member": "Persoana nu face parte din contul de firmă.",
-    "corporate.already_member": "Persoana face deja parte din contul de firmă."
+    "corporate.already_member": "Persoana face deja parte din contul de firmă.",
+    "vouchers.not_found": "Voucherul nu există sau nu este al tău.",
+    "vouchers.not_valid": "Voucherul a fost deja folosit, a expirat sau nu este încă valabil.",
+    "vouchers.wrong_target": "Voucherul nu se poate folosi pentru aceasta.",
+    "vouchers.band_not_allowed": "Voucherul este valabil doar în aceste intervale: {bands}.",
+    "referrals.invalid_code": "Codul de recomandare nu există.",
+    "referrals.self": "Nu îți poți folosi propriul cod de recomandare.",
+    "referrals.already_claimed": "Ai folosit deja un cod de recomandare.",
+    "referrals.not_new": "Codul de recomandare este doar pentru membrii noi.",
+    "cafe.product_unavailable": "Un produs din comandă nu mai este disponibil.",
+    "cafe.order_not_found": "Comanda nu există.",
+    "cafe.invalid_transition": "Comanda nu poate trece în această stare.",
+    "cafe.empty_order": "Comanda este goală."
   },
   "web": {
     "meta": {

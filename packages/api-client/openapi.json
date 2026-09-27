@@ -64,6 +64,18 @@
         "title": "ActiveIn",
         "type": "object"
       },
+      "AdvanceIn": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/OrderStatus"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "AdvanceIn",
+        "type": "object"
+      },
       "AuditOut": {
         "properties": {
           "action": {
@@ -380,18 +392,104 @@
       "CancelIn": {
         "properties": {
           "reason": {
-            "default": "",
-            "maxLength": 250,
+            "maxLength": 500,
+            "minLength": 1,
             "title": "Reason",
             "type": "string"
-          },
-          "waive": {
-            "default": false,
-            "title": "Waive",
-            "type": "boolean"
           }
         },
+        "required": [
+          "reason"
+        ],
         "title": "CancelIn",
+        "type": "object"
+      },
+      "CancelVoucherIn": {
+        "properties": {
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "reason": {
+            "maxLength": 250,
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "location_id",
+          "reason"
+        ],
+        "title": "CancelVoucherIn",
+        "type": "object"
+      },
+      "CategoryIn": {
+        "properties": {
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "name_en": {
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Name En",
+            "type": "string"
+          },
+          "name_ro": {
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Name Ro",
+            "type": "string"
+          },
+          "sort_order": {
+            "default": 0,
+            "maximum": 1000,
+            "minimum": 0,
+            "title": "Sort Order",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "location_id",
+          "name_ro",
+          "name_en"
+        ],
+        "title": "CategoryIn",
+        "type": "object"
+      },
+      "CategoryOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "name_en": {
+            "title": "Name En",
+            "type": "string"
+          },
+          "name_ro": {
+            "title": "Name Ro",
+            "type": "string"
+          },
+          "products": {
+            "items": {
+              "$ref": "#/components/schemas/ProductOut"
+            },
+            "title": "Products",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "name_ro",
+          "name_en",
+          "products"
+        ],
+        "title": "CategoryOut",
         "type": "object"
       },
       "ChildIn": {
@@ -457,6 +555,21 @@
           "date_of_birth"
         ],
         "title": "ChildOut",
+        "type": "object"
+      },
+      "ClaimIn": {
+        "properties": {
+          "code": {
+            "maxLength": 12,
+            "minLength": 4,
+            "title": "Code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "title": "ClaimIn",
         "type": "object"
       },
       "ClassIn": {
@@ -564,6 +677,19 @@
           "price_provisional"
         ],
         "title": "ClassOut",
+        "type": "object"
+      },
+      "CodeOut": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "title": "CodeOut",
         "type": "object"
       },
       "CompanyOut": {
@@ -1651,6 +1777,50 @@
         "title": "LiftIn",
         "type": "object"
       },
+      "LineIn": {
+        "properties": {
+          "product_id": {
+            "format": "uuid",
+            "title": "Product Id",
+            "type": "string"
+          },
+          "quantity": {
+            "maximum": 20,
+            "minimum": 1,
+            "title": "Quantity",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "product_id",
+          "quantity"
+        ],
+        "title": "LineIn",
+        "type": "object"
+      },
+      "LineOut": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "quantity": {
+            "title": "Quantity",
+            "type": "integer"
+          },
+          "unit_price": {
+            "title": "Unit Price",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "unit_price",
+          "quantity"
+        ],
+        "title": "LineOut",
+        "type": "object"
+      },
       "LocationIn": {
         "properties": {
           "address": {
@@ -2089,37 +2259,124 @@
       },
       "OrderIn": {
         "properties": {
+          "customer_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Customer Id"
+          },
+          "lines": {
+            "items": {
+              "$ref": "#/components/schemas/LineIn"
+            },
+            "maxItems": 30,
+            "minItems": 1,
+            "title": "Lines",
+            "type": "array"
+          },
           "location_id": {
             "format": "uuid",
             "title": "Location Id",
             "type": "string"
           },
-          "period": {
-            "$ref": "#/components/schemas/Period"
+          "method": {
+            "$ref": "#/components/schemas/PaymentMethod"
           },
-          "selections": {
-            "items": {
-              "$ref": "#/components/schemas/SelectionIn"
-            },
-            "maxItems": 3,
-            "minItems": 1,
-            "title": "Selections",
-            "type": "array"
-          },
-          "starts_on": {
-            "format": "date",
-            "title": "Starts On",
+          "reason": {
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Reason",
             "type": "string"
+          },
+          "tendered": {
+            "default": 0,
+            "maximum": 10000000,
+            "minimum": 0,
+            "title": "Tendered",
+            "type": "integer"
           }
         },
         "required": [
           "location_id",
-          "selections",
-          "period",
-          "starts_on"
+          "lines",
+          "method",
+          "reason"
         ],
         "title": "OrderIn",
         "type": "object"
+      },
+      "OrderOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "lines": {
+            "items": {
+              "$ref": "#/components/schemas/LineOut"
+            },
+            "title": "Lines",
+            "type": "array"
+          },
+          "number": {
+            "title": "Number",
+            "type": "integer"
+          },
+          "ready_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ready At"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "number",
+          "status",
+          "total",
+          "created_at",
+          "ready_at",
+          "lines"
+        ],
+        "title": "OrderOut",
+        "type": "object"
+      },
+      "OrderStatus": {
+        "enum": [
+          "new",
+          "preparing",
+          "ready",
+          "picked_up",
+          "cancelled"
+        ],
+        "title": "OrderStatus",
+        "type": "string"
       },
       "PasswordChangeIn": {
         "properties": {
@@ -2354,6 +2611,98 @@
         "title": "Product",
         "type": "string"
       },
+      "ProductIn": {
+        "properties": {
+          "category_id": {
+            "format": "uuid",
+            "title": "Category Id",
+            "type": "string"
+          },
+          "confirmed": {
+            "default": false,
+            "title": "Confirmed",
+            "type": "boolean"
+          },
+          "is_available": {
+            "default": true,
+            "title": "Is Available",
+            "type": "boolean"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "name_en": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name En",
+            "type": "string"
+          },
+          "name_ro": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name Ro",
+            "type": "string"
+          },
+          "price": {
+            "maximum": 10000000,
+            "minimum": 0,
+            "title": "Price",
+            "type": "integer"
+          },
+          "sort_order": {
+            "default": 0,
+            "maximum": 1000,
+            "minimum": 0,
+            "title": "Sort Order",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "location_id",
+          "category_id",
+          "name_ro",
+          "name_en",
+          "price"
+        ],
+        "title": "ProductIn",
+        "type": "object"
+      },
+      "ProductOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "marker": {
+            "title": "Marker",
+            "type": "string"
+          },
+          "name_en": {
+            "title": "Name En",
+            "type": "string"
+          },
+          "name_ro": {
+            "title": "Name Ro",
+            "type": "string"
+          },
+          "price": {
+            "title": "Price",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name_ro",
+          "name_en",
+          "price",
+          "marker"
+        ],
+        "title": "ProductOut",
+        "type": "object"
+      },
       "ProfileIn": {
         "properties": {
           "first_name": {
@@ -2560,6 +2909,22 @@
         "title": "RateOut",
         "type": "object"
       },
+      "ReadyOut": {
+        "properties": {
+          "numbers": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Numbers",
+            "type": "array"
+          }
+        },
+        "required": [
+          "numbers"
+        ],
+        "title": "ReadyOut",
+        "type": "object"
+      },
       "ReasonIn": {
         "properties": {
           "reason": {
@@ -2585,6 +2950,36 @@
           "recovery_codes"
         ],
         "title": "RecoveryCodesOut",
+        "type": "object"
+      },
+      "RedeemIn": {
+        "properties": {
+          "booking_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Booking Id"
+          },
+          "subscription_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subscription Id"
+          }
+        },
+        "title": "RedeemIn",
         "type": "object"
       },
       "RegisterIn": {
@@ -4187,6 +4582,155 @@
         "title": "UserSummaryOut",
         "type": "object"
       },
+      "VoucherIn": {
+        "properties": {
+          "holder_id": {
+            "format": "uuid",
+            "title": "Holder Id",
+            "type": "string"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/VoucherKind"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "reason": {
+            "maxLength": 250,
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          },
+          "target": {
+            "$ref": "#/components/schemas/VoucherTarget"
+          },
+          "valid_days": {
+            "maximum": 730,
+            "minimum": 1,
+            "title": "Valid Days",
+            "type": "integer"
+          },
+          "value": {
+            "maximum": 100000000,
+            "minimum": 1,
+            "title": "Value",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "location_id",
+          "holder_id",
+          "kind",
+          "value",
+          "target",
+          "valid_days",
+          "reason"
+        ],
+        "title": "VoucherIn",
+        "type": "object"
+      },
+      "VoucherKind": {
+        "enum": [
+          "hour",
+          "amount",
+          "percent"
+        ],
+        "title": "VoucherKind",
+        "type": "string"
+      },
+      "VoucherOut": {
+        "properties": {
+          "allowed_bands": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Allowed Bands",
+            "type": "array"
+          },
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "redeemed_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Redeemed At"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "target": {
+            "title": "Target",
+            "type": "string"
+          },
+          "valid_from": {
+            "format": "date",
+            "title": "Valid From",
+            "type": "string"
+          },
+          "valid_until": {
+            "format": "date",
+            "title": "Valid Until",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "kind",
+          "value",
+          "target",
+          "allowed_bands",
+          "valid_from",
+          "valid_until",
+          "source",
+          "reason",
+          "status",
+          "redeemed_at"
+        ],
+        "title": "VoucherOut",
+        "type": "object"
+      },
+      "VoucherTarget": {
+        "enum": [
+          "booking",
+          "subscription",
+          "any"
+        ],
+        "title": "VoucherTarget",
+        "type": "string"
+      },
       "WaitlistOut": {
         "properties": {
           "ends_at": {
@@ -4442,6 +4986,132 @@
         ]
       }
     },
+    "/api/v1/account/referral": {
+      "post": {
+        "description": "A new member enters a friend's code (before their first subscription).",
+        "operationId": "jungle_rewards_api_claim",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClaimIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CodeOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Claim",
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/api/v1/account/referral-code": {
+      "get": {
+        "description": "R-120: the code to share with friends.",
+        "operationId": "jungle_rewards_api_referral_code",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CodeOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Referral Code",
+        "tags": [
+          "account"
+        ]
+      }
+    },
     "/api/v1/account/split": {
       "get": {
         "description": "R-060, R-061: \"Împarte ora cu partenerii\" — each player's share of what is left.",
@@ -4549,6 +5219,134 @@
           }
         ],
         "summary": "Split",
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/api/v1/account/vouchers": {
+      "get": {
+        "operationId": "jungle_rewards_api_my_vouchers",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/VoucherOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "My Vouchers",
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/api/v1/account/vouchers/{code}/redeem": {
+      "post": {
+        "operationId": "jungle_rewards_api_redeem",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "title": "Code",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RedeemIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Redeem",
         "tags": [
           "account"
         ]
@@ -5886,6 +6684,95 @@
         ]
       }
     },
+    "/api/v1/cafe/menu": {
+      "get": {
+        "operationId": "jungle_cafe_api_menu",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location",
+            "required": true,
+            "schema": {
+              "title": "Location",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CategoryOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "summary": "Menu",
+        "tags": [
+          "cafe"
+        ]
+      }
+    },
+    "/api/v1/cafe/ready": {
+      "get": {
+        "description": "Lobby screens (§8.5): the numbers of the orders ready to collect, nothing else.",
+        "operationId": "jungle_cafe_api_ready",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location",
+            "required": true,
+            "schema": {
+              "title": "Location",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadyOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "summary": "Ready",
+        "tags": [
+          "cafe"
+        ]
+      }
+    },
     "/api/v1/classes": {
       "get": {
         "operationId": "jungle_bookings_api_list_classes",
@@ -7086,6 +7973,634 @@
         "summary": "Book For Client",
         "tags": [
           "staff: bookings"
+        ]
+      }
+    },
+    "/api/v1/staff/cafe/categories": {
+      "post": {
+        "operationId": "jungle_cafe_api_create_category",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Create Category",
+        "tags": [
+          "staff: cafe"
+        ]
+      }
+    },
+    "/api/v1/staff/cafe/orders": {
+      "post": {
+        "operationId": "jungle_cafe_api_place_order",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "maxLength": 200,
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Place Order",
+        "tags": [
+          "staff: cafe"
+        ]
+      }
+    },
+    "/api/v1/staff/cafe/orders/{order_id}/cancel": {
+      "post": {
+        "operationId": "jungle_cafe_api_cancel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "order_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Order Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Cancel",
+        "tags": [
+          "staff: cafe"
+        ]
+      }
+    },
+    "/api/v1/staff/cafe/orders/{order_id}/status": {
+      "post": {
+        "operationId": "jungle_cafe_api_advance",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "order_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Order Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdvanceIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Advance",
+        "tags": [
+          "staff: cafe"
+        ]
+      }
+    },
+    "/api/v1/staff/cafe/products": {
+      "post": {
+        "operationId": "jungle_cafe_api_create_product",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Create Product",
+        "tags": [
+          "staff: cafe"
+        ]
+      }
+    },
+    "/api/v1/staff/cafe/products/{product_id}": {
+      "put": {
+        "operationId": "jungle_cafe_api_update_product",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "product_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Product Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Update Product",
+        "tags": [
+          "staff: cafe"
+        ]
+      }
+    },
+    "/api/v1/staff/cafe/queue": {
+      "get": {
+        "operationId": "jungle_cafe_api_queue",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/OrderOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Queue",
+        "tags": [
+          "staff: cafe"
         ]
       }
     },
@@ -10147,6 +11662,201 @@
         "summary": "Grant Role",
         "tags": [
           "staff: users"
+        ]
+      }
+    },
+    "/api/v1/staff/vouchers": {
+      "post": {
+        "operationId": "jungle_rewards_api_issue",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoucherIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoucherOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Issue",
+        "tags": [
+          "staff: vouchers"
+        ]
+      }
+    },
+    "/api/v1/staff/vouchers/{voucher_id}/cancel": {
+      "post": {
+        "operationId": "jungle_rewards_api_cancel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "voucher_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Voucher Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelVoucherIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoucherOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Cancel",
+        "tags": [
+          "staff: vouchers"
         ]
       }
     },
