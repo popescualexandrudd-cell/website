@@ -48,6 +48,8 @@ Din rădăcina repository-ului:
 | Resetarea 2FA (telefon pierdut) | `uv run python apps/backend/manage.py reset_mfa --email ... --reason "..."` |
 | Date inițiale | `uv run python apps/backend/manage.py seed_initial [--demo]` |
 | Schema OpenAPI + client TS | `scripts/generate-api-client` |
+| Publicarea unui text legal (din `docs/07-securitate-gdpr-legal/texte/`) | `uv run python apps/backend/manage.py publish_legal_document --kind waitlist_notice --language ro --file …` |
+| Ștergerea înscrierilor neconfirmate (zilnic) | `uv run python apps/backend/manage.py purge_waitlist` |
 
 Baza de date: PostgreSQL (`DATABASE_URL`; implicit `postgres://jungle:jungle@localhost:5432/jungle`), de exemplu cu `docker compose -f deploy/compose/dev/compose.yaml up -d db redis`.
 Variabilele de mediu sunt descrise în [`.env.example`](.env.example). Imaginea Docker: [`Dockerfile`](Dockerfile) (se construiește din rădăcina repository-ului).
@@ -63,3 +65,4 @@ Variabilele de mediu sunt descrise în [`.env.example`](.env.example). Imaginea 
 | `jungle/legal` | documente legale versionate, acorduri (doar-adăugare) |
 | `jungle/devices` | dispozitivele clubului |
 | `jungle/notifications` | emailuri RO/EN |
+| `jungle/waitlist` | lista de așteptare (Etapa 1B): dublă confirmare, dezabonare cu ștergerea datelor, export CSV |

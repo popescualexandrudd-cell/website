@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# End-to-end tests across apps (§13.1): real backend + production build of the website + Playwright.
+# Needs PostgreSQL (DATABASE_URL server, default localhost) and a Chromium for Playwright
+# (PW_CHROMIUM_PATH, or `pnpm --filter @jungle/web exec playwright install chromium`).
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+BASE_DB_URL="${DATABASE_URL:-postgres://jungle:jungle@localhost:5432/jungle}"
+E2E_DB_URL="${BASE_DB_URL%/*}/jungle_e2e"
+WORK="$(mktemp -d)"
+MAIL_DIR="$WORK/mail"
+mkdir -p "$MAIL_DIR"
+PIDS=()
+cleanup() {
+  for pid in "${PIDS[@]:-}"; do [ -n "$pid" ] && kill "$pid" 2>/dev/null || true; done
+  rm -rf "$WORK"
+}
+trap cleanup EXIT
+
+if [ -z "${PW_CHROMIUM_PATH:-}" ] && [ -x /opt/pw-browsers/chromium-1194/chrome-linux/chrome ]; then
+  export PW_CHROMIUM_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome
+fi
+
+echo "==> Fresh e2e database"
+psql "$BASE_DB_URL" -q -c "DROP DATABASE IF EXISTS jungle_e2e" -c "CREATE DATABASE jungle_e2e" >/dev/null
+
+export DATABASE_URL="$E2E_DB_URL" JUNGLE_ENV=dev DJANGO_SETTINGS_MODULE=jungle.settings DJANGO_DEBUG=false \
+  EMAIL_BACKEND=django.core.mail.backends.filebased.EmailBackend EMAIL_FILE_PATH="$MAIL_DIR" \
+  WEB_BASE_URL=http://localhost:3000 CORS_ALLOWED_ORIGINS=http://localhost:3000
+(cd apps/backend && uv run python manage.py migrate -v0 && uv run python manage.py seed_initial --demo >/dev/null)
+(cd apps/backend && exec uv run python manage.py runserver 127.0.0.1:8000 --noreload >"$WORK/backend.log" 2>&1) &
+PIDS+=($!)
+
+echo "==> Production build of the website"
+export NEXT_PUBLIC_API_URL=http://localhost:8000 NEXT_PUBLIC_SITE_URL=http://localhost:3000 NEXT_TELEMETRY_DISABLED=1
+pnpm --filter @jungle/web build >"$WORK/build.log" 2>&1 || { cat "$WORK/build.log"; exit 1; }
+(cd apps/web && exec pnpm start >"$WORK/web.log" 2>&1) &
+PIDS+=($!)
+
+for url in http://127.0.0.1:8000/api/v1/health http://localhost:3000/ro; do
+  for _ in $(seq 1 60); do curl -fs -o /dev/null "$url" && break; sleep 1; done
+  curl -fs -o /dev/null "$url" || { echo "server not ready: $url"; cat "$WORK"/*.log; exit 1; }
+done
+
+echo "==> Playwright"
+E2E_MAIL_DIR="$MAIL_DIR" pnpm --filter @jungle/web exec playwright test

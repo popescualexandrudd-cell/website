@@ -35,6 +35,13 @@ fi
 step "JavaScript dependencies"
 pnpm install --frozen-lockfile
 
+step "Design tokens are up to date"
+(cd packages/design-tokens && node build.mjs)
+if ! git diff --quiet -- packages/design-tokens/dist; then
+  echo "Design tokens changed: commit packages/design-tokens/dist (pnpm --filter @jungle/design-tokens build)" >&2
+  exit 1
+fi
+
 step "Generated API client is up to date"
 (cd packages/api-client && pnpm exec openapi-typescript openapi.json -o "$tmp_dir/schema.d.ts" >/dev/null)
 if ! diff -q packages/api-client/src/schema.d.ts "$tmp_dir/schema.d.ts" >/dev/null; then
@@ -45,7 +52,15 @@ fi
 step "TypeScript typecheck"
 pnpm -r typecheck
 
-step "JavaScript tests (including RO/EN translation completeness)"
+step "Lint (ESLint, website)"
+pnpm --filter @jungle/web lint
+
+step "JavaScript tests (including RO/EN translation completeness and colour contrast)"
 pnpm -r test
+
+if [ "${SKIP_E2E:-0}" != "1" ]; then
+  step "End-to-end tests (backend + website + Playwright, accessibility with axe)"
+  scripts/test-e2e
+fi
 
 printf '\nAll checks passed.\n'

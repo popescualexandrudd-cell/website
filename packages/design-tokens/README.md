@@ -1,6 +1,6 @@
 # Design tokens
 
-> **Stare:** neînceput (schelet creat în Etapa 0, 26.09.2026). **Se construiește în Etapa:** 1B (tema provizorie).
+> **Stare:** construit în Etapa 1B (27.09.2026): identitatea provizorie „Neon Jungle”.
 
 ## Ce face
 
@@ -16,4 +16,6 @@ Culorile, fonturile, spațierile, razele, umbrele și animațiile tuturor aplica
 
 ## Rulare, testare, deploy
 
-Etapa 0 nu conține cod. `.env.example`, `Dockerfile` (unde e cazul) și testele se adaugă în etapa care construiește componenta, împreună cu instrucțiunile de rulare, testare și deploy.
+- Tokenii (format DTCG): `tokens/color.json`, `tokens/base.json`. Descrierea identității: [docs/12-branding/03-identitate-provizorie-neon-jungle.md](../../docs/12-branding/03-identitate-provizorie-neon-jungle.md).
+- Generare: `pnpm --filter @jungle/design-tokens build` → `dist/tokens.css` (variabile CSS) și `dist/tokens.ts`. Fișierele generate se păstrează în git; `scripts/test-all` verifică că sunt la zi.
+- Test automat: contrastul culorilor de text (WCAG 2.2 AA) — `pnpm --filter @jungle/design-tokens test`.

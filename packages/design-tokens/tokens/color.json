@@ -1,0 +1,39 @@
+{
+  "$description": "Provisional 'Neon Jungle' palette (ADR-0020). Deliberately different from the Tenis Elite green/lime.",
+  "color": {
+    "night": {
+      "950": { "$type": "color", "$value": "#040C09", "$description": "Page background: jungle at night" },
+      "900": { "$type": "color", "$value": "#071610" },
+      "800": { "$type": "color", "$value": "#0C2219" },
+      "700": { "$type": "color", "$value": "#133226" },
+      "600": { "$type": "color", "$value": "#1C4535" }
+    },
+    "orchid": {
+      "500": { "$type": "color", "$value": "#FF3DA5", "$description": "Primary accent: neon orchid" },
+      "400": { "$type": "color", "$value": "#FF6CBC" },
+      "300": { "$type": "color", "$value": "#FF9FD3" }
+    },
+    "toucan": {
+      "500": { "$type": "color", "$value": "#FF8A1F", "$description": "Secondary accent: toucan orange" },
+      "400": { "$type": "color", "$value": "#FFA552" }
+    },
+    "firefly": {
+      "400": { "$type": "color", "$value": "#FFD84D", "$description": "Highlights: fireflies" }
+    },
+    "lagoon": {
+      "400": { "$type": "color", "$value": "#2BE8D2", "$description": "Cool accent: glass walls, links" },
+      "300": { "$type": "color", "$value": "#7FF3E4" }
+    },
+    "leaf": {
+      "500": { "$type": "color", "$value": "#1F8A5B", "$description": "Deep emerald leaves (never lime)" },
+      "400": { "$type": "color", "$value": "#34B67B" }
+    },
+    "sand": {
+      "100": { "$type": "color", "$value": "#F6EBD9", "$description": "Main text on dark" },
+      "300": { "$type": "color", "$value": "#C9D4CB", "$description": "Secondary text" },
+      "500": { "$type": "color", "$value": "#8FA398", "$description": "Muted text (large text only)" }
+    },
+    "danger": { "$type": "color", "$value": "#FF6B6B" },
+    "success": { "$type": "color", "$value": "#4BE39B" }
+  }
+}

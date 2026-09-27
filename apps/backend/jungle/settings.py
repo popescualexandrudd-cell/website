@@ -185,6 +185,8 @@ EMAIL_BACKEND = env(
     else "django.core.mail.backends.smtp.EmailBackend",
 )
 EMAIL_HOST = env("EMAIL_HOST", "localhost")
+# Only for the file-based backend (end-to-end tests): where emails are written.
+EMAIL_FILE_PATH = env("EMAIL_FILE_PATH")
 EMAIL_PORT = env_int("EMAIL_PORT", 587)
 EMAIL_HOST_USER = env("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", "")

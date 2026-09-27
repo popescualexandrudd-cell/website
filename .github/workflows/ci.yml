@@ -26,4 +26,5 @@ jobs:
         with:
           node-version-file: .node-version
           cache: pnpm
+      - run: pnpm install --frozen-lockfile && pnpm --filter @jungle/web exec playwright install --with-deps chromium
       - run: scripts/test-all

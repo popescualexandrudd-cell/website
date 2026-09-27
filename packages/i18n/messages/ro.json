@@ -53,5 +53,158 @@
     "validation.invalid": "Unele câmpuri nu sunt completate corect.",
     "waitlist.token_expired": "Linkul de confirmare a expirat. Înscrie-te din nou, durează un minut.",
     "waitlist.token_invalid": "Linkul nu este valid. Poate te-ai dezabonat deja sau linkul e incomplet."
+  },
+  "web": {
+    "meta": {
+      "title": "Jungle Padel — club de padel indoor în Pantelimon · Deschidere martie 2027",
+      "description": "Padel indoor pe 4 terenuri, liga Jungle cu ranguri, pilates Reformer, cafenea de specialitate și seri cu DJ. Pe Șoseaua Biruinței, lângă Selgros Pantelimon. Intră pe lista de așteptare.",
+      "ogAlt": "Jungle Padel — deschidere martie 2027"
+    },
+    "nav": {
+      "club": "Clubul",
+      "league": "Liga",
+      "location": "Locație",
+      "join": "Vreau pe listă",
+      "language": "Limba",
+      "skip": "Sari la conținut",
+      "home": "Jungle Padel — acasă"
+    },
+    "hero": {
+      "eyebrow": "Pantelimon · Deschidere martie 2027",
+      "title1": "Intră",
+      "title2": "în junglă.",
+      "lead": "Padel indoor, liga Jungle, pilates Reformer și o cafenea de specialitate — sub palmieri, plante suspendate și lumini de club.",
+      "ctaPrimary": "Intră pe lista de așteptare",
+      "ctaSecondary": "Descoperă clubul",
+      "scroll": "Derulează",
+      "note": "Scena 3D este o ilustrație, nu o fotografie a clubului."
+    },
+    "marquee": [
+      "Padel indoor",
+      "Liga Jungle",
+      "Pilates Reformer",
+      "Cafenea de specialitate",
+      "Seri cu DJ",
+      "Mezanin cu vedere la terenuri"
+    ],
+    "club": {
+      "kicker": "Clubul",
+      "title": "Mai mult decât un teren. O seară întreagă în junglă.",
+      "lead": "Vii să joci, rămâi pentru atmosferă: sport, cafenea, muzică și comunitate, într-un singur loc.",
+      "cards": {
+        "padel": {
+          "title": "4 terenuri de padel indoor",
+          "text": "Terenuri închise, într-o hală încălzită iarna și răcită vara. Joci în orice anotimp."
+        },
+        "league": {
+          "title": "Liga Jungle",
+          "text": "Meciuri oficiale, puncte, ranguri și clasamente live. Bați jucători mai buni, urci mai repede."
+        },
+        "pilates": {
+          "title": "Pilates Reformer",
+          "text": "Studio separat, cu aparate Reformer și clase pentru începători, avansați, sportivi și mămici."
+        },
+        "cafe": {
+          "title": "Cafenea & mezanin",
+          "text": "Cafea de specialitate și un mezanin la 3 m înălțime, cu vedere spre terenuri."
+        },
+        "events": {
+          "title": "Seri cu DJ",
+          "text": "Boxe, lumini de club și petreceri: padelul se joacă și după apus."
+        },
+        "room": {
+          "title": "Sală de evenimente",
+          "text": "Un spațiu separat pentru petreceri private de 15–20 de persoane."
+        }
+      }
+    },
+    "league": {
+      "kicker": "Liga Jungle",
+      "title": "Joci. Câștigi puncte. Urci în rang.",
+      "lead": "O ligă cu clasament ca în jocurile competitive: fiecare meci oficial îți schimbă punctele, iar rangul arată cât de bine joci. Sezoanele durează 3 luni, ca să rămână mereu deschisă cursa.",
+      "ranks": {
+        "bronze": "Bronz",
+        "silver": "Argint",
+        "gold": "Aur",
+        "platinum": "Platină",
+        "diamond": "Diamant",
+        "master": "Maestru",
+        "king": "Regele Junglei"
+      },
+      "facts": {
+        "ladders": "3 clasamente: dublu, simplu și perechi",
+        "season": "Sezoane de 3 luni",
+        "live": "Clasamente live, pe site și în club"
+      },
+      "hint": "Treci cu mouse-ul peste medalii"
+    },
+    "numbers": {
+      "kicker": "În cifre",
+      "courts": "terenuri de padel indoor",
+      "reformers": "aparate Reformer la deschidere",
+      "parking": "locuri de parcare",
+      "season": "luni durează un sezon de ligă"
+    },
+    "location": {
+      "kicker": "Locație",
+      "title": "Estul Bucureștiului, la un pas de oraș.",
+      "address": "Șoseaua Biruinței, lângă Selgros Pantelimon",
+      "access": "Acces din două străzi",
+      "parking": "Parcare: 18 locuri în spate + 10 în față",
+      "map": "Deschide în hartă"
+    },
+    "waitlist": {
+      "kicker": "Lista de așteptare",
+      "title": "Fii printre primii în junglă.",
+      "lead": "Lasă-ne numele și emailul: îți scriem primii când deschidem, despre liga Jungle și despre evenimentele de lansare.",
+      "name": "Nume și prenume",
+      "email": "Email",
+      "phone": "Telefon (opțional)",
+      "interests": "Ce te interesează?",
+      "interest": {
+        "padel": "Padel",
+        "league": "Liga Jungle",
+        "tennis": "Tenis",
+        "pilates": "Pilates",
+        "events": "Evenimente",
+        "cafe": "Cafenea",
+        "corporate": "Corporate"
+      },
+      "consentBefore": "Am citit ",
+      "consentLink": "nota de informare",
+      "consentAfter": ", am cel puțin 16 ani și sunt de acord să primesc emailuri despre deschiderea Jungle Padel. Mă pot dezabona oricând.",
+      "submit": "Intră pe listă",
+      "submitting": "Se trimite…",
+      "successTitle": "Verifică-ți emailul!",
+      "successText": "Ți-am trimis un link de confirmare. Ești pe listă după ce dai click pe el.",
+      "unavailable": "Formularul nu este disponibil momentan. Te rugăm să revii puțin mai târziu.",
+      "genericError": "Ceva nu a mers. Încearcă din nou."
+    },
+    "confirm": {
+      "title": "Confirmarea înscrierii",
+      "working": "Confirmăm adresa ta…",
+      "success": "Gata, ești pe listă! Bun venit în junglă.",
+      "missing": "Linkul nu conține codul de confirmare.",
+      "back": "Înapoi la pagina principală"
+    },
+    "unsubscribe": {
+      "title": "Dezabonare",
+      "lead": "Dacă te dezabonezi, îți ștergem numele, emailul, telefonul și interesele.",
+      "button": "Dezabonează-mă",
+      "working": "Se procesează…",
+      "success": "Te-ai dezabonat, iar datele tale au fost șterse.",
+      "missing": "Linkul nu conține codul de dezabonare."
+    },
+    "notice": {
+      "title": "Nota de informare",
+      "version": "Versiunea {version}, publicată la {date}",
+      "unavailable": "Documentul nu este disponibil momentan."
+    },
+    "footer": {
+      "tagline": "Club de padel indoor · Pantelimon, Ilfov",
+      "construction": "Site în construcție: informațiile pot fi actualizate până la deschidere.",
+      "notice": "Nota de informare",
+      "rights": "© {year} Jungle Padel"
+    }
   }
 }

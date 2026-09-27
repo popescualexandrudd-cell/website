@@ -36,5 +36,14 @@ services:
     depends_on:
       db: {condition: service_healthy}
       redis: {condition: service_started}
+  web:
+    build:
+      context: ../../..
+      dockerfile: apps/web/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:8000
+        NEXT_PUBLIC_SITE_URL: http://localhost:3000
+    ports: ["3000:3000"]
+    depends_on: [backend]
 volumes:
   db-data:

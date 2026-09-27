@@ -3,7 +3,7 @@
 > Actualizat la fiecare sesiune de lucru. Prima secțiune spune mereu **unde suntem acum**.
 
 ## Unde suntem acum
-- **Etapa curentă:** Etapa 1B (pagina de pre-lansare) — în lucru din 27.09.2026.
+- **Etapa curentă:** Etapa 1B (pagina de pre-lansare) — **livrată pe 27.09.2026, așteaptă aprobarea proprietarului.** Raport: [verificare/etapa-1b/RAPORT.md](verificare/etapa-1b/RAPORT.md).
 - **Etapa 1A:** aprobată de proprietar pe 27.09.2026 (merge în `main`). Raport: [verificare/etapa-1a/RAPORT.md](verificare/etapa-1a/RAPORT.md).
 - **Etapa 0:** aprobată de proprietar pe 26.09.2026 (tag `etapa-0`, branch `main`).
 - **Următoarea etapă:** 1B (pagina de pre-lansare), după aprobarea Etapei 1A.
@@ -16,7 +16,7 @@
 |---|---|---|---|
 | 0 | Documentație, structură, ADR-uri, întrebări, plan | oct. 2026 | **Aprobată 26.09.2026** |
 | 1A | Fundația backend | oct. 2026 | **Aprobată 27.09.2026** |
-| 1B | Pagina de pre-lansare | oct.–nov. 2026 | În lucru |
+| 1B | Pagina de pre-lansare | oct.–nov. 2026 | Livrată, așteaptă aprobarea |
 | 2 | Motorul ligii + simulări | nov. 2026 | Neîncepută |
 | 3 | Rezervări, prețuri, anulări, prezențe | nov. 2026 | Neîncepută |
 | 4 | Bani, abonamente, corporate, vouchere, cafenea | nov.–dec. 2026 | Neîncepută |
@@ -32,6 +32,12 @@
 | 14 | Deploy, securitate, backup, hardware real | feb. 2027 | Neîncepută |
 | 15 | Beta, încărcare, instruire | feb.–mar. 2027 | Neîncepută |
 | 16 | Inaugurare și go-live | mar. 2027 | Neîncepută |
+
+## Etapa 1B — cum verifici (click cu click)
+1. Pe GitHub, branch-ul `claude/hopeful-euler-rguibn`, deschide `docs/00-management/verificare/etapa-1b/RAPORT.md`.
+2. Deschide capturile de ecran din același folder (`ro-desktop-01-hero.png` și următoarele; `ro-mobil-…` pentru telefon, `en-…` pentru engleză).
+3. Citește nota de informare: `docs/07-securitate-gdpr-legal/texte/nota-informare-lista-asteptare.ro.md`.
+4. Identitatea vizuală: `docs/12-branding/03-identitate-provizorie-neon-jungle.md`.
 
 ## Etapa 1A — cum verifici (click cu click)
 1. Pe GitHub, branch-ul `claude/hopeful-euler-rguibn`, deschide `docs/00-management/verificare/etapa-1a/RAPORT.md`: ce s-a construit, rezultatele testelor, ce s-a reparat la revizuire.
@@ -71,3 +77,4 @@
 - **26.09.2026** — Etapa 0 aprobată. Răspunsuri: Q7, Q8, Q20, Q36, Q37, Q40, Q41, Q42 rezolvate; Q22, Q23, Q24 parțial (Apple Wallet amânat); Q26, Q39 încă deschise. ADR-0001 … ADR-0022 acceptate. Început Etapa 1A.
 - **27.09.2026** — Etapa 1A livrată: backend Django + API, conturi, roluri, 2FA, locații, audit, configurare, traduceri, client API; 109 teste, acoperire 97%. Tag-ul `etapa-0` nu a putut fi publicat din mediul de lucru (GitHub a refuzat push-ul de tag-uri, 403); există local și trebuie creat din GitHub → Releases.
 - **27.09.2026** — Etapa 1A aprobată; Q43 = 14 ani. Cerință nouă a proprietarului pentru 1B: design și branding moderne, estetice, culori atractive, efecte 3D. Început Etapa 1B.
+- **27.09.2026** — Etapa 1B livrată: pagina de pre-lansare RO/EN cu identitatea „Neon Jungle”, scenă 3D, listă de așteptare cu dublă confirmare, nota de informare redactată (Q41). Lighthouse mobil 93/100/100/100, desktop 100/100/100/100; 128 teste backend, 16 teste cap-coadă. Tag-ul `etapa-1a` există doar local (push de tag-uri refuzat).

@@ -31,6 +31,8 @@ node_modules/
 .next/
 out/
 dist/
+!packages/design-tokens/dist/
+next-env.d.ts
 build/
 *.tsbuildinfo
 .turbo/

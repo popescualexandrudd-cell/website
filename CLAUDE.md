@@ -6,7 +6,7 @@ Memoria operațională a proiectului. Se actualizează la finalul fiecărei etap
 Sistem digital propriu pentru clubul **Jungle Padel** (Șoseaua Biruinței, lângă Selgros Pantelimon): 4 terenuri de padel închise, pilates Reformer (4 → 6 aparate), sală de evenimente, cafenea, ligă de padel de tip MMR. Deschidere: **martie 2027**. Proprietarul **nu are programator**: noi construim și întreținem, în sesiuni succesive. Backend-ul și website-ul sunt singura sursă de adevăr; chioșcurile, ecranele, afișajul cafenelei și adminul sunt „ferestre” spre aceleași date, conectate live.
 
 ## Stare curentă
-- **Etapa 0 aprobată pe 26.09.2026** (tag `etapa-0` doar local: push-ul de tag-uri e refuzat de GitHub din acest mediu). **Etapa 1A aprobată pe 27.09.2026.** **Etapa 1B (pagina de pre-lansare) în lucru.** Proprietarul cere design modern, estetic, culori atractive, efecte 3D.
+- **Etapa 0 aprobată pe 26.09.2026** (tag `etapa-0` doar local: push-ul de tag-uri e refuzat de GitHub din acest mediu). **Etapa 1A aprobată pe 27.09.2026.** **Etapa 1B (pagina de pre-lansare) livrată pe 27.09.2026, așteaptă aprobarea.** Proprietarul cere design modern, estetic, culori atractive, efecte 3D (identitatea provizorie „Neon Jungle”: `docs/12-branding/03-identitate-provizorie-neon-jungle.md`).
 - Decizii ale proprietarului din 26.09.2026: Apple Wallet amânat (Q24); textele legale le redactăm noi, fără avocat (Q41); hardware ales mai târziu, lucrăm cu simulatoare (Q23); server propriu sau închiriat (Q40); cont propriu de la 14 ani (Q43, 27.09.2026).
 - Detalii: [docs/00-management/PROGRES.md](docs/00-management/PROGRES.md).
 
@@ -73,6 +73,15 @@ Monorepo: workspace pnpm (TypeScript) + workspace uv (Python) (ADR-0002). Featur
 - `scripts/test-all` — TOATE verificările (ruff, mypy strict, migrații, pytest cu acoperire ≥ 95%, OpenAPI și client la zi, tsc, teste JS, traduceri RO/EN). Trebuie să fie verde înainte de orice livrare.
 - `scripts/setup` — dependențe, migrații, date inițiale + demo. `scripts/dev` — backend pe `http://localhost:8000` (`/api/v1/docs`, `/django-admin/`).
 - `scripts/generate-api-client` — după ORICE schimbare de API (altfel `test-all` pică).
+- `scripts/test-e2e` — backend + build de producție al site-ului + Playwright (desktop și mobil) + axe; rulat și de `test-all` (`SKIP_E2E=1` îl sare).
+- Site: `pnpm --filter @jungle/web dev|build|lint|test`; tokeni: `pnpm --filter @jungle/design-tokens build` (fișierele din `dist/` se commit-uiesc).
+- ATENȚIE în mediul cloud: nu opri serverele cu `pkill -f "<text>"` dacă acel text apare în propria comandă (se oprește și shell-ul); filtrează după numele procesului (python/node/next-server).
+
+### Convenții pentru website (`apps/web`)
+- Toate textele în `packages/i18n/messages/{ro,en}.json` sub `web.*`; niciun text scris direct în componente.
+- Culori, fonturi, umbre: doar din tokeni (`var(--color-…)`), niciodată valori noi scrise direct.
+- Scena 3D respectă regulile de performanță (doar GPU real, după `load`, 30 fps pe mobil, `?3d=force` pentru demo); ținta Lighthouse ≥ 90 pe mobil la toate categoriile.
+- Doar fapte din `docs/` (fără prețuri, cifre sau recenzii inventate); ilustrațiile sunt marcate ca ilustrații.
 - Primul admin: `JUNGLE_ADMIN_PASSWORD=... uv run python apps/backend/manage.py bootstrap_admin --email ... --first-name ... --last-name ...`
 - PostgreSQL local: `DATABASE_URL` (implicit `postgres://jungle:jungle@localhost:5432/jungle`); în mediul cloud: `pg_ctlcluster 16 main start`.
 
