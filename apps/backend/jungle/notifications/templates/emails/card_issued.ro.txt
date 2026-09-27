@@ -1,0 +1,11 @@
+{% autoescape off %}Salut, {{ name }}!
+
+Cardul tău de membru Jungle Padel este gata (numărul {{ number }}). Îl folosești peste tot în club: la sosire, la intrarea pe teren, la antrenamente și pilates, în ligă, la plăți și la cafenea.
+
+Din contul tău îl poți vedea oricând și îl poți adăuga în Apple Wallet sau Google Wallet:
+{{ link }}
+
+Dacă ai avut un card mai vechi, acela nu mai funcționează. Dacă nu tu ai cerut un card nou, scrie-ne cât mai repede.
+
+Echipa Jungle Padel
+{% endautoescape %}

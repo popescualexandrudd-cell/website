@@ -124,6 +124,11 @@ class ErrorCode(StrEnum):
     CAFE_ORDER_NOT_FOUND = "cafe.order_not_found"
     CAFE_INVALID_TRANSITION = "cafe.invalid_transition"
     CAFE_EMPTY_ORDER = "cafe.empty_order"
+    CARDS_NOT_FOUND = "cards.not_found"
+    CARDS_INVALID = "cards.invalid"
+    CARDS_NOTHING_TO_PRINT = "cards.nothing_to_print"
+    CARDS_INVALID_TRANSITION = "cards.invalid_transition"
+    CARDS_INVALID_EMBLEM = "cards.invalid_emblem"
 
 
 class DomainError(Exception):

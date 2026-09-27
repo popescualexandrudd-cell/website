@@ -28,6 +28,7 @@ from jungle.bookings.models import (
     EnrollmentStatus,
     SessionType,
 )
+from jungle.cards import services as cards
 from jungle.configuration.services import get_config
 from jungle.core import clock
 from jungle.core.errors import DomainError, ErrorCode
@@ -45,9 +46,10 @@ def _grace() -> timedelta:
 # ---------------------------------------------------------------- scans
 @dataclass(frozen=True)
 class ScanData:
-    user_id: uuid.UUID
     location_id: uuid.UUID
     kind: str
+    user_id: uuid.UUID | None = None
+    card_token: str = ""  # R-025: the scanned QR code of the member card
     resource_id: uuid.UUID | None = None
     class_session_id: uuid.UUID | None = None
 
@@ -57,7 +59,12 @@ def record_scan(request: HttpRequest, data: ScanData) -> Scan:
     court (from 15 minutes before its start until its end); a class entry marks attendance."""
     staff = authorize(request, Action.ATTENDANCE_RECORD, data.location_id)
     location = Location.objects.filter(pk=data.location_id).first()
-    person = User.objects.filter(pk=data.user_id, is_active=True).first()
+    if data.card_token:
+        person: User | None = cards.resolve(data.card_token).user
+    else:
+        person = (
+            User.objects.filter(pk=data.user_id, is_active=True).first() if data.user_id else None
+        )
     if location is None or person is None:
         raise DomainError(ErrorCode.ATTENDANCE_UNKNOWN_PERSON, status=404)
     now = clock.now()

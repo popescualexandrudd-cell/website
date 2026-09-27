@@ -103,6 +103,15 @@ def band_list(value: Any) -> bool:
     )
 
 
+def emblem_list(value: Any) -> bool:
+    return (
+        isinstance(value, list)
+        and 1 <= len(value) <= 30
+        and all(isinstance(v, str) and v.isidentifier() and len(v) <= 30 for v in value)
+        and len(set(value)) == len(value)
+    )
+
+
 def percent(value: Any) -> bool:
     return isinstance(value, int) and not isinstance(value, bool) and 0 <= value <= 90
 
@@ -403,6 +412,14 @@ CONFIG: dict[str, ConfigSpec] = {
             Marker.DEFAULT,
             "Zile de la crearea contului în care un membru nou poate folosi un cod de recomandare.",
             positive_int,
+        ),
+        ConfigSpec(
+            "cards.diamond_emblems",
+            ["jaguar", "panther", "toucan", "gorilla", "crocodile", "macaw", "anaconda", "leopard"],
+            Marker.TO_CONFIRM,
+            "Emblemele de junglă dintre care alege jucătorul promovat în Diamant (R-024).",
+            emblem_list,
+            question="Q1",
         ),
         ConfigSpec(
             "auth.staff_session_hours",

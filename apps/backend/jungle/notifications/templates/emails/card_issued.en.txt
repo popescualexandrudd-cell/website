@@ -1,0 +1,11 @@
+{% autoescape off %}Hi {{ name }},
+
+Your Jungle Padel member card is ready (number {{ number }}). You use it everywhere in the club: on arrival, when entering the court, at training and Pilates, in the league, for payments and at the café.
+
+You can see it in your account at any time and add it to Apple Wallet or Google Wallet:
+{{ link }}
+
+If you had an older card, it no longer works. If you did not ask for a new card, please write to us as soon as possible.
+
+The Jungle Padel team
+{% endautoescape %}

@@ -234,6 +234,27 @@
         "title": "Band",
         "type": "string"
       },
+      "BlockIn": {
+        "properties": {
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "reason": {
+            "maxLength": 250,
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "location_id",
+          "reason"
+        ],
+        "title": "BlockIn",
+        "type": "object"
+      },
       "BookingIn": {
         "properties": {
           "coach_id": {
@@ -423,6 +444,42 @@
           "reason"
         ],
         "title": "CancelVoucherIn",
+        "type": "object"
+      },
+      "CardOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "issued_at": {
+            "format": "date-time",
+            "title": "Issued At",
+            "type": "string"
+          },
+          "number": {
+            "title": "Number",
+            "type": "string"
+          },
+          "qr_svg": {
+            "description": "Codul QR (SVG). Conține doar un cod aleatoriu (R-022).",
+            "title": "Qr Svg",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "number",
+          "status",
+          "issued_at",
+          "qr_svg"
+        ],
+        "title": "CardOut",
         "type": "object"
       },
       "CategoryIn": {
@@ -1215,6 +1272,30 @@
         "title": "DeviceOut",
         "type": "object"
       },
+      "DiamondOut": {
+        "properties": {
+          "emblem": {
+            "title": "Emblem",
+            "type": "string"
+          },
+          "request_id": {
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id",
+          "emblem",
+          "status"
+        ],
+        "title": "DiamondOut",
+        "type": "object"
+      },
       "DocumentKind": {
         "enum": [
           "terms",
@@ -1239,6 +1320,37 @@
           "email"
         ],
         "title": "EmailIn",
+        "type": "object"
+      },
+      "EmblemIn": {
+        "properties": {
+          "emblem": {
+            "maxLength": 30,
+            "minLength": 1,
+            "title": "Emblem",
+            "type": "string"
+          }
+        },
+        "required": [
+          "emblem"
+        ],
+        "title": "EmblemIn",
+        "type": "object"
+      },
+      "EmblemsOut": {
+        "properties": {
+          "emblems": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Emblems",
+            "type": "array"
+          }
+        },
+        "required": [
+          "emblems"
+        ],
+        "title": "EmblemsOut",
         "type": "object"
       },
       "EnrollmentOut": {
@@ -2576,6 +2688,59 @@
         "title": "Period",
         "type": "string"
       },
+      "PrintIn": {
+        "properties": {
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "request_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "maxItems": 200,
+            "minItems": 1,
+            "title": "Request Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "location_id",
+          "request_ids"
+        ],
+        "title": "PrintIn",
+        "type": "object"
+      },
+      "PrintStatus": {
+        "enum": [
+          "queued",
+          "printed",
+          "handed_over",
+          "cancelled"
+        ],
+        "title": "PrintStatus",
+        "type": "string"
+      },
+      "PrintStatusIn": {
+        "properties": {
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PrintStatus"
+          }
+        },
+        "required": [
+          "location_id",
+          "status"
+        ],
+        "title": "PrintStatusIn",
+        "type": "object"
+      },
       "Product": {
         "enum": [
           "rental",
@@ -2733,6 +2898,51 @@
           }
         },
         "title": "ProfileIn",
+        "type": "object"
+      },
+      "QueueItemOut": {
+        "properties": {
+          "card_number": {
+            "title": "Card Number",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "emblem": {
+            "title": "Emblem",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "card_number",
+          "name",
+          "reason",
+          "emblem",
+          "status",
+          "created_at"
+        ],
+        "title": "QueueItemOut",
         "type": "object"
       },
       "QuoteIn": {
@@ -3016,6 +3226,38 @@
           "accepted_documents"
         ],
         "title": "RegisterIn",
+        "type": "object"
+      },
+      "ReissueIn": {
+        "properties": {
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "print_card": {
+            "default": true,
+            "title": "Print Card",
+            "type": "boolean"
+          },
+          "reason": {
+            "maxLength": 250,
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          },
+          "user_id": {
+            "format": "uuid",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "location_id",
+          "reason"
+        ],
+        "title": "ReissueIn",
         "type": "object"
       },
       "ReportOut": {
@@ -3492,7 +3734,14 @@
         "type": "object"
       },
       "ScanIn": {
+        "description": "Either the scanned card code (R-025) or, for reception, the person's id.",
         "properties": {
+          "card_token": {
+            "default": "",
+            "maxLength": 64,
+            "title": "Card Token",
+            "type": "string"
+          },
           "class_session_id": {
             "anyOf": [
               {
@@ -3526,13 +3775,19 @@
             "title": "Resource Id"
           },
           "user_id": {
-            "format": "uuid",
-            "title": "User Id",
-            "type": "string"
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Id"
           }
         },
         "required": [
-          "user_id",
           "location_id",
           "kind"
         ],
@@ -3993,6 +4248,60 @@
           "organizer_name"
         ],
         "title": "StaffBookingOut",
+        "type": "object"
+      },
+      "StaffCardOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "issued_at": {
+            "format": "date-time",
+            "title": "Issued At",
+            "type": "string"
+          },
+          "number": {
+            "title": "Number",
+            "type": "string"
+          },
+          "revoke_reason": {
+            "title": "Revoke Reason",
+            "type": "string"
+          },
+          "revoked_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Revoked At"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "user_id": {
+            "format": "uuid",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "user_id",
+          "number",
+          "status",
+          "issued_at",
+          "revoked_at",
+          "revoke_reason"
+        ],
+        "title": "StaffCardOut",
         "type": "object"
       },
       "StaffEventOut": {
@@ -6748,6 +7057,226 @@
         ]
       }
     },
+    "/api/v1/cards/emblems": {
+      "get": {
+        "operationId": "jungle_cards_api_emblems",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmblemsOut"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Emblems",
+        "tags": [
+          "cards"
+        ]
+      }
+    },
+    "/api/v1/cards/mine": {
+      "get": {
+        "description": "R-020: the member's card; created on the first visit.",
+        "operationId": "jungle_cards_api_my_card",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CardOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "My Card",
+        "tags": [
+          "cards"
+        ]
+      }
+    },
+    "/api/v1/cards/mine/diamond": {
+      "get": {
+        "operationId": "jungle_cards_api_my_diamond",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/DiamondOut"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "My Diamond",
+        "tags": [
+          "cards"
+        ]
+      }
+    },
+    "/api/v1/cards/mine/emblem": {
+      "post": {
+        "description": "R-024, Q1: the Diamond card's jungle emblem, from the predefined list.",
+        "operationId": "jungle_cards_api_choose_emblem",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmblemIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiamondOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Choose Emblem",
+        "tags": [
+          "cards"
+        ]
+      }
+    },
+    "/api/v1/cards/mine/replace": {
+      "post": {
+        "description": "R-022: lost card — the old code is blocked at once and a new card is issued.",
+        "operationId": "jungle_cards_api_replace",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CardOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Replace",
+        "tags": [
+          "cards"
+        ]
+      }
+    },
     "/api/v1/classes": {
       "get": {
         "operationId": "jungle_bookings_api_list_classes",
@@ -8576,6 +9105,441 @@
         "summary": "Queue",
         "tags": [
           "staff: cafe"
+        ]
+      }
+    },
+    "/api/v1/staff/cards/print-queue": {
+      "get": {
+        "operationId": "jungle_cards_api_print_queue",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/QueueItemOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Print Queue",
+        "tags": [
+          "staff: cards"
+        ]
+      }
+    },
+    "/api/v1/staff/cards/print-queue/{request_id}/status": {
+      "post": {
+        "operationId": "jungle_cards_api_set_status",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "request_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Request Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PrintStatusIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueueItemOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Set Status",
+        "tags": [
+          "staff: cards"
+        ]
+      }
+    },
+    "/api/v1/staff/cards/print.pdf": {
+      "post": {
+        "description": "R-021: one CR80 page per card (85.60 × 53.98 mm), ready for the club's card printer.",
+        "operationId": "jungle_cards_api_print_pdf",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PrintIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "format": "binary",
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Print Pdf",
+        "tags": [
+          "staff: cards"
+        ]
+      }
+    },
+    "/api/v1/staff/cards/reissue": {
+      "post": {
+        "operationId": "jungle_cards_api_reissue",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReissueIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffCardOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Reissue",
+        "tags": [
+          "staff: cards"
+        ]
+      }
+    },
+    "/api/v1/staff/cards/{card_id}/block": {
+      "post": {
+        "operationId": "jungle_cards_api_block",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "card_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Card Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BlockIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffCardOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Block",
+        "tags": [
+          "staff: cards"
         ]
       }
     },

@@ -18,6 +18,9 @@ from jungle.bookings.api import public_router as bookings_public_router
 from jungle.bookings.api import staff_router as bookings_staff_router
 from jungle.cafe.api import public_router as cafe_router
 from jungle.cafe.api import staff_router as cafe_staff_router
+from jungle.cards.api import me_router as cards_router
+from jungle.cards.api import public_router as cards_public_router
+from jungle.cards.api import staff_router as cards_staff_router
 from jungle.configuration.api import public_router as config_public_router
 from jungle.configuration.api import staff_router as config_staff_router
 from jungle.core.api import router as health_router
@@ -77,6 +80,9 @@ api.add_router("/account", rewards_router)
 api.add_router("/staff", rewards_staff_router)
 api.add_router("/cafe", cafe_router)
 api.add_router("/staff", cafe_staff_router)
+api.add_router("/cards", cards_public_router)
+api.add_router("/cards", cards_router)
+api.add_router("/staff", cards_staff_router)
 
 
 def _error(

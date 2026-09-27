@@ -20,6 +20,7 @@ TEMPLATES = (
     "waitlist_confirm",
     "waitlist_welcome",
     "spot_promoted",
+    "card_issued",
 )
 LANGUAGES = ("ro", "en")
 

@@ -112,7 +112,12 @@
     "cafe.product_unavailable": "Un produs din comandă nu mai este disponibil.",
     "cafe.order_not_found": "Comanda nu există.",
     "cafe.invalid_transition": "Comanda nu poate trece în această stare.",
-    "cafe.empty_order": "Comanda este goală."
+    "cafe.empty_order": "Comanda este goală.",
+    "cards.not_found": "Cardul nu există.",
+    "cards.invalid": "Cardul nu este valabil. Cere un card nou la recepție sau din cont.",
+    "cards.nothing_to_print": "Nu există carduri gata de tipărit în selecție.",
+    "cards.invalid_transition": "Cardul nu poate trece în această stare.",
+    "cards.invalid_emblem": "Alege una dintre emblemele din listă."
   },
   "web": {
     "meta": {

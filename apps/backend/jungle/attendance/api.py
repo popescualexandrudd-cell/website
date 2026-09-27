@@ -18,8 +18,11 @@ staff_router = Router(tags=["staff: attendance"], auth=session_auth)
 
 
 class ScanIn(Schema):
-    user_id: uuid.UUID
+    """Either the scanned card code (R-025) or, for reception, the person's id."""
+
     location_id: uuid.UUID
+    user_id: uuid.UUID | None = None
+    card_token: str = Field(default="", max_length=64)
     kind: ScanKind
     resource_id: uuid.UUID | None = None
     class_session_id: uuid.UUID | None = None

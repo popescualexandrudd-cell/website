@@ -15,6 +15,8 @@ dependencies = [
     "phonenumbers>=8.13",
     "redis>=5.0",
     "gunicorn>=23",
+    "segno>=1.6.6",
+    "reportlab>=5.0.1",
 ]
 
 [dependency-groups]
@@ -27,6 +29,7 @@ dev = [
     "ruff>=0.6",
     "mypy>=1.11",
     "django-stubs[compatible-mypy]>=5.1",
+    "types-reportlab>=5.0.0.20260911",
 ]
 
 [tool.uv]
