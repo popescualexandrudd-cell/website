@@ -21,6 +21,8 @@ from jungle.configuration.api import staff_router as config_staff_router
 from jungle.core.api import router as health_router
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.devices.api import router as devices_router
+from jungle.ledger.api import me_router as account_router
+from jungle.ledger.api import staff_router as payments_staff_router
 from jungle.legal.api import router as legal_router
 from jungle.locations.api import public_router as locations_router
 from jungle.locations.api import staff_router as locations_staff_router
@@ -59,6 +61,8 @@ api.add_router("/pricing", pricing_router)
 api.add_router("/staff", bookings_staff_router)
 api.add_router("/staff", attendance_staff_router)
 api.add_router("/staff", pricing_staff_router)
+api.add_router("/account", account_router)
+api.add_router("/staff", payments_staff_router)
 
 
 def _error(

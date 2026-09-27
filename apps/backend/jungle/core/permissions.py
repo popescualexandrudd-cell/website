@@ -41,6 +41,14 @@ class Action(StrEnum):
     ATTENDANCE_VIEW = "attendance.view"
     RESTRICTIONS_MANAGE = "restrictions.manage"
     EVENTS_MANAGE = "events.manage"
+    PAYMENTS_VIEW = "payments.view"
+    PAYMENTS_RECORD = "payments.record"
+    LEDGER_CORRECT = "ledger.correct"
+    SUBSCRIPTIONS_MANAGE = "subscriptions.manage"
+    CORPORATE_MANAGE = "corporate.manage"
+    VOUCHERS_MANAGE = "vouchers.manage"
+    CAFE_MANAGE = "cafe.manage"
+    CAFE_ORDERS = "cafe.orders"
 
 
 ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
@@ -64,6 +72,15 @@ ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
             Action.ATTENDANCE_VIEW,
             Action.RESTRICTIONS_MANAGE,
             Action.EVENTS_MANAGE,
+            # Q10: payments are taken by the kiosk; staff record exceptions, with a reason.
+            Action.PAYMENTS_VIEW,
+            Action.PAYMENTS_RECORD,
+            Action.LEDGER_CORRECT,
+            Action.SUBSCRIPTIONS_MANAGE,
+            Action.CORPORATE_MANAGE,
+            Action.VOUCHERS_MANAGE,
+            Action.CAFE_MANAGE,
+            Action.CAFE_ORDERS,
         }
     ),
     Role.RECEPTION: frozenset(
@@ -74,6 +91,8 @@ ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
             Action.BOOKINGS_MANAGE,
             Action.ATTENDANCE_RECORD,
             Action.ATTENDANCE_VIEW,
+            Action.PAYMENTS_VIEW,
+            Action.CAFE_ORDERS,
         }
     ),
     # Coaches and the Pilates instructor manage their programme and see attendance (R-033);

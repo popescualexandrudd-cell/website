@@ -36,6 +36,7 @@ from jungle.core import clock
 from jungle.core.clock import BUSINESS_TZ
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.permissions import Action, Role
+from jungle.ledger.payments import due_for_booking, settle
 from jungle.locations.models import Resource, ResourceKind
 from jungle.notifications.email import send_templated_email
 from jungle.pricing.models import CustomerType, Product
@@ -359,6 +360,7 @@ def cancel_booking(
             after={**_brief(booking), "outcome": booking.cancellation_outcome},
             reason=reason,
         )
+        settle(due_for_booking(booking))  # R-070, R-071: debt or credit in the account
         promote_waiting(booking.resource, booking.starts_at, booking.ends_at)
     return booking
 

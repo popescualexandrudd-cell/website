@@ -39,6 +39,7 @@ from jungle.configuration.services import get_config
 from jungle.core import clock
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.permissions import Action, Role
+from jungle.ledger.payments import due_for_enrollment, settle
 from jungle.locations.models import Resource, ResourceKind
 from jungle.notifications.email import send_templated_email
 from jungle.pricing.models import Product
@@ -181,6 +182,7 @@ def cancel_enrollment(request: HttpRequest, enrollment_id: uuid.UUID) -> ClassEn
             target=enrollment,
             after={"outcome": enrollment.cancellation_outcome},
         )
+        settle(due_for_enrollment(enrollment))
         if had_place:
             promote_class_waitlist(session, now)
     return enrollment

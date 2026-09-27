@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     "jungle.pricing",
     "jungle.bookings",
     "jungle.attendance",
+    "jungle.ledger",
 ]
 
 MIDDLEWARE = [
@@ -199,6 +200,10 @@ EMAIL_USE_TLS = env_bool("EMAIL_USE_TLS", True)
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", "Jungle Padel <no-reply@example.invalid>")
 
 # Public website base URL, used in links inside emails.
+# Fiscal cash register (R-066): "simulator" until the model is bought (Q23); an adapter per
+# model is added then. Receipts from the simulator are marked as such and are not fiscal.
+FISCAL_PRINTER = env("FISCAL_PRINTER", "simulator") or "simulator"
+
 WEB_BASE_URL = (env("WEB_BASE_URL", "http://localhost:3000") or "").rstrip("/")
 
 # Emergency Django admin (§8.6): Admin role + 2FA only.

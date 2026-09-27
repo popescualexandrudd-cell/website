@@ -78,7 +78,18 @@
     "events.already_decided": "The request has already been approved or declined.",
     "attendance.unknown_person": "The person was not found.",
     "restrictions.not_found": "There is no active block for this person.",
-    "booking.email_not_verified": "Please confirm your email address (the link in the email we sent) before booking online."
+    "booking.email_not_verified": "Please confirm your email address (the link in the email we sent) before booking online.",
+    "payments.idempotency_required": "The payment key is missing. Please retry from the app.",
+    "payments.idempotency_conflict": "This payment was already sent with different details. Please start the payment again.",
+    "payments.invalid_amount": "The amount is not valid.",
+    "payments.nothing_due": "There is nothing left to pay for this.",
+    "payments.overpay": "The amount is more than what is left to pay ({due} bani).",
+    "payments.insufficient_cash": "The cash inserted does not cover the payment.",
+    "payments.insufficient_balance": "There is not enough credit in your account.",
+    "payments.method_unavailable": "This payment method is not available yet.",
+    "ledger.not_found": "The transaction does not exist.",
+    "ledger.already_reversed": "The transaction has already been corrected.",
+    "ledger.cannot_reverse": "A correction cannot be corrected again; record a new transaction."
   },
   "web": {
     "meta": {

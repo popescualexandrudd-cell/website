@@ -4,6 +4,77 @@
  */
 
 export interface paths {
+    "/api/v1/account": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** My Account */
+        get: operations["jungle_ledger_api_my_account"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/account/entries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** My Entries */
+        get: operations["jungle_ledger_api_my_entries"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/account/payment-status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Payment Status */
+        get: operations["jungle_ledger_api_payment_status"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/account/split": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Split
+         * @description R-060, R-061: "Împarte ora cu partenerii" — each player's share of what is left.
+         */
+        get: operations["jungle_ledger_api_split"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/csrf": {
         parameters: {
             query?: never;
@@ -717,6 +788,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/staff/customers/{user_id}/account": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Customer Account */
+        get: operations["jungle_ledger_api_customer_account"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/customers/{user_id}/entries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Customer Entries */
+        get: operations["jungle_ledger_api_customer_entries"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/staff/devices": {
         parameters: {
             query?: never;
@@ -820,6 +925,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/staff/ledger/transactions/{transaction_id}/reverse": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reverse Transaction */
+        post: operations["jungle_ledger_api_reverse_transaction"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/staff/locations": {
         parameters: {
             query?: never;
@@ -865,6 +987,27 @@ export interface paths {
         put?: never;
         /** Read Notice */
         post: operations["jungle_attendance_api_read_notice"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Record Payment
+         * @description Q10: a payment recorded by staff (exception, with a reason). R-067: send the same
+         *     `Idempotency-Key` again after a timeout — it is never charged twice.
+         */
+        post: operations["jungle_ledger_api_record_payment"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1195,6 +1338,19 @@ export interface components {
             language: string;
             /** Version */
             version: number;
+        };
+        /** AccountOut */
+        AccountOut: {
+            /**
+             * Credit
+             * @description bani: credit în cont (R-065)
+             */
+            credit: number;
+            /**
+             * Debt
+             * @description bani: datorii (R-065)
+             */
+            debt: number;
         };
         /** ActiveIn */
         ActiveIn: {
@@ -1602,30 +1758,34 @@ export interface components {
         };
         /** EntryOut */
         EntryOut: {
-            /** Confirmed At */
-            confirmed_at: string | null;
+            /**
+             * Account
+             * @description customer_balance sau receivable
+             */
+            account: string;
+            /**
+             * Amount
+             * @description bani; + debit, − credit
+             */
+            amount: number;
+            /** Booking Id */
+            booking_id: string | null;
             /**
              * Created At
              * Format: date-time
              */
             created_at: string;
-            /** Email */
-            email: string | null;
+            /** Description */
+            description: string;
+            /** Enrollment Id */
+            enrollment_id: string | null;
+            /** Kind */
+            kind: string;
             /**
-             * Id
+             * Transaction Id
              * Format: uuid
              */
-            id: string;
-            /** Language */
-            language: string;
-            /** Level */
-            level: string;
-            /** Name */
-            name: string;
-            /** Source */
-            source: string;
-            /** Status */
-            status: string;
+            transaction_id: string;
         };
         /** EntryPageOut */
         EntryPageOut: {
@@ -1894,6 +2054,19 @@ export interface components {
             /** Secret */
             secret: string;
         };
+        /** MoneyOut */
+        MoneyOut: {
+            /** Charged */
+            charged: number;
+            /** Paid */
+            paid: number;
+            /** Price */
+            price: number;
+            /** Refunded */
+            refunded: number;
+            /** To Pay */
+            to_pay: number;
+        };
         /** NoticeOut */
         NoticeOut: {
             /**
@@ -1938,6 +2111,61 @@ export interface components {
             token: string;
             /** Uid */
             uid: string;
+        };
+        /** PaymentIn */
+        PaymentIn: {
+            /** Amount */
+            amount: number;
+            /** Booking Id */
+            booking_id?: string | null;
+            /** Enrollment Id */
+            enrollment_id?: string | null;
+            method: components["schemas"]["PaymentMethod"];
+            /**
+             * Payer Id
+             * Format: uuid
+             */
+            payer_id: string;
+            /** Reason */
+            reason: string;
+            /**
+             * Tendered
+             * @default 0
+             */
+            tendered: number;
+        };
+        /**
+         * PaymentMethod
+         * @enum {string}
+         */
+        PaymentMethod: "cash" | "card" | "balance" | "voucher";
+        /** PaymentOut */
+        PaymentOut: {
+            /** Amount */
+            amount: number;
+            /** Change */
+            change: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Fiscal Receipt */
+            fiscal_receipt: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Method */
+            method: string;
+            /** Tendered */
+            tendered: number;
+            /**
+             * Transaction Id
+             * Format: uuid
+             */
+            transaction_id: string;
         };
         /** PendingDecisionOut */
         PendingDecisionOut: {
@@ -2208,6 +2436,11 @@ export interface components {
              */
             user_id: string;
         };
+        /** ReverseIn */
+        ReverseIn: {
+            /** Reason */
+            reason: string;
+        };
         /** RoleGrantIn */
         RoleGrantIn: {
             /** Location Id */
@@ -2368,6 +2601,16 @@ export interface components {
              */
             status: string;
         };
+        /** SplitOut */
+        SplitOut: {
+            /**
+             * Shares
+             * @description R-061: primul participant plătește restul de bani
+             */
+            shares: number[];
+            /** To Pay */
+            to_pay: number;
+        };
         /** StaffBookingIn */
         StaffBookingIn: {
             /** Coach Id */
@@ -2506,6 +2749,27 @@ export interface components {
             /** Token */
             token: string;
         };
+        /** TransactionOut */
+        TransactionOut: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Description */
+            description: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Kind */
+            kind: string;
+            /** Reason */
+            reason: string;
+            /** Reverses Id */
+            reverses_id: string | null;
+        };
         /** TypeIn */
         TypeIn: {
             session_type: components["schemas"]["SessionType"];
@@ -2619,6 +2883,183 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    jungle_ledger_api_my_account: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_ledger_api_my_entries: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntryOut"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_ledger_api_payment_status: {
+        parameters: {
+            query?: {
+                booking_id?: string | null;
+                enrollment_id?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MoneyOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_ledger_api_split: {
+        parameters: {
+            query: {
+                parts: number;
+                booking_id?: string | null;
+                enrollment_id?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SplitOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     jungle_accounts_api_csrf: {
         parameters: {
             query?: never;
@@ -4726,6 +5167,126 @@ export interface operations {
             };
         };
     };
+    jungle_ledger_api_customer_account: {
+        parameters: {
+            query: {
+                location_id: string;
+            };
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_ledger_api_customer_entries: {
+        parameters: {
+            query: {
+                location_id: string;
+            };
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntryOut"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     jungle_devices_api_list_devices: {
         parameters: {
             query?: never;
@@ -5128,6 +5689,77 @@ export interface operations {
             };
         };
     };
+    jungle_ledger_api_reverse_transaction: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                transaction_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReverseIn"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TransactionOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     jungle_locations_api_create_location: {
         parameters: {
             query?: never;
@@ -5288,6 +5920,86 @@ export interface operations {
             };
             /** @description Not Found */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_ledger_api_record_payment: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PaymentIn"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };

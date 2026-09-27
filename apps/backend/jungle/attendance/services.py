@@ -32,6 +32,7 @@ from jungle.configuration.services import get_config
 from jungle.core import clock
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.permissions import Action, Role
+from jungle.ledger.payments import due_for_booking, due_for_enrollment, settle
 from jungle.locations.models import Location, Resource
 
 NOTICE_NO_SHOW_BLOCK = "no_show_block"
@@ -125,6 +126,7 @@ def _class_enrollment(data: ScanData, person: User, now: datetime) -> ClassEnrol
     if enrollment is not None:
         enrollment.status = EnrollmentStatus.ATTENDED
         enrollment.save(update_fields=["status"])
+        settle(due_for_enrollment(enrollment))
     return enrollment
 
 
@@ -158,6 +160,7 @@ def process_no_shows(now: datetime | None = None) -> NoShowReport:
                 if booking.ends_at <= now:
                     booking.status = BookingStatus.COMPLETED
                     booking.save(update_fields=["status"])
+                    settle(due_for_booking(booking))
                     report.bookings_completed += 1
                 continue
             if booking.session_type == SessionType.EVENT:
@@ -165,14 +168,19 @@ def process_no_shows(now: datetime | None = None) -> NoShowReport:
             booking.status = BookingStatus.NO_SHOW
             booking.save(update_fields=["status"])
             audit.record(audit.SYSTEM, "booking.no_show", target=booking)
+            settle(due_for_booking(booking))  # R-072: a no-show is paid
             report.bookings_no_show += 1
             responsible = booking.coach if booking.session_type == SessionType.LESSON else None
             if _check_block(booking.organizer, booking.location_id, responsible, now):
                 report.restrictions += 1
-        ended_events = Booking.objects.filter(
+        ended_events = Booking.objects.select_for_update().filter(
             status=BookingStatus.CONFIRMED, session_type=SessionType.EVENT, ends_at__lte=now
         )
-        report.bookings_completed += ended_events.update(status=BookingStatus.COMPLETED)
+        for event in ended_events:
+            event.status = BookingStatus.COMPLETED
+            event.save(update_fields=["status"])
+            settle(due_for_booking(event))
+            report.bookings_completed += 1
 
         absent = ClassEnrollment.objects.select_for_update().filter(
             status=EnrollmentStatus.ENROLLED,
@@ -183,6 +191,7 @@ def process_no_shows(now: datetime | None = None) -> NoShowReport:
             enrollment.status = EnrollmentStatus.NO_SHOW
             enrollment.save(update_fields=["status"])
             audit.record(audit.SYSTEM, "classes.no_show", target=enrollment)
+            settle(due_for_enrollment(enrollment))
             report.enrollments_no_show += 1
             session: ClassSession = enrollment.session
             if _check_block(enrollment.user, session.location_id, session.instructor, now):

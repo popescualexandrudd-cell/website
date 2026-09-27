@@ -78,7 +78,18 @@
     "events.already_decided": "Cererea a fost deja aprobată sau respinsă.",
     "attendance.unknown_person": "Persoana nu a fost găsită.",
     "restrictions.not_found": "Nu există o blocare activă pentru această persoană.",
-    "booking.email_not_verified": "Confirmă adresa de email (linkul din emailul primit) înainte de a rezerva online."
+    "booking.email_not_verified": "Confirmă adresa de email (linkul din emailul primit) înainte de a rezerva online.",
+    "payments.idempotency_required": "Lipsește cheia unică a plății. Reîncearcă din aplicație.",
+    "payments.idempotency_conflict": "Această plată a fost deja trimisă cu alte date. Reîncepe plata.",
+    "payments.invalid_amount": "Suma nu este validă.",
+    "payments.nothing_due": "Nu mai este nimic de plată pentru aceasta.",
+    "payments.overpay": "Suma depășește ce mai este de plată ({due} bani).",
+    "payments.insufficient_cash": "Suma introdusă nu acoperă plata.",
+    "payments.insufficient_balance": "Nu ai suficient credit în cont.",
+    "payments.method_unavailable": "Această metodă de plată nu este disponibilă încă.",
+    "ledger.not_found": "Tranzacția nu există.",
+    "ledger.already_reversed": "Tranzacția a fost deja corectată.",
+    "ledger.cannot_reverse": "O corecție nu se mai corectează; înregistrează o tranzacție nouă."
   },
   "web": {
     "meta": {

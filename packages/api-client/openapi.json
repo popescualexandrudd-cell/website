@@ -25,6 +25,26 @@
         "title": "AcceptedDocumentIn",
         "type": "object"
       },
+      "AccountOut": {
+        "properties": {
+          "credit": {
+            "description": "bani: credit în cont (R-065)",
+            "title": "Credit",
+            "type": "integer"
+          },
+          "debt": {
+            "description": "bani: datorii (R-065)",
+            "title": "Debt",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "credit",
+          "debt"
+        ],
+        "title": "AccountOut",
+        "type": "object"
+      },
       "ActiveIn": {
         "properties": {
           "is_active": {
@@ -1002,70 +1022,68 @@
       },
       "EntryOut": {
         "properties": {
-          "confirmed_at": {
+          "account": {
+            "description": "customer_balance sau receivable",
+            "title": "Account",
+            "type": "string"
+          },
+          "amount": {
+            "description": "bani; + debit, − credit",
+            "title": "Amount",
+            "type": "integer"
+          },
+          "booking_id": {
             "anyOf": [
               {
-                "format": "date-time",
+                "format": "uuid",
                 "type": "string"
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Confirmed At"
+            "title": "Booking Id"
           },
           "created_at": {
             "format": "date-time",
             "title": "Created At",
             "type": "string"
           },
-          "email": {
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "enrollment_id": {
             "anyOf": [
               {
+                "format": "uuid",
                 "type": "string"
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Email"
+            "title": "Enrollment Id"
           },
-          "id": {
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "transaction_id": {
             "format": "uuid",
-            "title": "Id",
-            "type": "string"
-          },
-          "language": {
-            "title": "Language",
-            "type": "string"
-          },
-          "level": {
-            "title": "Level",
-            "type": "string"
-          },
-          "name": {
-            "title": "Name",
-            "type": "string"
-          },
-          "source": {
-            "title": "Source",
-            "type": "string"
-          },
-          "status": {
-            "title": "Status",
+            "title": "Transaction Id",
             "type": "string"
           }
         },
         "required": [
-          "id",
-          "email",
-          "name",
-          "level",
-          "language",
-          "source",
-          "status",
+          "transaction_id",
           "created_at",
-          "confirmed_at"
+          "kind",
+          "account",
+          "amount",
+          "description",
+          "booking_id",
+          "enrollment_id"
         ],
         "title": "EntryOut",
         "type": "object"
@@ -1685,6 +1703,39 @@
         "title": "MfaSetupOut",
         "type": "object"
       },
+      "MoneyOut": {
+        "properties": {
+          "charged": {
+            "title": "Charged",
+            "type": "integer"
+          },
+          "paid": {
+            "title": "Paid",
+            "type": "integer"
+          },
+          "price": {
+            "title": "Price",
+            "type": "integer"
+          },
+          "refunded": {
+            "title": "Refunded",
+            "type": "integer"
+          },
+          "to_pay": {
+            "title": "To Pay",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "price",
+          "charged",
+          "paid",
+          "refunded",
+          "to_pay"
+        ],
+        "title": "MoneyOut",
+        "type": "object"
+      },
       "NoticeOut": {
         "properties": {
           "created_at": {
@@ -1784,6 +1835,130 @@
           "new_password"
         ],
         "title": "PasswordResetConfirmIn",
+        "type": "object"
+      },
+      "PaymentIn": {
+        "properties": {
+          "amount": {
+            "exclusiveMinimum": 0,
+            "maximum": 100000000,
+            "title": "Amount",
+            "type": "integer"
+          },
+          "booking_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Booking Id"
+          },
+          "enrollment_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enrollment Id"
+          },
+          "method": {
+            "$ref": "#/components/schemas/PaymentMethod"
+          },
+          "payer_id": {
+            "format": "uuid",
+            "title": "Payer Id",
+            "type": "string"
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          },
+          "tendered": {
+            "default": 0,
+            "maximum": 100000000,
+            "minimum": 0,
+            "title": "Tendered",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "payer_id",
+          "amount",
+          "method",
+          "reason"
+        ],
+        "title": "PaymentIn",
+        "type": "object"
+      },
+      "PaymentMethod": {
+        "enum": [
+          "cash",
+          "card",
+          "balance",
+          "voucher"
+        ],
+        "title": "PaymentMethod",
+        "type": "string"
+      },
+      "PaymentOut": {
+        "properties": {
+          "amount": {
+            "title": "Amount",
+            "type": "integer"
+          },
+          "change": {
+            "title": "Change",
+            "type": "integer"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "fiscal_receipt": {
+            "title": "Fiscal Receipt",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "method": {
+            "title": "Method",
+            "type": "string"
+          },
+          "tendered": {
+            "title": "Tendered",
+            "type": "integer"
+          },
+          "transaction_id": {
+            "format": "uuid",
+            "title": "Transaction Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "transaction_id",
+          "method",
+          "amount",
+          "tendered",
+          "change",
+          "fiscal_receipt",
+          "created_at"
+        ],
+        "title": "PaymentOut",
         "type": "object"
       },
       "PendingDecisionOut": {
@@ -2432,6 +2607,21 @@
         "title": "RestrictionOut",
         "type": "object"
       },
+      "ReverseIn": {
+        "properties": {
+          "reason": {
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reason"
+        ],
+        "title": "ReverseIn",
+        "type": "object"
+      },
       "RoleGrantIn": {
         "properties": {
           "location_id": {
@@ -2819,6 +3009,28 @@
         "title": "SignupOut",
         "type": "object"
       },
+      "SplitOut": {
+        "properties": {
+          "shares": {
+            "description": "R-061: primul participant plătește restul de bani",
+            "items": {
+              "type": "integer"
+            },
+            "title": "Shares",
+            "type": "array"
+          },
+          "to_pay": {
+            "title": "To Pay",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "to_pay",
+          "shares"
+        ],
+        "title": "SplitOut",
+        "type": "object"
+      },
       "StaffBookingIn": {
         "properties": {
           "coach_id": {
@@ -3118,6 +3330,54 @@
         "title": "TokenIn",
         "type": "object"
       },
+      "TransactionOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "reverses_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reverses Id"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "description",
+          "reason",
+          "reverses_id",
+          "created_at"
+        ],
+        "title": "TransactionOut",
+        "type": "object"
+      },
       "TypeIn": {
         "properties": {
           "session_type": {
@@ -3389,6 +3649,298 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/api/v1/account": {
+      "get": {
+        "operationId": "jungle_ledger_api_my_account",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "My Account",
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/api/v1/account/entries": {
+      "get": {
+        "operationId": "jungle_ledger_api_my_entries",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/EntryOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "My Entries",
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/api/v1/account/payment-status": {
+      "get": {
+        "operationId": "jungle_ledger_api_payment_status",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "booking_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Booking Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "enrollment_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Enrollment Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MoneyOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Payment Status",
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/api/v1/account/split": {
+      "get": {
+        "description": "R-060, R-061: \"Împarte ora cu partenerii\" — each player's share of what is left.",
+        "operationId": "jungle_ledger_api_split",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "parts",
+            "required": true,
+            "schema": {
+              "title": "Parts",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "booking_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Booking Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "enrollment_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Enrollment Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SplitOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Split",
+        "tags": [
+          "account"
+        ]
+      }
+    },
     "/api/v1/auth/csrf": {
       "get": {
         "description": "Sets the CSRF cookie; web apps send its value in the X-CSRFToken header.",
@@ -6237,6 +6789,186 @@
         ]
       }
     },
+    "/api/v1/staff/customers/{user_id}/account": {
+      "get": {
+        "operationId": "jungle_ledger_api_customer_account",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "User Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Customer Account",
+        "tags": [
+          "staff: payments"
+        ]
+      }
+    },
+    "/api/v1/staff/customers/{user_id}/entries": {
+      "get": {
+        "operationId": "jungle_ledger_api_customer_entries",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "User Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/EntryOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Customer Entries",
+        "tags": [
+          "staff: payments"
+        ]
+      }
+    },
     "/api/v1/staff/devices": {
       "get": {
         "operationId": "jungle_devices_api_list_devices",
@@ -6785,6 +7517,104 @@
         ]
       }
     },
+    "/api/v1/staff/ledger/transactions/{transaction_id}/reverse": {
+      "post": {
+        "operationId": "jungle_ledger_api_reverse_transaction",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "transaction_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Transaction Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReverseIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Reverse Transaction",
+        "tags": [
+          "staff: payments"
+        ]
+      }
+    },
     "/api/v1/staff/locations": {
       "post": {
         "operationId": "jungle_locations_api_create_location",
@@ -7029,6 +7859,115 @@
         "summary": "Read Notice",
         "tags": [
           "staff: attendance"
+        ]
+      }
+    },
+    "/api/v1/staff/payments": {
+      "post": {
+        "description": "Q10: a payment recorded by staff (exception, with a reason). R-067: send the same\n`Idempotency-Key` again after a timeout — it is never charged twice.",
+        "operationId": "jungle_ledger_api_record_payment",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "maxLength": 200,
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Record Payment",
+        "tags": [
+          "staff: payments"
         ]
       }
     },
