@@ -12,7 +12,9 @@ Card payments wait for the payment processor and the POS adapter (Q9, R-062).
 from __future__ import annotations
 
 import uuid
+from collections.abc import Callable
 from dataclasses import dataclass, field
+from functools import partial
 from typing import Any
 
 from django.db import models, transaction
@@ -54,6 +56,15 @@ from jungle.ledger.services import (
 )
 from jungle.locations.models import Location, ResourceKind
 from jungle.subscriptions.models import SubscriptionUse
+
+# Called after a payment is committed (the league validates a score waiting for it, §6.9).
+_paid_listeners: list[Callable[[Due], None]] = []
+
+
+def on_paid(listener: Callable[[Due], None]) -> None:
+    if listener not in _paid_listeners:
+        _paid_listeners.append(listener)
+
 
 PURPOSE_CHARGE = "charge"
 PURPOSE_PAYMENT = "payment"
@@ -307,6 +318,8 @@ def pay(
             after={"due": due.key, "amount": data.amount, "method": data.method, "change": change},
             reason=data.reason,
         )
+        for listener in _paid_listeners:  # never undoes the payment: runs after the commit
+            transaction.on_commit(partial(listener, due))
     return payment
 
 

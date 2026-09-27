@@ -849,6 +849,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/league/me/matches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * My Matches
+         * @description The player's matches and where each one is (§6.9). Scores are entered only at the
+         *     League Kiosk: there is no way to enter or confirm one from here (invariant 1).
+         */
+        get: operations["jungle_league_api_my_matches"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/league/questionnaire": {
         parameters: {
             query?: never;
@@ -1610,6 +1631,48 @@ export interface paths {
         put?: never;
         /** Create Guest */
         post: operations["jungle_accounts_api_create_guest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/league/matches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Staff Matches
+         * @description Disputed, expired, waiting for payment … (LG-095), with the log of every step.
+         */
+        get: operations["jungle_league_api_staff_matches"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/league/matches/{match_id}/resolve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Resolve
+         * @description Apply a disputed or expired score as entered at the kiosk, reopen the score window (the
+         *     players enter it again at the kiosk) or cancel the match, always with a written reason;
+         *     cancelling an applied match recomputes the league (LG-161).
+         */
+        post: operations["jungle_league_api_resolve"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3230,6 +3293,49 @@ export interface components {
          * @enum {string}
          */
         Marker: "confirmed" | "default" | "to_confirm" | "to_set";
+        /** MatchOut */
+        MatchOut: {
+            /**
+             * Finished At
+             * Format: date-time
+             */
+            finished_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Kind */
+            kind: string;
+            /** Note */
+            note: string;
+            /** Payment Deadline */
+            payment_deadline: string | null;
+            /** Players */
+            players: components["schemas"]["MatchPlayerOut"][];
+            /** Score */
+            score: {
+                [key: string]: unknown;
+            };
+            /** Status */
+            status: string;
+            /**
+             * Window Closes At
+             * Format: date-time
+             */
+            window_closes_at: string;
+        };
+        /** MatchPlayerOut */
+        MatchPlayerOut: {
+            /** First Name */
+            first_name: string;
+            /** Last Name */
+            last_name: string;
+            /** Response */
+            response: string;
+            /** Side */
+            side: string;
+        };
         /** MeOut */
         MeOut: {
             /** Adult */
@@ -3819,6 +3925,13 @@ export interface components {
             /** Year */
             year: number;
         };
+        /** ResolveIn */
+        ResolveIn: {
+            /** Action */
+            action: string;
+            /** Reason */
+            reason: string;
+        };
         /** ResourceAvailabilityOut */
         ResourceAvailabilityOut: {
             /** Busy */
@@ -4349,6 +4462,44 @@ export interface components {
             /** Status */
             status: string;
         };
+        /** StaffMatchOut */
+        StaffMatchOut: {
+            /** Booking Id */
+            booking_id: string | null;
+            /** Court */
+            court: string;
+            /**
+             * Finished At
+             * Format: date-time
+             */
+            finished_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Kind */
+            kind: string;
+            /** Note */
+            note: string;
+            /** Payment Deadline */
+            payment_deadline: string | null;
+            /** Players */
+            players: components["schemas"]["MatchPlayerOut"][];
+            /** Score */
+            score: {
+                [key: string]: unknown;
+            };
+            /** Status */
+            status: string;
+            /** Transitions */
+            transitions: components["schemas"]["TransitionOut"][];
+            /**
+             * Window Closes At
+             * Format: date-time
+             */
+            window_closes_at: string;
+        };
         /** StaffOrderIn */
         StaffOrderIn: {
             /** Corporate Id */
@@ -4505,6 +4656,22 @@ export interface components {
             reason: string;
             /** Reverses Id */
             reverses_id: string | null;
+        };
+        /** TransitionOut */
+        TransitionOut: {
+            /**
+             * At
+             * Format: date-time
+             */
+            at: string;
+            /** Checks */
+            checks: {
+                [key: string]: unknown;
+            };
+            /** Reason */
+            reason: string;
+            /** Status */
+            status: string;
         };
         /** TypeIn */
         TypeIn: {
@@ -6790,6 +6957,35 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MeOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_my_matches: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MatchOut"][];
                 };
             };
             /** @description Unauthorized */
@@ -9385,6 +9581,136 @@ export interface operations {
             };
             /** @description Forbidden */
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_staff_matches: {
+        parameters: {
+            query: {
+                location_id: string;
+                status?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffMatchOut"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_resolve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                match_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResolveIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffMatchOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

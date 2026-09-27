@@ -1,11 +1,17 @@
+from typing import Any
+
 from django.contrib import admin
+from django.http import HttpRequest
 
 from jungle.core.admin_site import ReadOnlyAdmin, emergency_admin_site
 from jungle.league.models import (
     LeagueEvent,
+    LeagueMatch,
     LeaguePlayer,
     LeagueSeason,
     LevelQuestionnaire,
+    MatchPlayer,
+    MatchTransition,
     Standing,
 )
 
@@ -38,3 +44,26 @@ class LeagueEventAdmin(ReadOnlyAdmin):
 class StandingAdmin(ReadOnlyAdmin):
     list_display = ("season", "ladder", "position", "competitor_id", "tier", "division", "lp")
     list_filter = ("season", "ladder")
+
+
+class MatchPlayerInline(admin.TabularInline):  # type: ignore[type-arg]
+    model = MatchPlayer
+    extra = 0
+    can_delete = False
+    readonly_fields = ("user", "side", "response", "responded_at", "device")
+
+    def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:
+        return False
+
+
+@admin.register(LeagueMatch, site=emergency_admin_site)
+class LeagueMatchAdmin(ReadOnlyAdmin):
+    list_display = ("finished_at", "location", "kind", "status", "applied_at")
+    list_filter = ("status", "kind", "location")
+    inlines = (MatchPlayerInline,)
+
+
+@admin.register(MatchTransition, site=emergency_admin_site)
+class MatchTransitionAdmin(ReadOnlyAdmin):
+    list_display = ("match", "status", "at", "reason")
+    list_filter = ("status",)

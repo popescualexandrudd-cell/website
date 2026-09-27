@@ -125,6 +125,20 @@ def league_config(value: Any) -> bool:
     return True
 
 
+def networks(value: Any) -> bool:
+    """A non-empty list of IP networks in CIDR form ("192.168.10.0/24")."""
+    import ipaddress
+
+    if not isinstance(value, list) or not value:
+        return False
+    try:
+        for v in value:
+            ipaddress.ip_network(v)
+    except (TypeError, ValueError):
+        return False
+    return True
+
+
 def percent(value: Any) -> bool:
     return isinstance(value, int) and not isinstance(value, bool) and 0 <= value <= 90
 
@@ -441,6 +455,29 @@ CONFIG: dict[str, ConfigSpec] = {
             "Valorile ligii care diferă de cele implicite (§6); se aplică de la sezonul următor.",
             league_config,
             question="Q45",
+        ),
+        ConfigSpec(
+            "league.score_window_minutes",
+            30,
+            Marker.CONFIRMED,
+            "Fereastra pentru scor după finalul rezervării (§6.9, LG-093).",
+            positive_int,
+        ),
+        ConfigSpec(
+            "league.payment_deadline_hours",
+            24,
+            Marker.TO_CONFIRM,
+            "Cât așteaptă un scor confirmat plata integrală a rezervării (LG-096).",
+            positive_int,
+            question="Q11",
+        ),
+        ConfigSpec(
+            "league.kiosk_networks",
+            ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"],
+            Marker.DEFAULT,
+            "Rețelele din care Chioșcul Ligii poate trimite scoruri (ADR-0012); "
+            "se restrâng la rețeaua clubului la instalare.",
+            networks,
         ),
         ConfigSpec(
             "auth.staff_session_hours",

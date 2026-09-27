@@ -8,8 +8,9 @@ from jungle.accounts.models import User
 from jungle.cards import fields as card_fields
 from jungle.cards.models import MemberCard
 from jungle.cards.services import active_card, card_changed
-from jungle.league import projection, services, store
+from jungle.league import matches, projection, services, store
 from jungle.league.models import Ladder, LeagueEvent, LeagueSeason, SeasonStatus, Standing
+from jungle.ledger import payments
 from jungle.privacy import league_consent
 from jungle.privacy import services as privacy
 
@@ -97,3 +98,4 @@ def connect() -> None:
     )
     privacy.on_erased(lambda user: services.leave(user, "Cont șters"))
     store.on_applied(refresh_cards)
+    payments.on_paid(matches.payment_received)

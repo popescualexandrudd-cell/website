@@ -2154,6 +2154,102 @@
         "title": "Marker",
         "type": "string"
       },
+      "MatchOut": {
+        "properties": {
+          "finished_at": {
+            "format": "date-time",
+            "title": "Finished At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "note": {
+            "title": "Note",
+            "type": "string"
+          },
+          "payment_deadline": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Payment Deadline"
+          },
+          "players": {
+            "items": {
+              "$ref": "#/components/schemas/MatchPlayerOut"
+            },
+            "title": "Players",
+            "type": "array"
+          },
+          "score": {
+            "additionalProperties": true,
+            "title": "Score",
+            "type": "object"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "window_closes_at": {
+            "format": "date-time",
+            "title": "Window Closes At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "status",
+          "score",
+          "finished_at",
+          "window_closes_at",
+          "payment_deadline",
+          "note",
+          "players"
+        ],
+        "title": "MatchOut",
+        "type": "object"
+      },
+      "MatchPlayerOut": {
+        "properties": {
+          "first_name": {
+            "title": "First Name",
+            "type": "string"
+          },
+          "last_name": {
+            "title": "Last Name",
+            "type": "string"
+          },
+          "response": {
+            "title": "Response",
+            "type": "string"
+          },
+          "side": {
+            "title": "Side",
+            "type": "string"
+          }
+        },
+        "required": [
+          "first_name",
+          "last_name",
+          "side",
+          "response"
+        ],
+        "title": "MatchPlayerOut",
+        "type": "object"
+      },
       "MeOut": {
         "properties": {
           "adult": {
@@ -3556,6 +3652,27 @@
         "title": "ReportOut",
         "type": "object"
       },
+      "ResolveIn": {
+        "properties": {
+          "action": {
+            "pattern": "^(apply|reopen|cancel)$",
+            "title": "Action",
+            "type": "string"
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "action",
+          "reason"
+        ],
+        "title": "ResolveIn",
+        "type": "object"
+      },
       "ResourceAvailabilityOut": {
         "properties": {
           "busy": {
@@ -4755,6 +4872,100 @@
         "title": "StaffEventOut",
         "type": "object"
       },
+      "StaffMatchOut": {
+        "properties": {
+          "booking_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Booking Id"
+          },
+          "court": {
+            "title": "Court",
+            "type": "string"
+          },
+          "finished_at": {
+            "format": "date-time",
+            "title": "Finished At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "note": {
+            "title": "Note",
+            "type": "string"
+          },
+          "payment_deadline": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Payment Deadline"
+          },
+          "players": {
+            "items": {
+              "$ref": "#/components/schemas/MatchPlayerOut"
+            },
+            "title": "Players",
+            "type": "array"
+          },
+          "score": {
+            "additionalProperties": true,
+            "title": "Score",
+            "type": "object"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "transitions": {
+            "items": {
+              "$ref": "#/components/schemas/TransitionOut"
+            },
+            "title": "Transitions",
+            "type": "array"
+          },
+          "window_closes_at": {
+            "format": "date-time",
+            "title": "Window Closes At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "status",
+          "score",
+          "finished_at",
+          "window_closes_at",
+          "payment_deadline",
+          "note",
+          "players",
+          "court",
+          "booking_id",
+          "transitions"
+        ],
+        "title": "StaffMatchOut",
+        "type": "object"
+      },
       "StaffOrderIn": {
         "properties": {
           "corporate_id": {
@@ -5105,6 +5316,36 @@
           "created_at"
         ],
         "title": "TransactionOut",
+        "type": "object"
+      },
+      "TransitionOut": {
+        "properties": {
+          "at": {
+            "format": "date-time",
+            "title": "At",
+            "type": "string"
+          },
+          "checks": {
+            "additionalProperties": true,
+            "title": "Checks",
+            "type": "object"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "at",
+          "checks",
+          "reason"
+        ],
+        "title": "TransitionOut",
         "type": "object"
       },
       "TypeIn": {
@@ -8445,6 +8686,48 @@
           }
         ],
         "summary": "Me",
+        "tags": [
+          "league"
+        ]
+      }
+    },
+    "/api/v1/league/me/matches": {
+      "get": {
+        "description": "The player's matches and where each one is (§6.9). Scores are entered only at the\nLeague Kiosk: there is no way to enter or confirm one from here (invariant 1).",
+        "operationId": "jungle_league_api_my_matches",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MatchOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "My Matches",
         "tags": [
           "league"
         ]
@@ -12102,6 +12385,204 @@
         "summary": "Create Guest",
         "tags": [
           "staff: users"
+        ]
+      }
+    },
+    "/api/v1/staff/league/matches": {
+      "get": {
+        "description": "Disputed, expired, waiting for payment … (LG-095), with the log of every step.",
+        "operationId": "jungle_league_api_staff_matches",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/StaffMatchOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Staff Matches",
+        "tags": [
+          "staff: league"
+        ]
+      }
+    },
+    "/api/v1/staff/league/matches/{match_id}/resolve": {
+      "post": {
+        "description": "Apply a disputed or expired score as entered at the kiosk, reopen the score window (the\nplayers enter it again at the kiosk) or cancel the match, always with a written reason;\ncancelling an applied match recomputes the league (LG-161).",
+        "operationId": "jungle_league_api_resolve",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "match_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Match Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResolveIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffMatchOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Resolve",
+        "tags": [
+          "staff: league"
         ]
       }
     },

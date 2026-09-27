@@ -245,3 +245,140 @@ class Standing(models.Model):
 
     def __str__(self) -> str:
         return f"{self.ladder} {self.position} {self.competitor_id}"
+
+
+# ---------------------------------------------------------------- matches (§6.9)
+class MatchStatus(models.TextChoices):
+    """LG-090. Before a score is proposed the phase follows the clock (scheduled, in progress,
+    score window open); "confirmed by all" and "validated" are passed through in one step and
+    kept in the transition log."""
+
+    PROPOSED = "proposed", "Scor propus"
+    AWAITING_PAYMENT = "awaiting_payment", "Așteaptă plata"
+    APPLIED = "applied", "Aplicat"
+    DISPUTED = "disputed", "Disputat"
+    EXPIRED = "expired", "Expirat"
+    CANCELLED = "cancelled", "Anulat"
+    TRAINING = "training", "Convertit în antrenament"
+
+
+OPEN_STATUSES = (MatchStatus.PROPOSED, MatchStatus.AWAITING_PAYMENT)
+
+
+class MatchKind(models.TextChoices):
+    """§6.14: the matches that count for the league."""
+
+    OFFICIAL = "official", "Oficial de ligă"
+    CHALLENGE = "challenge", "Provocare"
+    TOURNAMENT = "tournament", "Turneu"
+
+
+class LeagueMatch(models.Model):
+    """A match on a court booking, from the proposed score to its application (§6.9)."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    season = models.ForeignKey(LeagueSeason, on_delete=models.PROTECT, related_name="matches")
+    location = models.ForeignKey("locations.Location", on_delete=models.PROTECT)
+    booking = models.ForeignKey(
+        "bookings.Booking",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="league_matches",
+    )
+    kind = models.CharField(max_length=12, choices=MatchKind.choices, default=MatchKind.OFFICIAL)
+    status = models.CharField(max_length=20, choices=MatchStatus.choices)
+    score = models.JSONField()
+    finished_at = models.DateTimeField(help_text="Finalul meciului: ordinea în ligă.")
+    window_closes_at = models.DateTimeField()
+    proposed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="+"
+    )
+    proposed_at = models.DateTimeField()
+    payment_deadline = models.DateTimeField(null=True, blank=True)
+    applied_at = models.DateTimeField(null=True, blank=True)
+    event = models.OneToOneField(
+        LeagueEvent, on_delete=models.PROTECT, null=True, blank=True, related_name="match"
+    )
+    note = models.CharField(max_length=500, blank=True)
+    reopened_until = models.DateTimeField(
+        null=True, blank=True, help_text="Adminul a redeschis fereastra: scorul se reintroduce."
+    )
+
+    class Meta:
+        ordering = ["-finished_at"]
+        verbose_name = "meci de ligă"
+        verbose_name_plural = "meciuri de ligă"
+        indexes = [models.Index(fields=["status", "window_closes_at"])]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["booking"],
+                condition=~models.Q(status="cancelled"),
+                name="one_live_match_per_booking",
+            )
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.get_status_display()} {self.finished_at:%Y-%m-%d %H:%M}"
+
+    @property
+    def ref(self) -> str:
+        """The match's reference in the league's event store."""
+        return f"match:{self.pk}"
+
+
+class Side(models.TextChoices):
+    A = "a", "Echipa A"
+    B = "b", "Echipa B"
+
+
+class Response(models.TextChoices):
+    PENDING = "pending", "Așteaptă"
+    CONFIRMED = "confirmed", "Confirmat"
+    DISPUTED = "disputed", "Contestat"
+
+
+class MatchPlayer(models.Model):
+    """LG-094: each player scans the card and confirms (or disputes) the score shown."""
+
+    id = models.BigAutoField(primary_key=True)
+    match = models.ForeignKey(LeagueMatch, on_delete=models.PROTECT, related_name="players")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="+")
+    side = models.CharField(max_length=1, choices=Side.choices)
+    response = models.CharField(max_length=10, choices=Response.choices, default=Response.PENDING)
+    responded_at = models.DateTimeField(null=True, blank=True)
+    device = models.ForeignKey(
+        "devices.Device", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+
+    class Meta:
+        ordering = ["match", "side", "id"]
+        verbose_name = "jucător în meci"
+        verbose_name_plural = "jucători în meci"
+        constraints = [models.UniqueConstraint(fields=["match", "user"], name="match_player_once")]
+
+    def __str__(self) -> str:
+        return f"{self.match_id} {self.side} {self.user_id}"
+
+
+class MatchTransition(models.Model):
+    """Append-only (LG-098): every step of a match with the checks made for it."""
+
+    id = models.BigAutoField(primary_key=True)
+    match = models.ForeignKey(LeagueMatch, on_delete=models.PROTECT, related_name="transitions")
+    status = models.CharField(max_length=20)
+    at = models.DateTimeField()
+    actor = models.JSONField(default=dict)
+    device = models.ForeignKey(
+        "devices.Device", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    checks = models.JSONField(default=dict)
+    reason = models.CharField(max_length=500, blank=True)
+
+    class Meta:
+        ordering = ["id"]
+        verbose_name = "pas al meciului"
+        verbose_name_plural = "pașii meciurilor"
+
+    def __str__(self) -> str:
+        return f"{self.match_id} {self.status}"

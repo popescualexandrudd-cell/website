@@ -153,7 +153,19 @@
     "league.questionnaire_invalid": "The questionnaire answers are not complete.",
     "league.questionnaire_not_found": "The questionnaire does not exist.",
     "league.season_invalid": "The season cannot be started or closed now.",
-    "league.match_not_found": "This match is not in this season."
+    "league.match_not_found": "This match is not in this season.",
+    "league.score_kiosk_only": "Scores are entered and confirmed only at the club's League Kiosk.",
+    "league.window_not_open": "The score can be entered between {opens} and {closes}.",
+    "league.window_closed": "The score window closed at {closes}.",
+    "league.booking_not_eligible": "This booking is not for a league match on one of the club's padel courts.",
+    "league.players_not_scanned": "Not every player scanned their card when entering the court ({missing} missing).",
+    "league.player_not_in_league": "{name} is not in the league yet (level validated by a coach and consent signed at the kiosk).",
+    "league.not_a_player": "The scanned card does not belong to a player in this match.",
+    "league.score_already_proposed": "The score of this match has already been entered.",
+    "league.already_responded": "You have already answered for this score.",
+    "league.match_not_open": "This match is no longer waiting for confirmations.",
+    "league.match_state_invalid": "This action is not possible in the match's current state.",
+    "league.reason_required": "Write the reason; it is kept in the log."
   },
   "web": {
     "meta": {

@@ -17,9 +17,10 @@ from jungle.accounts.services.authz import current_user
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.schemas import errors
 from jungle.core.security import session_auth
-from jungle.league import services
+from jungle.league import matches, services
 from jungle.league.models import (
     Ladder,
+    LeagueMatch,
     LeagueSeason,
     LevelQuestionnaire,
     RatingRecord,
@@ -125,6 +126,77 @@ class SeasonIn(Schema):
     starts_at: datetime
     ends_at: datetime
     is_calibration: bool = False
+
+
+class MatchPlayerOut(Schema):
+    first_name: str
+    last_name: str
+    side: str
+    response: str
+
+
+class MatchOut(Schema):
+    id: uuid.UUID
+    kind: str
+    status: str
+    score: dict[str, object]
+    finished_at: datetime
+    window_closes_at: datetime
+    payment_deadline: datetime | None
+    note: str
+    players: list[MatchPlayerOut]
+
+
+class TransitionOut(Schema):
+    status: str
+    at: datetime
+    checks: dict[str, object]
+    reason: str
+
+
+class StaffMatchOut(MatchOut):
+    court: str
+    booking_id: uuid.UUID | None
+    transitions: list[TransitionOut]
+
+
+class ResolveIn(Schema):
+    action: str = Field(pattern=r"^(apply|reopen|cancel)$")
+    reason: str = Field(min_length=1, max_length=500)
+
+
+def match_out(match: LeagueMatch) -> MatchOut:
+    return MatchOut(
+        id=match.id,
+        kind=match.kind,
+        status=match.status,
+        score=match.score,
+        finished_at=match.finished_at,
+        window_closes_at=match.window_closes_at,
+        payment_deadline=match.payment_deadline,
+        note=match.note,
+        players=[
+            MatchPlayerOut(
+                first_name=p.user.first_name,
+                last_name=p.user.last_name,
+                side=p.side,
+                response=p.response,
+            )
+            for p in match.players.all()
+        ],
+    )
+
+
+def staff_match_out(match: LeagueMatch) -> StaffMatchOut:
+    return StaffMatchOut(
+        **match_out(match).dict(),
+        court=match.booking.resource.name if match.booking else "",
+        booking_id=match.booking_id,
+        transitions=[
+            TransitionOut(status=t.status, at=t.at, checks=t.checks, reason=t.reason)
+            for t in match.transitions.all()
+        ],
+    )
 
 
 def _season(location: str, season_number: int | None) -> LeagueSeason:
@@ -266,6 +338,13 @@ def me(request: HttpRequest) -> MeOut:
     )
 
 
+@me_router.get("/me/matches", response={200: list[MatchOut], **errors(401)})
+def my_matches(request: HttpRequest) -> list[MatchOut]:
+    """The player's matches and where each one is (§6.9). Scores are entered only at the
+    League Kiosk: there is no way to enter or confirm one from here (invariant 1)."""
+    return [match_out(m) for m in matches.my_matches(request)[:50]]
+
+
 @me_router.post("/questionnaire", response={201: QuestionnaireOut, **errors(400, 401, 422)})
 def questionnaire(request: HttpRequest, payload: QuestionnaireIn) -> Status[QuestionnaireOut]:
     """R-003: the level questionnaire; a coach validates it before the first league match."""
@@ -325,3 +404,23 @@ def activate(request: HttpRequest, season_id: uuid.UUID) -> SeasonOut:
 )
 def rebuild(request: HttpRequest, season_id: uuid.UUID) -> SeasonOut:
     return SeasonOut.from_orm(services.rebuild_season(request, season_id))
+
+
+@staff_router.get("/league/matches", response={200: list[StaffMatchOut], **errors(401, 403, 422)})
+def staff_matches(
+    request: HttpRequest, location_id: uuid.UUID, status: str | None = None
+) -> list[StaffMatchOut]:
+    """Disputed, expired, waiting for payment … (LG-095), with the log of every step."""
+    return [staff_match_out(m) for m in matches.staff_matches(request, location_id, status)[:200]]
+
+
+@staff_router.post(
+    "/league/matches/{match_id}/resolve",
+    response={200: StaffMatchOut, **errors(400, 401, 403, 404, 409, 422)},
+)
+def resolve(request: HttpRequest, match_id: uuid.UUID, payload: ResolveIn) -> StaffMatchOut:
+    """Apply a disputed or expired score as entered at the kiosk, reopen the score window (the
+    players enter it again at the kiosk) or cancel the match, always with a written reason;
+    cancelling an applied match recomputes the league (LG-161)."""
+    match = matches.resolve(request, match_id, payload.action, payload.reason)
+    return staff_match_out(LeagueMatch.objects.get(pk=match.pk))

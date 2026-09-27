@@ -153,7 +153,19 @@
     "league.questionnaire_invalid": "Răspunsurile la chestionar nu sunt complete.",
     "league.questionnaire_not_found": "Chestionarul nu există.",
     "league.season_invalid": "Sezonul nu poate fi pornit sau închis acum.",
-    "league.match_not_found": "Meciul nu există în acest sezon."
+    "league.match_not_found": "Meciul nu există în acest sezon.",
+    "league.score_kiosk_only": "Scorurile se introduc și se confirmă doar la Chioșcul Ligii din club.",
+    "league.window_not_open": "Scorul se poate introduce între {opens} și {closes}.",
+    "league.window_closed": "Fereastra pentru scor s-a închis la {closes}.",
+    "league.booking_not_eligible": "Rezervarea nu este pentru un meci de ligă pe un teren de padel al clubului.",
+    "league.players_not_scanned": "Nu toți jucătorii și-au scanat cardul la intrarea pe teren ({missing} lipsă).",
+    "league.player_not_in_league": "{name} nu este încă în ligă (nivel validat de antrenor și acord semnat la chioșc).",
+    "league.not_a_player": "Cardul scanat nu aparține unui jucător din acest meci.",
+    "league.score_already_proposed": "Scorul acestui meci a fost deja introdus.",
+    "league.already_responded": "Ai răspuns deja la acest scor.",
+    "league.match_not_open": "Meciul nu mai așteaptă confirmări.",
+    "league.match_state_invalid": "Acțiunea nu este posibilă în starea actuală a meciului.",
+    "league.reason_required": "Scrie motivul; apare în jurnal."
   },
   "web": {
     "meta": {

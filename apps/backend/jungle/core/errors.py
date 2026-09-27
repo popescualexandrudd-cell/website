@@ -165,6 +165,18 @@ class ErrorCode(StrEnum):
     LEAGUE_QUESTIONNAIRE_NOT_FOUND = "league.questionnaire_not_found"
     LEAGUE_SEASON_INVALID = "league.season_invalid"
     LEAGUE_MATCH_NOT_FOUND = "league.match_not_found"
+    LEAGUE_SCORE_KIOSK_ONLY = "league.score_kiosk_only"
+    LEAGUE_WINDOW_NOT_OPEN = "league.window_not_open"
+    LEAGUE_WINDOW_CLOSED = "league.window_closed"
+    LEAGUE_BOOKING_NOT_ELIGIBLE = "league.booking_not_eligible"
+    LEAGUE_PLAYERS_NOT_SCANNED = "league.players_not_scanned"
+    LEAGUE_PLAYER_NOT_IN_LEAGUE = "league.player_not_in_league"
+    LEAGUE_NOT_A_PLAYER = "league.not_a_player"
+    LEAGUE_SCORE_ALREADY_PROPOSED = "league.score_already_proposed"
+    LEAGUE_ALREADY_RESPONDED = "league.already_responded"
+    LEAGUE_MATCH_NOT_OPEN = "league.match_not_open"
+    LEAGUE_MATCH_STATE_INVALID = "league.match_state_invalid"
+    LEAGUE_REASON_REQUIRED = "league.reason_required"
 
 
 class DomainError(Exception):
