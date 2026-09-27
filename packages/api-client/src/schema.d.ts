@@ -559,6 +559,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/cards/mine/apple.pkpass": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Apple Pass
+         * @description R-020: the card for Apple Wallet (opens "Add to Wallet" on an iPhone).
+         */
+        get: operations["jungle_cards_api_apple_pass"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/cards/mine/diamond": {
         parameters: {
             query?: never;
@@ -590,6 +610,26 @@ export interface paths {
          * @description R-024, Q1: the Diamond card's jungle emblem, from the predefined list.
          */
         post: operations["jungle_cards_api_choose_emblem"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/cards/mine/google": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Google Link
+         * @description R-020: the "Add to Google Wallet" link.
+         */
+        get: operations["jungle_cards_api_google_link"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -2170,6 +2210,16 @@ export interface components {
         /** CardOut */
         CardOut: {
             /**
+             * Apple Wallet
+             * @description Apple Wallet e activ (certificatul clubului, Q24)
+             */
+            apple_wallet: boolean;
+            /**
+             * Google Wallet
+             * @description Google Wallet e activ (emitentul clubului, Q24)
+             */
+            google_wallet: boolean;
+            /**
              * Id
              * Format: uuid
              */
@@ -2724,6 +2774,11 @@ export interface components {
              * Format: date
              */
             starts_on: string;
+        };
+        /** GoogleWalletOut */
+        GoogleWalletOut: {
+            /** Url */
+            url: string;
         };
         /** GuestIn */
         GuestIn: {
@@ -5657,6 +5712,44 @@ export interface operations {
             };
         };
     };
+    jungle_cards_api_apple_pass: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     jungle_cards_api_my_diamond: {
         parameters: {
             query?: never;
@@ -5737,6 +5830,44 @@ export interface operations {
             };
             /** @description Unprocessable Content */
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_cards_api_google_link: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GoogleWalletOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };

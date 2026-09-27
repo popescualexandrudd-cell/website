@@ -448,6 +448,16 @@
       },
       "CardOut": {
         "properties": {
+          "apple_wallet": {
+            "description": "Apple Wallet e activ (certificatul clubului, Q24)",
+            "title": "Apple Wallet",
+            "type": "boolean"
+          },
+          "google_wallet": {
+            "description": "Google Wallet e activ (emitentul clubului, Q24)",
+            "title": "Google Wallet",
+            "type": "boolean"
+          },
           "id": {
             "format": "uuid",
             "title": "Id",
@@ -477,7 +487,9 @@
           "number",
           "status",
           "issued_at",
-          "qr_svg"
+          "qr_svg",
+          "apple_wallet",
+          "google_wallet"
         ],
         "title": "CardOut",
         "type": "object"
@@ -1708,6 +1720,19 @@
           "ends_on"
         ],
         "title": "FreezeOut",
+        "type": "object"
+      },
+      "GoogleWalletOut": {
+        "properties": {
+          "url": {
+            "title": "Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "title": "GoogleWalletOut",
         "type": "object"
       },
       "GuestIn": {
@@ -7117,6 +7142,56 @@
         ]
       }
     },
+    "/api/v1/cards/mine/apple.pkpass": {
+      "get": {
+        "description": "R-020: the card for Apple Wallet (opens \"Add to Wallet\" on an iPhone).",
+        "operationId": "jungle_cards_api_apple_pass",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "format": "binary",
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Apple Pass",
+        "tags": [
+          "cards"
+        ]
+      }
+    },
     "/api/v1/cards/mine/diamond": {
       "get": {
         "operationId": "jungle_cards_api_my_diamond",
@@ -7234,6 +7309,54 @@
           }
         ],
         "summary": "Choose Emblem",
+        "tags": [
+          "cards"
+        ]
+      }
+    },
+    "/api/v1/cards/mine/google": {
+      "get": {
+        "description": "R-020: the \"Add to Google Wallet\" link.",
+        "operationId": "jungle_cards_api_google_link",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GoogleWalletOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Google Link",
         "tags": [
           "cards"
         ]

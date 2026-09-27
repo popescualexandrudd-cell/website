@@ -55,6 +55,12 @@ def update_profile(request: HttpRequest, user: User, changes: ProfileChanges) ->
         before=before,
         after=audit.snapshot(user),
     )
+    if (before["first_name"], before["last_name"]) != (user.first_name, user.last_name):
+        from jungle.cards.services import active_card, card_changed
+
+        card = active_card(user)
+        if card is not None:
+            card_changed(card)  # R-023: the Wallet card shows the new name
     return user
 
 

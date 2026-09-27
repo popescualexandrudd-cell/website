@@ -286,11 +286,11 @@ def test_card_colours_match_the_design_tokens() -> None:
     tokens = json.loads(
         (Path(settings.REPO_ROOT) / "packages/design-tokens/tokens/color.json").read_text()
     )["color"]
-    assert printing.NIGHT_900 == tokens["night"]["900"]["$value"]
-    assert printing.NIGHT_600 == tokens["night"]["600"]["$value"]
-    assert printing.BONE_50 == tokens["bone"]["50"]["$value"]
-    assert printing.BONE_400 == tokens["bone"]["400"]["$value"]
-    assert printing.BRASS_400 == tokens["brass"]["400"]["$value"]
+    assert tokens["night"]["900"]["$value"] == printing.NIGHT_900
+    assert tokens["night"]["600"]["$value"] == printing.NIGHT_600
+    assert tokens["bone"]["50"]["$value"] == printing.BONE_50
+    assert tokens["bone"]["400"]["$value"] == printing.BONE_400
+    assert tokens["brass"]["400"]["$value"] == printing.BRASS_400
 
 
 def test_readable_rows(member: Any, club: Any) -> None:
@@ -305,4 +305,4 @@ def test_readable_rows(member: Any, club: Any) -> None:
         card=card, device_library_id="abc", push_token="t", created_at=clock.now()
     )
     assert str(card) == card.number and str(row) and str(reg)
-    assert PrintStatus.QUEUED == row.status
+    assert row.status == PrintStatus.QUEUED

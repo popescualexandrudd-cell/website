@@ -129,6 +129,7 @@ class ErrorCode(StrEnum):
     CARDS_NOTHING_TO_PRINT = "cards.nothing_to_print"
     CARDS_INVALID_TRANSITION = "cards.invalid_transition"
     CARDS_INVALID_EMBLEM = "cards.invalid_emblem"
+    WALLET_UNAVAILABLE = "wallet.unavailable"
 
 
 class DomainError(Exception):

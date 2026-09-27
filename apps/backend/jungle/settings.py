@@ -208,6 +208,23 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", "Jungle Padel <no-reply@example.i
 # model is added then. Receipts from the simulator are marked as such and are not fiscal.
 FISCAL_PRINTER = env("FISCAL_PRINTER", "simulator") or "simulator"
 
+# Apple Wallet (R-020, Q24): needs the club's Apple Developer account. Certificates are files
+# on the server, referenced here; never in git.
+APPLE_WALLET_ENABLED = env_bool("APPLE_WALLET_ENABLED", False)
+APPLE_PASS_TYPE_ID = env("APPLE_PASS_TYPE_ID", "") or ""
+APPLE_TEAM_ID = env("APPLE_TEAM_ID", "") or ""
+APPLE_PASS_CERT_FILE = env("APPLE_PASS_CERT_FILE", "") or ""
+APPLE_PASS_KEY_FILE = env("APPLE_PASS_KEY_FILE", "") or ""
+APPLE_PASS_KEY_PASSWORD = env("APPLE_PASS_KEY_PASSWORD", "") or ""
+APPLE_WWDR_CERT_FILE = env("APPLE_WWDR_CERT_FILE", "") or ""
+APPLE_WALLET_WEB_SERVICE_URL = env("APPLE_WALLET_WEB_SERVICE_URL", "") or ""
+APPLE_APNS_HOST = env("APPLE_APNS_HOST", "https://api.push.apple.com") or ""
+
+# Google Wallet (R-020, Q24): needs the club's Google Wallet issuer and a service account.
+GOOGLE_WALLET_ENABLED = env_bool("GOOGLE_WALLET_ENABLED", False)
+GOOGLE_WALLET_ISSUER_ID = env("GOOGLE_WALLET_ISSUER_ID", "") or ""
+GOOGLE_WALLET_SERVICE_ACCOUNT_FILE = env("GOOGLE_WALLET_SERVICE_ACCOUNT_FILE", "") or ""
+
 WEB_BASE_URL = (env("WEB_BASE_URL", "http://localhost:3000") or "").rstrip("/")
 
 # Emergency Django admin (§8.6): Admin role + 2FA only.

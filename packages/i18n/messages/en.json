@@ -117,7 +117,8 @@
     "cards.invalid": "The card is not valid. Ask for a new card at the front desk or in your account.",
     "cards.nothing_to_print": "There are no cards ready to print in the selection.",
     "cards.invalid_transition": "The card cannot move to this state.",
-    "cards.invalid_emblem": "Please choose one of the emblems in the list."
+    "cards.invalid_emblem": "Please choose one of the emblems in the list.",
+    "wallet.unavailable": "Adding to Wallet is not available yet. Please use the QR code in your account."
   },
   "web": {
     "meta": {
