@@ -197,6 +197,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/config/company": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Company */
+        get: operations["jungle_configuration_api_company"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/config/flags": {
         parameters: {
             query?: never;
@@ -801,6 +818,26 @@ export interface components {
             /** Last Name */
             last_name: string;
         };
+        /**
+         * CompanyOut
+         * @description Legal identity of the club, shown in every page footer (consumer law, §12.3).
+         */
+        CompanyOut: {
+            /** Address */
+            address: string | null;
+            /** Complete */
+            complete: boolean;
+            /** Email */
+            email: string | null;
+            /** Legal Name */
+            legal_name: string | null;
+            /** Phone */
+            phone: string | null;
+            /** Registration Code */
+            registration_code: string | null;
+            /** Trade Register Number */
+            trade_register_number: string | null;
+        };
         /** ConfigIn */
         ConfigIn: {
             /** Effective From */
@@ -909,7 +946,7 @@ export interface components {
          * DocumentKind
          * @enum {string}
          */
-        DocumentKind: "terms" | "privacy" | "league_gdpr" | "waitlist_notice";
+        DocumentKind: "terms" | "privacy" | "league_gdpr" | "waitlist_notice" | "refunds" | "cookies";
         /** EmailIn */
         EmailIn: {
             /** Email */
@@ -931,14 +968,12 @@ export interface components {
              * Format: uuid
              */
             id: string;
-            /** Interests */
-            interests: string[];
             /** Language */
             language: string;
+            /** Level */
+            level: string;
             /** Name */
             name: string;
-            /** Phone */
-            phone: string;
             /** Source */
             source: string;
             /** Status */
@@ -998,11 +1033,6 @@ export interface components {
             /** Status */
             status: string;
         };
-        /**
-         * Interest
-         * @enum {string}
-         */
-        Interest: "padel" | "league" | "tennis" | "pilates" | "events" | "cafe" | "corporate";
         /** LegalDocumentOut */
         LegalDocumentOut: {
             /** Body */
@@ -1025,6 +1055,12 @@ export interface components {
             /** Version */
             version: number;
         };
+        /**
+         * Level
+         * @description Self-declared playing level (optional). Data minimisation: nothing else is asked.
+         * @enum {string}
+         */
+        Level: "beginner" | "intermediate" | "advanced" | "competitive";
         /** LocationIn */
         LocationIn: {
             /**
@@ -1338,22 +1374,16 @@ export interface components {
             accepted_notice: boolean;
             /** Email */
             email: string;
-            /** Interests */
-            interests?: components["schemas"]["Interest"][];
             /**
              * Language
              * @default ro
              */
             language: string;
+            level?: components["schemas"]["Level"] | null;
             /** Name */
             name: string;
             /** Notice Version */
             notice_version: number;
-            /**
-             * Phone
-             * @default
-             */
-            phone: string;
             /**
              * Source
              * @default
@@ -1380,8 +1410,8 @@ export interface components {
             by_status: {
                 [key: string]: number;
             };
-            /** Confirmed By Interest */
-            confirmed_by_interest: {
+            /** Confirmed By Level */
+            confirmed_by_level: {
                 [key: string]: number;
             };
         };
@@ -1986,6 +2016,26 @@ export interface operations {
             };
         };
     };
+    jungle_configuration_api_company: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompanyOut"];
+                };
+            };
+        };
+    };
     jungle_configuration_api_list_flags: {
         parameters: {
             query?: never;
@@ -2042,7 +2092,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                kind: "terms" | "privacy" | "league_gdpr" | "waitlist_notice";
+                kind: "terms" | "privacy" | "league_gdpr" | "waitlist_notice" | "refunds" | "cookies";
             };
             cookie?: never;
         };

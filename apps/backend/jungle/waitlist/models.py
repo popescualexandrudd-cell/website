@@ -11,14 +11,13 @@ import uuid
 from django.db import models
 
 
-class Interest(models.TextChoices):
-    PADEL = "padel", "Padel"
-    LEAGUE = "league", "Liga Jungle"
-    TENNIS = "tennis", "Tenis"
-    PILATES = "pilates", "Pilates Reformer"
-    EVENTS = "events", "Evenimente"
-    CAFE = "cafe", "Cafenea"
-    CORPORATE = "corporate", "Pachete corporate"
+class Level(models.TextChoices):
+    """Self-declared playing level (optional). Data minimisation: nothing else is asked."""
+
+    BEGINNER = "beginner", "Începător"
+    INTERMEDIATE = "intermediate", "Intermediar"
+    ADVANCED = "advanced", "Avansat"
+    COMPETITIVE = "competitive", "Competiție"
 
 
 class Status(models.TextChoices):
@@ -32,8 +31,7 @@ class WaitlistEntry(models.Model):
     email = models.EmailField("email", max_length=254, unique=True, null=True, blank=True)
     email_sha256 = models.CharField(max_length=64, unique=True)
     name = models.CharField("nume", max_length=150, blank=True)
-    phone = models.CharField("telefon", max_length=20, blank=True)
-    interests = models.JSONField("interese", default=list, blank=True)
+    level = models.CharField("nivel de joc", max_length=15, choices=Level.choices, blank=True)
     language = models.CharField("limba", max_length=5, default="ro")
     source = models.CharField("sursa", max_length=60, blank=True)
     status = models.CharField(

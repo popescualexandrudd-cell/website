@@ -16,7 +16,7 @@ from django.http import HttpRequest
 
 from jungle.accounts.models import normalize_email
 from jungle.accounts.services.authz import authorize
-from jungle.accounts.services.validation import clean_email, clean_phone
+from jungle.accounts.services.validation import clean_email
 from jungle.audit import services as audit
 from jungle.configuration.services import get_config
 from jungle.core import clock
@@ -28,7 +28,7 @@ from jungle.core.ratelimit import increment
 from jungle.legal.models import DocumentKind
 from jungle.legal.services import current_document
 from jungle.notifications.email import send_templated_email
-from jungle.waitlist.models import Interest, Status, WaitlistEntry
+from jungle.waitlist.models import Level, Status, WaitlistEntry
 
 CONFIRM_SALT = "jungle.waitlist.confirm"
 UNSUBSCRIBE_SALT = "jungle.waitlist.unsubscribe"
@@ -45,8 +45,7 @@ _PATHS = {
 class SignupData:
     email: str
     name: str
-    phone: str
-    interests: list[str]
+    level: str
     language: str
     notice_version: int
     source: str = ""
@@ -91,10 +90,8 @@ def signup(request: HttpRequest, data: SignupData) -> None:
             ErrorCode.AUTH_RATE_LIMITED, status=429, params={"retry_after_seconds": 3600}
         )
     email = clean_email(data.email)
-    phone = clean_phone(data.phone) if data.phone.strip() else ""
-    interests = sorted(set(data.interests))
-    if any(i not in Interest.values for i in interests):
-        raise DomainError(ErrorCode.VALIDATION_INVALID, params={"fields": ["interests"]})
+    if data.level and data.level not in Level.values:
+        raise DomainError(ErrorCode.VALIDATION_INVALID, params={"fields": ["level"]})
     notice = current_document(DocumentKind.WAITLIST_NOTICE, data.language)
     if notice.version != data.notice_version:
         raise DomainError(
@@ -118,8 +115,7 @@ def signup(request: HttpRequest, data: SignupData) -> None:
             entry.confirmed_at = None
         entry.email = email
         entry.name = data.name.strip()
-        entry.phone = phone
-        entry.interests = interests
+        entry.level = data.level
         entry.language = data.language
         entry.source = data.source.strip()[:60]
         entry.notice = notice
@@ -133,7 +129,7 @@ def signup(request: HttpRequest, data: SignupData) -> None:
             "waitlist.signup",
             target=entry,
             after={
-                "interests": interests,
+                "level": data.level,
                 "language": data.language,
                 "notice_version": notice.version,
             },
@@ -188,8 +184,7 @@ def unsubscribe(request: HttpRequest, token: str) -> WaitlistEntry:
             entry.withdrawn_at = clock.now()
             entry.email = None
             entry.name = ""
-            entry.phone = ""
-            entry.interests = []
+            entry.level = ""
             entry.source = ""
             entry.consent_ip = None
             entry.consent_user_agent = ""
@@ -226,13 +221,12 @@ def staff_entries(request: HttpRequest, status: str) -> QuerySet[WaitlistEntry]:
 def stats(request: HttpRequest) -> dict[str, object]:
     authorize(request, Action.WAITLIST_VIEW)
     confirmed = WaitlistEntry.objects.filter(status=Status.CONFIRMED)
-    by_interest = dict.fromkeys(Interest.values, 0)
-    for interests in confirmed.values_list("interests", flat=True):
-        for interest in interests:
-            by_interest[interest] = by_interest.get(interest, 0) + 1
     return {
         "by_status": {s: WaitlistEntry.objects.filter(status=s).count() for s in Status.values},
-        "confirmed_by_interest": by_interest,
+        "confirmed_by_level": {
+            (level or "unspecified"): confirmed.filter(level=level).count()
+            for level in [*Level.values, ""]
+        },
     }
 
 
@@ -241,7 +235,7 @@ def csv_safe(value: str) -> str:
     return f"'{value}" if value[:1] in ("=", "+", "-", "@", "\t", "\r") else value
 
 
-CSV_COLUMNS = ("email", "name", "phone", "interests", "language", "source", "confirmed_at")
+CSV_COLUMNS = ("email", "name", "level", "language", "source", "confirmed_at")
 
 
 def export_csv(request: HttpRequest) -> str:
@@ -256,8 +250,7 @@ def export_csv(request: HttpRequest) -> str:
         values = [
             e.email or "",
             e.name,
-            e.phone,
-            " ".join(e.interests),
+            e.level,
             e.language,
             e.source,
             e.confirmed_at.isoformat() if e.confirmed_at else "",

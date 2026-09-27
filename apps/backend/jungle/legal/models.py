@@ -15,6 +15,8 @@ class DocumentKind(models.TextChoices):
     PRIVACY = "privacy", "Politica de confidențialitate"
     LEAGUE_GDPR = "league_gdpr", "Acordul GDPR al ligii"
     WAITLIST_NOTICE = "waitlist_notice", "Nota de informare pentru lista de așteptare"
+    REFUNDS = "refunds", "Politica de anulare și rambursare"
+    COOKIES = "cookies", "Politica de cookies"
 
 
 # Documents a person must accept to create an account.

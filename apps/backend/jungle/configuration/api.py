@@ -25,6 +25,18 @@ class FlagOut(Schema):
     description: str
 
 
+class CompanyOut(Schema):
+    """Legal identity of the club, shown in every page footer (consumer law, §12.3)."""
+
+    legal_name: str | None
+    registration_code: str | None
+    trade_register_number: str | None
+    address: str | None
+    phone: str | None
+    email: str | None
+    complete: bool
+
+
 class FlagIn(Schema):
     enabled: bool
     reason: str = Field(min_length=3)
@@ -66,6 +78,31 @@ def _config_out(v: services.ConfigValue) -> ConfigOut:
 @public_router.get("/flags", response=list[FlagOut], auth=None)
 def list_flags(request: HttpRequest) -> list[FlagOut]:
     return [FlagOut(key=k, enabled=e, description=d) for k, e, d in services.list_flags()]
+
+
+@public_router.get("/company", response=CompanyOut, auth=None)
+def company(request: HttpRequest) -> CompanyOut:
+    data = services.get_config("club.company") or {}
+    out = CompanyOut(
+        legal_name=data.get("legal_name"),
+        registration_code=data.get("registration_code"),
+        trade_register_number=data.get("trade_register_number"),
+        address=data.get("address"),
+        phone=data.get("phone"),
+        email=data.get("privacy_contact_email"),
+        complete=False,
+    )
+    out.complete = all(
+        [
+            out.legal_name,
+            out.registration_code,
+            out.trade_register_number,
+            out.address,
+            out.phone,
+            out.email,
+        ]
+    )
+    return out
 
 
 @staff_router.put("/flags/{key}", response={200: FlagOut, **errors(401, 403, 404, 422)})

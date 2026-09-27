@@ -5,6 +5,8 @@ export const routing = defineRouting({
   locales: ["ro", "en"],
   defaultLocale: "ro",
   localePrefix: "always",
+  // The language lives in the URL; no locale cookie (fewer cookies, §12.2).
+  localeCookie: false,
   pathnames: {
     "/": "/",
     "/waitlist/confirm": { ro: "/lista/confirmare", en: "/waitlist/confirm" },

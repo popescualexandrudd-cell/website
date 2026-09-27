@@ -8,8 +8,8 @@ Operatorul datelor este **[denumirea firmei — DE_CONFIRMAT]**, cu sediul în *
 
 ## Ce date prelucrăm
 - numele și adresa de email;
-- numărul de telefon, doar dacă ni-l dai;
-- ce te interesează (padel, liga, tenis, pilates, evenimente, cafenea, pachete corporate) și limba preferată;
+- nivelul tău de joc, doar dacă alegi să ni-l spui;
+- limba preferată;
 - dovada acordului: data și ora, versiunea acestei note, adresa IP și tipul de browser din momentul înscrierii.
 
 ## De ce
@@ -24,7 +24,7 @@ Doar echipa Jungle Padel care se ocupă de comunicare și furnizorii care ne aju
 ## Cât timp le păstrăm
 - dacă nu confirmi emailul în 7 zile, datele se șterg automat;
 - după confirmare, le păstrăm până la 12 luni după deschiderea clubului sau până te dezabonezi, dacă te dezabonezi mai devreme;
-- la dezabonare, ștergem numele, emailul, telefonul și interesele; păstrăm doar o amprentă criptografică a adresei, ca dovadă că ți-ai retras acordul.
+- la dezabonare, ștergem numele, emailul și nivelul de joc; păstrăm doar o amprentă criptografică a adresei, ca dovadă că ți-ai retras acordul.
 
 ## Vârsta
 Te poți înscrie pe listă dacă ai cel puțin **16 ani**.

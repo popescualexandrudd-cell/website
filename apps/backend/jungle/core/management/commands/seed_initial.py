@@ -21,17 +21,13 @@ from jungle.legal.models import DocumentKind, LegalDocument
 from jungle.legal.services import publish_document
 from jungle.locations.models import Location, Resource, ResourceKind
 
-DEMO_LEGAL_BODY = {
-    "ro": "DOCUMENT DEMO — nu este un text legal. Textul real se redactează în etapele următoare "
-    "(Q41) și are nevoie de datele firmei (Q26).",
-    "en": "DEMO DOCUMENT — not a legal text. The real text is drafted in later stages (Q41) "
-    "and needs the company details (Q26).",
-}
-DEMO_TITLES = {
-    (DocumentKind.TERMS, "ro"): "Termeni și condiții (DEMO)",
-    (DocumentKind.TERMS, "en"): "Terms and conditions (DEMO)",
-    (DocumentKind.PRIVACY, "ro"): "Politica de confidențialitate (DEMO)",
-    (DocumentKind.PRIVACY, "en"): "Privacy policy (DEMO)",
+# Legal texts drafted in docs/ (Q41); published as demo while they contain DE_CONFIRMAT (Q26).
+LEGAL_FILES = {
+    DocumentKind.TERMS: "termeni-si-conditii",
+    DocumentKind.PRIVACY: "politica-confidentialitate",
+    DocumentKind.REFUNDS: "politica-rambursare",
+    DocumentKind.COOKIES: "politica-cookies",
+    DocumentKind.WAITLIST_NOTICE: "nota-informare-lista-asteptare",
 }
 # (first name, last name, email, role) — §8.5 names first; all addresses are non-deliverable.
 DEMO_PEOPLE = [
@@ -104,19 +100,13 @@ class Command(BaseCommand):
             self._demo()
 
     def _demo(self) -> None:
-        for (kind, language), title in DEMO_TITLES.items():
-            if not LegalDocument.objects.filter(kind=kind, language=language).exists():
-                publish_document(
-                    SYSTEM, kind, language, title, DEMO_LEGAL_BODY[language], is_demo=True
-                )
-        notices = settings.REPO_ROOT / "docs/07-securitate-gdpr-legal/texte"
-        for language in ("ro", "en"):
-            kind = DocumentKind.WAITLIST_NOTICE
-            if not LegalDocument.objects.filter(kind=kind, language=language).exists():
-                title, body = read_public_text(
-                    notices / f"nota-informare-lista-asteptare.{language}.md"
-                )
-                publish_document(SYSTEM, kind, language, title, body, is_demo=True)
+        texts = settings.REPO_ROOT / "docs/07-securitate-gdpr-legal/texte"
+        for kind, stem in LEGAL_FILES.items():
+            for language in ("ro", "en"):
+                if not LegalDocument.objects.filter(kind=kind, language=language).exists():
+                    title, body = read_public_text(texts / f"{stem}.{language}.md")
+                    is_demo = "DE_CONFIRMAT" in body
+                    publish_document(SYSTEM, kind, language, title, body, is_demo=is_demo)
         for first, last, email, role in DEMO_PEOPLE:
             user = User.objects.filter(email=email).first()
             if user is None:

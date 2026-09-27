@@ -8,8 +8,8 @@ The data controller is **[company name — DE_CONFIRMAT]**, registered at **[add
 
 ## What data we process
 - your name and email address;
-- your phone number, only if you give it to us;
-- what you are interested in (padel, league, tennis, pilates, events, café, corporate packages) and your preferred language;
+- your playing level, only if you choose to tell us;
+- your preferred language;
 - proof of consent: date and time, the version of this notice, the IP address and browser type at the time you signed up.
 
 ## Why
@@ -24,7 +24,7 @@ Only the Jungle Padel team handling communication and the providers who help us 
 ## How long we keep it
 - if you do not confirm your email within 7 days, your data is deleted automatically;
 - after confirmation, we keep it for up to 12 months after the club opens, or until you unsubscribe, if earlier;
-- when you unsubscribe, we delete your name, email, phone and interests; we keep only a cryptographic fingerprint of the address, as proof that you withdrew consent.
+- when you unsubscribe, we delete your name, email and playing level; we keep only a cryptographic fingerprint of the address, as proof that you withdrew consent.
 
 ## Age
 You can join the list if you are at least **16 years old**.

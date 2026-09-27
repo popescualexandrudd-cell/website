@@ -12,7 +12,7 @@ from ninja import Field, Router, Schema, Status
 from jungle.core.schemas import OkOut, errors
 from jungle.core.security import session_auth
 from jungle.waitlist import services
-from jungle.waitlist.models import Interest
+from jungle.waitlist.models import Level
 
 public_router = Router(tags=["waitlist"])
 staff_router = Router(tags=["staff: waitlist"], auth=session_auth)
@@ -21,8 +21,7 @@ staff_router = Router(tags=["staff: waitlist"], auth=session_auth)
 class SignupIn(Schema):
     email: str = Field(max_length=254)
     name: str = Field(min_length=1, max_length=150)
-    phone: str = Field(default="", max_length=30)
-    interests: list[Interest] = Field(default_factory=list, max_length=10)
+    level: Level | None = None
     language: str = Field(default="ro", pattern=r"^(ro|en)$")
     notice_version: int = Field(ge=1)
     accepted_notice: bool
@@ -47,8 +46,7 @@ class EntryOut(Schema):
     id: uuid.UUID
     email: str | None
     name: str
-    phone: str
-    interests: list[str]
+    level: str
     language: str
     source: str
     status: str
@@ -63,7 +61,7 @@ class EntryPageOut(Schema):
 
 class StatsOut(Schema):
     by_status: dict[str, int]
-    confirmed_by_interest: dict[str, int]
+    confirmed_by_level: dict[str, int]
 
 
 @public_router.post("", response={202: SignupOut, **errors(400, 404, 422, 429)}, auth=None)
@@ -78,8 +76,7 @@ def signup(request: HttpRequest, payload: SignupIn) -> Status[SignupOut]:
         services.SignupData(
             email=payload.email,
             name=payload.name,
-            phone=payload.phone,
-            interests=[str(i) for i in payload.interests],
+            level=str(payload.level or ""),
             language=payload.language,
             notice_version=payload.notice_version,
             source=payload.source,

@@ -132,3 +132,25 @@ def test_config_versions_are_immutable() -> None:
     )
     with pytest.raises(DatabaseError), transaction.atomic():
         ConfigVersion.objects.filter(pk=row.pk).update(value="y")
+
+
+def test_public_company_details_for_the_footer(api: Api, staff) -> None:
+    """Consumer law (§12.3): the legal identity is public; incomplete until Q26 is answered."""
+    body = api.get("/config/company").json()
+    assert body["complete"] is False
+    assert body["legal_name"] is None
+    staff(Role.ADMIN)
+    company = {
+        "legal_name": "Jungle Padel SRL",
+        "registration_code": "RO1",
+        "trade_register_number": "J1",
+        "address": "Pantelimon",
+        "privacy_contact_email": "dpo@example.test",
+        "phone": "+40700000000",
+    }
+    api.post(
+        "/staff/config/club.company", {"value": company, "marker": "confirmed", "reason": "Q26"}
+    )
+    body = api.get("/config/company").json()
+    assert body["complete"] is True
+    assert body["email"] == "dpo@example.test"

@@ -34,8 +34,9 @@ def test_seed_demo_marks_demo_data() -> None:
     assert ("Popescu", "Alexandru Daniel") in names  # §8.5 demo names
     assert ("Moșteanu", "Rareș") in names
     assert all(User.objects.values_list("is_demo", flat=True))
-    assert LegalDocument.objects.count() == 6  # terms, privacy, waitlist notice × RO/EN
-    assert all(LegalDocument.objects.values_list("is_demo", flat=True))
+    assert LegalDocument.objects.count() == 10  # 5 legal texts × RO/EN
+    for doc in LegalDocument.objects.all():
+        assert doc.is_demo == ("DE_CONFIRMAT" in doc.body), doc  # placeholders are never 'final'
 
 
 def test_public_listing_shows_only_active(api: Api, location: Location) -> None:

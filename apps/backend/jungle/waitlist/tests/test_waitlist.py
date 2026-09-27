@@ -28,8 +28,7 @@ def body(**overrides: object) -> dict[str, object]:
     data: dict[str, object] = {
         "email": "Maria@Example.test",
         "name": "Maria Ionescu",
-        "phone": "0722 111 222",
-        "interests": ["padel", "league"],
+        "level": "intermediate",
         "language": "ro",
         "notice_version": 1,
         "accepted_notice": True,
@@ -59,8 +58,7 @@ def test_signup_is_pending_until_email_confirmed(
     entry = WaitlistEntry.objects.get()
     assert entry.status == Status.PENDING
     assert entry.email == "maria@example.test"
-    assert entry.phone == "+40722111222"
-    assert entry.interests == ["league", "padel"]
+    assert entry.level == "intermediate"
     assert entry.notice_sha256 == entry.notice.sha256
     assert entry.consent_ip == "127.0.0.1"
     assert mail.outbox[0].subject == "Confirmă înscrierea pe lista Jungle Padel"
@@ -112,7 +110,7 @@ def test_unsubscribe_erases_personal_data_and_allows_new_signup(
     assert api.post("/waitlist/unsubscribe", {"token": unsubscribe}).status_code == 200
     entry = WaitlistEntry.objects.get()
     assert entry.status == Status.WITHDRAWN
-    assert (entry.email, entry.name, entry.phone, entry.interests) == (None, "", "", [])
+    assert (entry.email, entry.name, entry.level) == (None, "", "")
     assert entry.email_sha256
     assert (
         api.post("/waitlist/unsubscribe", {"token": unsubscribe}).status_code == 200
@@ -164,14 +162,10 @@ def test_consent_and_input_are_validated(
         error_code(signup(api, django_capture_on_commit_callbacks, email="nope"))
         == "accounts.email_invalid"
     )
-    assert (
-        error_code(signup(api, django_capture_on_commit_callbacks, phone="12345"))
-        == "accounts.phone_invalid"
-    )
-    assert signup(api, django_capture_on_commit_callbacks, interests=["golf"]).status_code == 422
+    assert signup(api, django_capture_on_commit_callbacks, level="pro").status_code == 422
     assert (
         signup(
-            api, django_capture_on_commit_callbacks, phone="", email="nophone@example.test"
+            api, django_capture_on_commit_callbacks, level=None, email="nolevel@example.test"
         ).status_code
         == 202
     )
@@ -205,11 +199,12 @@ def test_staff_list_stats_and_csv_export(
     assert api.get("/staff/waitlist?status=confirmed").json()["total"] == 1
     stats = api.get("/staff/waitlist/stats").json()
     assert stats["by_status"]["confirmed"] == 1
-    assert stats["confirmed_by_interest"]["padel"] == 1
+    assert stats["confirmed_by_level"]["intermediate"] == 1
+    assert stats["confirmed_by_level"]["unspecified"] == 0
     csv_response = api.get("/staff/waitlist/export.csv")
     assert csv_response["Content-Type"].startswith("text/csv")
     text = csv_response.content.decode()
-    assert text.splitlines()[0] == "email,name,phone,interests,language,source,confirmed_at"
+    assert text.splitlines()[0] == "email,name,level,language,source,confirmed_at"
     assert "'=HYPERLINK(1)" in text  # formula injection neutralised
     assert AuditLog.objects.filter(action="waitlist.exported").exists()
 
@@ -263,3 +258,29 @@ def test_publish_legal_document_command_refuses_placeholders(tmp_path) -> None:
     good = tmp_path / "good.md"
     good.write_text("<!-- PUBLIC TEXT BELOW -->\n# Titlu\nText final.")
     call_command("publish_legal_document", kind="terms", language="ro", file=str(good))
+
+
+def test_data_minimisation_only_name_email_and_optional_level(
+    api: Api, notice: None, django_capture_on_commit_callbacks
+) -> None:
+    """Owner's request 27.09.2026: the pre-registration asks for nothing more."""
+    assert {f.name for f in WaitlistEntry._meta.get_fields()}.isdisjoint({"phone", "interests"})
+    response = signup(
+        api, django_capture_on_commit_callbacks, phone="0722111222", interests=["padel"]
+    )
+    assert response.status_code == 202  # unknown fields are ignored, never stored
+
+
+def test_service_rejects_unknown_level() -> None:
+    from django.test import RequestFactory
+
+    from jungle.core.errors import DomainError
+    from jungle.waitlist.services import SignupData
+    from jungle.waitlist.services import signup as do_signup
+
+    request = RequestFactory().post("/")
+    data = SignupData(
+        email="a@example.test", name="A", level="pro", language="ro", notice_version=1
+    )
+    with pytest.raises(DomainError):
+        do_signup(request, data)

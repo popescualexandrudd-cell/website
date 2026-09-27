@@ -218,6 +218,92 @@
         "title": "ChildOut",
         "type": "object"
       },
+      "CompanyOut": {
+        "description": "Legal identity of the club, shown in every page footer (consumer law, §12.3).",
+        "properties": {
+          "address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Address"
+          },
+          "complete": {
+            "title": "Complete",
+            "type": "boolean"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "legal_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Legal Name"
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone"
+          },
+          "registration_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Registration Code"
+          },
+          "trade_register_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trade Register Number"
+          }
+        },
+        "required": [
+          "legal_name",
+          "registration_code",
+          "trade_register_number",
+          "address",
+          "phone",
+          "email",
+          "complete"
+        ],
+        "title": "CompanyOut",
+        "type": "object"
+      },
       "ConfigIn": {
         "properties": {
           "effective_from": {
@@ -488,7 +574,9 @@
           "terms",
           "privacy",
           "league_gdpr",
-          "waitlist_notice"
+          "waitlist_notice",
+          "refunds",
+          "cookies"
         ],
         "title": "DocumentKind",
         "type": "string"
@@ -542,23 +630,16 @@
             "title": "Id",
             "type": "string"
           },
-          "interests": {
-            "items": {
-              "type": "string"
-            },
-            "title": "Interests",
-            "type": "array"
-          },
           "language": {
             "title": "Language",
             "type": "string"
           },
-          "name": {
-            "title": "Name",
+          "level": {
+            "title": "Level",
             "type": "string"
           },
-          "phone": {
-            "title": "Phone",
+          "name": {
+            "title": "Name",
             "type": "string"
           },
           "source": {
@@ -574,8 +655,7 @@
           "id",
           "email",
           "name",
-          "phone",
-          "interests",
+          "level",
           "language",
           "source",
           "status",
@@ -732,19 +812,6 @@
         "title": "HealthOut",
         "type": "object"
       },
-      "Interest": {
-        "enum": [
-          "padel",
-          "league",
-          "tennis",
-          "pilates",
-          "events",
-          "cafe",
-          "corporate"
-        ],
-        "title": "Interest",
-        "type": "string"
-      },
       "LegalDocumentOut": {
         "properties": {
           "body": {
@@ -793,6 +860,17 @@
         ],
         "title": "LegalDocumentOut",
         "type": "object"
+      },
+      "Level": {
+        "description": "Self-declared playing level (optional). Data minimisation: nothing else is asked.",
+        "enum": [
+          "beginner",
+          "intermediate",
+          "advanced",
+          "competitive"
+        ],
+        "title": "Level",
+        "type": "string"
       },
       "LocationIn": {
         "properties": {
@@ -1615,19 +1693,21 @@
             "title": "Email",
             "type": "string"
           },
-          "interests": {
-            "items": {
-              "$ref": "#/components/schemas/Interest"
-            },
-            "maxItems": 10,
-            "title": "Interests",
-            "type": "array"
-          },
           "language": {
             "default": "ro",
             "pattern": "^(ro|en)$",
             "title": "Language",
             "type": "string"
+          },
+          "level": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Level"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "name": {
             "maxLength": 150,
@@ -1639,12 +1719,6 @@
             "minimum": 1,
             "title": "Notice Version",
             "type": "integer"
-          },
-          "phone": {
-            "default": "",
-            "maxLength": 30,
-            "title": "Phone",
-            "type": "string"
           },
           "source": {
             "default": "",
@@ -1689,17 +1763,17 @@
             "title": "By Status",
             "type": "object"
           },
-          "confirmed_by_interest": {
+          "confirmed_by_level": {
             "additionalProperties": {
               "type": "integer"
             },
-            "title": "Confirmed By Interest",
+            "title": "Confirmed By Level",
             "type": "object"
           }
         },
         "required": [
           "by_status",
-          "confirmed_by_interest"
+          "confirmed_by_level"
         ],
         "title": "StatsOut",
         "type": "object"
@@ -2559,6 +2633,28 @@
         ]
       }
     },
+    "/api/v1/config/company": {
+      "get": {
+        "operationId": "jungle_configuration_api_company",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyOut"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Company",
+        "tags": [
+          "configuration"
+        ]
+      }
+    },
     "/api/v1/config/flags": {
       "get": {
         "operationId": "jungle_configuration_api_list_flags",
@@ -2630,7 +2726,9 @@
                 "terms",
                 "privacy",
                 "league_gdpr",
-                "waitlist_notice"
+                "waitlist_notice",
+                "refunds",
+                "cookies"
               ],
               "title": "DocumentKind",
               "type": "string"
