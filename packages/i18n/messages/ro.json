@@ -57,7 +57,7 @@
   "web": {
     "meta": {
       "title": "Jungle Padel — club de padel indoor în Pantelimon · Deschidere martie 2027",
-      "description": "Patru terenuri de padel indoor, un lounge suspendat la 3 metri, pilates Reformer și o ligă cu clasament live. Facilități proiectate la cele mai înalte standarde europene. Înscrie-te pe lista de așteptare."
+      "description": "Patru terenuri de padel indoor, un lounge suspendat la 3 metri între ele, pilates Reformer și o ligă cu clasament live. Facilități proiectate la cele mai înalte standarde europene. Înscrie-te pe lista de așteptare."
     },
     "nav": {
       "arena": "Arena",
@@ -75,11 +75,11 @@
     "hero": {
       "eyebrow": "Pantelimon · Deschidere în martie 2027",
       "title": "Privește jocul de la trei metri înălțime.",
-      "lead": "Patru terenuri de padel indoor, un lounge suspendat deasupra lor și un club în care totul, de la rezervare la plată, funcționează digital. Facilități proiectate la cele mai înalte standarde europene.",
+      "lead": "Patru terenuri de padel indoor, o pasarelă-lounge la 3 metri între ele și un club în care totul, de la rezervare la plată, funcționează digital. Facilități proiectate la cele mai înalte standarde europene.",
       "ctaPrimary": "Înscrie-te pe lista de așteptare",
       "ctaSecondary": "Descoperă arena",
-      "renderAlt": "Randare 3D: vedere din lounge-ul de la 3 metri spre terenurile de padel închise cu pereți de sticlă, într-o hală luminoasă.",
-      "renderNote": "Randare 3D ilustrativă, realizată de noi. Nu este o fotografie a clubului."
+      "renderAlt": "Randare 3D, seara: vedere de pe pasarela-lounge de la 3 metri, peste balustrada de sticlă, spre terenurile de padel cu pereți de sticlă, luminate de benzi LED.",
+      "renderNote": "Randare 3D ilustrativă, realizată de noi după schița clubului. Nu este o fotografie și nici proiectul final."
     },
     "arena": {
       "kicker": "Arena",
@@ -87,13 +87,13 @@
       "lead": "Terenuri de padel închise, într-o hală încălzită iarna și răcită vara, cu sistem audio și lumini pentru meciuri, antrenamente și seri de club.",
       "stats": {
         "courts": "terenuri de padel indoor",
-        "lounge": "metri: înălțimea lounge-ului cu vedere spre terenuri",
+        "lounge": "metri: înălțimea pasarelei-lounge dintre terenuri",
         "parking": "locuri de parcare",
         "climate": "anotimpuri de joc, în hala climatizată"
       },
       "points": [
         "Terenuri închise, cu pereți de sticlă",
-        "Lounge suspendat la 3 m, cu vedere spre terenuri",
+        "Pasarelă-lounge la 3 m, între cele două rânduri de terenuri",
         "Ecran la fiecare teren: jucătorii, rangul și timpul rămas"
       ]
     },
@@ -142,15 +142,15 @@
         },
         "pilates": {
           "title": "Pilates Reformer",
-          "text": "Studio separat, încălzit și răcit: 4 aparate Reformer la deschidere, extensibil la 6. Clase pe niveluri, ședințe private și duo."
+          "text": "Studio în clădirea de alături, încălzit și răcit: 4 aparate Reformer la deschidere, extensibil la 6. Clase pe niveluri, ședințe private și duo."
         },
         "events": {
           "title": "Sală de evenimente",
-          "text": "Un spațiu separat, configurabil pentru petreceri și evenimente private de 15–20 de persoane."
+          "text": "O sală separată, în aceeași clădire cu studioul de pilates, pentru petreceri și evenimente private de 15–20 de persoane."
         },
         "lounge": {
           "title": "Cafenea de specialitate & lounge",
-          "text": "Cafea de specialitate și lounge-ul suspendat la 3 m, cu vedere spre terenuri."
+          "text": "Cafea de specialitate la parter, cu scară spre pasarela-lounge de deasupra terenurilor."
         }
       },
       "rendersSoon": "Randările fotorealiste ale acestor spații vor fi adăugate pe baza proiectului de arhitectură.",
@@ -185,7 +185,21 @@
       "access": "Acces din două străzi",
       "parking": "Parcare: 18 locuri în spate și 10 în față",
       "map": "Deschide locația în OpenStreetMap (fereastră nouă)",
-      "mapNote": "Hartă stilizată, fără scară. Pentru traseu, deschide OpenStreetMap."
+      "mapNote": "Schemă ilustrativă după schița clubului, fără scară. Pentru traseu, deschide OpenStreetMap.",
+      "plan": {
+        "title": "Planul clubului (schemă)",
+        "courts": "Terenuri 1–4",
+        "gallery": "Pasarelă-lounge la 3 m",
+        "cafe": "Cafenea",
+        "reception": "Recepție",
+        "lockers": "Vestiare",
+        "entrance": "Intrare",
+        "alley": "Alee",
+        "access": "Acces",
+        "parking": "Parcare",
+        "pilates": "Pilates Reformer",
+        "events": "Sală de evenimente"
+      }
     },
     "waitlist": {
       "kicker": "Pre-înregistrare",

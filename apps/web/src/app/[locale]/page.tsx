@@ -5,6 +5,7 @@ import { HeroVisual } from "@/components/HeroVisual";
 import { IconCar, IconCheck, IconCoffee, IconLocker, IconLotus, IconMusic, IconPin, IconRoute } from "@/components/Icons";
 import { LeagueCard } from "@/components/LeagueCard";
 import { Reveal } from "@/components/Reveal";
+import { SitePlan } from "@/components/SitePlan";
 import { TimelineProgress } from "@/components/TimelineProgress";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { ADDRESS, FACTS, MAP_URL, SITE_URL } from "@/lib/site";
@@ -215,11 +216,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
           </Reveal>
           <Reveal delay={120}>
             <figure className="plan-figure">
-              <div className="plan" aria-hidden="true">
-                <span className="plan-road plan-road-a" />
-                <span className="plan-road plan-road-b" />
-                <span className="plan-pin" />
-              </div>
+              <SitePlan />
               <figcaption className="muted">{t("location.mapNote")}</figcaption>
             </figure>
           </Reveal>

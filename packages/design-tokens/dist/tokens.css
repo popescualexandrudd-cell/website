@@ -3,36 +3,36 @@
  */
 
 :root {
-  --font-sans: 'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 22px;
+  --font-sans: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: Fraunces, Georgia, 'Times New Roman', serif;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
   --radius-pill: 999px;
   --space-gutter: clamp(20px, 5vw, 64px);
   --space-section: clamp(88px, 13vw, 176px);
-  --shadow-soft: 0 1px 2px rgba(11, 18, 32, 0.04), 0 8px 24px rgba(11, 18, 32, 0.06);
-  --shadow-lift: 0 2px 4px rgba(11, 18, 32, 0.05), 0 24px 48px -12px rgba(11, 18, 32, 0.18);
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+  --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.35), 0 28px 56px -14px rgba(0, 0, 0, 0.6);
   --motion-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --motion-duration-fast: 180ms;
   --motion-duration-slow: 800ms;
-  --color-surface-0: #ffffff; /** Cards, inputs */
-  --color-surface-50: #f8fafc; /** Page background (slate-50) */
-  --color-surface-100: #f1f5f9; /** Alternate sections */
-  --color-surface-200: #e2e8f0; /** Borders, dividers */
-  --color-ink-500: #5b6b80; /** Captions (AA on light surfaces) */
-  --color-ink-700: #334155; /** Secondary text */
-  --color-ink-900: #0b1220; /** Headings and body text */
-  --color-navy-100: #e7eef7;
-  --color-navy-700: #13315c;
-  --color-navy-900: #0b2545; /** Primary: deep navy (buttons, dark sections) */
-  --color-emerald-100: #e3f2ec;
-  --color-emerald-600: #12805e;
-  --color-emerald-700: #0e6b4f; /** Mature emerald: accents, success */
-  --color-metal-champagne: #8c6a3c; /** Metallic accent for text/lines (AA on light) */
-  --color-metal-gold: #c8a96a; /** Decorative gold (not for text) */
-  --color-metal-silver: #a7b1bd; /** Decorative silver (not for text) */
-  --color-metal-platinum: #dce2e8; /** Decorative platinum (not for text) */
-  --color-focus: #1d4ed8; /** Focus ring */
-  --color-danger: #b42318;
-  --color-success: #0e6b4f;
+  --color-night-500: #3a5270; /** Strong borders, input outlines */
+  --color-night-600: #1e3148; /** Borders, dividers */
+  --color-night-700: #13253a; /** Cards, inputs, navy panels */
+  --color-night-800: #0d1726; /** Alternate sections */
+  --color-night-900: #0a1320; /** Page background */
+  --color-night-950: #070e18; /** Deepest background (footer, overlays) */
+  --color-bone-50: #eee7da; /** Headings and body text */
+  --color-bone-200: #c9cdd3; /** Secondary text */
+  --color-bone-400: #9aa6b3; /** Captions (AA on every night surface) */
+  --color-brass-300: #dcc08a; /** Brass for text, links and kickers */
+  --color-brass-400: #c6a15b; /** Primary buttons (night text on brass), lines */
+  --color-brass-600: #8c6a3c; /** Brass shadow tone (decorative) */
+  --color-forest-400: #6dbf94; /** Success text on night */
+  --color-forest-700: #1d3b2e; /** Courts, accent panels */
+  --color-metal-gold: #c8a96a; /** Card finish (decorative) */
+  --color-metal-silver: #a7b1bd; /** Card finish (decorative) */
+  --color-metal-platinum: #dce2e8; /** Card finish (decorative) */
+  --color-focus: #8db8ff; /** Focus ring on night surfaces */
+  --color-danger: #ff9a8a; /** Error text on night surfaces */
 }

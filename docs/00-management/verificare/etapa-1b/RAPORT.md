@@ -1,7 +1,24 @@
-# Raport de verificare — Etapa 1B (pagina de pre-lansare), revizia 2 „Premium Light”
+# Raport de verificare — Etapa 1B (pagina de pre-lansare), revizia 3 „Noapte și alamă”
 
 > Data: 27.09.2026. Branch: `claude/hopeful-euler-rguibn`. Starea: **livrată, așteaptă aprobarea proprietarului.**
-> Revizia 2 răspunde cererii proprietarului din 27.09.2026: „estetică ultra-premium, serioasă, luminoasă și curată”. Prima variantă („Neon Jungle”) a fost înlocuită integral.
+
+## Revizia 3 (27.09.2026): ce s-a schimbat
+- **Identitatea B4 „Noapte și alamă”,** aleasă de proprietar de pe pânza de design, dintre 3 direcții și 6 variante de paletă:
+  - bleumarin de noapte, alamă, os și verde de pădure;
+  - titluri Fraunces, text Instrument Sans.
+  - Descriere: [05-identitate-provizorie-noapte-si-alama.md](../../../12-branding/05-identitate-provizorie-noapte-si-alama.md).
+- **Arena 3D refăcută după schița clubului:**
+  - 4 terenuri în pătrat (2 × 2);
+  - vederea de pe pasarela-lounge de la 3 m, dintre rânduri, seara.
+- **Planul clubului în secțiunea Locație:** o schemă desenată de noi după schiță, fără scară și fără parkour (ascuns la lansare).
+- **Textele RO/EN actualizate:** pasarela dintre terenuri, cafeneaua de la parter cu scara spre lounge, pilates și evenimente în clădirea de alături.
+- **Rezultate:**
+  - toate testele trec (131 backend, 173 ligă, 26 cap-coadă, cu verificarea automată de accesibilitate axe pe tema întunecată);
+  - Lighthouse: mobil **94 / 100 / 100 / 100**, desktop **100 / 100 / 100 / 100**.
+
+Restul raportului descrie revizia 2. Funcțiile descrise acolo au rămas aceleași; s-a schimbat doar aspectul.
+
+---
 
 ## Ce s-a construit
 | Ce | Detalii |
@@ -22,7 +39,7 @@
 | Teste unitare site + tokeni | toate trec (acordul pentru cookies, fapte afișate, contrast AAA/AA) |
 | Teste cap-coadă (Playwright, desktop + mobil) | 26 trec. Acoperă: pagina RO/EN, text alternativ pe randări, tastatura, carduri pe niveluri, subsolul cu datele firmei și ANPC, înscrierea cu 3 câmpuri → confirmare → dezabonare, acordul obligatoriu, cele 10 pagini legale, cookies (nimic înainte de alegere, statistici doar după „Accept”, retragerea acordului), mișcare redusă, meniul pe mobil, sitemap/robots. 2 teste se sar intenționat: tastatura pe telefon și meniul mobil pe desktop. |
 | Accesibilitate automată (axe, WCAG 2.2 AA) | 0 probleme grave (pagina principală și paginile legale) |
-| Lighthouse mobil | **Performanță 95 · Accesibilitate 100 · Bune practici 100 · SEO 100** ([raport](lighthouse-mobil.html)) |
+| Lighthouse mobil | **Performanță 94 · Accesibilitate 100 · Bune practici 100 · SEO 100** (revizia 3, [raport](lighthouse-mobil.html)) |
 | Lighthouse desktop | **100 · 100 · 100 · 100** ([raport](lighthouse-desktop.html)) |
 | ESLint, TypeScript strict, ruff, mypy strict | 0 probleme |
 

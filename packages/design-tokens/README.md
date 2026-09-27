@@ -1,10 +1,10 @@
 # Design tokens
 
-> **Stare:** construit în Etapa 1B (27.09.2026); din 27.09.2026 identitatea provizorie „Premium Light” (a înlocuit „Neon Jungle”).
+> **Stare:** construit în Etapa 1B (27.09.2026); din 27.09.2026 identitatea provizorie „Noapte și alamă” (B4), aleasă de proprietar.
 
 ## Ce face
 
-Culorile, fonturile, spațierile, razele, umbrele și animațiile tuturor aplicațiilor, dintr-un singur loc (§12.4). Identitate provizorie „Premium Light” până la alegerea identității finale (Etapa 13).
+Culorile, fonturile, spațierile, razele, umbrele și animațiile tuturor aplicațiilor, dintr-un singur loc (§12.4). Identitate provizorie „Noapte și alamă” (B4) până la identitatea finală (Etapa 13).
 
 ## Specificații
 
@@ -16,6 +16,6 @@ Culorile, fonturile, spațierile, razele, umbrele și animațiile tuturor aplica
 
 ## Rulare, testare, deploy
 
-- Tokenii (format DTCG): `tokens/color.json`, `tokens/base.json`. Descrierea identității: [docs/12-branding/04-identitate-provizorie-premium-light.md](../../docs/12-branding/04-identitate-provizorie-premium-light.md).
+- Tokenii (format DTCG): `tokens/color.json`, `tokens/base.json`. Descrierea identității: [docs/12-branding/05-identitate-provizorie-noapte-si-alama.md](../../docs/12-branding/05-identitate-provizorie-noapte-si-alama.md).
 - Generare: `pnpm --filter @jungle/design-tokens build` → `dist/tokens.css` (variabile CSS) și `dist/tokens.ts`. Fișierele generate se păstrează în git; `scripts/test-all` verifică că sunt la zi.
-- Test automat: contrastul culorilor de text (AAA pentru text principal, AA pentru explicații și accente) — `pnpm --filter @jungle/design-tokens test`.
+- Test automat: contrastul culorilor de text (AAA pentru text, AA pentru explicații și accente, 3:1 pentru focus și contururi, pe toate fundalurile de noapte) — `pnpm --filter @jungle/design-tokens test`.

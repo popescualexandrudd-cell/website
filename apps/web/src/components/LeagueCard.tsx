@@ -12,7 +12,7 @@ const SWATCH: Record<CardTier, string> = {
   silver: tokens.ColorMetalSilver,
   gold: tokens.ColorMetalGold,
   platinum: tokens.ColorMetalPlatinum,
-  diamond: tokens.ColorNavy900,
+  diamond: tokens.ColorNight500,
 };
 
 /**

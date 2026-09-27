@@ -1,4 +1,6 @@
-# Identitatea vizuală provizorie „Premium Light”
+# Identitatea vizuală provizorie „Premium Light” (înlocuită)
+
+> **Înlocuită pe 27.09.2026** de [„Noapte și alamă” (B4)](05-identitate-provizorie-noapte-si-alama.md), aleasă de proprietar. Păstrată ca istoric; regulile despre scenele 3D rămân valabile.
 
 > Creată pe 27.09.2026, la cererea proprietarului: „o estetică ultra-premium, serioasă, luminoasă și curată”. **Înlocuiește** identitatea „Neon Jungle” ([03](03-identitate-provizorie-neon-jungle.md), păstrată doar ca istoric). Este tot **provizorie**: logo-ul, culorile și fonturile finale le alege proprietarul (§2.4, §15.4, Etapa 13). Toate valorile stau în [`packages/design-tokens`](../../packages/design-tokens/) (ADR-0020), deci identitatea se schimbă dintr-un singur loc.
 

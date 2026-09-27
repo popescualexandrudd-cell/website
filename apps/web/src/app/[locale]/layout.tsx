@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
-import { ColorSurface50 } from "@jungle/design-tokens/tokens";
+import { ColorNight900 } from "@jungle/design-tokens/tokens";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import "../globals.css";
@@ -11,13 +11,13 @@ import { Header } from "@/components/Header";
 import { routing } from "@/i18n/routing";
 import { INDEXABLE, SITE_URL } from "@/lib/site";
 
-const FONT_FILES = ["inter-latin.woff2", "inter-ro.woff2"];
+const FONT_FILES = ["instrument-sans-latin.woff2", "fraunces-latin.woff2", "fraunces-italic-latin.woff2"];
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export const viewport: Viewport = { themeColor: ColorSurface50, colorScheme: "light" };
+export const viewport: Viewport = { themeColor: ColorNight900, colorScheme: "dark" };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;

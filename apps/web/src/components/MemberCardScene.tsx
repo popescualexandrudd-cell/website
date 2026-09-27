@@ -15,10 +15,10 @@ import { afterLoadIdle, createLoop, disposeScene, hasRealGpu, sceneFlags, usesSo
 type Finish = { stops: string[]; ink: string; edge: string; metalness: number; roughness: number; env?: number };
 
 const FINISH: Record<CardTier, Finish> = {
-  silver: { stops: ["#EEF1F4", tokens.ColorMetalSilver, "#D3D9E0"], ink: tokens.ColorNavy900, edge: tokens.ColorMetalSilver, metalness: 0.9, roughness: 0.3 },
-  gold: { stops: ["#F1E2BE", tokens.ColorMetalGold, "#A8864B"], ink: tokens.ColorNavy900, edge: tokens.ColorMetalGold, metalness: 0.95, roughness: 0.26 },
-  platinum: { stops: ["#FAFBFC", tokens.ColorMetalPlatinum, "#BCC6D0"], ink: tokens.ColorNavy900, edge: tokens.ColorMetalPlatinum, metalness: 0.85, roughness: 0.2 },
-  diamond: { stops: [tokens.ColorNavy700, tokens.ColorNavy900, "#06162B"], ink: "#FFFFFF", edge: tokens.ColorEmerald600, metalness: 0.55, roughness: 0.2, env: 0.7 },
+  silver: { stops: ["#EEF1F4", tokens.ColorMetalSilver, "#D3D9E0"], ink: tokens.ColorNight900, edge: tokens.ColorMetalSilver, metalness: 0.9, roughness: 0.3 },
+  gold: { stops: ["#F1E2BE", tokens.ColorMetalGold, "#A8864B"], ink: tokens.ColorNight900, edge: tokens.ColorMetalGold, metalness: 0.95, roughness: 0.26 },
+  platinum: { stops: ["#FAFBFC", tokens.ColorMetalPlatinum, "#BCC6D0"], ink: tokens.ColorNight900, edge: tokens.ColorMetalPlatinum, metalness: 0.85, roughness: 0.2 },
+  diamond: { stops: [tokens.ColorNight700, tokens.ColorNight900, tokens.ColorNight950], ink: tokens.ColorBone50, edge: tokens.ColorBrass400, metalness: 0.55, roughness: 0.24, env: 0.32 },
 };
 
 export type CardLabels = { brand: string; member: string; tiers: Record<CardTier, string> };
@@ -39,18 +39,19 @@ function drawFace(labels: CardLabels, tier: CardTier, back: boolean): HTMLCanvas
     g.fillRect(0, y, 1024, 1);
   }
   // Guilloché rings, engraved in the lower right corner.
-  g.strokeStyle = tier === "diamond" ? "rgba(158,224,199,0.22)" : "rgba(11,37,69,0.10)";
+  g.strokeStyle = tier === "diamond" ? "rgba(220,192,138,0.22)" : "rgba(10,19,32,0.10)";
   g.lineWidth = 1.2;
   for (let r = 60; r < 520; r += 14) {
     g.beginPath();
     g.arc(980, 640, r, Math.PI, Math.PI * 1.5);
     g.stroke();
   }
-  const font = (weight: number, size: number) => `${weight} ${size}px "Inter Variable", Inter, system-ui, sans-serif`;
+  const font = (weight: number, size: number) => `${weight} ${size}px "Instrument Sans", system-ui, sans-serif`;
+  const serif = (size: number) => `400 ${size}px Fraunces, Georgia, serif`;
   g.fillStyle = f.ink;
   g.textBaseline = "alphabetic";
   if ("letterSpacing" in g) (g as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = "10px";
-  g.font = font(700, 34);
+  g.font = font(600, 32);
   g.fillText(labels.brand.toUpperCase(), 72, 110);
   if (back) {
     g.font = font(500, 26);
@@ -59,7 +60,7 @@ function drawFace(labels: CardLabels, tier: CardTier, back: boolean): HTMLCanvas
     return canvas;
   }
   // The emerald leaf seam of the provisional mark.
-  g.strokeStyle = tier === "diamond" ? "#9EE0C7" : tokens.ColorEmerald700;
+  g.strokeStyle = tier === "diamond" ? tokens.ColorBrass300 : tokens.ColorForest700;
   g.lineWidth = 5;
   g.beginPath();
   g.moveTo(72, 150);
@@ -70,9 +71,9 @@ function drawFace(labels: CardLabels, tier: CardTier, back: boolean): HTMLCanvas
   g.globalAlpha = 0.8;
   g.fillText(labels.member, 72, 488);
   g.globalAlpha = 1;
-  if ("letterSpacing" in g) (g as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = "4px";
-  g.font = font(650, 76);
-  g.fillText(labels.tiers[tier].toUpperCase(), 68, 570);
+  if ("letterSpacing" in g) (g as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = "0px";
+  g.font = serif(84);
+  g.fillText(labels.tiers[tier], 68, 574);
   return canvas;
 }
 
@@ -107,7 +108,10 @@ export default function MemberCardScene({
         import("gsap"),
         import("gsap/ScrollTrigger"),
       ]);
-      await document.fonts?.load('650 76px "Inter Variable"').catch(() => undefined);
+      await Promise.all([
+        document.fonts?.load('400 84px Fraunces'),
+        document.fonts?.load('600 32px "Instrument Sans"'),
+      ]).catch(() => undefined);
       if (disposed) return;
       const flags = sceneFlags();
       let renderer: import("three").WebGLRenderer;
@@ -144,7 +148,7 @@ export default function MemberCardScene({
           roughness: f.roughness,
           clearcoat: 1,
           clearcoatRoughness: 0.06,
-          envMapIntensity: f.env ?? 1.25,
+          envMapIntensity: f.env ?? 0.75,
         });
       };
 
@@ -199,8 +203,8 @@ export default function MemberCardScene({
       shade.width = shade.height = 128;
       const sg = shade.getContext("2d")!;
       const radial = sg.createRadialGradient(64, 64, 0, 64, 64, 64);
-      radial.addColorStop(0, "rgba(11,37,69,0.28)");
-      radial.addColorStop(1, "rgba(11,37,69,0)");
+      radial.addColorStop(0, "rgba(0,0,0,0.55)");
+      radial.addColorStop(1, "rgba(0,0,0,0)");
       sg.fillStyle = radial;
       sg.fillRect(0, 0, 128, 128);
       const shadow = new THREE.Mesh(

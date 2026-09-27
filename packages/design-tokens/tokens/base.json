@@ -1,11 +1,12 @@
 {
   "font": {
-    "sans": { "$type": "fontFamily", "$value": ["Inter Variable", "Inter", "system-ui", "-apple-system", "Segoe UI", "sans-serif"] }
+    "sans": { "$type": "fontFamily", "$value": ["Instrument Sans", "system-ui", "-apple-system", "Segoe UI", "sans-serif"] },
+    "serif": { "$type": "fontFamily", "$value": ["Fraunces", "Georgia", "Times New Roman", "serif"] }
   },
   "radius": {
-    "sm": { "$type": "dimension", "$value": "8px" },
-    "md": { "$type": "dimension", "$value": "14px" },
-    "lg": { "$type": "dimension", "$value": "22px" },
+    "sm": { "$type": "dimension", "$value": "2px" },
+    "md": { "$type": "dimension", "$value": "4px" },
+    "lg": { "$type": "dimension", "$value": "6px" },
     "pill": { "$type": "dimension", "$value": "999px" }
   },
   "space": {
@@ -13,8 +14,8 @@
     "section": { "$type": "dimension", "$value": "clamp(88px, 13vw, 176px)" }
   },
   "shadow": {
-    "soft": { "$type": "shadow", "$value": "0 1px 2px rgba(11, 18, 32, 0.04), 0 8px 24px rgba(11, 18, 32, 0.06)" },
-    "lift": { "$type": "shadow", "$value": "0 2px 4px rgba(11, 18, 32, 0.05), 0 24px 48px -12px rgba(11, 18, 32, 0.18)" }
+    "soft": { "$type": "shadow", "$value": "0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25)" },
+    "lift": { "$type": "shadow", "$value": "0 2px 4px rgba(0, 0, 0, 0.35), 0 28px 56px -14px rgba(0, 0, 0, 0.6)" }
   },
   "motion": {
     "ease-out": { "$type": "cubicBezier", "$value": [0.22, 1, 0.36, 1] },

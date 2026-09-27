@@ -57,7 +57,7 @@
   "web": {
     "meta": {
       "title": "Jungle Padel — indoor padel club in Pantelimon · Opening March 2027",
-      "description": "Four indoor padel courts, a lounge suspended three metres above them, Reformer pilates and a league with live rankings. Facilities designed to the highest European standards. Join the waitlist."
+      "description": "Four indoor padel courts, a lounge suspended 3 metres up between them, Reformer Pilates and a league with live rankings. Facilities designed to the highest European standards. Join the waitlist."
     },
     "nav": {
       "arena": "Arena",
@@ -75,11 +75,11 @@
     "hero": {
       "eyebrow": "Pantelimon · Opening March 2027",
       "title": "Watch the game from three metres up.",
-      "lead": "Four indoor padel courts, a lounge suspended above them and a club where everything, from booking to payment, runs digitally. Facilities designed to the highest European standards.",
+      "lead": "Four indoor padel courts, a gallery lounge 3 metres up between them and a club where everything, from booking to payment, runs digitally. Facilities designed to the highest European standards.",
       "ctaPrimary": "Join the waitlist",
       "ctaSecondary": "Discover the arena",
-      "renderAlt": "3D rendering: view from the lounge three metres up towards the enclosed padel courts with glass walls, in a bright hall.",
-      "renderNote": "Illustrative 3D rendering made by us. Not a photograph of the club."
+      "renderAlt": "3D rendering, evening: the view from the gallery lounge 3 metres up, over the glass balustrade, towards the glass-walled padel courts lit by LED lines.",
+      "renderNote": "Illustrative 3D rendering made by us from the club's sketch. Not a photograph and not the final design."
     },
     "arena": {
       "kicker": "The arena",
@@ -87,13 +87,13 @@
       "lead": "Enclosed padel courts in a hall heated in winter and cooled in summer, with a sound system and lighting for matches, training and club nights.",
       "stats": {
         "courts": "indoor padel courts",
-        "lounge": "metres: height of the lounge overlooking the courts",
+        "lounge": "metres: height of the gallery lounge between the courts",
         "parking": "parking spaces",
         "climate": "seasons of play, in the climate-controlled hall"
       },
       "points": [
         "Enclosed courts with glass walls",
-        "Lounge suspended 3 m up, overlooking the courts",
+        "A gallery lounge 3 m up, between the two rows of courts",
         "A screen at every court: players, rank and time left"
       ]
     },
@@ -142,15 +142,15 @@
         },
         "pilates": {
           "title": "Reformer pilates",
-          "text": "A separate heated and cooled studio: 4 Reformer machines at opening, expandable to 6. Classes by level, private and duo sessions."
+          "text": "A studio in the building next door, heated and cooled: 4 Reformer machines at opening, up to 6. Classes by level, private and duo sessions."
         },
         "events": {
           "title": "Event room",
-          "text": "A separate space, configurable for private parties and events of 15–20 people."
+          "text": "A separate room, in the same building as the Pilates studio, for parties and private events of 15–20 people."
         },
         "lounge": {
           "title": "Specialty café & lounge",
-          "text": "Specialty coffee and the lounge suspended 3 m up, overlooking the courts."
+          "text": "Specialty coffee on the ground floor, with stairs up to the gallery lounge above the courts."
         }
       },
       "rendersSoon": "Photorealistic renderings of these spaces will be added from the architectural project.",
@@ -185,7 +185,21 @@
       "access": "Access from two streets",
       "parking": "Parking: 18 spaces at the back and 10 at the front",
       "map": "Open the location in OpenStreetMap (new window)",
-      "mapNote": "Stylised map, not to scale. For directions, open OpenStreetMap."
+      "mapNote": "Illustrative plan from the club's sketch, not to scale. For directions, open OpenStreetMap.",
+      "plan": {
+        "title": "Club plan (diagram)",
+        "courts": "Courts 1–4",
+        "gallery": "Gallery lounge, 3 m",
+        "cafe": "Café",
+        "reception": "Reception",
+        "lockers": "Changing rooms",
+        "entrance": "Entrance",
+        "alley": "Driveway",
+        "access": "Access",
+        "parking": "Parking",
+        "pilates": "Reformer Pilates",
+        "events": "Event room"
+      }
     },
     "waitlist": {
       "kicker": "Pre-registration",

@@ -3,43 +3,42 @@
  */
 
 export const FontSans = [
-  "Inter Variable",
-  "Inter",
+  "Instrument Sans",
   "system-ui",
   "-apple-system",
   "Segoe UI",
   "sans-serif",
 ];
-export const RadiusSm = "8px";
-export const RadiusMd = "14px";
-export const RadiusLg = "22px";
+export const FontSerif = ["Fraunces", "Georgia", "Times New Roman", "serif"];
+export const RadiusSm = "2px";
+export const RadiusMd = "4px";
+export const RadiusLg = "6px";
 export const RadiusPill = "999px";
 export const SpaceGutter = "clamp(20px, 5vw, 64px)";
 export const SpaceSection = "clamp(88px, 13vw, 176px)";
 export const ShadowSoft =
-  "0 1px 2px rgba(11, 18, 32, 0.04), 0 8px 24px rgba(11, 18, 32, 0.06)";
+  "0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25)";
 export const ShadowLift =
-  "0 2px 4px rgba(11, 18, 32, 0.05), 0 24px 48px -12px rgba(11, 18, 32, 0.18)";
+  "0 2px 4px rgba(0, 0, 0, 0.35), 0 28px 56px -14px rgba(0, 0, 0, 0.6)";
 export const MotionEaseOut = [0.22, 1, 0.36, 1];
 export const MotionDurationFast = "180ms";
 export const MotionDurationSlow = "800ms";
-export const ColorSurface0 = "#ffffff"; // Cards, inputs
-export const ColorSurface50 = "#f8fafc"; // Page background (slate-50)
-export const ColorSurface100 = "#f1f5f9"; // Alternate sections
-export const ColorSurface200 = "#e2e8f0"; // Borders, dividers
-export const ColorInk500 = "#5b6b80"; // Captions (AA on light surfaces)
-export const ColorInk700 = "#334155"; // Secondary text
-export const ColorInk900 = "#0b1220"; // Headings and body text
-export const ColorNavy100 = "#e7eef7";
-export const ColorNavy700 = "#13315c";
-export const ColorNavy900 = "#0b2545"; // Primary: deep navy (buttons, dark sections)
-export const ColorEmerald100 = "#e3f2ec";
-export const ColorEmerald600 = "#12805e";
-export const ColorEmerald700 = "#0e6b4f"; // Mature emerald: accents, success
-export const ColorMetalChampagne = "#8c6a3c"; // Metallic accent for text/lines (AA on light)
-export const ColorMetalGold = "#c8a96a"; // Decorative gold (not for text)
-export const ColorMetalSilver = "#a7b1bd"; // Decorative silver (not for text)
-export const ColorMetalPlatinum = "#dce2e8"; // Decorative platinum (not for text)
-export const ColorFocus = "#1d4ed8"; // Focus ring
-export const ColorDanger = "#b42318";
-export const ColorSuccess = "#0e6b4f";
+export const ColorNight500 = "#3a5270"; // Strong borders, input outlines
+export const ColorNight600 = "#1e3148"; // Borders, dividers
+export const ColorNight700 = "#13253a"; // Cards, inputs, navy panels
+export const ColorNight800 = "#0d1726"; // Alternate sections
+export const ColorNight900 = "#0a1320"; // Page background
+export const ColorNight950 = "#070e18"; // Deepest background (footer, overlays)
+export const ColorBone50 = "#eee7da"; // Headings and body text
+export const ColorBone200 = "#c9cdd3"; // Secondary text
+export const ColorBone400 = "#9aa6b3"; // Captions (AA on every night surface)
+export const ColorBrass300 = "#dcc08a"; // Brass for text, links and kickers
+export const ColorBrass400 = "#c6a15b"; // Primary buttons (night text on brass), lines
+export const ColorBrass600 = "#8c6a3c"; // Brass shadow tone (decorative)
+export const ColorForest400 = "#6dbf94"; // Success text on night
+export const ColorForest700 = "#1d3b2e"; // Courts, accent panels
+export const ColorMetalGold = "#c8a96a"; // Card finish (decorative)
+export const ColorMetalSilver = "#a7b1bd"; // Card finish (decorative)
+export const ColorMetalPlatinum = "#dce2e8"; // Card finish (decorative)
+export const ColorFocus = "#8db8ff"; // Focus ring on night surfaces
+export const ColorDanger = "#ff9a8a"; // Error text on night surfaces

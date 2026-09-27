@@ -1,35 +1,34 @@
 {
-  "$description": "Provisional 'Premium Light' palette (owner's brief, 27.09.2026; ADR-0020). Light, calm, high-contrast; no green/lime of the Tenis Elite site.",
+  "$description": "Provisional 'Night & Brass' palette (B4, chosen by the owner on 27.09.2026; ADR-0020). A members' club at night: deep navy, brass, bone, forest green. No green/lime of the Tenis Elite site.",
   "color": {
-    "surface": {
-      "0": { "$type": "color", "$value": "#FFFFFF", "$description": "Cards, inputs" },
-      "50": { "$type": "color", "$value": "#F8FAFC", "$description": "Page background (slate-50)" },
-      "100": { "$type": "color", "$value": "#F1F5F9", "$description": "Alternate sections" },
-      "200": { "$type": "color", "$value": "#E2E8F0", "$description": "Borders, dividers" }
+    "night": {
+      "950": { "$type": "color", "$value": "#070E18", "$description": "Deepest background (footer, overlays)" },
+      "900": { "$type": "color", "$value": "#0A1320", "$description": "Page background" },
+      "800": { "$type": "color", "$value": "#0D1726", "$description": "Alternate sections" },
+      "700": { "$type": "color", "$value": "#13253A", "$description": "Cards, inputs, navy panels" },
+      "600": { "$type": "color", "$value": "#1E3148", "$description": "Borders, dividers" },
+      "500": { "$type": "color", "$value": "#3A5270", "$description": "Strong borders, input outlines" }
     },
-    "ink": {
-      "900": { "$type": "color", "$value": "#0B1220", "$description": "Headings and body text" },
-      "700": { "$type": "color", "$value": "#334155", "$description": "Secondary text" },
-      "500": { "$type": "color", "$value": "#5B6B80", "$description": "Captions (AA on light surfaces)" }
+    "bone": {
+      "50": { "$type": "color", "$value": "#EEE7DA", "$description": "Headings and body text" },
+      "200": { "$type": "color", "$value": "#C9CDD3", "$description": "Secondary text" },
+      "400": { "$type": "color", "$value": "#9AA6B3", "$description": "Captions (AA on every night surface)" }
     },
-    "navy": {
-      "900": { "$type": "color", "$value": "#0B2545", "$description": "Primary: deep navy (buttons, dark sections)" },
-      "700": { "$type": "color", "$value": "#13315C" },
-      "100": { "$type": "color", "$value": "#E7EEF7" }
+    "brass": {
+      "300": { "$type": "color", "$value": "#DCC08A", "$description": "Brass for text, links and kickers" },
+      "400": { "$type": "color", "$value": "#C6A15B", "$description": "Primary buttons (night text on brass), lines" },
+      "600": { "$type": "color", "$value": "#8C6A3C", "$description": "Brass shadow tone (decorative)" }
     },
-    "emerald": {
-      "700": { "$type": "color", "$value": "#0E6B4F", "$description": "Mature emerald: accents, success" },
-      "600": { "$type": "color", "$value": "#12805E" },
-      "100": { "$type": "color", "$value": "#E3F2EC" }
+    "forest": {
+      "700": { "$type": "color", "$value": "#1D3B2E", "$description": "Courts, accent panels" },
+      "400": { "$type": "color", "$value": "#6DBF94", "$description": "Success text on night" }
     },
     "metal": {
-      "champagne": { "$type": "color", "$value": "#8C6A3C", "$description": "Metallic accent for text/lines (AA on light)" },
-      "gold": { "$type": "color", "$value": "#C8A96A", "$description": "Decorative gold (not for text)" },
-      "silver": { "$type": "color", "$value": "#A7B1BD", "$description": "Decorative silver (not for text)" },
-      "platinum": { "$type": "color", "$value": "#DCE2E8", "$description": "Decorative platinum (not for text)" }
+      "gold": { "$type": "color", "$value": "#C8A96A", "$description": "Card finish (decorative)" },
+      "silver": { "$type": "color", "$value": "#A7B1BD", "$description": "Card finish (decorative)" },
+      "platinum": { "$type": "color", "$value": "#DCE2E8", "$description": "Card finish (decorative)" }
     },
-    "focus": { "$type": "color", "$value": "#1D4ED8", "$description": "Focus ring" },
-    "danger": { "$type": "color", "$value": "#B42318" },
-    "success": { "$type": "color", "$value": "#0E6B4F" }
+    "focus": { "$type": "color", "$value": "#8DB8FF", "$description": "Focus ring on night surfaces" },
+    "danger": { "$type": "color", "$value": "#FF9A8A", "$description": "Error text on night surfaces" }
   }
 }
