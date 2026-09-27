@@ -63,7 +63,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q40](#q40) | Găzduirea paginii de pre-lansare dacă serverul propriu nu e gata *(nouă)* | URGENTĂ | Etapa 1B | REZOLVATĂ |
 | [Q41](#q41) | Avocat / DPO pentru revizuirea textelor legale *(nouă)* | URGENTĂ | Etapa 1B (nota de informare pentru lista de așteptare), Etapa 5 (formularul GDPR al ligii) | REZOLVATĂ |
 | [Q42](#q42) | Fluxul de aprobare pe GitHub *(nouă)* | SCĂZUTĂ | Etapa 0 (organizare) | REZOLVATĂ |
-| [Q43](#q43) | Vârsta minimă pentru a-ți crea singur cont *(nouă, Etapa 1A)* | MEDIE | Etapa 1B / 11 (înscrierea publică) | DESCHISĂ |
+| [Q43](#q43) | Vârsta minimă pentru a-ți crea singur cont *(nouă, Etapa 1A)* | MEDIE | Etapa 1B / 11 (înscrierea publică) | REZOLVATĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -498,7 +498,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q43"></a>Q43 — Vârsta minimă pentru a-ți crea singur cont
 
 - **Prioritate:** MEDIE · **Blochează:** înscrierea publică (Etapa 1B / 11)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Întrebarea:** De la ce vârstă își poate face cineva singur cont online? Sub această vârstă, contul îl face un părinte (conturi de copii, Q7). În România, vârsta de la care o persoană își poate da singură acordul pentru servicii online este 16 ani (de verificat).
 - **Varianta implicită (propusă în Etapa 1A):** 16 ani; configurabilă din admin (`accounts.min_self_registration_age`, marcată `DE_CONFIRMAT`). Liga rămâne 18+ (R-006).
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (27.09.2026):** 14 ani. Setarea `accounts.min_self_registration_age` = 14 (confirmat). Notă: pentru persoanele de 14–15 ani, orice prelucrare bazată pe consimțământ (de exemplu mesaje de marketing) are nevoie de acordul părintelui (vârsta consimțământului digital în România: 16 ani, Legea 190/2018); astfel de opțiuni vor fi oprite pentru ei până la 16 ani.

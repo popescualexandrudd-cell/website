@@ -114,12 +114,12 @@ def test_birth_date_in_future_is_refused(api: Api, legal_docs: None) -> None:
 
 def test_q43_under_minimum_age_must_use_guardian_account(api: Api, legal_docs: None) -> None:
     today = clock.today_local()
-    fifteen = date(today.year - 15, today.month, min(today.day, 28))
-    response = api.post("/auth/register", payload(date_of_birth=fifteen.isoformat()))
+    thirteen = date(today.year - 13, today.month, min(today.day, 28))
+    response = api.post("/auth/register", payload(date_of_birth=thirteen.isoformat()))
     assert response.status_code == 400
     assert response.json()["error"] == {
         "code": "accounts.too_young_for_self_registration",
-        "params": {"min_age": 16},
+        "params": {"min_age": 14},
     }
 
 

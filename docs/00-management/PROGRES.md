@@ -3,10 +3,11 @@
 > Actualizat la fiecare sesiune de lucru. Prima secțiune spune mereu **unde suntem acum**.
 
 ## Unde suntem acum
-- **Etapa curentă:** Etapa 1A (fundația backend) — **livrată pe 27.09.2026, așteaptă aprobarea proprietarului.** Raport: [verificare/etapa-1a/RAPORT.md](verificare/etapa-1a/RAPORT.md).
+- **Etapa curentă:** Etapa 1B (pagina de pre-lansare) — în lucru din 27.09.2026.
+- **Etapa 1A:** aprobată de proprietar pe 27.09.2026 (merge în `main`). Raport: [verificare/etapa-1a/RAPORT.md](verificare/etapa-1a/RAPORT.md).
 - **Etapa 0:** aprobată de proprietar pe 26.09.2026 (tag `etapa-0`, branch `main`).
 - **Următoarea etapă:** 1B (pagina de pre-lansare), după aprobarea Etapei 1A.
-- **Întrebări încă deschise care contează curând:** Q26 (datele firmei), Q39 (domeniu, marcă), Q24 (furnizor de email), Q43 (vârsta minimă pentru cont), Q23 (modelele de hardware) — vezi [INTREBARI_DESCHISE.md](INTREBARI_DESCHISE.md).
+- **Întrebări încă deschise care contează curând:** Q26 (datele firmei), Q39 (domeniu, marcă), Q24 (furnizor de email), Q23 (modelele de hardware) — vezi [INTREBARI_DESCHISE.md](INTREBARI_DESCHISE.md).
 - **Branch de lucru:** `claude/hopeful-euler-rguibn` (repository `popescualexandrudd-cell/website`).
 
 ## Starea etapelor
@@ -14,8 +15,8 @@
 | Etapă | Conținut | Orientativ | Stare |
 |---|---|---|---|
 | 0 | Documentație, structură, ADR-uri, întrebări, plan | oct. 2026 | **Aprobată 26.09.2026** |
-| 1A | Fundația backend | oct. 2026 | Livrată, așteaptă aprobarea |
-| 1B | Pagina de pre-lansare | oct.–nov. 2026 | Neîncepută |
+| 1A | Fundația backend | oct. 2026 | **Aprobată 27.09.2026** |
+| 1B | Pagina de pre-lansare | oct.–nov. 2026 | În lucru |
 | 2 | Motorul ligii + simulări | nov. 2026 | Neîncepută |
 | 3 | Rezervări, prețuri, anulări, prezențe | nov. 2026 | Neîncepută |
 | 4 | Bani, abonamente, corporate, vouchere, cafenea | nov.–dec. 2026 | Neîncepută |
@@ -69,3 +70,4 @@
 - **26.09.2026** — Etapa 0 livrată: documentație, structură, ADR-uri, întrebări, plan.
 - **26.09.2026** — Etapa 0 aprobată. Răspunsuri: Q7, Q8, Q20, Q36, Q37, Q40, Q41, Q42 rezolvate; Q22, Q23, Q24 parțial (Apple Wallet amânat); Q26, Q39 încă deschise. ADR-0001 … ADR-0022 acceptate. Început Etapa 1A.
 - **27.09.2026** — Etapa 1A livrată: backend Django + API, conturi, roluri, 2FA, locații, audit, configurare, traduceri, client API; 109 teste, acoperire 97%. Tag-ul `etapa-0` nu a putut fi publicat din mediul de lucru (GitHub a refuzat push-ul de tag-uri, 403); există local și trebuie creat din GitHub → Releases.
+- **27.09.2026** — Etapa 1A aprobată; Q43 = 14 ani. Cerință nouă a proprietarului pentru 1B: design și branding moderne, estetice, culori atractive, efecte 3D. Început Etapa 1B.

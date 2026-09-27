@@ -102,8 +102,8 @@ CONFIG: dict[str, ConfigSpec] = {
         ),
         ConfigSpec(
             "accounts.min_self_registration_age",
-            16,
-            Marker.TO_CONFIRM,
+            14,
+            Marker.CONFIRMED,
             "Vârsta minimă pentru a-și crea singur cont (sub ea: cont gestionat de părinte).",
             positive_int,
             question="Q43",

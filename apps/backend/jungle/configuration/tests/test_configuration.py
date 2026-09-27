@@ -61,7 +61,7 @@ def test_config_defaults_and_pending_decisions(api: Api, staff) -> None:
     pending = {p["key"]: p for p in api.get("/staff/pending-decisions").json()}
     assert pending["club.company"]["question"] == "Q26"
     assert pending["club.domain"]["question"] == "Q39"
-    assert pending["accounts.min_self_registration_age"]["value"] == 16
+    assert "accounts.min_self_registration_age" not in pending  # Q43 answered: 14
     assert "auth.login_max_failures" not in pending
     listed = {c["key"]: c for c in api.get("/staff/config").json()}
     assert listed["auth.login_max_failures"] == {
@@ -94,7 +94,7 @@ def test_publish_config_versions_and_effective_date(api: Api, staff, client, tim
     assert (
         api.post("/staff/config/accounts.min_self_registration_age", later).json()["version"] == 1
     )
-    assert services.get_config("accounts.min_self_registration_age") == 16  # not yet in force
+    assert services.get_config("accounts.min_self_registration_age") == 14  # not yet in force
     time_machine.move_to("2026-11-01T00:00:01+02:00", tick=False)
     assert services.get_config("accounts.min_self_registration_age") == 18
     assert api.get("/staff/pending-decisions").status_code == 401  # the session expired meanwhile
