@@ -1,6 +1,6 @@
 # Clientul API (TypeScript, generat)
 
-> **Stare:** neînceput (schelet creat în Etapa 0, 26.09.2026). **Se construiește în Etapa:** 1A.
+> **Stare:** construit în Etapa 1A (27.09.2026); se regenerează la fiecare schimbare de API.
 
 ## Ce face
 
@@ -16,4 +16,6 @@ Client TypeScript **generat automat** din schema OpenAPI a backend-ului. Nu se e
 
 ## Rulare, testare, deploy
 
-Etapa 0 nu conține cod. `.env.example`, `Dockerfile` (unde e cazul) și testele se adaugă în etapa care construiește componenta, împreună cu instrucțiunile de rulare, testare și deploy.
+- `openapi.json` și `src/schema.d.ts` sunt **generate**: nu se editează manual. Regenerare: `scripts/generate-api-client`.
+- Folosire: `import { createApiClient } from "@jungle/api-client"; const api = createApiClient("https://api.<domeniu>/");` — trimite cookie-ul de sesiune și tokenul CSRF automat.
+- Verificări: `pnpm --filter @jungle/api-client typecheck` și `test`; `scripts/test-all` verifică și că clientul e la zi.

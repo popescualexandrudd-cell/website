@@ -23,6 +23,8 @@ from jungle.audit import services as audit
 from jungle.configuration.services import get_config
 from jungle.core import clock
 from jungle.core.errors import DomainError, ErrorCode
+from jungle.core.http import client_ip
+from jungle.core.ratelimit import increment
 from jungle.legal import services as legal
 
 
@@ -38,7 +40,17 @@ class RegistrationData:
     accepted: list[legal.AcceptedDocument]
 
 
+REGISTRATIONS_PER_IP_PER_HOUR = 10
+
+
 def register(request: HttpRequest, data: RegistrationData) -> User:
+    if (
+        increment(f"accounts:register:ip:{client_ip(request)}", 3600)
+        > REGISTRATIONS_PER_IP_PER_HOUR
+    ):
+        raise DomainError(
+            ErrorCode.AUTH_RATE_LIMITED, status=429, params={"retry_after_seconds": 3600}
+        )
     email = clean_email(data.email)
     phone = clean_phone(data.phone)
     age = check_birth_date(data.date_of_birth)

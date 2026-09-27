@@ -4,6 +4,22 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 1A — 27.09.2026 (așteaptă aprobarea)
+#### Adăugat
+- `apps/backend`: Django 5.2 LTS + Django Ninja, API `/api/v1` cu schemă OpenAPI; erori cu coduri stabile.
+- Conturi: înregistrare cu acorduri versionate (hash), verificarea emailului, resetarea parolei, schimbarea parolei, profil; conturi rapide pentru invitați (Q8); conturi de copii în spatele unui comutator (Q7).
+- Personal: roluri pe acțiuni, globale sau pe locație; 2FA TOTP obligatorie cu coduri de recuperare și protecție la reutilizare; blocare temporară după încercări greșite; limită de înregistrări pe IP.
+- Locații și resurse administrabile fără cod; dispozitive; date inițiale (`seed_initial`, `--demo`).
+- Jurnal de audit, versiuni de configurare și acorduri: tabele doar-adăugare (trigger PostgreSQL).
+- Feature flags și configurare versionată, cu lista valorilor `DE_CONFIRMAT`.
+- Admin tehnic de urgență (doar Admin + 2FA, modificări auditate).
+- `packages/i18n` (RO/EN, test de completitudine), `packages/api-client` (generat din OpenAPI).
+- `scripts/test-all`, `scripts/setup`, `scripts/dev`, `scripts/generate-api-client`; Dockerfile, Docker Compose de dezvoltare, pre-commit, GitHub Actions.
+- Întrebarea nouă Q43 (vârsta minimă pentru cont propriu).
+#### Reparat la revizuire
+- Link de resetare cu `uid` invalid → eroare 500; acum „link invalid”.
+- Câmpul 2FA lipsea de pe pagina de login a adminului de urgență.
+
 ### Etapa 0 — 26.09.2026 (aprobată 26.09.2026, tag `etapa-0`)
 #### Adăugat
 - Structura monorepo din §4.4 (`apps/`, `packages/`, `services/`, `deploy/`, `scripts/`, `tests/`, `docs/`), cu README în fiecare folder.

@@ -69,7 +69,9 @@ def session(request: HttpRequest) -> SessionOut:
     return SessionOut(authenticated=False, user=None)
 
 
-@auth_router.post("/register", response={201: MeOut, **errors(400, 403, 404, 409, 422)}, auth=None)
+@auth_router.post(
+    "/register", response={201: MeOut, **errors(400, 403, 404, 409, 422, 429)}, auth=None
+)
 def register(request: HttpRequest, payload: RegisterIn) -> Status[MeOut]:
     require_csrf(request)
     data = registration.RegistrationData(

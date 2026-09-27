@@ -20,17 +20,20 @@ class DeviceKind(models.TextChoices):
 
 class Device(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    kind = models.CharField(max_length=20, choices=DeviceKind.choices)
+    kind = models.CharField("tip", max_length=20, choices=DeviceKind.choices)
     location = models.ForeignKey(
-        "locations.Location", on_delete=models.PROTECT, related_name="devices"
+        "locations.Location",
+        on_delete=models.PROTECT,
+        related_name="devices",
+        verbose_name="locație",
     )
-    name = models.CharField(max_length=120)
-    is_active = models.BooleanField(default=True)
+    name = models.CharField("nume", max_length=120)
+    is_active = models.BooleanField("activ", default=True)
     public_key = models.TextField(
         blank=True, help_text="Cheia publică Ed25519 a Hardware Bridge (Etapa 7)."
     )
     certificate_fingerprint = models.CharField(max_length=128, blank=True)
-    last_seen_at = models.DateTimeField(null=True, blank=True)
+    last_seen_at = models.DateTimeField("ultimul semnal", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

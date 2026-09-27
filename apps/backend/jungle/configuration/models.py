@@ -15,7 +15,7 @@ class Marker(models.TextChoices):
 
 class FeatureFlag(models.Model):
     key = models.CharField(max_length=60, primary_key=True)
-    enabled = models.BooleanField(default=False)
+    enabled = models.BooleanField("activ", default=False)
     updated_at = models.DateTimeField(auto_now=True)
     updated_by_id = models.UUIDField(null=True, blank=True)
 

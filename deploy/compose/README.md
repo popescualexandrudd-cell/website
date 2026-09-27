@@ -1,6 +1,6 @@
 # Docker Compose pe medii
 
-> **Stare:** neînceput (schelet creat în Etapa 0, 26.09.2026). **Se construiește în Etapa:** 1A (dev), 14 (staging, prod).
+> **Stare:** mediul `dev` creat în Etapa 1A (27.09.2026); `staging` și `prod` în Etapa 14.
 
 Fișierele Docker Compose pentru `dev`, `staging` și `prod` (§14).
 
@@ -11,3 +11,6 @@ Fișierele Docker Compose pentru `dev`, `staging` și `prod` (§14).
 ## Decizii tehnice
 
 [ADR-0015](../../docs/04-arhitectura/adr/0015-infrastructura-docker-caddy.md)
+
+## Medii
+- [`dev/compose.yaml`](dev/compose.yaml): PostgreSQL 17, Redis 7 și backend-ul (neverificat încă în Docker: mediul de lucru nu rulează Docker; verificare în Etapa 14).

@@ -6,7 +6,7 @@ Memoria operațională a proiectului. Se actualizează la finalul fiecărei etap
 Sistem digital propriu pentru clubul **Jungle Padel** (Șoseaua Biruinței, lângă Selgros Pantelimon): 4 terenuri de padel închise, pilates Reformer (4 → 6 aparate), sală de evenimente, cafenea, ligă de padel de tip MMR. Deschidere: **martie 2027**. Proprietarul **nu are programator**: noi construim și întreținem, în sesiuni succesive. Backend-ul și website-ul sunt singura sursă de adevăr; chioșcurile, ecranele, afișajul cafenelei și adminul sunt „ferestre” spre aceleași date, conectate live.
 
 ## Stare curentă
-- **Etapa 0 aprobată pe 26.09.2026** (tag `etapa-0`). **Etapa 1A (fundația backend) în lucru.** Apoi 1B (pagina de pre-lansare), doar după aprobarea 1A.
+- **Etapa 0 aprobată pe 26.09.2026** (tag `etapa-0` doar local: push-ul de tag-uri e refuzat de GitHub din acest mediu). **Etapa 1A livrată pe 27.09.2026, așteaptă aprobarea.** Apoi 1B (pagina de pre-lansare), doar după aprobarea 1A.
 - Decizii ale proprietarului din 26.09.2026: Apple Wallet amânat (Q24); textele legale le redactăm noi, fără avocat (Q41); hardware ales mai târziu, lucrăm cu simulatoare (Q23); server propriu sau închiriat (Q40).
 - Detalii: [docs/00-management/PROGRES.md](docs/00-management/PROGRES.md).
 
@@ -70,7 +70,19 @@ Monorepo: workspace pnpm (TypeScript) + workspace uv (Python) (ADR-0002). Featur
 - Branch-ul de lucru și repository-ul sunt notate în `PROGRES.md`.
 
 ## Comenzi
-Încă nu există cod de rulat. Comenzile (`scripts/setup`, `scripts/test-all`, pornirea mediului local) se adaugă aici în Etapa 1A.
+- `scripts/test-all` — TOATE verificările (ruff, mypy strict, migrații, pytest cu acoperire ≥ 95%, OpenAPI și client la zi, tsc, teste JS, traduceri RO/EN). Trebuie să fie verde înainte de orice livrare.
+- `scripts/setup` — dependențe, migrații, date inițiale + demo. `scripts/dev` — backend pe `http://localhost:8000` (`/api/v1/docs`, `/django-admin/`).
+- `scripts/generate-api-client` — după ORICE schimbare de API (altfel `test-all` pică).
+- Primul admin: `JUNGLE_ADMIN_PASSWORD=... uv run python apps/backend/manage.py bootstrap_admin --email ... --first-name ... --last-name ...`
+- PostgreSQL local: `DATABASE_URL` (implicit `postgres://jungle:jungle@localhost:5432/jungle`); în mediul cloud: `pg_ctlcluster 16 main start`.
+
+### Convenții de cod în backend (`apps/backend/jungle/`)
+- O aplicație Django pe domeniu (`accounts`, `locations`, `audit`, `configuration`, `legal`, `devices`, `notifications`, `core`); logica stă în `services`, endpoint-urile (`api.py`) sunt subțiri.
+- Orice acțiune de personal: `authorize(request, Action.X, location_id)` în serviciu; orice modificare importantă: `audit.record(...)`.
+- Erori: `DomainError(ErrorCode.X, status, params)`; codul nou se adaugă în `core/errors.py` ȘI în `packages/i18n/messages/{ro,en}.json` (testul verifică).
+- Timp: doar `jungle.core.clock` (niciodată `datetime.now()`); teste de timp cu `time_machine`.
+- Emailuri trimise cu `transaction.on_commit`; în teste: `django_capture_on_commit_callbacks(execute=True)`.
+- Valori configurabile noi: în `configuration/registry.py`, cu marcaj (`TO_CONFIRM` = DE_CONFIRMAT).
 
 ## La finalul fiecărei etape
 Parcurge [CHECKLIST_LIVRARE.md](docs/00-management/CHECKLIST_LIVRARE.md) și [DEFINITION_OF_DONE.md](docs/00-management/DEFINITION_OF_DONE.md), apoi actualizează: `PROGRES.md`, `CHANGELOG.md`, `INTREBARI_DESCHISE.md`, README-urile atinse și acest fișier.

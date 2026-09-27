@@ -1,6 +1,6 @@
 # Scripturi
 
-> **Stare:** neînceput (schelet creat în Etapa 0, 26.09.2026). **Se construiește în Etapa:** 1A (setup, test-all), 2 (simularea ligii).
+> **Stare:** construite în Etapa 1A (27.09.2026); simularea ligii vine în Etapa 2.
 
 Comenzi pentru: pregătirea mediului local, date demo (inclusiv numele din exemplul §8.5), rularea tuturor testelor (`test-all`, §13.5), simularea ligii.
 
@@ -11,3 +11,11 @@ Comenzi pentru: pregătirea mediului local, date demo (inclusiv numele din exemp
 ## Decizii tehnice
 
 [ADR-0021](../docs/04-arhitectura/adr/0021-calitate-teste-ci.md)
+
+## Scripturi disponibile
+| Script | Ce face |
+|---|---|
+| `test-all` | toate verificările proiectului; trebuie să fie verde înainte de orice livrare |
+| `setup` | dependențe, migrații, date inițiale și demo |
+| `dev` | pornește backend-ul pe `http://localhost:8000` |
+| `generate-api-client` | regenerează schema OpenAPI și clientul TypeScript |

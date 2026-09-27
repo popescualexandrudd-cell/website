@@ -29,7 +29,11 @@ from jungle.core.http import client_ip
 
 
 class OtpAdminLoginForm(AuthenticationForm):
-    otp_code = forms.CharField(label="Cod 2FA (sau cod de recuperare)", max_length=20)
+    otp_code = forms.CharField(
+        label="Cod 2FA (sau cod de recuperare)",
+        max_length=20,
+        widget=forms.TextInput(attrs={"autocomplete": "one-time-code", "inputmode": "numeric"}),
+    )
 
     error_messages = {
         **AuthenticationForm.error_messages,
@@ -66,6 +70,7 @@ class EmergencyAdminSite(admin.AdminSite):
     site_title = "Jungle Padel admin"
     index_title = "Doar pentru urgențe. Administrarea obișnuită se face în panoul de admin."
     login_form = OtpAdminLoginForm
+    login_template = "admin/emergency_login.html"
 
     def has_permission(self, request: HttpRequest) -> bool:
         user = request.user

@@ -1,6 +1,6 @@
 # Traduceri (i18n)
 
-> **Stare:** neînceput (schelet creat în Etapa 0, 26.09.2026). **Se construiește în Etapa:** 1A.
+> **Stare:** construit în Etapa 1A (27.09.2026): RO/EN pentru toate codurile de eroare ale API-ului.
 
 ## Ce face
 
@@ -16,4 +16,6 @@ Cataloagele de texte pentru toate aplicațiile: română (referință) și engle
 
 ## Rulare, testare, deploy
 
-Etapa 0 nu conține cod. `.env.example`, `Dockerfile` (unde e cazul) și testele se adaugă în etapa care construiește componenta, împreună cu instrucțiunile de rulare, testare și deploy.
+- Cataloagele: `messages/ro.json` (referință) și `messages/en.json`, format ICU MessageFormat (de exemplu `{retry_after_seconds, number}`).
+- Un cod de eroare nou din backend (`apps/backend/jungle/core/errors.py`) trebuie adăugat în ambele fișiere la `errors.<cod>`; testele backend și `pnpm --filter @jungle/i18n test` verifică asta.
+- O limbă nouă = un fișier nou (`es.json`, `it.json`, `zh.json` …), fără cod nou.

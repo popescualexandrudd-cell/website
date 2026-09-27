@@ -19,11 +19,13 @@ slug_validator = RegexValidator(
 
 class Location(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    slug = models.CharField(max_length=60, unique=True, validators=[slug_validator])
-    name = models.CharField(max_length=120)
-    address = models.CharField(max_length=250, blank=True)
-    city = models.CharField(max_length=120, blank=True)
-    is_active = models.BooleanField(default=True)
+    slug = models.CharField(
+        "identificator", max_length=60, unique=True, validators=[slug_validator]
+    )
+    name = models.CharField("nume", max_length=120)
+    address = models.CharField("adresă", max_length=250, blank=True)
+    city = models.CharField("localitate", max_length=120, blank=True)
+    is_active = models.BooleanField("activă", default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -55,17 +57,24 @@ REQUIRED_PARENT_KIND: dict[str, str | None] = {
 
 class Resource(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    location = models.ForeignKey(Location, on_delete=models.PROTECT, related_name="resources")
-    kind = models.CharField(max_length=30, choices=ResourceKind.choices)
-    slug = models.CharField(max_length=60, validators=[slug_validator])
-    name = models.CharField(max_length=120)
-    parent = models.ForeignKey(
-        "self", on_delete=models.PROTECT, null=True, blank=True, related_name="children"
+    location = models.ForeignKey(
+        Location, on_delete=models.PROTECT, related_name="resources", verbose_name="locație"
     )
-    capacity = models.PositiveIntegerField(null=True, blank=True)
-    attributes = models.JSONField(default=dict, blank=True)
-    is_active = models.BooleanField(default=True)
-    sort_order = models.PositiveIntegerField(default=0)
+    kind = models.CharField("tip", max_length=30, choices=ResourceKind.choices)
+    slug = models.CharField("identificator", max_length=60, validators=[slug_validator])
+    name = models.CharField("nume", max_length=120)
+    parent = models.ForeignKey(
+        "self",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="children",
+        verbose_name="resursă-părinte",
+    )
+    capacity = models.PositiveIntegerField("capacitate", null=True, blank=True)
+    attributes = models.JSONField("atribute", default=dict, blank=True)
+    is_active = models.BooleanField("activă", default=True)
+    sort_order = models.PositiveIntegerField("ordine", default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -76,3 +76,10 @@ def test_api_session_without_mfa_cannot_open_admin(client: Client, make_user) ->
     grant(admin, Role.ADMIN)
     login_as(client, admin, mfa=False)
     assert client.get("/django-admin/").status_code == 302
+
+
+def test_login_page_shows_the_2fa_field(client: Client) -> None:
+    page = client.get("/django-admin/login/").content.decode()
+    assert 'name="otp_code"' in page
+    assert 'name="username"' in page
+    assert 'name="password"' in page

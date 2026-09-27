@@ -226,3 +226,13 @@ def test_published_legal_document_is_readable_and_immutable(api: Api, legal_docs
 
     with pytest.raises(DatabaseError), transaction.atomic():
         LegalDocument.objects.filter(kind="privacy").update(body="changed")
+
+
+def test_registrations_are_limited_per_ip(api: Api, legal_docs: None) -> None:
+    """§12.1: rate limiting against mass account creation (10 per hour per IP)."""
+    for n in range(10):
+        assert api.post("/auth/register", payload(email=f"u{n}@example.test")).status_code == 201
+        api.post("/auth/logout")
+    response = api.post("/auth/register", payload(email="u10@example.test"))
+    assert response.status_code == 429
+    assert error_code(response) == "auth.rate_limited"

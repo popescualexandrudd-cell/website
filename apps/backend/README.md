@@ -1,6 +1,6 @@
 # Backend central (Django)
 
-> **Stare:** neînceput (schelet creat în Etapa 0, 26.09.2026). **Se construiește în Etapa:** 1A (fundația), apoi 3, 4, 5, 6, 12.
+> **Stare:** fundația construită în Etapa 1A (27.09.2026). **Următoarele module:** Etapele 3, 4, 5, 6, 12.
 
 ## Ce face
 
@@ -36,4 +36,30 @@ Valorile reale stau doar în `.env` pe server, niciodată în git.
 
 ## Rulare, testare, deploy
 
-Etapa 0 nu conține cod. `.env.example`, `Dockerfile` (unde e cazul) și testele se adaugă în etapa care construiește componenta, împreună cu instrucțiunile de rulare, testare și deploy.
+Din rădăcina repository-ului:
+
+| Ce | Comandă |
+|---|---|
+| Pregătire (dependențe, migrații, date demo) | `scripts/setup` |
+| Pornire locală | `scripts/dev` → `http://localhost:8000/api/v1/docs`, `http://localhost:8000/django-admin/` |
+| Toate verificările | `scripts/test-all` |
+| Doar testele backend | `cd apps/backend && uv run pytest --cov` |
+| Primul admin (2FA inclusă) | `JUNGLE_ADMIN_PASSWORD=... uv run python apps/backend/manage.py bootstrap_admin --email ... --first-name ... --last-name ...` |
+| Resetarea 2FA (telefon pierdut) | `uv run python apps/backend/manage.py reset_mfa --email ... --reason "..."` |
+| Date inițiale | `uv run python apps/backend/manage.py seed_initial [--demo]` |
+| Schema OpenAPI + client TS | `scripts/generate-api-client` |
+
+Baza de date: PostgreSQL (`DATABASE_URL`; implicit `postgres://jungle:jungle@localhost:5432/jungle`), de exemplu cu `docker compose -f deploy/compose/dev/compose.yaml up -d db redis`.
+Variabilele de mediu sunt descrise în [`.env.example`](.env.example). Imaginea Docker: [`Dockerfile`](Dockerfile) (se construiește din rădăcina repository-ului).
+
+### Structura codului
+| Folder | Ce conține |
+|---|---|
+| `jungle/core` | erori cu coduri stabile, ceas (`Europe/Bucharest`), roluri și acțiuni, criptare, limitări, admin de urgență, health |
+| `jungle/accounts` | utilizatori, roluri, 2FA, înregistrare, parole, invitați, copii |
+| `jungle/locations` | locații și resurse |
+| `jungle/audit` | jurnalul de audit (doar-adăugare) |
+| `jungle/configuration` | feature flags, configurare versionată, „ce mai trebuie confirmat” |
+| `jungle/legal` | documente legale versionate, acorduri (doar-adăugare) |
+| `jungle/devices` | dispozitivele clubului |
+| `jungle/notifications` | emailuri RO/EN |

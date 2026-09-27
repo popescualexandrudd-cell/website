@@ -55,13 +55,15 @@ class User(AbstractBaseUser):
         max_length=5, choices=Language.choices, default=Language.RO
     )
     account_type = models.CharField(
-        max_length=10, choices=AccountType.choices, default=AccountType.FULL
+        "tip cont", max_length=10, choices=AccountType.choices, default=AccountType.FULL
     )
-    is_active = models.BooleanField(default=True)
-    is_demo = models.BooleanField(default=False, help_text="Date demo (seed), nu clienți reali.")
-    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField("activ", default=True)
+    is_demo = models.BooleanField(
+        "demo", default=False, help_text="Date demo (seed), nu clienți reali."
+    )
+    created_at = models.DateTimeField("creat la", auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    email_verified_at = models.DateTimeField(null=True, blank=True)
+    email_verified_at = models.DateTimeField("email verificat la", null=True, blank=True)
     totp_secret = models.TextField(blank=True, help_text="Criptat (Fernet).")
     totp_confirmed_at = models.DateTimeField(null=True, blank=True)
     totp_last_step = models.BigIntegerField(null=True, blank=True)
@@ -153,6 +155,8 @@ class GuardianLink(models.Model):
         constraints = [
             models.UniqueConstraint(fields=["guardian", "child"], name="guardian_child_unique")
         ]
+        verbose_name = "legătură părinte–copil"
+        verbose_name_plural = "legături părinte–copil"
 
     def __str__(self) -> str:
         return f"{self.guardian} → {self.child}"
