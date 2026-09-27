@@ -4,6 +4,20 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 2 — 27.09.2026 (așteaptă aprobarea)
+#### Adăugat
+- `packages/league-engine` (Python pur): MMR Weng-Lin Thurstone–Mosteller verificat față de `openskill`; nivelul 1.0–7.0; chestionar și plasare; ranguri Bronz IV → Maestru, LP, promovare/retrogradare/protecție, departajare, Regele Junglei; validatorul de scor și meciurile neterminate; anti-abuz (minimum de meciuri, limită zilnică, randament descrescător, decay); provocări; turnee; resetarea de sezon; evenimente înainte/după, aplicare idempotentă, recalculare deterministă.
+- 173 de teste cu ID-ul regulii în nume, 100% acoperire pe ramuri, teste de proprietate (hypothesis); incluse în `scripts/test-all`.
+- Simularea mare (`tools/simulate.py`: 500 de jucători, 50.000 de meciuri, 8 sezoane) cu rapoarte și grafice în `docs/03-liga/simulari/`.
+- `docs/03-liga/ID-URI-REGULI.md` (LG-001 … LG-162), `NIVELURI.md`, `simulari/CALIBRARE.md`; sursa FIP pentru regula la 40–40 („Star Point”, din 2026).
+- Întrebarea nouă Q45 (valorile implicite ale ligii).
+#### Modificat la calibrare
+- `LP_total_așteptat` calibrat prin simulare la `(Nivel − 1,3)/4,6 × 2000` (DE_CONFIRMAT, se recalibrează după Sezonul 0).
+#### Reparat la revizuire
+- Două promovări posibile dintr-un singur meci cu bonus mare de turneu: surplusul se plafonează la 99 LP.
+- Bonusurile se pierdeau la un câștig plafonat la +60: acum se adaugă după plafonare.
+- Simulatorul socotea ziua în UTC (motorul, corect, în ora României): acum folosesc aceeași regulă.
+
 ### Etapa 1B, revizia 2 „Premium Light” — 27.09.2026 (așteaptă aprobarea)
 #### Modificat
 - Identitatea vizuală provizorie „Premium Light” înlocuiește „Neon Jungle”: fundal deschis, bleumarin, smarald, accente metalice, fontul Inter (`docs/12-branding/04-identitate-provizorie-premium-light.md`); contrast AAA pentru text.

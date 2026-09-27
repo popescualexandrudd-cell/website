@@ -64,6 +64,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q41](#q41) | Avocat / DPO pentru revizuirea textelor legale *(nouă)* | URGENTĂ | Etapa 1B (nota de informare pentru lista de așteptare), Etapa 5 (formularul GDPR al ligii) | REZOLVATĂ |
 | [Q42](#q42) | Fluxul de aprobare pe GitHub *(nouă)* | SCĂZUTĂ | Etapa 0 (organizare) | REZOLVATĂ |
 | [Q43](#q43) | Vârsta minimă pentru a-ți crea singur cont *(nouă, Etapa 1A)* | MEDIE | Etapa 1B / 11 (înscrierea publică) | REZOLVATĂ |
+| [Q45](#q45) | Valorile implicite ale ligii alese în Etapa 2 *(nouă, Etapa 2)* | SCĂZUTĂ | Etapa 6 (nu blochează; se schimbă din configurare) | DESCHISĂ |
 | [Q44](#q44) | Randări sau fotografii reale ale spațiilor (vestiare, pilates, sală de evenimente, cafenea, lounge) *(nouă, Etapa 1B)* | MEDIE | Etapa 1B (grila de facilități), Etapa 11 (website-ul complet), Etapa 13 (marketing) | DESCHISĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
@@ -513,3 +514,17 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Context:** proprietarul a cerut (27.09.2026) randări fotorealiste pentru vestiare, studioul de Pilates Reformer și sala de evenimente. Nu avem încă proiectul de arhitectură (planuri, materiale, finisaje), iar o randare „inventată” ar fi prezentată ca realitate (invariantul 12). Arena și cardul de membru sunt randări proprii, marcate ca ilustrative.
 - **Întrebarea:** Există (sau va exista) un proiect de arhitectură / design interior cu randări? Sunt disponibile planurile și materialele, ca să realizăm noi randările? Când se pot face fotografii reale?
 - **Varianta implicită:** până la primirea materialelor, grila de facilități folosește pictograme și nota „Randările fotorealiste ale acestor spații vor fi adăugate pe baza proiectului de arhitectură”. Folosim doar imagini proprii (fără imagini cumpărate de pe site-uri de stock).
+
+## Întrebări noi, apărute în Etapa 2
+
+### <a id="q45"></a>Q45 — Valorile implicite ale ligii alese în Etapa 2
+
+- **Prioritate:** SCĂZUTĂ · **Blochează:** nimic (toate se schimbă din configurarea versionată, fără cod)
+- **Stare:** DESCHISĂ
+- **Context:** acolo unde specificația nu spunea exact, am ales o variantă implicită, marcată DE_CONFIRMAT în [ID-URI-REGULI.md](../03-liga/ID-URI-REGULI.md).
+- **Întrebările, pe înțeles:**
+  1. **Provocări:** se poate provoca și cineva de pe aceeași treaptă, nu doar de pe treapta de deasupra? *Implicit: da.*
+  2. **Perechi noi:** o pereche care joacă prima dată împreună pornește de la media nivelurilor celor doi. *Implicit: da.*
+  3. **Bonusuri:** bonusul de provocare (+5) și cel de turneu se adaugă chiar dacă meciul a adus deja maximul de +60. *Implicit: da.*
+  4. **Nivelul pentru ranguri:** din simulare, am ales ca un jucător de nivel 5,9 sau peste să tindă spre Maestru (nu 7,0, ca în formula inițială, unde nimeni nu ajungea Maestru). *Implicit: 5,9, recalibrat după Sezonul 0.*
+  5. **Regula la 40–40:** „Star Point”, regula oficială din 2026 (două avantaje, apoi un punct decisiv). *Implicit: Star Point; se poate alege „Punct de aur” pentru ligă.*

@@ -1,6 +1,6 @@
 # uv workspace root (virtual: no package of its own). See ADR-0002.
 [tool.uv.workspace]
-members = ["apps/backend"]
+members = ["apps/backend", "packages/league-engine"]
 
 [tool.ruff]
 line-length = 100
@@ -15,7 +15,8 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"**/tests/**" = ["S101", "S105", "S106", "S311"]
+"**/tests/**" = ["S101", "S105", "S106", "S311", "PT018", "RUF043"]
+"packages/league-engine/tools/**" = ["S311", "E501"]  # seeded RNG; long SVG/Markdown template lines
 "**/conftest.py" = ["S101", "S105", "S106", "S107"]
 "**/core/errors.py" = ["S105"]  # error-code names such as ACCOUNTS_PASSWORD_WEAK are not secrets
 "**/management/commands/**" = ["S311"]

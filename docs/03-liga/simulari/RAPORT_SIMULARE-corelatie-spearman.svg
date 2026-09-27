@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 240" font-family="Inter,Arial" font-size="12">
+<rect width="640" height="240" fill="#ffffff"/>
+<text x="50" y="18" font-size="14" font-weight="600" fill="#0B1220">Corelația Spearman rang–nivel real, pe sezoane</text>
+<polyline points="50.0,108.4 131.4,82.9 212.9,71.9 294.3,69.2 375.7,68.4 457.1,72.1 538.6,73.0 620.0,70.8" fill="none" stroke="#0B2545" stroke-width="2.5"/>
+<line x1="50" y1="165.6" x2="620" y2="165.6" stroke="#0E6B4F" stroke-dasharray="6 4"/><text x="620" y="159.6" text-anchor="end" fill="#0E6B4F">prag 0.85</text>
+<circle cx="50.0" cy="108.4" r="3.5" fill="#0B2545"/>
+<text x="50.0" y="228" text-anchor="middle" fill="#334155">S1</text>
+<text x="50.0" y="100.4" text-anchor="middle" fill="#334155">0.92</text>
+<circle cx="131.4" cy="82.9" r="3.5" fill="#0B2545"/>
+<text x="131.4" y="228" text-anchor="middle" fill="#334155">S2</text>
+<text x="131.4" y="74.9" text-anchor="middle" fill="#334155">0.96</text>
+<circle cx="212.9" cy="71.9" r="3.5" fill="#0B2545"/>
+<text x="212.9" y="228" text-anchor="middle" fill="#334155">S3</text>
+<text x="212.9" y="63.9" text-anchor="middle" fill="#334155">0.97</text>
+<circle cx="294.3" cy="69.2" r="3.5" fill="#0B2545"/>
+<text x="294.3" y="228" text-anchor="middle" fill="#334155">S4</text>
+<text x="294.3" y="61.2" text-anchor="middle" fill="#334155">0.98</text>
+<circle cx="375.7" cy="68.4" r="3.5" fill="#0B2545"/>
+<text x="375.7" y="228" text-anchor="middle" fill="#334155">S5</text>
+<text x="375.7" y="60.4" text-anchor="middle" fill="#334155">0.98</text>
+<circle cx="457.1" cy="72.1" r="3.5" fill="#0B2545"/>
+<text x="457.1" y="228" text-anchor="middle" fill="#334155">S6</text>
+<text x="457.1" y="64.1" text-anchor="middle" fill="#334155">0.97</text>
+<circle cx="538.6" cy="73.0" r="3.5" fill="#0B2545"/>
+<text x="538.6" y="228" text-anchor="middle" fill="#334155">S7</text>
+<text x="538.6" y="65.0" text-anchor="middle" fill="#334155">0.97</text>
+<circle cx="620.0" cy="70.8" r="3.5" fill="#0B2545"/>
+<text x="620.0" y="228" text-anchor="middle" fill="#334155">S8</text>
+<text x="620.0" y="62.8" text-anchor="middle" fill="#334155">0.97</text>
+</svg>

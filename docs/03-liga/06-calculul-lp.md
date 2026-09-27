@@ -22,3 +22,8 @@ clamp:    victorie ∈ [+3, +60]; înfrângere ∈ [−60, −3]; egalitate ∈ 
 - Exemple de verificat în teste (K = 40, g = 1, m = 1): echipe egale → ±20; echipa mai slabă (p = 0.24) bate echipa mai bună → +30 / −30; echipa mai bună (p = 0.76) bate echipa mai slabă → +10 / −10.
 - În simplu, aceeași formulă. În clasamentul pe perechi, `j` e perechea.
 - În meciurile de plasare, LP nu se aplică (doar MMR).
+
+## Notă (Etapa 2, 27.09.2026): calibrarea prin simulare
+- `LP_total_așteptat` a fost calibrat prin simulare (§6.17) la **`(Nivel − 1,3) / 4,6 × 2000`**, marcat DE_CONFIRMAT. Cu formula inițială nimeni nu ajungea Maestru. Detalii: [simulari/CALIBRARE.md](simulari/CALIBRARE.md). Se recalibrează după „Sezonul 0 – Calibrare”.
+- Bonusurile (provocare, fază de turneu) se adaugă după limitare (DE_CONFIRMAT, LG-069), ca să nu se piardă la un câștig deja plafonat la +60.
+- ID-urile regulilor din această secțiune: LG-060 … LG-069 ([ID-URI-REGULI.md](ID-URI-REGULI.md)).

@@ -10,3 +10,7 @@
 - **Protecție la promovare**: următoarele **3 meciuri** după o promovare nu pot produce retrogradare (LP nu coboară sub 0).
 - **Retrogradare**: LP < 0 (fără protecție) → treapta anterioară, cu **LP = 75**. Bronz IV are podea la 0. Maestru cu LP < 0 → Diamant I, LP 75.
 - **Departajare** (egalitate de LP total): nivel (μ) mai mare, apoi mai multe meciuri oficiale jucate în sezon, apoi cine a atins primul acel LP. Ordinea e deterministă și testată.
+
+## Notă (Etapa 2, 27.09.2026)
+- Un singur meci nu poate produce două promovări: sub Maestru, surplusul după promovare se plafonează la 99 LP (LG-058, DE_CONFIRMAT). Situația apare doar cu bonusuri mari de turneu.
+- Ultima departajare, pentru o ordine complet deterministă, este ID-ul jucătorului (LG-057).

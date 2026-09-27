@@ -6,7 +6,7 @@ Memoria operațională a proiectului. Se actualizează la finalul fiecărei etap
 Sistem digital propriu pentru clubul **Jungle Padel** (Șoseaua Biruinței, lângă Selgros Pantelimon): 4 terenuri de padel închise, pilates Reformer (4 → 6 aparate), sală de evenimente, cafenea, ligă de padel de tip MMR. Deschidere: **martie 2027**. Proprietarul **nu are programator**: noi construim și întreținem, în sesiuni succesive. Backend-ul și website-ul sunt singura sursă de adevăr; chioșcurile, ecranele, afișajul cafenelei și adminul sunt „ferestre” spre aceleași date, conectate live.
 
 ## Stare curentă
-- **Etapa 0 aprobată pe 26.09.2026** (tag `etapa-0` doar local: push-ul de tag-uri e refuzat de GitHub din acest mediu). **Etapa 1A aprobată pe 27.09.2026.** **Etapa 1B (pagina de pre-lansare) livrată pe 27.09.2026 în revizia 2 „Premium Light”, așteaptă aprobarea.** Proprietarul a cerut o estetică ultra-premium, luminoasă, cu randări 3D realiste (identitatea provizorie: `docs/12-branding/04-identitate-provizorie-premium-light.md`; „Neon Jungle” e doar istoric). **Etapa 2 (motorul ligii) începută** la cererea proprietarului.
+- **Etapa 0 aprobată pe 26.09.2026** (tag `etapa-0` doar local: push-ul de tag-uri e refuzat de GitHub din acest mediu). **Etapa 1A aprobată pe 27.09.2026.** **Etapa 1B (pagina de pre-lansare) livrată pe 27.09.2026 în revizia 2 „Premium Light”, așteaptă aprobarea.** Proprietarul a cerut o estetică ultra-premium, luminoasă, cu randări 3D realiste (identitatea provizorie: `docs/12-branding/04-identitate-provizorie-premium-light.md`; „Neon Jungle” e doar istoric). **Etapa 2 (motorul ligii + simulări) livrată pe 27.09.2026, așteaptă aprobarea** (`packages/league-engine`, 100% acoperire pe ramuri, rapoarte în `docs/03-liga/simulari/`).
 - Decizii ale proprietarului din 26.09.2026: Apple Wallet amânat (Q24); textele legale le redactăm noi, fără avocat (Q41); hardware ales mai târziu, lucrăm cu simulatoare (Q23); server propriu sau închiriat (Q40); cont propriu de la 14 ani (Q43, 27.09.2026).
 - Detalii: [docs/00-management/PROGRES.md](docs/00-management/PROGRES.md).
 
@@ -68,6 +68,13 @@ Monorepo: workspace pnpm (TypeScript) + workspace uv (Python) (ADR-0002). Featur
 - Commit-uri în engleză, stil Conventional Commits (`feat:`, `fix:`, `docs:`, `test:`, `chore:`).
 - Fiecare etapă aprobată primește un tag git (`etapa-0`, `etapa-1a` …) (Q42).
 - Branch-ul de lucru și repository-ul sunt notate în `PROGRES.md`.
+
+### Convenții pentru motorul ligii (`packages/league-engine`)
+- Python pur: fără Django, bază de date, rețea sau ceas; toate constantele vin din `LeagueConfig` (versionată).
+- Orice regulă nouă primește un ID `LG-xxx` în `docs/03-liga/ID-URI-REGULI.md`, iar testul îl poartă în nume.
+- Acoperire pe ramuri 100% (`uv run pytest --cov` în pachet); rotunjirea LP doar cu `round_half_away`.
+- După orice schimbare de formulă sau parametru: rulează din nou simularea (`uv run python tools/simulate.py`) și actualizează `docs/03-liga/simulari/CALIBRARE.md`.
+- Ziua (limita zilnică, decay) se socotește în `Europe/Bucharest`.
 
 ## Comenzi
 - `scripts/test-all` — TOATE verificările (ruff, mypy strict, migrații, pytest cu acoperire ≥ 95%, OpenAPI și client la zi, tsc, teste JS, traduceri RO/EN). Trebuie să fie verde înainte de orice livrare.

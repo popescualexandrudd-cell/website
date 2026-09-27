@@ -22,11 +22,10 @@ Specificația ligii (§6), câte un fișier pe subsecțiune. Implementarea: [`pa
 - [6.15 Gamificare](15-gamificare.md)
 - [6.16 Corectitudine tehnică (obligatoriu)](16-corectitudine-tehnica.md)
 - [6.17 Testele ligii (obligatorii, înainte de orice integrare)](17-testele-ligii.md)
-- [`simulari/`](simulari/) — rapoartele simulărilor ligii (Etapa 2)
+- [`simulari/`](simulari/) — rapoartele simulărilor ligii și calibrarea (Etapa 2)
+- [ID-URI-REGULI.md](ID-URI-REGULI.md) — ID-urile `LG-xxx` ale regulilor și unde e implementată fiecare (Etapa 2)
+- [NIVELURI.md](NIVELURI.md) — ce înseamnă fiecare nivel 1.0–7.0, în cuvinte (Etapa 2)
 
-## Urmează
-
-- Etapa 2: `ID-URI-REGULI.md` — ID-uri `LG-xxx` pentru fiecare regulă, folosite în numele testelor (fără a schimba textul regulilor).
-- Etapa 2: `NIVELURI.md` — ce înseamnă fiecare nivel 1.0–7.0, în cuvinte (§6.3).
-- Etapa 2: rapoartele simulărilor în [`simulari/`](simulari/) și calibrarea parametrilor (§6.17).
-- Etapa 2: sursa oficială (FIP / Premier Padel) pentru regula la 40–40 (§6.7).
+## Stare
+- Etapa 2 (27.09.2026): motorul ligii în [`packages/league-engine`](../../packages/league-engine/), simularea mare și calibrarea, sursa oficială FIP pentru regula la 40–40 (nota din [07-formatul-scorului.md](07-formatul-scorului.md)).
+- Urmează: Etapa 6, integrarea (fluxul de validare, sezoane, provocări, turnee, recompense).

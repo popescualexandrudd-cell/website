@@ -16,12 +16,16 @@ uv run ruff format --check .
 
 step "Types (mypy, strict)"
 (cd apps/backend && uv run mypy jungle)
+(cd packages/league-engine && uv run mypy src tools)
 
 step "Database migrations are up to date"
 (cd apps/backend && uv run python manage.py makemigrations --check --dry-run)
 
 step "Backend tests (pytest, branch coverage)"
 (cd apps/backend && uv run pytest --cov)
+
+step "League engine tests (pytest + hypothesis, 100% branch coverage, openskill comparison)"
+(cd packages/league-engine && uv run pytest --cov)
 
 step "OpenAPI schema is up to date"
 tmp_dir="$(mktemp -d)"

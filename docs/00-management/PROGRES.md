@@ -3,11 +3,12 @@
 > Actualizat la fiecare sesiune de lucru. Prima secțiune spune mereu **unde suntem acum**.
 
 ## Unde suntem acum
-- **Etapa curentă:** Etapa 1B (pagina de pre-lansare), **revizia 2 „Premium Light”**, livrată pe 27.09.2026, așteaptă aprobarea proprietarului. Raport: [verificare/etapa-1b/RAPORT.md](verificare/etapa-1b/RAPORT.md). În paralel a început Etapa 2 (motorul ligii), la cererea proprietarului („după acestea continuă cu următoarea etapă”).
+- **Etapa curentă:** Etapa 1B (pagina de pre-lansare), **revizia 2 „Premium Light”**, livrată pe 27.09.2026, așteaptă aprobarea proprietarului. Raport: [verificare/etapa-1b/RAPORT.md](verificare/etapa-1b/RAPORT.md).
+- **Etapa 2 (motorul ligii + simulări):** livrată pe 27.09.2026, la cererea proprietarului („după acestea continuă cu următoarea etapă”), așteaptă aprobarea. Raport: [verificare/etapa-2/RAPORT.md](verificare/etapa-2/RAPORT.md).
 - **Etapa 1A:** aprobată de proprietar pe 27.09.2026 (merge în `main`). Raport: [verificare/etapa-1a/RAPORT.md](verificare/etapa-1a/RAPORT.md).
 - **Etapa 0:** aprobată de proprietar pe 26.09.2026 (tag `etapa-0`, branch `main`).
-- **Următoarea etapă:** 2 (motorul ligii + simulări).
-- **Întrebări încă deschise care contează curând:** Q26 (datele firmei: subsol și texte legale), Q39 (domeniu, marcă), Q24 (furnizor de email), Q23 (modelele de hardware), Q44 (randări sau fotografii ale spațiilor) — vezi [INTREBARI_DESCHISE.md](INTREBARI_DESCHISE.md).
+- **Următoarea etapă:** 3 (rezervări, prețuri, anulări, prezențe), după aprobarea etapelor 1B și 2.
+- **Întrebări încă deschise care contează curând:** Q26 (datele firmei: subsol și texte legale), Q39 (domeniu, marcă), Q24 (furnizor de email), Q23 (modelele de hardware), Q44 (randări sau fotografii ale spațiilor), Q45 (valorile implicite ale ligii) — vezi [INTREBARI_DESCHISE.md](INTREBARI_DESCHISE.md).
 - **Branch de lucru:** `claude/hopeful-euler-rguibn` (repository `popescualexandrudd-cell/website`).
 
 ## Starea etapelor
@@ -17,7 +18,7 @@
 | 0 | Documentație, structură, ADR-uri, întrebări, plan | oct. 2026 | **Aprobată 26.09.2026** |
 | 1A | Fundația backend | oct. 2026 | **Aprobată 27.09.2026** |
 | 1B | Pagina de pre-lansare | oct.–nov. 2026 | Livrată (revizia 2 „Premium Light”), așteaptă aprobarea |
-| 2 | Motorul ligii + simulări | nov. 2026 | Neîncepută |
+| 2 | Motorul ligii + simulări | nov. 2026 | Livrată 27.09.2026, așteaptă aprobarea |
 | 3 | Rezervări, prețuri, anulări, prezențe | nov. 2026 | Neîncepută |
 | 4 | Bani, abonamente, corporate, vouchere, cafenea | nov.–dec. 2026 | Neîncepută |
 | 5 | Carduri, Wallet, GDPR | dec. 2026 | Neîncepută |
@@ -32,6 +33,12 @@
 | 14 | Deploy, securitate, backup, hardware real | feb. 2027 | Neîncepută |
 | 15 | Beta, încărcare, instruire | feb.–mar. 2027 | Neîncepută |
 | 16 | Inaugurare și go-live | mar. 2027 | Neîncepută |
+
+## Etapa 2 — cum verifici (click cu click)
+1. Pe GitHub, branch-ul `claude/hopeful-euler-rguibn`, deschide `docs/00-management/verificare/etapa-2/RAPORT.md`.
+2. Deschide `docs/03-liga/simulari/CALIBRARE.md`: ce a arătat simularea și ce am calibrat (GitHub desenează graficele din rapoarte).
+3. Deschide `docs/03-liga/NIVELURI.md`: ce înseamnă fiecare nivel 1.0–7.0.
+4. Opțional: `docs/03-liga/ID-URI-REGULI.md` — fiecare regulă a ligii, cu ID-ul ei și unde e implementată.
 
 ## Etapa 1B — cum verifici (click cu click)
 1. Pe GitHub, branch-ul `claude/hopeful-euler-rguibn`, deschide `docs/00-management/verificare/etapa-1b/RAPORT.md`.
@@ -79,3 +86,4 @@
 - **27.09.2026** — Etapa 1A aprobată; Q43 = 14 ani. Cerință nouă a proprietarului pentru 1B: design și branding moderne, estetice, culori atractive, efecte 3D. Început Etapa 1B.
 - **27.09.2026** — Etapa 1B livrată: pagina de pre-lansare RO/EN cu identitatea „Neon Jungle”, scenă 3D, listă de așteptare cu dublă confirmare, nota de informare redactată (Q41). Lighthouse mobil 93/100/100/100, desktop 100/100/100/100; 128 teste backend, 16 teste cap-coadă. Tag-ul `etapa-1a` există doar local (push de tag-uri refuzat).
 - **27.09.2026** — Cerință nouă a proprietarului: estetică ultra-premium, luminoasă, randări 3D realiste, conformitate (contrast, cookies, date firmă, pagini legale, minimizarea datelor). Etapa 1B refăcută ca „Premium Light”. Lista de așteptare cere doar nume, email și, opțional, nivel. Adăugate paginile legale RO/EN, gestionarul de cookies și subsolul cu datele firmei și ANPC SAL. Lighthouse mobil 95/100/100/100, desktop 100/100/100/100; 131 teste backend, 26 teste cap-coadă. Întrebare nouă: Q44.
+- **27.09.2026** — Etapa 2 livrată: `packages/league-engine` (MMR Weng-Lin verificat față de openskill, nivel, plasare, ranguri, LP, validatorul de scor, meciuri neterminate, anti-abuz, decay, provocări, sezoane, recalculare deterministă); 173 de teste, 100% acoperire pe ramuri; simularea mare (500 de jucători, 50.000 de meciuri): corelație rang–nivel real 0,96–0,98; „LP așteptat” calibrat (DE_CONFIRMAT); regula la 40–40 verificată la FIP (Star Point). Întrebare nouă: Q45.
