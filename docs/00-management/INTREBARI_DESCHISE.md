@@ -22,8 +22,8 @@ Titlul și instrucțiunea din §17, preluate integral:
 | ID | Subiect | Prioritate | Blochează | Stare |
 |---|---|---|---|---|
 | [Q1](#q1) | Cardul de Diamant | MEDIE | Etapa 5 (carduri), Etapa 6 (promovări) | DESCHISĂ |
-| [Q2](#q2) | Durata de 150 de minute | MEDIE | Etapa 3 (rezervări) | DESCHISĂ |
-| [Q3](#q3) | Programul de funcționare | ÎNALTĂ | Etapa 3 (rezervări, prețuri); conținutul paginii de pre-lansare (1B) | DESCHISĂ |
+| [Q2](#q2) | Durata de 150 de minute | MEDIE | Etapa 3 (rezervări) | REZOLVATĂ |
+| [Q3](#q3) | Programul de funcționare | ÎNALTĂ | Etapa 3 (rezervări, prețuri); conținutul paginii de pre-lansare (1B) | REZOLVATĂ (semi-vârful rămâne implicit) |
 | [Q4](#q4) | Prioritatea abonaților | MEDIE | Etapa 3 (liste de așteptare), Etapa 6 (turnee) | DESCHISĂ |
 | [Q5](#q5) | Limita de diferență de nivel | MEDIE | Etapa 2 (parametru al motorului; nu blochează) | DESCHISĂ |
 | [Q6](#q6) | Recompense | MEDIE | Etapa 6 (recompense de sezon) | DESCHISĂ |
@@ -35,8 +35,8 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q12](#q12) | Intensitățile „La cerere” | MEDIE | Etapa 4 (configuratorul de pachete) | DESCHISĂ |
 | [Q13](#q13) | Start | MEDIE | Etapa 4 (regula Start/vârf) | DESCHISĂ |
 | [Q14](#q14) | „Recuperare” | MEDIE | Etapa 3 (anulări), Etapa 4 (credit în cont) | DESCHISĂ |
-| [Q15](#q15) | Neprezentări | MEDIE | Etapa 3 (neprezentări și blocări) | DESCHISĂ |
-| [Q16](#q16) | Lista de așteptare | MEDIE | Etapa 3 (liste de așteptare) | DESCHISĂ |
+| [Q15](#q15) | Neprezentări | MEDIE | Etapa 3 (neprezentări și blocări) | REZOLVATĂ |
+| [Q16](#q16) | Lista de așteptare | MEDIE | Etapa 3 (liste de așteptare) | REZOLVATĂ |
 | [Q17](#q17) | „Telefon” | MEDIE | Etapa 12 (notificări); Etapa 1A (dacă telefonul trebuie verificat prin cod) | DESCHISĂ |
 | [Q18](#q18) | Pilates | SCĂZUTĂ | Etapa 12 (notificări pilates) | DESCHISĂ |
 | [Q19](#q19) | Grupul comunității | SCĂZUTĂ | Etapa 12 (mesaje pentru comunitate) | DESCHISĂ |
@@ -83,10 +83,10 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q2"></a>Q2 — Durata de 150 de minute
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 3 (rezervări)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (din MEGA_PROMPT):** da.
 - **Folosită în Etapa 3 (27.09.2026):** Durate 60, 90, 120, 150, 180 min (`bookings.durations_minutes`).
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (27.09.2026):** duratele sunt 60, 90, 120, 150 sau 180 de minute (confirmat).
 - **Textul original (§17):**
 
   > - **Q2 Durata de 150 de minute** e permisă (regula „60, apoi din 30 în 30”)? *Implicit: da.*
@@ -94,11 +94,11 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q3"></a>Q3 — Programul de funcționare
 
 - **Prioritate:** ÎNALTĂ · **Blochează:** Etapa 3 (rezervări, prețuri); conținutul paginii de pre-lansare (1B)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (din MEGA_PROMPT):** în afara vârfului; weekend ca în cursul săptămânii.
 - **Notă:** Fără program confirmat, pagina de pre-lansare afișează „Programul se anunță în curând”.
 - **Folosită în Etapa 3 (27.09.2026):** 08:00–23:00 zilnic; benzi: vârf 15–22, semi-vârf 08–12, restul în afara vârfului; weekend ca în cursul săptămânii (`bookings.opening_hours`, `pricing.time_bands`).
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (27.09.2026):** program 08:00–23:00 în fiecare zi; ora de vârf 17:00–22:00 (confirmat). Semi-vârful (08–12 și 15–17) și restul orelor în afara vârfului rămân varianta implicită, `DE_CONFIRMAT`, schimbabile din admin (`pricing.time_bands`).
 - **Textul original (§17):**
 
   > - **Q3 Programul de funcționare** și benzile pentru 13:00–15:00, după 22:00 și weekend. *Implicit: în afara vârfului; weekend ca în cursul săptămânii.*
@@ -221,10 +221,10 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q15"></a>Q15 — Neprezentări
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 3 (neprezentări și blocări)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (din MEGA_PROMPT):** 90 de zile; managerul.
 - **Folosită în Etapa 3 (27.09.2026):** 90 de zile (`bookings.no_show_window_days`); pentru închirieri se anunță managerul.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (27.09.2026):** da: neprezentările se numără pe 90 de zile; pentru închirieri se anunță managerul.
 - **Textul original (§17):**
 
   > - **Q15 Neprezentări**: în ce interval se numără cele „mai mult de două” (90 de zile, sezon, total)? Cine e „antrenorul responsabil” pentru clienții care doar închiriază? *Implicit: 90 de zile; managerul.*
@@ -232,10 +232,10 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q16"></a>Q16 — Lista de așteptare
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 3 (liste de așteptare)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (din MEGA_PROMPT):** da, în primele 2 ore de la promovare.
 - **Folosită în Etapa 3 (27.09.2026):** Anulare gratuită 2 h după promovare (`bookings.promotion_free_cancel_hours`).
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (27.09.2026):** da: anulare gratuită în primele 2 ore de la promovare.
 - **Textul original (§17):**
 
   > - **Q16 Lista de așteptare**: cine e promovat cu mai puțin de 24 h înainte poate anula gratuit? *Implicit: da, în primele 2 ore de la promovare.*
@@ -287,7 +287,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** valori demo marcate `DE_STABILIT`.
 - **Folosită în Etapa 3 (27.09.2026):** Tarife DEMO marcate DE_STABILIT în `seed_initial --demo`; tenisul 120 RON/oră (R-051).
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (27.09.2026):** încă deschisă (prețurile nu sunt stabilite). Tarifele rămân DEMO, marcate `DE_STABILIT`.
 - **Textul original (§17):**
 
   > - **Q21 Prețuri**: padel, pilates, lecții, sala de evenimente, meniul cafenelei, datele sezonului de vară și de iarnă. *Implicit: valori demo marcate `DE_STABILIT`.*

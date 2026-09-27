@@ -38,10 +38,10 @@ def book(api: Api, *args: Any, **kwargs: Any) -> Any:
 
 # ---------------------------------------------------------------- creating
 def test_r040_player_books_a_court_with_price(api: Api, club: Any, player: Any) -> None:
-    response = book(api, club.court1, "2027-03-16T14:30:00+02:00", 90)
+    response = book(api, club.court1, "2027-03-16T16:30:00+02:00", 90)
     assert response.status_code == 201, response.json()
     body = response.json()
-    assert body["price_total"] == 4000 + 6000 + 6000  # R-052: off-peak + 2 × peak
+    assert body["price_total"] == 5000 + 6000 + 6000  # R-052: semi-peak + 2 × peak
     assert body["price_provisional"] is True
     assert body["status"] == "confirmed" and body["source"] == "online"
     assert AuditLog.objects.filter(action="booking.created").count() == 1
@@ -234,10 +234,10 @@ def test_availability_shows_no_personal_data(api: Api, club: Any, player: Any) -
 
 def test_quote_endpoint(api: Api, club: Any) -> None:
     response = api.get(
-        f"/bookings/quote?resource_id={club.court1.id}&starts_at=2027-03-16T14:30:00%2B02:00&duration_minutes=90"
+        f"/bookings/quote?resource_id={club.court1.id}&starts_at=2027-03-16T16:30:00%2B02:00&duration_minutes=90"
     )
     assert response.status_code == 200, response.json()
-    assert response.json()["total"] == 16000 and len(response.json()["segments"]) == 3
+    assert response.json()["total"] == 17000 and len(response.json()["segments"]) == 3
     naive = api.get(
         f"/bookings/quote?resource_id={club.court1.id}&starts_at=2027-03-16T14:30:00&duration_minutes=90"
     )

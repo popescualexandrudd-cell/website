@@ -4,7 +4,10 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
-### Etapa 3 — 27.09.2026 (așteaptă aprobarea)
+### Etapa 3 — 27.09.2026 (aprobată 27.09.2026)
+#### Modificat la aprobare (răspunsurile proprietarului)
+- Q3: ora de vârf 17:00–22:00 (15:00–17:00 devine semi-vârf, implicit); programul 08:00–23:00 confirmat.
+- Q2, Q15, Q16 confirmate: durate 60–180 min, fereastra de 90 de zile, 2 ore de anulare gratuită după promovare. Q21 rămâne deschisă.
 #### Adăugat
 - `jungle.bookings`: rezervări de terenuri și ședințe private pe Reformer (grilă de 30 min, durate Q2, program Q3, tipul sesiunii schimbabil până la check-in Q29), rezervare la recepție pentru un client, anulări gratuite/cu plată/scutite (R-070, R-071), lista de așteptare cu promovare automată și email (R-074, Q16), clase de pilates cu capacitate ≤ aparate active și listă de așteptare (R-100 … R-102), cereri pentru sala de evenimente aprobate de manager (Q34).
 - Garanții în PostgreSQL: excluderea suprapunerilor pe resursă, pe antrenor și pe sală (btree_gist), grila și duratele (CHECK); rezervările simultane se pun la rând (advisory lock), fără deadlock.

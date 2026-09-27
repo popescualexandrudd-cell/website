@@ -1,6 +1,6 @@
 # Raport de verificare — Etapa 3 (rezervări, prețuri, anulări, prezențe)
 
-> Data: 27.09.2026. Branch: `claude/hopeful-euler-rguibn`. Starea: **livrată, așteaptă aprobarea proprietarului.**
+> Data: 27.09.2026. Branch: `claude/hopeful-euler-rguibn`. Starea: **aprobată de proprietar pe 27.09.2026** (cu răspunsurile la Q2, Q3, Q15, Q16; ora de vârf devine 17:00–22:00).
 
 Etapa 3 construiește „motorul” rezervărilor, în backend: regulile, prețurile, anulările, lista de așteptare, prezențele și neprezentările. Ecranele pentru clienți (pe site) și pentru recepție (în admin) vin în Etapele 10–11 și vor folosi exact aceste funcții. Până atunci, totul se verifică prin testele automate și prin documentația API (`/api/v1/docs`).
 

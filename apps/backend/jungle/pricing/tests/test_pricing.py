@@ -31,10 +31,12 @@ def local(text: str) -> datetime:
         ("2027-03-16 08:00", Band.SEMI_PEAK),
         ("2027-03-16 11:30", Band.SEMI_PEAK),
         ("2027-03-16 12:00", Band.OFF_PEAK),
-        ("2027-03-16 15:00", Band.PEAK),
+        ("2027-03-16 15:00", Band.SEMI_PEAK),
+        ("2027-03-16 16:30", Band.SEMI_PEAK),
+        ("2027-03-16 17:00", Band.PEAK),  # Q3: peak 17–22 (owner, 27.09.2026)
         ("2027-03-16 21:30", Band.PEAK),
         ("2027-03-16 22:00", Band.OFF_PEAK),
-        ("2027-03-20 16:00", Band.PEAK),  # Saturday: weekend table
+        ("2027-03-20 17:00", Band.PEAK),  # Saturday: weekend table
     ],
 )
 def test_r050_band_follows_club_clock(moment: str, band: str) -> None:
@@ -42,8 +44,8 @@ def test_r050_band_follows_club_clock(moment: str, band: str) -> None:
 
 
 def test_r050_band_is_read_in_club_time_not_utc() -> None:
-    """15:00 in Bucharest is 13:00 UTC: the band is peak, not off-peak."""
-    assert band_at(datetime.fromisoformat("2027-03-16T13:00:00+00:00")) == Band.PEAK
+    """17:00 in Bucharest is 15:00 UTC: the band is peak, not semi-peak."""
+    assert band_at(datetime.fromisoformat("2027-03-16T15:00:00+00:00")) == Band.PEAK
 
 
 @pytest.mark.parametrize(
@@ -67,18 +69,18 @@ def test_r051_season_that_wraps_around_new_year(db: None) -> None:
 
 
 def test_r052_quote_crossing_bands_is_proportional(club: Any) -> None:
-    """14:30–16:00: 30 min off-peak (40 RON) + 60 min peak (2 × 60 RON)."""
+    """16:30–18:00: 30 min semi-peak (50 RON) + 60 min peak (2 × 60 RON)."""
     q = quote(
         club.location,
         ResourceKind.PADEL_COURT,
         Product.RENTAL,
-        local("2027-03-16 14:30"),
-        local("2027-03-16 16:00"),
+        local("2027-03-16 16:30"),
+        local("2027-03-16 18:00"),
     )
-    assert q.total == 4000 + 6000 + 6000
-    assert [s.band for s in q.segments] == [Band.OFF_PEAK, Band.PEAK, Band.PEAK]
+    assert q.total == 5000 + 6000 + 6000
+    assert [s.band for s in q.segments] == [Band.SEMI_PEAK, Band.PEAK, Band.PEAK]
     assert q.provisional is True  # demo rates are DE_STABILIT
-    assert q.as_dict()["segments"][0]["amount"] == 4000
+    assert q.as_dict()["segments"][0]["amount"] == 5000
 
 
 def test_r052_dst_day_quote_and_day_length(club: Any) -> None:
