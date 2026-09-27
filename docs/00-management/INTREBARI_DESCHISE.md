@@ -64,7 +64,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q41](#q41) | Avocat / DPO pentru revizuirea textelor legale *(nouă)* | URGENTĂ | Etapa 1B (nota de informare pentru lista de așteptare), Etapa 5 (formularul GDPR al ligii) | REZOLVATĂ |
 | [Q42](#q42) | Fluxul de aprobare pe GitHub *(nouă)* | SCĂZUTĂ | Etapa 0 (organizare) | REZOLVATĂ |
 | [Q43](#q43) | Vârsta minimă pentru a-ți crea singur cont *(nouă, Etapa 1A)* | MEDIE | Etapa 1B / 11 (înscrierea publică) | REZOLVATĂ |
-| [Q46](#q46) | Etichetele neclare din schița clubului *(nouă, Etapa 1B)* | SCĂZUTĂ | Etapa 1B (planul de pe site), Etapa 3 (resursele: săli, parcări) | DESCHISĂ |
+| [Q46](#q46) | Etichetele neclare din schița clubului *(nouă, Etapa 1B)* | SCĂZUTĂ | Etapa 1B (planul de pe site), Etapa 3 (resursele: săli, parcări) | PARȚIAL |
 | [Q45](#q45) | Valorile implicite ale ligii alese în Etapa 2 *(nouă, Etapa 2)* | SCĂZUTĂ | Etapa 6 (nu blochează; se schimbă din configurare) | DESCHISĂ |
 | [Q44](#q44) | Randări sau fotografii reale ale spațiilor (vestiare, pilates, sală de evenimente, cafenea, lounge) *(nouă, Etapa 1B)* | MEDIE | Etapa 1B (grila de facilități), Etapa 11 (website-ul complet), Etapa 13 (marketing) | DESCHISĂ |
 
@@ -545,3 +545,4 @@ Titlul și instrucțiunea din §17, preluate integral:
   2. Câte aparate Reformer sunt la deschidere? Schița arată 6, documentația spune 4, extensibil la 6.
   3. Care este înălțimea exactă a pasarelei?
 - **Varianta implicită:** textele neclare nu apar pe site; rămân 4 aparate Reformer la deschidere (R-100); pasarela este la 3 m.
+- **Răspunsul proprietarului (27.09.2026):** 4 aparate Reformer momentan; pasarela are 3 m. Rămâne deschis doar punctul 1 (textele de sub „Sala de evenimente” și din parcarea de jos).

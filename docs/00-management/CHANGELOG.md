@@ -4,7 +4,7 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
-### Etapa 1B, revizia 3 „Noapte și alamă” — 27.09.2026 (așteaptă aprobarea)
+### Etapa 1B, revizia 3 „Noapte și alamă” — 27.09.2026 (aprobată 27.09.2026)
 #### Modificat
 - Identitatea B4 aleasă de proprietar: tokeni noi (noapte, os, alamă, pădure), contrast AAA pe fundalurile întunecate; fonturile Fraunces și Instrument Sans (auto-găzduite, reduse).
 - Arena 3D după schița clubului: 4 terenuri 2 × 2, pasarela-lounge la 3 m între rânduri, lumină de seară; cardul de membru cu reflexii mai discrete.
@@ -13,7 +13,7 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 - Planul clubului (schemă după schiță) în secțiunea Locație.
 - `docs/12-branding/05-identitate-provizorie-noapte-si-alama.md`; întrebarea Q46.
 
-### Etapa 2 — 27.09.2026 (așteaptă aprobarea)
+### Etapa 2 — 27.09.2026 (aprobată 27.09.2026)
 #### Adăugat
 - `packages/league-engine` (Python pur): MMR Weng-Lin Thurstone–Mosteller verificat față de `openskill`; nivelul 1.0–7.0; chestionar și plasare; ranguri Bronz IV → Maestru, LP, promovare/retrogradare/protecție, departajare, Regele Junglei; validatorul de scor și meciurile neterminate; anti-abuz (minimum de meciuri, limită zilnică, randament descrescător, decay); provocări; turnee; resetarea de sezon; evenimente înainte/după, aplicare idempotentă, recalculare deterministă.
 - 173 de teste cu ID-ul regulii în nume, 100% acoperire pe ramuri, teste de proprietate (hypothesis); incluse în `scripts/test-all`.
