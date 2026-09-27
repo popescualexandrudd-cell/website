@@ -1,0 +1,10 @@
+{% autoescape off %}Hi {{ first_name }},
+
+Thank you for creating a Jungle Padel account. Please confirm your email address by opening the link below:
+
+{{ link }}
+
+The link is valid for {{ ttl_hours }} hours. If you did not create this account, please ignore this message.
+
+The Jungle Padel team
+{% endautoescape %}

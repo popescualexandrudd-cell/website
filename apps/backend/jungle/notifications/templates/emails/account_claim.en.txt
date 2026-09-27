@@ -1,0 +1,10 @@
+{% autoescape off %}Hi {{ first_name }},
+
+Our reception team created a quick Jungle Padel account for you. To use it online as well, choose a password here:
+
+{{ link }}
+
+The link can be used once and is valid for 24 hours. You can always request a new link from the "Forgot password" page.
+
+The Jungle Padel team
+{% endautoescape %}

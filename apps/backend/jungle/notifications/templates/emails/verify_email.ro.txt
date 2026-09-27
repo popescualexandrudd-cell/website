@@ -1,0 +1,10 @@
+{% autoescape off %}Salut, {{ first_name }}!
+
+Mulțumim că ți-ai creat cont la Jungle Padel. Confirmă adresa de email deschizând linkul de mai jos:
+
+{{ link }}
+
+Linkul este valabil {{ ttl_hours }} de ore. Dacă nu tu ți-ai creat contul, ignoră acest mesaj.
+
+Echipa Jungle Padel
+{% endautoescape %}

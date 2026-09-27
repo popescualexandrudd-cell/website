@@ -1,0 +1,20 @@
+# Install once: uv tool install pre-commit && pre-commit install
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: ruff check
+        entry: uv run ruff check --fix
+        language: system
+        types: [python]
+      - id: ruff-format
+        name: ruff format
+        entry: uv run ruff format
+        language: system
+        types: [python]
+      - id: i18n-complete
+        name: RO/EN translations complete
+        entry: pnpm --filter @jungle/i18n test
+        language: system
+        files: ^packages/i18n/
+        pass_filenames: false

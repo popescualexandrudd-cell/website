@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# Runs every check of the project with one command (§13.5, ADR-0021).
+# Needs: uv, pnpm, Node.js >= 22 and a PostgreSQL reachable through DATABASE_URL
+# (default postgres://jungle:jungle@localhost:5432/jungle; the test database is created automatically).
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+step() { printf '\n==> %s\n' "$1"; }
+
+step "Python dependencies"
+uv sync --all-packages --frozen
+
+step "Lint and formatting (ruff)"
+uv run ruff check .
+uv run ruff format --check .
+
+step "Types (mypy, strict)"
+(cd apps/backend && uv run mypy jungle)
+
+step "Database migrations are up to date"
+(cd apps/backend && uv run python manage.py makemigrations --check --dry-run)
+
+step "Backend tests (pytest, branch coverage)"
+(cd apps/backend && uv run pytest --cov)
+
+step "OpenAPI schema is up to date"
+tmp_dir="$(mktemp -d)"
+trap 'rm -rf "$tmp_dir"' EXIT
+uv run python apps/backend/manage.py export_openapi --output "$tmp_dir/openapi.json" >/dev/null
+if ! diff -q packages/api-client/openapi.json "$tmp_dir/openapi.json" >/dev/null; then
+  echo "OpenAPI schema changed. Run: scripts/generate-api-client" >&2
+  exit 1
+fi
+
+step "JavaScript dependencies"
+pnpm install --frozen-lockfile
+
+step "Generated API client is up to date"
+(cd packages/api-client && pnpm exec openapi-typescript openapi.json -o "$tmp_dir/schema.d.ts" >/dev/null)
+if ! diff -q packages/api-client/src/schema.d.ts "$tmp_dir/schema.d.ts" >/dev/null; then
+  echo "Generated client is stale. Run: scripts/generate-api-client" >&2
+  exit 1
+fi
+
+step "TypeScript typecheck"
+pnpm -r typecheck
+
+step "JavaScript tests (including RO/EN translation completeness)"
+pnpm -r test
+
+printf '\nAll checks passed.\n'

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Starts the backend locally on http://localhost:8000
+#   API docs:        http://localhost:8000/api/v1/docs
+#   Emergency admin: http://localhost:8000/django-admin/  (Admin role + 2FA)
+set -euo pipefail
+cd "$(cd "$(dirname "$0")/.." && pwd)/apps/backend"
+exec uv run python manage.py runserver 0.0.0.0:8000

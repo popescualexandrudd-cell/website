@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Regenerates packages/api-client from the backend (run after any API change).
+set -euo pipefail
+cd "$(cd "$(dirname "$0")/.." && pwd)"
+uv run python apps/backend/manage.py export_openapi
+pnpm --filter @jungle/api-client generate

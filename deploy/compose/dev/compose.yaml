@@ -1,0 +1,40 @@
+# Local development services (ADR-0015). From the repository root:
+#   docker compose -f deploy/compose/dev/compose.yaml up -d db redis   # only the databases
+#   docker compose -f deploy/compose/dev/compose.yaml up --build       # everything
+name: jungle-dev
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: jungle
+      POSTGRES_USER: jungle
+      POSTGRES_PASSWORD: jungle  # development only
+    ports: ["5432:5432"]
+    volumes: [db-data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jungle"]
+      interval: 5s
+      retries: 10
+  redis:
+    image: redis:7
+    ports: ["6379:6379"]
+  backend:
+    build:
+      context: ../../..
+      dockerfile: apps/backend/Dockerfile
+    environment:
+      JUNGLE_ENV: dev
+      DJANGO_DEBUG: "true"
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+      DATABASE_URL: postgres://jungle:jungle@db:5432/jungle
+      REDIS_URL: redis://redis:6379/0
+      EMAIL_BACKEND: django.core.mail.backends.console.EmailBackend
+    command: >
+      sh -c "python manage.py migrate && python manage.py seed_initial --demo &&
+             gunicorn jungle.wsgi:application --bind 0.0.0.0:8000 --reload"
+    ports: ["8000:8000"]
+    depends_on:
+      db: {condition: service_healthy}
+      redis: {condition: service_started}
+volumes:
+  db-data:

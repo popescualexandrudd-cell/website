@@ -1,0 +1,23 @@
+{
+  "name": "@jungle/api-client",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Typed client for the Jungle Padel API, generated from the backend OpenAPI schema.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "generate": "openapi-typescript openapi.json -o src/schema.d.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test --experimental-strip-types test/*.test.ts"
+  },
+  "dependencies": {
+    "openapi-fetch": "^0.17.0"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.13.0",
+    "typescript": "^5.9.0",
+    "@types/node": "^22.0.0"
+  }
+}

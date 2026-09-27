@@ -1,0 +1,10 @@
+{% autoescape off %}Salut, {{ first_name }}!
+
+Colegii noștri de la recepție ți-au creat un cont rapid la Jungle Padel. Ca să îl poți folosi și online, alege o parolă aici:
+
+{{ link }}
+
+Linkul poate fi folosit o singură dată și este valabil 24 de ore. Poți cere oricând un link nou din pagina „Am uitat parola”.
+
+Echipa Jungle Padel
+{% endautoescape %}
