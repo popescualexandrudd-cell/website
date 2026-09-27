@@ -1,6 +1,6 @@
 # Backend central (Django)
 
-> **Stare:** fundația în Etapa 1A; rezervările, prețurile și prezențele în Etapa 3; banii, abonamentele, voucherele și cafeneaua în Etapa 4 (27.09.2026). **Următoarele module:** Etapele 5, 6, 12.
+> **Stare:** fundația în Etapa 1A; rezervările, prețurile și prezențele în Etapa 3; banii, abonamentele, voucherele și cafeneaua în Etapa 4; cardurile, Wallet și GDPR în Etapa 5 (27.09.2026). **Următoarele module:** Etapele 6, 12.
 
 ## Ce face
 
@@ -51,6 +51,8 @@ Din rădăcina repository-ului:
 | Publicarea unui text legal (din `docs/07-securitate-gdpr-legal/texte/`) | `uv run python apps/backend/manage.py publish_legal_document --kind waitlist_notice --language ro --file …` |
 | Ștergerea înscrierilor neconfirmate (zilnic) | `uv run python apps/backend/manage.py purge_waitlist` |
 | Neprezentări, rezervări încheiate, blocări (la 5 minute) | `uv run python apps/backend/manage.py process_no_shows` |
+| Verificarea configurării Apple/Google Wallet | `uv run python apps/backend/manage.py wallet_check` |
+| Fontul cardului tipărit (din fonturile site-ului) | `uvx --with brotli --from fonttools python apps/backend/scripts/build_card_font.py` |
 
 Baza de date: PostgreSQL (`DATABASE_URL`; implicit `postgres://jungle:jungle@localhost:5432/jungle`), de exemplu cu `docker compose -f deploy/compose/dev/compose.yaml up -d db redis`.
 Variabilele de mediu sunt descrise în [`.env.example`](.env.example). Imaginea Docker: [`Dockerfile`](Dockerfile) (se construiește din rădăcina repository-ului).
@@ -74,3 +76,5 @@ Variabilele de mediu sunt descrise în [`.env.example`](.env.example). Imaginea 
 | `jungle/subscriptions` | configuratorul, abonamente, sesiuni și recuperări, înghețare, conturi corporate (Etapa 4) |
 | `jungle/rewards` | vouchere, „Adu un prieten” (Etapa 4) |
 | `jungle/cafe` | meniul, comenzile și coada cafenelei (Etapa 4) |
+| `jungle/cards` | cardul de membru (QR revocabil), coada și PDF-ul de tipar CR80, Apple Wallet și Google Wallet (Etapa 5) |
+| `jungle/privacy` | acordul ligii (Chioșc de Ligă, 18+), exportul datelor, ștergerea contului ca „Jucător retras” (Etapa 5) |

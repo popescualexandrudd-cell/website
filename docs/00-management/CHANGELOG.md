@@ -4,6 +4,18 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 5 — 27.09.2026 (așteaptă aprobarea)
+#### Adăugat
+- `jungle.cards`: card de membru cu cod QR aleatoriu și revocabil (R-020, R-022), reemitere care invalidează cardurile vechi, blocare de către personal, scanare cu codul cardului (R-025), coada de carduri de tipărit și PDF-ul CR80 cu fontul inclus (R-021), cardul Diamant cu emblemă aleasă, o singură dată (R-024, Q1).
+- Apple Wallet (la cererea proprietarului, 27.09.2026): `.pkpass` semnat, serviciul web PassKit, notificări de actualizare prin APNs; Google Wallet: link „Adaugă în Google Wallet” semnat, actualizări prin API; actualizare automată la orice schimbare a cardului (R-023); `manage.py wallet_check`; activare după certificatele clubului (Q24).
+- `jungle.privacy`: acordul ligii doar la Chioșcul de Ligă și doar de la 18 ani, cu toate câmpurile R-011; retragere din cont; exportul complet al datelor; ștergerea contului ca „Jucător retras” (§12.2).
+- Textul acordului ligii (RO/EN), ghidul pentru conturile Apple/Google, imagini de exemplu ale cardului.
+- 47 de teste noi (355 în backend).
+#### Reparat la revizuire
+- Cheia serviciului Apple Wallet se compară în timp constant.
+- Schimbarea numelui actualizează cardul din Wallet.
+- Recomandările în așteptare ale unui cont șters se anulează.
+
 ### Etapa 4 — 27.09.2026 (aprobată 27.09.2026)
 #### Modificat la aprobare (răspunsurile proprietarului)
 - Q21: prețuri orientative în sistem de la prima pornire (`seed_initial`), marcate DE_STABILIT, cu nota „Preț orientativ”.

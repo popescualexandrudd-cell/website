@@ -75,6 +75,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** MEDIE · **Blochează:** Etapa 5 (carduri), Etapa 6 (promovări)
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** prima dată, emblemă din listă predefinită, fără design liber.
+- **Folosită în Etapa 5 (27.09.2026):** La prima promovare în Diamant (o singură dată), jucătorul alege o emblemă din `cards.diamond_emblems`: jaguar, panteră, tucan, gorilă, crocodil, papagal ara, anaconda, leopard. Fără design liber.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 
@@ -327,6 +328,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Notă:** Apple Developer pentru o firmă cere un număr D-U-N-S, care se obține în câteva zile sau săptămâni: merită început acum, ca Wallet să fie gata în decembrie.
 - **Răspunsul proprietarului (26.09.2026):** Nu se începe înscrierea în Apple Developer acum. Consecință: Apple Wallet se amână (adaptor pregătit, dezactivat); în Etapa 5 se livrează Google Wallet (dacă se creează contul de emitent), PDF-ul de tipar și emailul cu cardul. Furnizorul de email, emitentul Google Wallet și cheia AI rămân de stabilit.
 - **Actualizare (27.09.2026, proprietarul):** Apple Wallet se face în Etapa 5, împreună cu Google Wallet. Codul se construiește și se testează complet; pentru activare e nevoie de contul Apple Developer al firmei (cu număr D-U-N-S) și de certificatul „Pass Type ID”, puse doar în `.env` pe server.
+- **Etapa 5 (27.09.2026):** codul pentru Apple Wallet și Google Wallet e gata; pașii pentru conturi sunt în `docs/08-deploy-si-mentenanta/02-ghid-apple-google-wallet.md`. Rămân de creat de proprietar: Apple Developer (cu D-U-N-S), Google Wallet Console, furnizorul de email, cheia AI.
 - **Textul original (§17):**
 
   > - **Q24 Conturi externe**: Apple Developer (pentru Wallet), emitent Google Wallet, furnizor de email, cheie API pentru AI: cine le creează și pe ce firmă?
@@ -387,6 +389,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** MEDIE · **Blochează:** Etapa 5 (textul formularului GDPR al ligii)
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** da, menționat explicit în formular; de validat cu avocatul.
+- **Folosită în Etapa 5 (27.09.2026):** Acordul ligii (`formular-gdpr-liga`) spune explicit că rezultatele meciurilor de ligă și „Meciul zilei” sunt publice, cu nume, prenume și nivel.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 

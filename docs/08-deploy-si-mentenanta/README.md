@@ -5,6 +5,7 @@ Cerințele de deploy, backup și monitorizare (§14) și, pe măsură ce se cons
 ## Conținut
 
 - [14. DEPLOY PE SERVERUL PROPRIU, BACKUP, MONITORIZARE, MENTENANȚĂ](01-cerinte-deploy-backup-monitorizare.md)
+- [Ghid: activarea Apple Wallet și Google Wallet](02-ghid-apple-google-wallet.md) (Etapa 5)
 
 ## Urmează
 
