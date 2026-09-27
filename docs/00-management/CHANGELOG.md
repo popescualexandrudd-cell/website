@@ -4,7 +4,7 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
-### Etapa 5 — 27.09.2026 (așteaptă aprobarea)
+### Etapa 5 — 27.09.2026 (aprobată 27.09.2026)
 #### Adăugat
 - `jungle.cards`: card de membru cu cod QR aleatoriu și revocabil (R-020, R-022), reemitere care invalidează cardurile vechi, blocare de către personal, scanare cu codul cardului (R-025), coada de carduri de tipărit și PDF-ul CR80 cu fontul inclus (R-021), cardul Diamant cu emblemă aleasă, o singură dată (R-024, Q1).
 - Apple Wallet (la cererea proprietarului, 27.09.2026): `.pkpass` semnat, serviciul web PassKit, notificări de actualizare prin APNs; Google Wallet: link „Adaugă în Google Wallet” semnat, actualizări prin API; actualizare automată la orice schimbare a cardului (R-023); `manage.py wallet_check`; activare după certificatele clubului (Q24).

@@ -1,6 +1,6 @@
 # Raport de verificare — Etapa 5 (carduri, Apple Wallet și Google Wallet, GDPR)
 
-> Data: 27.09.2026. Branch: `claude/hopeful-euler-rguibn`. Starea: **livrată, așteaptă aprobarea proprietarului.**
+> Data: 27.09.2026. Branch: `claude/hopeful-euler-rguibn`. Starea: **aprobată de proprietar pe 27.09.2026.**
 
 La cererea proprietarului (27.09.2026), etapa include și **Apple Wallet**, nu doar Google Wallet (Q24).
 
