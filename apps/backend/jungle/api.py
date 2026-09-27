@@ -27,6 +27,9 @@ from jungle.configuration.api import staff_router as config_staff_router
 from jungle.core.api import router as health_router
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.devices.api import router as devices_router
+from jungle.league.api import me_router as league_me_router
+from jungle.league.api import public_router as league_public_router
+from jungle.league.api import staff_router as league_staff_router
 from jungle.ledger.api import me_router as account_router
 from jungle.ledger.api import staff_router as payments_staff_router
 from jungle.legal.api import router as legal_router
@@ -89,6 +92,9 @@ api.add_router("/staff", cards_staff_router)
 api.add_router("/wallet/apple", apple_wallet_router)
 api.add_router("/privacy", privacy_router)
 api.add_router("/staff", privacy_staff_router)
+api.add_router("/league", league_public_router)
+api.add_router("/league", league_me_router)
+api.add_router("/staff", league_staff_router)
 
 
 def _error(

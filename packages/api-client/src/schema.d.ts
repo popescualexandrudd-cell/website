@@ -809,6 +809,103 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/league/kings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Kings
+         * @description LG-051: the Kings of the Jungle — the 10 best eligible Masters (computed, not stored).
+         */
+        get: operations["jungle_league_api_kings"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/league/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Me
+         * @description Private statistics: only the player sees them (R-012).
+         */
+        get: operations["jungle_league_api_me"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/league/questionnaire": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Questionnaire
+         * @description R-003: the level questionnaire; a coach validates it before the first league match.
+         */
+        post: operations["jungle_league_api_questionnaire"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/league/seasons": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Seasons */
+        get: operations["jungle_league_api_seasons"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/league/standings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Standings
+         * @description LG-057 order; players in placement are not ranked yet.
+         */
+        get: operations["jungle_league_api_standings"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/legal/documents/{kind}": {
         parameters: {
             query?: never;
@@ -1513,6 +1610,91 @@ export interface paths {
         put?: never;
         /** Create Guest */
         post: operations["jungle_accounts_api_create_guest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/league/questionnaires": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Pending */
+        get: operations["jungle_league_api_pending"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/league/questionnaires/{questionnaire_id}/validate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Validate */
+        post: operations["jungle_league_api_validate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/league/seasons": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Season */
+        post: operations["jungle_league_api_create_season"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/league/seasons/{season_id}/activate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Activate */
+        post: operations["jungle_league_api_activate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/league/seasons/{season_id}/rebuild": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Rebuild */
+        post: operations["jungle_league_api_rebuild"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2925,6 +3107,12 @@ export interface components {
              */
             starts_at: string;
         };
+        /**
+         * Ladder
+         * @description LG-001.
+         * @enum {string}
+         */
+        Ladder: "doubles" | "singles" | "pairs";
         /** LegalDocumentOut */
         LegalDocumentOut: {
             /** Body */
@@ -3044,38 +3232,21 @@ export interface components {
         Marker: "confirmed" | "default" | "to_confirm" | "to_set";
         /** MeOut */
         MeOut: {
-            /** Account Type */
-            account_type: string;
+            /** Adult */
+            adult: boolean;
+            /** Consent Signed */
+            consent_signed: boolean;
+            /** In League */
+            in_league: boolean;
+            /** Ladders */
+            ladders: components["schemas"]["MyLadderOut"][];
             /**
-             * Created At
-             * Format: date-time
+             * Questionnaire
+             * @description none, pending sau validated
              */
-            created_at: string;
-            /** Date Of Birth */
-            date_of_birth: string | null;
-            /** Email */
-            email: string | null;
-            /** Email Verified */
-            email_verified: boolean;
-            /** First Name */
-            first_name: string;
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /** Last Name */
-            last_name: string;
-            /** Mfa Enabled */
-            mfa_enabled: boolean;
-            /** Mfa Verified */
-            mfa_verified: boolean;
-            /** Phone */
-            phone: string;
-            /** Preferred Language */
-            preferred_language: string;
-            /** Roles */
-            roles: components["schemas"]["RoleOut"][];
+            questionnaire: string;
+            /** Recent */
+            recent: components["schemas"]["RatingChangeOut"][];
         };
         /** MemberIn */
         MemberIn: {
@@ -3123,6 +3294,27 @@ export interface components {
             refunded: number;
             /** To Pay */
             to_pay: number;
+        };
+        /** MyLadderOut */
+        MyLadderOut: {
+            /** Division */
+            division: string;
+            /** Eligible */
+            eligible: boolean;
+            /** Ladder */
+            ladder: string;
+            /** Level */
+            level: number;
+            /** Lp */
+            lp: number;
+            /** Matches Played */
+            matches_played: number;
+            /** Placement Left */
+            placement_left: number;
+            /** Position */
+            position: number | null;
+            /** Tier */
+            tier: string;
         };
         /** NoticeOut */
         NoticeOut: {
@@ -3311,6 +3503,13 @@ export interface components {
          * @enum {string}
          */
         Period: "monthly" | "quarterly" | "annual";
+        /** PlayerOut */
+        PlayerOut: {
+            /** First Name */
+            first_name: string;
+            /** Last Name */
+            last_name: string;
+        };
         /** PrintIn */
         PrintIn: {
             /**
@@ -3401,6 +3600,40 @@ export interface components {
             /** Preferred Language */
             preferred_language?: string | null;
         };
+        /** QuestionnaireIn */
+        QuestionnaireIn: {
+            /** Band */
+            band: string;
+            /** Racket Background */
+            racket_background: string;
+            /** Tournaments */
+            tournaments: string;
+            /** Years Playing */
+            years_playing: number;
+        };
+        /** QuestionnaireOut */
+        QuestionnaireOut: {
+            /** Answers */
+            answers: {
+                [key: string]: unknown;
+            };
+            /** Estimated Level */
+            estimated_level: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Submitted At
+             * Format: date-time
+             */
+            submitted_at: string;
+            /** Validated At */
+            validated_at: string | null;
+            /** Validated Level */
+            validated_level: string | null;
+        };
         /** QueueItemOut */
         QueueItemOut: {
             /** Card Number */
@@ -3485,6 +3718,20 @@ export interface components {
             sessions_per_month: number;
             /** Sport */
             sport: string;
+        };
+        /** RatingChangeOut */
+        RatingChangeOut: {
+            /**
+             * At
+             * Format: date-time
+             */
+            at: string;
+            /** Kind */
+            kind: string;
+            /** Ladder */
+            ladder: string;
+            /** Lp Delta */
+            lp_delta: number;
         };
         /** ReadyOut */
         ReadyOut: {
@@ -3805,6 +4052,59 @@ export interface components {
          * @enum {string}
          */
         Season: "all" | "summer" | "winter";
+        /** SeasonIn */
+        SeasonIn: {
+            /**
+             * Ends At
+             * Format: date-time
+             */
+            ends_at: string;
+            /**
+             * Is Calibration
+             * @default false
+             */
+            is_calibration: boolean;
+            /**
+             * Location Id
+             * Format: uuid
+             */
+            location_id: string;
+            /** Name */
+            name: string;
+            /** Number */
+            number: number;
+            /**
+             * Starts At
+             * Format: date-time
+             */
+            starts_at: string;
+        };
+        /** SeasonOut */
+        SeasonOut: {
+            /**
+             * Ends At
+             * Format: date-time
+             */
+            ends_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Is Calibration */
+            is_calibration: boolean;
+            /** Name */
+            name: string;
+            /** Number */
+            number: number;
+            /**
+             * Starts At
+             * Format: date-time
+             */
+            starts_at: string;
+            /** Status */
+            status: string;
+        };
         /** SegmentOut */
         SegmentOut: {
             /** Amount */
@@ -4072,6 +4372,59 @@ export interface components {
              */
             user_id: string;
         };
+        /** StaffQuestionnaireOut */
+        StaffQuestionnaireOut: {
+            /** Answers */
+            answers: {
+                [key: string]: unknown;
+            };
+            /** Estimated Level */
+            estimated_level: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /**
+             * Submitted At
+             * Format: date-time
+             */
+            submitted_at: string;
+            /**
+             * User Id
+             * Format: uuid
+             */
+            user_id: string;
+            /** Validated At */
+            validated_at: string | null;
+            /** Validated Level */
+            validated_level: string | null;
+        };
+        /**
+         * StandingOut
+         * @description R-012: nothing else is public.
+         */
+        StandingOut: {
+            /** Division */
+            division: string;
+            /**
+             * Eligible
+             * @description False: sub minimul de meciuri (§6.10)
+             */
+            eligible: boolean;
+            /** Level */
+            level: number;
+            /** Lp */
+            lp: number;
+            /** Players */
+            players: components["schemas"]["PlayerOut"][];
+            /** Position */
+            position: number;
+            /** Tier */
+            tier: string;
+        };
         /** StatsOut */
         StatsOut: {
             /** By Status */
@@ -4242,6 +4595,23 @@ export interface components {
             last_name: string;
             /** Phone */
             phone: string;
+        };
+        /** ValidateIn */
+        ValidateIn: {
+            /** Level */
+            level: number | string;
+            /**
+             * Location Id
+             * Format: uuid
+             */
+            location_id: string;
+            /**
+             * Note
+             * @default
+             */
+            note: string;
+            /** Sigma */
+            sigma?: number | string | null;
         };
         /** VoucherIn */
         VoucherIn: {
@@ -6369,6 +6739,190 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HealthOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_kings: {
+        parameters: {
+            query: {
+                location: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StandingOut"][];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_me: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_questionnaire: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["QuestionnaireIn"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QuestionnaireOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_seasons: {
+        parameters: {
+            query: {
+                location: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SeasonOut"][];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_standings: {
+        parameters: {
+            query: {
+                location: string;
+                ladder?: "doubles" | "singles" | "pairs";
+                season?: number | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StandingOut"][];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
                 };
             };
         };
@@ -8849,6 +9403,302 @@ export interface operations {
             };
             /** @description Unprocessable Content */
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_pending: {
+        parameters: {
+            query: {
+                location_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffQuestionnaireOut"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_validate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                questionnaire_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ValidateIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QuestionnaireOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_create_season: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SeasonIn"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SeasonOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_activate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                season_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SeasonOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_rebuild: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                season_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SeasonOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

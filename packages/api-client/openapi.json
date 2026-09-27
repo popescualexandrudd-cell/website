@@ -1882,6 +1882,16 @@
         "title": "IntervalOut",
         "type": "object"
       },
+      "Ladder": {
+        "description": "LG-001.",
+        "enum": [
+          "doubles",
+          "singles",
+          "pairs"
+        ],
+        "title": "Ladder",
+        "type": "string"
+      },
       "LegalDocumentOut": {
         "properties": {
           "body": {
@@ -2146,93 +2156,45 @@
       },
       "MeOut": {
         "properties": {
-          "account_type": {
-            "title": "Account Type",
-            "type": "string"
-          },
-          "created_at": {
-            "format": "date-time",
-            "title": "Created At",
-            "type": "string"
-          },
-          "date_of_birth": {
-            "anyOf": [
-              {
-                "format": "date",
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Date Of Birth"
-          },
-          "email": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Email"
-          },
-          "email_verified": {
-            "title": "Email Verified",
+          "adult": {
+            "title": "Adult",
             "type": "boolean"
           },
-          "first_name": {
-            "title": "First Name",
-            "type": "string"
-          },
-          "id": {
-            "format": "uuid",
-            "title": "Id",
-            "type": "string"
-          },
-          "last_name": {
-            "title": "Last Name",
-            "type": "string"
-          },
-          "mfa_enabled": {
-            "title": "Mfa Enabled",
+          "consent_signed": {
+            "title": "Consent Signed",
             "type": "boolean"
           },
-          "mfa_verified": {
-            "title": "Mfa Verified",
+          "in_league": {
+            "title": "In League",
             "type": "boolean"
           },
-          "phone": {
-            "title": "Phone",
-            "type": "string"
-          },
-          "preferred_language": {
-            "title": "Preferred Language",
-            "type": "string"
-          },
-          "roles": {
+          "ladders": {
             "items": {
-              "$ref": "#/components/schemas/RoleOut"
+              "$ref": "#/components/schemas/MyLadderOut"
             },
-            "title": "Roles",
+            "title": "Ladders",
+            "type": "array"
+          },
+          "questionnaire": {
+            "description": "none, pending sau validated",
+            "title": "Questionnaire",
+            "type": "string"
+          },
+          "recent": {
+            "items": {
+              "$ref": "#/components/schemas/RatingChangeOut"
+            },
+            "title": "Recent",
             "type": "array"
           }
         },
         "required": [
-          "id",
-          "email",
-          "first_name",
-          "last_name",
-          "phone",
-          "date_of_birth",
-          "preferred_language",
-          "account_type",
-          "email_verified",
-          "created_at",
-          "roles",
-          "mfa_enabled",
-          "mfa_verified"
+          "in_league",
+          "adult",
+          "consent_signed",
+          "questionnaire",
+          "ladders",
+          "recent"
         ],
         "title": "MeOut",
         "type": "object"
@@ -2341,6 +2303,66 @@
           "to_pay"
         ],
         "title": "MoneyOut",
+        "type": "object"
+      },
+      "MyLadderOut": {
+        "properties": {
+          "division": {
+            "title": "Division",
+            "type": "string"
+          },
+          "eligible": {
+            "title": "Eligible",
+            "type": "boolean"
+          },
+          "ladder": {
+            "title": "Ladder",
+            "type": "string"
+          },
+          "level": {
+            "title": "Level",
+            "type": "number"
+          },
+          "lp": {
+            "title": "Lp",
+            "type": "integer"
+          },
+          "matches_played": {
+            "title": "Matches Played",
+            "type": "integer"
+          },
+          "placement_left": {
+            "title": "Placement Left",
+            "type": "integer"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "tier": {
+            "title": "Tier",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ladder",
+          "level",
+          "tier",
+          "division",
+          "lp",
+          "position",
+          "placement_left",
+          "matches_played",
+          "eligible"
+        ],
+        "title": "MyLadderOut",
         "type": "object"
       },
       "NoticeOut": {
@@ -2787,6 +2809,24 @@
         "title": "Period",
         "type": "string"
       },
+      "PlayerOut": {
+        "properties": {
+          "first_name": {
+            "title": "First Name",
+            "type": "string"
+          },
+          "last_name": {
+            "title": "Last Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "first_name",
+          "last_name"
+        ],
+        "title": "PlayerOut",
+        "type": "object"
+      },
       "PrintIn": {
         "properties": {
           "location_id": {
@@ -2999,6 +3039,97 @@
         "title": "ProfileIn",
         "type": "object"
       },
+      "QuestionnaireIn": {
+        "properties": {
+          "band": {
+            "pattern": "^(1\\.0|1\\.5|2\\.0|2\\.5|3\\.0|3\\.5|4\\.0|4\\.5|5\\.0|5\\.5|6\\.0)$",
+            "title": "Band",
+            "type": "string"
+          },
+          "racket_background": {
+            "pattern": "^(none|recreational|competitive)$",
+            "title": "Racket Background",
+            "type": "string"
+          },
+          "tournaments": {
+            "pattern": "^(none|club|regional_national)$",
+            "title": "Tournaments",
+            "type": "string"
+          },
+          "years_playing": {
+            "maximum": 80,
+            "minimum": 0,
+            "title": "Years Playing",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "band",
+          "years_playing",
+          "racket_background",
+          "tournaments"
+        ],
+        "title": "QuestionnaireIn",
+        "type": "object"
+      },
+      "QuestionnaireOut": {
+        "properties": {
+          "answers": {
+            "additionalProperties": true,
+            "title": "Answers",
+            "type": "object"
+          },
+          "estimated_level": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Estimated Level",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "submitted_at": {
+            "format": "date-time",
+            "title": "Submitted At",
+            "type": "string"
+          },
+          "validated_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Validated At"
+          },
+          "validated_level": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Validated Level"
+          }
+        },
+        "required": [
+          "id",
+          "answers",
+          "estimated_level",
+          "submitted_at",
+          "validated_level",
+          "validated_at"
+        ],
+        "title": "QuestionnaireOut",
+        "type": "object"
+      },
       "QueueItemOut": {
         "properties": {
           "card_number": {
@@ -3191,6 +3322,35 @@
           "marker"
         ],
         "title": "RateOut",
+        "type": "object"
+      },
+      "RatingChangeOut": {
+        "properties": {
+          "at": {
+            "format": "date-time",
+            "title": "At",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "ladder": {
+            "title": "Ladder",
+            "type": "string"
+          },
+          "lp_delta": {
+            "title": "Lp Delta",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "at",
+          "kind",
+          "lp_delta",
+          "ladder"
+        ],
+        "title": "RatingChangeOut",
         "type": "object"
       },
       "ReadyOut": {
@@ -3981,6 +4141,97 @@
         "title": "Season",
         "type": "string"
       },
+      "SeasonIn": {
+        "properties": {
+          "ends_at": {
+            "format": "date-time",
+            "title": "Ends At",
+            "type": "string"
+          },
+          "is_calibration": {
+            "default": false,
+            "title": "Is Calibration",
+            "type": "boolean"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "number": {
+            "maximum": 1000,
+            "minimum": 0,
+            "title": "Number",
+            "type": "integer"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "location_id",
+          "number",
+          "name",
+          "starts_at",
+          "ends_at"
+        ],
+        "title": "SeasonIn",
+        "type": "object"
+      },
+      "SeasonOut": {
+        "properties": {
+          "ends_at": {
+            "format": "date-time",
+            "title": "Ends At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "is_calibration": {
+            "title": "Is Calibration",
+            "type": "boolean"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "number": {
+            "title": "Number",
+            "type": "integer"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "number",
+          "name",
+          "starts_at",
+          "ends_at",
+          "status",
+          "is_calibration"
+        ],
+        "title": "SeasonOut",
+        "type": "object"
+      },
       "SegmentOut": {
         "properties": {
           "amount": {
@@ -4556,6 +4807,123 @@
         "title": "StaffOrderIn",
         "type": "object"
       },
+      "StaffQuestionnaireOut": {
+        "properties": {
+          "answers": {
+            "additionalProperties": true,
+            "title": "Answers",
+            "type": "object"
+          },
+          "estimated_level": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Estimated Level",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "submitted_at": {
+            "format": "date-time",
+            "title": "Submitted At",
+            "type": "string"
+          },
+          "user_id": {
+            "format": "uuid",
+            "title": "User Id",
+            "type": "string"
+          },
+          "validated_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Validated At"
+          },
+          "validated_level": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Validated Level"
+          }
+        },
+        "required": [
+          "id",
+          "answers",
+          "estimated_level",
+          "submitted_at",
+          "validated_level",
+          "validated_at",
+          "user_id",
+          "name"
+        ],
+        "title": "StaffQuestionnaireOut",
+        "type": "object"
+      },
+      "StandingOut": {
+        "description": "R-012: nothing else is public.",
+        "properties": {
+          "division": {
+            "title": "Division",
+            "type": "string"
+          },
+          "eligible": {
+            "description": "False: sub minimul de meciuri (§6.10)",
+            "title": "Eligible",
+            "type": "boolean"
+          },
+          "level": {
+            "title": "Level",
+            "type": "number"
+          },
+          "lp": {
+            "title": "Lp",
+            "type": "integer"
+          },
+          "players": {
+            "items": {
+              "$ref": "#/components/schemas/PlayerOut"
+            },
+            "title": "Players",
+            "type": "array"
+          },
+          "position": {
+            "title": "Position",
+            "type": "integer"
+          },
+          "tier": {
+            "title": "Tier",
+            "type": "string"
+          }
+        },
+        "required": [
+          "position",
+          "players",
+          "tier",
+          "division",
+          "level",
+          "lp",
+          "eligible"
+        ],
+        "title": "StandingOut",
+        "type": "object"
+      },
       "StatsOut": {
         "properties": {
           "by_status": {
@@ -4983,6 +5351,58 @@
           "is_demo"
         ],
         "title": "UserSummaryOut",
+        "type": "object"
+      },
+      "ValidateIn": {
+        "properties": {
+          "level": {
+            "anyOf": [
+              {
+                "maximum": 7.0,
+                "minimum": 1.0,
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d{0,2}0*$",
+                "type": "string"
+              }
+            ],
+            "title": "Level"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "note": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Note",
+            "type": "string"
+          },
+          "sigma": {
+            "anyOf": [
+              {
+                "maximum": 15.0,
+                "minimum": 0.5,
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d{0,3}0*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sigma"
+          }
+        },
+        "required": [
+          "location_id",
+          "level"
+        ],
+        "title": "ValidateIn",
         "type": "object"
       },
       "VoucherIn": {
@@ -7942,6 +8362,298 @@
         "summary": "Health",
         "tags": [
           "health"
+        ]
+      }
+    },
+    "/api/v1/league/kings": {
+      "get": {
+        "description": "LG-051: the Kings of the Jungle — the 10 best eligible Masters (computed, not stored).",
+        "operationId": "jungle_league_api_kings",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location",
+            "required": true,
+            "schema": {
+              "title": "Location",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/StandingOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "summary": "Kings",
+        "tags": [
+          "league"
+        ]
+      }
+    },
+    "/api/v1/league/me": {
+      "get": {
+        "description": "Private statistics: only the player sees them (R-012).",
+        "operationId": "jungle_league_api_me",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Me",
+        "tags": [
+          "league"
+        ]
+      }
+    },
+    "/api/v1/league/questionnaire": {
+      "post": {
+        "description": "R-003: the level questionnaire; a coach validates it before the first league match.",
+        "operationId": "jungle_league_api_questionnaire",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuestionnaireIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuestionnaireOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Questionnaire",
+        "tags": [
+          "league"
+        ]
+      }
+    },
+    "/api/v1/league/seasons": {
+      "get": {
+        "operationId": "jungle_league_api_seasons",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location",
+            "required": true,
+            "schema": {
+              "title": "Location",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SeasonOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "summary": "Seasons",
+        "tags": [
+          "league"
+        ]
+      }
+    },
+    "/api/v1/league/standings": {
+      "get": {
+        "description": "LG-057 order; players in placement are not ranked yet.",
+        "operationId": "jungle_league_api_standings",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location",
+            "required": true,
+            "schema": {
+              "title": "Location",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "ladder",
+            "required": false,
+            "schema": {
+              "allOf": [
+                {
+                  "description": "LG-001.",
+                  "enum": [
+                    "doubles",
+                    "singles",
+                    "pairs"
+                  ],
+                  "title": "Ladder",
+                  "type": "string"
+                }
+              ],
+              "default": "doubles"
+            }
+          },
+          {
+            "in": "query",
+            "name": "season",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Season"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/StandingOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Standings",
+        "tags": [
+          "league"
         ]
       }
     },
@@ -11390,6 +12102,409 @@
         "summary": "Create Guest",
         "tags": [
           "staff: users"
+        ]
+      }
+    },
+    "/api/v1/staff/league/questionnaires": {
+      "get": {
+        "operationId": "jungle_league_api_pending",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/StaffQuestionnaireOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Pending",
+        "tags": [
+          "staff: league"
+        ]
+      }
+    },
+    "/api/v1/staff/league/questionnaires/{questionnaire_id}/validate": {
+      "post": {
+        "operationId": "jungle_league_api_validate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "questionnaire_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Questionnaire Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuestionnaireOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Validate",
+        "tags": [
+          "staff: league"
+        ]
+      }
+    },
+    "/api/v1/staff/league/seasons": {
+      "post": {
+        "operationId": "jungle_league_api_create_season",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeasonIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeasonOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Create Season",
+        "tags": [
+          "staff: league"
+        ]
+      }
+    },
+    "/api/v1/staff/league/seasons/{season_id}/activate": {
+      "post": {
+        "operationId": "jungle_league_api_activate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "season_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Season Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeasonOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Activate",
+        "tags": [
+          "staff: league"
+        ]
+      }
+    },
+    "/api/v1/staff/league/seasons/{season_id}/rebuild": {
+      "post": {
+        "operationId": "jungle_league_api_rebuild",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "season_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Season Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeasonOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Rebuild",
+        "tags": [
+          "staff: league"
         ]
       }
     },

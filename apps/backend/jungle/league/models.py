@@ -1,0 +1,247 @@
+"""The league in the database (§6, ADR-0008).
+
+The league engine (`packages/league-engine`) is a pure function. Here it becomes durable:
+
+- every change to the league is an append-only `LeagueEvent` (a player registers, a match is
+  applied, a bonus, a day of decay, a match cancelled);
+- the engine state after the events is cached in `LeagueSnapshot`; it can always be rebuilt
+  from the season's base state and its events (replay, §6.16), with an identical result;
+- each computation produces immutable `RatingRecord` rows (values before and after);
+- `Standing` is a projection for fast reading, rewritten after every change.
+"""
+
+from __future__ import annotations
+
+import uuid
+
+from django.conf import settings
+from django.db import models
+
+
+class SeasonStatus(models.TextChoices):
+    PLANNED = "planned", "Planificat"
+    ACTIVE = "active", "În desfășurare"
+    CLOSED = "closed", "Încheiat"
+
+
+class LeagueSeason(models.Model):
+    """§6.13: three months by default; "Season 0 – Calibration" has no prizes (Q27)."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    location = models.ForeignKey(
+        "locations.Location", on_delete=models.PROTECT, related_name="league_seasons"
+    )
+    number = models.PositiveSmallIntegerField()
+    name = models.CharField(max_length=120)
+    starts_at = models.DateTimeField()
+    ends_at = models.DateTimeField()
+    status = models.CharField(
+        max_length=10, choices=SeasonStatus.choices, default=SeasonStatus.PLANNED
+    )
+    is_calibration = models.BooleanField(default=False, help_text="Sezonul 0: fără premii (Q27).")
+    config = models.JSONField(
+        default=dict, help_text="Valorile ligii fixate la începutul sezonului."
+    )
+    base_state = models.JSONField(null=True, blank=True, help_text="Starea ligii la început.")
+    activated_at = models.DateTimeField(null=True, blank=True)
+    closed_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-number"]
+        verbose_name = "sezon"
+        verbose_name_plural = "sezoane"
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(ends_at__gt=models.F("starts_at")), name="season_positive"
+            ),
+            models.UniqueConstraint(
+                fields=["location"], condition=models.Q(status="active"), name="one_active_season"
+            ),
+            models.UniqueConstraint(fields=["location", "number"], name="season_number_once"),
+        ]
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class LevelQuestionnaire(models.Model):
+    """R-003, §6.4: the level questionnaire, validated by a coach before the first match."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="questionnaires"
+    )
+    answers = models.JSONField()
+    estimated_level = models.DecimalField(max_digits=3, decimal_places=2)
+    submitted_at = models.DateTimeField()
+    validated_level = models.DecimalField(max_digits=3, decimal_places=2, null=True, blank=True)
+    validated_sigma = models.DecimalField(max_digits=5, decimal_places=3, null=True, blank=True)
+    validated_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    validated_at = models.DateTimeField(null=True, blank=True)
+    note = models.CharField(max_length=500, blank=True)
+
+    class Meta:
+        ordering = ["-submitted_at"]
+        verbose_name = "chestionar de nivel"
+        verbose_name_plural = "chestionare de nivel"
+
+    def __str__(self) -> str:
+        return f"{self.user_id} {self.estimated_level}"
+
+
+class PlayerStatus(models.TextChoices):
+    ACTIVE = "active", "În ligă"
+    WITHDRAWN = "withdrawn", "Retras"
+
+
+class LeaguePlayer(models.Model):
+    """A person in the league: adult, validated level, league consent signed (R-006, R-010)."""
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        primary_key=True,
+        related_name="league_player",
+    )
+    status = models.CharField(
+        max_length=10, choices=PlayerStatus.choices, default=PlayerStatus.ACTIVE
+    )
+    joined_at = models.DateTimeField()
+    left_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = "jucător de ligă"
+        verbose_name_plural = "jucători de ligă"
+
+    def __str__(self) -> str:
+        return str(self.user_id)
+
+
+class EventKind(models.TextChoices):
+    REGISTER = "register", "Jucător înscris"
+    MATCH = "match", "Meci aplicat"
+    BONUS = "bonus", "Bonus LP (turneu)"
+    DECAY = "decay", "Decay zilnic"
+    CANCEL = "cancel", "Meci anulat"
+
+
+class LeagueEvent(models.Model):
+    """Append-only (§6.16). `at` orders the replay: a match counts at its end time."""
+
+    id = models.BigAutoField(primary_key=True)
+    season = models.ForeignKey(LeagueSeason, on_delete=models.PROTECT, related_name="events")
+    kind = models.CharField(max_length=10, choices=EventKind.choices)
+    at = models.DateTimeField()
+    ref = models.CharField(max_length=80, help_text="Meciul sau jucătorul la care se referă.")
+    payload = models.JSONField(default=dict)
+    actor = models.JSONField(default=dict)
+    reason = models.CharField(max_length=500, blank=True)
+    created_at = models.DateTimeField()
+
+    class Meta:
+        ordering = ["at", "id"]
+        verbose_name = "eveniment de ligă"
+        verbose_name_plural = "evenimente de ligă"
+        indexes = [models.Index(fields=["season", "at", "id"])]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["season", "kind", "ref"],
+                condition=models.Q(kind__in=["match", "cancel"]),
+                name="league_event_match_once",
+            )
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.kind} {self.ref}"
+
+
+class LeagueSnapshot(models.Model):
+    """The engine state after the season's events (a cache: `store.rebuild` recreates it)."""
+
+    season = models.OneToOneField(
+        LeagueSeason, on_delete=models.CASCADE, primary_key=True, related_name="snapshot"
+    )
+    state = models.JSONField()
+    last_event_id = models.BigIntegerField(default=0)
+    last_at = models.DateTimeField(null=True, blank=True)
+    computation = models.PositiveIntegerField(default=1)
+    updated_at = models.DateTimeField()
+
+    class Meta:
+        verbose_name = "starea ligii"
+        verbose_name_plural = "starea ligii"
+
+    def __str__(self) -> str:
+        return f"{self.season_id} #{self.computation}"
+
+
+class RatingRecord(models.Model):
+    """Append-only: the values before and after of one event, for one computation (§6.16)."""
+
+    id = models.BigAutoField(primary_key=True)
+    season = models.ForeignKey(LeagueSeason, on_delete=models.PROTECT, related_name="+")
+    computation = models.PositiveIntegerField()
+    event = models.ForeignKey(LeagueEvent, on_delete=models.PROTECT, related_name="records")
+    payload = models.JSONField()
+    created_at = models.DateTimeField()
+
+    class Meta:
+        ordering = ["id"]
+        verbose_name = "calcul de rating"
+        verbose_name_plural = "calcule de rating"
+        indexes = [models.Index(fields=["season", "computation"])]
+
+    def __str__(self) -> str:
+        return f"{self.event_id} #{self.computation}"
+
+
+class Ladder(models.TextChoices):
+    """LG-001."""
+
+    DOUBLES = "doubles", "Dublu"
+    SINGLES = "singles", "Simplu"
+    PAIRS = "pairs", "Perechi"
+
+
+class Standing(models.Model):
+    """A projection of the engine state for reading (rewritten after every change)."""
+
+    id = models.BigAutoField(primary_key=True)
+    season = models.ForeignKey(LeagueSeason, on_delete=models.CASCADE, related_name="standings")
+    ladder = models.CharField(max_length=10, choices=Ladder.choices)
+    competitor_id = models.CharField(max_length=80)
+    player_a = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="+"
+    )
+    player_b = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    mu = models.FloatField()
+    sigma = models.FloatField()
+    level = models.FloatField()
+    rank_index = models.PositiveSmallIntegerField(null=True, blank=True)
+    tier = models.CharField(max_length=10, blank=True)
+    division = models.CharField(max_length=3, blank=True)
+    lp = models.PositiveIntegerField(default=0)
+    total_lp = models.PositiveIntegerField(default=0)
+    placement_left = models.PositiveSmallIntegerField(default=0)
+    matches_played = models.PositiveIntegerField(default=0)
+    position = models.PositiveIntegerField(null=True, blank=True)
+    eligible = models.BooleanField(default=False)
+    last_match_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["season", "ladder", "position"]
+        verbose_name = "clasament"
+        verbose_name_plural = "clasamente"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["season", "ladder", "competitor_id"], name="standing_once"
+            )
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.ladder} {self.position} {self.competitor_id}"

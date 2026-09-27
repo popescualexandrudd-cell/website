@@ -83,6 +83,7 @@ INSTALLED_APPS = [
     "jungle.cafe",
     "jungle.cards",
     "jungle.privacy",
+    "jungle.league",
 ]
 
 MIDDLEWARE = [

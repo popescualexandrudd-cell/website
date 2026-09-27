@@ -26,6 +26,13 @@ from jungle.legal.services import current_document, record_consents
 
 ADULT_AGE = 18
 _withdrawal_listeners: list[Callable[[User], None]] = []
+_signed_listeners: list[Callable[[User], object]] = []
+
+
+def on_signed(listener: Callable[[User], object]) -> None:
+    """The league registers here: signing may be the last condition for joining (§6.4)."""
+    if listener not in _signed_listeners:
+        _signed_listeners.append(listener)
 
 
 def on_withdrawn(listener: Callable[[User], None]) -> None:
@@ -74,6 +81,8 @@ def sign(request: HttpRequest, user: User, device: Device, language: str) -> Con
             target=consent,
             after={"user": str(user.pk), "version": document.version, "device": str(device.pk)},
         )
+        for listener in _signed_listeners:
+            listener(user)
     return consent
 
 

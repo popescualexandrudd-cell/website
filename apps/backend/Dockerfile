@@ -8,7 +8,12 @@ WORKDIR /app
 # Dependencies first (cached layer)
 COPY pyproject.toml uv.lock .python-version ./
 COPY apps/backend/pyproject.toml apps/backend/pyproject.toml
+COPY packages/league-engine/pyproject.toml packages/league-engine/pyproject.toml
 RUN uv sync --frozen --no-dev --package jungle-backend --no-install-workspace
+
+# The league engine (ADR-0008) is a workspace package: installed from its source.
+COPY packages/league-engine packages/league-engine
+RUN uv sync --frozen --no-dev --package jungle-backend --no-editable
 
 COPY apps/backend apps/backend
 RUN useradd --system --uid 10001 jungle && mkdir -p /app/apps/backend/staticfiles \

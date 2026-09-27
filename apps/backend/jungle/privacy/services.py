@@ -11,6 +11,7 @@ consents given.
 from __future__ import annotations
 
 import uuid
+from collections.abc import Callable
 from datetime import date, datetime
 from typing import Any
 
@@ -42,6 +43,15 @@ from jungle.ledger.services import customer_credit, customer_debt
 from jungle.legal.models import Consent
 from jungle.rewards.models import Referral, ReferralCode, ReferralStatus, Voucher, VoucherStatus
 from jungle.subscriptions.models import CorporateMember, Subscription
+
+_erased_listeners: list[Callable[[User], None]] = []
+
+
+def on_erased(listener: Callable[[User], None]) -> None:
+    """The league registers here to stop showing the person (§12.2)."""
+    if listener not in _erased_listeners:
+        _erased_listeners.append(listener)
+
 
 RETIRED_FIRST_NAME = "Jucător"
 RETIRED_LAST_NAME = "retras"
@@ -247,6 +257,8 @@ def erase(actor: audit.Actor, user: User, *, forfeit_credit: bool = False) -> Us
         audit.record(
             actor, "privacy.account_erased", target=user, after={"forfeited_credit": forfeit_credit}
         )
+        for listener in _erased_listeners:
+            listener(user)
     return user
 
 

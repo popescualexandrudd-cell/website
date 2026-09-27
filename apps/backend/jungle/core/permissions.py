@@ -50,6 +50,8 @@ class Action(StrEnum):
     CAFE_MANAGE = "cafe.manage"
     CAFE_ORDERS = "cafe.orders"
     CARDS_MANAGE = "cards.manage"
+    LEAGUE_VALIDATE_LEVELS = "league.validate_levels"
+    LEAGUE_MANAGE = "league.manage"
 
 
 ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
@@ -83,6 +85,8 @@ ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
             Action.CAFE_MANAGE,
             Action.CAFE_ORDERS,
             Action.CARDS_MANAGE,
+            Action.LEAGUE_VALIDATE_LEVELS,
+            Action.LEAGUE_MANAGE,
         }
     ),
     Role.RECEPTION: frozenset(
@@ -106,6 +110,7 @@ ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
             Action.CLASSES_MANAGE,
             Action.ATTENDANCE_VIEW,
             Action.RESTRICTIONS_MANAGE,
+            Action.LEAGUE_VALIDATE_LEVELS,  # R-003: the coach validates the questionnaire
         }
     ),
 }

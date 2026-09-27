@@ -112,6 +112,19 @@ def emblem_list(value: Any) -> bool:
     )
 
 
+def league_config(value: Any) -> bool:
+    """Overrides of the league engine's values (a dict of LeagueConfig fields)."""
+    if not isinstance(value, dict):
+        return False
+    from jungle_league.config import LeagueConfig
+
+    try:
+        LeagueConfig(**value)
+    except (TypeError, ValueError):
+        return False
+    return True
+
+
 def percent(value: Any) -> bool:
     return isinstance(value, int) and not isinstance(value, bool) and 0 <= value <= 90
 
@@ -420,6 +433,14 @@ CONFIG: dict[str, ConfigSpec] = {
             "Emblemele de junglă dintre care alege jucătorul promovat în Diamant (R-024).",
             emblem_list,
             question="Q1",
+        ),
+        ConfigSpec(
+            "league.config",
+            {},
+            Marker.TO_CONFIRM,
+            "Valorile ligii care diferă de cele implicite (§6); se aplică de la sezonul următor.",
+            league_config,
+            question="Q45",
         ),
         ConfigSpec(
             "auth.staff_session_hours",
