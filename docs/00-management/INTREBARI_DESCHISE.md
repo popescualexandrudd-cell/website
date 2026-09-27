@@ -162,6 +162,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** dezactivată; „plată la locație”.
 - **Notă:** Contractul cu o bancă sau un procesator durează de obicei câteva săptămâni; dacă vreți plata online la deschidere, decizia trebuie luată până în decembrie 2026.
+- **Folosită în Etapa 4 (27.09.2026):** Plata online e dezactivată; rezervările sunt „plată la locație”, cu datoria urmărită în cont. Metoda „card” răspunde `payments.method_unavailable` până la alegerea procesatorului.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 
@@ -172,6 +173,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** MEDIE · **Blochează:** Etapa 4 (plăți, registru)
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** doar chioșcul; admin-ul poate înregistra excepții cu motiv, auditat.
+- **Folosită în Etapa 4 (27.09.2026):** Plățile le ia chioșcul (Etapa 8); managerul înregistrează excepții (`POST /api/v1/staff/payments`), doar cu motiv, în jurnal.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 
@@ -192,6 +194,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** MEDIE · **Blochează:** Etapa 4 (configuratorul de pachete)
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** cerere aprobată de admin; sub 8 sesiuni = regula Start.
+- **Folosită în Etapa 4 (27.09.2026):** Intensitățile „La cerere” le creează recepția/managerul, cu prețul lunar stabilit de club; sub 8 sesiuni se aplică regula Start (`subscriptions.start_rule_below_sessions`).
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 
@@ -202,6 +205,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** MEDIE · **Blochează:** Etapa 4 (regula Start/vârf)
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** da (restricție doar pe 15:00–22:00).
+- **Folosită în Etapa 4 (27.09.2026):** Start nu e valabil în banda de vârf (acum 17–22, după Q3); semi-vârful e permis.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 
@@ -213,6 +217,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** credit în cont; sesiunea recuperată e valabilă până la finalul perioadei abonamentului.
 - **Folosită în Etapa 3 (27.09.2026):** Anularea gratuită e marcată „eligibilă pentru recuperare”; creditul în cont vine în Etapa 4.
+- **Folosită în Etapa 4 (27.09.2026):** Plățile unei rezervări anulate la timp devin credit în cont pentru fiecare plătitor; sesiunea de abonament devine sesiune de recuperare, valabilă până la finalul abonamentului.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 
@@ -401,6 +406,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** MEDIE · **Blochează:** Etapa 4 (vouchere și recomandări)
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** în afara vârfului și semi-vârf.
+- **Folosită în Etapa 4 (27.09.2026):** Voucherul e valabil în afara vârfului și în semi-vârf (`referrals.voucher_bands`), 90 de zile.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 
@@ -411,6 +417,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** MEDIE · **Blochează:** Etapa 4 (produse de cafenea), Etapa 8 (afișajul cafenelei)
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** fără stoc la lansare; afișaj la bar.
+- **Folosită în Etapa 4 (27.09.2026):** Fără stoc (doar „disponibil / indisponibil”); coada de comenzi pentru bar există în API, afișajul vine în Etapa 8.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 
@@ -432,6 +439,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** MEDIE · **Blochează:** Etapa 4 (conturi corporate)
 - **Stare:** DESCHISĂ
 - **Varianta implicită (propusă în Etapa 0):** Cont de firmă cu angajați asociați; firma cumpără abonamente pentru angajați din configuratorul standard, cu o reducere corporate configurabilă; factură lunară pe firmă; raport lunar de utilizare. Prețurile și pragurile (de exemplu 5 / 10 / 20 de angajați) se stabilesc de proprietar.
+- **Folosită în Etapa 4 (27.09.2026):** Cont de firmă cu angajați; reducere per firmă sau implicită (`corporate.default_discount_percent`, 0%, DE_STABILIT); facturare pe firmă; raport lunar de utilizare.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 

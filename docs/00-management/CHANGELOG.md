@@ -4,6 +4,19 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 4 — 27.09.2026 (așteaptă aprobarea)
+#### Adăugat
+- `jungle.ledger`: registru cu dublă înregistrare în bani întregi, tabele doar-adăugare, tranzacții echilibrate verificate la commit, chei de idempotență, corecții prin înregistrări inverse; plăți în numerar cu rest și bon (simulator, Q23), din credit, cu voucher; împărțirea orei (R-061); datorii la anulare târzie, neprezentare și sesiuni jucate; credit la anularea gratuită (Q14); excepțiile de plată ale personalului doar cu motiv (Q10).
+- `jungle.subscriptions`: configuratorul în 3 pași, prețul pachetului cu reduceri multiplicative rotunjit la leu (R-084), comandă și activare la plată, sesiuni consumate de lecții și clase, regula Start fără vârf (R-087, Q13), fără reportare (R-085), sesiuni de recuperare (Q14), înghețare 14 zile/an (R-086), intensități „La cerere” (Q12), conturi corporate cu raport lunar (R-088, Q35).
+- `jungle.rewards`: vouchere (oră gratuită, sumă, procent), „Adu un prieten” (R-120, Q32), emitere manuală de către manager (R-121).
+- `jungle.cafe`: meniu, comenzi plătite și numerotate pe zi, coada de la bar, numerele gata pentru lobby, anulare cu restituire (R-111, R-112, Q33).
+- Date DEMO (DE_STABILIT) pentru abonamente și cafenea în `seed_initial --demo`.
+- `scripts/test-all` impune 100% acoperire pe ramuri pentru modulele de bani; 104 teste noi (308 în backend).
+#### Reparat la revizuire
+- Contul unei firme nu încăpea în registru (câmp prea scurt).
+- Un voucher folosit și apoi anulat la timp s-ar fi transformat în credit cheltuibil; acum redevine voucher.
+- Două plăți simultane din același credit ar fi putut trece amândouă; acum se fac pe rând.
+
 ### Etapa 3 — 27.09.2026 (aprobată 27.09.2026)
 #### Modificat la aprobare (răspunsurile proprietarului)
 - Q3: ora de vârf 17:00–22:00 (15:00–17:00 devine semi-vârf, implicit); programul 08:00–23:00 confirmat.

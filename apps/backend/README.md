@@ -1,6 +1,6 @@
 # Backend central (Django)
 
-> **Stare:** fundația construită în Etapa 1A (27.09.2026); rezervările, prețurile și prezențele în Etapa 3 (27.09.2026). **Următoarele module:** Etapele 4, 5, 6, 12.
+> **Stare:** fundația în Etapa 1A; rezervările, prețurile și prezențele în Etapa 3; banii, abonamentele, voucherele și cafeneaua în Etapa 4 (27.09.2026). **Următoarele module:** Etapele 5, 6, 12.
 
 ## Ce face
 
@@ -70,3 +70,7 @@ Variabilele de mediu sunt descrise în [`.env.example`](.env.example). Imaginea 
 | `jungle/pricing` | tarife pe 30 de minute (bandă, sezon, tip client, produs), oferta unei rezervări (Etapa 3) |
 | `jungle/bookings` | rezervări, anulări, lista de așteptare pe interval, clase de pilates, sala de evenimente (Etapa 3); suprapunerile sunt refuzate de PostgreSQL (btree_gist) |
 | `jungle/attendance` | scanări și prezențe, neprezentări, blocări și notificări pentru personal (Etapa 3) |
+| `jungle/ledger` | registrul contabil cu dublă înregistrare, plăți, împărțirea orei, credit și datorii, bon fiscal prin adaptor (Etapa 4) |
+| `jungle/subscriptions` | configuratorul, abonamente, sesiuni și recuperări, înghețare, conturi corporate (Etapa 4) |
+| `jungle/rewards` | vouchere, „Adu un prieten” (Etapa 4) |
+| `jungle/cafe` | meniul, comenzile și coada cafenelei (Etapa 4) |
