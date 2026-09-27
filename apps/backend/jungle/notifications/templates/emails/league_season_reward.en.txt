@@ -1,0 +1,13 @@
+{% autoescape off %}Hi {{ first_name }},
+
+{{ season }} is over. Congratulations: {{ award }}!
+
+Your rewards are in your account, under "Vouchers":
+{% for line in rewards %}- {{ line }}
+{% endfor %}{% if extras %}
+Also waiting for you at the reception: {{ extras }}.
+{% endif %}
+Your vouchers: {{ link }}
+
+The Jungle Padel team
+{% endautoescape %}

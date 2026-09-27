@@ -561,6 +561,82 @@
         "title": "CategoryOut",
         "type": "object"
       },
+      "ChallengeOut": {
+        "properties": {
+          "challengers": {
+            "items": {
+              "$ref": "#/components/schemas/PlayerOut"
+            },
+            "title": "Challengers",
+            "type": "array"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "ladder": {
+            "title": "Ladder",
+            "type": "string"
+          },
+          "mine": {
+            "description": "challenger sau target",
+            "title": "Mine",
+            "type": "string"
+          },
+          "play_by": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Play By"
+          },
+          "refusal_outcome": {
+            "title": "Refusal Outcome",
+            "type": "string"
+          },
+          "respond_by": {
+            "format": "date-time",
+            "title": "Respond By",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "targets": {
+            "items": {
+              "$ref": "#/components/schemas/PlayerOut"
+            },
+            "title": "Targets",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "ladder",
+          "status",
+          "mine",
+          "challengers",
+          "targets",
+          "created_at",
+          "respond_by",
+          "play_by",
+          "refusal_outcome"
+        ],
+        "title": "ChallengeOut",
+        "type": "object"
+      },
       "ChildIn": {
         "properties": {
           "date_of_birth": {
@@ -8686,6 +8762,48 @@
           }
         ],
         "summary": "Me",
+        "tags": [
+          "league"
+        ]
+      }
+    },
+    "/api/v1/league/me/challenges": {
+      "get": {
+        "description": "Challenges are issued and answered at the League Kiosk; here they are only shown.",
+        "operationId": "jungle_league_api_my_challenges",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ChallengeOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "My Challenges",
         "tags": [
           "league"
         ]

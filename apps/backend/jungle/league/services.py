@@ -18,7 +18,6 @@ from typing import Any
 from django.db import transaction
 from django.db.models import QuerySet
 from django.http import HttpRequest
-from jungle_league.config import LeagueConfig
 from jungle_league.engine import register_player, start_new_season
 
 from jungle.accounts.models import User
@@ -268,7 +267,7 @@ def create_season(request: HttpRequest, data: SeasonData) -> LeagueSeason:
 
 def current_config() -> dict[str, Any]:
     overrides: dict[str, Any] = dict(get_config("league.config"))
-    LeagueConfig(**overrides)  # validated by the registry; raises if not
+    store.make_config(overrides)  # validated by the registry; raises if not
     return overrides
 
 
@@ -286,7 +285,7 @@ def activate_season(request: HttpRequest, season_id: uuid.UUID) -> LeagueSeason:
         if season.status != SeasonStatus.PLANNED or busy:
             raise DomainError(ErrorCode.LEAGUE_SEASON_INVALID, status=409)
         season.config = current_config()
-        config = LeagueConfig(**season.config)
+        config = store.make_config(season.config)
         previous = (
             LeagueSeason.objects.filter(location=season.location, status=SeasonStatus.CLOSED)
             .order_by("-number")

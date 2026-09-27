@@ -18,8 +18,9 @@ import dataclasses
 import uuid
 from collections.abc import Callable
 from datetime import date, datetime
+from enum import Enum
 from functools import partial
-from typing import Any
+from typing import Any, get_type_hints
 
 from django.db import transaction
 from jungle_league.config import LeagueConfig
@@ -60,9 +61,23 @@ def on_applied(listener: Callable[[LeagueSeason, LeagueEvent, dict[str, Any]], N
         _applied_listeners.append(listener)
 
 
+def make_config(values: dict[str, Any]) -> LeagueConfig:
+    """A LeagueConfig from stored JSON: choices such as the third-refusal policy come back as
+    the engine's enums (a plain string would never equal them)."""
+    hints = get_type_hints(LeagueConfig)
+    return LeagueConfig(
+        **{
+            key: hints[key](value)
+            if isinstance(hints.get(key), type) and issubclass(hints[key], Enum)
+            else value
+            for key, value in values.items()
+        }
+    )
+
+
 def config_for(season: LeagueSeason) -> LeagueConfig:
     """The values fixed when the season started (ADR-0022: changes apply from the next one)."""
-    return LeagueConfig(**season.config)
+    return make_config(season.config)
 
 
 def engine_error(exc: LeagueError | ScoreError) -> DomainError:

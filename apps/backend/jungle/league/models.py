@@ -304,6 +304,9 @@ class LeagueMatch(models.Model):
     reopened_until = models.DateTimeField(
         null=True, blank=True, help_text="Adminul a redeschis fereastra: scorul se reintroduce."
     )
+    challenge = models.ForeignKey(
+        "Challenge", on_delete=models.PROTECT, null=True, blank=True, related_name="matches"
+    )
 
     class Meta:
         ordering = ["-finished_at"]
@@ -382,3 +385,88 @@ class MatchTransition(models.Model):
 
     def __str__(self) -> str:
         return f"{self.match_id} {self.status}"
+
+
+# ---------------------------------------------------------------- challenges (§6.11)
+class ChallengeStatus(models.TextChoices):
+    PENDING = "pending", "Așteaptă răspunsul"
+    ACCEPTED = "accepted", "Acceptată"
+    REFUSED = "refused", "Refuzată"
+    EXPIRED = "expired", "Expirată"
+    PLAYED = "played", "Jucată"
+    CANCELLED = "cancelled", "Anulată"
+
+
+class Challenge(models.Model):
+    """LG-110 … LG-113. A player (singles) or a pair (doubles) challenges an opponent at most
+    one division above. Issued and answered at the League Kiosk; seen on the website."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    season = models.ForeignKey(LeagueSeason, on_delete=models.PROTECT, related_name="challenges")
+    location = models.ForeignKey("locations.Location", on_delete=models.PROTECT)
+    ladder = models.CharField(max_length=10, choices=Ladder.choices)
+    challenger_a = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="+"
+    )
+    challenger_b = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    target_a = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="+"
+    )
+    target_b = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    challenger_rank = models.PositiveSmallIntegerField()
+    target_rank = models.PositiveSmallIntegerField()
+    status = models.CharField(
+        max_length=10, choices=ChallengeStatus.choices, default=ChallengeStatus.PENDING
+    )
+    created_at = models.DateTimeField()
+    respond_by = models.DateTimeField()
+    responded_at = models.DateTimeField(null=True, blank=True)
+    responded_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    play_by = models.DateTimeField(null=True, blank=True)
+    refusal_outcome = models.CharField(max_length=15, blank=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "provocare"
+        verbose_name_plural = "provocări"
+        indexes = [models.Index(fields=["status", "respond_by"])]
+
+    def __str__(self) -> str:
+        return f"{self.get_status_display()} {self.created_at:%Y-%m-%d}"
+
+    @property
+    def challengers(self) -> list[uuid.UUID]:
+        return [self.challenger_a_id, *([self.challenger_b_id] if self.challenger_b_id else [])]
+
+    @property
+    def targets(self) -> list[uuid.UUID]:
+        return [self.target_a_id, *([self.target_b_id] if self.target_b_id else [])]
+
+
+class DecayWarning(models.Model):
+    """LG-107: a warning sent once, three days before the decay starts."""
+
+    id = models.BigAutoField(primary_key=True)
+    season = models.ForeignKey(LeagueSeason, on_delete=models.CASCADE, related_name="+")
+    day = models.DateField()
+    ladder = models.CharField(max_length=10, choices=Ladder.choices)
+    competitor_id = models.CharField(max_length=80)
+    sent_at = models.DateTimeField()
+
+    class Meta:
+        verbose_name = "avertizare de decay"
+        verbose_name_plural = "avertizări de decay"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["season", "day", "ladder", "competitor_id"], name="decay_warning_once"
+            )
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.day} {self.ladder} {self.competitor_id}"

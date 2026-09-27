@@ -13,12 +13,14 @@ from django.db.models import F, Q
 from django.http import HttpRequest
 from ninja import Field, Router, Schema, Status
 
+from jungle.accounts.models import User
 from jungle.accounts.services.authz import current_user
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.schemas import errors
 from jungle.core.security import session_auth
-from jungle.league import matches, services
+from jungle.league import challenges, matches, services
 from jungle.league.models import (
+    Challenge,
     Ladder,
     LeagueMatch,
     LeagueSeason,
@@ -199,6 +201,39 @@ def staff_match_out(match: LeagueMatch) -> StaffMatchOut:
     )
 
 
+class ChallengeOut(Schema):
+    id: uuid.UUID
+    ladder: str
+    status: str
+    mine: str = Field(description="challenger sau target")
+    challengers: list[PlayerOut]
+    targets: list[PlayerOut]
+    created_at: datetime
+    respond_by: datetime
+    play_by: datetime | None
+    refusal_outcome: str
+
+
+def _people(*people: User | None) -> list[PlayerOut]:
+    shown = sorted((p for p in people if p is not None), key=lambda p: (p.last_name, p.first_name))
+    return [PlayerOut(first_name=p.first_name, last_name=p.last_name) for p in shown]
+
+
+def challenge_out(challenge: Challenge, user_id: uuid.UUID) -> ChallengeOut:
+    return ChallengeOut(
+        id=challenge.id,
+        ladder=challenge.ladder,
+        status=challenge.status,
+        mine="challenger" if user_id in challenge.challengers else "target",
+        challengers=_people(challenge.challenger_a, challenge.challenger_b),
+        targets=_people(challenge.target_a, challenge.target_b),
+        created_at=challenge.created_at,
+        respond_by=challenge.respond_by,
+        play_by=challenge.play_by,
+        refusal_outcome=challenge.refusal_outcome,
+    )
+
+
 def _season(location: str, season_number: int | None) -> LeagueSeason:
     place = get_location_by_slug(location)
     seasons = LeagueSeason.objects.filter(location=place).exclude(status=SeasonStatus.PLANNED)
@@ -343,6 +378,13 @@ def my_matches(request: HttpRequest) -> list[MatchOut]:
     """The player's matches and where each one is (§6.9). Scores are entered only at the
     League Kiosk: there is no way to enter or confirm one from here (invariant 1)."""
     return [match_out(m) for m in matches.my_matches(request)[:50]]
+
+
+@me_router.get("/me/challenges", response={200: list[ChallengeOut], **errors(401)})
+def my_challenges(request: HttpRequest) -> list[ChallengeOut]:
+    """Challenges are issued and answered at the League Kiosk; here they are only shown."""
+    user = current_user(request)
+    return [challenge_out(c, user.pk) for c in challenges.my_challenges(request)[:50]]
 
 
 @me_router.post("/questionnaire", response={201: QuestionnaireOut, **errors(400, 401, 422)})

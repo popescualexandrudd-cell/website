@@ -39,7 +39,7 @@ from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.http import client_ip
 from jungle.core.permissions import Action, Role
 from jungle.devices.models import Device
-from jungle.league import kiosk, services, store
+from jungle.league import challenges, kiosk, services, store
 from jungle.league.models import (
     OPEN_STATUSES,
     EventKind,
@@ -55,9 +55,11 @@ from jungle.league.models import (
 from jungle.ledger import payments
 from jungle.locations.models import ResourceKind
 
-# The bookings whose score may count (§6.14). Challenges join in with their challenge (§6.11),
-# tournament matches with their draw (§6.14).
-LEAGUE_SESSIONS = {SessionType.OFFICIAL_MATCH: MatchKind.OFFICIAL}
+# The bookings whose score may count (§6.14); tournament matches come with their draw (§6.14).
+LEAGUE_SESSIONS = {
+    SessionType.OFFICIAL_MATCH: MatchKind.OFFICIAL,
+    SessionType.CHALLENGE: MatchKind.CHALLENGE,  # with an accepted challenge (§6.11)
+}
 PLAYABLE_BOOKINGS = (BookingStatus.CONFIRMED, BookingStatus.COMPLETED)
 NOTICE_DISPUTE = "league.match_disputed"
 
@@ -252,6 +254,9 @@ def propose(request: HttpRequest, device: Device | None, data: Proposal) -> Leag
         season = services.active_season(booking.location)
         kind = LEAGUE_SESSIONS[SessionType(booking.session_type)]
         score = _parse_score(data.score, kind, season)
+        challenge = None
+        if kind == MatchKind.CHALLENGE:
+            challenge, _ = challenges.for_match(season, team_a, team_b, booking.starts_at)
         check_daily_limit(
             players, booking.ends_at, store.config_for(season).max_official_matches_per_day
         )
@@ -266,6 +271,7 @@ def propose(request: HttpRequest, device: Device | None, data: Proposal) -> Leag
             window_closes_at=closes,
             proposed_by=proposer,
             proposed_at=now,
+            challenge=challenge,
         )
         MatchPlayer.objects.bulk_create(
             MatchPlayer(
@@ -402,6 +408,10 @@ def _apply(match: LeagueMatch, actor: audit.Actor) -> None:
         "score": match.score,
         "match_type": match.kind,
     }
+    if match.challenge is not None:  # LG-113: the challenger who wins gets the bonus
+        payload["challenger"] = (
+            "a" if set(match.challenge.challengers) == {p.pk for p in team_a} else "b"
+        )
     try:
         event = store.record(
             match.season, EventKind.MATCH, match.finished_at, match.ref, payload, actor
@@ -434,6 +444,7 @@ def _finish(
     match.applied_at = clock.now()
     match.note = note
     match.save(update_fields=["status", "event", "applied_at", "note"])
+    challenges.played(match.challenge_id)
     _log(match, status, actor, checks={"event": event.pk if event else None}, reason=note)
     audit.record(actor, f"league.match_{status}", target=match)
 

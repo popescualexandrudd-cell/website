@@ -1,0 +1,10 @@
+{% autoescape off %}Hi {{ first_name }},
+
+{{ challengers }} challenged you to a league match.
+
+You can accept or refuse at the club's League Kiosk until {{ respond_by|date:"d.m.Y H:i" }}. If you accept, the match is played within 7 days on a normal "Challenge" booking. If the challengers win, they get 5 extra LP.
+
+You can also see it in your account: {{ link }}
+
+The Jungle Padel team
+{% endautoescape %}

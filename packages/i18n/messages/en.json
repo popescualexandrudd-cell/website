@@ -165,7 +165,13 @@
     "league.already_responded": "You have already answered for this score.",
     "league.match_not_open": "This match is no longer waiting for confirmations.",
     "league.match_state_invalid": "This action is not possible in the match's current state.",
-    "league.reason_required": "Write the reason; it is kept in the log."
+    "league.reason_required": "Write the reason; it is kept in the log.",
+    "league.challenge_not_allowed": "You can only challenge an opponent in your division or at most one division above.",
+    "league.challenge_not_ranked": "Challenges are between players or pairs who have finished their placement matches.",
+    "league.challenge_exists": "There is already an open challenge between you.",
+    "league.challenge_not_found": "The challenge does not exist or is no longer waiting for an answer.",
+    "league.challenge_not_target": "Only the challenged players can answer.",
+    "league.challenge_required": "A challenge booking needs an accepted challenge between these players."
   },
   "web": {
     "meta": {

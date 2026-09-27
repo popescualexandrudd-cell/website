@@ -1,0 +1,13 @@
+{% autoescape off %}Salut, {{ first_name }}!
+
+{{ season }} s-a încheiat. Felicitări: {{ award }}!
+
+Recompensele tale sunt în cont, la „Vouchere”:
+{% for line in rewards %}- {{ line }}
+{% endfor %}{% if extras %}
+La recepție te așteaptă și: {{ extras }}.
+{% endif %}
+Voucherele tale: {{ link }}
+
+Echipa Jungle Padel
+{% endautoescape %}

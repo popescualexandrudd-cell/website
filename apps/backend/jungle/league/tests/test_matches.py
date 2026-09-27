@@ -700,7 +700,10 @@ def test_the_expiry_command_and_the_admin_views(
     after_game.move_to("2027-04-05T12:05:00+03:00")
     out = StringIO()
     call_command("expire_league_matches", stdout=out)
-    assert out.getvalue().strip() == "Meciuri expirate: 1 neconfirmate, 0 neplătite."
+    assert out.getvalue().strip() == (
+        "Meciuri expirate: 1 neconfirmate, 0 neplătite. "
+        "Provocări expirate: 0 fără răspuns, 0 nejucate."
+    )
     inline = MatchPlayerInline(LeagueMatch, emergency_admin_site)
     assert inline.has_add_permission(RequestFactory().get("/")) is False
     staff(Role.MANAGER)

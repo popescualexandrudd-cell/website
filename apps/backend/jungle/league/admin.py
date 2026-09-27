@@ -5,6 +5,7 @@ from django.http import HttpRequest
 
 from jungle.core.admin_site import ReadOnlyAdmin, emergency_admin_site
 from jungle.league.models import (
+    Challenge,
     LeagueEvent,
     LeagueMatch,
     LeaguePlayer,
@@ -67,3 +68,9 @@ class LeagueMatchAdmin(ReadOnlyAdmin):
 class MatchTransitionAdmin(ReadOnlyAdmin):
     list_display = ("match", "status", "at", "reason")
     list_filter = ("status",)
+
+
+@admin.register(Challenge, site=emergency_admin_site)
+class ChallengeAdmin(ReadOnlyAdmin):
+    list_display = ("created_at", "ladder", "status", "respond_by", "play_by", "refusal_outcome")
+    list_filter = ("status", "ladder", "season")

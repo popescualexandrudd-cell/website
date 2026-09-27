@@ -21,6 +21,9 @@ TEMPLATES = (
     "waitlist_welcome",
     "spot_promoted",
     "card_issued",
+    "league_challenge",
+    "league_decay_warning",
+    "league_season_reward",
 )
 LANGUAGES = ("ro", "en")
 

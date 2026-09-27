@@ -177,6 +177,12 @@ class ErrorCode(StrEnum):
     LEAGUE_MATCH_NOT_OPEN = "league.match_not_open"
     LEAGUE_MATCH_STATE_INVALID = "league.match_state_invalid"
     LEAGUE_REASON_REQUIRED = "league.reason_required"
+    LEAGUE_CHALLENGE_NOT_ALLOWED = "league.challenge_not_allowed"
+    LEAGUE_CHALLENGE_NOT_RANKED = "league.challenge_not_ranked"
+    LEAGUE_CHALLENGE_EXISTS = "league.challenge_exists"
+    LEAGUE_CHALLENGE_NOT_FOUND = "league.challenge_not_found"
+    LEAGUE_CHALLENGE_NOT_TARGET = "league.challenge_not_target"
+    LEAGUE_CHALLENGE_REQUIRED = "league.challenge_required"
 
 
 class DomainError(Exception):

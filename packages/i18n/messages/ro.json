@@ -165,7 +165,13 @@
     "league.already_responded": "Ai răspuns deja la acest scor.",
     "league.match_not_open": "Meciul nu mai așteaptă confirmări.",
     "league.match_state_invalid": "Acțiunea nu este posibilă în starea actuală a meciului.",
-    "league.reason_required": "Scrie motivul; apare în jurnal."
+    "league.reason_required": "Scrie motivul; apare în jurnal.",
+    "league.challenge_not_allowed": "Poți provoca doar un adversar din aceeași divizie sau cu cel mult o divizie peste.",
+    "league.challenge_not_ranked": "Provocările sunt între jucători sau perechi care și-au terminat meciurile de plasare.",
+    "league.challenge_exists": "Există deja o provocare deschisă între voi.",
+    "league.challenge_not_found": "Provocarea nu există sau nu mai așteaptă un răspuns.",
+    "league.challenge_not_target": "Doar cei provocați pot răspunde.",
+    "league.challenge_required": "Pentru o rezervare de tip provocare trebuie să existe o provocare acceptată între acești jucători."
   },
   "web": {
     "meta": {

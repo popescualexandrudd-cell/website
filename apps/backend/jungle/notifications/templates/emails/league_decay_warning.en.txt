@@ -1,0 +1,10 @@
+{% autoescape off %}Hi {{ first_name }},
+
+You have not played an official league match for a while. From {{ starts|date:"d.m.Y" }}, in the {{ ladder }} ladder, you lose {{ lp_per_day }} LP a day until you play again (never below Diamond IV).
+
+A single official match stops it.
+
+Your rank and LP: {{ link }}
+
+The Jungle Padel team
+{% endautoescape %}

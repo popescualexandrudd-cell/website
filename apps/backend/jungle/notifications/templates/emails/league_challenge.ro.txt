@@ -1,0 +1,10 @@
+{% autoescape off %}Salut, {{ first_name }}!
+
+{{ challengers }} te-au provocat la un meci de ligă.
+
+Poți accepta sau refuza la Chioșcul Ligii din club, până la {{ respond_by|date:"d.m.Y H:i" }}. Dacă accepți, meciul se joacă în cel mult 7 zile, pe o rezervare obișnuită de tip „Provocare”. Dacă provocatorii câștigă, primesc 5 LP în plus.
+
+Provocarea apare și în contul tău: {{ link }}
+
+Echipa Jungle Padel
+{% endautoescape %}

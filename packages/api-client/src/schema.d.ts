@@ -849,6 +849,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/league/me/challenges": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * My Challenges
+         * @description Challenges are issued and answered at the League Kiosk; here they are only shown.
+         */
+        get: operations["jungle_league_api_my_challenges"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/league/me/matches": {
         parameters: {
             query?: never;
@@ -2605,6 +2625,41 @@ export interface components {
             name_ro: string;
             /** Products */
             products: components["schemas"]["ProductOut"][];
+        };
+        /** ChallengeOut */
+        ChallengeOut: {
+            /** Challengers */
+            challengers: components["schemas"]["PlayerOut"][];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Ladder */
+            ladder: string;
+            /**
+             * Mine
+             * @description challenger sau target
+             */
+            mine: string;
+            /** Play By */
+            play_by: string | null;
+            /** Refusal Outcome */
+            refusal_outcome: string;
+            /**
+             * Respond By
+             * Format: date-time
+             */
+            respond_by: string;
+            /** Status */
+            status: string;
+            /** Targets */
+            targets: components["schemas"]["PlayerOut"][];
         };
         /** ChildIn */
         ChildIn: {
@@ -6957,6 +7012,35 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MeOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_my_challenges: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChallengeOut"][];
                 };
             };
             /** @description Unauthorized */

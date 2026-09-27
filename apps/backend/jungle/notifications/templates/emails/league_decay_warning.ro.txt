@@ -1,0 +1,10 @@
+{% autoescape off %}Salut, {{ first_name }}!
+
+Nu ai mai jucat un meci oficial de ligă de ceva vreme. Din {{ starts|date:"d.m.Y" }}, în clasamentul {{ ladder }} pierzi câte {{ lp_per_day }} LP pe zi până joci din nou (niciodată sub Diamant IV).
+
+Un singur meci oficial oprește scăderea.
+
+Rangul și LP-ul tău: {{ link }}
+
+Echipa Jungle Padel
+{% endautoescape %}
