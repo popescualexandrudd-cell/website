@@ -534,7 +534,6 @@ def test_r088_corporate_accounts(
             "location_id": str(club.location.id),
             "name": "Firma SRL",
             "registration_code": "RO123",
-            "discount_percent": 20,
         },
     )
     assert company.status_code == 201
@@ -602,10 +601,10 @@ def test_r088_corporate_accounts(
     )
 
 
-def test_q35_default_corporate_discount_and_validation(
+def test_q35_single_company_package_discount(
     api: Api, club: Any, rates: None, make_user: Any, staff: Any
 ) -> None:
-    set_config("corporate.default_discount_percent", 10)
+    """Q35 (owner, 27.09.2026): one company package, 20% off; the percentage is a setting."""
     staff(Role.MANAGER, club.location)
     account_id = api.post(
         "/staff/corporate", {"location_id": str(club.location.id), "name": "Alta SRL"}
@@ -617,19 +616,9 @@ def test_q35_default_corporate_discount_and_validation(
         "user_id": str(employee.pk),
         "corporate_id": account_id,
     }
+    assert api.post("/staff/subscriptions", body).json()["price_total"] == 28800  # 360 × 0.8
+    set_config("corporate.discount_percent", 10)
     assert api.post("/staff/subscriptions", body).json()["price_total"] == 32400  # 360 × 0.9
-    assert (
-        api.post(
-            "/staff/corporate",
-            {"location_id": str(club.location.id), "name": "X", "discount_percent": 95},
-        ).status_code
-        == 422
-    )
-    with pytest.raises(DomainError) as exc:  # the service checks it too (kiosk, admin)
-        services.create_corporate(
-            _staff_request(api), services.CorporateData(club.location.id, "X", discount_percent=95)
-        )
-    assert exc.value.code.value == "subscriptions.invalid_selection"
 
 
 def _staff_request(api: Api) -> Any:

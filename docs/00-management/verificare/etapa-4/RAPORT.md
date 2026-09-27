@@ -1,6 +1,6 @@
 # Raport de verificare — Etapa 4 (bani, abonamente, corporate, vouchere, cafenea)
 
-> Data: 27.09.2026. Branch: `claude/hopeful-euler-rguibn`. Starea: **livrată, așteaptă aprobarea proprietarului.**
+> Data: 27.09.2026. Branch: `claude/hopeful-euler-rguibn`. Starea: **aprobată de proprietar pe 27.09.2026** (cu răspunsurile la Q9, Q13, Q21, Q35).
 
 Etapa 4 construiește tot ce ține de bani, în backend.
 

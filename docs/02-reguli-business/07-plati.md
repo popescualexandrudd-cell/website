@@ -11,3 +11,7 @@
 - **R-065** **Contul clientului are un sold** (credit din anulări eligibile, rambursări, recompense) și poate avea **datorii** (taxe de anulare tardivă sau neprezentare, rezervări neplătite).
 - **R-066** Fiecare încasare în numerar la chioșc emite **bon fiscal** prin casa de marcat fiscală integrată (obligație legală în România; modelul se alege la achiziție). Facturi pentru corporate, inclusiv e-Factura (Q26).
 - **R-067** Idempotență: orice operație de plată are o cheie unică; o re-trimitere nu poate încasa de două ori.
+
+## Modificări
+
+- **27.09.2026** (confirmat de proprietar, Q9): la lansare **doar plata în numerar**. Plata online cu card nu se activează; rezervările online rămân „plată la locație”, cu datoria urmărită în cont.

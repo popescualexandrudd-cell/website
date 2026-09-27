@@ -151,10 +151,9 @@ def _component(location: Location, selection: Selection, allow_custom: bool) -> 
     )
 
 
-def corporate_discount(corporate: CorporateAccount) -> int:
-    if corporate.discount_percent is not None:
-        return corporate.discount_percent
-    return int(get_config("corporate.default_discount_percent"))
+def corporate_discount() -> int:
+    """Q35 (owner, 27.09.2026): a single company package, 20% off by default."""
+    return int(get_config("corporate.discount_percent"))
 
 
 def quote(
@@ -176,7 +175,7 @@ def quote(
     periods: dict[str, int] = get_config("subscriptions.period_discounts")
     discounts = [bundle[str(len(components))], periods[period]]
     if corporate is not None:
-        discounts.append(corporate_discount(corporate))
+        discounts.append(corporate_discount())
     price = package_price(
         [c.monthly_price for c in components], PERIOD_MONTHS[Period(period)], discounts
     )
@@ -612,20 +611,16 @@ class CorporateData:
     name: str
     registration_code: str = ""
     billing_email: str = ""
-    discount_percent: int | None = None
 
 
 def create_corporate(request: HttpRequest, data: CorporateData) -> CorporateAccount:
     location = _location(data.location_id)
     authorize(request, Action.CORPORATE_MANAGE, location.pk)
-    if data.discount_percent is not None and not 0 <= data.discount_percent <= 90:
-        raise _invalid("discount_percent")
     account = CorporateAccount.objects.create(
         location=location,
         name=data.name,
         registration_code=data.registration_code,
         billing_email=data.billing_email,
-        discount_percent=data.discount_percent,
     )
     audit.record(audit.actor_from_request(request), "corporate.created", target=account)
     return account

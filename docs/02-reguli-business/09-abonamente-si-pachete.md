@@ -13,3 +13,8 @@
 - **R-087** **Start: doar în afara orelor de vârf. Activ și Pro: oricând.** (Q13: intră și semi-vârful la Start?) Regula e afișată clar în regulament și la cumpărare.
 - **R-088** **Pachete speciale: doar Corporate** (fără pachete de familie sau studenți): cont de firmă, angajați asociați, facturare pe firmă, rapoarte de utilizare (Q35).
 - **R-089** Configuratorul apare pe website și pe chioșcul de plăți. Cumpărarea se face la chioșc (numerar) sau online când plata online e activă.
+
+## Modificări
+
+- **27.09.2026** (confirmat de proprietar, Q13): Start se poate folosi și în semi-vârf; doar banda de vârf (17–22) e exclusă.
+- **27.09.2026** (confirmat de proprietar, Q35): **un singur pachet de firmă**: angajații unei firme primesc 20% reducere la abonamentele din configuratorul standard; facturare pe firmă și raport lunar.

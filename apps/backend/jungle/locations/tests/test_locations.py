@@ -203,3 +203,21 @@ def test_reception_cannot_manage_resources(api: Api, staff, location: Location) 
     staff(Role.RECEPTION)
     body = {"location_id": str(location.pk), "kind": "padel_court", "slug": "t1", "name": "T1"}
     assert error_code(api.post("/staff/resources", body)) == "auth.forbidden"
+
+
+def test_q21_seed_sets_indicative_prices_marked_to_set() -> None:
+    """Q21 (owner, 27.09.2026): indicative prices exist from the start, marked DE_STABILIT."""
+    from django.core.management import call_command
+
+    from jungle.cafe.models import CafeProduct
+    from jungle.configuration.models import Marker
+    from jungle.pricing.models import PriceRate
+    from jungle.subscriptions.models import SubscriptionRate
+
+    call_command("seed_initial")
+    call_command("seed_initial")
+    rates = PriceRate.objects.all()
+    assert rates.count() == 15 and {r.marker for r in rates} == {Marker.TO_SET}
+    assert all("orientativ" in r.note for r in rates)
+    assert SubscriptionRate.objects.count() == 9
+    assert CafeProduct.objects.filter(marker=Marker.TO_SET).count() == 3

@@ -43,31 +43,32 @@ DEMO_PEOPLE = [
 ]
 # DEMO rates in bani per 30 minutes, so bookings can be tried out. They are NOT prices of the
 # club: marked DE_STABILIT (Q21) until the owner sets them in the admin.
-DEMO_RATES: list[tuple[str, str, dict[str, int]]] = [
+INDICATIVE_NOTE = "Preț orientativ (Q21, 27.09.2026), de confirmat de proprietar"
+INDICATIVE_RATES: list[tuple[str, str, dict[str, int]]] = [
     (
         ResourceKind.PADEL_COURT,
         Product.RENTAL,
-        {Band.PEAK: 6000, Band.SEMI_PEAK: 5000, Band.OFF_PEAK: 4000},
+        {Band.PEAK: 9000, Band.SEMI_PEAK: 7500, Band.OFF_PEAK: 6000},  # 180 / 150 / 120 lei/h
     ),
     (
         ResourceKind.PADEL_COURT,
         Product.LESSON,
-        {Band.PEAK: 9000, Band.SEMI_PEAK: 8000, Band.OFF_PEAK: 7000},
+        {Band.PEAK: 11000, Band.SEMI_PEAK: 10000, Band.OFF_PEAK: 10000},  # 220 / 200 lei/h
     ),
-    (ResourceKind.REFORMER, Product.LESSON, dict.fromkeys(Band.values, 7500)),
-    (ResourceKind.PILATES_STUDIO, Product.CLASS, dict.fromkeys(Band.values, 4000)),
-    (ResourceKind.EVENT_ROOM, Product.EVENT, dict.fromkeys(Band.values, 10000)),
+    (ResourceKind.REFORMER, Product.LESSON, dict.fromkeys(Band.values, 9000)),  # 180 lei/h
+    (ResourceKind.PILATES_STUDIO, Product.CLASS, dict.fromkeys(Band.values, 4000)),  # 80 lei/h
+    (ResourceKind.EVENT_ROOM, Product.EVENT, dict.fromkeys(Band.values, 10000)),  # 200 lei/h
 ]
-# DEMO café menu (R-112): generic items, prices DE_STABILIT (Q21, Q33), names RO/EN.
-DEMO_CAFE = {
+# Café menu (R-112): generic items, indicative prices (Q21, Q33), names RO/EN.
+INDICATIVE_CAFE = {
     ("Cafea", "Coffee"): [("Espresso", "Espresso", 1200), ("Cappuccino", "Cappuccino", 1600)],
     ("Băuturi reci", "Cold drinks"): [("Apă plată 0,5 l", "Still water 0.5 l", 800)],
 }
-# DEMO monthly subscription prices (bani) per sport and sessions per month (R-082), DE_STABILIT.
-DEMO_SUBSCRIPTION_RATES = {
-    Sport.PADEL: {4: 36000, 8: 64000, 12: 90000},
-    Sport.TENNIS: {4: 32000, 8: 56000, 12: 78000},
-    Sport.PILATES: {4: 30000, 8: 52000, 12: 72000},
+# Monthly subscription prices (bani) per sport and sessions per month (R-082), indicative.
+INDICATIVE_SUBSCRIPTION_RATES = {
+    Sport.PADEL: {4: 40000, 8: 72000, 12: 96000},
+    Sport.TENNIS: {4: 36000, 8: 64000, 12: 86000},
+    Sport.PILATES: {4: 32000, 8: 56000, 12: 78000},
 }
 
 
@@ -128,6 +129,7 @@ class Command(BaseCommand):
             self.style.SUCCESS(f"Locația {location.name}: {location.resources.count()} resurse.")
         )
 
+        self._indicative_prices(location)
         if options["demo"]:
             self._demo()
 
@@ -152,8 +154,11 @@ class Command(BaseCommand):
                 )
             if role is not None:
                 UserRole.objects.get_or_create(user=user, role=role, location=None)
-        location = Location.objects.get(slug="jungle-padel")
-        for resource_kind, product, bands in DEMO_RATES:
+        self.stdout.write(self.style.WARNING("Date DEMO create (marcate is_demo / DEMO)."))
+
+    def _indicative_prices(self, location: Location) -> None:
+        """Q21 (owner, 27.09.2026): indicative prices, DE_STABILIT until confirmed in the admin."""
+        for resource_kind, product, bands in INDICATIVE_RATES:
             for band, amount in bands.items():
                 PriceRate.objects.get_or_create(
                     location=location,
@@ -163,14 +168,14 @@ class Command(BaseCommand):
                     defaults={
                         "amount_per_half_hour": amount,
                         "marker": Marker.TO_SET,
-                        "note": "DEMO — nu este un preț al clubului (Q21)",
+                        "note": INDICATIVE_NOTE,
                     },
                 )
-        for order, ((cat_ro, cat_en), items) in enumerate(DEMO_CAFE.items()):
+        for order, ((cat_ro, cat_en), items) in enumerate(INDICATIVE_CAFE.items()):
             category, _ = CafeCategory.objects.get_or_create(
                 location=location,
-                name_ro=f"{cat_ro} (DEMO)",
-                defaults={"name_en": f"{cat_en} (DEMO)", "sort_order": order},
+                name_ro=cat_ro,
+                defaults={"name_en": cat_en, "sort_order": order},
             )
             for name_ro, name_en, price in items:
                 CafeProduct.objects.get_or_create(
@@ -179,7 +184,7 @@ class Command(BaseCommand):
                     name_ro=name_ro,
                     defaults={"name_en": name_en, "price": price, "marker": Marker.TO_SET},
                 )
-        for sport, levels in DEMO_SUBSCRIPTION_RATES.items():
+        for sport, levels in INDICATIVE_SUBSCRIPTION_RATES.items():
             for sessions, monthly in levels.items():
                 SubscriptionRate.objects.get_or_create(
                     location=location,
@@ -188,7 +193,6 @@ class Command(BaseCommand):
                     defaults={
                         "monthly_price": monthly,
                         "marker": Marker.TO_SET,
-                        "note": "DEMO — nu este un preț al clubului (Q21)",
+                        "note": INDICATIVE_NOTE,
                     },
                 )
-        self.stdout.write(self.style.WARNING("Date DEMO create (marcate is_demo / DEMO)."))

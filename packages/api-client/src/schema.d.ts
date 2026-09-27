@@ -2191,8 +2191,6 @@ export interface components {
              * @default
              */
             billing_email: string;
-            /** Discount Percent */
-            discount_percent?: number | null;
             /**
              * Location Id
              * Format: uuid
@@ -2210,8 +2208,6 @@ export interface components {
         CorporateOut: {
             /** Billing Email */
             billing_email: string;
-            /** Discount Percent */
-            discount_percent: number | null;
             /**
              * Id
              * Format: uuid

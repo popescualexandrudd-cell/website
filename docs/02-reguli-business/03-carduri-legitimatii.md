@@ -13,3 +13,4 @@
 ## Modificări
 
 - **26.09.2026** (confirmat de proprietar, Q24): înscrierea în Apple Developer nu se începe acum. **Apple Wallet se amână**: adaptorul se construiește, dar rămâne dezactivat până la crearea contului. R-020 rămâne valabilă pentru Google Wallet, email și PDF.
+- **27.09.2026** (confirmat de proprietar): **Apple Wallet se face în Etapa 5**, alături de Google Wallet (R-020 integral). Activarea cere contul Apple Developer al firmei și certificatul pentru carduri (Q24).

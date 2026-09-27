@@ -3,14 +3,15 @@
 > Actualizat la fiecare sesiune de lucru. Prima secțiune spune mereu **unde suntem acum**.
 
 ## Unde suntem acum
-- **Etapa curentă:** Etapa 4 (bani, abonamente, corporate, vouchere, cafenea): **livrată pe 27.09.2026, așteaptă aprobarea proprietarului.** Raport: [verificare/etapa-4/RAPORT.md](verificare/etapa-4/RAPORT.md).
+- **Etapa curentă:** Etapa 5 (carduri, Apple Wallet și Google Wallet, GDPR), începută pe 27.09.2026.
+- **Etapa 4 (bani, abonamente, corporate, vouchere, cafenea):** aprobată de proprietar pe 27.09.2026 (merge în `main`), împreună cu răspunsurile la Q9 (doar numerar), Q13, Q21 (prețuri orientative), Q35 (un pachet de firmă, 20%). Raport: [verificare/etapa-4/RAPORT.md](verificare/etapa-4/RAPORT.md).
 - **Etapa 3 (rezervări, prețuri, anulări, prezențe):** aprobată de proprietar pe 27.09.2026 (merge în `main`), împreună cu răspunsurile la Q2, Q3, Q15, Q16. Raport: [verificare/etapa-3/RAPORT.md](verificare/etapa-3/RAPORT.md).
 - **Etapa 2 (motorul ligii + simulări):** aprobată de proprietar pe 27.09.2026 (merge în `main`). Raport: [verificare/etapa-2/RAPORT.md](verificare/etapa-2/RAPORT.md).
 - **Etapa 1B (pagina de pre-lansare, revizia 3 „Noapte și alamă”):** aprobată de proprietar pe 27.09.2026 (merge în `main`). Raport: [verificare/etapa-1b/RAPORT.md](verificare/etapa-1b/RAPORT.md).
 - **Etapa 1A:** aprobată de proprietar pe 27.09.2026 (merge în `main`). Raport: [verificare/etapa-1a/RAPORT.md](verificare/etapa-1a/RAPORT.md).
 - **Etapa 0:** aprobată de proprietar pe 26.09.2026 (tag `etapa-0`, branch `main`).
-- **Următoarea etapă:** 5 (carduri, Wallet, GDPR), după aprobarea Etapei 4.
-- **Întrebări încă deschise care contează curând:** Q26 (datele firmei: subsol și texte legale), Q39 (domeniu, marcă), Q24 (furnizor de email), Q23 (modelele de hardware), Q44 (randări sau fotografii ale spațiilor), Q45 (valorile implicite ale ligii), Q46 (un text neclar din schiță); Q21 (prețurile: tarifele rămân DEMO, `DE_STABILIT`); Q9 (plata online cu card: decizia până în decembrie 2026); Q35 (reducerea pentru firme) — vezi [INTREBARI_DESCHISE.md](INTREBARI_DESCHISE.md).
+- **Următoarea etapă:** 6 (integrarea ligii), după aprobarea Etapei 5.
+- **Întrebări încă deschise care contează curând:** Q26 (datele firmei: subsol și texte legale), Q39 (domeniu, marcă), Q24 (furnizor de email), Q23 (modelele de hardware), Q44 (randări sau fotografii ale spațiilor), Q45 (valorile implicite ale ligii), Q46 (un text neclar din schiță); Q21 (prețurile: tarifele rămân DEMO, `DE_STABILIT`); Q24 (contul Apple Developer al firmei, pentru activarea Apple Wallet) — vezi [INTREBARI_DESCHISE.md](INTREBARI_DESCHISE.md).
 - **Branch de lucru:** `claude/hopeful-euler-rguibn` (repository `popescualexandrudd-cell/website`).
 
 ## Starea etapelor
@@ -22,8 +23,8 @@
 | 1B | Pagina de pre-lansare | oct.–nov. 2026 | **Aprobată 27.09.2026** |
 | 2 | Motorul ligii + simulări | nov. 2026 | **Aprobată 27.09.2026** |
 | 3 | Rezervări, prețuri, anulări, prezențe | nov. 2026 | **Aprobată 27.09.2026** |
-| 4 | Bani, abonamente, corporate, vouchere, cafenea | nov.–dec. 2026 | **Livrată 27.09.2026, așteaptă aprobarea** |
-| 5 | Carduri, Wallet, GDPR | dec. 2026 | Neîncepută |
+| 4 | Bani, abonamente, corporate, vouchere, cafenea | nov.–dec. 2026 | **Aprobată 27.09.2026** |
+| 5 | Carduri, Wallet, GDPR | dec. 2026 | În lucru |
 | 6 | Integrarea ligii | dec. 2026 | Neîncepută |
 | 7 | Hardware Bridge + Chioșcul de Ligă | dec. 2026–ian. 2027 | Neîncepută |
 | 8 | Chioșcul de Plăți + afișajul cafenelei | ian. 2027 | Neîncepută |

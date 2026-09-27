@@ -4,7 +4,11 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
-### Etapa 4 — 27.09.2026 (așteaptă aprobarea)
+### Etapa 4 — 27.09.2026 (aprobată 27.09.2026)
+#### Modificat la aprobare (răspunsurile proprietarului)
+- Q21: prețuri orientative în sistem de la prima pornire (`seed_initial`), marcate DE_STABILIT, cu nota „Preț orientativ”.
+- Q35: un singur pachet de firmă, 20% reducere (`corporate.discount_percent`, confirmat); reducerea per firmă a fost scoasă.
+- Q9: doar numerar la lansare; Q13: Start permis în semi-vârf (confirmat).
 #### Adăugat
 - `jungle.ledger`: registru cu dublă înregistrare în bani întregi, tabele doar-adăugare, tranzacții echilibrate verificate la commit, chei de idempotență, corecții prin înregistrări inverse; plăți în numerar cu rest și bon (simulator, Q23), din credit, cu voucher; împărțirea orei (R-061); datorii la anulare târzie, neprezentare și sesiuni jucate; credit la anularea gratuită (Q14); excepțiile de plată ale personalului doar cu motiv (Q10).
 - `jungle.subscriptions`: configuratorul în 3 pași, prețul pachetului cu reduceri multiplicative rotunjit la leu (R-084), comandă și activare la plată, sesiuni consumate de lecții și clase, regula Start fără vârf (R-087, Q13), fără reportare (R-085), sesiuni de recuperare (Q14), înghețare 14 zile/an (R-086), intensități „La cerere” (Q12), conturi corporate cu raport lunar (R-088, Q35).

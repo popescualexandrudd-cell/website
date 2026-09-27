@@ -29,7 +29,7 @@ class SubscriptionUseAdmin(ReadOnlyAdmin):
 
 @admin.register(CorporateAccount, site=emergency_admin_site)
 class CorporateAccountAdmin(AuditedAdmin):
-    list_display = ("name", "registration_code", "discount_percent", "is_active")
+    list_display = ("name", "registration_code", "billing_email", "is_active")
 
 
 @admin.register(CorporateMember, site=emergency_admin_site)

@@ -141,7 +141,6 @@ class CorporateIn(Schema):
     name: str = Field(min_length=1, max_length=200)
     registration_code: str = Field(default="", max_length=20)
     billing_email: str = Field(default="", max_length=254)
-    discount_percent: int | None = Field(default=None, ge=0, le=90)
 
 
 class CorporateOut(Schema):
@@ -150,7 +149,6 @@ class CorporateOut(Schema):
     name: str
     registration_code: str
     billing_email: str
-    discount_percent: int | None
     is_active: bool
 
 

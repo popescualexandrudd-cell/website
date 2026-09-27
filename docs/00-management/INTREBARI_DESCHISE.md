@@ -29,11 +29,11 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q6](#q6) | Recompense | MEDIE | Etapa 6 (recompense de sezon) | DESCHISĂ |
 | [Q7](#q7) | Copiii | ÎNALTĂ | Etapa 1A (modelul de conturi: legătura părinte–copil) | REZOLVATĂ |
 | [Q8](#q8) | Invitații fără cont | ÎNALTĂ | Etapa 1A (conturi rapide), Etapa 3 (scanarea la intrarea pe teren) | REZOLVATĂ |
-| [Q9](#q9) | Plata online cu card | MEDIE | Etapa 4 (plăți) | DESCHISĂ |
+| [Q9](#q9) | Plata online cu card | MEDIE | Etapa 4 (plăți) | REZOLVATĂ |
 | [Q10](#q10) | Recepția | MEDIE | Etapa 4 (plăți, registru) | DESCHISĂ |
 | [Q11](#q11) | Termenul pentru plată | MEDIE | Etapa 6 (validarea scorului prin plată) | DESCHISĂ |
 | [Q12](#q12) | Intensitățile „La cerere” | MEDIE | Etapa 4 (configuratorul de pachete) | DESCHISĂ |
-| [Q13](#q13) | Start | MEDIE | Etapa 4 (regula Start/vârf) | DESCHISĂ |
+| [Q13](#q13) | Start | MEDIE | Etapa 4 (regula Start/vârf) | REZOLVATĂ |
 | [Q14](#q14) | „Recuperare” | MEDIE | Etapa 3 (anulări), Etapa 4 (credit în cont) | DESCHISĂ |
 | [Q15](#q15) | Neprezentări | MEDIE | Etapa 3 (neprezentări și blocări) | REZOLVATĂ |
 | [Q16](#q16) | Lista de așteptare | MEDIE | Etapa 3 (liste de așteptare) | REZOLVATĂ |
@@ -41,7 +41,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q18](#q18) | Pilates | SCĂZUTĂ | Etapa 12 (notificări pilates) | DESCHISĂ |
 | [Q19](#q19) | Grupul comunității | SCĂZUTĂ | Etapa 12 (mesaje pentru comunitate) | DESCHISĂ |
 | [Q20](#q20) | Tenis | ÎNALTĂ | Etapa 1A (modelul Locație → Resurse) | REZOLVATĂ |
-| [Q21](#q21) | Prețuri | MEDIE | Etapele 3–4 (valori demo); prețurile finale trebuie știute înainte de Etapa 15 (beta) | DESCHISĂ |
+| [Q21](#q21) | Prețuri | MEDIE | Etapele 3–4 (valori demo); prețurile finale trebuie știute înainte de Etapa 15 (beta) | PARȚIAL (prețuri orientative) |
 | [Q22](#q22) | Serverul | URGENTĂ | Etapa 1B (unde publicăm pagina de pre-lansare) și Etapa 14 (deploy) | PARȚIAL |
 | [Q23](#q23) | Hardware | URGENTĂ | Etapele 7–9 (drivere reale); trebuie răspuns ÎNAINTE de a cumpăra aparatele | PARȚIAL |
 | [Q24](#q24) | Conturi externe | URGENTĂ | Etapa 1B (furnizorul de email pentru lista de așteptare), Etapa 5 (Apple/Google Wallet), Etapa 12 (cheia AI) | PARȚIAL |
@@ -55,7 +55,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q32](#q32) | Voucherul „Adu un prieten” | MEDIE | Etapa 4 (vouchere și recomandări) | DESCHISĂ |
 | [Q33](#q33) | Cafeneaua | MEDIE | Etapa 4 (produse de cafenea), Etapa 8 (afișajul cafenelei) | DESCHISĂ |
 | [Q34](#q34) | Sala de evenimente | MEDIE | Etapa 3 (rezervarea sălii de evenimente) | DESCHISĂ |
-| [Q35](#q35) | Pachetele corporate | MEDIE | Etapa 4 (conturi corporate) | DESCHISĂ |
+| [Q35](#q35) | Pachetele corporate | MEDIE | Etapa 4 (conturi corporate) | REZOLVATĂ |
 | [Q36](#q36) | Membri fondatori | ÎNALTĂ | Etapa 1B (dacă pagina de pre-lansare oferă locuri de membru fondator) | REZOLVATĂ |
 | [Q37](#q37) | Personalul | ÎNALTĂ | Etapa 1A (roluri și permisiuni), Etapa 15 (instruirea personalului) | REZOLVATĂ |
 | [Q38](#q38) | Propunerile de concept | SCĂZUTĂ | Etapa 13 (branding, marketing); numele terenurilor se pot schimba oricând din admin | DESCHISĂ |
@@ -159,11 +159,11 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q9"></a>Q9 — Plata online cu card
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 4 (plăți)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (din MEGA_PROMPT):** dezactivată; „plată la locație”.
 - **Notă:** Contractul cu o bancă sau un procesator durează de obicei câteva săptămâni; dacă vreți plata online la deschidere, decizia trebuie luată până în decembrie 2026.
 - **Folosită în Etapa 4 (27.09.2026):** Plata online e dezactivată; rezervările sunt „plată la locație”, cu datoria urmărită în cont. Metoda „card” răspunde `payments.method_unavailable` până la alegerea procesatorului.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (27.09.2026):** la lansare, doar plata în numerar (la chioșc). Fără plată online cu card; rezervările online rămân „plată la locație”. Adaptorul pentru card rămâne pregătit, dezactivat.
 - **Textul original (§17):**
 
   > - **Q9 Plata online cu card**: ce bancă sau procesator și când? *Implicit: dezactivată; „plată la locație”.*
@@ -203,10 +203,10 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q13"></a>Q13 — Start
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 4 (regula Start/vârf)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (din MEGA_PROMPT):** da (restricție doar pe 15:00–22:00).
 - **Folosită în Etapa 4 (27.09.2026):** Start nu e valabil în banda de vârf (acum 17–22, după Q3); semi-vârful e permis.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (27.09.2026):** da: Start se poate folosi și în semi-vârf; nu se poate folosi doar în banda de vârf (17–22).
 - **Textul original (§17):**
 
   > - **Q13 Start** poate folosi semi-vârful (08:00–12:00)? *Implicit: da (restricție doar pe 15:00–22:00).*
@@ -289,7 +289,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q21"></a>Q21 — Prețuri
 
 - **Prioritate:** MEDIE · **Blochează:** Etapele 3–4 (valori demo); prețurile finale trebuie știute înainte de Etapa 15 (beta)
-- **Stare:** DESCHISĂ
+- **Stare:** PARȚIAL
 - **Varianta implicită (din MEGA_PROMPT):** valori demo marcate `DE_STABILIT`.
 - **Folosită în Etapa 3 (27.09.2026):** Tarife DEMO marcate DE_STABILIT în `seed_initial --demo`; tenisul 120 RON/oră (R-051).
 - **Răspunsul proprietarului (27.09.2026):** încă deschisă (prețurile nu sunt stabilite). Tarifele rămân DEMO, marcate `DE_STABILIT`.
@@ -326,6 +326,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Varianta implicită (propusă în Etapa 0):** Toate conturile se creează pe firma clubului, de către proprietar, cu ghid pas cu pas de la mine. Parolele și cheile NU se trimit în chat și nu intră în git: se pun direct în fișierul de configurare (`.env`) de pe server.
 - **Notă:** Apple Developer pentru o firmă cere un număr D-U-N-S, care se obține în câteva zile sau săptămâni: merită început acum, ca Wallet să fie gata în decembrie.
 - **Răspunsul proprietarului (26.09.2026):** Nu se începe înscrierea în Apple Developer acum. Consecință: Apple Wallet se amână (adaptor pregătit, dezactivat); în Etapa 5 se livrează Google Wallet (dacă se creează contul de emitent), PDF-ul de tipar și emailul cu cardul. Furnizorul de email, emitentul Google Wallet și cheia AI rămân de stabilit.
+- **Actualizare (27.09.2026, proprietarul):** Apple Wallet se face în Etapa 5, împreună cu Google Wallet. Codul se construiește și se testează complet; pentru activare e nevoie de contul Apple Developer al firmei (cu număr D-U-N-S) și de certificatul „Pass Type ID”, puse doar în `.env` pe server.
 - **Textul original (§17):**
 
   > - **Q24 Conturi externe**: Apple Developer (pentru Wallet), emitent Google Wallet, furnizor de email, cheie API pentru AI: cine le creează și pe ce firmă?
@@ -335,7 +336,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** SCĂZUTĂ · **Blochează:** Etapa 11 (website complet)
 - **Stare:** DESCHISĂ
 - **Varianta implicită (propusă în Etapa 0):** La lansare: română și engleză complete. Spaniolă, italiană și chineză se adaugă din cataloage, traduse cu AI și marcate „necesită revizuire” până la aprobare; franceză și germană doar dacă le confirmați. Revizuirea: o persoană numită de proprietar.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (27.09.2026):** să punem prețuri orientative. Sunt în sistem de la prima pornire (nu doar în datele demo), marcate `DE_STABILIT` cu nota „Preț orientativ”: padel 180 / 150 / 120 lei pe oră (vârf / semi-vârf / în afara vârfului); lecție de padel 220 / 200 lei pe oră; ședință privată Reformer 180 lei pe oră; clasă de pilates 80 lei pe oră; sala de evenimente 200 lei pe oră; abonamente pe lună: padel 400 / 720 / 960 lei, tenis 360 / 640 / 860 lei, pilates 320 / 560 / 780 lei (Start / Activ / Pro); cafenea: espresso 12, cappuccino 16, apă 8 lei. Prețurile finale le confirmă proprietarul din admin.
 - **Textul original (§17):**
 
   > - **Q25 Limbi suplimentare** peste RO, EN, ES, IT, ZH (franceză, germană, altele?) și cine revizuiește traducerile.
@@ -437,10 +438,10 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q35"></a>Q35 — Pachetele corporate
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 4 (conturi corporate)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (propusă în Etapa 0):** Cont de firmă cu angajați asociați; firma cumpără abonamente pentru angajați din configuratorul standard, cu o reducere corporate configurabilă; factură lunară pe firmă; raport lunar de utilizare. Prețurile și pragurile (de exemplu 5 / 10 / 20 de angajați) se stabilesc de proprietar.
 - **Folosită în Etapa 4 (27.09.2026):** Cont de firmă cu angajați; reducere per firmă sau implicită (`corporate.default_discount_percent`, 0%, DE_STABILIT); facturare pe firmă; raport lunar de utilizare.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (27.09.2026):** un singur pachet de firmă, cu 20% reducere la abonamentele angajaților (`corporate.discount_percent` = 20, confirmat). Reducerea nu mai diferă de la o firmă la alta.
 - **Textul original (§17):**
 
   > - **Q35 Pachetele corporate**: structură (număr de angajați, ore incluse, facturare lunară)?

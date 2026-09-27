@@ -963,19 +963,6 @@
             "title": "Billing Email",
             "type": "string"
           },
-          "discount_percent": {
-            "anyOf": [
-              {
-                "maximum": 90,
-                "minimum": 0,
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Discount Percent"
-          },
           "location_id": {
             "format": "uuid",
             "title": "Location Id",
@@ -1007,17 +994,6 @@
             "title": "Billing Email",
             "type": "string"
           },
-          "discount_percent": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Discount Percent"
-          },
           "id": {
             "format": "uuid",
             "title": "Id",
@@ -1047,7 +1023,6 @@
           "name",
           "registration_code",
           "billing_email",
-          "discount_percent",
           "is_active"
         ],
         "title": "CorporateOut",

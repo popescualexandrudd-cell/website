@@ -58,16 +58,14 @@ class SubscriptionRate(models.Model):
 
 
 class CorporateAccount(models.Model):
-    """R-088, Q35: a company buys subscriptions for its employees; invoiced to the company."""
+    """R-088, Q35: a company buys subscriptions for its employees; invoiced to the company.
+    One company package for everyone (owner, 27.09.2026): the discount is a single setting."""
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     location = models.ForeignKey("locations.Location", on_delete=models.PROTECT)
     name = models.CharField(max_length=200)
     registration_code = models.CharField("CUI", max_length=20, blank=True)
     billing_email = models.EmailField(blank=True)
-    discount_percent = models.PositiveSmallIntegerField(
-        null=True, blank=True, help_text="Gol = reducerea implicită din configurare (Q35)."
-    )
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
