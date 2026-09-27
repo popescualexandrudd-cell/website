@@ -652,6 +652,39 @@
         "title": "CompanyOut",
         "type": "object"
       },
+      "ComponentOut": {
+        "properties": {
+          "marker": {
+            "title": "Marker",
+            "type": "string"
+          },
+          "monthly_price": {
+            "title": "Monthly Price",
+            "type": "integer"
+          },
+          "peak_allowed": {
+            "title": "Peak Allowed",
+            "type": "boolean"
+          },
+          "sessions_per_month": {
+            "title": "Sessions Per Month",
+            "type": "integer"
+          },
+          "sport": {
+            "title": "Sport",
+            "type": "string"
+          }
+        },
+        "required": [
+          "sport",
+          "sessions_per_month",
+          "monthly_price",
+          "peak_allowed",
+          "marker"
+        ],
+        "title": "ComponentOut",
+        "type": "object"
+      },
       "ConfigIn": {
         "properties": {
           "effective_from": {
@@ -796,6 +829,104 @@
         "title": "ConsentOut",
         "type": "object"
       },
+      "CorporateIn": {
+        "properties": {
+          "billing_email": {
+            "default": "",
+            "maxLength": 254,
+            "title": "Billing Email",
+            "type": "string"
+          },
+          "discount_percent": {
+            "anyOf": [
+              {
+                "maximum": 90,
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Discount Percent"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "registration_code": {
+            "default": "",
+            "maxLength": 20,
+            "title": "Registration Code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "location_id",
+          "name"
+        ],
+        "title": "CorporateIn",
+        "type": "object"
+      },
+      "CorporateOut": {
+        "properties": {
+          "billing_email": {
+            "title": "Billing Email",
+            "type": "string"
+          },
+          "discount_percent": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Discount Percent"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "is_active": {
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "registration_code": {
+            "title": "Registration Code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "location_id",
+          "name",
+          "registration_code",
+          "billing_email",
+          "discount_percent",
+          "is_active"
+        ],
+        "title": "CorporateOut",
+        "type": "object"
+      },
       "CsrfOut": {
         "properties": {
           "csrf_token": {
@@ -807,6 +938,44 @@
           "csrf_token"
         ],
         "title": "CsrfOut",
+        "type": "object"
+      },
+      "CustomSelectionIn": {
+        "properties": {
+          "intensity": {
+            "default": "",
+            "pattern": "^(|start|active|pro)$",
+            "title": "Intensity",
+            "type": "string"
+          },
+          "monthly_price": {
+            "anyOf": [
+              {
+                "maximum": 100000000,
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Monthly Price"
+          },
+          "sessions": {
+            "default": 0,
+            "maximum": 31,
+            "minimum": 0,
+            "title": "Sessions",
+            "type": "integer"
+          },
+          "sport": {
+            "$ref": "#/components/schemas/Sport"
+          }
+        },
+        "required": [
+          "sport"
+        ],
+        "title": "CustomSelectionIn",
         "type": "object"
       },
       "CustomerType": {
@@ -1287,6 +1456,47 @@
         "title": "FlagOut",
         "type": "object"
       },
+      "FreezeIn": {
+        "properties": {
+          "days": {
+            "maximum": 60,
+            "minimum": 1,
+            "title": "Days",
+            "type": "integer"
+          },
+          "starts_on": {
+            "format": "date",
+            "title": "Starts On",
+            "type": "string"
+          }
+        },
+        "required": [
+          "starts_on",
+          "days"
+        ],
+        "title": "FreezeIn",
+        "type": "object"
+      },
+      "FreezeOut": {
+        "properties": {
+          "ends_on": {
+            "format": "date",
+            "title": "Ends On",
+            "type": "string"
+          },
+          "starts_on": {
+            "format": "date",
+            "title": "Starts On",
+            "type": "string"
+          }
+        },
+        "required": [
+          "starts_on",
+          "ends_on"
+        ],
+        "title": "FreezeOut",
+        "type": "object"
+      },
       "GuestIn": {
         "properties": {
           "email": {
@@ -1671,6 +1881,47 @@
         "title": "MeOut",
         "type": "object"
       },
+      "MemberIn": {
+        "properties": {
+          "user_id": {
+            "format": "uuid",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "title": "MemberIn",
+        "type": "object"
+      },
+      "MemberUsageOut": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "sessions": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Sessions",
+            "type": "object"
+          },
+          "user_id": {
+            "format": "uuid",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "name",
+          "sessions"
+        ],
+        "title": "MemberUsageOut",
+        "type": "object"
+      },
       "MfaConfirmIn": {
         "properties": {
           "code": {
@@ -1791,6 +2042,85 @@
         "title": "OkOut",
         "type": "object"
       },
+      "OptionsOut": {
+        "properties": {
+          "bundle_discounts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Bundle Discounts",
+            "type": "object"
+          },
+          "intensities": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Intensities",
+            "type": "object"
+          },
+          "period_discounts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Period Discounts",
+            "type": "object"
+          },
+          "rates": {
+            "items": {
+              "$ref": "#/components/schemas/RateOut"
+            },
+            "title": "Rates",
+            "type": "array"
+          },
+          "start_rule_below_sessions": {
+            "title": "Start Rule Below Sessions",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "intensities",
+          "bundle_discounts",
+          "period_discounts",
+          "start_rule_below_sessions",
+          "rates"
+        ],
+        "title": "OptionsOut",
+        "type": "object"
+      },
+      "OrderIn": {
+        "properties": {
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "period": {
+            "$ref": "#/components/schemas/Period"
+          },
+          "selections": {
+            "items": {
+              "$ref": "#/components/schemas/SelectionIn"
+            },
+            "maxItems": 3,
+            "minItems": 1,
+            "title": "Selections",
+            "type": "array"
+          },
+          "starts_on": {
+            "format": "date",
+            "title": "Starts On",
+            "type": "string"
+          }
+        },
+        "required": [
+          "location_id",
+          "selections",
+          "period",
+          "starts_on"
+        ],
+        "title": "OrderIn",
+        "type": "object"
+      },
       "PasswordChangeIn": {
         "properties": {
           "current_password": {
@@ -1882,6 +2212,18 @@
             "minLength": 1,
             "title": "Reason",
             "type": "string"
+          },
+          "subscription_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subscription Id"
           },
           "tendered": {
             "default": 0,
@@ -1993,6 +2335,15 @@
         "title": "PendingDecisionOut",
         "type": "object"
       },
+      "Period": {
+        "enum": [
+          "monthly",
+          "quarterly",
+          "annual"
+        ],
+        "title": "Period",
+        "type": "string"
+      },
       "Product": {
         "enum": [
           "rental",
@@ -2060,152 +2411,151 @@
         "title": "ProfileIn",
         "type": "object"
       },
+      "QuoteIn": {
+        "properties": {
+          "location": {
+            "maxLength": 60,
+            "title": "Location",
+            "type": "string"
+          },
+          "period": {
+            "$ref": "#/components/schemas/Period"
+          },
+          "selections": {
+            "items": {
+              "$ref": "#/components/schemas/SelectionIn"
+            },
+            "maxItems": 3,
+            "minItems": 1,
+            "title": "Selections",
+            "type": "array"
+          }
+        },
+        "required": [
+          "location",
+          "selections",
+          "period"
+        ],
+        "title": "QuoteIn",
+        "type": "object"
+      },
       "QuoteOut": {
         "properties": {
+          "components": {
+            "items": {
+              "$ref": "#/components/schemas/ComponentOut"
+            },
+            "title": "Components",
+            "type": "array"
+          },
+          "discounts": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Discounts",
+            "type": "array"
+          },
+          "gross": {
+            "title": "Gross",
+            "type": "integer"
+          },
+          "monthly_sum": {
+            "title": "Monthly Sum",
+            "type": "integer"
+          },
+          "months": {
+            "title": "Months",
+            "type": "integer"
+          },
           "provisional": {
             "description": "cel puțin un tarif este DE_STABILIT",
             "title": "Provisional",
             "type": "boolean"
           },
-          "segments": {
-            "items": {
-              "$ref": "#/components/schemas/SegmentOut"
-            },
-            "title": "Segments",
-            "type": "array"
+          "rounding": {
+            "title": "Rounding",
+            "type": "integer"
           },
           "total": {
-            "description": "bani (RON × 100)",
+            "description": "bani, rotunjit la leu întreg (R-084)",
             "title": "Total",
             "type": "integer"
           }
         },
         "required": [
+          "components",
+          "monthly_sum",
+          "months",
+          "gross",
+          "discounts",
           "total",
-          "provisional",
-          "segments"
+          "rounding",
+          "provisional"
         ],
         "title": "QuoteOut",
         "type": "object"
       },
       "RateIn": {
         "properties": {
-          "amount_per_half_hour": {
-            "maximum": 10000000,
-            "minimum": 0,
-            "title": "Amount Per Half Hour",
-            "type": "integer"
-          },
-          "band": {
-            "$ref": "#/components/schemas/Band"
-          },
           "confirmed": {
             "default": false,
             "title": "Confirmed",
             "type": "boolean"
-          },
-          "customer_type": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CustomerType"
-              }
-            ],
-            "default": "standard"
           },
           "location_id": {
             "format": "uuid",
             "title": "Location Id",
             "type": "string"
           },
-          "note": {
-            "default": "",
-            "maxLength": 200,
-            "title": "Note",
-            "type": "string"
+          "monthly_price": {
+            "maximum": 100000000,
+            "minimum": 0,
+            "title": "Monthly Price",
+            "type": "integer"
           },
-          "product": {
-            "$ref": "#/components/schemas/Product"
+          "sessions_per_month": {
+            "maximum": 31,
+            "minimum": 1,
+            "title": "Sessions Per Month",
+            "type": "integer"
           },
-          "resource_kind": {
-            "$ref": "#/components/schemas/ResourceKind"
-          },
-          "season": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Season"
-              }
-            ],
-            "default": "all"
+          "sport": {
+            "$ref": "#/components/schemas/Sport"
           }
         },
         "required": [
           "location_id",
-          "resource_kind",
-          "product",
-          "band",
-          "amount_per_half_hour"
+          "sport",
+          "sessions_per_month",
+          "monthly_price"
         ],
         "title": "RateIn",
         "type": "object"
       },
       "RateOut": {
         "properties": {
-          "amount_per_half_hour": {
-            "description": "bani (RON × 100) pentru 30 de minute",
-            "title": "Amount Per Half Hour",
-            "type": "integer"
-          },
-          "band": {
-            "title": "Band",
-            "type": "string"
-          },
-          "customer_type": {
-            "title": "Customer Type",
-            "type": "string"
-          },
-          "id": {
-            "format": "uuid",
-            "title": "Id",
-            "type": "string"
-          },
           "marker": {
-            "description": "CONFIRMED sau TO_SET (DE_STABILIT)",
             "title": "Marker",
             "type": "string"
           },
-          "note": {
-            "title": "Note",
-            "type": "string"
+          "monthly_price": {
+            "title": "Monthly Price",
+            "type": "integer"
           },
-          "product": {
-            "title": "Product",
-            "type": "string"
+          "sessions_per_month": {
+            "title": "Sessions Per Month",
+            "type": "integer"
           },
-          "resource_kind": {
-            "title": "Resource Kind",
-            "type": "string"
-          },
-          "season": {
-            "title": "Season",
-            "type": "string"
-          },
-          "updated_at": {
-            "format": "date-time",
-            "title": "Updated At",
+          "sport": {
+            "title": "Sport",
             "type": "string"
           }
         },
         "required": [
-          "id",
-          "resource_kind",
-          "product",
-          "season",
-          "band",
-          "customer_type",
-          "amount_per_half_hour",
-          "marker",
-          "note",
-          "updated_at"
+          "sport",
+          "sessions_per_month",
+          "monthly_price",
+          "marker"
         ],
         "title": "RateOut",
         "type": "object"
@@ -2296,6 +2646,43 @@
           "accepted_documents"
         ],
         "title": "RegisterIn",
+        "type": "object"
+      },
+      "ReportOut": {
+        "properties": {
+          "account_id": {
+            "format": "uuid",
+            "title": "Account Id",
+            "type": "string"
+          },
+          "billed": {
+            "title": "Billed",
+            "type": "integer"
+          },
+          "members": {
+            "items": {
+              "$ref": "#/components/schemas/MemberUsageOut"
+            },
+            "title": "Members",
+            "type": "array"
+          },
+          "month": {
+            "title": "Month",
+            "type": "integer"
+          },
+          "year": {
+            "title": "Year",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "account_id",
+          "year",
+          "month",
+          "members",
+          "billed"
+        ],
+        "title": "ReportOut",
         "type": "object"
       },
       "ResourceAvailabilityOut": {
@@ -2899,6 +3286,24 @@
         "title": "SegmentOut",
         "type": "object"
       },
+      "SelectionIn": {
+        "properties": {
+          "intensity": {
+            "default": "",
+            "pattern": "^(|start|active|pro)$",
+            "title": "Intensity",
+            "type": "string"
+          },
+          "sport": {
+            "$ref": "#/components/schemas/Sport"
+          }
+        },
+        "required": [
+          "sport"
+        ],
+        "title": "SelectionIn",
+        "type": "object"
+      },
       "SessionOut": {
         "properties": {
           "authenticated": {
@@ -3030,6 +3435,15 @@
         ],
         "title": "SplitOut",
         "type": "object"
+      },
+      "Sport": {
+        "enum": [
+          "padel",
+          "tennis",
+          "pilates"
+        ],
+        "title": "Sport",
+        "type": "string"
       },
       "StaffBookingIn": {
         "properties": {
@@ -3292,6 +3706,58 @@
         "title": "StaffEventOut",
         "type": "object"
       },
+      "StaffOrderIn": {
+        "properties": {
+          "corporate_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Corporate Id"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "period": {
+            "$ref": "#/components/schemas/Period"
+          },
+          "selections": {
+            "items": {
+              "$ref": "#/components/schemas/CustomSelectionIn"
+            },
+            "maxItems": 3,
+            "minItems": 1,
+            "title": "Selections",
+            "type": "array"
+          },
+          "starts_on": {
+            "format": "date",
+            "title": "Starts On",
+            "type": "string"
+          },
+          "user_id": {
+            "format": "uuid",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "location_id",
+          "user_id",
+          "selections",
+          "period",
+          "starts_on"
+        ],
+        "title": "StaffOrderIn",
+        "type": "object"
+      },
       "StatsOut": {
         "properties": {
           "by_status": {
@@ -3314,6 +3780,103 @@
           "confirmed_by_level"
         ],
         "title": "StatsOut",
+        "type": "object"
+      },
+      "SubscriptionOut": {
+        "properties": {
+          "activated_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Activated At"
+          },
+          "corporate_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Corporate Id"
+          },
+          "custom": {
+            "title": "Custom",
+            "type": "boolean"
+          },
+          "ends_on": {
+            "format": "date",
+            "title": "Ends On",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "period": {
+            "title": "Period",
+            "type": "string"
+          },
+          "price_provisional": {
+            "title": "Price Provisional",
+            "type": "boolean"
+          },
+          "price_total": {
+            "title": "Price Total",
+            "type": "integer"
+          },
+          "starts_on": {
+            "format": "date",
+            "title": "Starts On",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "usage": {
+            "items": {
+              "$ref": "#/components/schemas/UsageOut"
+            },
+            "title": "Usage",
+            "type": "array"
+          },
+          "user_id": {
+            "format": "uuid",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "user_id",
+          "location_id",
+          "corporate_id",
+          "period",
+          "starts_on",
+          "ends_on",
+          "status",
+          "custom",
+          "price_total",
+          "price_provisional",
+          "activated_at",
+          "usage"
+        ],
+        "title": "SubscriptionOut",
         "type": "object"
       },
       "TokenIn": {
@@ -3388,6 +3951,39 @@
           "session_type"
         ],
         "title": "TypeIn",
+        "type": "object"
+      },
+      "UsageOut": {
+        "properties": {
+          "makeups_available": {
+            "title": "Makeups Available",
+            "type": "integer"
+          },
+          "peak_allowed": {
+            "title": "Peak Allowed",
+            "type": "boolean"
+          },
+          "sessions_per_month": {
+            "title": "Sessions Per Month",
+            "type": "integer"
+          },
+          "sport": {
+            "title": "Sport",
+            "type": "string"
+          },
+          "used_this_month": {
+            "title": "Used This Month",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "sport",
+          "sessions_per_month",
+          "used_this_month",
+          "makeups_available",
+          "peak_allowed"
+        ],
+        "title": "UsageOut",
         "type": "object"
       },
       "UserDetailOut": {
@@ -3763,6 +4359,23 @@
                 }
               ],
               "title": "Enrollment Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "subscription_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Subscription Id"
             }
           }
         ],
@@ -6789,6 +7402,385 @@
         ]
       }
     },
+    "/api/v1/staff/corporate": {
+      "post": {
+        "operationId": "jungle_subscriptions_api_create_corporate",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CorporateIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CorporateOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Create Corporate",
+        "tags": [
+          "staff: subscriptions"
+        ]
+      }
+    },
+    "/api/v1/staff/corporate/{account_id}/members": {
+      "post": {
+        "operationId": "jungle_subscriptions_api_add_member",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "account_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Account Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MemberIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Add Member",
+        "tags": [
+          "staff: subscriptions"
+        ]
+      }
+    },
+    "/api/v1/staff/corporate/{account_id}/members/{user_id}/remove": {
+      "post": {
+        "operationId": "jungle_subscriptions_api_remove_member",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "account_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Account Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "User Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Remove Member",
+        "tags": [
+          "staff: subscriptions"
+        ]
+      }
+    },
+    "/api/v1/staff/corporate/{account_id}/report": {
+      "get": {
+        "operationId": "jungle_subscriptions_api_report",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "account_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Account Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "year",
+            "required": true,
+            "schema": {
+              "title": "Year",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "month",
+            "required": true,
+            "schema": {
+              "title": "Month",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Report",
+        "tags": [
+          "staff: subscriptions"
+        ]
+      }
+    },
     "/api/v1/staff/customers/{user_id}/account": {
       "get": {
         "operationId": "jungle_ledger_api_customer_account",
@@ -8629,6 +9621,190 @@
         ]
       }
     },
+    "/api/v1/staff/subscriptions": {
+      "post": {
+        "operationId": "jungle_subscriptions_api_staff_create",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StaffOrderIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Staff Create",
+        "tags": [
+          "staff: subscriptions"
+        ]
+      }
+    },
+    "/api/v1/staff/subscriptions/rates": {
+      "put": {
+        "operationId": "jungle_subscriptions_api_set_rate",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RateIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Set Rate",
+        "tags": [
+          "staff: subscriptions"
+        ]
+      }
+    },
     "/api/v1/staff/users": {
       "get": {
         "operationId": "jungle_accounts_api_search_users",
@@ -9148,6 +10324,445 @@
         "summary": "Stats",
         "tags": [
           "staff: waitlist"
+        ]
+      }
+    },
+    "/api/v1/subscriptions": {
+      "post": {
+        "operationId": "jungle_subscriptions_api_order",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Order",
+        "tags": [
+          "subscriptions"
+        ]
+      }
+    },
+    "/api/v1/subscriptions/mine": {
+      "get": {
+        "operationId": "jungle_subscriptions_api_mine",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SubscriptionOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Mine",
+        "tags": [
+          "subscriptions"
+        ]
+      }
+    },
+    "/api/v1/subscriptions/options": {
+      "get": {
+        "description": "What the 3-step configurator offers (R-081, R-082, R-084).",
+        "operationId": "jungle_subscriptions_api_options",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location",
+            "required": true,
+            "schema": {
+              "title": "Location",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptionsOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "summary": "Options",
+        "tags": [
+          "subscriptions"
+        ]
+      }
+    },
+    "/api/v1/subscriptions/quote": {
+      "post": {
+        "operationId": "jungle_subscriptions_api_get_quote",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuoteIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuoteOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Get Quote",
+        "tags": [
+          "subscriptions"
+        ]
+      }
+    },
+    "/api/v1/subscriptions/{subscription_id}/cancel": {
+      "post": {
+        "operationId": "jungle_subscriptions_api_cancel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "subscription_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Subscription Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Cancel",
+        "tags": [
+          "subscriptions"
+        ]
+      }
+    },
+    "/api/v1/subscriptions/{subscription_id}/freeze": {
+      "post": {
+        "operationId": "jungle_subscriptions_api_freeze",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "subscription_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Subscription Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FreezeIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FreezeOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Freeze",
+        "tags": [
+          "subscriptions"
         ]
       }
     },

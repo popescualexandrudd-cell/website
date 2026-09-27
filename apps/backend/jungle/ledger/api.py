@@ -55,6 +55,7 @@ class SplitOut(Schema):
 class PaymentIn(Schema):
     booking_id: uuid.UUID | None = None
     enrollment_id: uuid.UUID | None = None
+    subscription_id: uuid.UUID | None = None
     payer_id: uuid.UUID
     amount: int = Field(gt=0, le=100_000_000)
     method: PaymentMethod
@@ -140,8 +141,10 @@ def payment_status(
     request: HttpRequest,
     booking_id: uuid.UUID | None = None,
     enrollment_id: uuid.UUID | None = None,
+    subscription_id: uuid.UUID | None = None,
 ) -> MoneyOut:
-    return _money(payments.status_for(request, booking_id, enrollment_id))
+    subject = payments.Subject(booking_id, enrollment_id, subscription_id)
+    return _money(payments.status_for(request, subject))
 
 
 @me_router.get("/split", response={200: SplitOut, **errors(400, 401, 403, 404)})
@@ -154,7 +157,7 @@ def split(
     """R-060, R-061: "Împarte ora cu partenerii" — each player's share of what is left."""
     if not 1 <= parts <= 8:
         raise DomainError(ErrorCode.VALIDATION_INVALID, params={"field": "parts"})
-    status = payments.status_for(request, booking_id, enrollment_id)
+    status = payments.status_for(request, payments.Subject(booking_id, enrollment_id))
     return SplitOut(to_pay=status.to_pay, shares=services.split_amount(status.to_pay, parts))
 
 
@@ -169,8 +172,7 @@ def record_payment(
     `Idempotency-Key` again after a timeout — it is never charged twice."""
     payment = payments.record_payment(
         request,
-        payload.booking_id,
-        payload.enrollment_id,
+        payments.Subject(payload.booking_id, payload.enrollment_id, payload.subscription_id),
         payments.PaymentData(
             payer_id=payload.payer_id,
             amount=payload.amount,

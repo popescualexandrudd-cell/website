@@ -69,6 +69,35 @@ def durations(value: Any) -> bool:
     )
 
 
+def percent_map(keys: tuple[str, ...]) -> Callable[[Any], bool]:
+    """{key: whole percent 0–90} for exactly `keys` (R-084 discounts)."""
+
+    def check(value: Any) -> bool:
+        return (
+            isinstance(value, dict)
+            and set(value) == set(keys)
+            and all(
+                isinstance(v, int) and not isinstance(v, bool) and 0 <= v <= 90
+                for v in value.values()
+            )
+        )
+
+    return check
+
+
+def intensities(value: Any) -> bool:
+    """R-082: {"start": 4, "active": 8, "pro": 12}."""
+    return (
+        isinstance(value, dict)
+        and set(value) == {"start", "active", "pro"}
+        and all(positive_int(v) and v <= 31 for v in value.values())
+    )
+
+
+def percent(value: Any) -> bool:
+    return isinstance(value, int) and not isinstance(value, bool) and 0 <= value <= 90
+
+
 def opening_hours(value: Any) -> bool:
     """{"weekday": ["08:00", "23:00"], "weekend": [...]} in club time (Q3)."""
     return (
@@ -299,6 +328,50 @@ CONFIG: dict[str, ConfigSpec] = {
             "Datele de schimbare a sezonului de preț, vară și iarnă (R-051).",
             season_dates,
             question="Q21",
+        ),
+        ConfigSpec(
+            "subscriptions.intensities",
+            {"start": 4, "active": 8, "pro": 12},
+            Marker.CONFIRMED,
+            "Sesiuni pe lună pentru fiecare intensitate standard (R-082).",
+            intensities,
+        ),
+        ConfigSpec(
+            "subscriptions.bundle_discounts",
+            {"1": 0, "2": 10, "3": 15},
+            Marker.CONFIRMED,
+            "Reducerea (%) după numărul de sporturi din pachet (R-084).",
+            percent_map(("1", "2", "3")),
+        ),
+        ConfigSpec(
+            "subscriptions.period_discounts",
+            {"monthly": 0, "quarterly": 5, "annual": 15},
+            Marker.CONFIRMED,
+            "Reducerea (%) după perioadă: lunar, trimestrial, anual (R-084).",
+            percent_map(("monthly", "quarterly", "annual")),
+        ),
+        ConfigSpec(
+            "subscriptions.start_rule_below_sessions",
+            8,
+            Marker.TO_CONFIRM,
+            "Sub atâtea sesiuni pe lună se aplică regula Start: fără ore de vârf (R-087, Q12).",
+            positive_int,
+            question="Q12",
+        ),
+        ConfigSpec(
+            "subscriptions.freeze_days_per_year",
+            14,
+            Marker.CONFIRMED,
+            "Zile de înghețare a abonamentului pe an calendaristic (R-086).",
+            positive_int,
+        ),
+        ConfigSpec(
+            "corporate.default_discount_percent",
+            0,
+            Marker.TO_SET,
+            "Reducerea implicită (%) pentru abonamentele corporate (R-088, Q35).",
+            percent,
+            question="Q35",
         ),
         ConfigSpec(
             "auth.staff_session_hours",

@@ -44,6 +44,7 @@ from jungle.locations.models import Resource, ResourceKind
 from jungle.notifications.email import send_templated_email
 from jungle.pricing.models import Product
 from jungle.pricing.services import quote
+from jungle.subscriptions import services as subscriptions
 
 
 def active_reformers(studio: Resource) -> int:
@@ -140,6 +141,8 @@ def enroll(request: HttpRequest, session_id: uuid.UUID) -> ClassEnrollment:
                 )
         except IntegrityError as exc:
             raise DomainError(ErrorCode.CLASSES_ALREADY_ENROLLED, status=409) from exc
+        if enrollment.status == EnrollmentStatus.ENROLLED:
+            subscriptions.cover_enrollment(enrollment)  # R-083
         audit.record(
             audit.actor_from_request(request),
             "classes.enrolled",
@@ -182,6 +185,7 @@ def cancel_enrollment(request: HttpRequest, enrollment_id: uuid.UUID) -> ClassEn
             target=enrollment,
             after={"outcome": enrollment.cancellation_outcome},
         )
+        subscriptions.on_cancelled(enrollment.cancellation_outcome, enrollment=enrollment)  # Q14
         settle(due_for_enrollment(enrollment))
         if had_place:
             promote_class_waitlist(session, now)
@@ -202,6 +206,7 @@ def promote_class_waitlist(session: ClassSession, now: datetime) -> ClassEnrollm
         candidate.status = EnrollmentStatus.ENROLLED
         candidate.promoted_at = now
         candidate.save(update_fields=["status", "promoted_at"])
+        subscriptions.cover_enrollment(candidate)
         audit.record(audit.SYSTEM, "classes.promoted_from_waitlist", target=candidate)
         _notify(candidate.user, session, now)
         return candidate

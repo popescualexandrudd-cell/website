@@ -41,6 +41,7 @@ from jungle.locations.models import Resource, ResourceKind
 from jungle.notifications.email import send_templated_email
 from jungle.pricing.models import CustomerType, Product
 from jungle.pricing.services import day_bounds, quote
+from jungle.subscriptions import services as subscriptions
 
 COURT_KINDS = (ResourceKind.PADEL_COURT, ResourceKind.TENNIS_COURT)
 # Which session types each kind of resource accepts.
@@ -265,23 +266,25 @@ def create_booking(
         ends_at,
         customer_type,
     )
-    booking = insert_booking(
-        Booking(
-            location=resource.location,
-            resource=resource,
-            organizer=organizer,
-            coach=coach,
-            starts_at=data.starts_at,
-            ends_at=ends_at,
-            session_type=data.session_type,
-            source=source,
-            customer_type=customer_type,
-            price_total=priced.total,
-            price_breakdown=priced.as_dict(),
-            price_provisional=priced.provisional,
-            created_by=actor,
+    with transaction.atomic():
+        booking = insert_booking(
+            Booking(
+                location=resource.location,
+                resource=resource,
+                organizer=organizer,
+                coach=coach,
+                starts_at=data.starts_at,
+                ends_at=ends_at,
+                session_type=data.session_type,
+                source=source,
+                customer_type=customer_type,
+                price_total=priced.total,
+                price_breakdown=priced.as_dict(),
+                price_provisional=priced.provisional,
+                created_by=actor,
+            )
         )
-    )
+        subscriptions.cover_booking(booking)  # R-083: a lesson may be a subscription session
     audit.record(
         audit.actor_from_request(request), "booking.created", target=booking, after=_brief(booking)
     )
@@ -360,6 +363,7 @@ def cancel_booking(
             after={**_brief(booking), "outcome": booking.cancellation_outcome},
             reason=reason,
         )
+        subscriptions.on_cancelled(booking.cancellation_outcome, booking=booking)  # Q14
         settle(due_for_booking(booking))  # R-070, R-071: debt or credit in the account
         promote_waiting(booking.resource, booking.starts_at, booking.ends_at)
     return booking

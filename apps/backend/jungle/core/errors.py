@@ -101,6 +101,17 @@ class ErrorCode(StrEnum):
     # Waitlist
     WAITLIST_TOKEN_INVALID = "waitlist.token_invalid"
     WAITLIST_TOKEN_EXPIRED = "waitlist.token_expired"
+    SUBSCRIPTIONS_NOT_FOUND = "subscriptions.not_found"
+    SUBSCRIPTIONS_INVALID_SELECTION = "subscriptions.invalid_selection"
+    SUBSCRIPTIONS_INVALID_START = "subscriptions.invalid_start"
+    SUBSCRIPTIONS_NOT_CANCELLABLE = "subscriptions.not_cancellable"
+    SUBSCRIPTIONS_NOT_ACTIVE = "subscriptions.not_active"
+    SUBSCRIPTIONS_FREEZE_LIMIT = "subscriptions.freeze_limit"
+    SUBSCRIPTIONS_FREEZE_OVERLAP = "subscriptions.freeze_overlap"
+    SUBSCRIPTIONS_FREEZE_CONFLICT = "subscriptions.freeze_conflict"
+    CORPORATE_NOT_FOUND = "corporate.not_found"
+    CORPORATE_NOT_MEMBER = "corporate.not_member"
+    CORPORATE_ALREADY_MEMBER = "corporate.already_member"
 
 
 class DomainError(Exception):

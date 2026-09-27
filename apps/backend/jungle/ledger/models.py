@@ -47,7 +47,7 @@ class LedgerAccount(models.Model):
     location = models.ForeignKey(
         "locations.Location", on_delete=models.PROTECT, null=True, blank=True
     )
-    category = models.CharField(max_length=20, blank=True)
+    category = models.CharField(max_length=60, blank=True)
     currency = models.CharField(max_length=3, default="RON")
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -88,6 +88,8 @@ class LedgerTransaction(models.Model):
         blank=True,
         related_name="+",
     )
+    # What the money is for: "booking:<id>", "enrollment:<id>", "subscription:<id>", …
+    subject = models.CharField(max_length=80, blank=True, db_index=True)
     reverses = models.OneToOneField(
         "self", on_delete=models.PROTECT, null=True, blank=True, related_name="reversed_by"
     )

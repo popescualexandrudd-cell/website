@@ -28,6 +28,9 @@ from jungle.locations.api import public_router as locations_router
 from jungle.locations.api import staff_router as locations_staff_router
 from jungle.pricing.api import public_router as pricing_router
 from jungle.pricing.api import staff_router as pricing_staff_router
+from jungle.subscriptions.api import me_router as subscriptions_router
+from jungle.subscriptions.api import public_router as subscriptions_public_router
+from jungle.subscriptions.api import staff_router as subscriptions_staff_router
 from jungle.waitlist.api import public_router as waitlist_router
 from jungle.waitlist.api import staff_router as waitlist_staff_router
 
@@ -63,6 +66,9 @@ api.add_router("/staff", attendance_staff_router)
 api.add_router("/staff", pricing_staff_router)
 api.add_router("/account", account_router)
 api.add_router("/staff", payments_staff_router)
+api.add_router("/subscriptions", subscriptions_public_router)
+api.add_router("/subscriptions", subscriptions_router)
+api.add_router("/staff", subscriptions_staff_router)
 
 
 def _error(

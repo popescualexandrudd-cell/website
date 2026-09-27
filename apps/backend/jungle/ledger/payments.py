@@ -1,4 +1,4 @@
-"""Money for bookings and classes (R-060 … R-067, R-070 … R-072, Q10, Q14).
+"""Money for bookings, classes and subscriptions (R-060 … R-067, R-070 … R-072, Q10, Q14).
 
 - A booking or class place becomes a debt of its organizer ("charge") when it is paid,
   played, missed (no-show) or cancelled late. The charge is posted once (idempotent).
@@ -12,9 +12,10 @@ Card payments wait for the payment processor and the POS adapter (Q9, R-062).
 from __future__ import annotations
 
 import uuid
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Any
 
-from django.db import transaction
+from django.db import models, transaction
 from django.db.models import Q, QuerySet, Sum
 from django.http import HttpRequest
 
@@ -52,6 +53,7 @@ from jungle.ledger.services import (
     reverse_as,
 )
 from jungle.locations.models import Location, ResourceKind
+from jungle.subscriptions.models import SubscriptionUse
 
 PURPOSE_CHARGE = "charge"
 PURPOSE_PAYMENT = "payment"
@@ -60,21 +62,30 @@ PURPOSE_REFUND = "refund"
 
 @dataclass(frozen=True)
 class Due:
-    """Something a customer pays for: a booking or a class place."""
+    """Something a customer pays for: a booking, a class place or a subscription."""
 
-    key: str
+    key: str  # also the `subject` of every ledger transaction about it
     customer: User
     location: Location
     amount: int
     category: str
     description: str
+    lock_on: tuple[type[models.Model], Any] = field(compare=False)
+    active: bool = True  # still to be paid if not charged yet (not cancelled)
+    late_cancelled: bool = False  # R-071: cancelled late, still paid
+    debtor_category: str = ""  # "corporate:<id>": the company owes it (R-088)
     booking: Booking | None = None
     enrollment: ClassEnrollment | None = None
 
     def transactions(self) -> QuerySet[LedgerTransaction]:
-        if self.booking is not None:
-            return LedgerTransaction.objects.filter(booking=self.booking)
-        return LedgerTransaction.objects.filter(enrollment=self.enrollment)
+        return LedgerTransaction.objects.filter(subject=self.key)
+
+    def receivable(self) -> LedgerAccount:
+        if self.debtor_category:
+            return account(
+                AccountKind.RECEIVABLE, location=self.location, category=self.debtor_category
+            )
+        return account(AccountKind.RECEIVABLE, user=self.customer, location=self.location)
 
     @property
     def booking_id(self) -> uuid.UUID | None:
@@ -96,26 +107,34 @@ def booking_category(booking: Booking) -> str:
 
 
 def due_for_booking(booking: Booking) -> Due:
+    covered = SubscriptionUse.objects.filter(booking=booking).exists()  # R-083
     return Due(
         key=f"booking:{booking.pk}",
         customer=booking.organizer,
         location=booking.location,
-        amount=booking.price_total,
+        amount=0 if covered else booking.price_total,
         category=booking_category(booking),
         description=f"{booking.resource.name} {booking.starts_at:%Y-%m-%d %H:%M}",
+        active=booking.status != BookingStatus.CANCELLED,
+        late_cancelled=booking.cancellation_outcome == CancellationOutcome.CHARGED,
+        lock_on=(Booking, booking.pk),
         booking=booking,
     )
 
 
 def due_for_enrollment(enrollment: ClassEnrollment) -> Due:
     session = enrollment.session
+    covered = SubscriptionUse.objects.filter(enrollment=enrollment).exists()  # R-083
     return Due(
         key=f"enrollment:{enrollment.pk}",
         customer=enrollment.user,
         location=session.location,
-        amount=session.price_total,
+        amount=0 if covered else session.price_total,
         category=RevenueCategory.PILATES,
         description=f"Pilates {session.starts_at:%Y-%m-%d %H:%M}",
+        active=enrollment.status not in (EnrollmentStatus.CANCELLED, EnrollmentStatus.WAITLISTED),
+        late_cancelled=enrollment.cancellation_outcome == CancellationOutcome.CHARGED,
+        lock_on=(ClassEnrollment, enrollment.pk),
         enrollment=enrollment,
     )
 
@@ -139,27 +158,13 @@ def _receivable_sum(due: Due, purpose: str) -> int:
     return int(entries.aggregate(total=Sum("amount"))["total"] or 0)
 
 
-def _is_active(due: Due) -> bool:
-    if due.booking is not None:
-        return due.booking.status != BookingStatus.CANCELLED
-    return getattr(due.enrollment, "status", "") not in (
-        EnrollmentStatus.CANCELLED,
-        EnrollmentStatus.WAITLISTED,
-    )
-
-
-def _charged_cancellation(due: Due) -> bool:
-    item = due.booking if due.booking is not None else due.enrollment
-    return getattr(item, "cancellation_outcome", "") == CancellationOutcome.CHARGED
-
-
 def money_status(due: Due) -> MoneyStatus:
     charged = _receivable_sum(due, PURPOSE_CHARGE)
     paid = -_receivable_sum(due, PURPOSE_PAYMENT)
     refunded = _receivable_sum(due, PURPOSE_REFUND)
     if charged:
         to_pay = max(0, charged - paid)
-    elif _is_active(due) or _charged_cancellation(due):
+    elif due.active or due.late_cancelled:
         to_pay = max(0, due.amount - paid)
     else:
         to_pay = 0
@@ -178,7 +183,7 @@ def charge(due: Due, actor: audit.Actor = audit.SYSTEM) -> LedgerTransaction | N
     return post(
         TransactionKind.CHARGE,
         [
-            (account(AccountKind.RECEIVABLE, user=due.customer, location=due.location), due.amount),
+            (due.receivable(), due.amount),
             (
                 account(AccountKind.REVENUE, location=due.location, category=due.category),
                 -due.amount,
@@ -191,6 +196,7 @@ def charge(due: Due, actor: audit.Actor = audit.SYSTEM) -> LedgerTransaction | N
         metadata={"purpose": PURPOSE_CHARGE},
         booking_id=due.booking_id,
         enrollment_id=due.enrollment_id,
+        subject=due.key,
     )
 
 
@@ -262,10 +268,7 @@ def pay(
             TransactionKind.PAYMENT,
             [
                 (source, data.amount),
-                (
-                    account(AccountKind.RECEIVABLE, user=due.customer, location=due.location),
-                    -data.amount,
-                ),
+                (due.receivable(), -data.amount),
             ],
             description=due.description,
             actor=actor,
@@ -276,6 +279,7 @@ def pay(
             metadata={"purpose": PURPOSE_PAYMENT, "payer": str(payer.pk)},
             booking_id=due.booking_id,
             enrollment_id=due.enrollment_id,
+            subject=due.key,
         )
         payment = Payment.objects.create(
             transaction=tx,
@@ -300,10 +304,8 @@ def pay(
 
 def _lock(due: Due) -> None:
     """Payments for the same item are taken one at a time (no double counting)."""
-    if due.booking is not None:
-        Booking.objects.select_for_update().filter(pk=due.booking.pk).first()
-    else:
-        ClassEnrollment.objects.select_for_update().filter(pk=str(due.enrollment_id)).first()
+    model, pk = due.lock_on
+    model._default_manager.select_for_update().filter(pk=pk).first()
 
 
 # ---------------------------------------------------------------- settling
@@ -342,12 +344,7 @@ def refund_as_credit(due: Due) -> list[LedgerTransaction]:
                 post(
                     TransactionKind.CREDIT,
                     [
-                        (
-                            account(
-                                AccountKind.RECEIVABLE, user=due.customer, location=due.location
-                            ),
-                            amount,
-                        ),
+                        (due.receivable(), amount),
                         (account(AccountKind.CUSTOMER_BALANCE, user=payer), -amount),
                     ],
                     description=f"Credit în cont: {due.description}",
@@ -358,6 +355,7 @@ def refund_as_credit(due: Due) -> list[LedgerTransaction]:
                     metadata={"purpose": PURPOSE_REFUND, "payer": str(payer_id)},
                     booking_id=due.booking_id,
                     enrollment_id=due.enrollment_id,
+                    subject=due.key,
                 )
             )
     return posted
@@ -380,11 +378,27 @@ def _paid_by_payer(due: Due) -> dict[str, int]:
 
 
 # ---------------------------------------------------------------- entry points
-def resolve_due(booking_id: uuid.UUID | None, enrollment_id: uuid.UUID | None) -> Due:
-    if (booking_id is None) == (enrollment_id is None):
+@dataclass(frozen=True)
+class Subject:
+    """Which item a payment is for: exactly one of the three."""
+
+    booking_id: uuid.UUID | None = None
+    enrollment_id: uuid.UUID | None = None
+    subscription_id: uuid.UUID | None = None
+
+
+def resolve_due(subject: Subject) -> Due:
+    given = [v for v in (subject.booking_id, subject.enrollment_id, subject.subscription_id) if v]
+    if len(given) != 1:
         raise DomainError(
-            ErrorCode.VALIDATION_INVALID, params={"field": "booking_id/enrollment_id"}
+            ErrorCode.VALIDATION_INVALID,
+            params={"field": "booking_id/enrollment_id/subscription_id"},
         )
+    booking_id, enrollment_id = subject.booking_id, subject.enrollment_id
+    if subject.subscription_id is not None:
+        from jungle.subscriptions.services import due_for_subscription, get_subscription
+
+        return due_for_subscription(get_subscription(subject.subscription_id))
     if booking_id is not None:
         booking = (
             Booking.objects.select_related("location", "resource", "organizer")
@@ -404,26 +418,29 @@ def resolve_due(booking_id: uuid.UUID | None, enrollment_id: uuid.UUID | None) -
     return due_for_enrollment(enrollment)
 
 
-def record_payment(
-    request: HttpRequest,
-    booking_id: uuid.UUID | None,
-    enrollment_id: uuid.UUID | None,
-    data: PaymentData,
-) -> Payment:
-    """Q10: payments are taken by the payments kiosk (Stage 8, same `pay`); staff record an
-    exception, always with a reason (audited)."""
-    due = resolve_due(booking_id, enrollment_id)
+def record_payment(request: HttpRequest, subject: Subject, data: PaymentData) -> Payment:
+    """Q10: payments are taken by the payments kiosk (Stage 8, same `pay_for`); staff record
+    an exception, always with a reason (audited)."""
+    due = resolve_due(subject)
     authorize(request, Action.PAYMENTS_RECORD, due.location.pk)
     if not data.reason.strip():
         raise DomainError(ErrorCode.VALIDATION_INVALID, params={"field": "reason"})
-    return pay(audit.actor_from_request(request), due, data)
+    return pay_for(audit.actor_from_request(request), subject, due, data)
 
 
-def status_for(
-    request: HttpRequest, booking_id: uuid.UUID | None, enrollment_id: uuid.UUID | None
-) -> MoneyStatus:
+def pay_for(actor: audit.Actor, subject: Subject, due: Due, data: PaymentData) -> Payment:
+    """`pay`, then what a full payment unlocks (a subscription becomes active)."""
+    payment = pay(actor, due, data)
+    if subject.subscription_id is not None:
+        from jungle.subscriptions.services import activate_if_paid
+
+        activate_if_paid(subject.subscription_id)
+    return payment
+
+
+def status_for(request: HttpRequest, subject: Subject) -> MoneyStatus:
     """The organizer, or staff who may see payments."""
-    due = resolve_due(booking_id, enrollment_id)
+    due = resolve_due(subject)
     user = current_user(request)
     if due.customer.pk != user.pk:
         authorize(request, Action.PAYMENTS_VIEW, due.location.pk)

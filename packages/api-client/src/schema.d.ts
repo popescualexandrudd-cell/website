@@ -788,6 +788,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/staff/corporate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Corporate */
+        post: operations["jungle_subscriptions_api_create_corporate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/corporate/{account_id}/members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add Member */
+        post: operations["jungle_subscriptions_api_add_member"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/corporate/{account_id}/members/{user_id}/remove": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Remove Member */
+        post: operations["jungle_subscriptions_api_remove_member"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/corporate/{account_id}/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Report */
+        get: operations["jungle_subscriptions_api_report"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/staff/customers/{user_id}/account": {
         parameters: {
             query?: never;
@@ -1153,6 +1221,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/staff/subscriptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Staff Create */
+        post: operations["jungle_subscriptions_api_staff_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/subscriptions/rates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Set Rate */
+        put: operations["jungle_subscriptions_api_set_rate"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/staff/users": {
         parameters: {
             query?: never;
@@ -1266,6 +1368,111 @@ export interface paths {
         get: operations["jungle_waitlist_api_stats"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/subscriptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Order */
+        post: operations["jungle_subscriptions_api_order"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/subscriptions/mine": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Mine */
+        get: operations["jungle_subscriptions_api_mine"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/subscriptions/options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Options
+         * @description What the 3-step configurator offers (R-081, R-082, R-084).
+         */
+        get: operations["jungle_subscriptions_api_options"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/subscriptions/quote": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Get Quote */
+        post: operations["jungle_subscriptions_api_get_quote"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/subscriptions/{subscription_id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cancel */
+        post: operations["jungle_subscriptions_api_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/subscriptions/{subscription_id}/freeze": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Freeze */
+        post: operations["jungle_subscriptions_api_freeze"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1603,6 +1810,19 @@ export interface components {
             /** Trade Register Number */
             trade_register_number: string | null;
         };
+        /** ComponentOut */
+        ComponentOut: {
+            /** Marker */
+            marker: string;
+            /** Monthly Price */
+            monthly_price: number;
+            /** Peak Allowed */
+            peak_allowed: boolean;
+            /** Sessions Per Month */
+            sessions_per_month: number;
+            /** Sport */
+            sport: string;
+        };
         /** ConfigIn */
         ConfigIn: {
             /** Effective From */
@@ -1653,10 +1873,71 @@ export interface components {
             /** Text Sha256 */
             text_sha256: string;
         };
+        /** CorporateIn */
+        CorporateIn: {
+            /**
+             * Billing Email
+             * @default
+             */
+            billing_email: string;
+            /** Discount Percent */
+            discount_percent?: number | null;
+            /**
+             * Location Id
+             * Format: uuid
+             */
+            location_id: string;
+            /** Name */
+            name: string;
+            /**
+             * Registration Code
+             * @default
+             */
+            registration_code: string;
+        };
+        /** CorporateOut */
+        CorporateOut: {
+            /** Billing Email */
+            billing_email: string;
+            /** Discount Percent */
+            discount_percent: number | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Is Active */
+            is_active: boolean;
+            /**
+             * Location Id
+             * Format: uuid
+             */
+            location_id: string;
+            /** Name */
+            name: string;
+            /** Registration Code */
+            registration_code: string;
+        };
         /** CsrfOut */
         CsrfOut: {
             /** Csrf Token */
             csrf_token: string;
+        };
+        /** CustomSelectionIn */
+        CustomSelectionIn: {
+            /**
+             * Intensity
+             * @default
+             */
+            intensity: string;
+            /** Monthly Price */
+            monthly_price?: number | null;
+            /**
+             * Sessions
+             * @default 0
+             */
+            sessions: number;
+            sport: components["schemas"]["Sport"];
         };
         /**
          * CustomerType
@@ -1878,6 +2159,29 @@ export interface components {
             /** Key */
             key: string;
         };
+        /** FreezeIn */
+        FreezeIn: {
+            /** Days */
+            days: number;
+            /**
+             * Starts On
+             * Format: date
+             */
+            starts_on: string;
+        };
+        /** FreezeOut */
+        FreezeOut: {
+            /**
+             * Ends On
+             * Format: date
+             */
+            ends_on: string;
+            /**
+             * Starts On
+             * Format: date
+             */
+            starts_on: string;
+        };
         /** GuestIn */
         GuestIn: {
             /** Email */
@@ -2042,6 +2346,28 @@ export interface components {
             /** Roles */
             roles: components["schemas"]["RoleOut"][];
         };
+        /** MemberIn */
+        MemberIn: {
+            /**
+             * User Id
+             * Format: uuid
+             */
+            user_id: string;
+        };
+        /** MemberUsageOut */
+        MemberUsageOut: {
+            /** Name */
+            name: string;
+            /** Sessions */
+            sessions: {
+                [key: string]: number;
+            };
+            /**
+             * User Id
+             * Format: uuid
+             */
+            user_id: string;
+        };
         /** MfaConfirmIn */
         MfaConfirmIn: {
             /** Code */
@@ -2096,6 +2422,41 @@ export interface components {
              */
             ok: boolean;
         };
+        /** OptionsOut */
+        OptionsOut: {
+            /** Bundle Discounts */
+            bundle_discounts: {
+                [key: string]: number;
+            };
+            /** Intensities */
+            intensities: {
+                [key: string]: number;
+            };
+            /** Period Discounts */
+            period_discounts: {
+                [key: string]: number;
+            };
+            /** Rates */
+            rates: components["schemas"]["RateOut"][];
+            /** Start Rule Below Sessions */
+            start_rule_below_sessions: number;
+        };
+        /** OrderIn */
+        OrderIn: {
+            /**
+             * Location Id
+             * Format: uuid
+             */
+            location_id: string;
+            period: components["schemas"]["Period"];
+            /** Selections */
+            selections: components["schemas"]["SelectionIn"][];
+            /**
+             * Starts On
+             * Format: date
+             */
+            starts_on: string;
+        };
         /** PasswordChangeIn */
         PasswordChangeIn: {
             /** Current Password */
@@ -2128,6 +2489,8 @@ export interface components {
             payer_id: string;
             /** Reason */
             reason: string;
+            /** Subscription Id */
+            subscription_id?: string | null;
             /**
              * Tendered
              * @default 0
@@ -2181,6 +2544,11 @@ export interface components {
             value: unknown;
         };
         /**
+         * Period
+         * @enum {string}
+         */
+        Period: "monthly" | "quarterly" | "annual";
+        /**
          * Product
          * @enum {string}
          */
@@ -2196,82 +2564,67 @@ export interface components {
             /** Preferred Language */
             preferred_language?: string | null;
         };
+        /** QuoteIn */
+        QuoteIn: {
+            /** Location */
+            location: string;
+            period: components["schemas"]["Period"];
+            /** Selections */
+            selections: components["schemas"]["SelectionIn"][];
+        };
         /** QuoteOut */
         QuoteOut: {
+            /** Components */
+            components: components["schemas"]["ComponentOut"][];
+            /** Discounts */
+            discounts: number[];
+            /** Gross */
+            gross: number;
+            /** Monthly Sum */
+            monthly_sum: number;
+            /** Months */
+            months: number;
             /**
              * Provisional
              * @description cel puțin un tarif este DE_STABILIT
              */
             provisional: boolean;
-            /** Segments */
-            segments: components["schemas"]["SegmentOut"][];
+            /** Rounding */
+            rounding: number;
             /**
              * Total
-             * @description bani (RON × 100)
+             * @description bani, rotunjit la leu întreg (R-084)
              */
             total: number;
         };
         /** RateIn */
         RateIn: {
-            /** Amount Per Half Hour */
-            amount_per_half_hour: number;
-            band: components["schemas"]["Band"];
             /**
              * Confirmed
              * @default false
              */
             confirmed: boolean;
-            /** @default standard */
-            customer_type: components["schemas"]["CustomerType"];
             /**
              * Location Id
              * Format: uuid
              */
             location_id: string;
-            /**
-             * Note
-             * @default
-             */
-            note: string;
-            product: components["schemas"]["Product"];
-            resource_kind: components["schemas"]["ResourceKind"];
-            /** @default all */
-            season: components["schemas"]["Season"];
+            /** Monthly Price */
+            monthly_price: number;
+            /** Sessions Per Month */
+            sessions_per_month: number;
+            sport: components["schemas"]["Sport"];
         };
         /** RateOut */
         RateOut: {
-            /**
-             * Amount Per Half Hour
-             * @description bani (RON × 100) pentru 30 de minute
-             */
-            amount_per_half_hour: number;
-            /** Band */
-            band: string;
-            /** Customer Type */
-            customer_type: string;
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /**
-             * Marker
-             * @description CONFIRMED sau TO_SET (DE_STABILIT)
-             */
+            /** Marker */
             marker: string;
-            /** Note */
-            note: string;
-            /** Product */
-            product: string;
-            /** Resource Kind */
-            resource_kind: string;
-            /** Season */
-            season: string;
-            /**
-             * Updated At
-             * Format: date-time
-             */
-            updated_at: string;
+            /** Monthly Price */
+            monthly_price: number;
+            /** Sessions Per Month */
+            sessions_per_month: number;
+            /** Sport */
+            sport: string;
         };
         /** ReasonIn */
         ReasonIn: {
@@ -2310,6 +2663,22 @@ export interface components {
              * @default ro
              */
             preferred_language: string;
+        };
+        /** ReportOut */
+        ReportOut: {
+            /**
+             * Account Id
+             * Format: uuid
+             */
+            account_id: string;
+            /** Billed */
+            billed: number;
+            /** Members */
+            members: components["schemas"]["MemberUsageOut"][];
+            /** Month */
+            month: number;
+            /** Year */
+            year: number;
         };
         /** ResourceAvailabilityOut */
         ResourceAvailabilityOut: {
@@ -2553,6 +2922,15 @@ export interface components {
              */
             starts_at: string;
         };
+        /** SelectionIn */
+        SelectionIn: {
+            /**
+             * Intensity
+             * @default
+             */
+            intensity: string;
+            sport: components["schemas"]["Sport"];
+        };
         /** SessionOut */
         SessionOut: {
             /** Authenticated */
@@ -2611,6 +2989,11 @@ export interface components {
             /** To Pay */
             to_pay: number;
         };
+        /**
+         * Sport
+         * @enum {string}
+         */
+        Sport: "padel" | "tennis" | "pilates";
         /** StaffBookingIn */
         StaffBookingIn: {
             /** Coach Id */
@@ -2733,6 +3116,29 @@ export interface components {
             /** Status */
             status: string;
         };
+        /** StaffOrderIn */
+        StaffOrderIn: {
+            /** Corporate Id */
+            corporate_id?: string | null;
+            /**
+             * Location Id
+             * Format: uuid
+             */
+            location_id: string;
+            period: components["schemas"]["Period"];
+            /** Selections */
+            selections: components["schemas"]["CustomSelectionIn"][];
+            /**
+             * Starts On
+             * Format: date
+             */
+            starts_on: string;
+            /**
+             * User Id
+             * Format: uuid
+             */
+            user_id: string;
+        };
         /** StatsOut */
         StatsOut: {
             /** By Status */
@@ -2743,6 +3149,50 @@ export interface components {
             confirmed_by_level: {
                 [key: string]: number;
             };
+        };
+        /** SubscriptionOut */
+        SubscriptionOut: {
+            /** Activated At */
+            activated_at: string | null;
+            /** Corporate Id */
+            corporate_id: string | null;
+            /** Custom */
+            custom: boolean;
+            /**
+             * Ends On
+             * Format: date
+             */
+            ends_on: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Location Id
+             * Format: uuid
+             */
+            location_id: string;
+            /** Period */
+            period: string;
+            /** Price Provisional */
+            price_provisional: boolean;
+            /** Price Total */
+            price_total: number;
+            /**
+             * Starts On
+             * Format: date
+             */
+            starts_on: string;
+            /** Status */
+            status: string;
+            /** Usage */
+            usage: components["schemas"]["UsageOut"][];
+            /**
+             * User Id
+             * Format: uuid
+             */
+            user_id: string;
         };
         /** TokenIn */
         TokenIn: {
@@ -2773,6 +3223,19 @@ export interface components {
         /** TypeIn */
         TypeIn: {
             session_type: components["schemas"]["SessionType"];
+        };
+        /** UsageOut */
+        UsageOut: {
+            /** Makeups Available */
+            makeups_available: number;
+            /** Peak Allowed */
+            peak_allowed: boolean;
+            /** Sessions Per Month */
+            sessions_per_month: number;
+            /** Sport */
+            sport: string;
+            /** Used This Month */
+            used_this_month: number;
         };
         /**
          * UserDetailOut
@@ -2946,6 +3409,7 @@ export interface operations {
             query?: {
                 booking_id?: string | null;
                 enrollment_id?: string | null;
+                subscription_id?: string | null;
             };
             header?: never;
             path?: never;
@@ -5167,6 +5631,275 @@ export interface operations {
             };
         };
     };
+    jungle_subscriptions_api_create_corporate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CorporateIn"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CorporateOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_subscriptions_api_add_member: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                account_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MemberIn"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_subscriptions_api_remove_member: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                account_id: string;
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_subscriptions_api_report: {
+        parameters: {
+            query: {
+                year: number;
+                month: number;
+            };
+            header?: never;
+            path: {
+                account_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     jungle_ledger_api_customer_account: {
         parameters: {
             query: {
@@ -6507,6 +7240,153 @@ export interface operations {
             };
         };
     };
+    jungle_subscriptions_api_staff_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StaffOrderIn"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubscriptionOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_subscriptions_api_set_rate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RateIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RateOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     jungle_accounts_api_search_users: {
         parameters: {
             query?: {
@@ -6849,6 +7729,342 @@ export interface operations {
             };
             /** @description Forbidden */
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_subscriptions_api_order: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OrderIn"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubscriptionOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_subscriptions_api_mine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubscriptionOut"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_subscriptions_api_options: {
+        parameters: {
+            query: {
+                location: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OptionsOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_subscriptions_api_get_quote: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["QuoteIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QuoteOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_subscriptions_api_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                subscription_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubscriptionOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_subscriptions_api_freeze: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                subscription_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FreezeIn"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FreezeOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };

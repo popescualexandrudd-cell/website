@@ -22,6 +22,7 @@ from jungle.legal.models import DocumentKind, LegalDocument
 from jungle.legal.services import publish_document
 from jungle.locations.models import Location, Resource, ResourceKind
 from jungle.pricing.models import Band, PriceRate, Product
+from jungle.subscriptions.models import Sport, SubscriptionRate
 
 # Legal texts drafted in docs/ (Q41); published as demo while they contain DE_CONFIRMAT (Q26).
 LEGAL_FILES = {
@@ -56,6 +57,12 @@ DEMO_RATES: list[tuple[str, str, dict[str, int]]] = [
     (ResourceKind.PILATES_STUDIO, Product.CLASS, dict.fromkeys(Band.values, 4000)),
     (ResourceKind.EVENT_ROOM, Product.EVENT, dict.fromkeys(Band.values, 10000)),
 ]
+# DEMO monthly subscription prices (bani) per sport and sessions per month (R-082), DE_STABILIT.
+DEMO_SUBSCRIPTION_RATES = {
+    Sport.PADEL: {4: 36000, 8: 64000, 12: 90000},
+    Sport.TENNIS: {4: 32000, 8: 56000, 12: 78000},
+    Sport.PILATES: {4: 30000, 8: 52000, 12: 72000},
+}
 
 
 class Command(BaseCommand):
@@ -149,6 +156,18 @@ class Command(BaseCommand):
                     band=band,
                     defaults={
                         "amount_per_half_hour": amount,
+                        "marker": Marker.TO_SET,
+                        "note": "DEMO — nu este un preț al clubului (Q21)",
+                    },
+                )
+        for sport, levels in DEMO_SUBSCRIPTION_RATES.items():
+            for sessions, monthly in levels.items():
+                SubscriptionRate.objects.get_or_create(
+                    location=location,
+                    sport=sport,
+                    sessions_per_month=sessions,
+                    defaults={
+                        "monthly_price": monthly,
                         "marker": Marker.TO_SET,
                         "note": "DEMO — nu este un preț al clubului (Q21)",
                     },

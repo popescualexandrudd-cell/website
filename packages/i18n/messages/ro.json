@@ -89,7 +89,18 @@
     "payments.method_unavailable": "Această metodă de plată nu este disponibilă încă.",
     "ledger.not_found": "Tranzacția nu există.",
     "ledger.already_reversed": "Tranzacția a fost deja corectată.",
-    "ledger.cannot_reverse": "O corecție nu se mai corectează; înregistrează o tranzacție nouă."
+    "ledger.cannot_reverse": "O corecție nu se mai corectează; înregistrează o tranzacție nouă.",
+    "subscriptions.not_found": "Abonamentul nu există.",
+    "subscriptions.invalid_selection": "Alegerea nu este validă. Verifică sporturile, intensitatea și perioada.",
+    "subscriptions.invalid_start": "Data de început nu este validă.",
+    "subscriptions.not_cancellable": "Abonamentul nu mai poate fi anulat de aici. Te rugăm să vorbești cu recepția.",
+    "subscriptions.not_active": "Abonamentul nu este activ.",
+    "subscriptions.freeze_limit": "Poți îngheța abonamentul cel mult 2 săptămâni pe an. Îți mai rămân {remaining} zile.",
+    "subscriptions.freeze_overlap": "Există deja o înghețare în acea perioadă.",
+    "subscriptions.freeze_conflict": "Ai sesiuni programate în acea perioadă. Anulează-le înainte de înghețare.",
+    "corporate.not_found": "Contul de firmă nu există.",
+    "corporate.not_member": "Persoana nu face parte din contul de firmă.",
+    "corporate.already_member": "Persoana face deja parte din contul de firmă."
   },
   "web": {
     "meta": {

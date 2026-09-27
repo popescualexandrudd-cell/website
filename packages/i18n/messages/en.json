@@ -89,7 +89,18 @@
     "payments.method_unavailable": "This payment method is not available yet.",
     "ledger.not_found": "The transaction does not exist.",
     "ledger.already_reversed": "The transaction has already been corrected.",
-    "ledger.cannot_reverse": "A correction cannot be corrected again; record a new transaction."
+    "ledger.cannot_reverse": "A correction cannot be corrected again; record a new transaction.",
+    "subscriptions.not_found": "The subscription does not exist.",
+    "subscriptions.invalid_selection": "The choice is not valid. Please check the sports, intensity and period.",
+    "subscriptions.invalid_start": "The start date is not valid.",
+    "subscriptions.not_cancellable": "The subscription can no longer be cancelled here. Please talk to the front desk.",
+    "subscriptions.not_active": "The subscription is not active.",
+    "subscriptions.freeze_limit": "You can freeze the subscription for at most 2 weeks a year. You have {remaining} days left.",
+    "subscriptions.freeze_overlap": "There is already a freeze in that period.",
+    "subscriptions.freeze_conflict": "You have sessions booked in that period. Cancel them before freezing.",
+    "corporate.not_found": "The company account does not exist.",
+    "corporate.not_member": "The person is not part of the company account.",
+    "corporate.already_member": "The person is already part of the company account."
   },
   "web": {
     "meta": {

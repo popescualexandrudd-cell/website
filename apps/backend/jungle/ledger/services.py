@@ -100,6 +100,7 @@ def post(
     enrollment_id: uuid.UUID | None = None,
     reverses: LedgerTransaction | None = None,
     metadata: dict[str, Any] | None = None,
+    subject: str = "",
 ) -> LedgerTransaction:
     """Writes one balanced transaction. Lines with the same account are merged."""
     merged: dict[uuid.UUID, int] = {}
@@ -121,6 +122,7 @@ def post(
             booking_id=booking_id,
             enrollment_id=enrollment_id,
             reverses=reverses,
+            subject=subject,
             description=description[:250],
             reason=reason[:500],
             actor=_actor_data(actor),
@@ -196,6 +198,7 @@ def reverse_as(actor: audit.Actor, original: LedgerTransaction, reason: str) -> 
             booking_id=locked.booking_id,
             enrollment_id=locked.enrollment_id,
             reverses=locked,
+            subject=locked.subject,
             metadata={**locked.metadata, "reversal_of": str(locked.pk)},
         )
         audit.record(
