@@ -3,11 +3,12 @@
 import { useEffect, useId, useState, type FormEvent } from "react";
 import { useLocale, useMessages, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import type { components } from "@jungle/api-client";
 import { api, errorKey, errorParams } from "@/lib/api";
 import { IconCheck } from "./Icons";
 
-const INTERESTS = ["padel", "league", "tennis", "pilates", "events", "cafe", "corporate"] as const;
-type Interest = (typeof INTERESTS)[number];
+type Level = components["schemas"]["Level"];
+const LEVELS: Level[] = ["beginner", "intermediate", "advanced", "competitive"];
 
 type State =
   | { kind: "loading" }
@@ -15,7 +16,10 @@ type State =
   | { kind: "ready"; noticeVersion: number }
   | { kind: "sent" };
 
-/** Pre-launch waitlist with double opt-in (Stage 1B). The API answers the same for everyone. */
+/**
+ * Pre-launch waitlist with double opt-in (Stage 1B). Data minimisation (GDPR art. 5(1)(c)):
+ * only name and email, plus an optional playing level. The API answers the same for everyone.
+ */
 export function WaitlistForm() {
   const t = useTranslations("web.waitlist");
   const tErrors = useTranslations("errors");
@@ -25,7 +29,6 @@ export function WaitlistForm() {
   const [state, setState] = useState<State>({ kind: "loading" });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [interests, setInterests] = useState<Interest[]>(["padel"]);
 
   useEffect(() => {
     let cancelled = false;
@@ -43,9 +46,6 @@ export function WaitlistForm() {
     };
   }, [locale]);
 
-  const toggle = (value: Interest) =>
-    setInterests((current) => (current.includes(value) ? current.filter((i) => i !== value) : [...current, value]));
-
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (state.kind !== "ready" || submitting) return;
@@ -58,8 +58,7 @@ export function WaitlistForm() {
         body: {
           name: String(form.get("name") ?? ""),
           email: String(form.get("email") ?? ""),
-          phone: String(form.get("phone") ?? ""),
-          interests,
+          level: LEVELS.find((l) => l === form.get("level")) ?? null,
           language: locale,
           notice_version: state.noticeVersion,
           accepted_notice: form.get("consent") === "on",
@@ -93,32 +92,40 @@ export function WaitlistForm() {
   }
 
   return (
-    <form className="form" onSubmit={onSubmit} noValidate={false} aria-describedby={error ? `${ids}-error` : undefined}>
+    <form className="form" onSubmit={onSubmit} aria-describedby={error ? `${ids}-error` : undefined}>
       <div className="field">
-        <label htmlFor={`${ids}-name`}>{t("name")}</label>
+        <label htmlFor={`${ids}-name`}>
+          {t("name")} <span className="req">({t("required")})</span>
+        </label>
         <input id={`${ids}-name`} name="name" className="input" required maxLength={150} autoComplete="name" />
       </div>
-      <div className="row-2">
-        <div className="field">
-          <label htmlFor={`${ids}-email`}>{t("email")}</label>
-          <input id={`${ids}-email`} name="email" type="email" className="input" required maxLength={254} autoComplete="email" inputMode="email" />
-        </div>
-        <div className="field">
-          <label htmlFor={`${ids}-phone`}>{t("phone")}</label>
-          <input id={`${ids}-phone`} name="phone" type="tel" className="input" maxLength={30} autoComplete="tel" inputMode="tel" />
-        </div>
+      <div className="field">
+        <label htmlFor={`${ids}-email`}>
+          {t("email")} <span className="req">({t("required")})</span>
+        </label>
+        <input
+          id={`${ids}-email`}
+          name="email"
+          type="email"
+          className="input"
+          required
+          maxLength={254}
+          autoComplete="email"
+          inputMode="email"
+          spellCheck={false}
+        />
       </div>
-      <fieldset className="field">
-        <legend>{t("interests")}</legend>
-        <div className="chips">
-          {INTERESTS.map((value) => (
-            <label className="chip" key={value}>
-              <input type="checkbox" checked={interests.includes(value)} onChange={() => toggle(value)} />
-              <span>{t(`interest.${value}`)}</span>
-            </label>
+      <div className="field">
+        <label htmlFor={`${ids}-level`}>{t("level")}</label>
+        <select id={`${ids}-level`} name="level" className="select" defaultValue="">
+          <option value="">{t("levelNone")}</option>
+          {LEVELS.map((level) => (
+            <option key={level} value={level}>
+              {t(`levels.${level}`)}
+            </option>
           ))}
-        </div>
-      </fieldset>
+        </select>
+      </div>
       <div className="honeypot" aria-hidden="true">
         <label htmlFor={`${ids}-website`}>Website</label>
         <input id={`${ids}-website`} name="website" tabIndex={-1} autoComplete="off" />

@@ -64,6 +64,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q41](#q41) | Avocat / DPO pentru revizuirea textelor legale *(nouă)* | URGENTĂ | Etapa 1B (nota de informare pentru lista de așteptare), Etapa 5 (formularul GDPR al ligii) | REZOLVATĂ |
 | [Q42](#q42) | Fluxul de aprobare pe GitHub *(nouă)* | SCĂZUTĂ | Etapa 0 (organizare) | REZOLVATĂ |
 | [Q43](#q43) | Vârsta minimă pentru a-ți crea singur cont *(nouă, Etapa 1A)* | MEDIE | Etapa 1B / 11 (înscrierea publică) | REZOLVATĂ |
+| [Q44](#q44) | Randări sau fotografii reale ale spațiilor (vestiare, pilates, sală de evenimente, cafenea, lounge) *(nouă, Etapa 1B)* | MEDIE | Etapa 1B (grila de facilități), Etapa 11 (website-ul complet), Etapa 13 (marketing) | DESCHISĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -502,3 +503,13 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Întrebarea:** De la ce vârstă își poate face cineva singur cont online? Sub această vârstă, contul îl face un părinte (conturi de copii, Q7). În România, vârsta de la care o persoană își poate da singură acordul pentru servicii online este 16 ani (de verificat).
 - **Varianta implicită (propusă în Etapa 1A):** 16 ani; configurabilă din admin (`accounts.min_self_registration_age`, marcată `DE_CONFIRMAT`). Liga rămâne 18+ (R-006).
 - **Răspunsul proprietarului (27.09.2026):** 14 ani. Setarea `accounts.min_self_registration_age` = 14 (confirmat). Notă: pentru persoanele de 14–15 ani, orice prelucrare bazată pe consimțământ (de exemplu mesaje de marketing) are nevoie de acordul părintelui (vârsta consimțământului digital în România: 16 ani, Legea 190/2018); astfel de opțiuni vor fi oprite pentru ei până la 16 ani.
+
+## Întrebări noi, apărute în Etapa 1B
+
+### <a id="q44"></a>Q44 — Randări sau fotografii reale ale spațiilor
+
+- **Prioritate:** MEDIE · **Blochează:** imaginile din grila „Facilități integrate” (Etapa 1B), website-ul complet (Etapa 11), materialele de marketing (Etapa 13)
+- **Stare:** DESCHISĂ
+- **Context:** proprietarul a cerut (27.09.2026) randări fotorealiste pentru vestiare, studioul de Pilates Reformer și sala de evenimente. Nu avem încă proiectul de arhitectură (planuri, materiale, finisaje), iar o randare „inventată” ar fi prezentată ca realitate (invariantul 12). Arena și cardul de membru sunt randări proprii, marcate ca ilustrative.
+- **Întrebarea:** Există (sau va exista) un proiect de arhitectură / design interior cu randări? Sunt disponibile planurile și materialele, ca să realizăm noi randările? Când se pot face fotografii reale?
+- **Varianta implicită:** până la primirea materialelor, grila de facilități folosește pictograme și nota „Randările fotorealiste ale acestor spații vor fi adăugate pe baza proiectului de arhitectură”. Folosim doar imagini proprii (fără imagini cumpărate de pe site-uri de stock).

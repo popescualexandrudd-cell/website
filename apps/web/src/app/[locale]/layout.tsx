@@ -1,22 +1,23 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
-import Script from "next/script";
+import { ColorSurface50 } from "@jungle/design-tokens/tokens";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import "../globals.css";
+import { CookieConsent } from "@/components/CookieConsent";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { routing } from "@/i18n/routing";
 import { INDEXABLE, SITE_URL } from "@/lib/site";
 
-const FONT_FILES = ["unbounded-latin.woff2", "manrope-latin.woff2", "unbounded-ro.woff2", "manrope-ro.woff2"];
+const FONT_FILES = ["inter-latin.woff2", "inter-ro.woff2"];
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export const viewport: Viewport = { themeColor: "#040C09", colorScheme: "dark" };
+export const viewport: Viewport = { themeColor: ColorSurface50, colorScheme: "light" };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -54,8 +55,6 @@ export default async function LocaleLayout({
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "web.nav" });
-  const umamiSrc = process.env.NEXT_PUBLIC_UMAMI_SRC;
-  const umamiId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
   return (
     <html lang={locale}>
       <head>
@@ -71,8 +70,9 @@ export default async function LocaleLayout({
           <Header />
           <main id="main">{children}</main>
           <Footer />
+          {/* Statistics (Umami) load only after consent, from the consent manager. */}
+          <CookieConsent />
         </NextIntlClientProvider>
-        {umamiSrc && umamiId && <Script src={umamiSrc} data-website-id={umamiId} strategy="afterInteractive" />}
       </body>
     </html>
   );

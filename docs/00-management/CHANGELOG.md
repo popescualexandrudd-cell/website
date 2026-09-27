@@ -4,6 +4,24 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 1B, revizia 2 „Premium Light” — 27.09.2026 (așteaptă aprobarea)
+#### Modificat
+- Identitatea vizuală provizorie „Premium Light” înlocuiește „Neon Jungle”: fundal deschis, bleumarin, smarald, accente metalice, fontul Inter (`docs/12-branding/04-identitate-provizorie-premium-light.md`); contrast AAA pentru text.
+- Pagina de pre-lansare refăcută pe povestea clubului: deschidere cu vederea din lounge-ul de la 3 m, Arena (4 terenuri), Ecosistemul (rezervare → acces digital → ieșire), Facilități integrate, Liga și cardurile de statut (Argint, Aur, Platină, Diamant), Locație, Lista de așteptare.
+- Scene 3D noi cu materiale fizice (PBR) și reflexii: arena văzută din lounge (privirea coboară la derulare, GSAP ScrollTrigger) și cardul de membru metalic; imagini statice proprii, cu text alternativ, când 3D-ul nu rulează.
+- Lista de așteptare: doar nume, email și, opțional, nivelul de joc (minimizarea datelor); telefonul și interesele au fost eliminate.
+#### Adăugat
+- Pagini legale RO/EN: Termeni și condiții, Politica de confidențialitate, Politica de anulare și rambursare, Politica de cookies (redactate fără avocat, Q41).
+- Gestionar de cookies propriu: statisticile pornesc doar după „Accept”; refuzul are aceeași greutate; alegerea se poate schimba din subsol.
+- Subsol cu datele de identificare ale firmei (din configurare, `GET /api/v1/config/company`), linkurile legale și linkul ANPC SAL.
+- Meniu pe mobil, legătură „Sari la conținut”, focus vizibil, etichete explicite pe butoane.
+- Întrebarea nouă Q44 (randări sau fotografii reale ale spațiilor).
+#### Reparat la revizuire
+- Linkurile din texte nu erau subliniate (se distingeau doar prin culoare, WCAG 1.4.1).
+- Linkul spre politica de rambursare din termeni ducea la o adresă greșită.
+- Biblioteca 3D se descărca și pe dispozitivele fără placă video; acum placa video se verifică înainte (mobil: performanță 86 → 95).
+- Textul din deschidere avea contrast slab peste randare; adăugat un voal deschis în spatele lui.
+
 ### Etapa 1B — 27.09.2026 (așteaptă aprobarea)
 #### Adăugat
 - `apps/web` (Next.js 16): pagina de pre-lansare RO/EN cu adrese traduse, scenă 3D în timp real (Three.js), carduri 3D, medalii 3D ale rangurilor, apariții la derulare, contoare, hartă stilizată; SEO (metadate, hreflang, sitemap, robots, date structurate, imagine Open Graph); antete de securitate (CSP).

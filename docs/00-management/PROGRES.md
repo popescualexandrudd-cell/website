@@ -3,11 +3,11 @@
 > Actualizat la fiecare sesiune de lucru. Prima secțiune spune mereu **unde suntem acum**.
 
 ## Unde suntem acum
-- **Etapa curentă:** Etapa 1B (pagina de pre-lansare) — **livrată pe 27.09.2026, așteaptă aprobarea proprietarului.** Raport: [verificare/etapa-1b/RAPORT.md](verificare/etapa-1b/RAPORT.md).
+- **Etapa curentă:** Etapa 1B (pagina de pre-lansare), **revizia 2 „Premium Light”**, livrată pe 27.09.2026, așteaptă aprobarea proprietarului. Raport: [verificare/etapa-1b/RAPORT.md](verificare/etapa-1b/RAPORT.md). În paralel a început Etapa 2 (motorul ligii), la cererea proprietarului („după acestea continuă cu următoarea etapă”).
 - **Etapa 1A:** aprobată de proprietar pe 27.09.2026 (merge în `main`). Raport: [verificare/etapa-1a/RAPORT.md](verificare/etapa-1a/RAPORT.md).
 - **Etapa 0:** aprobată de proprietar pe 26.09.2026 (tag `etapa-0`, branch `main`).
-- **Următoarea etapă:** 1B (pagina de pre-lansare), după aprobarea Etapei 1A.
-- **Întrebări încă deschise care contează curând:** Q26 (datele firmei), Q39 (domeniu, marcă), Q24 (furnizor de email), Q23 (modelele de hardware) — vezi [INTREBARI_DESCHISE.md](INTREBARI_DESCHISE.md).
+- **Următoarea etapă:** 2 (motorul ligii + simulări).
+- **Întrebări încă deschise care contează curând:** Q26 (datele firmei: subsol și texte legale), Q39 (domeniu, marcă), Q24 (furnizor de email), Q23 (modelele de hardware), Q44 (randări sau fotografii ale spațiilor) — vezi [INTREBARI_DESCHISE.md](INTREBARI_DESCHISE.md).
 - **Branch de lucru:** `claude/hopeful-euler-rguibn` (repository `popescualexandrudd-cell/website`).
 
 ## Starea etapelor
@@ -16,7 +16,7 @@
 |---|---|---|---|
 | 0 | Documentație, structură, ADR-uri, întrebări, plan | oct. 2026 | **Aprobată 26.09.2026** |
 | 1A | Fundația backend | oct. 2026 | **Aprobată 27.09.2026** |
-| 1B | Pagina de pre-lansare | oct.–nov. 2026 | Livrată, așteaptă aprobarea |
+| 1B | Pagina de pre-lansare | oct.–nov. 2026 | Livrată (revizia 2 „Premium Light”), așteaptă aprobarea |
 | 2 | Motorul ligii + simulări | nov. 2026 | Neîncepută |
 | 3 | Rezervări, prețuri, anulări, prezențe | nov. 2026 | Neîncepută |
 | 4 | Bani, abonamente, corporate, vouchere, cafenea | nov.–dec. 2026 | Neîncepută |
@@ -35,9 +35,9 @@
 
 ## Etapa 1B — cum verifici (click cu click)
 1. Pe GitHub, branch-ul `claude/hopeful-euler-rguibn`, deschide `docs/00-management/verificare/etapa-1b/RAPORT.md`.
-2. Deschide capturile de ecran din același folder (`ro-desktop-01-hero.png` și următoarele; `ro-mobil-…` pentru telefon, `en-…` pentru engleză).
-3. Citește nota de informare: `docs/07-securitate-gdpr-legal/texte/nota-informare-lista-asteptare.ro.md`.
-4. Identitatea vizuală: `docs/12-branding/03-identitate-provizorie-neon-jungle.md`.
+2. Deschide capturile de ecran din același folder: `ro-desktop-00-banner-cookies.png`, `ro-desktop-01-hero.png` și următoarele; `ro-mobil-…` pentru telefon, `en-…` pentru engleză.
+3. Citește textele legale din `docs/07-securitate-gdpr-legal/texte/`: termeni, confidențialitate, rambursare, cookies, nota de informare.
+4. Identitatea vizuală: `docs/12-branding/04-identitate-provizorie-premium-light.md`.
 
 ## Etapa 1A — cum verifici (click cu click)
 1. Pe GitHub, branch-ul `claude/hopeful-euler-rguibn`, deschide `docs/00-management/verificare/etapa-1a/RAPORT.md`: ce s-a construit, rezultatele testelor, ce s-a reparat la revizuire.
@@ -78,3 +78,4 @@
 - **27.09.2026** — Etapa 1A livrată: backend Django + API, conturi, roluri, 2FA, locații, audit, configurare, traduceri, client API; 109 teste, acoperire 97%. Tag-ul `etapa-0` nu a putut fi publicat din mediul de lucru (GitHub a refuzat push-ul de tag-uri, 403); există local și trebuie creat din GitHub → Releases.
 - **27.09.2026** — Etapa 1A aprobată; Q43 = 14 ani. Cerință nouă a proprietarului pentru 1B: design și branding moderne, estetice, culori atractive, efecte 3D. Început Etapa 1B.
 - **27.09.2026** — Etapa 1B livrată: pagina de pre-lansare RO/EN cu identitatea „Neon Jungle”, scenă 3D, listă de așteptare cu dublă confirmare, nota de informare redactată (Q41). Lighthouse mobil 93/100/100/100, desktop 100/100/100/100; 128 teste backend, 16 teste cap-coadă. Tag-ul `etapa-1a` există doar local (push de tag-uri refuzat).
+- **27.09.2026** — Cerință nouă a proprietarului: estetică ultra-premium, luminoasă, randări 3D realiste, conformitate (contrast, cookies, date firmă, pagini legale, minimizarea datelor). Etapa 1B refăcută ca „Premium Light”. Lista de așteptare cere doar nume, email și, opțional, nivel. Adăugate paginile legale RO/EN, gestionarul de cookies și subsolul cu datele firmei și ANPC SAL. Lighthouse mobil 95/100/100/100, desktop 100/100/100/100; 131 teste backend, 26 teste cap-coadă. Întrebare nouă: Q44.

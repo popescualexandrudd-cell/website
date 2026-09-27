@@ -1,39 +1,35 @@
 {
-  "$description": "Provisional 'Neon Jungle' palette (ADR-0020). Deliberately different from the Tenis Elite green/lime.",
+  "$description": "Provisional 'Premium Light' palette (owner's brief, 27.09.2026; ADR-0020). Light, calm, high-contrast; no green/lime of the Tenis Elite site.",
   "color": {
-    "night": {
-      "950": { "$type": "color", "$value": "#040C09", "$description": "Page background: jungle at night" },
-      "900": { "$type": "color", "$value": "#071610" },
-      "800": { "$type": "color", "$value": "#0C2219" },
-      "700": { "$type": "color", "$value": "#133226" },
-      "600": { "$type": "color", "$value": "#1C4535" }
+    "surface": {
+      "0": { "$type": "color", "$value": "#FFFFFF", "$description": "Cards, inputs" },
+      "50": { "$type": "color", "$value": "#F8FAFC", "$description": "Page background (slate-50)" },
+      "100": { "$type": "color", "$value": "#F1F5F9", "$description": "Alternate sections" },
+      "200": { "$type": "color", "$value": "#E2E8F0", "$description": "Borders, dividers" }
     },
-    "orchid": {
-      "500": { "$type": "color", "$value": "#FF3DA5", "$description": "Primary accent: neon orchid" },
-      "400": { "$type": "color", "$value": "#FF6CBC" },
-      "300": { "$type": "color", "$value": "#FF9FD3" }
+    "ink": {
+      "900": { "$type": "color", "$value": "#0B1220", "$description": "Headings and body text" },
+      "700": { "$type": "color", "$value": "#334155", "$description": "Secondary text" },
+      "500": { "$type": "color", "$value": "#5B6B80", "$description": "Captions (AA on light surfaces)" }
     },
-    "toucan": {
-      "500": { "$type": "color", "$value": "#FF8A1F", "$description": "Secondary accent: toucan orange" },
-      "400": { "$type": "color", "$value": "#FFA552" }
+    "navy": {
+      "900": { "$type": "color", "$value": "#0B2545", "$description": "Primary: deep navy (buttons, dark sections)" },
+      "700": { "$type": "color", "$value": "#13315C" },
+      "100": { "$type": "color", "$value": "#E7EEF7" }
     },
-    "firefly": {
-      "400": { "$type": "color", "$value": "#FFD84D", "$description": "Highlights: fireflies" }
+    "emerald": {
+      "700": { "$type": "color", "$value": "#0E6B4F", "$description": "Mature emerald: accents, success" },
+      "600": { "$type": "color", "$value": "#12805E" },
+      "100": { "$type": "color", "$value": "#E3F2EC" }
     },
-    "lagoon": {
-      "400": { "$type": "color", "$value": "#2BE8D2", "$description": "Cool accent: glass walls, links" },
-      "300": { "$type": "color", "$value": "#7FF3E4" }
+    "metal": {
+      "champagne": { "$type": "color", "$value": "#8C6A3C", "$description": "Metallic accent for text/lines (AA on light)" },
+      "gold": { "$type": "color", "$value": "#C8A96A", "$description": "Decorative gold (not for text)" },
+      "silver": { "$type": "color", "$value": "#A7B1BD", "$description": "Decorative silver (not for text)" },
+      "platinum": { "$type": "color", "$value": "#DCE2E8", "$description": "Decorative platinum (not for text)" }
     },
-    "leaf": {
-      "500": { "$type": "color", "$value": "#1F8A5B", "$description": "Deep emerald leaves (never lime)" },
-      "400": { "$type": "color", "$value": "#34B67B" }
-    },
-    "sand": {
-      "100": { "$type": "color", "$value": "#F6EBD9", "$description": "Main text on dark" },
-      "300": { "$type": "color", "$value": "#C9D4CB", "$description": "Secondary text" },
-      "500": { "$type": "color", "$value": "#8FA398", "$description": "Muted text (large text only)" }
-    },
-    "danger": { "$type": "color", "$value": "#FF6B6B" },
-    "success": { "$type": "color", "$value": "#4BE39B" }
+    "focus": { "$type": "color", "$value": "#1D4ED8", "$description": "Focus ring" },
+    "danger": { "$type": "color", "$value": "#B42318" },
+    "success": { "$type": "color", "$value": "#0E6B4F" }
   }
 }

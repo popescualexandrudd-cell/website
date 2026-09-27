@@ -6,6 +6,8 @@ Identitatea vizuală tehnică (design tokens, §12.4) și platforma de brand (§
 
 - [12.4 Branding tehnic (design tokens)](01-branding-tehnic-design-tokens.md)
 - [15.4 Branding (în `docs/12-branding/`)](02-platforma-de-brand.md)
+- [Identitatea provizorie „Premium Light”](04-identitate-provizorie-premium-light.md) (în vigoare din 27.09.2026)
+- [Identitatea provizorie „Neon Jungle”](03-identitate-provizorie-neon-jungle.md) (înlocuită, istoric)
 
 ## Urmează
 

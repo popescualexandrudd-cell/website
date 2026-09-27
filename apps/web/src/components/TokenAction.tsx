@@ -57,7 +57,7 @@ export function TokenAction({ mode, token }: { mode: Mode; token: string | null 
 
   return (
     <div className="panel" aria-live="polite">
-      <h1 className="section-title">{t("title")}</h1>
+      <h1 className="h2">{t("title")}</h1>
       {mode === "unsubscribe" && status === "idle" && token && (
         <>
           <p className="lead">{t("lead")}</p>

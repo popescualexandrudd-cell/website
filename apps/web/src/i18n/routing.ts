@@ -12,6 +12,10 @@ export const routing = defineRouting({
     "/waitlist/confirm": { ro: "/lista/confirmare", en: "/waitlist/confirm" },
     "/waitlist/unsubscribe": { ro: "/lista/dezabonare", en: "/waitlist/unsubscribe" },
     "/privacy-notice": { ro: "/nota-informare", en: "/privacy-notice" },
+    "/terms": { ro: "/termeni-si-conditii", en: "/terms" },
+    "/privacy": { ro: "/confidentialitate", en: "/privacy" },
+    "/refunds": { ro: "/anulare-si-rambursare", en: "/refunds" },
+    "/cookies": { ro: "/cookies", en: "/cookies" },
   },
 });
 

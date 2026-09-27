@@ -7,7 +7,7 @@ export default function NotFound() {
     <section className="page">
       <div className="container">
         <div className="panel">
-          <h1 className="section-title">404</h1>
+          <h1 className="h2">404</h1>
           <Link href="/">{t("back")}</Link>
         </div>
       </div>

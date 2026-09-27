@@ -6,7 +6,7 @@ Memoria operațională a proiectului. Se actualizează la finalul fiecărei etap
 Sistem digital propriu pentru clubul **Jungle Padel** (Șoseaua Biruinței, lângă Selgros Pantelimon): 4 terenuri de padel închise, pilates Reformer (4 → 6 aparate), sală de evenimente, cafenea, ligă de padel de tip MMR. Deschidere: **martie 2027**. Proprietarul **nu are programator**: noi construim și întreținem, în sesiuni succesive. Backend-ul și website-ul sunt singura sursă de adevăr; chioșcurile, ecranele, afișajul cafenelei și adminul sunt „ferestre” spre aceleași date, conectate live.
 
 ## Stare curentă
-- **Etapa 0 aprobată pe 26.09.2026** (tag `etapa-0` doar local: push-ul de tag-uri e refuzat de GitHub din acest mediu). **Etapa 1A aprobată pe 27.09.2026.** **Etapa 1B (pagina de pre-lansare) livrată pe 27.09.2026, așteaptă aprobarea.** Proprietarul cere design modern, estetic, culori atractive, efecte 3D (identitatea provizorie „Neon Jungle”: `docs/12-branding/03-identitate-provizorie-neon-jungle.md`).
+- **Etapa 0 aprobată pe 26.09.2026** (tag `etapa-0` doar local: push-ul de tag-uri e refuzat de GitHub din acest mediu). **Etapa 1A aprobată pe 27.09.2026.** **Etapa 1B (pagina de pre-lansare) livrată pe 27.09.2026 în revizia 2 „Premium Light”, așteaptă aprobarea.** Proprietarul a cerut o estetică ultra-premium, luminoasă, cu randări 3D realiste (identitatea provizorie: `docs/12-branding/04-identitate-provizorie-premium-light.md`; „Neon Jungle” e doar istoric). **Etapa 2 (motorul ligii) începută** la cererea proprietarului.
 - Decizii ale proprietarului din 26.09.2026: Apple Wallet amânat (Q24); textele legale le redactăm noi, fără avocat (Q41); hardware ales mai târziu, lucrăm cu simulatoare (Q23); server propriu sau închiriat (Q40); cont propriu de la 14 ani (Q43, 27.09.2026).
 - Detalii: [docs/00-management/PROGRES.md](docs/00-management/PROGRES.md).
 
@@ -80,8 +80,9 @@ Monorepo: workspace pnpm (TypeScript) + workspace uv (Python) (ADR-0002). Featur
 ### Convenții pentru website (`apps/web`)
 - Toate textele în `packages/i18n/messages/{ro,en}.json` sub `web.*`; niciun text scris direct în componente.
 - Culori, fonturi, umbre: doar din tokeni (`var(--color-…)`), niciodată valori noi scrise direct.
-- Scena 3D respectă regulile de performanță (doar GPU real, după `load`, 30 fps pe mobil, `?3d=force` pentru demo); ținta Lighthouse ≥ 90 pe mobil la toate categoriile.
-- Doar fapte din `docs/` (fără prețuri, cifre sau recenzii inventate); ilustrațiile sunt marcate ca ilustrații.
+- Scenele 3D respectă regulile din `src/lib/webgl.ts`: GPU real verificat înainte de a descărca three.js, după `load`, randare doar la schimbări, 30 fps pe mobil, `?3d=force` pentru demo, `?3d=capture` pentru imaginile statice. Orice scenă are o imagine statică proprie cu `alt` (`node scripts/render-stills.mjs`, în `public/renders/`). Ținta Lighthouse ≥ 90 pe mobil la toate categoriile.
+- Conformitate: contrast AAA pentru text (testat în `packages/design-tokens`); linkurile din text sunt subliniate; nimic opțional (statistici) înainte de acordul din `CookieConsent`; formularele cer doar datele strict necesare; subsolul arată datele firmei din `GET /api/v1/config/company` și linkul ANPC SAL (platforma SOL/ODR a UE s-a închis în 2025). Fără widget-uri, fonturi sau imagini de la terți.
+- Doar fapte din `docs/` (fără prețuri, cifre sau recenzii inventate); ilustrațiile și randările sunt marcate ca ilustrative; fără randări inventate ale spațiilor încă neproiectate (Q44).
 - Primul admin: `JUNGLE_ADMIN_PASSWORD=... uv run python apps/backend/manage.py bootstrap_admin --email ... --first-name ... --last-name ...`
 - PostgreSQL local: `DATABASE_URL` (implicit `postgres://jungle:jungle@localhost:5432/jungle`); în mediul cloud: `pg_ctlcluster 16 main start`.
 

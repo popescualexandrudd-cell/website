@@ -22,7 +22,7 @@ Folosirea site-ului și, de la deschiderea clubului, a serviciilor noastre: cont
 - La intrarea pe teren, fiecare jucător își scanează cardul.
 
 ## 5. Anulări și rambursări
-Regulile sunt în [Politica de anulare și rambursare](/ro/rambursari). Pe scurt: anularea cu cel puțin 24 de ore înainte este gratuită; anularea mai târziu sau neprezentarea se plătesc.
+Regulile sunt în [Politica de anulare și rambursare](/ro/anulare-si-rambursare). Pe scurt: anularea cu cel puțin 24 de ore înainte este gratuită; anularea mai târziu sau neprezentarea se plătesc.
 
 ## 6. Prețuri și plăți
 Prețurile sunt afișate în lei, pe site și la club, înainte de cumpărare. **[Mențiunea privind TVA — DE_CONFIRMAT cu contabilul]**. Pentru fiecare plată la club primești bon fiscal. Firmele pot cere factură.

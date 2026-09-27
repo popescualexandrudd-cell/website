@@ -3,40 +3,36 @@
  */
 
 :root {
-  --font-display: 'Unbounded Variable', Unbounded, system-ui, sans-serif;
-  --font-body: 'Manrope Variable', Manrope, system-ui, sans-serif;
-  --radius-sm: 10px;
-  --radius-md: 18px;
-  --radius-lg: 28px;
+  --font-sans: 'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
   --radius-pill: 999px;
-  --space-gutter: clamp(16px, 4vw, 48px);
-  --space-section: clamp(72px, 12vw, 160px);
-  --shadow-glow-orchid: 0 0 40px rgba(255, 61, 165, 0.45);
-  --shadow-glow-lagoon: 0 0 36px rgba(43, 232, 210, 0.35);
-  --shadow-card: 0 30px 60px -20px rgba(0, 0, 0, 0.65);
-  --gradient-sunset: linear-gradient(120deg, #FF3DA5 0%, #FF8A1F 60%, #FFD84D 100%);
-  --gradient-lagoon: linear-gradient(120deg, #2BE8D2 0%, #1F8A5B 100%);
-  --motion-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --space-gutter: clamp(20px, 5vw, 64px);
+  --space-section: clamp(88px, 13vw, 176px);
+  --shadow-soft: 0 1px 2px rgba(11, 18, 32, 0.04), 0 8px 24px rgba(11, 18, 32, 0.06);
+  --shadow-lift: 0 2px 4px rgba(11, 18, 32, 0.05), 0 24px 48px -12px rgba(11, 18, 32, 0.18);
+  --motion-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --motion-duration-fast: 180ms;
-  --motion-duration-slow: 700ms;
-  --color-night-600: #1c4535;
-  --color-night-700: #133226;
-  --color-night-800: #0c2219;
-  --color-night-900: #071610;
-  --color-night-950: #040c09; /** Page background: jungle at night */
-  --color-orchid-300: #ff9fd3;
-  --color-orchid-400: #ff6cbc;
-  --color-orchid-500: #ff3da5; /** Primary accent: neon orchid */
-  --color-toucan-400: #ffa552;
-  --color-toucan-500: #ff8a1f; /** Secondary accent: toucan orange */
-  --color-firefly-400: #ffd84d; /** Highlights: fireflies */
-  --color-lagoon-300: #7ff3e4;
-  --color-lagoon-400: #2be8d2; /** Cool accent: glass walls, links */
-  --color-leaf-400: #34b67b;
-  --color-leaf-500: #1f8a5b; /** Deep emerald leaves (never lime) */
-  --color-sand-100: #f6ebd9; /** Main text on dark */
-  --color-sand-300: #c9d4cb; /** Secondary text */
-  --color-sand-500: #8fa398; /** Muted text (large text only) */
-  --color-danger: #ff6b6b;
-  --color-success: #4be39b;
+  --motion-duration-slow: 800ms;
+  --color-surface-0: #ffffff; /** Cards, inputs */
+  --color-surface-50: #f8fafc; /** Page background (slate-50) */
+  --color-surface-100: #f1f5f9; /** Alternate sections */
+  --color-surface-200: #e2e8f0; /** Borders, dividers */
+  --color-ink-500: #5b6b80; /** Captions (AA on light surfaces) */
+  --color-ink-700: #334155; /** Secondary text */
+  --color-ink-900: #0b1220; /** Headings and body text */
+  --color-navy-100: #e7eef7;
+  --color-navy-700: #13315c;
+  --color-navy-900: #0b2545; /** Primary: deep navy (buttons, dark sections) */
+  --color-emerald-100: #e3f2ec;
+  --color-emerald-600: #12805e;
+  --color-emerald-700: #0e6b4f; /** Mature emerald: accents, success */
+  --color-metal-champagne: #8c6a3c; /** Metallic accent for text/lines (AA on light) */
+  --color-metal-gold: #c8a96a; /** Decorative gold (not for text) */
+  --color-metal-silver: #a7b1bd; /** Decorative silver (not for text) */
+  --color-metal-platinum: #dce2e8; /** Decorative platinum (not for text) */
+  --color-focus: #1d4ed8; /** Focus ring */
+  --color-danger: #b42318;
+  --color-success: #0e6b4f;
 }

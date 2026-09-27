@@ -1,12 +1,14 @@
-/** Site-wide constants. Only facts confirmed in docs/ (no invented prices, numbers or reviews). */
+/** Site-wide constants. Only facts confirmed in docs/ or by the owner (no invented prices, numbers or reviews). */
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 export const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000").replace(/\/$/, "");
 export const INDEXABLE = process.env.SITE_INDEXABLE === "true";
 
 export const FACTS = {
   courts: 4, // §2.2
-  reformersAtOpening: 4, // R-100
+  loungeHeightM: 3, // owner, 27.09.2026: lounge suspended 3 m above the courts
   parking: 28, // §2.2: 18 + 10
+  seasonsOfPlay: 4, // §2.2: heated in winter, cooled in summer
+  reformersAtOpening: 4, // R-100
   seasonMonths: 3, // §6.13
 } as const;
 
@@ -18,3 +20,10 @@ export const ADDRESS = {
 } as const;
 
 export const MAP_URL = "https://www.openstreetmap.org/search?query=Selgros%20Pantelimon";
+
+/** ANPC alternative dispute resolution (SAL). The EU ODR platform closed on 20.07.2025 (Reg. (EU) 2024/3228). */
+export const ANPC_SAL_URL = "https://anpc.ro/ce-este-sal/";
+
+/** League card tiers shown on the site (visual status levels; the league ranks live in docs/03-liga). */
+export const CARD_TIERS = ["silver", "gold", "platinum", "diamond"] as const;
+export type CardTier = (typeof CARD_TIERS)[number];

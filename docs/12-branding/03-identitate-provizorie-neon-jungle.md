@@ -1,4 +1,6 @@
-# Identitatea vizuală provizorie „Neon Jungle”
+# Identitatea vizuală provizorie „Neon Jungle” (înlocuită)
+
+> **Înlocuită pe 27.09.2026** de [„Premium Light”](04-identitate-provizorie-premium-light.md), la cererea proprietarului. Păstrată doar ca istoric.
 
 > Creată în Etapa 1B (27.09.2026), la cererea proprietarului: „design și branding moderne, estetice, cu culori care să atragă, efecte 3D și altele”. Este **provizorie**: logo-ul, culorile și fonturile finale le alege proprietarul (§2.4, §15.4). Toate valorile stau în [`packages/design-tokens`](../../packages/design-tokens/) (ADR-0020), deci schimbarea identității se face dintr-un singur loc.
 

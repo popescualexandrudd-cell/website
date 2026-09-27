@@ -33,6 +33,8 @@ PIDS+=($!)
 
 echo "==> Production build of the website"
 export NEXT_PUBLIC_API_URL=http://localhost:8000 NEXT_PUBLIC_SITE_URL=http://localhost:3000 NEXT_TELEMETRY_DISABLED=1
+# A stand-in statistics script: the consent tests check that it is added only after "Accept".
+export NEXT_PUBLIC_UMAMI_SRC=http://localhost:3000/e2e-statistics.js NEXT_PUBLIC_UMAMI_WEBSITE_ID=e2e
 pnpm --filter @jungle/web build >"$WORK/build.log" 2>&1 || { cat "$WORK/build.log"; exit 1; }
 (cd apps/web && exec pnpm start >"$WORK/web.log" 2>&1) &
 PIDS+=($!)

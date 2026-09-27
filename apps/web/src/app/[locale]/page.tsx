@@ -1,33 +1,31 @@
-import type { CSSProperties } from "react";
 import { useTranslations } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { use } from "react";
-import { CountUp } from "@/components/CountUp";
-import HeroSceneLoader from "@/components/HeroSceneLoader";
-import {
-  IconCar, IconCoffee, IconCrown, IconLotus, IconMusic, IconParty, IconPin, IconRacket, IconRoute, IconStar, IconTrophy,
-} from "@/components/Icons";
+import { use, type ReactNode } from "react";
+import { HeroVisual } from "@/components/HeroVisual";
+import { IconCar, IconCheck, IconCoffee, IconLocker, IconLotus, IconMusic, IconPin, IconRoute } from "@/components/Icons";
+import { LeagueCard } from "@/components/LeagueCard";
 import { Reveal } from "@/components/Reveal";
-import { Tilt } from "@/components/Tilt";
+import { TimelineProgress } from "@/components/TimelineProgress";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { ADDRESS, FACTS, MAP_URL, SITE_URL } from "@/lib/site";
 
-const CARDS = [
-  { key: "padel", icon: IconRacket, accent: "var(--gradient-sunset)", shadow: "rgb(255 61 165 / .8)" },
-  { key: "league", icon: IconTrophy, accent: "linear-gradient(135deg,#FFD84D,#FF8A1F)", shadow: "rgb(255 138 31 / .8)" },
-  { key: "pilates", icon: IconLotus, accent: "var(--gradient-lagoon)", shadow: "rgb(43 232 210 / .7)" },
-  { key: "cafe", icon: IconCoffee, accent: "linear-gradient(135deg,#FFA552,#FF3DA5)", shadow: "rgb(255 61 165 / .7)" },
-  { key: "events", icon: IconMusic, accent: "linear-gradient(135deg,#FF6CBC,#6D7DFF)", shadow: "rgb(109 125 255 / .7)" },
-  { key: "room", icon: IconParty, accent: "linear-gradient(135deg,#7FF3E4,#FFD84D)", shadow: "rgb(127 243 228 / .7)" },
-] as const;
+// The footer shows the company details from the admin configuration: refresh the static page every 5 minutes.
+export const revalidate = 300;
 
-const RANKS = ["bronze", "silver", "gold", "platinum", "diamond", "master", "king"] as const;
+const FACILITIES: { key: "lockers" | "pilates" | "events" | "lounge"; icon: () => ReactNode }[] = [
+  { key: "lockers", icon: () => <IconLocker size={44} /> },
+  { key: "pilates", icon: () => <IconLotus size={44} /> },
+  { key: "events", icon: () => <IconMusic size={44} /> },
+  { key: "lounge", icon: () => <IconCoffee size={44} /> },
+];
 
 export default function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = use(params);
   setRequestLocale(locale);
   const t = useTranslations("web");
-  const marquee = t.raw("marquee") as string[];
+  const points = t.raw("arena.points") as string[];
+  const steps = t.raw("ecosystem.steps") as { title: string; text: string }[];
+  const rules = t.raw("league.rules") as string[];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -49,167 +47,196 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
 
-      {/* Hero */}
+      {/* Hero: the view from the lounge, 3 m above the courts */}
       <section className="hero" aria-labelledby="hero-title">
-        <div className="hero-backdrop" />
-        <HeroSceneLoader />
-        <div className="container hero-content">
-          <p className="eyebrow">
-            <span className="dot" aria-hidden="true" />
-            {t("hero.eyebrow")}
-          </p>
-          <h1 id="hero-title" className="display hero-title">
-            <span className="line">{t("hero.title1")}</span>
-            <span className="line glow">{t("hero.title2")}</span>
-          </h1>
-          <p className="hero-lead">{t("hero.lead")}</p>
-          <div className="hero-ctas">
-            <a className="btn btn-primary" href="#lista">
-              {t("hero.ctaPrimary")}
-            </a>
-            <a className="btn btn-ghost" href="#club">
-              {t("hero.ctaSecondary")}
-            </a>
+        <HeroVisual alt={t("hero.renderAlt")} />
+        <div className="container">
+          <div className="hero-content">
+            <p className="eyebrow">{t("hero.eyebrow")}</p>
+            <h1 id="hero-title" className="h1">
+              {t("hero.title")}
+            </h1>
+            <p className="lead">{t("hero.lead")}</p>
+            <div className="hero-ctas">
+              <a className="btn btn-primary" href="#lista">
+                {t("hero.ctaPrimary")}
+              </a>
+              <a className="btn btn-secondary" href="#arena">
+                {t("hero.ctaSecondary")}
+              </a>
+            </div>
+            <p className="render-note">{t("hero.renderNote")}</p>
           </div>
         </div>
-        <div className="scroll-hint" aria-hidden="true">
-          <i />
-          {t("hero.scroll")}
-        </div>
-        <p className="hero-note">{t("hero.note")}</p>
       </section>
 
-      {/* Marquee */}
-      <div className="marquee" aria-hidden="true">
-        <div className="marquee-track">
-          {[...marquee, ...marquee].map((word, i) => (
-            <span key={i}>{word}</span>
-          ))}
-        </div>
-      </div>
-
-      {/* Club */}
-      <section id="club" className="section" aria-labelledby="club-title">
-        <div className="aurora" />
+      {/* Arena */}
+      <section id="arena" className="section" aria-labelledby="arena-title">
         <div className="container">
-          <Reveal className="section-head">
-            <p className="kicker">{t("club.kicker")}</p>
-            <h2 id="club-title" className="section-title">{t("club.title")}</h2>
-            <p className="lead">{t("club.lead")}</p>
-          </Reveal>
-          <ul className="cards" role="list" style={{ listStyle: "none", padding: 0, margin: 0 }}>
-            {CARDS.map(({ key, icon: Icon, accent, shadow }, i) => (
-              <Reveal as="li" key={key} delay={i * 90}>
-                <Tilt>
-                  <article className="card">
-                    <div className="card-icon" style={{ "--accent": accent, "--accent-shadow": shadow } as CSSProperties}>
-                      <Icon />
-                    </div>
-                    <h3>{t(`club.cards.${key}.title`)}</h3>
-                    <p>{t(`club.cards.${key}.text`)}</p>
-                  </article>
-                </Tilt>
-              </Reveal>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* League */}
-      <section id="liga" className="section" aria-labelledby="league-title">
-        <div className="container league-grid">
-          <Reveal>
-            <p className="kicker">{t("league.kicker")}</p>
-            <h2 id="league-title" className="section-title">{t("league.title")}</h2>
-            <p className="lead">{t("league.lead")}</p>
-            <ul className="facts">
-              <li>{t("league.facts.ladders")}</li>
-              <li>{t("league.facts.season")}</li>
-              <li>{t("league.facts.live")}</li>
-            </ul>
-          </Reveal>
-          <Reveal delay={150}>
-            <ol className="medals" aria-label={t("league.kicker")} style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              {RANKS.map((rank, i) => (
-                <li key={rank}>
-                  <figure className="medal-wrap" style={{ margin: 0 }}>
-                    <div className={`medal rank-${rank}`} style={{ "--delay": `${-i * 1.1}s` } as CSSProperties} aria-hidden="true">
-                      <div className="edge" />
-                      <div className="face">{rank === "king" ? <IconCrown /> : <IconStar />}</div>
-                      <div className="face back">{rank === "king" ? <IconCrown /> : <IconStar />}</div>
-                    </div>
-                    <figcaption>{t(`league.ranks.${rank}`)}</figcaption>
-                  </figure>
-                </li>
-              ))}
-            </ol>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Numbers */}
-      <section className="section" aria-labelledby="numbers-title" style={{ paddingTop: 0 }}>
-        <div className="container">
-          <Reveal className="section-head">
-            <p id="numbers-title" className="kicker">{t("numbers.kicker")}</p>
-          </Reveal>
-          <div className="numbers">
+          <div className="split">
+            <Reveal>
+              <p className="kicker">{t("arena.kicker")}</p>
+              <h2 id="arena-title" className="h2">
+                {t("arena.title")}
+              </h2>
+              <p className="lead">{t("arena.lead")}</p>
+            </Reveal>
+            <Reveal delay={120}>
+              <ul className="checklist">
+                {points.map((point) => (
+                  <li key={point}>
+                    <IconCheck size={20} />
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          </div>
+          <dl className="stats">
             {(
               [
                 [FACTS.courts, "courts"],
-                [FACTS.reformersAtOpening, "reformers"],
+                [FACTS.loungeHeightM, "lounge"],
                 [FACTS.parking, "parking"],
-                [FACTS.seasonMonths, "season"],
+                [FACTS.seasonsOfPlay, "climate"],
               ] as const
-            ).map(([n, key], i) => (
-              <Reveal key={key} delay={i * 90}>
-                <div className="number">
-                  <CountUp to={n} />
-                  <span>{t(`numbers.${key}`)}</span>
-                </div>
+            ).map(([value, key], i) => (
+              <Reveal key={key} delay={i * 80} className="stat">
+                <dt className="sr-only">{t(`arena.stats.${key}`)}</dt>
+                <dd>
+                  <strong>{value}</strong>
+                  <span aria-hidden="true">{t(`arena.stats.${key}`)}</span>
+                </dd>
               </Reveal>
             ))}
+          </dl>
+        </div>
+      </section>
+
+      {/* Automated ecosystem: booking → digital access → exit */}
+      <section id="ecosistem" className="section section-dark" aria-labelledby="eco-title">
+        <div className="container split">
+          <div className="sticky-head">
+            <p className="kicker">{t("ecosystem.kicker")}</p>
+            <h2 id="eco-title" className="h2">
+              {t("ecosystem.title")}
+            </h2>
+            <p className="lead">{t("ecosystem.lead")}</p>
           </div>
+          <div className="timeline-wrap">
+            <TimelineProgress />
+            <ol className="timeline">
+              {steps.map((step) => (
+                <li key={step.title}>
+                  <h3>{step.title}</h3>
+                  <p>{step.text}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      {/* Integrated facilities */}
+      <section id="facilitati" className="section section-alt" aria-labelledby="fac-title">
+        <div className="container">
+          <Reveal className="section-head">
+            <p className="kicker">{t("facilities.kicker")}</p>
+            <h2 id="fac-title" className="h2">
+              {t("facilities.title")}
+            </h2>
+            <p className="lead">{t("facilities.lead")}</p>
+          </Reveal>
+          <ul className="grid-4">
+            {FACILITIES.map(({ key, icon }, i) => (
+              <Reveal as="li" key={key} delay={i * 80}>
+                <article className="facility">
+                  <div className="facility-visual" aria-hidden="true">
+                    {icon()}
+                  </div>
+                  <div className="facility-body">
+                    <h3>{t(`facilities.items.${key}.title`)}</h3>
+                    <p>{t(`facilities.items.${key}.text`)}</p>
+                  </div>
+                </article>
+              </Reveal>
+            ))}
+          </ul>
+          <p className="muted facilities-note">{t("facilities.rendersSoon")}</p>
+        </div>
+      </section>
+
+      {/* League and status cards */}
+      <section id="liga" className="section" aria-labelledby="league-title">
+        <div className="container split">
+          <Reveal>
+            <p className="kicker">{t("league.kicker")}</p>
+            <h2 id="league-title" className="h2">
+              {t("league.title")}
+            </h2>
+            <p className="lead">{t("league.lead")}</p>
+            <ul className="rules">
+              {rules.map((rule) => (
+                <li key={rule}>{rule}</li>
+              ))}
+            </ul>
+            <a className="btn btn-primary" href="#lista">
+              {t("league.cta")}
+            </a>
+          </Reveal>
+          <Reveal delay={120}>
+            <LeagueCard />
+          </Reveal>
         </div>
       </section>
 
       {/* Location */}
-      <section id="locatie" className="section" aria-labelledby="loc-title">
-        <div className="container location">
+      <section id="locatie" className="section section-alt" aria-labelledby="loc-title">
+        <div className="container split">
           <Reveal>
             <p className="kicker">{t("location.kicker")}</p>
-            <h2 id="loc-title" className="section-title">{t("location.title")}</h2>
-            <ul className="loc-list">
-              <li><IconPin /> {t("location.address")}</li>
-              <li><IconRoute /> {t("location.access")}</li>
-              <li><IconCar /> {t("location.parking")}</li>
+            <h2 id="loc-title" className="h2">
+              {t("location.title")}
+            </h2>
+            <ul className="location-list">
+              <li>
+                <IconPin /> {t("location.address")}
+              </li>
+              <li>
+                <IconRoute /> {t("location.access")}
+              </li>
+              <li>
+                <IconCar /> {t("location.parking")}
+              </li>
             </ul>
-            <a className="btn btn-ghost" href={MAP_URL} target="_blank" rel="noopener noreferrer">
+            <a className="btn btn-secondary" href={MAP_URL} target="_blank" rel="noopener noreferrer">
               {t("location.map")}
             </a>
           </Reveal>
-          <Reveal delay={150}>
-            <div className="map-card" aria-hidden="true">
-              <div className="road" style={{ left: "-10%", right: "-10%", top: "38%", transform: "rotate(-8deg)" }} />
-              <div className="road" style={{ top: "-10%", bottom: "-10%", left: "30%", width: 12, height: "auto", transform: "rotate(12deg)" }} />
-              <div className="road" style={{ left: "40%", right: "-10%", top: "70%", transform: "rotate(4deg)", height: 10 }} />
-              <div className="map-pin" />
-            </div>
+          <Reveal delay={120}>
+            <figure className="plan-figure">
+              <div className="plan" aria-hidden="true">
+                <span className="plan-road plan-road-a" />
+                <span className="plan-road plan-road-b" />
+                <span className="plan-pin" />
+              </div>
+              <figcaption className="muted">{t("location.mapNote")}</figcaption>
+            </figure>
           </Reveal>
         </div>
       </section>
 
       {/* Waitlist */}
       <section id="lista" className="section" aria-labelledby="wl-title">
-        <div className="container">
-          <Reveal className="waitlist">
-            <div>
-              <p className="kicker">{t("waitlist.kicker")}</p>
-              <h2 id="wl-title" className="section-title">
-                <span className="gradient-text">{t("waitlist.title")}</span>
-              </h2>
-              <p className="lead">{t("waitlist.lead")}</p>
-            </div>
+        <div className="container split">
+          <Reveal>
+            <p className="kicker">{t("waitlist.kicker")}</p>
+            <h2 id="wl-title" className="h2">
+              {t("waitlist.title")}
+            </h2>
+            <p className="lead">{t("waitlist.lead")}</p>
+          </Reveal>
+          <Reveal delay={120} className="form-panel">
             <WaitlistForm />
           </Reveal>
         </div>

@@ -1,30 +1,24 @@
 {
   "font": {
-    "display": { "$type": "fontFamily", "$value": ["Unbounded Variable", "Unbounded", "system-ui", "sans-serif"] },
-    "body": { "$type": "fontFamily", "$value": ["Manrope Variable", "Manrope", "system-ui", "sans-serif"] }
+    "sans": { "$type": "fontFamily", "$value": ["Inter Variable", "Inter", "system-ui", "-apple-system", "Segoe UI", "sans-serif"] }
   },
   "radius": {
-    "sm": { "$type": "dimension", "$value": "10px" },
-    "md": { "$type": "dimension", "$value": "18px" },
-    "lg": { "$type": "dimension", "$value": "28px" },
+    "sm": { "$type": "dimension", "$value": "8px" },
+    "md": { "$type": "dimension", "$value": "14px" },
+    "lg": { "$type": "dimension", "$value": "22px" },
     "pill": { "$type": "dimension", "$value": "999px" }
   },
   "space": {
-    "gutter": { "$type": "dimension", "$value": "clamp(16px, 4vw, 48px)" },
-    "section": { "$type": "dimension", "$value": "clamp(72px, 12vw, 160px)" }
+    "gutter": { "$type": "dimension", "$value": "clamp(20px, 5vw, 64px)" },
+    "section": { "$type": "dimension", "$value": "clamp(88px, 13vw, 176px)" }
   },
   "shadow": {
-    "glow-orchid": { "$type": "shadow", "$value": "0 0 40px rgba(255, 61, 165, 0.45)" },
-    "glow-lagoon": { "$type": "shadow", "$value": "0 0 36px rgba(43, 232, 210, 0.35)" },
-    "card": { "$type": "shadow", "$value": "0 30px 60px -20px rgba(0, 0, 0, 0.65)" }
-  },
-  "gradient": {
-    "sunset": { "$type": "gradient", "$value": "linear-gradient(120deg, #FF3DA5 0%, #FF8A1F 60%, #FFD84D 100%)" },
-    "lagoon": { "$type": "gradient", "$value": "linear-gradient(120deg, #2BE8D2 0%, #1F8A5B 100%)" }
+    "soft": { "$type": "shadow", "$value": "0 1px 2px rgba(11, 18, 32, 0.04), 0 8px 24px rgba(11, 18, 32, 0.06)" },
+    "lift": { "$type": "shadow", "$value": "0 2px 4px rgba(11, 18, 32, 0.05), 0 24px 48px -12px rgba(11, 18, 32, 0.18)" }
   },
   "motion": {
-    "ease-out": { "$type": "cubicBezier", "$value": [0.16, 1, 0.3, 1] },
+    "ease-out": { "$type": "cubicBezier", "$value": [0.22, 1, 0.36, 1] },
     "duration-fast": { "$type": "duration", "$value": "180ms" },
-    "duration-slow": { "$type": "duration", "$value": "700ms" }
+    "duration-slow": { "$type": "duration", "$value": "800ms" }
   }
 }

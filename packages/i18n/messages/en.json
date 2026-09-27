@@ -57,140 +57,172 @@
   "web": {
     "meta": {
       "title": "Jungle Padel — indoor padel club in Pantelimon · Opening March 2027",
-      "description": "Indoor padel on 4 courts, the ranked Jungle league, Reformer pilates, a specialty café and DJ nights. On Șoseaua Biruinței, next to Selgros Pantelimon. Join the waitlist.",
-      "ogAlt": "Jungle Padel — opening March 2027"
+      "description": "Four indoor padel courts, a lounge suspended three metres above them, Reformer pilates and a league with live rankings. Facilities designed to the highest European standards. Join the waitlist."
     },
     "nav": {
-      "club": "The club",
+      "arena": "Arena",
+      "ecosystem": "How it works",
+      "facilities": "Facilities",
       "league": "League",
       "location": "Location",
       "join": "Join the list",
       "language": "Language",
       "skip": "Skip to content",
-      "home": "Jungle Padel — home"
+      "home": "Jungle Padel — home page",
+      "main": "Main navigation",
+      "menu": "Menu"
     },
     "hero": {
       "eyebrow": "Pantelimon · Opening March 2027",
-      "title1": "Enter",
-      "title2": "the jungle.",
-      "lead": "Indoor padel, the Jungle league, Reformer pilates and a specialty café — under palm trees, hanging plants and club lights.",
+      "title": "Watch the game from three metres up.",
+      "lead": "Four indoor padel courts, a lounge suspended above them and a club where everything, from booking to payment, runs digitally. Facilities designed to the highest European standards.",
       "ctaPrimary": "Join the waitlist",
-      "ctaSecondary": "Discover the club",
-      "scroll": "Scroll",
-      "note": "The 3D scene is an illustration, not a photo of the club."
+      "ctaSecondary": "Discover the arena",
+      "renderAlt": "3D rendering: view from the lounge three metres up towards the enclosed padel courts with glass walls, in a bright hall.",
+      "renderNote": "Illustrative 3D rendering made by us. Not a photograph of the club."
     },
-    "marquee": [
-      "Indoor padel",
-      "Jungle league",
-      "Reformer pilates",
-      "Specialty café",
-      "DJ nights",
-      "Mezzanine overlooking the courts"
-    ],
-    "club": {
-      "kicker": "The club",
-      "title": "More than a court. A whole evening in the jungle.",
-      "lead": "Come to play, stay for the vibe: sport, café, music and community in one place.",
-      "cards": {
-        "padel": {
-          "title": "4 indoor padel courts",
-          "text": "Enclosed courts in a hall heated in winter and cooled in summer. Play in any season."
+    "arena": {
+      "kicker": "The arena",
+      "title": "Four courts. One standard.",
+      "lead": "Enclosed padel courts in a hall heated in winter and cooled in summer, with a sound system and lighting for matches, training and club nights.",
+      "stats": {
+        "courts": "indoor padel courts",
+        "lounge": "metres: height of the lounge overlooking the courts",
+        "parking": "parking spaces",
+        "climate": "seasons of play, in the climate-controlled hall"
+      },
+      "points": [
+        "Enclosed courts with glass walls",
+        "Lounge suspended 3 m up, overlooking the courts",
+        "A screen at every court: players, rank and time left"
+      ]
+    },
+    "ecosystem": {
+      "kicker": "The Jungle ecosystem",
+      "title": "From booking to leaving, no queues and no paperwork.",
+      "lead": "One account and one digital card connect everything: booking, access, the league and payment.",
+      "steps": [
+        {
+          "title": "Book online",
+          "text": "Choose the court, time and duration, any time and as far ahead as you like."
         },
-        "league": {
-          "title": "The Jungle league",
-          "text": "Official matches, points, ranks and live leaderboards. Beat stronger players, climb faster."
+        {
+          "title": "Get your digital card",
+          "text": "Your member card with a QR code arrives by email and you can keep it on your phone."
+        },
+        {
+          "title": "Check in with one gesture",
+          "text": "Scan your card on arrival and at the court entrance. Attendance is recorded automatically."
+        },
+        {
+          "title": "Play",
+          "text": "The court screen shows the match, the players and the time left."
+        },
+        {
+          "title": "The score, confirmed by everyone",
+          "text": "At the league kiosk, every player scans their card and confirms the result."
+        },
+        {
+          "title": "Pay or split the hour",
+          "text": "At the payment kiosk everyone pays their share. The fiscal receipt is issued automatically."
+        },
+        {
+          "title": "Leave. It's all in your account.",
+          "text": "Bookings, payments, attendance and league progress, all visible in your account."
+        }
+      ]
+    },
+    "facilities": {
+      "kicker": "Integrated facilities",
+      "title": "Everything you need, under one roof.",
+      "items": {
+        "lockers": {
+          "title": "Changing rooms",
+          "text": "Spaces to change, designed for comfort before and after play."
         },
         "pilates": {
           "title": "Reformer pilates",
-          "text": "A separate studio with Reformer machines and classes for beginners, advanced players, athletes and mums."
-        },
-        "cafe": {
-          "title": "Café & mezzanine",
-          "text": "Specialty coffee and a mezzanine 3 m up, overlooking the courts."
+          "text": "A separate heated and cooled studio: 4 Reformer machines at opening, expandable to 6. Classes by level, private and duo sessions."
         },
         "events": {
-          "title": "DJ nights",
-          "text": "Speakers, club lights and parties: padel doesn't stop at sunset."
-        },
-        "room": {
           "title": "Event room",
-          "text": "A separate space for private parties of 15–20 people."
+          "text": "A separate space, configurable for private parties and events of 15–20 people."
+        },
+        "lounge": {
+          "title": "Specialty café & lounge",
+          "text": "Specialty coffee and the lounge suspended 3 m up, overlooking the courts."
         }
-      }
+      },
+      "rendersSoon": "Photorealistic renderings of these spaces will be added from the architectural project.",
+      "lead": "Changing rooms, a Pilates studio, an event room and a café, designed as parts of the same club."
     },
     "league": {
       "kicker": "The Jungle league",
-      "title": "Play. Earn points. Rank up.",
-      "lead": "A league ranked like competitive games: every official match moves your points, and your rank shows how well you play. Seasons last 3 months, so the race always stays open.",
-      "ranks": {
-        "bronze": "Bronze",
+      "title": "A serious ranking. A card that shows your status.",
+      "lead": "Every official match updates your points and rank. Seasons last 3 months and the rankings are live, online and in the club. Your member card reflects the rank you reach.",
+      "rules": [
+        "Scores are entered only at the league kiosk in the club and validated only when every player confirms them.",
+        "Three ladders: doubles, singles and pairs.",
+        "A minimum number of matches per season for the final ranking: nobody reaches the top from a single match.",
+        "Reach Diamond and you receive a special physical card."
+      ],
+      "tiers": {
         "silver": "Silver",
         "gold": "Gold",
         "platinum": "Platinum",
-        "diamond": "Diamond",
-        "master": "Master",
-        "king": "King of the Jungle"
+        "diamond": "Diamond"
       },
-      "facts": {
-        "ladders": "3 ladders: doubles, singles and pairs",
-        "season": "3-month seasons",
-        "live": "Live leaderboards, online and in the club"
-      },
-      "hint": "Hover over the medals"
-    },
-    "numbers": {
-      "kicker": "In numbers",
-      "courts": "indoor padel courts",
-      "reformers": "Reformer machines at opening",
-      "parking": "parking spaces",
-      "season": "months per league season"
+      "tierHint": "Scroll or choose a tier to see the card's finish.",
+      "cardAlt": "3D rendering of the Jungle Padel member card with a metallic finish, in the Silver, Gold, Platinum and Diamond tiers.",
+      "cardMember": "MEMBER",
+      "cta": "Sign up for the league launch",
+      "tiersLabel": "Member card tiers"
     },
     "location": {
       "kicker": "Location",
-      "title": "East Bucharest, a step from the city.",
+      "title": "On the eastern edge of Bucharest.",
       "address": "Șoseaua Biruinței, next to Selgros Pantelimon",
       "access": "Access from two streets",
-      "parking": "Parking: 18 spaces at the back + 10 at the front",
-      "map": "Open in map"
+      "parking": "Parking: 18 spaces at the back and 10 at the front",
+      "map": "Open the location in OpenStreetMap (new window)",
+      "mapNote": "Stylised map, not to scale. For directions, open OpenStreetMap."
     },
     "waitlist": {
-      "kicker": "Waitlist",
-      "title": "Be among the first in the jungle.",
-      "lead": "Leave your name and email: you'll hear first when we open, about the Jungle league and the launch events.",
+      "kicker": "Pre-registration",
+      "title": "Be among the first members.",
+      "lead": "We only ask for what is strictly necessary. We will write when registrations, the league and the launch events open.",
       "name": "Full name",
-      "email": "Email",
-      "phone": "Phone (optional)",
-      "interests": "What are you interested in?",
-      "interest": {
-        "padel": "Padel",
-        "league": "Jungle league",
-        "tennis": "Tennis",
-        "pilates": "Pilates",
-        "events": "Events",
-        "cafe": "Café",
-        "corporate": "Corporate"
+      "email": "Email address",
+      "level": "Playing level (optional)",
+      "levelNone": "Prefer not to say",
+      "levels": {
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced",
+        "competitive": "Competitive"
       },
       "consentBefore": "I have read the ",
       "consentLink": "privacy notice",
       "consentAfter": ", I am at least 16 and I agree to receive emails about the Jungle Padel opening. I can unsubscribe at any time.",
-      "submit": "Join the list",
-      "submitting": "Sending…",
-      "successTitle": "Check your email!",
-      "successText": "We sent you a confirmation link. You're on the list once you click it.",
+      "submit": "Join the waitlist",
+      "submitting": "Sending your registration…",
+      "successTitle": "Check your email.",
+      "successText": "We sent you a confirmation link. You're on the list once you open it.",
       "unavailable": "The form is not available at the moment. Please come back a little later.",
-      "genericError": "Something went wrong. Please try again."
+      "genericError": "Your registration could not be sent. Please try again.",
+      "required": "required"
     },
     "confirm": {
       "title": "Confirm your sign-up",
       "working": "Confirming your address…",
-      "success": "Done, you're on the list! Welcome to the jungle.",
+      "success": "Done, you're on the list. Thank you!",
       "missing": "The link does not contain a confirmation code.",
       "back": "Back to the home page"
     },
     "unsubscribe": {
       "title": "Unsubscribe",
-      "lead": "If you unsubscribe, we delete your name, email, phone and interests.",
-      "button": "Unsubscribe me",
+      "lead": "If you unsubscribe, we delete your name, email and playing level.",
+      "button": "Confirm unsubscribe",
       "working": "Processing…",
       "success": "You have unsubscribed and your data has been deleted.",
       "missing": "The link does not contain an unsubscribe code."
@@ -200,11 +232,39 @@
       "version": "Version {version}, published on {date}",
       "unavailable": "The document is not available at the moment."
     },
+    "legal": {
+      "terms": "Terms and conditions",
+      "privacy": "Privacy policy",
+      "refunds": "Cancellation and refund policy",
+      "cookies": "Cookie policy",
+      "notice": "Privacy notice"
+    },
     "footer": {
       "tagline": "Indoor padel club · Pantelimon, Ilfov",
-      "construction": "Site under construction: details may change before opening.",
-      "notice": "Privacy notice",
-      "rights": "© {year} Jungle Padel"
+      "company": "Company details",
+      "legalName": "Company",
+      "cui": "Tax ID (CUI)",
+      "orc": "Trade Register no.",
+      "address": "Registered office",
+      "phone": "Phone",
+      "email": "Email",
+      "pending": "being completed",
+      "legal": "Legal information",
+      "cookieSettings": "Cookie settings",
+      "anpc": "ANPC — Alternative dispute resolution (SAL)",
+      "construction": "Pre-launch website: details may change before opening.",
+      "rights": "© {year} Jungle Padel. All rights reserved."
+    },
+    "cookies": {
+      "title": "Cookies and privacy",
+      "text": "We only use cookies needed for the website to work. With your consent, we also start a self-hosted statistics tool, with no marketing cookies.",
+      "accept": "Accept statistics",
+      "reject": "Necessary cookies only",
+      "settings": "Settings",
+      "save": "Save my choice",
+      "necessary": "Necessary (always on)",
+      "statistics": "Anonymous statistics",
+      "policy": "Cookie policy"
     }
   }
 }

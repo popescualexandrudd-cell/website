@@ -57,140 +57,172 @@
   "web": {
     "meta": {
       "title": "Jungle Padel — club de padel indoor în Pantelimon · Deschidere martie 2027",
-      "description": "Padel indoor pe 4 terenuri, liga Jungle cu ranguri, pilates Reformer, cafenea de specialitate și seri cu DJ. Pe Șoseaua Biruinței, lângă Selgros Pantelimon. Intră pe lista de așteptare.",
-      "ogAlt": "Jungle Padel — deschidere martie 2027"
+      "description": "Patru terenuri de padel indoor, un lounge suspendat la 3 metri, pilates Reformer și o ligă cu clasament live. Facilități proiectate la cele mai înalte standarde europene. Înscrie-te pe lista de așteptare."
     },
     "nav": {
-      "club": "Clubul",
+      "arena": "Arena",
+      "ecosystem": "Cum funcționează",
+      "facilities": "Facilități",
       "league": "Liga",
       "location": "Locație",
-      "join": "Vreau pe listă",
+      "join": "Înscrie-te pe listă",
       "language": "Limba",
       "skip": "Sari la conținut",
-      "home": "Jungle Padel — acasă"
+      "home": "Jungle Padel — pagina principală",
+      "main": "Navigare principală",
+      "menu": "Meniu"
     },
     "hero": {
-      "eyebrow": "Pantelimon · Deschidere martie 2027",
-      "title1": "Intră",
-      "title2": "în junglă.",
-      "lead": "Padel indoor, liga Jungle, pilates Reformer și o cafenea de specialitate — sub palmieri, plante suspendate și lumini de club.",
-      "ctaPrimary": "Intră pe lista de așteptare",
-      "ctaSecondary": "Descoperă clubul",
-      "scroll": "Derulează",
-      "note": "Scena 3D este o ilustrație, nu o fotografie a clubului."
+      "eyebrow": "Pantelimon · Deschidere în martie 2027",
+      "title": "Privește jocul de la trei metri înălțime.",
+      "lead": "Patru terenuri de padel indoor, un lounge suspendat deasupra lor și un club în care totul, de la rezervare la plată, funcționează digital. Facilități proiectate la cele mai înalte standarde europene.",
+      "ctaPrimary": "Înscrie-te pe lista de așteptare",
+      "ctaSecondary": "Descoperă arena",
+      "renderAlt": "Randare 3D: vedere din lounge-ul de la 3 metri spre terenurile de padel închise cu pereți de sticlă, într-o hală luminoasă.",
+      "renderNote": "Randare 3D ilustrativă, realizată de noi. Nu este o fotografie a clubului."
     },
-    "marquee": [
-      "Padel indoor",
-      "Liga Jungle",
-      "Pilates Reformer",
-      "Cafenea de specialitate",
-      "Seri cu DJ",
-      "Mezanin cu vedere la terenuri"
-    ],
-    "club": {
-      "kicker": "Clubul",
-      "title": "Mai mult decât un teren. O seară întreagă în junglă.",
-      "lead": "Vii să joci, rămâi pentru atmosferă: sport, cafenea, muzică și comunitate, într-un singur loc.",
-      "cards": {
-        "padel": {
-          "title": "4 terenuri de padel indoor",
-          "text": "Terenuri închise, într-o hală încălzită iarna și răcită vara. Joci în orice anotimp."
+    "arena": {
+      "kicker": "Arena",
+      "title": "Patru terenuri. Un singur standard.",
+      "lead": "Terenuri de padel închise, într-o hală încălzită iarna și răcită vara, cu sistem audio și lumini pentru meciuri, antrenamente și seri de club.",
+      "stats": {
+        "courts": "terenuri de padel indoor",
+        "lounge": "metri: înălțimea lounge-ului cu vedere spre terenuri",
+        "parking": "locuri de parcare",
+        "climate": "anotimpuri de joc, în hala climatizată"
+      },
+      "points": [
+        "Terenuri închise, cu pereți de sticlă",
+        "Lounge suspendat la 3 m, cu vedere spre terenuri",
+        "Ecran la fiecare teren: jucătorii, rangul și timpul rămas"
+      ]
+    },
+    "ecosystem": {
+      "kicker": "Ecosistemul Jungle",
+      "title": "De la rezervare la ieșire, fără cozi și fără hârtii.",
+      "lead": "Un singur cont și un singur card digital leagă totul: rezervarea, accesul, liga și plata.",
+      "steps": [
+        {
+          "title": "Rezervi online",
+          "text": "Alegi terenul, ora și durata, oricând și cu oricât timp înainte."
         },
-        "league": {
-          "title": "Liga Jungle",
-          "text": "Meciuri oficiale, puncte, ranguri și clasamente live. Bați jucători mai buni, urci mai repede."
+        {
+          "title": "Primești cardul digital",
+          "text": "Cardul de membru cu cod QR ajunge pe email și îl poți păstra în telefon."
+        },
+        {
+          "title": "Check-in cu un gest",
+          "text": "Scanezi cardul la sosire și la intrarea pe teren. Prezența se înregistrează automat."
+        },
+        {
+          "title": "Joci",
+          "text": "Ecranul terenului arată meciul, jucătorii și timpul rămas."
+        },
+        {
+          "title": "Scorul, confirmat de toți",
+          "text": "La chioșcul ligii, fiecare jucător își scanează cardul și confirmă rezultatul."
+        },
+        {
+          "title": "Plătești sau împarți ora",
+          "text": "La chioșcul de plăți fiecare își achită partea. Bonul fiscal se emite automat."
+        },
+        {
+          "title": "Pleci. Totul e în cont.",
+          "text": "Rezervări, plăți, prezențe și progresul din ligă, vizibile în contul tău."
+        }
+      ]
+    },
+    "facilities": {
+      "kicker": "Facilități integrate",
+      "title": "Tot ce ai nevoie, sub același acoperiș.",
+      "items": {
+        "lockers": {
+          "title": "Vestiare",
+          "text": "Spații pentru schimbat, gândite pentru confort înainte și după joc."
         },
         "pilates": {
           "title": "Pilates Reformer",
-          "text": "Studio separat, cu aparate Reformer și clase pentru începători, avansați, sportivi și mămici."
-        },
-        "cafe": {
-          "title": "Cafenea & mezanin",
-          "text": "Cafea de specialitate și un mezanin la 3 m înălțime, cu vedere spre terenuri."
+          "text": "Studio separat, încălzit și răcit: 4 aparate Reformer la deschidere, extensibil la 6. Clase pe niveluri, ședințe private și duo."
         },
         "events": {
-          "title": "Seri cu DJ",
-          "text": "Boxe, lumini de club și petreceri: padelul se joacă și după apus."
-        },
-        "room": {
           "title": "Sală de evenimente",
-          "text": "Un spațiu separat pentru petreceri private de 15–20 de persoane."
+          "text": "Un spațiu separat, configurabil pentru petreceri și evenimente private de 15–20 de persoane."
+        },
+        "lounge": {
+          "title": "Cafenea de specialitate & lounge",
+          "text": "Cafea de specialitate și lounge-ul suspendat la 3 m, cu vedere spre terenuri."
         }
-      }
+      },
+      "rendersSoon": "Randările fotorealiste ale acestor spații vor fi adăugate pe baza proiectului de arhitectură.",
+      "lead": "Vestiare, studio de pilates, sală de evenimente și cafenea, gândite ca parte din același club."
     },
     "league": {
       "kicker": "Liga Jungle",
-      "title": "Joci. Câștigi puncte. Urci în rang.",
-      "lead": "O ligă cu clasament ca în jocurile competitive: fiecare meci oficial îți schimbă punctele, iar rangul arată cât de bine joci. Sezoanele durează 3 luni, ca să rămână mereu deschisă cursa.",
-      "ranks": {
-        "bronze": "Bronz",
+      "title": "Un clasament serios. Un card care îți arată statutul.",
+      "lead": "Fiecare meci oficial îți actualizează punctele și rangul. Sezoanele durează 3 luni, iar clasamentele sunt live, pe site și în club. Cardul tău de membru reflectă rangul atins.",
+      "rules": [
+        "Scorurile se introduc doar la chioșcul ligii din club și se validează numai când toți jucătorii le confirmă.",
+        "Trei clasamente: dublu, simplu și perechi.",
+        "Minimum de meciuri pe sezon pentru clasamentul final: nimeni nu urcă în top dintr-un singur meci.",
+        "La atingerea rangului Diamant, primești un card fizic special."
+      ],
+      "tiers": {
         "silver": "Argint",
         "gold": "Aur",
         "platinum": "Platină",
-        "diamond": "Diamant",
-        "master": "Maestru",
-        "king": "Regele Junglei"
+        "diamond": "Diamant"
       },
-      "facts": {
-        "ladders": "3 clasamente: dublu, simplu și perechi",
-        "season": "Sezoane de 3 luni",
-        "live": "Clasamente live, pe site și în club"
-      },
-      "hint": "Treci cu mouse-ul peste medalii"
-    },
-    "numbers": {
-      "kicker": "În cifre",
-      "courts": "terenuri de padel indoor",
-      "reformers": "aparate Reformer la deschidere",
-      "parking": "locuri de parcare",
-      "season": "luni durează un sezon de ligă"
+      "tierHint": "Derulează sau alege un nivel pentru a vedea finisajul cardului.",
+      "cardAlt": "Randare 3D a cardului de membru Jungle Padel, cu finisaj metalic, în nivelurile Argint, Aur, Platină și Diamant.",
+      "cardMember": "MEMBRU",
+      "cta": "Înscrie-te pentru lansarea ligii",
+      "tiersLabel": "Nivelurile cardului de membru"
     },
     "location": {
       "kicker": "Locație",
-      "title": "Estul Bucureștiului, la un pas de oraș.",
+      "title": "La marginea de est a Bucureștiului.",
       "address": "Șoseaua Biruinței, lângă Selgros Pantelimon",
       "access": "Acces din două străzi",
-      "parking": "Parcare: 18 locuri în spate + 10 în față",
-      "map": "Deschide în hartă"
+      "parking": "Parcare: 18 locuri în spate și 10 în față",
+      "map": "Deschide locația în OpenStreetMap (fereastră nouă)",
+      "mapNote": "Hartă stilizată, fără scară. Pentru traseu, deschide OpenStreetMap."
     },
     "waitlist": {
-      "kicker": "Lista de așteptare",
-      "title": "Fii printre primii în junglă.",
-      "lead": "Lasă-ne numele și emailul: îți scriem primii când deschidem, despre liga Jungle și despre evenimentele de lansare.",
+      "kicker": "Pre-înregistrare",
+      "title": "Fii printre primii membri.",
+      "lead": "Îți cerem doar strictul necesar. Îți scriem când deschidem înscrierile, liga și evenimentele de lansare.",
       "name": "Nume și prenume",
-      "email": "Email",
-      "phone": "Telefon (opțional)",
-      "interests": "Ce te interesează?",
-      "interest": {
-        "padel": "Padel",
-        "league": "Liga Jungle",
-        "tennis": "Tenis",
-        "pilates": "Pilates",
-        "events": "Evenimente",
-        "cafe": "Cafenea",
-        "corporate": "Corporate"
+      "email": "Adresa de email",
+      "level": "Nivelul de joc (opțional)",
+      "levelNone": "Prefer să nu spun",
+      "levels": {
+        "beginner": "Începător",
+        "intermediate": "Intermediar",
+        "advanced": "Avansat",
+        "competitive": "Competiție"
       },
       "consentBefore": "Am citit ",
       "consentLink": "nota de informare",
       "consentAfter": ", am cel puțin 16 ani și sunt de acord să primesc emailuri despre deschiderea Jungle Padel. Mă pot dezabona oricând.",
-      "submit": "Intră pe listă",
-      "submitting": "Se trimite…",
-      "successTitle": "Verifică-ți emailul!",
-      "successText": "Ți-am trimis un link de confirmare. Ești pe listă după ce dai click pe el.",
+      "submit": "Înscrie-te pe lista de așteptare",
+      "submitting": "Se trimite înscrierea…",
+      "successTitle": "Verifică-ți emailul.",
+      "successText": "Ți-am trimis un link de confirmare. Ești pe listă după ce îl deschizi.",
       "unavailable": "Formularul nu este disponibil momentan. Te rugăm să revii puțin mai târziu.",
-      "genericError": "Ceva nu a mers. Încearcă din nou."
+      "genericError": "Înscrierea nu a putut fi trimisă. Încearcă din nou.",
+      "required": "obligatoriu"
     },
     "confirm": {
       "title": "Confirmarea înscrierii",
       "working": "Confirmăm adresa ta…",
-      "success": "Gata, ești pe listă! Bun venit în junglă.",
+      "success": "Gata, ești pe listă. Îți mulțumim!",
       "missing": "Linkul nu conține codul de confirmare.",
       "back": "Înapoi la pagina principală"
     },
     "unsubscribe": {
       "title": "Dezabonare",
-      "lead": "Dacă te dezabonezi, îți ștergem numele, emailul, telefonul și interesele.",
-      "button": "Dezabonează-mă",
+      "lead": "Dacă te dezabonezi, îți ștergem numele, emailul și nivelul de joc.",
+      "button": "Confirmă dezabonarea",
       "working": "Se procesează…",
       "success": "Te-ai dezabonat, iar datele tale au fost șterse.",
       "missing": "Linkul nu conține codul de dezabonare."
@@ -200,11 +232,39 @@
       "version": "Versiunea {version}, publicată la {date}",
       "unavailable": "Documentul nu este disponibil momentan."
     },
+    "legal": {
+      "terms": "Termeni și condiții",
+      "privacy": "Politica de confidențialitate",
+      "refunds": "Politica de anulare și rambursare",
+      "cookies": "Politica de cookies",
+      "notice": "Nota de informare"
+    },
     "footer": {
       "tagline": "Club de padel indoor · Pantelimon, Ilfov",
-      "construction": "Site în construcție: informațiile pot fi actualizate până la deschidere.",
-      "notice": "Nota de informare",
-      "rights": "© {year} Jungle Padel"
+      "company": "Date de identificare",
+      "legalName": "Denumire",
+      "cui": "CUI",
+      "orc": "Nr. Registrul Comerțului",
+      "address": "Sediu",
+      "phone": "Telefon",
+      "email": "Email",
+      "pending": "în curs de completare",
+      "legal": "Informații legale",
+      "cookieSettings": "Setări cookies",
+      "anpc": "ANPC — Soluționarea alternativă a litigiilor (SAL)",
+      "construction": "Site de pre-lansare: informațiile pot fi actualizate până la deschidere.",
+      "rights": "© {year} Jungle Padel. Toate drepturile rezervate."
+    },
+    "cookies": {
+      "title": "Cookies și confidențialitate",
+      "text": "Folosim doar cookies necesare funcționării site-ului. Cu acordul tău, pornim și un instrument de statistici găzduit de noi, fără cookies de marketing.",
+      "accept": "Accept statisticile",
+      "reject": "Doar cookies necesare",
+      "settings": "Setări",
+      "save": "Salvează alegerea",
+      "necessary": "Necesare (întotdeauna active)",
+      "statistics": "Statistici anonime",
+      "policy": "Politica de cookies"
     }
   }
 }
