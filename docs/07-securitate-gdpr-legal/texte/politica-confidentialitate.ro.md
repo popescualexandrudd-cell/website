@@ -27,7 +27,7 @@ Doar furnizorilor care ne ajută să funcționăm, pe bază de contract și numa
 - găzduirea serverelor;
 - furnizorul de email;
 - casa de marcat fiscală;
-- după activare: procesatorul de plăți online, Google Wallet și furnizorul de inteligență artificială.
+- după activare: procesatorul de plăți online, Apple Wallet și Google Wallet (doar dacă îți adaugi cardul acolo) și furnizorul de inteligență artificială.
 
 Transmitem date și autorităților, când legea ne obligă. Datele rămân în Uniunea Europeană. Orice transfer în afara ei se face doar cu garanțiile prevăzute de GDPR.
 

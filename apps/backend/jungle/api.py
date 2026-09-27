@@ -34,6 +34,8 @@ from jungle.locations.api import public_router as locations_router
 from jungle.locations.api import staff_router as locations_staff_router
 from jungle.pricing.api import public_router as pricing_router
 from jungle.pricing.api import staff_router as pricing_staff_router
+from jungle.privacy.api import me_router as privacy_router
+from jungle.privacy.api import staff_router as privacy_staff_router
 from jungle.rewards.api import me_router as rewards_router
 from jungle.rewards.api import staff_router as rewards_staff_router
 from jungle.subscriptions.api import me_router as subscriptions_router
@@ -85,6 +87,8 @@ api.add_router("/cards", cards_public_router)
 api.add_router("/cards", cards_router)
 api.add_router("/staff", cards_staff_router)
 api.add_router("/wallet/apple", apple_wallet_router)
+api.add_router("/privacy", privacy_router)
+api.add_router("/staff", privacy_staff_router)
 
 
 def _error(

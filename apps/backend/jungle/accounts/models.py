@@ -67,6 +67,12 @@ class User(AbstractBaseUser):
     totp_secret = models.TextField(blank=True, help_text="Criptat (Fernet).")
     totp_confirmed_at = models.DateTimeField(null=True, blank=True)
     totp_last_step = models.BigIntegerField(null=True, blank=True)
+    deleted_at = models.DateTimeField(
+        "șters la",
+        null=True,
+        blank=True,
+        help_text="§12.2: datele personale au fost șterse; rămâne „Jucător retras”.",
+    )
 
     objects: ClassVar[UserManager] = UserManager()
 
@@ -85,8 +91,10 @@ class User(AbstractBaseUser):
                 name="user_email_ci_unique",
             ),
             models.CheckConstraint(
-                condition=models.Q(email__isnull=False) | models.Q(account_type="child"),
-                name="user_email_required_unless_child",
+                condition=models.Q(email__isnull=False)
+                | models.Q(account_type="child")
+                | models.Q(deleted_at__isnull=False),
+                name="user_email_required_unless_child_or_deleted",
             ),
         ]
 

@@ -27,7 +27,7 @@ Only the providers who help us operate, under contract and only on our instructi
 - server hosting;
 - the email provider;
 - the fiscal cash register;
-- once enabled: the online payment processor, Google Wallet and the AI provider.
+- once enabled: the online payment processor, Apple Wallet and Google Wallet (only if you add your card there) and the AI provider.
 
 We also share data with authorities when the law requires it. The data stays in the European Union. Any transfer outside it happens only with the safeguards required by the GDPR.
 

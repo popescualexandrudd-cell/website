@@ -130,6 +130,15 @@ class ErrorCode(StrEnum):
     CARDS_INVALID_TRANSITION = "cards.invalid_transition"
     CARDS_INVALID_EMBLEM = "cards.invalid_emblem"
     WALLET_UNAVAILABLE = "wallet.unavailable"
+    LEAGUE_KIOSK_ONLY = "league.kiosk_only"
+    LEAGUE_ADULTS_ONLY = "league.adults_only"
+    PRIVACY_NO_CONSENT = "privacy.no_consent"
+    PRIVACY_STAFF_ACCOUNT = "privacy.staff_account"
+    PRIVACY_HAS_CHILDREN = "privacy.has_children"
+    PRIVACY_OUTSTANDING_DEBT = "privacy.outstanding_debt"
+    PRIVACY_CREDIT_LEFT = "privacy.credit_left"
+    PRIVACY_FUTURE_BOOKINGS = "privacy.future_bookings"
+    PRIVACY_WRONG_PASSWORD = "privacy.wrong_password"
 
 
 class DomainError(Exception):

@@ -118,7 +118,16 @@
     "cards.nothing_to_print": "Nu există carduri gata de tipărit în selecție.",
     "cards.invalid_transition": "Cardul nu poate trece în această stare.",
     "cards.invalid_emblem": "Alege una dintre emblemele din listă.",
-    "wallet.unavailable": "Adăugarea în Wallet nu este încă disponibilă. Folosește codul QR din cont."
+    "wallet.unavailable": "Adăugarea în Wallet nu este încă disponibilă. Folosește codul QR din cont.",
+    "league.kiosk_only": "Acordul pentru ligă se semnează doar la Chioșcul Ligii din club.",
+    "league.adults_only": "Liga este doar pentru persoane de cel puțin 18 ani.",
+    "privacy.no_consent": "Nu ai un acord activ pentru ligă.",
+    "privacy.staff_account": "Contul are un rol de personal. Rolul trebuie retras de administrator înainte de ștergere.",
+    "privacy.has_children": "Gestionezi conturi de copii. Șterge-le mai întâi sau cere ajutor la recepție.",
+    "privacy.outstanding_debt": "Ai o datorie de {debt} bani. Achit-o înainte de ștergerea contului.",
+    "privacy.credit_left": "Ai credit în cont ({credit} bani). Folosește-l sau confirmă că renunți la el.",
+    "privacy.future_bookings": "Ai rezervări viitoare. Anulează-le înainte de ștergerea contului.",
+    "privacy.wrong_password": "Parola nu este corectă."
   },
   "web": {
     "meta": {

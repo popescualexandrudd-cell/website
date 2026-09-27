@@ -118,7 +118,16 @@
     "cards.nothing_to_print": "There are no cards ready to print in the selection.",
     "cards.invalid_transition": "The card cannot move to this state.",
     "cards.invalid_emblem": "Please choose one of the emblems in the list.",
-    "wallet.unavailable": "Adding to Wallet is not available yet. Please use the QR code in your account."
+    "wallet.unavailable": "Adding to Wallet is not available yet. Please use the QR code in your account.",
+    "league.kiosk_only": "The league consent can only be signed at the League Kiosk in the club.",
+    "league.adults_only": "The league is only for people aged 18 or over.",
+    "privacy.no_consent": "You have no active league consent.",
+    "privacy.staff_account": "The account has a staff role. An administrator must remove the role before deletion.",
+    "privacy.has_children": "You manage children's accounts. Delete them first or ask the front desk for help.",
+    "privacy.outstanding_debt": "You have a debt of {debt} bani. Please settle it before deleting the account.",
+    "privacy.credit_left": "You have credit in your account ({credit} bani). Use it or confirm that you give it up.",
+    "privacy.future_bookings": "You have future bookings. Cancel them before deleting the account.",
+    "privacy.wrong_password": "The password is not correct."
   },
   "web": {
     "meta": {

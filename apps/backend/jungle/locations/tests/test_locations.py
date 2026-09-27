@@ -34,7 +34,7 @@ def test_seed_demo_marks_demo_data() -> None:
     assert ("Popescu", "Alexandru Daniel") in names  # §8.5 demo names
     assert ("Moșteanu", "Rareș") in names
     assert all(User.objects.values_list("is_demo", flat=True))
-    assert LegalDocument.objects.count() == 10  # 5 legal texts × RO/EN
+    assert LegalDocument.objects.count() == 12  # 6 legal texts × RO/EN (with the league form)
     for doc in LegalDocument.objects.all():
         assert doc.is_demo == ("DE_CONFIRMAT" in doc.body), doc  # placeholders are never 'final'
 

@@ -32,6 +32,7 @@ LEGAL_FILES = {
     DocumentKind.REFUNDS: "politica-rambursare",
     DocumentKind.COOKIES: "politica-cookies",
     DocumentKind.WAITLIST_NOTICE: "nota-informare-lista-asteptare",
+    DocumentKind.LEAGUE_GDPR: "formular-gdpr-liga",
 }
 # (first name, last name, email, role) — §8.5 names first; all addresses are non-deliverable.
 DEMO_PEOPLE = [
