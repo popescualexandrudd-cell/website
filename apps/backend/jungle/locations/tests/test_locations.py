@@ -34,7 +34,7 @@ def test_seed_demo_marks_demo_data() -> None:
     assert ("Popescu", "Alexandru Daniel") in names  # §8.5 demo names
     assert ("Moșteanu", "Rareș") in names
     assert all(User.objects.values_list("is_demo", flat=True))
-    assert LegalDocument.objects.count() == 4
+    assert LegalDocument.objects.count() == 6  # terms, privacy, waitlist notice × RO/EN
     assert all(LegalDocument.objects.values_list("is_demo", flat=True))
 
 

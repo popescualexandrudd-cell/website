@@ -1,0 +1,9 @@
+{% autoescape off %}Salut, {{ name }}!
+
+Gata, ești pe lista de așteptare Jungle Padel. Îți scriem când avem noutăți despre deschidere (martie 2027), despre liga Jungle și despre evenimentele de lansare.
+
+Te poți dezabona oricând, cu un click (datele tale se șterg): {{ unsubscribe_link }}
+
+Ne vedem în junglă!
+Echipa Jungle Padel
+{% endautoescape %}

@@ -50,6 +50,8 @@
     "roles.already_granted": "Persoana are deja acest rol.",
     "roles.last_admin": "Nu se poate: trebuie să rămână cel puțin un Admin activ.",
     "roles.not_found": "Rolul nu există.",
-    "validation.invalid": "Unele câmpuri nu sunt completate corect."
+    "validation.invalid": "Unele câmpuri nu sunt completate corect.",
+    "waitlist.token_expired": "Linkul de confirmare a expirat. Înscrie-te din nou, durează un minut.",
+    "waitlist.token_invalid": "Linkul nu este valid. Poate te-ai dezabonat deja sau linkul e incomplet."
   }
 }

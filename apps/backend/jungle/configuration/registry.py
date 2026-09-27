@@ -116,6 +116,13 @@ CONFIG: dict[str, ConfigSpec] = {
             positive_int,
         ),
         ConfigSpec(
+            "waitlist.confirmation_ttl_days",
+            7,
+            Marker.DEFAULT,
+            "Zile pentru confirmarea înscrierii pe lista de așteptare (apoi datele se șterg).",
+            positive_int,
+        ),
+        ConfigSpec(
             "auth.login_max_failures",
             5,
             Marker.DEFAULT,

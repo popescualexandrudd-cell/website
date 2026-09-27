@@ -13,7 +13,13 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
-TEMPLATES = ("verify_email", "password_reset", "account_claim")
+TEMPLATES = (
+    "verify_email",
+    "password_reset",
+    "account_claim",
+    "waitlist_confirm",
+    "waitlist_welcome",
+)
 LANGUAGES = ("ro", "en")
 
 

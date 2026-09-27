@@ -19,6 +19,8 @@ from jungle.devices.api import router as devices_router
 from jungle.legal.api import router as legal_router
 from jungle.locations.api import public_router as locations_router
 from jungle.locations.api import staff_router as locations_staff_router
+from jungle.waitlist.api import public_router as waitlist_router
+from jungle.waitlist.api import staff_router as waitlist_staff_router
 
 api = NinjaAPI(
     title="Jungle Padel API",
@@ -40,6 +42,8 @@ api.add_router("/staff", locations_staff_router)
 api.add_router("/staff", config_staff_router)
 api.add_router("/staff/devices", devices_router)
 api.add_router("/staff/audit", audit_router)
+api.add_router("/waitlist", waitlist_router)
+api.add_router("/staff/waitlist", waitlist_staff_router)
 
 
 def _error(

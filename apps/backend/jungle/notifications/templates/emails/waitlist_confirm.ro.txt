@@ -1,0 +1,13 @@
+{% autoescape off %}Salut, {{ name }}!
+
+Mai e un singur pas ca să intri pe lista de așteptare Jungle Padel. Confirmă adresa de email aici:
+
+{{ link }}
+
+Linkul e valabil {{ ttl_days }} zile. Dacă nu confirmi, datele tale se șterg automat.
+Dacă nu tu te-ai înscris, ignoră acest mesaj.
+
+Nu mai vrei mesaje de la noi? Dezabonează-te aici (datele tale se șterg): {{ unsubscribe_link }}
+
+Echipa Jungle Padel
+{% endautoescape %}

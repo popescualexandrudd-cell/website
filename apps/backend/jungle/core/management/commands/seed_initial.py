@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from django.conf import settings
 from django.core.management.base import BaseCommand, CommandParser
 from django.db import transaction
 
@@ -15,6 +16,7 @@ from jungle.accounts.models import AccountType, User, UserRole
 from jungle.audit.services import SYSTEM
 from jungle.configuration.services import ensure_flag_rows
 from jungle.core.permissions import Role
+from jungle.legal.management.commands.publish_legal_document import read_public_text
 from jungle.legal.models import DocumentKind, LegalDocument
 from jungle.legal.services import publish_document
 from jungle.locations.models import Location, Resource, ResourceKind
@@ -107,6 +109,14 @@ class Command(BaseCommand):
                 publish_document(
                     SYSTEM, kind, language, title, DEMO_LEGAL_BODY[language], is_demo=True
                 )
+        notices = settings.REPO_ROOT / "docs/07-securitate-gdpr-legal/texte"
+        for language in ("ro", "en"):
+            kind = DocumentKind.WAITLIST_NOTICE
+            if not LegalDocument.objects.filter(kind=kind, language=language).exists():
+                title, body = read_public_text(
+                    notices / f"nota-informare-lista-asteptare.{language}.md"
+                )
+                publish_document(SYSTEM, kind, language, title, body, is_demo=True)
         for first, last, email, role in DEMO_PEOPLE:
             user = User.objects.filter(email=email).first()
             if user is None:

@@ -50,6 +50,8 @@
     "roles.already_granted": "This person already has this role.",
     "roles.last_admin": "Not possible: at least one active Admin must remain.",
     "roles.not_found": "The role does not exist.",
-    "validation.invalid": "Some fields are not filled in correctly."
+    "validation.invalid": "Some fields are not filled in correctly.",
+    "waitlist.token_expired": "The confirmation link has expired. Please sign up again, it takes a minute.",
+    "waitlist.token_invalid": "The link is not valid. You may have unsubscribed already, or the link is incomplete."
   }
 }

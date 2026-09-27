@@ -292,6 +292,24 @@
         "title": "ConfigOut",
         "type": "object"
       },
+      "ConfirmOut": {
+        "properties": {
+          "language": {
+            "title": "Language",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "language"
+        ],
+        "title": "ConfirmOut",
+        "type": "object"
+      },
       "ConsentOut": {
         "properties": {
           "action": {
@@ -489,6 +507,105 @@
         "title": "EmailIn",
         "type": "object"
       },
+      "EntryOut": {
+        "properties": {
+          "confirmed_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confirmed At"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "interests": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Interests",
+            "type": "array"
+          },
+          "language": {
+            "title": "Language",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "phone": {
+            "title": "Phone",
+            "type": "string"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "name",
+          "phone",
+          "interests",
+          "language",
+          "source",
+          "status",
+          "created_at",
+          "confirmed_at"
+        ],
+        "title": "EntryOut",
+        "type": "object"
+      },
+      "EntryPageOut": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/EntryOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "total",
+          "items"
+        ],
+        "title": "EntryPageOut",
+        "type": "object"
+      },
       "ErrorBody": {
         "properties": {
           "code": {
@@ -614,6 +731,19 @@
         ],
         "title": "HealthOut",
         "type": "object"
+      },
+      "Interest": {
+        "enum": [
+          "padel",
+          "league",
+          "tennis",
+          "pilates",
+          "events",
+          "cafe",
+          "corporate"
+        ],
+        "title": "Interest",
+        "type": "string"
       },
       "LegalDocumentOut": {
         "properties": {
@@ -1472,6 +1602,106 @@
           "user"
         ],
         "title": "SessionOut",
+        "type": "object"
+      },
+      "SignupIn": {
+        "properties": {
+          "accepted_notice": {
+            "title": "Accepted Notice",
+            "type": "boolean"
+          },
+          "email": {
+            "maxLength": 254,
+            "title": "Email",
+            "type": "string"
+          },
+          "interests": {
+            "items": {
+              "$ref": "#/components/schemas/Interest"
+            },
+            "maxItems": 10,
+            "title": "Interests",
+            "type": "array"
+          },
+          "language": {
+            "default": "ro",
+            "pattern": "^(ro|en)$",
+            "title": "Language",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 150,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "notice_version": {
+            "minimum": 1,
+            "title": "Notice Version",
+            "type": "integer"
+          },
+          "phone": {
+            "default": "",
+            "maxLength": 30,
+            "title": "Phone",
+            "type": "string"
+          },
+          "source": {
+            "default": "",
+            "maxLength": 60,
+            "title": "Source",
+            "type": "string"
+          },
+          "website": {
+            "default": "",
+            "description": "Honeypot: must stay empty.",
+            "maxLength": 200,
+            "title": "Website",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "name",
+          "notice_version",
+          "accepted_notice"
+        ],
+        "title": "SignupIn",
+        "type": "object"
+      },
+      "SignupOut": {
+        "properties": {
+          "status": {
+            "default": "check_email",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "title": "SignupOut",
+        "type": "object"
+      },
+      "StatsOut": {
+        "properties": {
+          "by_status": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "By Status",
+            "type": "object"
+          },
+          "confirmed_by_interest": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Confirmed By Interest",
+            "type": "object"
+          }
+        },
+        "required": [
+          "by_status",
+          "confirmed_by_interest"
+        ],
+        "title": "StatsOut",
         "type": "object"
       },
       "TokenIn": {
@@ -4213,6 +4443,360 @@
         "summary": "Grant Role",
         "tags": [
           "staff: users"
+        ]
+      }
+    },
+    "/api/v1/staff/waitlist": {
+      "get": {
+        "operationId": "jungle_waitlist_api_list_entries",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "default": "",
+              "pattern": "^(|pending|confirmed|withdrawn)$",
+              "title": "Status",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryPageOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "List Entries",
+        "tags": [
+          "staff: waitlist"
+        ]
+      }
+    },
+    "/api/v1/staff/waitlist/export.csv": {
+      "get": {
+        "operationId": "jungle_waitlist_api_export_csv",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Export Csv",
+        "tags": [
+          "staff: waitlist"
+        ]
+      }
+    },
+    "/api/v1/staff/waitlist/stats": {
+      "get": {
+        "operationId": "jungle_waitlist_api_stats",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatsOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Stats",
+        "tags": [
+          "staff: waitlist"
+        ]
+      }
+    },
+    "/api/v1/waitlist": {
+      "post": {
+        "description": "Double opt-in: the answer is the same whether or not the address is already listed.",
+        "operationId": "jungle_waitlist_api_signup",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignupOut"
+                }
+              }
+            },
+            "description": "Accepted"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          }
+        },
+        "summary": "Signup",
+        "tags": [
+          "waitlist"
+        ]
+      }
+    },
+    "/api/v1/waitlist/confirm": {
+      "post": {
+        "operationId": "jungle_waitlist_api_confirm",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfirmOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Confirm",
+        "tags": [
+          "waitlist"
+        ]
+      }
+    },
+    "/api/v1/waitlist/unsubscribe": {
+      "post": {
+        "operationId": "jungle_waitlist_api_unsubscribe",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Unsubscribe",
+        "tags": [
+          "waitlist"
         ]
       }
     }

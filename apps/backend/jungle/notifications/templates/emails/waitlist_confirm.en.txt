@@ -1,0 +1,13 @@
+{% autoescape off %}Hi {{ name }},
+
+One more step to join the Jungle Padel waitlist. Please confirm your email address here:
+
+{{ link }}
+
+The link is valid for {{ ttl_days }} days. If you do not confirm, your data is deleted automatically.
+If you did not sign up, please ignore this message.
+
+Don't want to hear from us? Unsubscribe here (your data is deleted): {{ unsubscribe_link }}
+
+The Jungle Padel team
+{% endautoescape %}

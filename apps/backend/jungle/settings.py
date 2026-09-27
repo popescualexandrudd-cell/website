@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     "jungle.configuration",
     "jungle.legal",
     "jungle.notifications",
+    "jungle.waitlist",
 ]
 
 MIDDLEWARE = [

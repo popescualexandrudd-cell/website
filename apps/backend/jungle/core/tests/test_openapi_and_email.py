@@ -37,13 +37,20 @@ def test_r140_every_email_exists_in_ro_and_en(template: str, language: str) -> N
         template,
         "x@example.test",
         language,
-        {"first_name": "Ana", "link": "https://x", "ttl_hours": 48},
+        {
+            "first_name": "Ana",
+            "name": "Ana",
+            "link": "https://x",
+            "unsubscribe_link": "https://u",
+            "ttl_hours": 48,
+            "ttl_days": 7,
+        },
     )
     message = mail.outbox[-1]
     assert message.subject
     assert "\n" not in message.subject
     assert "Ana" in message.body
-    assert "https://x" in message.body
+    assert "https://x" in message.body or "https://u" in message.body
 
 
 def test_unknown_language_falls_back_to_romanian_and_unknown_template_fails() -> None:

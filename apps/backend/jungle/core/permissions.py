@@ -31,6 +31,8 @@ class Action(StrEnum):
     CONFIG_VIEW = "config.view"
     CONFIG_MANAGE = "config.manage"
     AUDIT_VIEW = "audit.view"
+    WAITLIST_VIEW = "waitlist.view"
+    WAITLIST_EXPORT = "waitlist.export"
 
 
 ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
@@ -44,6 +46,8 @@ ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
             Action.CONFIG_VIEW,
             Action.CONFIG_MANAGE,
             Action.AUDIT_VIEW,
+            Action.WAITLIST_VIEW,
+            Action.WAITLIST_EXPORT,
         }
     ),
     Role.RECEPTION: frozenset({Action.USERS_VIEW, Action.GUEST_ACCOUNT_CREATE}),

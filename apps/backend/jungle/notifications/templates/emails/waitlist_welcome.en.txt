@@ -1,0 +1,9 @@
+{% autoescape off %}Hi {{ name }},
+
+Done, you are on the Jungle Padel waitlist. We will write to you with news about the opening (March 2027), the Jungle league and the launch events.
+
+You can unsubscribe at any time with one click (your data is deleted): {{ unsubscribe_link }}
+
+See you in the jungle!
+The Jungle Padel team
+{% endautoescape %}

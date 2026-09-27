@@ -60,6 +60,9 @@ class ErrorCode(StrEnum):
     RESOURCES_INVALID_PARENT = "resources.invalid_parent"
     RESOURCES_INVALID_CAPACITY = "resources.invalid_capacity"
     DEVICES_NOT_FOUND = "devices.not_found"
+    # Waitlist
+    WAITLIST_TOKEN_INVALID = "waitlist.token_invalid"
+    WAITLIST_TOKEN_EXPIRED = "waitlist.token_expired"
 
 
 class DomainError(Exception):
