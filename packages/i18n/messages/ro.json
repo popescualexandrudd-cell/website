@@ -171,7 +171,10 @@
     "league.challenge_exists": "Există deja o provocare deschisă între voi.",
     "league.challenge_not_found": "Provocarea nu există sau nu mai așteaptă un răspuns.",
     "league.challenge_not_target": "Doar cei provocați pot răspunde.",
-    "league.challenge_required": "Pentru o rezervare de tip provocare trebuie să existe o provocare acceptată între acești jucători."
+    "league.challenge_required": "Pentru o rezervare de tip provocare trebuie să existe o provocare acceptată între acești jucători.",
+    "league.season_not_over": "Sezonul se încheie pe {ends}.",
+    "league.season_open_matches": "Mai sunt {count} meciuri neîncheiate (scor neconfirmat, neplătit sau disputat).",
+    "league.not_a_match_today": "Meciul zilei se alege dintre meciurile de ligă de azi."
   },
   "web": {
     "meta": {

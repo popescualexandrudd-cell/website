@@ -225,6 +225,30 @@
         "title": "AvailabilityOut",
         "type": "object"
       },
+      "BadgeOut": {
+        "properties": {
+          "awarded_at": {
+            "format": "date-time",
+            "title": "Awarded At",
+            "type": "string"
+          },
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "key": {
+            "title": "Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "key",
+          "awarded_at"
+        ],
+        "title": "BadgeOut",
+        "type": "object"
+      },
       "Band": {
         "enum": [
           "peak",
@@ -1789,6 +1813,71 @@
         "title": "EventOut",
         "type": "object"
       },
+      "FameEntryOut": {
+        "properties": {
+          "first_name": {
+            "title": "First Name",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "last_name": {
+            "title": "Last Name",
+            "type": "string"
+          },
+          "position": {
+            "title": "Position",
+            "type": "integer"
+          },
+          "tier": {
+            "title": "Tier",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "tier",
+          "position",
+          "first_name",
+          "last_name"
+        ],
+        "title": "FameEntryOut",
+        "type": "object"
+      },
+      "FameSeasonOut": {
+        "properties": {
+          "ends_at": {
+            "format": "date-time",
+            "title": "Ends At",
+            "type": "string"
+          },
+          "entries": {
+            "items": {
+              "$ref": "#/components/schemas/FameEntryOut"
+            },
+            "title": "Entries",
+            "type": "array"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "number": {
+            "title": "Number",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "number",
+          "name",
+          "ends_at",
+          "entries"
+        ],
+        "title": "FameSeasonOut",
+        "type": "object"
+      },
       "FlagIn": {
         "properties": {
           "enabled": {
@@ -2332,6 +2421,13 @@
             "title": "Adult",
             "type": "boolean"
           },
+          "badges": {
+            "items": {
+              "$ref": "#/components/schemas/BadgeOut"
+            },
+            "title": "Badges",
+            "type": "array"
+          },
           "consent_signed": {
             "title": "Consent Signed",
             "type": "boolean"
@@ -2366,7 +2462,8 @@
           "consent_signed",
           "questionnaire",
           "ladders",
-          "recent"
+          "recent",
+          "badges"
         ],
         "title": "MeOut",
         "type": "object"
@@ -4612,6 +4709,118 @@
         ],
         "title": "Sport",
         "type": "string"
+      },
+      "SpotlightIn": {
+        "properties": {
+          "booking_id": {
+            "format": "uuid",
+            "title": "Booking Id",
+            "type": "string"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "reason": {
+            "maxLength": 250,
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "location_id",
+          "booking_id",
+          "reason"
+        ],
+        "title": "SpotlightIn",
+        "type": "object"
+      },
+      "SpotlightOut": {
+        "description": "R-012 only: no court, no time.",
+        "properties": {
+          "chosen_by_admin": {
+            "default": false,
+            "title": "Chosen By Admin",
+            "type": "boolean"
+          },
+          "found": {
+            "title": "Found",
+            "type": "boolean"
+          },
+          "players": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/SpotlightPlayerOut"
+            },
+            "title": "Players",
+            "type": "array"
+          },
+          "reasons": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Reasons",
+            "type": "array"
+          }
+        },
+        "required": [
+          "found"
+        ],
+        "title": "SpotlightOut",
+        "type": "object"
+      },
+      "SpotlightPlayerOut": {
+        "properties": {
+          "division": {
+            "title": "Division",
+            "type": "string"
+          },
+          "first_name": {
+            "title": "First Name",
+            "type": "string"
+          },
+          "last_name": {
+            "title": "Last Name",
+            "type": "string"
+          },
+          "level": {
+            "title": "Level",
+            "type": "number"
+          },
+          "lp": {
+            "title": "Lp",
+            "type": "integer"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "tier": {
+            "title": "Tier",
+            "type": "string"
+          }
+        },
+        "required": [
+          "first_name",
+          "last_name",
+          "tier",
+          "division",
+          "level",
+          "lp",
+          "position"
+        ],
+        "title": "SpotlightPlayerOut",
+        "type": "object"
       },
       "StaffBookingIn": {
         "properties": {
@@ -8682,6 +8891,53 @@
         ]
       }
     },
+    "/api/v1/league/hall-of-fame": {
+      "get": {
+        "description": "LG-134: the winners of every closed season (Season 0 has no prizes).",
+        "operationId": "jungle_league_api_hall_of_fame",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location",
+            "required": true,
+            "schema": {
+              "title": "Location",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/FameSeasonOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "summary": "Hall Of Fame",
+        "tags": [
+          "league"
+        ]
+      }
+    },
     "/api/v1/league/kings": {
       "get": {
         "description": "LG-051: the Kings of the Jungle — the 10 best eligible Masters (computed, not stored).",
@@ -8724,6 +8980,49 @@
           }
         },
         "summary": "Kings",
+        "tags": [
+          "league"
+        ]
+      }
+    },
+    "/api/v1/league/match-of-the-day": {
+      "get": {
+        "description": "§6.15: today's Match of the day, with what is at stake.",
+        "operationId": "jungle_league_api_match_of_the_day",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location",
+            "required": true,
+            "schema": {
+              "title": "Location",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpotlightOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "summary": "Match Of The Day",
         "tags": [
           "league"
         ]
@@ -12506,6 +12805,83 @@
         ]
       }
     },
+    "/api/v1/staff/league/match-of-the-day": {
+      "post": {
+        "operationId": "jungle_league_api_choose_match_of_the_day",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SpotlightIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpotlightOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Choose Match Of The Day",
+        "tags": [
+          "staff: league"
+        ]
+      }
+    },
     "/api/v1/staff/league/matches": {
       "get": {
         "description": "Disputed, expired, waiting for payment … (LG-095), with the log of every step.",
@@ -13034,6 +13410,85 @@
           }
         ],
         "summary": "Activate",
+        "tags": [
+          "staff: league"
+        ]
+      }
+    },
+    "/api/v1/staff/league/seasons/{season_id}/close": {
+      "post": {
+        "description": "Final standings, rewards as vouchers, the Hall of Fame (§6.12, §6.13).",
+        "operationId": "jungle_league_api_close",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "season_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Season Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeasonOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Close",
         "tags": [
           "staff: league"
         ]

@@ -18,7 +18,7 @@ from jungle.accounts.services.authz import current_user
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.schemas import errors
 from jungle.core.security import session_auth
-from jungle.league import challenges, matches, services
+from jungle.league import badges, challenges, closing, matches, services, spotlight
 from jungle.league.models import (
     Challenge,
     Ladder,
@@ -84,6 +84,12 @@ class RatingChangeOut(Schema):
     ladder: str
 
 
+class BadgeOut(Schema):
+    code: str
+    key: str
+    awarded_at: datetime
+
+
 class MeOut(Schema):
     in_league: bool
     adult: bool
@@ -91,6 +97,7 @@ class MeOut(Schema):
     questionnaire: str = Field(description="none, pending sau validated")
     ladders: list[MyLadderOut]
     recent: list[RatingChangeOut]
+    badges: list[BadgeOut]
 
 
 class QuestionnaireIn(Schema):
@@ -234,6 +241,68 @@ def challenge_out(challenge: Challenge, user_id: uuid.UUID) -> ChallengeOut:
     )
 
 
+class FameEntryOut(Schema):
+    kind: str
+    tier: str
+    position: int
+    first_name: str
+    last_name: str
+
+
+class FameSeasonOut(Schema):
+    number: int
+    name: str
+    ends_at: datetime
+    entries: list[FameEntryOut]
+
+
+class SpotlightPlayerOut(Schema):
+    first_name: str
+    last_name: str
+    tier: str
+    division: str
+    level: float
+    lp: int
+    position: int | None
+
+
+class SpotlightOut(Schema):
+    """R-012 only: no court, no time."""
+
+    found: bool
+    players: list[SpotlightPlayerOut] = []
+    reasons: list[str] = []
+    chosen_by_admin: bool = False
+
+
+class SpotlightIn(Schema):
+    location_id: uuid.UUID
+    booking_id: uuid.UUID
+    reason: str = Field(min_length=1, max_length=250)
+
+
+def spotlight_out(found: spotlight.Spotlight | None) -> SpotlightOut:
+    if found is None:
+        return SpotlightOut(found=False)
+    return SpotlightOut(
+        found=True,
+        players=[
+            SpotlightPlayerOut(
+                first_name=r.player_a.first_name,
+                last_name=r.player_a.last_name,
+                tier=r.tier,
+                division=r.division,
+                level=round_level(r.level),
+                lp=r.lp,
+                position=r.position,
+            )
+            for r in found.players
+        ],
+        reasons=found.reasons,
+        chosen_by_admin=found.chosen_by_admin,
+    )
+
+
 def _season(location: str, season_number: int | None) -> LeagueSeason:
     place = get_location_by_slug(location)
     seasons = LeagueSeason.objects.filter(location=place).exclude(status=SeasonStatus.PLANNED)
@@ -304,6 +373,30 @@ def kings(request: HttpRequest, location: str) -> list[StandingOut]:
     return [standing_out(r) for r in rows]
 
 
+@public_router.get("/hall-of-fame", response={200: list[FameSeasonOut], **errors(404)}, auth=None)
+def hall_of_fame(request: HttpRequest, location: str) -> list[FameSeasonOut]:
+    """LG-134: the winners of every closed season (Season 0 has no prizes)."""
+    place = get_location_by_slug(location)
+    seasons_closed = list(
+        LeagueSeason.objects.filter(location=place, status=SeasonStatus.CLOSED).order_by("-number")
+    )
+    return [
+        FameSeasonOut(
+            number=f.number,
+            name=f.name,
+            ends_at=f.ends_at,
+            entries=[FameEntryOut(**vars(e)) for e in f.entries],
+        )
+        for f in closing.hall_of_fame(seasons_closed)
+    ]
+
+
+@public_router.get("/match-of-the-day", response={200: SpotlightOut, **errors(404)}, auth=None)
+def match_of_the_day(request: HttpRequest, location: str) -> SpotlightOut:
+    """§6.15: today's Match of the day, with what is at stake."""
+    return spotlight_out(spotlight.match_of_the_day(get_location_by_slug(location)))
+
+
 # ---------------------------------------------------------------- the player's own view
 def my_changes(player_id: str, limit: int = 20) -> list[RatingChangeOut]:
     """The player's latest LP changes in the active seasons (current computation only)."""
@@ -370,6 +463,9 @@ def me(request: HttpRequest) -> MeOut:
             for r in rows
         ],
         recent=recent,
+        badges=[
+            BadgeOut(code=b.code, key=b.key, awarded_at=b.awarded_at) for b in badges.mine(user)
+        ],
     )
 
 
@@ -466,3 +562,19 @@ def resolve(request: HttpRequest, match_id: uuid.UUID, payload: ResolveIn) -> St
     cancelling an applied match recomputes the league (LG-161)."""
     match = matches.resolve(request, match_id, payload.action, payload.reason)
     return staff_match_out(LeagueMatch.objects.get(pk=match.pk))
+
+
+@staff_router.post(
+    "/league/seasons/{season_id}/close", response={200: SeasonOut, **errors(401, 403, 404, 409)}
+)
+def close(request: HttpRequest, season_id: uuid.UUID) -> SeasonOut:
+    """Final standings, rewards as vouchers, the Hall of Fame (§6.12, §6.13)."""
+    return SeasonOut.from_orm(closing.close_season(request, season_id))
+
+
+@staff_router.post(
+    "/league/match-of-the-day", response={200: SpotlightOut, **errors(400, 401, 403, 422)}
+)
+def choose_match_of_the_day(request: HttpRequest, payload: SpotlightIn) -> SpotlightOut:
+    row = spotlight.choose(request, payload.location_id, payload.booking_id, payload.reason)
+    return spotlight_out(spotlight.match_of_the_day(row.location))

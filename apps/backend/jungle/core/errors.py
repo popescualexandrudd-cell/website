@@ -183,6 +183,9 @@ class ErrorCode(StrEnum):
     LEAGUE_CHALLENGE_NOT_FOUND = "league.challenge_not_found"
     LEAGUE_CHALLENGE_NOT_TARGET = "league.challenge_not_target"
     LEAGUE_CHALLENGE_REQUIRED = "league.challenge_required"
+    LEAGUE_SEASON_NOT_OVER = "league.season_not_over"
+    LEAGUE_SEASON_OPEN_MATCHES = "league.season_open_matches"
+    LEAGUE_NOT_A_MATCH_TODAY = "league.not_a_match_today"
 
 
 class DomainError(Exception):

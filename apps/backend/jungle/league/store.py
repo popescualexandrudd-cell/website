@@ -50,6 +50,7 @@ from jungle.league.models import (
     LeagueSeason,
     LeagueSnapshot,
     RatingRecord,
+    SeasonStatus,
 )
 
 # Called after an event is applied and committed: Wallet cards, badges, notifications.
@@ -229,6 +230,9 @@ def record(
     config = config_for(season)
     with transaction.atomic():
         snapshot = snapshot_for_update(season)
+        status = LeagueSeason.objects.values_list("status", flat=True).get(pk=season.pk)
+        if status != SeasonStatus.ACTIVE:  # a closed season is final (LG-134)
+            raise DomainError(ErrorCode.LEAGUE_NO_ACTIVE_SEASON, status=409)
         if kind in (EventKind.MATCH, EventKind.CANCEL):
             earlier = season.events.filter(kind=kind, ref=ref).first()
             if earlier is not None:

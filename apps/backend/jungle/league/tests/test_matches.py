@@ -338,7 +338,7 @@ def test_invariant_1_no_score_endpoint_outside_the_kiosk(api: Api) -> None:
         (path, method)
         for path, operations in schema["paths"].items()
         for method in operations
-        if method in {"post", "put", "patch"} and ("match" in path or "score" in path)
+        if method in {"post", "put", "patch"} and ("matches" in path or "score" in path)
     ]
     assert writes == [("/api/v1/staff/league/matches/{match_id}/resolve", "post")]
 

@@ -17,7 +17,7 @@ from jungle_league.engine import decay_warnings
 from jungle.accounts.models import User
 from jungle.audit.services import SYSTEM
 from jungle.core import clock
-from jungle.league import notify, services, store
+from jungle.league import badges, notify, services, store
 from jungle.league.models import (
     DecayWarning,
     EventKind,
@@ -96,11 +96,12 @@ class DailyReport:
     days_decayed: int
     lp_removed: int
     warnings: int
+    badges: int = 0
 
 
 def run_daily(today: date | None = None) -> DailyReport:
     today = today or clock.today_local()
-    days = lp = warnings = 0
+    days = lp = warnings = given = 0
     for season in LeagueSeason.objects.filter(status=SeasonStatus.ACTIVE):
         for day in decay_days(season, today):
             event = store.record(
@@ -115,4 +116,6 @@ def run_daily(today: date | None = None) -> DailyReport:
             record = event.records.order_by("-computation").first()
             lp -= sum(u["lp_delta"] for u in (record.payload.get("decay", []) if record else []))
         warnings += warn(season, today)
-    return DailyReport(days_decayed=days, lp_removed=lp, warnings=warnings)
+        if today.weekday() == 0:  # Monday: the upset of the week that ended
+            given += badges.upset_of_week(season, today - timedelta(days=7))
+    return DailyReport(days_decayed=days, lp_removed=lp, warnings=warnings, badges=given)

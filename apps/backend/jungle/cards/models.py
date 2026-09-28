@@ -52,6 +52,7 @@ class PrintReason(models.TextChoices):
     NEW_MEMBER = "new_member", "Membru nou"
     REISSUE = "reissue", "Reemitere (card pierdut sau deteriorat)"
     DIAMOND = "diamond", "Promovare în Diamant (R-024)"
+    KING = "king", "Rege al Junglei (§6.12)"
 
 
 class PrintStatus(models.TextChoices):

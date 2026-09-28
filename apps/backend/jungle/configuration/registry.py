@@ -139,6 +139,80 @@ def networks(value: Any) -> bool:
     return True
 
 
+def _voucher_rule(value: Any) -> bool:
+    return (
+        isinstance(value, dict)
+        and set(value) == {"kind", "value", "target", "count", "valid_days"}
+        and value["kind"] in ("hour", "amount", "percent")
+        and value["target"] in ("booking", "subscription", "any")
+        and all(positive_int(value[k]) for k in ("value", "count", "valid_days"))
+        and (value["kind"] != "percent" or value["value"] <= 100)
+    )
+
+
+def league_rewards(value: Any) -> bool:
+    """LG-122: {"ladder", "kings": {...}, "tier_top": {...}}; each with "top", "vouchers"
+    and "extras" ({"ro", "en"} text handed over at the reception, may be empty)."""
+
+    def rule(r: Any) -> bool:
+        return (
+            isinstance(r, dict)
+            and set(r) == {"top", "vouchers", "extras"}
+            and positive_int(r["top"])
+            and r["top"] <= 10
+            and isinstance(r["vouchers"], list)
+            and all(_voucher_rule(v) for v in r["vouchers"])
+            and isinstance(r["extras"], dict)
+            and set(r["extras"]) == {"ro", "en"}
+            and all(isinstance(t, str) and len(t) <= 200 for t in r["extras"].values())
+        )
+
+    return (
+        isinstance(value, dict)
+        and set(value) == {"ladder", "kings", "tier_top"}
+        and value["ladder"] in ("doubles", "singles", "pairs")
+        and rule(value["kings"])
+        and rule(value["tier_top"])
+    )
+
+
+def number_map(keys: tuple[str, ...]) -> Callable[[Any], bool]:
+    """{key: positive number} for exactly `keys`."""
+
+    def check(value: Any) -> bool:
+        return (
+            isinstance(value, dict)
+            and set(value) == set(keys)
+            and all(
+                isinstance(v, int | float) and not isinstance(v, bool) and v > 0
+                for v in value.values()
+            )
+        )
+
+    return check
+
+
+BADGE_KEYS = (
+    "giant_slayer_levels",
+    "win_streak",
+    "early_bird_before_hour",
+    "early_bird_matches",
+    "weekly_streak_weeks",
+)
+SPOTLIGHT_KEYS = (
+    "promotion",
+    "promotion_margin_lp",
+    "top10_duel",
+    "top10",
+    "challenge",
+    "rivalry",
+    "rivalry_matches",
+    "rivalry_days",
+    "level_gap",
+    "level_gap_levels",
+)
+
+
 def percent(value: Any) -> bool:
     return isinstance(value, int) and not isinstance(value, bool) and 0 <= value <= 90
 
@@ -478,6 +552,84 @@ CONFIG: dict[str, ConfigSpec] = {
             "Rețelele din care Chioșcul Ligii poate trimite scoruri (ADR-0012); "
             "se restrâng la rețeaua clubului la instalare.",
             networks,
+        ),
+        ConfigSpec(
+            "league.rewards",
+            {
+                "ladder": "doubles",
+                "kings": {
+                    "top": 3,
+                    "vouchers": [
+                        {
+                            "kind": "hour",
+                            "value": 60,
+                            "target": "booking",
+                            "count": 2,
+                            "valid_days": 90,
+                        }
+                    ],
+                    "extras": {
+                        "ro": "mingi și cardul special al Regelui Junglei",
+                        "en": "balls and the special King of the Jungle card",
+                    },
+                },
+                "tier_top": {
+                    "top": 3,
+                    "vouchers": [
+                        {
+                            "kind": "percent",
+                            "value": 15,
+                            "target": "subscription",
+                            "count": 1,
+                            "valid_days": 31,
+                        },
+                        {
+                            "kind": "percent",
+                            "value": 15,
+                            "target": "booking",
+                            "count": 4,
+                            "valid_days": 31,
+                        },
+                    ],
+                    "extras": {"ro": "", "en": ""},
+                },
+            },
+            Marker.TO_CONFIRM,
+            "Recompensele de sezon (§6.12): Regii Junglei și top 3 din fiecare rang; "
+            "se fixează la începutul sezonului.",
+            league_rewards,
+            question="Q6",
+        ),
+        ConfigSpec(
+            "league.badges",
+            {
+                "giant_slayer_levels": 1.0,
+                "win_streak": 10,
+                "early_bird_before_hour": 10,
+                "early_bird_matches": 5,
+                "weekly_streak_weeks": 4,
+            },
+            Marker.TO_CONFIRM,
+            "Pragurile insignelor (§6.15).",
+            number_map(BADGE_KEYS),
+        ),
+        ConfigSpec(
+            "league.match_of_the_day",
+            {
+                "promotion": 3,
+                "promotion_margin_lp": 20,
+                "top10_duel": 3,
+                "top10": 1,
+                "challenge": 2,
+                "rivalry": 2,
+                "rivalry_matches": 2,
+                "rivalry_days": 30,
+                "level_gap": 1,
+                "level_gap_levels": 1.0,
+            },
+            Marker.TO_CONFIRM,
+            "Scorul de miză pentru Meciul zilei (§6.15): puncte și praguri.",
+            number_map(SPOTLIGHT_KEYS),
         ),
         ConfigSpec(
             "auth.staff_session_hours",

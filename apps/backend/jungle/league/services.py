@@ -285,6 +285,7 @@ def activate_season(request: HttpRequest, season_id: uuid.UUID) -> LeagueSeason:
         if season.status != SeasonStatus.PLANNED or busy:
             raise DomainError(ErrorCode.LEAGUE_SEASON_INVALID, status=409)
         season.config = current_config()
+        season.rewards = dict(get_config("league.rewards"))  # LG-122, fixed for the season
         config = store.make_config(season.config)
         previous = (
             LeagueSeason.objects.filter(location=season.location, status=SeasonStatus.CLOSED)

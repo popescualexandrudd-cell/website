@@ -43,6 +43,9 @@ class LeagueSeason(models.Model):
         default=dict, help_text="Valorile ligii fixate la începutul sezonului."
     )
     base_state = models.JSONField(null=True, blank=True, help_text="Starea ligii la început.")
+    rewards = models.JSONField(
+        default=dict, blank=True, help_text="Regulile recompenselor, fixate la început (LG-122)."
+    )
     activated_at = models.DateTimeField(null=True, blank=True)
     closed_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -470,3 +473,88 @@ class DecayWarning(models.Model):
 
     def __str__(self) -> str:
         return f"{self.day} {self.ladder} {self.competitor_id}"
+
+
+# ---------------------------------------------------------------- season end (§6.12, §6.13)
+class AwardKind(models.TextChoices):
+    KING = "king", "Rege al Junglei (top 3)"
+    TIER_TOP = "tier_top", "Top 3 în rang"
+
+
+class SeasonAward(models.Model):
+    """The Hall of Fame (LG-134) and what each winner received (LG-120 … LG-122)."""
+
+    id = models.BigAutoField(primary_key=True)
+    season = models.ForeignKey(LeagueSeason, on_delete=models.PROTECT, related_name="awards")
+    kind = models.CharField(max_length=10, choices=AwardKind.choices)
+    ladder = models.CharField(max_length=10, choices=Ladder.choices)
+    tier = models.CharField(max_length=10)
+    position = models.PositiveSmallIntegerField(help_text="1–3 în clasamentul final al rangului.")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="+")
+    competitor_id = models.CharField(max_length=80)
+    vouchers = models.JSONField(default=list, blank=True)
+    created_at = models.DateTimeField()
+
+    class Meta:
+        ordering = ["season", "kind", "tier", "position"]
+        verbose_name = "premiu de sezon"
+        verbose_name_plural = "premii de sezon"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["season", "kind", "ladder", "tier", "user"], name="season_award_once"
+            )
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.season_id} {self.kind} {self.tier} {self.position}"
+
+
+class Badge(models.Model):
+    """§6.15: badges, private (shown in the player's own account)."""
+
+    id = models.BigAutoField(primary_key=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="league_badges"
+    )
+    code = models.CharField(max_length=30)
+    key = models.CharField(
+        max_length=60, blank=True, help_text="Sezonul, săptămâna sau gol (o dată în viață)."
+    )
+    season = models.ForeignKey(
+        LeagueSeason, on_delete=models.CASCADE, null=True, blank=True, related_name="+"
+    )
+    awarded_at = models.DateTimeField()
+    details = models.JSONField(default=dict, blank=True)
+
+    class Meta:
+        ordering = ["-awarded_at"]
+        verbose_name = "insignă"
+        verbose_name_plural = "insigne"
+        constraints = [models.UniqueConstraint(fields=["user", "code", "key"], name="badge_once")]
+
+    def __str__(self) -> str:
+        return f"{self.code} {self.key}"
+
+
+class MatchOfTheDay(models.Model):
+    """§6.15: the admin's choice for a day (without one, the stake score decides)."""
+
+    id = models.BigAutoField(primary_key=True)
+    location = models.ForeignKey("locations.Location", on_delete=models.PROTECT)
+    day = models.DateField()
+    booking = models.ForeignKey("bookings.Booking", on_delete=models.PROTECT, related_name="+")
+    chosen_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="+"
+    )
+    reason = models.CharField(max_length=250)
+    created_at = models.DateTimeField()
+
+    class Meta:
+        verbose_name = "meciul zilei"
+        verbose_name_plural = "meciurile zilei"
+        constraints = [
+            models.UniqueConstraint(fields=["location", "day"], name="match_of_the_day_once")
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.day} {self.booking_id}"

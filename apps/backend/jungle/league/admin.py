@@ -5,14 +5,17 @@ from django.http import HttpRequest
 
 from jungle.core.admin_site import ReadOnlyAdmin, emergency_admin_site
 from jungle.league.models import (
+    Badge,
     Challenge,
     LeagueEvent,
     LeagueMatch,
     LeaguePlayer,
     LeagueSeason,
     LevelQuestionnaire,
+    MatchOfTheDay,
     MatchPlayer,
     MatchTransition,
+    SeasonAward,
     Standing,
 )
 
@@ -74,3 +77,20 @@ class MatchTransitionAdmin(ReadOnlyAdmin):
 class ChallengeAdmin(ReadOnlyAdmin):
     list_display = ("created_at", "ladder", "status", "respond_by", "play_by", "refusal_outcome")
     list_filter = ("status", "ladder", "season")
+
+
+@admin.register(SeasonAward, site=emergency_admin_site)
+class SeasonAwardAdmin(ReadOnlyAdmin):
+    list_display = ("season", "kind", "tier", "position", "user")
+    list_filter = ("season", "kind")
+
+
+@admin.register(Badge, site=emergency_admin_site)
+class BadgeAdmin(ReadOnlyAdmin):
+    list_display = ("user", "code", "key", "awarded_at")
+    list_filter = ("code",)
+
+
+@admin.register(MatchOfTheDay, site=emergency_admin_site)
+class MatchOfTheDayAdmin(ReadOnlyAdmin):
+    list_display = ("day", "location", "booking", "chosen_by", "reason")

@@ -171,7 +171,10 @@
     "league.challenge_exists": "There is already an open challenge between you.",
     "league.challenge_not_found": "The challenge does not exist or is no longer waiting for an answer.",
     "league.challenge_not_target": "Only the challenged players can answer.",
-    "league.challenge_required": "A challenge booking needs an accepted challenge between these players."
+    "league.challenge_required": "A challenge booking needs an accepted challenge between these players.",
+    "league.season_not_over": "The season ends on {ends}.",
+    "league.season_open_matches": "There are still {count} unfinished matches (score not confirmed, not paid or disputed).",
+    "league.not_a_match_today": "The Match of the day is chosen among today's league matches."
   },
   "web": {
     "meta": {

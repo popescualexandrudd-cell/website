@@ -221,6 +221,8 @@ def printable(request_row: PhysicalCardRequest) -> PrintableCard:
     subtitle = "Membru"
     if request_row.reason == PrintReason.DIAMOND:
         subtitle = f"Diamant · {_emblem_label(request_row.emblem)}"
+    elif request_row.reason == PrintReason.KING:
+        subtitle = "Rege al Junglei"
     return PrintableCard(
         user.first_name, user.last_name, request_row.card.number, request_row.card.token, subtitle
     )
@@ -289,6 +291,18 @@ def offer_diamond_card(user: User, location: Location) -> PhysicalCardRequest | 
         card=card, location=location, reason=PrintReason.DIAMOND, created_at=clock.now()
     )
     audit.record(audit.SYSTEM, "cards.diamond_offered", target=row)
+    return row
+
+
+def offer_king_card(user: User, location: Location) -> PhysicalCardRequest | None:
+    """§6.12, LG-120: the special card of a King of the Jungle, at the end of every season."""
+    card = active_card(user)
+    if card is None:
+        return None
+    row = PhysicalCardRequest.objects.create(
+        card=card, location=location, reason=PrintReason.KING, created_at=clock.now()
+    )
+    audit.record(audit.SYSTEM, "cards.king_offered", target=row)
     return row
 
 

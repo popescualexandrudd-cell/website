@@ -809,6 +809,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/league/hall-of-fame": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Hall Of Fame
+         * @description LG-134: the winners of every closed season (Season 0 has no prizes).
+         */
+        get: operations["jungle_league_api_hall_of_fame"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/league/kings": {
         parameters: {
             query?: never;
@@ -821,6 +841,26 @@ export interface paths {
          * @description LG-051: the Kings of the Jungle — the 10 best eligible Masters (computed, not stored).
          */
         get: operations["jungle_league_api_kings"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/league/match-of-the-day": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Match Of The Day
+         * @description §6.15: today's Match of the day, with what is at stake.
+         */
+        get: operations["jungle_league_api_match_of_the_day"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1657,6 +1697,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/staff/league/match-of-the-day": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Choose Match Of The Day */
+        post: operations["jungle_league_api_choose_match_of_the_day"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/staff/league/matches": {
         parameters: {
             query?: never;
@@ -1761,6 +1818,26 @@ export interface paths {
         put?: never;
         /** Activate */
         post: operations["jungle_league_api_activate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/league/seasons/{season_id}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Close
+         * @description Final standings, rewards as vouchers, the Hall of Fame (§6.12, §6.13).
+         */
+        post: operations["jungle_league_api_close"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2467,6 +2544,18 @@ export interface components {
             /** Resources */
             resources: components["schemas"]["ResourceAvailabilityOut"][];
         };
+        /** BadgeOut */
+        BadgeOut: {
+            /**
+             * Awarded At
+             * Format: date-time
+             */
+            awarded_at: string;
+            /** Code */
+            code: string;
+            /** Key */
+            key: string;
+        };
         /**
          * Band
          * @enum {string}
@@ -3150,6 +3239,33 @@ export interface components {
             /** Status */
             status: string;
         };
+        /** FameEntryOut */
+        FameEntryOut: {
+            /** First Name */
+            first_name: string;
+            /** Kind */
+            kind: string;
+            /** Last Name */
+            last_name: string;
+            /** Position */
+            position: number;
+            /** Tier */
+            tier: string;
+        };
+        /** FameSeasonOut */
+        FameSeasonOut: {
+            /**
+             * Ends At
+             * Format: date-time
+             */
+            ends_at: string;
+            /** Entries */
+            entries: components["schemas"]["FameEntryOut"][];
+            /** Name */
+            name: string;
+            /** Number */
+            number: number;
+        };
         /** FlagIn */
         FlagIn: {
             /** Enabled */
@@ -3395,6 +3511,8 @@ export interface components {
         MeOut: {
             /** Adult */
             adult: boolean;
+            /** Badges */
+            badges: components["schemas"]["BadgeOut"][];
             /** Consent Signed */
             consent_signed: boolean;
             /** In League */
@@ -4359,6 +4477,61 @@ export interface components {
          * @enum {string}
          */
         Sport: "padel" | "tennis" | "pilates";
+        /** SpotlightIn */
+        SpotlightIn: {
+            /**
+             * Booking Id
+             * Format: uuid
+             */
+            booking_id: string;
+            /**
+             * Location Id
+             * Format: uuid
+             */
+            location_id: string;
+            /** Reason */
+            reason: string;
+        };
+        /**
+         * SpotlightOut
+         * @description R-012 only: no court, no time.
+         */
+        SpotlightOut: {
+            /**
+             * Chosen By Admin
+             * @default false
+             */
+            chosen_by_admin: boolean;
+            /** Found */
+            found: boolean;
+            /**
+             * Players
+             * @default []
+             */
+            players: components["schemas"]["SpotlightPlayerOut"][];
+            /**
+             * Reasons
+             * @default []
+             */
+            reasons: string[];
+        };
+        /** SpotlightPlayerOut */
+        SpotlightPlayerOut: {
+            /** Division */
+            division: string;
+            /** First Name */
+            first_name: string;
+            /** Last Name */
+            last_name: string;
+            /** Level */
+            level: number;
+            /** Lp */
+            lp: number;
+            /** Position */
+            position: number | null;
+            /** Tier */
+            tier: string;
+        };
         /** StaffBookingIn */
         StaffBookingIn: {
             /** Coach Id */
@@ -6965,6 +7138,37 @@ export interface operations {
             };
         };
     };
+    jungle_league_api_hall_of_fame: {
+        parameters: {
+            query: {
+                location: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FameSeasonOut"][];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     jungle_league_api_kings: {
         parameters: {
             query: {
@@ -6983,6 +7187,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["StandingOut"][];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_match_of_the_day: {
+        parameters: {
+            query: {
+                location: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SpotlightOut"];
                 };
             };
             /** @description Not Found */
@@ -9692,6 +9927,66 @@ export interface operations {
             };
         };
     };
+    jungle_league_api_choose_match_of_the_day: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SpotlightIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SpotlightOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     jungle_league_api_staff_matches: {
         parameters: {
             query: {
@@ -10012,6 +10307,64 @@ export interface operations {
         };
     };
     jungle_league_api_activate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                season_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SeasonOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_close: {
         parameters: {
             query?: never;
             header?: never;
