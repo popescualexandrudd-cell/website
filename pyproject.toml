@@ -1,6 +1,6 @@
 # uv workspace root (virtual: no package of its own). See ADR-0002.
 [tool.uv.workspace]
-members = ["apps/backend", "packages/league-engine"]
+members = ["apps/backend", "packages/league-engine", "services/hardware-bridge"]
 
 [tool.ruff]
 line-length = 100

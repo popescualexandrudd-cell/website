@@ -216,3 +216,14 @@ def test_adr0013_invalid_messages_are_refused(device: Device, change: str) -> No
     with pytest.raises(DomainError) as exc:
         bridge.verify(device, message, "scan")
     assert exc.value.code.value == "devices.signature_invalid"
+
+
+def test_adr0013_the_bridge_and_the_server_agree(device: Device, tmp_path: Any) -> None:
+    """Contract: a scan signed by the Hardware Bridge's own code verifies on the server."""
+    from jungle_bridge.signing import Signer, load_or_create_key
+
+    key = load_or_create_key(tmp_path / "bridge-key.pem")
+    signer = Signer(key, str(device.pk), clock.now)
+    device.public_key = signer.public_key
+    message = signer.sign("scan", code="CARD-1")
+    assert bridge.verify(device, message, "scan")["code"] == "CARD-1"
