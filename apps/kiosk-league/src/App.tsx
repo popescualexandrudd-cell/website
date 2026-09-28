@@ -79,7 +79,7 @@ export function App() {
         return;
       }
       if (error instanceof ApiError) {
-        if (error.code === "league.kiosk_session_expired") endSession(null);
+        if (error.code === "devices.session_expired") endSession(null);
         notify(errorText(lang, error.code, error.params), "error");
         return;
       }

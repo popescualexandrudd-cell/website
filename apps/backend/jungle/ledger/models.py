@@ -70,6 +70,7 @@ class TransactionKind(models.TextChoices):
     SALE = "sale", "Vânzare (abonament, cafenea)"
     VOUCHER_ISSUE = "voucher_issue", "Voucher emis"
     VOUCHER_REDEEM = "voucher_redeem", "Voucher folosit"
+    TRANSFER = "transfer", "Mutare de numerar (seif ↔ chioșc)"
 
 
 class LedgerTransaction(models.Model):

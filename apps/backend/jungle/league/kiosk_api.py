@@ -9,12 +9,10 @@ card scan); otherwise the plain code is accepted (development, or before the bri
 
 from __future__ import annotations
 
-import secrets
 import uuid
 from datetime import datetime
 from typing import Any
 
-from django.core.cache import cache
 from django.http import HttpRequest
 from ninja import Field, Router, Schema, Status
 
@@ -22,8 +20,14 @@ from jungle.attendance.services import record_arrival_at_device
 from jungle.cards import services as cards
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.schemas import errors
-from jungle.devices import bridge
 from jungle.devices.auth import device_auth, device_of
+from jungle.devices.kiosk_session import (
+    CardIn,
+    LogoutIn,
+    end_session,
+    open_session,
+    scanned_token,
+)
 from jungle.league import challenges, kiosk, kiosk_views, matches, spotlight
 from jungle.league.api import (
     ChallengeOut,
@@ -42,21 +46,8 @@ from jungle.privacy import league_consent
 
 router = Router(tags=["kiosk: league"], auth=device_auth)
 
-# A scan opens a short session on this kiosk, so the player can do several things after one
-# scan (a signed scan is accepted only once). It lives on the server, is bound to the device,
-# and ends after a minute without use or when the kiosk logs the player out (§8.2: 30 s idle).
-SESSION_SECONDS = 60
-
 
 # ---------------------------------------------------------------- schemas
-class CardIn(Schema):
-    token: str | None = Field(default=None, max_length=200, description="Codul citit (fără Bridge)")
-    signed: dict[str, Any] | None = Field(default=None, description="Scanarea semnată de Bridge")
-    session: str | None = Field(
-        default=None, max_length=64, description="Sesiunea deschisă de o scanare (POST /session)"
-    )
-
-
 class PersonOut(Schema):
     id: str
     first_name: str
@@ -112,7 +103,7 @@ class FixtureViewOut(Schema):
     score: dict[str, Any] | None = None
 
 
-class SessionOut(Schema):
+class KioskSessionOut(Schema):
     session: str = Field(description="Se trimite la acțiunile următoare, în loc de card")
     player: PersonOut
     language: str
@@ -160,7 +151,7 @@ class ConsentIn(Schema):
     accepted: bool = Field(description="Bifa obligatorie (R-010)")
 
 
-class ConsentOut(Schema):
+class KioskConsentOut(Schema):
     signed: bool
     version: int | None
 
@@ -198,29 +189,6 @@ class CheckInOut(Schema):
 
 
 # ---------------------------------------------------------------- helpers
-def _session_key(request: HttpRequest, session: str) -> str:
-    return f"kiosk-session:{device_of(request).pk}:{session}"
-
-
-def scanned_token(request: HttpRequest, card: CardIn) -> str:
-    """What the scanner read (signed by the device's bridge when it has one), or the card
-    behind a session this kiosk opened."""
-    device = device_of(request)
-    if card.session:
-        key = _session_key(request, card.session)
-        token = cache.get(key)
-        if token is None:
-            raise DomainError(ErrorCode.LEAGUE_KIOSK_SESSION_EXPIRED, status=403)
-        cache.touch(key, SESSION_SECONDS)
-        return str(token)
-    if device.public_key:
-        payload = bridge.verify(device, card.signed or {}, "scan")
-        return str(payload.get("code", ""))
-    if not card.token:
-        raise DomainError(ErrorCode.CARDS_INVALID, status=404)
-    return card.token
-
-
 def _guard(request: HttpRequest, action: str) -> None:
     device = device_of(request)
     kiosk.check(request, device, device.location_id, action)
@@ -230,8 +198,8 @@ def _people(people: list[kiosk_views.Person]) -> list[PersonOut]:
     return [PersonOut(**vars(p)) for p in people]
 
 
-def session_out(view: kiosk_views.Session, session: str) -> SessionOut:
-    return SessionOut(
+def session_out(view: kiosk_views.Session, session: str) -> KioskSessionOut:
+    return KioskSessionOut(
         session=session,
         player=PersonOut(**vars(view.player)),
         language=view.language,
@@ -260,11 +228,8 @@ def session_out(view: kiosk_views.Session, session: str) -> SessionOut:
     )
 
 
-def _session(request: HttpRequest, card: CardIn) -> SessionOut:
-    token = scanned_token(request, card)
-    user = cards.resolve(token).user
-    session = card.session or secrets.token_urlsafe(24)
-    cache.set(_session_key(request, session), token, SESSION_SECONDS)
+def _session(request: HttpRequest, card: CardIn) -> KioskSessionOut:
+    user, session = open_session(request, card)
     return session_out(kiosk_views.session(device_of(request), user), session)
 
 
@@ -323,21 +288,17 @@ def standings(
     return shown
 
 
-@router.post("/session", response={200: SessionOut, **errors(401, 403, 404, 422)})
-def session(request: HttpRequest, payload: CardOnlyIn) -> SessionOut:
+@router.post("/session", response={200: KioskSessionOut, **errors(401, 403, 404, 422)})
+def session(request: HttpRequest, payload: CardOnlyIn) -> KioskSessionOut:
     """After a scan: the player's own screen (logged out by the kiosk after 30 s idle)."""
     _guard(request, "league.kiosk_session")
     return _session(request, payload.card)
 
 
-class LogoutIn(Schema):
-    session: str = Field(max_length=64)
-
-
 @router.post("/logout", response={204: None, **errors(401, 422)})
 def logout(request: HttpRequest, payload: LogoutIn) -> Status[None]:
     """The kiosk ends the session (the player left, or 30 s without a touch)."""
-    cache.delete(_session_key(request, payload.session))
+    end_session(request, payload.session)
     return Status(204, None)
 
 
@@ -350,15 +311,15 @@ def consent_text(request: HttpRequest, language: str = "ro") -> ConsentTextOut:
     )
 
 
-@router.post("/consent", response={200: ConsentOut, **errors(400, 401, 403, 404, 422)})
-def sign_consent(request: HttpRequest, payload: ConsentIn) -> ConsentOut:
+@router.post("/consent", response={200: KioskConsentOut, **errors(400, 401, 403, 404, 422)})
+def sign_consent(request: HttpRequest, payload: ConsentIn) -> KioskConsentOut:
     """R-010, R-011: only with the box ticked, at this League Kiosk."""
     if not payload.accepted:
         raise DomainError(ErrorCode.VALIDATION_INVALID, params={"field": "accepted"})
     _guard(request, "league.kiosk_consent_sign")
     user = cards.resolve(scanned_token(request, payload.card)).user
     consent = league_consent.sign(request, user, device_of(request), payload.language)
-    return ConsentOut(signed=True, version=consent.document.version)
+    return KioskConsentOut(signed=True, version=consent.document.version)
 
 
 @router.post("/matches", response={201: MatchOut, **errors(400, 401, 403, 404, 409, 422)})

@@ -309,6 +309,28 @@ FLAGS: dict[str, FlagSpec] = {
     ]
 }
 
+REVENUE_CATEGORIES = (
+    "padel",
+    "tennis",
+    "pilates",
+    "lessons",
+    "subscriptions",
+    "cafe",
+    "events",
+    "tournaments",
+    "fees",
+)
+
+
+def vat_groups(value: Any) -> bool:
+    """The fiscal register's VAT group for each revenue category (a letter A … E)."""
+    return (
+        isinstance(value, dict)
+        and set(value) == set(REVENUE_CATEGORIES)
+        and all(isinstance(v, str) and v in ("A", "B", "C", "D", "E") for v in value.values())
+    )
+
+
 CONFIG: dict[str, ConfigSpec] = {
     spec.key: spec
     for spec in [
@@ -656,6 +678,39 @@ CONFIG: dict[str, ConfigSpec] = {
             "Bonusul de LP pe fază la turnee (§6.14, LG-141), peste LP × 1,5.",
             number_map(("winner", "finalist", "semifinal", "quarterfinal")),
             question="Q28",
+        ),
+        ConfigSpec(
+            "checkout.max_amount",
+            500_000,
+            Marker.TO_CONFIRM,
+            "Suma maximă a unei plăți în numerar la Chioșcul de Plăți (bani; 5 000 lei).",
+            positive_int,
+            question="Q53",
+        ),
+        ConfigSpec(
+            "checkout.vat_groups",
+            dict.fromkeys(REVENUE_CATEGORIES, "A"),
+            Marker.TO_CONFIRM,
+            "Grupa de TVA a casei de marcat pentru fiecare categorie de venit "
+            "(se confirmă cu contabilul clubului).",
+            vat_groups,
+            question="Q53",
+        ),
+        ConfigSpec(
+            "checkout.pin_max_failures",
+            5,
+            Marker.TO_CONFIRM,
+            "Câte încercări greșite de PIN la chioșc până la blocare (modul personal).",
+            positive_int,
+            question="Q54",
+        ),
+        ConfigSpec(
+            "checkout.pin_lock_minutes",
+            15,
+            Marker.TO_CONFIRM,
+            "Cât rămâne blocat PIN-ul după prea multe încercări greșite (minute).",
+            positive_int,
+            question="Q54",
         ),
         ConfigSpec(
             "auth.staff_session_hours",

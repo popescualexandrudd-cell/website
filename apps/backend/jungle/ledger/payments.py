@@ -230,8 +230,15 @@ def pay(
     *,
     device_id: uuid.UUID | None = None,
     voucher_account: LedgerAccount | None = None,
+    cash_account: LedgerAccount | None = None,
+    fiscal_receipt: str | None = None,
+    extra: dict[str, Any] | None = None,
 ) -> Payment:
-    """One person pays (part of) a booking or class (R-060, R-062, R-067)."""
+    """One person pays (part of) a booking or class (R-060, R-062, R-067).
+
+    At the Payments Kiosk the cash goes into that kiosk's own cash box (`cash_account`) and
+    the fiscal receipt is printed by the kiosk's register through its Hardware Bridge, for the
+    whole purchase (`fiscal_receipt=""`: none here; see `jungle.checkout`)."""
     if not data.idempotency_key:
         raise DomainError(ErrorCode.PAYMENTS_IDEMPOTENCY_REQUIRED)
     fingerprint = request_hash(
@@ -265,9 +272,13 @@ def pay(
             if data.tendered < data.amount:
                 raise DomainError(ErrorCode.PAYMENTS_INSUFFICIENT_CASH)
             tendered, change = data.tendered, data.tendered - data.amount
-            source = account(AccountKind.CASH, location=due.location)
-            receipt = fiscal.printer().print_receipt(
-                [fiscal.ReceiptLine(due.description, data.amount)], tendered
+            source = cash_account or account(AccountKind.CASH, location=due.location)
+            receipt = (
+                fiscal_receipt
+                if fiscal_receipt is not None
+                else fiscal.printer().print_receipt(
+                    [fiscal.ReceiptLine(due.description, data.amount)], tendered
+                )
             )
         elif data.method == PaymentMethod.BALANCE:
             source = account(AccountKind.CUSTOMER_BALANCE, user=payer)
@@ -292,6 +303,7 @@ def pay(
             fingerprint=fingerprint,
             location=due.location,
             metadata={
+                **(extra or {}),
                 "purpose": PURPOSE_PAYMENT,
                 "payer": str(payer.pk),
                 **({"voucher": data.voucher_id} if data.voucher_id else {}),
@@ -488,9 +500,22 @@ def pay_for(
     data: PaymentData,
     *,
     voucher_account: LedgerAccount | None = None,
+    cash_account: LedgerAccount | None = None,
+    fiscal_receipt: str | None = None,
+    extra: dict[str, Any] | None = None,
+    device_id: uuid.UUID | None = None,
 ) -> Payment:
     """`pay`, then what a full payment unlocks (a subscription becomes active)."""
-    payment = pay(actor, due, data, voucher_account=voucher_account)
+    payment = pay(
+        actor,
+        due,
+        data,
+        voucher_account=voucher_account,
+        cash_account=cash_account,
+        fiscal_receipt=fiscal_receipt,
+        extra=extra,
+        device_id=device_id,
+    )
     if subject.subscription_id is not None:
         from jungle.subscriptions.services import activate_if_paid
 

@@ -65,7 +65,7 @@ class LineIn(Schema):
     quantity: int = Field(ge=1, le=20)
 
 
-class OrderIn(Schema):
+class CafeOrderIn(Schema):
     location_id: uuid.UUID
     lines: list[LineIn] = Field(min_length=1, max_length=30)
     method: PaymentMethod
@@ -94,7 +94,7 @@ class AdvanceIn(Schema):
     status: OrderStatus
 
 
-class CancelIn(Schema):
+class CafeCancelIn(Schema):
     reason: str = Field(min_length=1, max_length=500)
 
 
@@ -185,7 +185,7 @@ def update_product(request: HttpRequest, product_id: uuid.UUID, payload: Product
 @staff_router.post("/cafe/orders", response={201: OrderOut, **errors(400, 401, 403, 404, 409, 422)})
 def place_order(
     request: HttpRequest,
-    payload: OrderIn,
+    payload: CafeOrderIn,
     idempotency_key: Annotated[str, Header(alias="Idempotency-Key", max_length=200)],
 ) -> Status[OrderOut]:
     order = services.staff_order(
@@ -219,5 +219,5 @@ def advance(request: HttpRequest, order_id: uuid.UUID, payload: AdvanceIn) -> Or
     "/cafe/orders/{order_id}/cancel",
     response={200: OrderOut, **errors(400, 401, 403, 404, 409, 422)},
 )
-def cancel(request: HttpRequest, order_id: uuid.UUID, payload: CancelIn) -> OrderOut:
+def cancel(request: HttpRequest, order_id: uuid.UUID, payload: CafeCancelIn) -> OrderOut:
     return order_out(services.cancel(request, order_id, payload.reason))

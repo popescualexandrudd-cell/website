@@ -15,6 +15,7 @@ from __future__ import annotations
 import base64
 import binascii
 import json
+import uuid
 from datetime import datetime
 from typing import Any
 
@@ -43,6 +44,29 @@ def public_key(value: str) -> Ed25519PublicKey:
 
 def _invalid() -> DomainError:
     return DomainError(ErrorCode.DEVICES_SIGNATURE_INVALID, status=403)
+
+
+def verify_event(device: Device, envelope: Any, kinds: tuple[str, ...]) -> dict[str, Any]:
+    """An event from the bridge's cash journal (a note accepted, change given, a receipt
+    printed). Unlike a scan it has no time window: after a power cut or an outage it reaches
+    the server late, sometimes hours later. It is accepted once because each event has a
+    unique id, which the server stores (the caller checks it)."""
+    if not isinstance(envelope, dict) or not device.public_key:
+        raise _invalid()
+    payload = envelope.get("payload")
+    signature = envelope.get("signature")
+    if not isinstance(payload, dict) or not isinstance(signature, str):
+        raise _invalid()
+    try:
+        public_key(device.public_key).verify(
+            base64.b64decode(signature, validate=True), canonical(payload)
+        )
+        uuid.UUID(str(payload["event"]))
+    except (InvalidSignature, binascii.Error, KeyError, ValueError) as exc:
+        raise _invalid() from exc
+    if payload.get("device") != str(device.pk) or payload.get("type") not in kinds:
+        raise _invalid()
+    return payload
 
 
 def verify(device: Device, envelope: dict[str, Any], kind: str) -> dict[str, Any]:

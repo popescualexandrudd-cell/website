@@ -241,3 +241,67 @@ def test_adr0012_guessing_tokens_is_throttled(api: Api, staff: Any, device: Devi
     assert logs.count() == auth.MAX_FAILURES  # without more audit rows
     other = whoami(token, REMOTE_ADDR="10.0.0.77")
     assert other.status_code == 200  # another address is not affected
+
+
+# ---------------------------------------------------------------- the server's signed commands
+def test_adr0013_server_commands_verify_on_the_bridge(device: Device) -> None:
+    """Contract: a command signed by the server passes the bridge's own check, once."""
+    from io import StringIO
+
+    from django.core.management import call_command
+    from jungle_bridge.signing import Verifier, parse_public_key
+
+    from jungle.devices import commands
+
+    out = StringIO()
+    call_command("device_command_key", stdout=out)
+    assert out.getvalue().strip() == commands.public_key()
+    seen: set[str] = set()
+
+    def once(nonce: str) -> bool:
+        fresh = nonce not in seen
+        seen.add(nonce)
+        return fresh
+
+    verifier = Verifier(
+        parse_public_key(commands.public_key()), str(device.pk), 120, clock.now, once
+    )
+    command = commands.sign(device, "cash.dispense", txn="checkout-1", amount=1200)
+    assert verifier.verify(command, "cash.dispense")["amount"] == 1200
+
+
+def journal_event(key: Ed25519PrivateKey, owner: Device, **changes: Any) -> dict[str, Any]:
+    payload = {
+        "device": str(owner.pk),
+        "type": "cash.accepted",
+        "event": str(uuid.uuid4()),
+        "txn": "checkout-1",
+        "amount": 5000,
+        "nonce": uuid.uuid4().hex,
+        "at": (clock.now() - timedelta(hours=5)).isoformat(),  # late after an outage: fine
+        **changes,
+    }
+    return signed(key, payload)
+
+
+def test_adr0013_cash_events_have_no_time_window(device: Device) -> None:
+    key = Ed25519PrivateKey.generate()
+    device.public_key = raw_key(key)
+    message = journal_event(key, device)
+    kinds = ("cash.accepted", "cash.dispensed")
+    assert bridge.verify_event(device, message, kinds)["amount"] == 5000
+    wrong: list[Any] = [
+        "text",
+        {"payload": [], "signature": "x"},
+        {**message, "signature": "%%%"},
+        journal_event(Ed25519PrivateKey.generate(), device),
+        journal_event(key, device, event="nu-e-uuid"),
+        journal_event(key, device, device=str(uuid.uuid4())),
+        journal_event(key, device, type="scan"),
+    ]
+    for envelope in wrong:
+        with pytest.raises(DomainError):
+            bridge.verify_event(device, envelope, kinds)
+    device.public_key = ""
+    with pytest.raises(DomainError):
+        bridge.verify_event(device, message, kinds)

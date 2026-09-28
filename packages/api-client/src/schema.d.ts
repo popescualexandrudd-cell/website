@@ -758,6 +758,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/device/cafe/orders/{order_id}/advance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Display Advance */
+        post: operations["jungle_checkout_api_display_advance"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/device/cafe/queue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Display Queue */
+        get: operations["jungle_checkout_api_display_queue"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/device/whoami": {
         parameters: {
             query?: never;
@@ -1072,6 +1106,412 @@ export interface paths {
         get: operations["jungle_league_kiosk_api_standings"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/alerts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Alert
+         * @description A device fault the bridge reported (jam, low change, cassette full, no paper).
+         */
+        post: operations["jungle_checkout_api_alert"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/bookings/{booking_id}/split": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Split
+         * @description R-060, R-061: the shares of the hour, and what is still to pay, live.
+         */
+        get: operations["jungle_checkout_api_split"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/check-in": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Check In
+         * @description §8.3 flow 1 (R-030).
+         */
+        post: operations["jungle_checkout_api_check_in"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/checkouts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Checkout */
+        post: operations["jungle_checkout_api_create_checkout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/checkouts/{checkout_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Checkout
+         * @description The kiosk page, restarted, checks what became of a transaction the bridge still has.
+         */
+        get: operations["jungle_checkout_api_get_checkout"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/checkouts/{checkout_id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cancel */
+        post: operations["jungle_checkout_api_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/checkouts/{checkout_id}/finish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Finish */
+        post: operations["jungle_checkout_api_finish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/checkouts/{checkout_id}/refunded": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Refunded */
+        post: operations["jungle_checkout_api_refunded"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/checkouts/{checkout_id}/settle": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Settle */
+        post: operations["jungle_checkout_api_settle"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/checkouts/{checkout_id}/start": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Start */
+        post: operations["jungle_checkout_api_start"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Events
+         * @description What the bridge signed (notes, change, receipts, staff operations); idempotent. The
+         *     answer carries the signed acknowledgement the bridge needs to mark them as synced.
+         */
+        post: operations["jungle_checkout_api_events"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/idle": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Idle
+         * @description The idle screen: the café menu (the subscription offers come from the public
+         *     configurator, by `location_slug`).
+         */
+        get: operations["jungle_checkout_api_idle"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Logout */
+        post: operations["jungle_checkout_api_logout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/pay-balance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Pay Balance
+         * @description §8.3 flow 6: the credit in the account pays.
+         */
+        post: operations["jungle_checkout_api_pay_balance"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/session": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Session */
+        post: operations["jungle_checkout_api_session"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/staff/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Staff Login */
+        post: operations["jungle_checkout_api_staff_login"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/staff/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Staff Logout */
+        post: operations["jungle_checkout_api_staff_logout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/staff/operations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Start Operation */
+        post: operations["jungle_checkout_api_start_operation"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/staff/operations/list": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** List Operations */
+        post: operations["jungle_checkout_api_list_operations"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/subscriptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Order Subscription
+         * @description §8.3 flow 4: the 3-step configurator (R-081); then it is paid like any item.
+         */
+        post: operations["jungle_checkout_api_order_subscription"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/subscriptions/{subscription_id}/freeze": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Freeze
+         * @description §8.3 flow 4: freezing (R-086).
+         */
+        post: operations["jungle_checkout_api_freeze"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/payments/voucher": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Voucher
+         * @description §8.3 flow 6: a voucher of the card holder, used here (R-121).
+         */
+        post: operations["jungle_checkout_api_voucher"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2138,6 +2578,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/staff/kiosk-pin": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Set Pin
+         * @description A staff member who handles cash sets their PIN for the kiosk's staff mode (Q54).
+         */
+        post: operations["jungle_checkout_api_set_pin"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/staff/league/fixtures/{fixture_id}/finished": {
         parameters: {
             query?: never;
@@ -3018,9 +3478,23 @@ export interface components {
             /** Reason */
             reason: string;
         };
+        /** ActiveSubscriptionOut */
+        ActiveSubscriptionOut: {
+            /** Description */
+            description: string;
+            /** Ends On */
+            ends_on: string;
+            /** Id */
+            id: string;
+        };
         /** AdvanceIn */
         AdvanceIn: {
             status: components["schemas"]["OrderStatus"];
+        };
+        /** AlertIn */
+        AlertIn: {
+            /** Code */
+            code: string;
         };
         /** AuditOut */
         AuditOut: {
@@ -3088,6 +3562,20 @@ export interface components {
             code: string;
             /** Key */
             key: string;
+        };
+        /** BalanceIn */
+        BalanceIn: {
+            card: components["schemas"]["CardIn"];
+            /** Idempotency Key */
+            idempotency_key: string;
+            item: components["schemas"]["ItemIn"];
+        };
+        /** BalanceOut */
+        BalanceOut: {
+            /** Amount */
+            amount: number;
+            /** Order */
+            order: number | null;
         };
         /**
          * Band
@@ -3170,10 +3658,59 @@ export interface components {
             /** Status */
             status: string;
         };
-        /** CancelIn */
-        CancelIn: {
+        /** CafeCancelIn */
+        CafeCancelIn: {
             /** Reason */
             reason: string;
+        };
+        /** CafeLineIn */
+        CafeLineIn: {
+            /**
+             * Product Id
+             * Format: uuid
+             */
+            product_id: string;
+            /** Quantity */
+            quantity: number;
+        };
+        /** CafeOrderIn */
+        CafeOrderIn: {
+            /** Customer Id */
+            customer_id?: string | null;
+            /** Lines */
+            lines: components["schemas"]["LineIn"][];
+            /**
+             * Location Id
+             * Format: uuid
+             */
+            location_id: string;
+            method: components["schemas"]["PaymentMethod"];
+            /** Reason */
+            reason: string;
+            /**
+             * Tendered
+             * @default 0
+             */
+            tendered: number;
+        };
+        /** CancelIn */
+        CancelIn: {
+            /**
+             * Reason
+             * @default
+             */
+            reason: string;
+            /**
+             * Waive
+             * @default false
+             */
+            waive: boolean;
+        };
+        /** CancelOut */
+        CancelOut: {
+            close: components["schemas"]["Command"] | null;
+            refund: components["schemas"]["Command"] | null;
+            stop: components["schemas"]["Command"] | null;
         };
         /** CancelVoucherIn */
         CancelVoucherIn: {
@@ -3314,6 +3851,11 @@ export interface components {
             /** Targets */
             targets: components["schemas"]["PlayerOut"][];
         };
+        /**
+         * ChangeMode
+         * @enum {string}
+         */
+        ChangeMode: "normal" | "exact" | "credit";
         /** CheckInOut */
         CheckInOut: {
             /** First Name */
@@ -3323,6 +3865,36 @@ export interface components {
              * Format: date-time
              */
             scanned_at: string;
+        };
+        /** CheckoutIn */
+        CheckoutIn: {
+            card: components["schemas"]["CardIn"];
+            /** Items */
+            items: components["schemas"]["ItemIn"][];
+        };
+        /** CheckoutOut */
+        CheckoutOut: {
+            /** Amount Due */
+            amount_due: number;
+            /** Change Mode */
+            change_mode: string;
+            /** Credited */
+            credited: number;
+            /** Dispensed */
+            dispensed: number;
+            /** Fiscal Receipt */
+            fiscal_receipt: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Inserted */
+            inserted: number;
+            /** Items */
+            items: components["schemas"]["ItemOut"][];
+            /** Status */
+            status: string;
         };
         /** ChildIn */
         ChildIn: {
@@ -3424,6 +3996,15 @@ export interface components {
             /** Code */
             code: string;
         };
+        /** Command */
+        Command: {
+            /** Payload */
+            payload: {
+                [key: string]: unknown;
+            };
+            /** Signature */
+            signature: string;
+        };
         /**
          * CompanyOut
          * @description Legal identity of the club, shown in every page footer (consumer law, §12.3).
@@ -3500,10 +4081,23 @@ export interface components {
         };
         /** ConsentOut */
         ConsentOut: {
-            /** Signed */
-            signed: boolean;
-            /** Version */
-            version: number | null;
+            /** Action */
+            action: string;
+            /** Device Id */
+            device_id: string | null;
+            /** Document Kind */
+            document_kind: string;
+            /** Document Version */
+            document_version: number;
+            /** Language */
+            language: string;
+            /**
+             * Occurred At
+             * Format: date-time
+             */
+            occurred_at: string;
+            /** Text Sha256 */
+            text_sha256: string;
         };
         /** ConsentStatusOut */
         ConsentStatusOut: {
@@ -3681,6 +4275,11 @@ export interface components {
             /** Status */
             status: string;
         };
+        /** DisplayAdvanceIn */
+        DisplayAdvanceIn: {
+            /** Status */
+            status: string;
+        };
         /**
          * DocumentKind
          * @enum {string}
@@ -3787,9 +4386,18 @@ export interface components {
         /** EntryPageOut */
         EntryPageOut: {
             /** Items */
-            items: components["schemas"]["EntryOut"][];
+            items: components["schemas"]["WaitlistEntryOut"][];
             /** Total */
             total: number;
+        };
+        /** Envelope */
+        Envelope: {
+            /** Payload */
+            payload: {
+                [key: string]: unknown;
+            };
+            /** Signature */
+            signature: string;
         };
         /** ErrorBody */
         ErrorBody: {
@@ -3859,6 +4467,14 @@ export interface components {
             /** Status */
             status: string;
         };
+        /** EventsIn */
+        EventsIn: {
+            /**
+             * Events
+             * @default []
+             */
+            events: components["schemas"]["Envelope"][];
+        };
         /** FameEntryOut */
         FameEntryOut: {
             /** First Name */
@@ -3885,6 +4501,11 @@ export interface components {
             name: string;
             /** Number */
             number: number;
+        };
+        /** FinishOut */
+        FinishOut: {
+            dispense: components["schemas"]["Command"] | null;
+            settled: components["schemas"]["SettledOut"] | null;
         };
         /**
          * FixtureOut
@@ -3987,6 +4608,19 @@ export interface components {
              */
             starts_on: string;
         };
+        /** FrozenOut */
+        FrozenOut: {
+            /**
+             * Ends On
+             * Format: date
+             */
+            ends_on: string;
+            /**
+             * Starts On
+             * Format: date
+             */
+            starts_on: string;
+        };
         /** GoogleWalletOut */
         GoogleWalletOut: {
             /** Url */
@@ -4074,6 +4708,86 @@ export interface components {
              */
             starts_at: string;
         };
+        /** ItemIn */
+        ItemIn: {
+            /** Amount */
+            amount?: number | null;
+            /**
+             * Cafe Lines
+             * @default []
+             */
+            cafe_lines: components["schemas"]["CafeLineIn"][];
+            kind: components["schemas"]["ItemKind"];
+            /** Subject Id */
+            subject_id?: string | null;
+        };
+        /**
+         * ItemKind
+         * @enum {string}
+         */
+        ItemKind: "booking" | "enrollment" | "subscription" | "tournament_entry" | "cafe";
+        /** ItemOut */
+        ItemOut: {
+            /** Amount */
+            amount: number;
+            /** Description */
+            description: string;
+            /** Kind */
+            kind: string;
+            /** Subject Id */
+            subject_id: string | null;
+        };
+        /** KioskConsentOut */
+        KioskConsentOut: {
+            /** Signed */
+            signed: boolean;
+            /** Version */
+            version: number | null;
+        };
+        /** KioskFreezeIn */
+        KioskFreezeIn: {
+            card: components["schemas"]["CardIn"];
+            /** Days */
+            days: number;
+            /**
+             * Starts On
+             * Format: date
+             */
+            starts_on: string;
+        };
+        /** KioskSessionOut */
+        KioskSessionOut: {
+            /** Adult */
+            adult: boolean;
+            /** Challenges */
+            challenges: components["schemas"]["WaitingChallengeOut"][];
+            /** Consent Outdated */
+            consent_outdated: boolean;
+            /** Consent Signed */
+            consent_signed: boolean;
+            /** Director */
+            director: boolean;
+            /** Fixtures */
+            fixtures: components["schemas"]["FixtureViewOut"][];
+            /** In League */
+            in_league: boolean;
+            /** Ladders */
+            ladders: components["schemas"]["LadderOut"][];
+            /** Language */
+            language: string;
+            player: components["schemas"]["PersonOut"];
+            /** Questionnaire */
+            questionnaire: string;
+            /** Score Chances */
+            score_chances: components["schemas"]["ScoreChanceOut"][];
+            /**
+             * Session
+             * @description Se trimite la acțiunile următoare, în loc de card
+             */
+            session: string;
+            /** To Confirm */
+            to_confirm: components["schemas"]["WaitingMatchOut"][];
+        };
         /**
          * Ladder
          * @description LG-001.
@@ -4100,6 +4814,31 @@ export interface components {
             position: number | null;
             /** Tier */
             tier: string;
+        };
+        /** LeagueMeOut */
+        LeagueMeOut: {
+            /** Adult */
+            adult: boolean;
+            /** Badges */
+            badges: components["schemas"]["BadgeOut"][];
+            /** Consent Signed */
+            consent_signed: boolean;
+            /** In League */
+            in_league: boolean;
+            /** Ladders */
+            ladders: components["schemas"]["MyLadderOut"][];
+            /**
+             * Questionnaire
+             * @description none, pending sau validated
+             */
+            questionnaire: string;
+            /** Recent */
+            recent: components["schemas"]["RatingChangeOut"][];
+        };
+        /** LeagueReasonIn */
+        LeagueReasonIn: {
+            /** Reason */
+            reason: string;
         };
         /** LegalDocumentOut */
         LegalDocumentOut: {
@@ -4268,23 +5007,38 @@ export interface components {
         };
         /** MeOut */
         MeOut: {
-            /** Adult */
-            adult: boolean;
-            /** Badges */
-            badges: components["schemas"]["BadgeOut"][];
-            /** Consent Signed */
-            consent_signed: boolean;
-            /** In League */
-            in_league: boolean;
-            /** Ladders */
-            ladders: components["schemas"]["MyLadderOut"][];
+            /** Account Type */
+            account_type: string;
             /**
-             * Questionnaire
-             * @description none, pending sau validated
+             * Created At
+             * Format: date-time
              */
-            questionnaire: string;
-            /** Recent */
-            recent: components["schemas"]["RatingChangeOut"][];
+            created_at: string;
+            /** Date Of Birth */
+            date_of_birth: string | null;
+            /** Email */
+            email: string | null;
+            /** Email Verified */
+            email_verified: boolean;
+            /** First Name */
+            first_name: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Last Name */
+            last_name: string;
+            /** Mfa Enabled */
+            mfa_enabled: boolean;
+            /** Mfa Verified */
+            mfa_verified: boolean;
+            /** Phone */
+            phone: string;
+            /** Preferred Language */
+            preferred_language: string;
+            /** Roles */
+            roles: components["schemas"]["RoleOut"][];
         };
         /** MemberIn */
         MemberIn: {
@@ -4383,6 +5137,57 @@ export interface components {
              */
             ok: boolean;
         };
+        /** OperationIn */
+        OperationIn: {
+            kind: components["schemas"]["OperationKind"];
+            /** Notes */
+            notes?: {
+                [key: string]: number;
+            } | null;
+            /** Token */
+            token: string;
+        };
+        /**
+         * OperationKind
+         * @enum {string}
+         */
+        OperationKind: "refill" | "empty" | "count" | "day_close";
+        /** OperationOut */
+        OperationOut: {
+            /** Amount */
+            amount: number | null;
+            /** Completed At */
+            completed_at: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Difference */
+            difference: number | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Kind */
+            kind: string;
+            /** Ledger Amount */
+            ledger_amount: number | null;
+            /** Requested */
+            requested: {
+                [key: string]: unknown;
+            };
+            /** Result */
+            result: {
+                [key: string]: unknown;
+            };
+        };
+        /** OperationStartedOut */
+        OperationStartedOut: {
+            command: components["schemas"]["Command"];
+            operation: components["schemas"]["OperationOut"];
+        };
         /** OptionsOut */
         OptionsOut: {
             /** Bundle Discounts */
@@ -4398,29 +5203,25 @@ export interface components {
                 [key: string]: number;
             };
             /** Rates */
-            rates: components["schemas"]["RateOut"][];
+            rates: components["schemas"]["SubscriptionRateOut"][];
             /** Start Rule Below Sessions */
             start_rule_below_sessions: number;
         };
         /** OrderIn */
         OrderIn: {
-            /** Customer Id */
-            customer_id?: string | null;
-            /** Lines */
-            lines: components["schemas"]["LineIn"][];
             /**
              * Location Id
              * Format: uuid
              */
             location_id: string;
-            method: components["schemas"]["PaymentMethod"];
-            /** Reason */
-            reason: string;
+            period: components["schemas"]["Period"];
+            /** Selections */
+            selections: components["schemas"]["SelectionIn"][];
             /**
-             * Tendered
-             * @default 0
+             * Starts On
+             * Format: date
              */
-            tendered: number;
+            starts_on: string;
         };
         /** OrderOut */
         OrderOut: {
@@ -4450,6 +5251,11 @@ export interface components {
          * @enum {string}
          */
         OrderStatus: "new" | "preparing" | "ready" | "picked_up" | "cancelled";
+        /** PaidOut */
+        PaidOut: {
+            /** Amount */
+            amount: number;
+        };
         /** PasswordChangeIn */
         PasswordChangeIn: {
             /** Current Password */
@@ -4465,6 +5271,28 @@ export interface components {
             token: string;
             /** Uid */
             uid: string;
+        };
+        /** PayableOut */
+        PayableOut: {
+            /** Debt */
+            debt: boolean;
+            /** Description */
+            description: string;
+            /** Kind */
+            kind: string;
+            /** Organizer */
+            organizer: string;
+            /** Price */
+            price: number;
+            /** Starts At */
+            starts_at: string | null;
+            /**
+             * Subject Id
+             * Format: uuid
+             */
+            subject_id: string;
+            /** To Pay */
+            to_pay: number;
         };
         /** PaymentIn */
         PaymentIn: {
@@ -4525,6 +5353,86 @@ export interface components {
              */
             transaction_id: string;
         };
+        /** PaymentsCardOnlyIn */
+        PaymentsCardOnlyIn: {
+            card: components["schemas"]["CardIn"];
+        };
+        /** PaymentsCheckInOut */
+        PaymentsCheckInOut: {
+            /** First Name */
+            first_name: string;
+            /**
+             * Scanned At
+             * Format: date-time
+             */
+            scanned_at: string;
+        };
+        /** PaymentsIdleOut */
+        PaymentsIdleOut: {
+            /** Location Name */
+            location_name: string;
+            /** Location Slug */
+            location_slug: string;
+            /** Menu */
+            menu: components["schemas"]["CategoryOut"][];
+        };
+        /** PaymentsOkOut */
+        PaymentsOkOut: {
+            /** Ok */
+            ok: boolean;
+        };
+        /** PaymentsSessionOut */
+        PaymentsSessionOut: {
+            /** Credit */
+            credit: number;
+            /** First Name */
+            first_name: string;
+            /** Language */
+            language: string;
+            /** Last Name */
+            last_name: string;
+            /** Payables */
+            payables: components["schemas"]["PayableOut"][];
+            /** Session */
+            session: string;
+            /** Shared */
+            shared: components["schemas"]["PayableOut"][];
+            /** Subscriptions */
+            subscriptions: components["schemas"]["ActiveSubscriptionOut"][];
+            /** Vouchers */
+            vouchers: components["schemas"]["PaymentsVoucherOut"][];
+        };
+        /** PaymentsSplitOut */
+        PaymentsSplitOut: {
+            /** Paid */
+            paid: number;
+            /** Price */
+            price: number;
+            /** Shares */
+            shares: number[];
+            /** To Pay */
+            to_pay: number;
+        };
+        /** PaymentsVoucherIn */
+        PaymentsVoucherIn: {
+            card: components["schemas"]["CardIn"];
+            /** Code */
+            code: string;
+            item: components["schemas"]["ItemIn"];
+        };
+        /** PaymentsVoucherOut */
+        PaymentsVoucherOut: {
+            /** Code */
+            code: string;
+            /** Kind */
+            kind: string;
+            /** Target */
+            target: string;
+            /** Valid Until */
+            valid_until: string;
+            /** Value */
+            value: number;
+        };
         /** PendingDecisionOut */
         PendingDecisionOut: {
             /** Description */
@@ -4551,6 +5459,11 @@ export interface components {
             id: string;
             /** Last Name */
             last_name: string;
+        };
+        /** PinIn */
+        PinIn: {
+            /** Pin */
+            pin: string;
         };
         /**
          * PlayerOut
@@ -4764,57 +5677,80 @@ export interface components {
         };
         /** QuoteOut */
         QuoteOut: {
-            /** Components */
-            components: components["schemas"]["ComponentOut"][];
-            /** Discounts */
-            discounts: number[];
-            /** Gross */
-            gross: number;
-            /** Monthly Sum */
-            monthly_sum: number;
-            /** Months */
-            months: number;
             /**
              * Provisional
              * @description cel puțin un tarif este DE_STABILIT
              */
             provisional: boolean;
-            /** Rounding */
-            rounding: number;
+            /** Segments */
+            segments: components["schemas"]["SegmentOut"][];
             /**
              * Total
-             * @description bani, rotunjit la leu întreg (R-084)
+             * @description bani (RON × 100)
              */
             total: number;
         };
         /** RateIn */
         RateIn: {
+            /** Amount Per Half Hour */
+            amount_per_half_hour: number;
+            band: components["schemas"]["Band"];
             /**
              * Confirmed
              * @default false
              */
             confirmed: boolean;
+            /** @default standard */
+            customer_type: components["schemas"]["CustomerType"];
             /**
              * Location Id
              * Format: uuid
              */
             location_id: string;
-            /** Monthly Price */
-            monthly_price: number;
-            /** Sessions Per Month */
-            sessions_per_month: number;
-            sport: components["schemas"]["Sport"];
+            /**
+             * Note
+             * @default
+             */
+            note: string;
+            product: components["schemas"]["Product"];
+            resource_kind: components["schemas"]["ResourceKind"];
+            /** @default all */
+            season: components["schemas"]["Season"];
         };
         /** RateOut */
         RateOut: {
-            /** Marker */
+            /**
+             * Amount Per Half Hour
+             * @description bani (RON × 100) pentru 30 de minute
+             */
+            amount_per_half_hour: number;
+            /** Band */
+            band: string;
+            /** Customer Type */
+            customer_type: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Marker
+             * @description CONFIRMED sau TO_SET (DE_STABILIT)
+             */
             marker: string;
-            /** Monthly Price */
-            monthly_price: number;
-            /** Sessions Per Month */
-            sessions_per_month: number;
-            /** Sport */
-            sport: string;
+            /** Note */
+            note: string;
+            /** Product */
+            product: string;
+            /** Resource Kind */
+            resource_kind: string;
+            /** Season */
+            season: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
         };
         /** RatingChangeOut */
         RatingChangeOut: {
@@ -4837,8 +5773,23 @@ export interface components {
         };
         /** ReasonIn */
         ReasonIn: {
-            /** Reason */
+            /**
+             * Reason
+             * @default
+             */
             reason: string;
+        };
+        /** RecordedOut */
+        RecordedOut: {
+            /**
+             * Ack
+             * @description Comanda semnată `journal.ack` pentru Bridge (ADR-0013)
+             */
+            ack?: {
+                [key: string]: unknown;
+            } | null;
+            /** Recorded */
+            recorded: string[];
         };
         /** RecoveryCodesOut */
         RecoveryCodesOut: {
@@ -4851,6 +5802,12 @@ export interface components {
             booking_id?: string | null;
             /** Subscription Id */
             subscription_id?: string | null;
+        };
+        /** RefundedOut */
+        RefundedOut: {
+            close: components["schemas"]["Command"];
+            /** Credited */
+            credited: number;
         };
         /** RegisterIn */
         RegisterIn: {
@@ -5324,36 +6281,9 @@ export interface components {
         };
         /** SessionOut */
         SessionOut: {
-            /** Adult */
-            adult: boolean;
-            /** Challenges */
-            challenges: components["schemas"]["WaitingChallengeOut"][];
-            /** Consent Outdated */
-            consent_outdated: boolean;
-            /** Consent Signed */
-            consent_signed: boolean;
-            /** Director */
-            director: boolean;
-            /** Fixtures */
-            fixtures: components["schemas"]["FixtureViewOut"][];
-            /** In League */
-            in_league: boolean;
-            /** Ladders */
-            ladders: components["schemas"]["LadderOut"][];
-            /** Language */
-            language: string;
-            player: components["schemas"]["PersonOut"];
-            /** Questionnaire */
-            questionnaire: string;
-            /** Score Chances */
-            score_chances: components["schemas"]["ScoreChanceOut"][];
-            /**
-             * Session
-             * @description Se trimite la acțiunile următoare, în loc de card
-             */
-            session: string;
-            /** To Confirm */
-            to_confirm: components["schemas"]["WaitingMatchOut"][];
+            /** Authenticated */
+            authenticated: boolean;
+            user: components["schemas"]["MeOut"] | null;
         };
         /**
          * SessionType
@@ -5361,6 +6291,14 @@ export interface components {
          * @enum {string}
          */
         SessionType: "official_match" | "training" | "lesson" | "tournament" | "challenge" | "free_rental" | "event";
+        /** SettledOut */
+        SettledOut: {
+            checkout: components["schemas"]["CheckoutOut"];
+            close: components["schemas"]["Command"];
+            /** Orders */
+            orders: number[];
+            receipt: components["schemas"]["Command"] | null;
+        };
         /** SignupIn */
         SignupIn: {
             /** Accepted Notice */
@@ -5637,6 +6575,12 @@ export interface components {
             /** Status */
             status: string;
         };
+        /** StaffLoginIn */
+        StaffLoginIn: {
+            card: components["schemas"]["CardIn"];
+            /** Pin */
+            pin: string;
+        };
         /** StaffMatchOut */
         StaffMatchOut: {
             /** Booking Id */
@@ -5698,6 +6642,13 @@ export interface components {
              */
             user_id: string;
         };
+        /** StaffOut */
+        StaffOut: {
+            /** First Name */
+            first_name: string;
+            /** Token */
+            token: string;
+        };
         /** StaffQuestionnaireOut */
         StaffQuestionnaireOut: {
             /** Answers */
@@ -5728,6 +6679,11 @@ export interface components {
             /** Validated Level */
             validated_level: string | null;
         };
+        /** StaffTokenIn */
+        StaffTokenIn: {
+            /** Token */
+            token: string;
+        };
         /**
          * StandingOut
          * @description R-012: nothing else is public.
@@ -5751,6 +6707,16 @@ export interface components {
             /** Tier */
             tier: string;
         };
+        /** StartIn */
+        StartIn: {
+            card: components["schemas"]["CardIn"];
+            change_mode: components["schemas"]["ChangeMode"];
+        };
+        /** StartOut */
+        StartOut: {
+            checkout: components["schemas"]["CheckoutOut"];
+            command: components["schemas"]["Command"];
+        };
         /** StatsOut */
         StatsOut: {
             /** By Status */
@@ -5761,6 +6727,30 @@ export interface components {
             confirmed_by_level: {
                 [key: string]: number;
             };
+        };
+        /** SubscriptionIn */
+        SubscriptionIn: {
+            card: components["schemas"]["CardIn"];
+            period: components["schemas"]["Period"];
+            /** Selections */
+            selections: components["schemas"]["SelectionIn"][];
+            /**
+             * Starts On
+             * Format: date
+             */
+            starts_on: string;
+        };
+        /** SubscriptionOrderedOut */
+        SubscriptionOrderedOut: {
+            /** Description */
+            description: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Price Total */
+            price_total: number;
         };
         /** SubscriptionOut */
         SubscriptionOut: {
@@ -5805,6 +6795,60 @@ export interface components {
              * Format: uuid
              */
             user_id: string;
+        };
+        /** SubscriptionQuoteOut */
+        SubscriptionQuoteOut: {
+            /** Components */
+            components: components["schemas"]["ComponentOut"][];
+            /** Discounts */
+            discounts: number[];
+            /** Gross */
+            gross: number;
+            /** Monthly Sum */
+            monthly_sum: number;
+            /** Months */
+            months: number;
+            /**
+             * Provisional
+             * @description cel puțin un tarif este DE_STABILIT
+             */
+            provisional: boolean;
+            /** Rounding */
+            rounding: number;
+            /**
+             * Total
+             * @description bani, rotunjit la leu întreg (R-084)
+             */
+            total: number;
+        };
+        /** SubscriptionRateIn */
+        SubscriptionRateIn: {
+            /**
+             * Confirmed
+             * @default false
+             */
+            confirmed: boolean;
+            /**
+             * Location Id
+             * Format: uuid
+             */
+            location_id: string;
+            /** Monthly Price */
+            monthly_price: number;
+            /** Sessions Per Month */
+            sessions_per_month: number;
+            sport: components["schemas"]["Sport"];
+        };
+        /** SubscriptionRateOut */
+        SubscriptionRateOut: {
+            /** Marker */
+            marker: string;
+            /** Monthly Price */
+            monthly_price: number;
+            /** Sessions Per Month */
+            sessions_per_month: number;
+            /** Sport */
+            sport: string;
         };
         /** TokenIn */
         TokenIn: {
@@ -6192,6 +7236,33 @@ export interface components {
              */
             window_closes_at: string;
         };
+        /** WaitlistEntryOut */
+        WaitlistEntryOut: {
+            /** Confirmed At */
+            confirmed_at: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Email */
+            email: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Language */
+            language: string;
+            /** Level */
+            level: string;
+            /** Name */
+            name: string;
+            /** Source */
+            source: string;
+            /** Status */
+            status: string;
+        };
         /** WaitlistOut */
         WaitlistOut: {
             /**
@@ -6218,6 +7289,11 @@ export interface components {
             starts_at: string;
             /** Status */
             status: string;
+        };
+        /** WaitlistTokenIn */
+        WaitlistTokenIn: {
+            /** Token */
+            token: string;
         };
     };
     responses: never;
@@ -8138,6 +9214,115 @@ export interface operations {
             };
         };
     };
+    jungle_checkout_api_display_advance: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                order_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DisplayAdvanceIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrderOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_display_queue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrderOut"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     jungle_devices_api_whoami: {
         parameters: {
             query?: never;
@@ -8571,7 +9756,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ConsentOut"];
+                    "application/json": components["schemas"]["KioskConsentOut"];
                 };
             };
             /** @description Bad Request */
@@ -9091,7 +10276,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SessionOut"];
+                    "application/json": components["schemas"]["KioskSessionOut"];
                 };
             };
             /** @description Unauthorized */
@@ -9164,6 +10349,1445 @@ export interface operations {
             };
             /** @description Forbidden */
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_alert: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AlertIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentsOkOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_split: {
+        parameters: {
+            query?: {
+                parts?: number;
+            };
+            header?: never;
+            path: {
+                booking_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentsSplitOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_check_in: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PaymentsCardOnlyIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentsCheckInOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_create_checkout: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CheckoutIn"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckoutOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_get_checkout: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                checkout_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckoutOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                checkout_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EventsIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CancelOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_finish: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                checkout_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EventsIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FinishOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_refunded: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                checkout_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EventsIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RefundedOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_settle: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                checkout_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EventsIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SettledOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_start: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                checkout_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StartIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StartOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_events: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EventsIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordedOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_idle: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentsIdleOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_logout: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LogoutIn"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_pay_balance: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BalanceIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BalanceOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_session: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PaymentsCardOnlyIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentsSessionOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_staff_login: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StaffLoginIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_staff_logout: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StaffTokenIn"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_start_operation: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OperationIn"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationStartedOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_list_operations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StaffTokenIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationOut"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_order_subscription: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubscriptionIn"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubscriptionOrderedOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_freeze: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                subscription_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KioskFreezeIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FrozenOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_checkout_api_voucher: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PaymentsVoucherIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaidOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -9290,7 +11914,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MeOut"];
+                    "application/json": components["schemas"]["LeagueMeOut"];
                 };
             };
             /** @description Unauthorized */
@@ -10589,7 +13213,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["OrderIn"];
+                "application/json": components["schemas"]["CafeOrderIn"];
             };
         };
         responses: {
@@ -10669,7 +13293,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CancelIn"];
+                "application/json": components["schemas"]["CafeCancelIn"];
             };
         };
         responses: {
@@ -12398,6 +15022,66 @@ export interface operations {
             };
         };
     };
+    jungle_checkout_api_set_pin: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PinIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentsOkOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     jungle_league_api_fixture_finished: {
         parameters: {
             query?: never;
@@ -13169,7 +15853,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["ReasonIn"];
+                "application/json": components["schemas"]["LeagueReasonIn"];
             };
         };
         responses: {
@@ -14201,7 +16885,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["RateIn"];
+                "application/json": components["schemas"]["SubscriptionRateIn"];
             };
         };
         responses: {
@@ -14211,7 +16895,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["RateOut"];
+                    "application/json": components["schemas"]["SubscriptionRateOut"];
                 };
             };
             /** @description Bad Request */
@@ -14998,7 +17682,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["QuoteOut"];
+                    "application/json": components["schemas"]["SubscriptionQuoteOut"];
                 };
             };
             /** @description Bad Request */
@@ -15246,7 +17930,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["TokenIn"];
+                "application/json": components["schemas"]["WaitlistTokenIn"];
             };
         };
         responses: {
@@ -15288,7 +17972,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["TokenIn"];
+                "application/json": components["schemas"]["WaitlistTokenIn"];
             };
         };
         responses: {

@@ -60,6 +60,12 @@ DISPENSED = "cash.dispensed"
 CLOSED = "cash.closed"
 INTERRUPTED = "cash.interrupted"
 ENDINGS = (CLOSED, INTERRUPTED)
+# Staff operations on the cash box, and the fiscal register (Stage 8).
+REFILLED = "cash.refilled"
+EMPTIED = "cash.emptied"
+COUNTED = "cash.counted"
+FISCAL_PRINTED = "fiscal.printed"
+Z_REPORT = "fiscal.z"
 
 
 @dataclass(frozen=True)
@@ -109,6 +115,12 @@ class Journal:
             params,
         ).fetchall()
         return [Event(r[0], r[1], r[2], r[3], r[4], json.loads(r[5])) for r in rows]
+
+    def has(self, txn: str, kind: str) -> bool:
+        row = self.db.execute(
+            "SELECT 1 FROM events WHERE txn = ? AND kind = ? LIMIT 1", (txn, kind)
+        ).fetchone()
+        return row is not None
 
     def events(self, txn: str | None = None) -> list[Event]:
         return self._events("WHERE txn = ?", (txn,)) if txn else self._events()

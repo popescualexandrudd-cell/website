@@ -33,7 +33,7 @@ class SignupOut(Schema):
     status: str = "check_email"
 
 
-class TokenIn(Schema):
+class WaitlistTokenIn(Schema):
     token: str = Field(max_length=500)
 
 
@@ -42,7 +42,7 @@ class ConfirmOut(Schema):
     language: str
 
 
-class EntryOut(Schema):
+class WaitlistEntryOut(Schema):
     id: uuid.UUID
     email: str | None
     name: str
@@ -56,7 +56,7 @@ class EntryOut(Schema):
 
 class EntryPageOut(Schema):
     total: int
-    items: list[EntryOut]
+    items: list[WaitlistEntryOut]
 
 
 class StatsOut(Schema):
@@ -87,13 +87,13 @@ def signup(request: HttpRequest, payload: SignupIn) -> Status[SignupOut]:
 
 
 @public_router.post("/confirm", response={200: ConfirmOut, **errors(400, 422)}, auth=None)
-def confirm(request: HttpRequest, payload: TokenIn) -> ConfirmOut:
+def confirm(request: HttpRequest, payload: WaitlistTokenIn) -> ConfirmOut:
     entry = services.confirm(request, payload.token)
     return ConfirmOut(status=entry.status, language=entry.language)
 
 
 @public_router.post("/unsubscribe", response={200: OkOut, **errors(400, 422)}, auth=None)
-def unsubscribe(request: HttpRequest, payload: TokenIn) -> OkOut:
+def unsubscribe(request: HttpRequest, payload: WaitlistTokenIn) -> OkOut:
     services.unsubscribe(request, payload.token)
     return OkOut()
 
@@ -107,7 +107,7 @@ def list_entries(
 ) -> EntryPageOut:
     qs = services.staff_entries(request, status)
     return EntryPageOut(
-        total=qs.count(), items=[EntryOut.from_orm(e) for e in qs[offset : offset + limit]]
+        total=qs.count(), items=[WaitlistEntryOut.from_orm(e) for e in qs[offset : offset + limit]]
     )
 
 

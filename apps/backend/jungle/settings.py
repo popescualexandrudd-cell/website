@@ -85,6 +85,7 @@ INSTALLED_APPS = [
     "jungle.cards",
     "jungle.privacy",
     "jungle.league",
+    "jungle.checkout",
 ]
 
 MIDDLEWARE = [
@@ -204,6 +205,10 @@ BRIDGE_MESSAGE_WINDOW_SECONDS = env_int("BRIDGE_MESSAGE_WINDOW_SECONDS", 120)
 # Development and the end-to-end tests only: a League Kiosk on this machine (127.0.0.1) counts
 # as on the club's network. Refused in staging and production.
 KIOSK_ALLOW_LOOPBACK = env_bool("KIOSK_ALLOW_LOOPBACK", False)
+# The server's Ed25519 key for commands to the Hardware Bridges (ADR-0013: "give 12 lei change
+# for transaction X"): 32 random bytes, base64. The bridges hold only its public key
+# (`manage.py device_command_key`). Development uses a fixed, public test key.
+DEVICE_COMMAND_KEY = secret("DEVICE_COMMAND_KEY", "ZGV2LW9ubHktaW5zZWN1cmUtY29tbWFuZC1rZXktMDA=")
 if KIOSK_ALLOW_LOOPBACK and IS_PRODUCTION_LIKE:
     raise ImproperlyConfigured("KIOSK_ALLOW_LOOPBACK is for development only")
 

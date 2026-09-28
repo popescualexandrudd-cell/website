@@ -9,7 +9,7 @@ import createClient from "openapi-fetch";
 
 type Schemas = components["schemas"];
 export type Card = Schemas["CardIn"];
-export type Session = Schemas["SessionOut"];
+export type Session = Schemas["KioskSessionOut"];
 export type Idle = Schemas["IdleOut"];
 export type Standing = Schemas["StandingOut"];
 export type ConsentText = Schemas["ConsentTextOut"];

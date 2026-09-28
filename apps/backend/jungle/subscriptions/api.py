@@ -52,7 +52,7 @@ class ComponentOut(Schema):
     marker: str
 
 
-class QuoteOut(Schema):
+class SubscriptionQuoteOut(Schema):
     components: list[ComponentOut]
     monthly_sum: int
     months: int
@@ -63,7 +63,7 @@ class QuoteOut(Schema):
     provisional: bool = Field(description="cel puțin un tarif este DE_STABILIT")
 
 
-class RateOut(Schema):
+class SubscriptionRateOut(Schema):
     sport: str
     sessions_per_month: int
     monthly_price: int
@@ -75,7 +75,7 @@ class OptionsOut(Schema):
     bundle_discounts: dict[str, int]
     period_discounts: dict[str, int]
     start_rule_below_sessions: int
-    rates: list[RateOut]
+    rates: list[SubscriptionRateOut]
 
 
 class OrderIn(Schema):
@@ -128,7 +128,7 @@ class FreezeOut(Schema):
     ends_on: date
 
 
-class RateIn(Schema):
+class SubscriptionRateIn(Schema):
     location_id: uuid.UUID
     sport: Sport
     sessions_per_month: int = Field(ge=1, le=31)
@@ -200,8 +200,8 @@ def subscription_out(s: Subscription) -> SubscriptionOut:
     )
 
 
-def _rate(r: SubscriptionRate) -> RateOut:
-    return RateOut(
+def _rate(r: SubscriptionRate) -> SubscriptionRateOut:
+    return SubscriptionRateOut(
         sport=r.sport,
         sessions_per_month=r.sessions_per_month,
         monthly_price=r.monthly_price,
@@ -223,11 +223,13 @@ def options(request: HttpRequest, location: str) -> OptionsOut:
     )
 
 
-@public_router.post("/quote", response={200: QuoteOut, **errors(400, 404, 409, 422)}, auth=None)
-def get_quote(request: HttpRequest, payload: QuoteIn) -> QuoteOut:
+@public_router.post(
+    "/quote", response={200: SubscriptionQuoteOut, **errors(400, 404, 409, 422)}, auth=None
+)
+def get_quote(request: HttpRequest, payload: QuoteIn) -> SubscriptionQuoteOut:
     place = get_location_by_slug(payload.location)
     priced = services.quote(place, _selections(payload.selections), payload.period)
-    return QuoteOut(**priced.as_dict())
+    return SubscriptionQuoteOut(**priced.as_dict())
 
 
 # ---------------------------------------------------------------- the customer
@@ -281,9 +283,9 @@ def staff_create(request: HttpRequest, payload: StaffOrderIn) -> Status[Subscrip
 
 
 @staff_router.put(
-    "/subscriptions/rates", response={200: RateOut, **errors(400, 401, 403, 404, 422)}
+    "/subscriptions/rates", response={200: SubscriptionRateOut, **errors(400, 401, 403, 404, 422)}
 )
-def set_rate(request: HttpRequest, payload: RateIn) -> RateOut:
+def set_rate(request: HttpRequest, payload: SubscriptionRateIn) -> SubscriptionRateOut:
     location = Location.objects.filter(pk=payload.location_id).first()
     if location is None:
         raise DomainError(ErrorCode.LOCATIONS_NOT_FOUND, status=404)
