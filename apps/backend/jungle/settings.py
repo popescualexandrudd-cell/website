@@ -187,6 +187,12 @@ if IS_PRODUCTION_LIKE:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 # Number of trusted reverse proxies in front of the app (for the client IP in audit logs).
 TRUSTED_PROXY_COUNT = env_int("TRUSTED_PROXY_COUNT", 1 if IS_PRODUCTION_LIKE else 0)
+# ADR-0012: the proxy (Caddy) verifies the device's client certificate and passes its SHA-256
+# fingerprint in this header; required in staging and production.
+DEVICE_CERT_HEADER = os.environ.get("DEVICE_CERT_HEADER", "HTTP_X_CLIENT_CERT_SHA256")
+DEVICE_MTLS_REQUIRED = env_bool("DEVICE_MTLS_REQUIRED", IS_PRODUCTION_LIKE)
+# How long a signed message from a Hardware Bridge is accepted (seconds, anti-replay).
+BRIDGE_MESSAGE_WINDOW_SECONDS = env_int("BRIDGE_MESSAGE_WINDOW_SECONDS", 120)
 
 # Email (adapter = Django email backend; provider still to be chosen, Q24)
 EMAIL_BACKEND = env(

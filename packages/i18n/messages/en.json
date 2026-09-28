@@ -186,7 +186,10 @@
     "league.fixture_not_ready": "The tournament match cannot be scheduled or finished now.",
     "league.fixture_not_scheduled": "The tournament match has no court yet (a tournament booking).",
     "league.reward_not_found": "The reward does not exist or has already been chosen.",
-    "league.reward_option_invalid": "Choose one of the reward's options."
+    "league.reward_option_invalid": "Choose one of the reward's options.",
+    "devices.auth_failed": "This device is not recognised. Ask the staff to enrol it again.",
+    "devices.signature_invalid": "The scan could not be verified. Scan the card again.",
+    "devices.key_invalid": "The device's public key is not valid (Ed25519, 32 bytes, base64)."
   },
   "web": {
     "meta": {

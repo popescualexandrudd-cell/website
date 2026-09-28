@@ -758,6 +758,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/device/whoami": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Whoami
+         * @description A device checks it is enrolled (and signals that it is alive).
+         */
+        get: operations["jungle_devices_api_whoami"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events": {
         parameters: {
             query?: never;
@@ -801,6 +821,235 @@ export interface paths {
         };
         /** Health */
         get: operations["jungle_core_api_health"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/league/challenges": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Issue Challenge
+         * @description §8.2 action 4 (Q48): the challengers scan their cards and pick the opponents.
+         */
+        post: operations["jungle_league_kiosk_api_issue_challenge"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/league/challenges/{challenge_id}/answer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Answer Challenge */
+        post: operations["jungle_league_kiosk_api_answer_challenge"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/league/check-in": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Check In
+         * @description §8.2 action 5 (R-030).
+         */
+        post: operations["jungle_league_kiosk_api_check_in"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/league/consent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Consent Text */
+        get: operations["jungle_league_kiosk_api_consent_text"];
+        put?: never;
+        /**
+         * Sign Consent
+         * @description R-010, R-011: only with the box ticked, at this League Kiosk.
+         */
+        post: operations["jungle_league_kiosk_api_sign_consent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/league/fixtures/{fixture_id}/finished": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Fixture Finished */
+        post: operations["jungle_league_kiosk_api_fixture_finished"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/league/fixtures/{fixture_id}/score": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Fixture Score */
+        post: operations["jungle_league_kiosk_api_fixture_score"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/league/idle": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Idle */
+        get: operations["jungle_league_kiosk_api_idle"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/league/matches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Propose
+         * @description §8.2 action 2: the score of a finished booking, set by set.
+         */
+        post: operations["jungle_league_kiosk_api_propose"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/league/matches/{match_id}/director": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Director
+         * @description Q28: the tournament director validates a tournament score.
+         */
+        post: operations["jungle_league_kiosk_api_director"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/league/matches/{match_id}/respond": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Respond
+         * @description §8.2 action 3: confirm or dispute.
+         */
+        post: operations["jungle_league_kiosk_api_respond"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/league/session": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Session
+         * @description After a scan: the player's own screen (logged out by the kiosk after 30 s idle).
+         */
+        post: operations["jungle_league_kiosk_api_session"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/league/standings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Standings
+         * @description §8.2 action 6: the full standings, with search by name.
+         */
+        get: operations["jungle_league_kiosk_api_standings"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1775,6 +2024,26 @@ export interface paths {
         put?: never;
         /** Set Active */
         post: operations["jungle_devices_api_set_active"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/devices/{device_id}/enroll": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Enroll
+         * @description ADR-0012: the token is shown once; enrolling again replaces it.
+         */
+        post: operations["jungle_devices_api_enroll"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2896,6 +3165,25 @@ export interface components {
             /** Reason */
             reason: string;
         };
+        /** CardIn */
+        CardIn: {
+            /**
+             * Signed
+             * @description Scanarea semnată de Bridge
+             */
+            signed?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Token
+             * @description Codul citit (fără Bridge)
+             */
+            token?: string | null;
+        };
+        /** CardOnlyIn */
+        CardOnlyIn: {
+            card: components["schemas"]["CardIn"];
+        };
         /** CardOut */
         CardOut: {
             /**
@@ -2959,6 +3247,13 @@ export interface components {
             /** Products */
             products: components["schemas"]["ProductOut"][];
         };
+        /** ChallengeIn */
+        ChallengeIn: {
+            /** Cards */
+            cards: components["schemas"]["CardIn"][];
+            /** Targets */
+            targets: string[];
+        };
         /** ChallengeOut */
         ChallengeOut: {
             /** Challengers */
@@ -2993,6 +3288,16 @@ export interface components {
             status: string;
             /** Targets */
             targets: components["schemas"]["PlayerOut"][];
+        };
+        /** CheckInOut */
+        CheckInOut: {
+            /** First Name */
+            first_name: string;
+            /**
+             * Scanned At
+             * Format: date-time
+             */
+            scanned_at: string;
         };
         /** ChildIn */
         ChildIn: {
@@ -3157,25 +3462,23 @@ export interface components {
             /** Status */
             status: string;
         };
-        /** ConsentOut */
-        ConsentOut: {
-            /** Action */
-            action: string;
-            /** Device Id */
-            device_id: string | null;
-            /** Document Kind */
-            document_kind: string;
-            /** Document Version */
-            document_version: number;
+        /** ConsentIn */
+        ConsentIn: {
+            /**
+             * Accepted
+             * @description Bifa obligatorie (R-010)
+             */
+            accepted: boolean;
+            card: components["schemas"]["CardIn"];
             /** Language */
             language: string;
-            /**
-             * Occurred At
-             * Format: date-time
-             */
-            occurred_at: string;
-            /** Text Sha256 */
-            text_sha256: string;
+        };
+        /** ConsentOut */
+        ConsentOut: {
+            /** Signed */
+            signed: boolean;
+            /** Version */
+            version: number | null;
         };
         /** ConsentStatusOut */
         ConsentStatusOut: {
@@ -3189,6 +3492,19 @@ export interface components {
             signed_at: string | null;
             /** Version */
             version: number | null;
+        };
+        /** ConsentTextOut */
+        ConsentTextOut: {
+            /** Body */
+            body: string;
+            /** Kind */
+            kind: string;
+            /** Language */
+            language: string;
+            /** Title */
+            title: string;
+            /** Version */
+            version: number;
         };
         /** CorporateIn */
         CorporateIn: {
@@ -3307,6 +3623,8 @@ export interface components {
              * Format: date-time
              */
             created_at: string;
+            /** Enrolled At */
+            enrolled_at: string | null;
             /**
              * Id
              * Format: uuid
@@ -3357,6 +3675,29 @@ export interface components {
         EmblemsOut: {
             /** Emblems */
             emblems: string[];
+        };
+        /** EnrollIn */
+        EnrollIn: {
+            /**
+             * Certificate Fingerprint
+             * @default
+             */
+            certificate_fingerprint: string;
+            /**
+             * Public Key
+             * @description Ed25519, base64 (Bridge)
+             * @default
+             */
+            public_key: string;
+        };
+        /** EnrollOut */
+        EnrollOut: {
+            device: components["schemas"]["DeviceOut"];
+            /**
+             * Token
+             * @description Se afișează o singură dată; se pune în .env pe aparat.
+             */
+            token: string;
         };
         /** EnrollmentOut */
         EnrollmentOut: {
@@ -3553,6 +3894,29 @@ export interface components {
             /** Winner */
             winner: string;
         };
+        /** FixtureScoreIn */
+        FixtureScoreIn: {
+            card: components["schemas"]["CardIn"];
+            /** Score */
+            score: {
+                [key: string]: unknown;
+            };
+        };
+        /** FixtureViewOut */
+        FixtureViewOut: {
+            /** Fixture Id */
+            fixture_id: string;
+            /** Phase */
+            phase: string;
+            /** Status */
+            status: string;
+            /** Team A */
+            team_a: components["schemas"]["PersonOut"][];
+            /** Team B */
+            team_b: components["schemas"]["PersonOut"][];
+            /** Tournament */
+            tournament: string;
+        };
         /** FlagIn */
         FlagIn: {
             /** Enabled */
@@ -3615,6 +3979,57 @@ export interface components {
             /** Status */
             status: string;
         };
+        /** HeartbeatOut */
+        HeartbeatOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Kind */
+            kind: string;
+            /**
+             * Location Id
+             * Format: uuid
+             */
+            location_id: string;
+            /** Name */
+            name: string;
+            /**
+             * Server Time
+             * Format: date-time
+             */
+            server_time: string;
+        };
+        /** IdleChallengeOut */
+        IdleChallengeOut: {
+            /** Challengers */
+            challengers: components["schemas"]["PersonOut"][];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Targets */
+            targets: components["schemas"]["PersonOut"][];
+        };
+        /**
+         * IdleOut
+         * @description The idle screen: live standings, Match of the day, Kings, challenges (§8.2).
+         */
+        IdleOut: {
+            /** Challenges */
+            challenges: components["schemas"]["IdleChallengeOut"][];
+            /** Doubles */
+            doubles: components["schemas"]["StandingOut"][];
+            /** Kings */
+            kings: components["schemas"]["StandingOut"][];
+            match_of_the_day: components["schemas"]["SpotlightOut"];
+            /** Pairs */
+            pairs: components["schemas"]["StandingOut"][];
+            /** Singles */
+            singles: components["schemas"]["StandingOut"][];
+        };
         /** IntervalOut */
         IntervalOut: {
             /**
@@ -3634,6 +4049,27 @@ export interface components {
          * @enum {string}
          */
         Ladder: "doubles" | "singles" | "pairs";
+        /** LadderOut */
+        LadderOut: {
+            /** Division */
+            division: string;
+            /** Ladder */
+            ladder: string;
+            /** Level */
+            level: number;
+            /** Lp */
+            lp: number;
+            /** Matches Played */
+            matches_played: number;
+            /** Minimum */
+            minimum: number;
+            /** Placement Left */
+            placement_left: number;
+            /** Position */
+            position: number | null;
+            /** Tier */
+            tier: string;
+        };
         /** LegalDocumentOut */
         LegalDocumentOut: {
             /** Body */
@@ -4071,6 +4507,15 @@ export interface components {
          * @enum {string}
          */
         Period: "monthly" | "quarterly" | "annual";
+        /** PersonOut */
+        PersonOut: {
+            /** First Name */
+            first_name: string;
+            /** Id */
+            id: string;
+            /** Last Name */
+            last_name: string;
+        };
         /**
          * PlayerOut
          * @description Public (Q49, 28.09.2026): the id links to the player's public history.
@@ -4183,6 +4628,23 @@ export interface components {
             /** Matches */
             matches: components["schemas"]["ResultOut"][];
             player: components["schemas"]["PlayerOut"];
+        };
+        /** ProposeIn */
+        ProposeIn: {
+            /**
+             * Booking Id
+             * Format: uuid
+             */
+            booking_id: string;
+            card: components["schemas"]["CardIn"];
+            /** Score */
+            score: {
+                [key: string]: unknown;
+            };
+            /** Team A */
+            team_a: string[];
+            /** Team B */
+            team_b: string[];
         };
         /** PublicLadderOut */
         PublicLadderOut: {
@@ -4523,6 +4985,12 @@ export interface components {
             /** Sort Order */
             sort_order?: number | null;
         };
+        /** RespondIn */
+        RespondIn: {
+            /** Accept */
+            accept: boolean;
+            card: components["schemas"]["CardIn"];
+        };
         /** RestrictionOut */
         RestrictionOut: {
             /**
@@ -4711,6 +5179,32 @@ export interface components {
              */
             booking_id: string;
         };
+        /** ScoreChanceOut */
+        ScoreChanceOut: {
+            /** Booking Id */
+            booking_id: string;
+            /** Court */
+            court: string;
+            /**
+             * Ends At
+             * Format: date-time
+             */
+            ends_at: string;
+            /** Kind */
+            kind: string;
+            /** Players */
+            players: components["schemas"]["PersonOut"][];
+            /**
+             * Starts At
+             * Format: date-time
+             */
+            starts_at: string;
+            /**
+             * Window Closes At
+             * Format: date-time
+             */
+            window_closes_at: string;
+        };
         /**
          * Season
          * @enum {string}
@@ -4794,9 +5288,31 @@ export interface components {
         };
         /** SessionOut */
         SessionOut: {
-            /** Authenticated */
-            authenticated: boolean;
-            user: components["schemas"]["MeOut"] | null;
+            /** Adult */
+            adult: boolean;
+            /** Challenges */
+            challenges: components["schemas"]["WaitingChallengeOut"][];
+            /** Consent Outdated */
+            consent_outdated: boolean;
+            /** Consent Signed */
+            consent_signed: boolean;
+            /** Director */
+            director: boolean;
+            /** Fixtures */
+            fixtures: components["schemas"]["FixtureViewOut"][];
+            /** In League */
+            in_league: boolean;
+            /** Ladders */
+            ladders: components["schemas"]["LadderOut"][];
+            /** Language */
+            language: string;
+            player: components["schemas"]["PersonOut"];
+            /** Questionnaire */
+            questionnaire: string;
+            /** Score Chances */
+            score_chances: components["schemas"]["ScoreChanceOut"][];
+            /** To Confirm */
+            to_confirm: components["schemas"]["WaitingMatchOut"][];
         };
         /**
          * SessionType
@@ -5601,6 +6117,40 @@ export interface components {
          * @enum {string}
          */
         VoucherTarget: "booking" | "subscription" | "any";
+        /** WaitingChallengeOut */
+        WaitingChallengeOut: {
+            /** Challenge Id */
+            challenge_id: string;
+            /** Challengers */
+            challengers: components["schemas"]["PersonOut"][];
+            /** Ladder */
+            ladder: string;
+            /**
+             * Respond By
+             * Format: date-time
+             */
+            respond_by: string;
+        };
+        /** WaitingMatchOut */
+        WaitingMatchOut: {
+            /** Kind */
+            kind: string;
+            /** Match Id */
+            match_id: string;
+            /** Score */
+            score: {
+                [key: string]: unknown;
+            };
+            /** Team A */
+            team_a: components["schemas"]["PersonOut"][];
+            /** Team B */
+            team_b: components["schemas"]["PersonOut"][];
+            /**
+             * Window Closes At
+             * Format: date-time
+             */
+            window_closes_at: string;
+        };
         /** WaitlistOut */
         WaitlistOut: {
             /**
@@ -7547,6 +8097,35 @@ export interface operations {
             };
         };
     };
+    jungle_devices_api_whoami: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HeartbeatOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     jungle_bookings_api_request_event: {
         parameters: {
             query?: never;
@@ -7661,6 +8240,863 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HealthOut"];
+                };
+            };
+        };
+    };
+    jungle_league_kiosk_api_issue_challenge: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChallengeIn"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChallengeOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_kiosk_api_answer_challenge: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                challenge_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RespondIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChallengeOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_kiosk_api_check_in: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CardOnlyIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckInOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_kiosk_api_consent_text: {
+        parameters: {
+            query?: {
+                language?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConsentTextOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_kiosk_api_sign_consent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ConsentIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConsentOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_kiosk_api_fixture_finished: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                fixture_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CardOnlyIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: string;
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_kiosk_api_fixture_score: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                fixture_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FixtureScoreIn"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MatchOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_kiosk_api_idle: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IdleOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_kiosk_api_propose: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProposeIn"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MatchOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_kiosk_api_director: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                match_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CardOnlyIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MatchOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_kiosk_api_respond: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                match_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RespondIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MatchOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_kiosk_api_session: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CardOnlyIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_kiosk_api_standings: {
+        parameters: {
+            query?: {
+                ladder?: "doubles" | "singles" | "pairs";
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StandingOut"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
                 };
             };
         };
@@ -10528,6 +11964,77 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DeviceOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_devices_api_enroll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                device_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EnrollIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EnrollOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
                 };
             };
             /** @description Unauthorized */

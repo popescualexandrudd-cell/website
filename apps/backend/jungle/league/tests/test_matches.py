@@ -334,13 +334,21 @@ def test_invariant_1_no_score_endpoint_outside_the_kiosk(api: Api) -> None:
     """The website, phones and the admin API can read matches but never enter or confirm a
     score: the only match action for staff is resolving (apply / reopen / cancel)."""
     schema = api.get("/openapi.json").json()
+    kiosk = "/api/v1/kiosk/league/"
     writes = [
         (path, method)
         for path, operations in schema["paths"].items()
         for method in operations
-        if method in {"post", "put", "patch"} and ("matches" in path or "score" in path)
+        if method in {"post", "put", "patch"}
+        and ("matches" in path or "score" in path)
+        and not path.startswith(kiosk)
     ]
     assert writes == [("/api/v1/staff/league/matches/{match_id}/resolve", "post")]
+    # The League Kiosk's own endpoints accept nothing but the device token (ADR-0012).
+    at_kiosk = [ops for path, ops in schema["paths"].items() if path.startswith(kiosk)]
+    assert at_kiosk and all(
+        op["security"] == [{"DeviceAuth": []}] for ops in at_kiosk for op in ops.values()
+    )
 
 
 # ---------------------------------------------------------------- booking, scans, players

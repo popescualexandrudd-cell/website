@@ -1,7 +1,8 @@
 """Registered club devices (§8, ADR-0012).
 
-Stage 1A stores the device identity. Certificate (mTLS) authentication and bridge keys
-are wired in Stages 7 and 14.
+A device proves who it is with a token issued at enrollment (only its hash is stored), the
+client certificate checked by the proxy (mTLS, from Stage 14 on the real network) and, when it
+has a Hardware Bridge, Ed25519 signatures of what its scanner read (Stage 7).
 """
 
 from __future__ import annotations
@@ -32,7 +33,11 @@ class Device(models.Model):
     public_key = models.TextField(
         blank=True, help_text="Cheia publică Ed25519 a Hardware Bridge (Etapa 7)."
     )
-    certificate_fingerprint = models.CharField(max_length=128, blank=True)
+    certificate_fingerprint = models.CharField(
+        max_length=128, blank=True, help_text="SHA-256 al certificatului client (mTLS)."
+    )
+    token_hash = models.CharField(max_length=64, blank=True, help_text="SHA-256 al tokenului.")
+    enrolled_at = models.DateTimeField("înrolat la", null=True, blank=True)
     last_seen_at = models.DateTimeField("ultimul semnal", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

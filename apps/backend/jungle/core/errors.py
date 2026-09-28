@@ -198,6 +198,9 @@ class ErrorCode(StrEnum):
     LEAGUE_FIXTURE_NOT_SCHEDULED = "league.fixture_not_scheduled"
     LEAGUE_REWARD_NOT_FOUND = "league.reward_not_found"
     LEAGUE_REWARD_OPTION_INVALID = "league.reward_option_invalid"
+    DEVICES_AUTH_FAILED = "devices.auth_failed"
+    DEVICES_SIGNATURE_INVALID = "devices.signature_invalid"
+    DEVICES_KEY_INVALID = "devices.key_invalid"
 
 
 class DomainError(Exception):

@@ -470,6 +470,50 @@
         "title": "CancelVoucherIn",
         "type": "object"
       },
+      "CardIn": {
+        "properties": {
+          "signed": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Scanarea semnată de Bridge",
+            "title": "Signed"
+          },
+          "token": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Codul citit (fără Bridge)",
+            "title": "Token"
+          }
+        },
+        "title": "CardIn",
+        "type": "object"
+      },
+      "CardOnlyIn": {
+        "properties": {
+          "card": {
+            "$ref": "#/components/schemas/CardIn"
+          }
+        },
+        "required": [
+          "card"
+        ],
+        "title": "CardOnlyIn",
+        "type": "object"
+      },
       "CardOut": {
         "properties": {
           "apple_wallet": {
@@ -585,6 +629,35 @@
         "title": "CategoryOut",
         "type": "object"
       },
+      "ChallengeIn": {
+        "properties": {
+          "cards": {
+            "items": {
+              "$ref": "#/components/schemas/CardIn"
+            },
+            "maxItems": 2,
+            "minItems": 1,
+            "title": "Cards",
+            "type": "array"
+          },
+          "targets": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "maxItems": 2,
+            "minItems": 1,
+            "title": "Targets",
+            "type": "array"
+          }
+        },
+        "required": [
+          "cards",
+          "targets"
+        ],
+        "title": "ChallengeIn",
+        "type": "object"
+      },
       "ChallengeOut": {
         "properties": {
           "challengers": {
@@ -659,6 +732,25 @@
           "refusal_outcome"
         ],
         "title": "ChallengeOut",
+        "type": "object"
+      },
+      "CheckInOut": {
+        "properties": {
+          "first_name": {
+            "title": "First Name",
+            "type": "string"
+          },
+          "scanned_at": {
+            "format": "date-time",
+            "title": "Scanned At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "scanned_at",
+          "first_name"
+        ],
+        "title": "CheckInOut",
         "type": "object"
       },
       "ChildIn": {
@@ -1087,54 +1179,51 @@
         "title": "ConfirmOut",
         "type": "object"
       },
+      "ConsentIn": {
+        "properties": {
+          "accepted": {
+            "description": "Bifa obligatorie (R-010)",
+            "title": "Accepted",
+            "type": "boolean"
+          },
+          "card": {
+            "$ref": "#/components/schemas/CardIn"
+          },
+          "language": {
+            "pattern": "^(ro|en)$",
+            "title": "Language",
+            "type": "string"
+          }
+        },
+        "required": [
+          "card",
+          "language",
+          "accepted"
+        ],
+        "title": "ConsentIn",
+        "type": "object"
+      },
       "ConsentOut": {
         "properties": {
-          "action": {
-            "title": "Action",
-            "type": "string"
+          "signed": {
+            "title": "Signed",
+            "type": "boolean"
           },
-          "device_id": {
+          "version": {
             "anyOf": [
               {
-                "format": "uuid",
-                "type": "string"
+                "type": "integer"
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Device Id"
-          },
-          "document_kind": {
-            "title": "Document Kind",
-            "type": "string"
-          },
-          "document_version": {
-            "title": "Document Version",
-            "type": "integer"
-          },
-          "language": {
-            "title": "Language",
-            "type": "string"
-          },
-          "occurred_at": {
-            "format": "date-time",
-            "title": "Occurred At",
-            "type": "string"
-          },
-          "text_sha256": {
-            "title": "Text Sha256",
-            "type": "string"
+            "title": "Version"
           }
         },
         "required": [
-          "document_kind",
-          "document_version",
-          "language",
-          "action",
-          "text_sha256",
-          "occurred_at",
-          "device_id"
+          "signed",
+          "version"
         ],
         "title": "ConsentOut",
         "type": "object"
@@ -1191,6 +1280,39 @@
           "signed_at"
         ],
         "title": "ConsentStatusOut",
+        "type": "object"
+      },
+      "ConsentTextOut": {
+        "properties": {
+          "body": {
+            "title": "Body",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "language": {
+            "title": "Language",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "kind",
+          "version",
+          "language",
+          "title",
+          "body"
+        ],
+        "title": "ConsentTextOut",
         "type": "object"
       },
       "CorporateIn": {
@@ -1426,6 +1548,18 @@
             "title": "Created At",
             "type": "string"
           },
+          "enrolled_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enrolled At"
+          },
           "id": {
             "format": "uuid",
             "title": "Id",
@@ -1468,6 +1602,7 @@
           "name",
           "is_active",
           "last_seen_at",
+          "enrolled_at",
           "created_at"
         ],
         "title": "DeviceOut",
@@ -1552,6 +1687,43 @@
           "emblems"
         ],
         "title": "EmblemsOut",
+        "type": "object"
+      },
+      "EnrollIn": {
+        "properties": {
+          "certificate_fingerprint": {
+            "default": "",
+            "maxLength": 128,
+            "title": "Certificate Fingerprint",
+            "type": "string"
+          },
+          "public_key": {
+            "default": "",
+            "description": "Ed25519, base64 (Bridge)",
+            "maxLength": 100,
+            "title": "Public Key",
+            "type": "string"
+          }
+        },
+        "title": "EnrollIn",
+        "type": "object"
+      },
+      "EnrollOut": {
+        "properties": {
+          "device": {
+            "$ref": "#/components/schemas/DeviceOut"
+          },
+          "token": {
+            "description": "Se afișează o singură dată; se pune în .env pe aparat.",
+            "title": "Token",
+            "type": "string"
+          }
+        },
+        "required": [
+          "device",
+          "token"
+        ],
+        "title": "EnrollOut",
         "type": "object"
       },
       "EnrollmentOut": {
@@ -1991,6 +2163,68 @@
         "title": "FixtureOut",
         "type": "object"
       },
+      "FixtureScoreIn": {
+        "properties": {
+          "card": {
+            "$ref": "#/components/schemas/CardIn"
+          },
+          "score": {
+            "additionalProperties": true,
+            "title": "Score",
+            "type": "object"
+          }
+        },
+        "required": [
+          "card",
+          "score"
+        ],
+        "title": "FixtureScoreIn",
+        "type": "object"
+      },
+      "FixtureViewOut": {
+        "properties": {
+          "fixture_id": {
+            "title": "Fixture Id",
+            "type": "string"
+          },
+          "phase": {
+            "title": "Phase",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "team_a": {
+            "items": {
+              "$ref": "#/components/schemas/PersonOut"
+            },
+            "title": "Team A",
+            "type": "array"
+          },
+          "team_b": {
+            "items": {
+              "$ref": "#/components/schemas/PersonOut"
+            },
+            "title": "Team B",
+            "type": "array"
+          },
+          "tournament": {
+            "title": "Tournament",
+            "type": "string"
+          }
+        },
+        "required": [
+          "fixture_id",
+          "tournament",
+          "phase",
+          "status",
+          "team_a",
+          "team_b"
+        ],
+        "title": "FixtureViewOut",
+        "type": "object"
+      },
       "FlagIn": {
         "properties": {
           "enabled": {
@@ -2140,6 +2374,125 @@
         "title": "HealthOut",
         "type": "object"
       },
+      "HeartbeatOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "server_time": {
+            "format": "date-time",
+            "title": "Server Time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "name",
+          "location_id",
+          "server_time"
+        ],
+        "title": "HeartbeatOut",
+        "type": "object"
+      },
+      "IdleChallengeOut": {
+        "properties": {
+          "challengers": {
+            "items": {
+              "$ref": "#/components/schemas/PersonOut"
+            },
+            "title": "Challengers",
+            "type": "array"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "targets": {
+            "items": {
+              "$ref": "#/components/schemas/PersonOut"
+            },
+            "title": "Targets",
+            "type": "array"
+          }
+        },
+        "required": [
+          "challengers",
+          "targets",
+          "created_at"
+        ],
+        "title": "IdleChallengeOut",
+        "type": "object"
+      },
+      "IdleOut": {
+        "description": "The idle screen: live standings, Match of the day, Kings, challenges (§8.2).",
+        "properties": {
+          "challenges": {
+            "items": {
+              "$ref": "#/components/schemas/IdleChallengeOut"
+            },
+            "title": "Challenges",
+            "type": "array"
+          },
+          "doubles": {
+            "items": {
+              "$ref": "#/components/schemas/StandingOut"
+            },
+            "title": "Doubles",
+            "type": "array"
+          },
+          "kings": {
+            "items": {
+              "$ref": "#/components/schemas/StandingOut"
+            },
+            "title": "Kings",
+            "type": "array"
+          },
+          "match_of_the_day": {
+            "$ref": "#/components/schemas/SpotlightOut"
+          },
+          "pairs": {
+            "items": {
+              "$ref": "#/components/schemas/StandingOut"
+            },
+            "title": "Pairs",
+            "type": "array"
+          },
+          "singles": {
+            "items": {
+              "$ref": "#/components/schemas/StandingOut"
+            },
+            "title": "Singles",
+            "type": "array"
+          }
+        },
+        "required": [
+          "doubles",
+          "singles",
+          "pairs",
+          "kings",
+          "match_of_the_day",
+          "challenges"
+        ],
+        "title": "IdleOut",
+        "type": "object"
+      },
       "IntervalOut": {
         "properties": {
           "ends_at": {
@@ -2169,6 +2522,66 @@
         ],
         "title": "Ladder",
         "type": "string"
+      },
+      "LadderOut": {
+        "properties": {
+          "division": {
+            "title": "Division",
+            "type": "string"
+          },
+          "ladder": {
+            "title": "Ladder",
+            "type": "string"
+          },
+          "level": {
+            "title": "Level",
+            "type": "number"
+          },
+          "lp": {
+            "title": "Lp",
+            "type": "integer"
+          },
+          "matches_played": {
+            "title": "Matches Played",
+            "type": "integer"
+          },
+          "minimum": {
+            "title": "Minimum",
+            "type": "integer"
+          },
+          "placement_left": {
+            "title": "Placement Left",
+            "type": "integer"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "tier": {
+            "title": "Tier",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ladder",
+          "position",
+          "tier",
+          "division",
+          "level",
+          "lp",
+          "placement_left",
+          "matches_played",
+          "minimum"
+        ],
+        "title": "LadderOut",
+        "type": "object"
       },
       "LegalDocumentOut": {
         "properties": {
@@ -3203,6 +3616,29 @@
         "title": "Period",
         "type": "string"
       },
+      "PersonOut": {
+        "properties": {
+          "first_name": {
+            "title": "First Name",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "last_name": {
+            "title": "Last Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "first_name",
+          "last_name"
+        ],
+        "title": "PersonOut",
+        "type": "object"
+      },
       "PlayerOut": {
         "description": "Public (Q49, 28.09.2026): the id links to the player's public history.",
         "properties": {
@@ -3473,6 +3909,52 @@
           "matches"
         ],
         "title": "ProfileOut",
+        "type": "object"
+      },
+      "ProposeIn": {
+        "properties": {
+          "booking_id": {
+            "format": "uuid",
+            "title": "Booking Id",
+            "type": "string"
+          },
+          "card": {
+            "$ref": "#/components/schemas/CardIn"
+          },
+          "score": {
+            "additionalProperties": true,
+            "title": "Score",
+            "type": "object"
+          },
+          "team_a": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "maxItems": 2,
+            "minItems": 1,
+            "title": "Team A",
+            "type": "array"
+          },
+          "team_b": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "maxItems": 2,
+            "minItems": 1,
+            "title": "Team B",
+            "type": "array"
+          }
+        },
+        "required": [
+          "card",
+          "booking_id",
+          "team_a",
+          "team_b",
+          "score"
+        ],
+        "title": "ProposeIn",
         "type": "object"
       },
       "PublicLadderOut": {
@@ -4322,6 +4804,23 @@
         "title": "ResourcePatch",
         "type": "object"
       },
+      "RespondIn": {
+        "properties": {
+          "accept": {
+            "title": "Accept",
+            "type": "boolean"
+          },
+          "card": {
+            "$ref": "#/components/schemas/CardIn"
+          }
+        },
+        "required": [
+          "card",
+          "accept"
+        ],
+        "title": "RespondIn",
+        "type": "object"
+      },
       "RestrictionOut": {
         "properties": {
           "created_at": {
@@ -4763,6 +5262,55 @@
         "title": "ScheduleIn",
         "type": "object"
       },
+      "ScoreChanceOut": {
+        "properties": {
+          "booking_id": {
+            "title": "Booking Id",
+            "type": "string"
+          },
+          "court": {
+            "title": "Court",
+            "type": "string"
+          },
+          "ends_at": {
+            "format": "date-time",
+            "title": "Ends At",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "players": {
+            "items": {
+              "$ref": "#/components/schemas/PersonOut"
+            },
+            "title": "Players",
+            "type": "array"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "window_closes_at": {
+            "format": "date-time",
+            "title": "Window Closes At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "booking_id",
+          "court",
+          "starts_at",
+          "ends_at",
+          "window_closes_at",
+          "kind",
+          "players"
+        ],
+        "title": "ScoreChanceOut",
+        "type": "object"
+      },
       "Season": {
         "enum": [
           "all",
@@ -4912,24 +5460,87 @@
       },
       "SessionOut": {
         "properties": {
-          "authenticated": {
-            "title": "Authenticated",
+          "adult": {
+            "title": "Adult",
             "type": "boolean"
           },
-          "user": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/MeOut"
-              },
-              {
-                "type": "null"
-              }
-            ]
+          "challenges": {
+            "items": {
+              "$ref": "#/components/schemas/WaitingChallengeOut"
+            },
+            "title": "Challenges",
+            "type": "array"
+          },
+          "consent_outdated": {
+            "title": "Consent Outdated",
+            "type": "boolean"
+          },
+          "consent_signed": {
+            "title": "Consent Signed",
+            "type": "boolean"
+          },
+          "director": {
+            "title": "Director",
+            "type": "boolean"
+          },
+          "fixtures": {
+            "items": {
+              "$ref": "#/components/schemas/FixtureViewOut"
+            },
+            "title": "Fixtures",
+            "type": "array"
+          },
+          "in_league": {
+            "title": "In League",
+            "type": "boolean"
+          },
+          "ladders": {
+            "items": {
+              "$ref": "#/components/schemas/LadderOut"
+            },
+            "title": "Ladders",
+            "type": "array"
+          },
+          "language": {
+            "title": "Language",
+            "type": "string"
+          },
+          "player": {
+            "$ref": "#/components/schemas/PersonOut"
+          },
+          "questionnaire": {
+            "title": "Questionnaire",
+            "type": "string"
+          },
+          "score_chances": {
+            "items": {
+              "$ref": "#/components/schemas/ScoreChanceOut"
+            },
+            "title": "Score Chances",
+            "type": "array"
+          },
+          "to_confirm": {
+            "items": {
+              "$ref": "#/components/schemas/WaitingMatchOut"
+            },
+            "title": "To Confirm",
+            "type": "array"
           }
         },
         "required": [
-          "authenticated",
-          "user"
+          "player",
+          "language",
+          "adult",
+          "consent_signed",
+          "consent_outdated",
+          "questionnaire",
+          "in_league",
+          "director",
+          "ladders",
+          "score_chances",
+          "to_confirm",
+          "challenges",
+          "fixtures"
         ],
         "title": "SessionOut",
         "type": "object"
@@ -6729,6 +7340,84 @@
         "title": "VoucherTarget",
         "type": "string"
       },
+      "WaitingChallengeOut": {
+        "properties": {
+          "challenge_id": {
+            "title": "Challenge Id",
+            "type": "string"
+          },
+          "challengers": {
+            "items": {
+              "$ref": "#/components/schemas/PersonOut"
+            },
+            "title": "Challengers",
+            "type": "array"
+          },
+          "ladder": {
+            "title": "Ladder",
+            "type": "string"
+          },
+          "respond_by": {
+            "format": "date-time",
+            "title": "Respond By",
+            "type": "string"
+          }
+        },
+        "required": [
+          "challenge_id",
+          "ladder",
+          "challengers",
+          "respond_by"
+        ],
+        "title": "WaitingChallengeOut",
+        "type": "object"
+      },
+      "WaitingMatchOut": {
+        "properties": {
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "match_id": {
+            "title": "Match Id",
+            "type": "string"
+          },
+          "score": {
+            "additionalProperties": true,
+            "title": "Score",
+            "type": "object"
+          },
+          "team_a": {
+            "items": {
+              "$ref": "#/components/schemas/PersonOut"
+            },
+            "title": "Team A",
+            "type": "array"
+          },
+          "team_b": {
+            "items": {
+              "$ref": "#/components/schemas/PersonOut"
+            },
+            "title": "Team B",
+            "type": "array"
+          },
+          "window_closes_at": {
+            "format": "date-time",
+            "title": "Window Closes At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "match_id",
+          "team_a",
+          "team_b",
+          "score",
+          "window_closes_at",
+          "kind"
+        ],
+        "title": "WaitingMatchOut",
+        "type": "object"
+      },
       "WaitlistOut": {
         "properties": {
           "ends_at": {
@@ -6773,6 +7462,11 @@
       }
     },
     "securitySchemes": {
+      "DeviceAuth": {
+        "in": "header",
+        "name": "X-Device-Token",
+        "type": "apiKey"
+      },
       "SessionUserAuth": {
         "in": "cookie",
         "name": "sessionid",
@@ -9407,6 +10101,44 @@
         ]
       }
     },
+    "/api/v1/device/whoami": {
+      "get": {
+        "description": "A device checks it is enrolled (and signals that it is alive).",
+        "operationId": "jungle_devices_api_whoami",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HeartbeatOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Whoami",
+        "tags": [
+          "devices"
+        ]
+      }
+    },
     "/api/v1/events": {
       "post": {
         "operationId": "jungle_bookings_api_request_event",
@@ -9554,6 +10286,1168 @@
         "summary": "Health",
         "tags": [
           "health"
+        ]
+      }
+    },
+    "/api/v1/kiosk/league/challenges": {
+      "post": {
+        "description": "§8.2 action 4 (Q48): the challengers scan their cards and pick the opponents.",
+        "operationId": "jungle_league_kiosk_api_issue_challenge",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChallengeIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChallengeOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Issue Challenge",
+        "tags": [
+          "kiosk: league"
+        ]
+      }
+    },
+    "/api/v1/kiosk/league/challenges/{challenge_id}/answer": {
+      "post": {
+        "operationId": "jungle_league_kiosk_api_answer_challenge",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "challenge_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Challenge Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RespondIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChallengeOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Answer Challenge",
+        "tags": [
+          "kiosk: league"
+        ]
+      }
+    },
+    "/api/v1/kiosk/league/check-in": {
+      "post": {
+        "description": "§8.2 action 5 (R-030).",
+        "operationId": "jungle_league_kiosk_api_check_in",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CardOnlyIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckInOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Check In",
+        "tags": [
+          "kiosk: league"
+        ]
+      }
+    },
+    "/api/v1/kiosk/league/consent": {
+      "get": {
+        "operationId": "jungle_league_kiosk_api_consent_text",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "language",
+            "required": false,
+            "schema": {
+              "default": "ro",
+              "title": "Language",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsentTextOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Consent Text",
+        "tags": [
+          "kiosk: league"
+        ]
+      },
+      "post": {
+        "description": "R-010, R-011: only with the box ticked, at this League Kiosk.",
+        "operationId": "jungle_league_kiosk_api_sign_consent",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConsentIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsentOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Sign Consent",
+        "tags": [
+          "kiosk: league"
+        ]
+      }
+    },
+    "/api/v1/kiosk/league/fixtures/{fixture_id}/finished": {
+      "post": {
+        "operationId": "jungle_league_kiosk_api_fixture_finished",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "fixture_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Fixture Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CardOnlyIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Fixture Finished",
+        "tags": [
+          "kiosk: league"
+        ]
+      }
+    },
+    "/api/v1/kiosk/league/fixtures/{fixture_id}/score": {
+      "post": {
+        "operationId": "jungle_league_kiosk_api_fixture_score",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "fixture_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Fixture Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FixtureScoreIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MatchOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Fixture Score",
+        "tags": [
+          "kiosk: league"
+        ]
+      }
+    },
+    "/api/v1/kiosk/league/idle": {
+      "get": {
+        "operationId": "jungle_league_kiosk_api_idle",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdleOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Idle",
+        "tags": [
+          "kiosk: league"
+        ]
+      }
+    },
+    "/api/v1/kiosk/league/matches": {
+      "post": {
+        "description": "§8.2 action 2: the score of a finished booking, set by set.",
+        "operationId": "jungle_league_kiosk_api_propose",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProposeIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MatchOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Propose",
+        "tags": [
+          "kiosk: league"
+        ]
+      }
+    },
+    "/api/v1/kiosk/league/matches/{match_id}/director": {
+      "post": {
+        "description": "Q28: the tournament director validates a tournament score.",
+        "operationId": "jungle_league_kiosk_api_director",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "match_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Match Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CardOnlyIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MatchOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Director",
+        "tags": [
+          "kiosk: league"
+        ]
+      }
+    },
+    "/api/v1/kiosk/league/matches/{match_id}/respond": {
+      "post": {
+        "description": "§8.2 action 3: confirm or dispute.",
+        "operationId": "jungle_league_kiosk_api_respond",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "match_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Match Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RespondIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MatchOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Respond",
+        "tags": [
+          "kiosk: league"
+        ]
+      }
+    },
+    "/api/v1/kiosk/league/session": {
+      "post": {
+        "description": "After a scan: the player's own screen (logged out by the kiosk after 30 s idle).",
+        "operationId": "jungle_league_kiosk_api_session",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CardOnlyIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Session",
+        "tags": [
+          "kiosk: league"
+        ]
+      }
+    },
+    "/api/v1/kiosk/league/standings": {
+      "get": {
+        "description": "§8.2 action 6: the full standings, with search by name.",
+        "operationId": "jungle_league_kiosk_api_standings",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "ladder",
+            "required": false,
+            "schema": {
+              "allOf": [
+                {
+                  "description": "LG-001.",
+                  "enum": [
+                    "doubles",
+                    "singles",
+                    "pairs"
+                  ],
+                  "title": "Ladder",
+                  "type": "string"
+                }
+              ],
+              "default": "doubles"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "default": "",
+              "title": "Search",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/StandingOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Standings",
+        "tags": [
+          "kiosk: league"
         ]
       }
     },
@@ -13648,6 +15542,105 @@
           }
         ],
         "summary": "Set Active",
+        "tags": [
+          "staff: devices"
+        ]
+      }
+    },
+    "/api/v1/staff/devices/{device_id}/enroll": {
+      "post": {
+        "description": "ADR-0012: the token is shown once; enrolling again replaces it.",
+        "operationId": "jungle_devices_api_enroll",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "device_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Device Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnrollIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnrollOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Enroll",
         "tags": [
           "staff: devices"
         ]

@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta
 
 from django.db import IntegrityError, transaction
 from django.db.models import Q, QuerySet
@@ -19,6 +19,7 @@ from jungle.accounts.models import User, UserRole
 from jungle.accounts.services.authz import authorize, current_user
 from jungle.attendance.models import BookingRestriction, Scan, ScanKind, StaffNotice
 from jungle.audit import services as audit
+from jungle.audit.models import ActorKind
 from jungle.bookings.models import (
     Booking,
     BookingStatus,
@@ -33,6 +34,7 @@ from jungle.configuration.services import get_config
 from jungle.core import clock
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.permissions import Action, Role
+from jungle.devices.models import Device
 from jungle.ledger.payments import due_for_booking, due_for_enrollment, settle
 from jungle.locations.models import Location, Resource
 
@@ -326,3 +328,31 @@ def mark_notice_read(
 
 def attendance_for_user(user: User) -> QuerySet[Scan]:
     return Scan.objects.filter(user=user).select_related("resource")
+
+
+def record_arrival_at_device(device: Device, person: User) -> Scan:
+    """R-030: the check-in a player makes at a club device (the League Kiosk, §8.2 action 5).
+    Checked in once a day: a second scan the same day returns the first one."""
+    today = clock.today_local()
+    start = datetime.combine(today, time(), clock.BUSINESS_TZ)
+    earlier = Scan.objects.filter(
+        user=person, kind=ScanKind.ARRIVAL, location_id=device.location_id, scanned_at__gte=start
+    ).first()
+    if earlier is not None:
+        return earlier
+    scan = Scan.objects.create(
+        user=person,
+        location_id=device.location_id,
+        kind=ScanKind.ARRIVAL,
+        device=device,
+        scanned_at=clock.now(),
+    )
+    audit.record(
+        audit.Actor(
+            kind=ActorKind.DEVICE, device_id=device.pk, user_id=person.pk, label=device.name
+        ),
+        "attendance.scan",
+        target=scan,
+        after={"kind": scan.kind, "device": str(device.pk)},
+    )
+    return scan
