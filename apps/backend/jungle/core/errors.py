@@ -196,6 +196,8 @@ class ErrorCode(StrEnum):
     LEAGUE_FIXTURE_NOT_FOUND = "league.fixture_not_found"
     LEAGUE_FIXTURE_NOT_READY = "league.fixture_not_ready"
     LEAGUE_FIXTURE_NOT_SCHEDULED = "league.fixture_not_scheduled"
+    LEAGUE_REWARD_NOT_FOUND = "league.reward_not_found"
+    LEAGUE_REWARD_OPTION_INVALID = "league.reward_option_invalid"
 
 
 class DomainError(Exception):

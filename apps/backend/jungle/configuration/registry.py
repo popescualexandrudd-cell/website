@@ -151,17 +151,27 @@ def _voucher_rule(value: Any) -> bool:
 
 
 def league_rewards(value: Any) -> bool:
-    """LG-122: {"ladder", "kings": {...}, "tier_top": {...}}; each with "top", "vouchers"
-    and "extras" ({"ro", "en"} text handed over at the reception, may be empty)."""
+    """LG-122: {"ladder", "kings": {...}, "tier_top": {...}}; each with "top", "vouchers" (always
+    given), "options" ({name: [vouchers]}: the winner chooses one in the account, Q6; may be
+    empty) and "extras" ({"ro", "en"} text handed over at the reception, may be empty)."""
+
+    def vouchers(v: Any) -> bool:
+        return isinstance(v, list) and all(_voucher_rule(x) for x in v)
 
     def rule(r: Any) -> bool:
         return (
             isinstance(r, dict)
-            and set(r) == {"top", "vouchers", "extras"}
+            and set(r) == {"top", "vouchers", "options", "extras"}
             and positive_int(r["top"])
             and r["top"] <= 10
-            and isinstance(r["vouchers"], list)
-            and all(_voucher_rule(v) for v in r["vouchers"])
+            and vouchers(r["vouchers"])
+            and isinstance(r["options"], dict)
+            and len(r["options"]) != 1
+            and all(
+                isinstance(k, str) and k.isidentifier() and len(k) <= 30 and vouchers(v) and v
+                for k, v in r["options"].items()
+            )
+            and bool(r["vouchers"] or r["options"])
             and isinstance(r["extras"], dict)
             and set(r["extras"]) == {"ro", "en"}
             and all(isinstance(t, str) and len(t) <= 200 for t in r["extras"].values())
@@ -568,35 +578,43 @@ CONFIG: dict[str, ConfigSpec] = {
                             "valid_days": 90,
                         }
                     ],
+                    "options": {},
                     "extras": {
-                        "ro": "mingi și cardul special al Regelui Junglei",
-                        "en": "balls and the special King of the Jungle card",
+                        "ro": "o cutie de mingi și cardul special al Regelui Junglei",
+                        "en": "a box of balls and the special King of the Jungle card",
                     },
                 },
                 "tier_top": {
                     "top": 3,
-                    "vouchers": [
-                        {
-                            "kind": "percent",
-                            "value": 15,
-                            "target": "subscription",
-                            "count": 1,
-                            "valid_days": 31,
-                        },
-                        {
-                            "kind": "percent",
-                            "value": 15,
-                            "target": "booking",
-                            "count": 4,
-                            "valid_days": 31,
-                        },
-                    ],
+                    "vouchers": [],
+                    "options": {
+                        "subscription": [
+                            {
+                                "kind": "percent",
+                                "value": 15,
+                                "target": "subscription",
+                                "count": 1,
+                                "valid_days": 31,
+                            }
+                        ],
+                        "bookings": [
+                            {
+                                "kind": "percent",
+                                "value": 20,
+                                "target": "booking",
+                                "count": 4,
+                                "valid_days": 31,
+                            }
+                        ],
+                    },
                     "extras": {"ro": "", "en": ""},
                 },
             },
-            Marker.TO_CONFIRM,
-            "Recompensele de sezon (§6.12): Regii Junglei și top 3 din fiecare rang; "
-            "se fixează la începutul sezonului.",
+            Marker.CONFIRMED,
+            "Recompensele de sezon (§6.12, Q6 confirmat pe 28.09.2026): Regii Junglei primesc "
+            "2 ore, o cutie de mingi și cardul special; top 3 din fiecare rang aleg în cont "
+            "15% la abonament sau 4 vouchere de 20% la rezervări. Se fixează la începutul "
+            "sezonului.",
             league_rewards,
             question="Q6",
         ),

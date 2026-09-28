@@ -9,13 +9,14 @@ from typing import Any
 
 import pytest
 from django.core import mail
+from django.test import Client
 
 from jungle.accounts.models import User
 from jungle.attendance.models import StaffNotice
 from jungle.audit.services import SYSTEM
 from jungle.cards import services as cards
 from jungle.cards.models import PhysicalCardRequest, PrintReason
-from jungle.conftest import Api, grant
+from jungle.conftest import Api, grant, login_as
 from jungle.core.errors import DomainError
 from jungle.core.permissions import Role
 from jungle.devices.models import Device
@@ -32,7 +33,7 @@ from jungle.league.models import (
 from jungle.league.tests.conftest import at, placed, play, staff_request
 from jungle.league.tests.test_matches import Game, kiosk_call
 from jungle.locations.models import Resource, ResourceKind
-from jungle.rewards.models import Voucher, VoucherSource
+from jungle.rewards.models import Voucher
 
 pytestmark = pytest.mark.django_db
 
@@ -87,6 +88,7 @@ def test_open_matches_keep_the_season_open(
 
 def test_lg120_lg121_rewards_and_the_hall_of_fame(
     api: Api,
+    client: Client,
     season: LeagueSeason,
     join: Join,
     manager: User,
@@ -124,15 +126,39 @@ def test_lg120_lg121_rewards_and_the_hall_of_fame(
         ("silver", 2),
         ("silver", 3),
     }
-    assert all(aw.kind == "tier_top" and len(aw.vouchers) == 5 for aw in awards)
-    vouchers = Voucher.objects.filter(source=VoucherSource.REWARD)
-    assert vouchers.count() == 30
-    assert {(v.kind, v.value, v.target) for v in vouchers} == {
-        ("percent", 15, "subscription"),
-        ("percent", 15, "booking"),
-    }
+    # Q6 (28.09.2026): each winner chooses in the account; nothing is issued before the choice.
+    assert all(aw.kind == "tier_top" and aw.vouchers == [] and aw.choice == "" for aw in awards)
+    assert not Voucher.objects.exists()
     assert len(mail.outbox) == 6 and "Sezonul 1" in mail.outbox[0].subject
-    assert "15% reducere la abonament" in mail.outbox[0].body
+    assert "la alegere, din cont" in mail.outbox[0].body and " sau " in mail.outbox[0].body
+
+    winner = awards[0].user
+    request = staff_request(winner)
+    assert [a.pk for a in closing.pending_choices(winner)] == [awards[0].pk]
+    with pytest.raises(DomainError) as exc:
+        closing.choose(request, awards[0].pk, "cash")
+    assert refused(exc) == ("league.reward_option_invalid", 400)
+    chosen = closing.choose(request, awards[0].pk, "bookings")
+    assert chosen.choice == "bookings" and len(chosen.vouchers) == 4
+    assert {(v.kind, v.value, v.target) for v in Voucher.objects.all()} == {
+        ("percent", 20, "booking")
+    }
+    with pytest.raises(DomainError) as exc:  # chosen once
+        closing.choose(request, awards[0].pk, "subscription")
+    assert refused(exc) == ("league.reward_not_found", 404)
+    other = awards[1]
+    with pytest.raises(DomainError) as exc:  # only the winner chooses
+        closing.choose(request, other.pk, "subscription")
+    assert refused(exc) == ("league.reward_not_found", 404)
+    login_as(client, other.user, mfa=False)
+    mine = api.get("/league/me/rewards").json()
+    assert [(r["id"], sorted(r["options"])) for r in mine] == [
+        (other.pk, ["bookings", "subscription"])
+    ]
+    picked = api.post(f"/league/me/rewards/{other.pk}/choose", {"option": "subscription"})
+    assert picked.status_code == 200
+    assert Voucher.objects.filter(holder=other.user, value=15, target="subscription").count() == 1
+    assert api.get("/league/me/rewards").json() == []
     assert not StaffNotice.objects.filter(kind=closing.NOTICE_REWARDS).exists()  # no kings
 
     final = Standing.objects.filter(season=season, ladder="doubles", position__isnull=False)
@@ -200,7 +226,7 @@ def test_lg120_the_kings_of_the_jungle(
         assert Badge.objects.filter(user=king.user, code="king", key=str(season.pk)).exists()
     assert PhysicalCardRequest.objects.filter(reason=PrintReason.KING).count() == kings.count()
     notice = StaffNotice.objects.get(kind=closing.NOTICE_REWARDS)
-    assert notice.payload["ro"] == "mingi și cardul special al Regelui Junglei"
+    assert notice.payload["ro"] == "o cutie de mingi și cardul special al Regelui Junglei"
     assert len(notice.payload["kings"]) == kings.count()
     king_mail = [m for m in mail.outbox if "Regii Junglei" in m.body]
     assert king_mail and "La recepție te așteaptă și" in king_mail[0].body

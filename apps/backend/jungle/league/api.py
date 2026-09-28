@@ -23,6 +23,8 @@ from jungle.league import (
     challenges,
     closing,
     matches,
+    projection,
+    public,
     services,
     spotlight,
     tournaments,
@@ -60,8 +62,19 @@ class SeasonOut(Schema):
 
 
 class PlayerOut(Schema):
+    """Public (Q49, 28.09.2026): the id links to the player's public history."""
+
+    id: uuid.UUID | None = Field(default=None, description="Gol: jucător retras")
     first_name: str
     last_name: str
+
+
+def player_out(user: User) -> PlayerOut:
+    return PlayerOut(id=user.pk, first_name=user.first_name, last_name=user.last_name)
+
+
+def public_out(shown: public.PublicPlayer) -> PlayerOut:
+    return PlayerOut(id=shown.id, first_name=shown.first_name, last_name=shown.last_name)
 
 
 class StandingOut(Schema):
@@ -234,7 +247,7 @@ class ChallengeOut(Schema):
 
 def _people(*people: User | None) -> list[PlayerOut]:
     shown = sorted((p for p in people if p is not None), key=lambda p: (p.last_name, p.first_name))
-    return [PlayerOut(first_name=p.first_name, last_name=p.last_name) for p in shown]
+    return [player_out(p) for p in shown]
 
 
 def challenge_out(challenge: Challenge, user_id: uuid.UUID) -> ChallengeOut:
@@ -268,6 +281,7 @@ class FameSeasonOut(Schema):
 
 
 class SpotlightPlayerOut(Schema):
+    id: uuid.UUID
     first_name: str
     last_name: str
     tier: str
@@ -278,9 +292,11 @@ class SpotlightPlayerOut(Schema):
 
 
 class SpotlightOut(Schema):
-    """R-012 only: no court, no time."""
+    """Q49 (28.09.2026): with the court and the start time."""
 
     found: bool
+    court: str = ""
+    starts_at: datetime | None = None
     players: list[SpotlightPlayerOut] = []
     reasons: list[str] = []
     chosen_by_admin: bool = False
@@ -297,8 +313,11 @@ def spotlight_out(found: spotlight.Spotlight | None) -> SpotlightOut:
         return SpotlightOut(found=False)
     return SpotlightOut(
         found=True,
+        court=found.booking.resource.name,
+        starts_at=found.booking.starts_at,
         players=[
             SpotlightPlayerOut(
+                id=r.player_a_id,
                 first_name=r.player_a.first_name,
                 last_name=r.player_a.last_name,
                 tier=r.tier,
@@ -337,9 +356,11 @@ class TournamentEntryOut(Schema):
 
 
 class FixtureOut(Schema):
-    """R-012: names only; no court and no time."""
+    """Q49 (28.09.2026): with the court and the start time once scheduled."""
 
     id: uuid.UUID
+    court: str
+    starts_at: datetime | None
     phase: str
     round: int
     slot: int
@@ -384,11 +405,8 @@ class ScheduleIn(Schema):
 
 def _names(ids: list[str]) -> list[PlayerOut]:
     people = {str(u.pk): u for u in User.objects.filter(pk__in=ids)}
-    return [
-        PlayerOut(first_name=people[i].first_name, last_name=people[i].last_name)
-        for i in ids
-        if i in people
-    ]
+    visible = projection.visible_players()
+    return [public_out(public.person(people[i], visible)) for i in ids if i in people]
 
 
 def tournament_out(t: Tournament) -> TournamentOut:
@@ -420,6 +438,8 @@ def entry_out(e: TournamentEntry) -> TournamentEntryOut:
 def fixture_out(f: Fixture) -> FixtureOut:
     return FixtureOut(
         id=f.id,
+        court=f.booking.resource.name if f.booking else "",
+        starts_at=f.booking.starts_at if f.booking else None,
         phase=f.phase,
         round=f.round,
         slot=f.slot,
@@ -439,6 +459,62 @@ def tournament_detail(t: Tournament) -> TournamentDetailOut:
     )
 
 
+class ResultOut(Schema):
+    """Q49 (28.09.2026): a league match, public: when, where, who, the score, LP won or lost."""
+
+    id: uuid.UUID
+    finished_at: datetime
+    court: str
+    kind: str
+    team_a: list[PlayerOut]
+    team_b: list[PlayerOut]
+    score: dict[str, object]
+    winner: str
+    lp_delta: dict[str, int]
+
+
+class PublicLadderOut(Schema):
+    ladder: str
+    position: int | None
+    tier: str
+    division: str
+    level: float
+    lp: int
+
+
+class ProfileOut(Schema):
+    player: PlayerOut
+    ladders: list[PublicLadderOut]
+    matches: list[ResultOut]
+
+
+class RewardOut(Schema):
+    id: int
+    season: str
+    kind: str
+    tier: str
+    position: int
+    options: dict[str, list[dict[str, object]]]
+
+
+class ChoiceIn(Schema):
+    option: str = Field(min_length=1, max_length=30)
+
+
+def result_out(r: public.PublicResult) -> ResultOut:
+    return ResultOut(
+        id=r.id,
+        finished_at=r.finished_at,
+        court=r.court,
+        kind=r.kind,
+        team_a=[public_out(p) for p in r.team_a],
+        team_b=[public_out(p) for p in r.team_b],
+        score=r.score,
+        winner=r.winner,
+        lp_delta=r.lp_delta,
+    )
+
+
 def _season(location: str, season_number: int | None) -> LeagueSeason:
     place = get_location_by_slug(location)
     seasons = LeagueSeason.objects.filter(location=place).exclude(status=SeasonStatus.PLANNED)
@@ -453,11 +529,9 @@ def _season(location: str, season_number: int | None) -> LeagueSeason:
 
 
 def standing_out(row: Standing) -> StandingOut:
-    players = [PlayerOut(first_name=row.player_a.first_name, last_name=row.player_a.last_name)]
+    players = [player_out(row.player_a)]
     if row.player_b is not None:
-        players.append(
-            PlayerOut(first_name=row.player_b.first_name, last_name=row.player_b.last_name)
-        )
+        players.append(player_out(row.player_b))
     return StandingOut(
         position=row.position or 0,
         players=players,
@@ -547,6 +621,26 @@ def tournament(request: HttpRequest, tournament_id: uuid.UUID) -> TournamentDeta
     if found is None:
         raise DomainError(ErrorCode.LEAGUE_TOURNAMENT_NOT_FOUND, status=404)
     return tournament_detail(found)
+
+
+@public_router.get("/results", response={200: list[ResultOut], **errors(404, 422)}, auth=None)
+def results(request: HttpRequest, location: str, limit: int = 30) -> list[ResultOut]:
+    """Q49: the latest league match results."""
+    matches_shown = list(public.applied(get_location_by_slug(location))[: min(max(limit, 1), 100)])
+    return [result_out(r) for r in public.results(matches_shown)]
+
+
+@public_router.get("/players/{user_id}", response={200: ProfileOut, **errors(404)}, auth=None)
+def player_profile(request: HttpRequest, user_id: uuid.UUID, location: str) -> ProfileOut:
+    """Q49: a player's public page: rank, level, LP, place and match history."""
+    found = public.profile(get_location_by_slug(location), user_id)
+    if found is None:
+        raise DomainError(ErrorCode.ACCOUNTS_NOT_FOUND, status=404)
+    return ProfileOut(
+        player=public_out(found.player),
+        ladders=[PublicLadderOut(**vars(x)) for x in found.ladders],
+        matches=[result_out(r) for r in found.matches],
+    )
 
 
 # ---------------------------------------------------------------- the player's own view
@@ -653,6 +747,37 @@ def enter(
 )
 def withdraw(request: HttpRequest, entry_id: uuid.UUID) -> TournamentEntryOut:
     return entry_out(tournaments.withdraw(request, entry_id))
+
+
+@me_router.get("/me/rewards", response={200: list[RewardOut], **errors(401)})
+def my_rewards(request: HttpRequest) -> list[RewardOut]:
+    """Q6: season rewards waiting for the winner's choice."""
+    return [
+        RewardOut(
+            id=a.pk,
+            season=a.season.name,
+            kind=a.kind,
+            tier=a.tier,
+            position=a.position,
+            options=closing.options_of(a),
+        )
+        for a in closing.pending_choices(current_user(request))
+    ]
+
+
+@me_router.post(
+    "/me/rewards/{award_id}/choose", response={200: RewardOut, **errors(400, 401, 404, 422)}
+)
+def choose_reward(request: HttpRequest, award_id: int, payload: ChoiceIn) -> RewardOut:
+    award = closing.choose(request, award_id, payload.option)
+    return RewardOut(
+        id=award.pk,
+        season=award.season.name,
+        kind=award.kind,
+        tier=award.tier,
+        position=award.position,
+        options={},
+    )
 
 
 @me_router.post("/questionnaire", response={201: QuestionnaireOut, **errors(400, 401, 422)})

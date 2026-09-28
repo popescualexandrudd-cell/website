@@ -33,7 +33,7 @@ from jungle.locations.models import Location, Resource, ResourceKind
 pytestmark = pytest.mark.django_db
 
 Join = Callable[..., User]
-PUBLIC = {"first_name", "last_name", "tier", "division", "level", "lp", "position"}
+PUBLIC = {"id", "first_name", "last_name", "tier", "division", "level", "lp", "position"}
 
 
 @pytest.fixture
@@ -51,6 +51,8 @@ def test_no_season_or_no_match_means_no_match_of_the_day(
 ) -> None:
     assert api.get(f"/league/match-of-the-day?location={location.slug}").json() == {
         "found": False,
+        "court": "",
+        "starts_at": None,
         "players": [],
         "reasons": [],
         "chosen_by_admin": False,
@@ -109,7 +111,10 @@ def test_lg150_the_biggest_stake_wins_deterministically(
 
     public = api.get(f"/league/match-of-the-day?location={location.slug}").json()
     assert public["found"] is True and public["chosen_by_admin"] is False
-    assert all(set(p) == PUBLIC for p in public["players"])  # R-012: no court, no time
+    assert all(set(p) == PUBLIC for p in public["players"])
+    assert public["court"] == "Teren 2" and public["starts_at"].startswith(
+        "2027-04-05T16:00"
+    )  # Q49
 
 
 def test_challenge_players_are_known_before_they_scan_in(

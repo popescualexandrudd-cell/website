@@ -501,6 +501,10 @@ class SeasonAward(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="+")
     competitor_id = models.CharField(max_length=80)
     vouchers = models.JSONField(default=list, blank=True)
+    choice = models.CharField(
+        max_length=30, blank=True, help_text="Opțiunea aleasă în cont (Q6); gol: încă nealeasă."
+    )
+    chosen_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField()
 
     class Meta:

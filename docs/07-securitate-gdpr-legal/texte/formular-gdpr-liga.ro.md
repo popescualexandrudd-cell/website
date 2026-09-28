@@ -1,4 +1,4 @@
-> **Notă internă (nu se publică):** redactat de Claude pe 27.09.2026, conform deciziei proprietarului (Q41). **Redactat fără revizuire juridică. Recomandăm verificarea de către un avocat/DPO.** Afișarea publică a rezultatelor și a „Meciului zilei” e inclusă explicit, după varianta implicită a întrebării Q30 (DE_CONFIRMAT). Câmpurile `[… — DE_CONFIRMAT]` se completează cu datele firmei (Q26) înainte de publicare. Publicare: `uv run python apps/backend/manage.py publish_legal_document --kind league_gdpr --language ro --file docs/07-securitate-gdpr-legal/texte/formular-gdpr-liga.ro.md`
+> **Notă internă (nu se publică):** redactat de Claude pe 27.09.2026, conform deciziei proprietarului (Q41). **Redactat fără revizuire juridică. Recomandăm verificarea de către un avocat/DPO.** Versiunea 2 (28.09.2026): afișarea publică a rezultatelor cu data, ora și terenul, a istoricului fiecărui jucător și a programului turneelor, după decizia proprietarului (Q49, Q30). Jucătorii semnează din nou la chioșc (chioșcul arată textul nou). Câmpurile `[… — DE_CONFIRMAT]` se completează cu datele firmei (Q26) înainte de publicare. Publicare: `uv run python apps/backend/manage.py publish_legal_document --kind league_gdpr --language ro --file docs/07-securitate-gdpr-legal/texte/formular-gdpr-liga.ro.md`
 
 <!-- PUBLIC TEXT BELOW -->
 # Acordul privind datele personale în Liga Jungle Padel
@@ -17,14 +17,15 @@ Liga este doar pentru persoane de cel puțin 18 ani. Verificăm vârsta după da
 - acest acord: versiunea textului, data și ora, chioșcul la care l-ai semnat și limba afișată.
 
 ## Ce devine public
-Pe site, pe ecranele din club și la chioșcuri apar despre tine **doar**:
+Pe site, pe ecranele din club și la chioșcuri apar despre tine:
 - numele și prenumele;
 - nivelul (rangul și nivelul numeric);
-- punctele de ligă (LP) și locul în clasament.
+- punctele de ligă (LP) și locul în clasament;
+- **meciurile tale de ligă**: data, ora, terenul, partenerii și adversarii, scorul și punctele (LP) câștigate sau pierdute, adunate într-un **istoric al meciurilor** pe pagina ta publică;
+- la turnee: **terenul și ora** meciurilor tale și rezultatele lor;
+- „**Meciul zilei**”, dacă ești ales, cu terenul și ora.
 
-Tot public apar **rezultatele meciurilor de ligă** (cine a jucat și scorul) și **„Meciul zilei”**, cu aceleași date: nume, prenume, nivel.
-
-Nimic altceva nu devine public: nici data nașterii, nici telefonul, nici emailul, nici statisticile detaliate. Pe acestea le vezi doar tu, în contul tău.
+Nimic altceva nu devine public: nici data nașterii, nici telefonul, nici emailul, nici insignele, nici statisticile detaliate. Pe acestea le vezi doar tu, în contul tău. Dacă îți retragi acordul sau îți ștergi contul, în rezultatele trecute ale celorlalți apari ca „Jucător retras”.
 
 ## De ce și pe ce bază
 - Organizarea ligii (programarea, validarea scorurilor, calculul punctelor și al clasamentelor): contractul cu tine (GDPR, art. 6 alin. 1 lit. b).

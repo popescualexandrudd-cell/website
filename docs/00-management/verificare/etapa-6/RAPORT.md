@@ -1,8 +1,13 @@
 # Raport de verificare — Etapa 6 (integrarea ligii)
 
-> Data: 28.09.2026. Branch: `claude/hopeful-euler-rguibn`. Starea: **livrată, așteaptă aprobarea proprietarului.**
+> Data: 28.09.2026. Branch: `claude/hopeful-euler-rguibn`. Starea: **aprobată de proprietar pe 28.09.2026**, cu modificările de mai jos.
 
 Motorul ligii (aprobat în Etapa 2) calcula corect, dar nu știa nimic de club: rezervări, carduri, plăți, sezoane. În Etapa 6 l-am legat de tot restul sistemului. Un exemplu complet, cu date demo, generat de codul real: [EXEMPLU.md](EXEMPLU.md).
+
+## Modificări la aprobare (28.09.2026)
+- **Q6 recompense:** top 3 din fiecare rang **aleg din cont** între 15% la abonament și 4 vouchere de 20% la rezervări; voucherele se emit la alegere. Regii Junglei primesc 2 ore gratuite, o cutie de mingi și cardul special.
+- **Q49 date publice:** pe site apar acum și **terenul și ora** (meciuri de turneu, Meciul zilei), **rezultatele meciurilor de ligă** (data, ora, terenul, echipele, scorul, LP câștigat sau pierdut) și **pagina publică a fiecărui jucător** cu istoricul meciurilor. Regula R-012 și acordul ligii (versiunea 2, RO/EN) au fost actualizate; la publicarea noii versiuni, jucătorii o semnează din nou la chioșc. Insignele și statisticile detaliate rămân private.
+- Confirmate: Q11, Q27, Q28, Q47, Q48, Q50 și punctul 1 din Q49 (turneele fără limită zilnică).
 
 ## Ce s-a construit
 

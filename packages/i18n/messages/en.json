@@ -184,7 +184,9 @@
     "league.tournament_too_few": "Too few entries for the draw: {count} (Americano and Mexicano: a multiple of 4; King of the Court: an even number).",
     "league.fixture_not_found": "The tournament match does not exist.",
     "league.fixture_not_ready": "The tournament match cannot be scheduled or finished now.",
-    "league.fixture_not_scheduled": "The tournament match has no court yet (a tournament booking)."
+    "league.fixture_not_scheduled": "The tournament match has no court yet (a tournament booking).",
+    "league.reward_not_found": "The reward does not exist or has already been chosen.",
+    "league.reward_option_invalid": "Choose one of the reward's options."
   },
   "web": {
     "meta": {

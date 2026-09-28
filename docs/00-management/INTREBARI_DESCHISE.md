@@ -26,12 +26,12 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q3](#q3) | Programul de funcționare | ÎNALTĂ | Etapa 3 (rezervări, prețuri); conținutul paginii de pre-lansare (1B) | REZOLVATĂ (semi-vârful rămâne implicit) |
 | [Q4](#q4) | Prioritatea abonaților | MEDIE | Etapa 3 (liste de așteptare), Etapa 6 (turnee) | DESCHISĂ |
 | [Q5](#q5) | Limita de diferență de nivel | MEDIE | Etapa 2 (parametru al motorului; nu blochează) | DESCHISĂ |
-| [Q6](#q6) | Recompense | MEDIE | Etapa 6 (recompense de sezon) | DESCHISĂ |
+| [Q6](#q6) | Recompense | MEDIE | Etapa 6 (recompense de sezon) | REZOLVATĂ |
 | [Q7](#q7) | Copiii | ÎNALTĂ | Etapa 1A (modelul de conturi: legătura părinte–copil) | REZOLVATĂ |
 | [Q8](#q8) | Invitații fără cont | ÎNALTĂ | Etapa 1A (conturi rapide), Etapa 3 (scanarea la intrarea pe teren) | REZOLVATĂ |
 | [Q9](#q9) | Plata online cu card | MEDIE | Etapa 4 (plăți) | REZOLVATĂ |
 | [Q10](#q10) | Recepția | MEDIE | Etapa 4 (plăți, registru) | DESCHISĂ |
-| [Q11](#q11) | Termenul pentru plată | MEDIE | Etapa 6 (validarea scorului prin plată) | DESCHISĂ |
+| [Q11](#q11) | Termenul pentru plată | MEDIE | Etapa 6 (validarea scorului prin plată) | REZOLVATĂ |
 | [Q12](#q12) | Intensitățile „La cerere” | MEDIE | Etapa 4 (configuratorul de pachete) | DESCHISĂ |
 | [Q13](#q13) | Start | MEDIE | Etapa 4 (regula Start/vârf) | REZOLVATĂ |
 | [Q14](#q14) | „Recuperare” | MEDIE | Etapa 3 (anulări), Etapa 4 (credit în cont) | DESCHISĂ |
@@ -47,10 +47,10 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q24](#q24) | Conturi externe | URGENTĂ | Etapa 1B (furnizorul de email pentru lista de așteptare), Etapa 5 (Apple/Google Wallet), Etapa 12 (cheia AI) | PARȚIAL |
 | [Q25](#q25) | Limbi suplimentare | SCĂZUTĂ | Etapa 11 (website complet) | DESCHISĂ |
 | [Q26](#q26) | Datele firmei | URGENTĂ | Etapa 1B (operatorul de date din nota de informare a listei de așteptare), Etapa 4 (bonuri, facturi), Etapa 5 (GDPR) | DESCHISĂ |
-| [Q27](#q27) | Calendarul sezoanelor | MEDIE | Etapa 6 (sezoane) | DESCHISĂ |
-| [Q28](#q28) | Turnee | MEDIE | Etapa 6 (turnee) | DESCHISĂ |
+| [Q27](#q27) | Calendarul sezoanelor | MEDIE | Etapa 6 (sezoane) | REZOLVATĂ |
+| [Q28](#q28) | Turnee | MEDIE | Etapa 6 (turnee) | REZOLVATĂ |
 | [Q29](#q29) | Tipul meciului | MEDIE | Etapa 3 (tipul sesiunii la rezervare) | DESCHISĂ |
-| [Q30](#q30) | Afișarea publică a rezultatelor | MEDIE | Etapa 5 (textul formularului GDPR al ligii) | DESCHISĂ |
+| [Q30](#q30) | Afișarea publică a rezultatelor | MEDIE | Etapa 5 (textul formularului GDPR al ligii) | REZOLVATĂ |
 | [Q31](#q31) | Clasamentul pe perechi | SCĂZUTĂ | Etapa 2 (parametru al motorului; nu blochează) | DESCHISĂ |
 | [Q32](#q32) | Voucherul „Adu un prieten” | MEDIE | Etapa 4 (vouchere și recomandări) | DESCHISĂ |
 | [Q33](#q33) | Cafeneaua | MEDIE | Etapa 4 (produse de cafenea), Etapa 8 (afișajul cafenelei) | DESCHISĂ |
@@ -67,10 +67,10 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q46](#q46) | Etichetele neclare din schița clubului *(nouă, Etapa 1B)* | SCĂZUTĂ | Etapa 1B (planul de pe site), Etapa 3 (resursele: săli, parcări) | PARȚIAL |
 | [Q45](#q45) | Valorile implicite ale ligii alese în Etapa 2 *(nouă, Etapa 2)* | SCĂZUTĂ | Etapa 6 (nu blochează; se schimbă din configurare) | DESCHISĂ |
 | [Q44](#q44) | Randări sau fotografii reale ale spațiilor (vestiare, pilates, sală de evenimente, cafenea, lounge) *(nouă, Etapa 1B)* | MEDIE | Etapa 1B (grila de facilități), Etapa 11 (website-ul complet), Etapa 13 (marketing) | DESCHISĂ |
-| [Q47](#q47) | Chestionarul de nivel: cum se estimează nivelul *(nouă, Etapa 6)* | SCĂZUTĂ | nimic (antrenorul stabilește nivelul final) | DESCHISĂ |
-| [Q48](#q48) | Provocările: unde, cine răspunde, ce înseamnă lipsa răspunsului *(nouă, Etapa 6)* | MEDIE | nimic (varianta implicită e în lucru) | DESCHISĂ |
-| [Q49](#q49) | Turneele: limita zilnică, înscrierea, ce se vede pe site *(nouă, Etapa 6)* | MEDIE | nimic (varianta implicită e în lucru) | DESCHISĂ |
-| [Q50](#q50) | Insignele și „Meciul zilei”: praguri și ce se afișează *(nouă, Etapa 6)* | SCĂZUTĂ | nimic (se schimbă din setări) | DESCHISĂ |
+| [Q47](#q47) | Chestionarul de nivel: cum se estimează nivelul *(nouă, Etapa 6)* | SCĂZUTĂ | nimic (antrenorul stabilește nivelul final) | REZOLVATĂ |
+| [Q48](#q48) | Provocările: unde, cine răspunde, ce înseamnă lipsa răspunsului *(nouă, Etapa 6)* | MEDIE | nimic (varianta implicită e în lucru) | REZOLVATĂ |
+| [Q49](#q49) | Turneele: limita zilnică, înscrierea, ce se vede pe site *(nouă, Etapa 6)* | MEDIE | nimic (varianta implicită e în lucru) | REZOLVATĂ |
+| [Q50](#q50) | Insignele și „Meciul zilei”: praguri și ce se afișează *(nouă, Etapa 6)* | SCĂZUTĂ | nimic (se schimbă din setări) | REZOLVATĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -133,10 +133,10 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q6"></a>Q6 — Recompense
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 6 (recompense de sezon)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (din MEGA_PROMPT):** top 3 din fiecare rang.
 - **Folosită în Etapa 6 (28.09.2026):** la închiderea sezonului, **top 3 din fiecare rang** (Bronz, Argint, Aur, Platină, Diamant, Maestru) în clasamentul final de dublu primesc câte un voucher de **15%** la abonament și **4 vouchere de 15%** la rezervări, valabile 31 de zile. **Regii Junglei (top 3)** primesc în plus 2 vouchere de câte 60 de minute (valabile 90 de zile), mingi și cardul special. Doar cei cu minimul de meciuri (12) intră în clasamentul final. Valorile se schimbă din setarea `league.rewards` și se fixează la începutul fiecărui sezon.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (28.09.2026):** top 3 din fiecare rang primesc, la alegere, **15% la abonament sau 4 vouchere de 20% la rezervări** (aleg din cont). Regii Junglei primesc în plus **2 ore gratuite, o cutie de mingi și un card special**.
 - **Textul original (§17):**
 
   > - **Q6 Recompense**: „10–20% reducere luna următoare” e pentru top 3 din fiecare rang sau o alternativă la premiile Regilor Junglei? *Implicit: top 3 din fiecare rang.*
@@ -188,10 +188,10 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q11"></a>Q11 — Termenul pentru plată
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 6 (validarea scorului prin plată)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (din MEGA_PROMPT):** 24 de ore.
 - **Folosită în Etapa 6 (28.09.2026):** 24 de ore (setarea `league.payment_deadline_hours`). Plata făcută în acest timp validează automat scorul; după termen, scorul expiră.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (28.09.2026):** confirmat, 24 de ore.
 - **Textul original (§17):**
 
   > - **Q11 Termenul pentru plată** după introducerea scorului, ca meciul să fie validat. *Implicit: 24 de ore.*
@@ -362,10 +362,10 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q27"></a>Q27 — Calendarul sezoanelor
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 6 (sezoane)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (din MEGA_PROMPT):** da, o lună.
 - **Folosită în Etapa 6 (28.09.2026):** un sezon se poate marca „Calibrare”; la închiderea lui nu se dau premii. Datele sezoanelor le alege managerul.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (28.09.2026):** confirmat (Sezonul 0 – Calibrare, fără premii).
 - **Textul original (§17):**
 
   > - **Q27 Calendarul sezoanelor** și „Sezonul 0 – Calibrare” la deschidere. *Implicit: da, o lună.*
@@ -373,10 +373,10 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q28"></a>Q28 — Turnee
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 6 (turnee)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (din MEGA_PROMPT):** jucătorii, cu confirmare; directorul poate introduce și valida.
 - **Folosită în Etapa 6 (28.09.2026):** un jucător sau directorul marchează meciul terminat la Chioșcul Ligii; scorul se introduce și se confirmă tot acolo, în 30 de minute. Directorul (manager) poate introduce și valida singur, la chioșc. Bonus de fază: câștigător 30 LP, finalist 20, semifinaliști 10, sferturi 5 (setarea `league.tournament_bonuses`).
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (28.09.2026):** confirmat (jucătorii la chioșc, cu confirmare; directorul poate introduce și valida; bonus 30/20/10/5 LP).
 - **Textul original (§17):**
 
   > - **Q28 Turnee**: cine introduce scorul (jucătorii sau un arbitru/director de turneu)? *Implicit: jucătorii, cu confirmare; directorul poate introduce și valida.*
@@ -395,10 +395,10 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q30"></a>Q30 — Afișarea publică a rezultatelor
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 5 (textul formularului GDPR al ligii)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (din MEGA_PROMPT):** da, menționat explicit în formular; de validat cu avocatul.
 - **Folosită în Etapa 5 (27.09.2026):** Acordul ligii (`formular-gdpr-liga`) spune explicit că rezultatele meciurilor de ligă și „Meciul zilei” sunt publice, cu nume, prenume și nivel.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (28.09.2026, prin Q49):** da; în plus, terenul, ora, rezultatele și istoricul fiecărui jucător sunt publice. Acordul ligii, versiunea 2.
 - **Textul original (§17):**
 
   > - **Q30 Afișarea publică a rezultatelor** meciurilor și a Meciului zilei intră în acordul GDPR din ligă? *Implicit: da, menționat explicit în formular; de validat cu avocatul.*
@@ -581,26 +581,24 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q47"></a>Q47 — Chestionarul de nivel: cum se estimează nivelul
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** nimic (antrenorul confirmă sau schimbă nivelul înainte de primul meci, R-003)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (DE_CONFIRMAT):** jucătorul alege descrierea care i se potrivește (treapta de nivel); estimarea pornește de la mijlocul treptei: −0,25 dacă joacă padel de mai puțin de un an, +0,25 dacă a jucat competițional alt sport cu rachetă, +0,25 dacă a jucat turnee regionale sau naționale. Rezultatul rămâne mereu în treapta aleasă.
-- **Răspunsul proprietarului:** —
-
+- **Răspunsul proprietarului (28.09.2026):** confirmat.
 ### <a id="q48"></a>Q48 — Provocările: unde, cine răspunde, ce înseamnă lipsa răspunsului
 
 - **Prioritate:** MEDIE · **Blochează:** nimic
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Variantele implicite (DE_CONFIRMAT):**
   1. Provocările se lansează și se acceptă **la Chioșcul Ligii**, cu cardul; pe site doar se văd (invariantul 2: de la distanță, liga doar se vizualizează).
   2. La dublu, provocarea e între **perechi**, după rangul perechii; ambele perechi trebuie să fi terminat meciurile de plasare.
   3. Răspunde **unul dintre cei provocați**, pentru toată perechea.
   4. **Fără răspuns în 72 de ore = refuz** (altfel refuzurile s-ar putea ocoli prin tăcere).
   5. La al treilea refuz, dacă adminul alege „înfrângere tehnică”, **managerul primește o notificare și decide**; nu se scad puncte automat, pentru că un scor se introduce doar la chioșc (invariantul 1).
-- **Răspunsul proprietarului:** —
-
+- **Răspunsul proprietarului (28.09.2026):** da, confirmat în întregime.
 ### <a id="q49"></a>Q49 — Turneele: limita zilnică, înscrierea, ce se vede pe site
 
 - **Prioritate:** MEDIE · **Blochează:** nimic
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Variantele implicite (DE_CONFIRMAT):**
   1. Meciurile de turneu **nu intră în limita de 3 meciuri oficiale pe zi** și nu au „randament descrescător”: sunt trase la sorți de sistem, iar un turneu are mai multe meciuri pe zi.
   2. Înscrierea se face **din cont** (ca o rezervare) sau la recepție. Cel care înscrie perechea își alege partenerul; partenerul se poate retrage oricând înainte de tragere.
@@ -608,14 +606,12 @@ Titlul și instrucțiunea din §17, preluate integral:
   4. Pe site apar înscrierile, tabloul, scorurile și clasamentul, **fără teren și fără oră** (R-012: despre un jucător se publică doar numele, nivelul, LP-ul și locul).
   5. Un rezultat de turneu, odată folosit de tablou, **nu se mai anulează** din admin (tabloul a mers mai departe).
   6. Un turneu se desfășoară pe mai multe rezervări de câte cel mult 3 ore (regula R-041 a duratelor).
-- **Răspunsul proprietarului:** —
-
+- **Răspunsul proprietarului (28.09.2026):** punctul 1 confirmat (fără limită zilnică la turnee). Punctul 4 schimbat: **pe site apar terenul și ora meciurilor, numele, rangul, LP-ul și locul, plus rezultatele meciurilor și istoricul fiecărui jucător**. R-012 și acordul ligii (versiunea 2) au fost actualizate. Restul confirmat.
 ### <a id="q50"></a>Q50 — Insignele și „Meciul zilei”: praguri și ce se afișează
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** nimic (totul se schimbă din setări)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Variantele implicite (DE_CONFIRMAT):**
   1. **Insigne** (vizibile doar în contul propriu): „Ucigaș de giganți” la o victorie contra unei echipe cu cel puțin un nivel peste; 10 victorii la rând; „Early Bird” după 5 meciuri terminate înainte de ora 10; 4 săptămâni la rând cu meciuri; „Surpriza săptămânii” (lunea, pentru săptămâna trecută); promovare; primul Diamant; Rege al Junglei. O insignă primită rămâne, chiar dacă un meci e anulat ulterior.
   2. **Meciul zilei**: se alege dintre meciurile de ligă de azi după un scor de miză (promovare la îndemână 3, duel între doi jucători din top 10: 3, unul din top 10: 1, provocare 2, rivalitate 2, diferență de nivel 1). Adminul îl poate schimba, cu motiv. Pe site și pe ecrane apar doar numele, rangul, nivelul, LP-ul și locul jucătorilor (fără teren și oră). Textul de prezentare scris de AI vine în Etapa 12.
-- **Răspunsul proprietarului:** —
-
+- **Răspunsul proprietarului (28.09.2026):** confirmat. (Meciul zilei arată acum și terenul și ora, după Q49.)

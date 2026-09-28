@@ -23,7 +23,7 @@ from django.db import transaction
 from django.http import HttpRequest
 
 from jungle.accounts.models import User
-from jungle.accounts.services.authz import authorize
+from jungle.accounts.services.authz import authorize, current_user
 from jungle.attendance.models import StaffNotice
 from jungle.audit import services as audit
 from jungle.cards import services as cards
@@ -117,20 +117,59 @@ def _voucher_line(rule: dict[str, Any], language: str) -> str:
     return f"{count} × {what} {target}, {valid}"
 
 
+OPTION_LABEL = {
+    "subscription": {"ro": "reducerea la abonament", "en": "the subscription discount"},
+    "bookings": {"ro": "voucherele pentru rezervări", "en": "the booking vouchers"},
+}
+
+
+def _option_line(name: str, rules: list[dict[str, Any]], language: str) -> str:
+    label = OPTION_LABEL.get(name, {}).get(language, name)
+    return f"{label}: " + "; ".join(_voucher_line(v, language) for v in rules)
+
+
 def _email(user: User, season: LeagueSeason, kind: str, tier: str, position: int) -> None:
     rule = season.rewards["kings" if kind == AwardKind.KING else "tier_top"]
     language = user.preferred_language if user.preferred_language in ("ro", "en") else "ro"
+    lines = [_voucher_line(v, language) for v in rule["vouchers"]]
+    if rule["options"]:
+        heading = "la alegere, din cont" if language == "ro" else "your choice, in your account"
+        options = (" sau " if language == "ro" else " or ").join(
+            _option_line(name, vouchers, language) for name, vouchers in rule["options"].items()
+        )
+        lines.append(f"{heading}: {options}")
     notify.send(
         "league_season_reward",
         user,
         {
             "season": season.name,
             "award": _label(kind, tier, position, language),
-            "rewards": [_voucher_line(v, language) for v in rule["vouchers"]],
+            "rewards": lines,
             "extras": rule["extras"][language],
         },
         notify.ACCOUNT_VOUCHERS_PATH,
     )
+
+
+def _issue(user: User, season: LeagueSeason, rules: list[dict[str, Any]], reason: str) -> list[str]:
+    return [
+        str(
+            issue_voucher(
+                audit.SYSTEM,
+                user,
+                VoucherData(
+                    kind=v["kind"],
+                    value=v["value"],
+                    target=v["target"],
+                    valid_days=v["valid_days"],
+                    reason=reason,
+                ),
+                VoucherSource.REWARD,
+            ).pk
+        )
+        for v in rules
+        for _ in range(v["count"])
+    ]
 
 
 def _award(season: LeagueSeason) -> list[SeasonAward]:
@@ -141,24 +180,7 @@ def _award(season: LeagueSeason) -> list[SeasonAward]:
     for kind, tier, position, row in _winners(season, rules["ladder"]):
         rule = rules["kings" if kind == AwardKind.KING else "tier_top"]
         for user in _people(row):
-            vouchers = [
-                str(
-                    issue_voucher(
-                        audit.SYSTEM,
-                        user,
-                        VoucherData(
-                            kind=v["kind"],
-                            value=v["value"],
-                            target=v["target"],
-                            valid_days=v["valid_days"],
-                            reason=f"{season.name}: {_label(kind, tier, position, 'ro')}",
-                        ),
-                        VoucherSource.REWARD,
-                    ).pk
-                )
-                for v in rule["vouchers"]
-                for _ in range(v["count"])
-            ]
+            reason = f"{season.name}: {_label(kind, tier, position, 'ro')}"
             awards.append(
                 SeasonAward.objects.create(
                     season=season,
@@ -168,7 +190,7 @@ def _award(season: LeagueSeason) -> list[SeasonAward]:
                     position=position,
                     user=user,
                     competitor_id=row.competitor_id,
-                    vouchers=vouchers,
+                    vouchers=_issue(user, season, rule["vouchers"], reason),
                     created_at=clock.now(),
                 )
             )
@@ -186,6 +208,57 @@ def _award(season: LeagueSeason) -> list[SeasonAward]:
             created_at=clock.now(),
         )
     return awards
+
+
+def _rule(award: SeasonAward) -> dict[str, Any]:
+    rule: dict[str, Any] = award.season.rewards[
+        "kings" if award.kind == AwardKind.KING else "tier_top"
+    ]
+    return rule
+
+
+def options_of(award: SeasonAward) -> dict[str, list[dict[str, Any]]]:
+    options: dict[str, list[dict[str, Any]]] = _rule(award)["options"]
+    return options
+
+
+def pending_choices(user: User) -> list[SeasonAward]:
+    """Q6: the rewards whose option the winner has not chosen yet."""
+    return [
+        a
+        for a in SeasonAward.objects.filter(user=user, choice="").select_related("season")
+        if _rule(a)["options"]
+    ]
+
+
+def choose(request: HttpRequest, award_id: int, option: str) -> SeasonAward:
+    """Q6 (confirmed 28.09.2026): the winner chooses in the account; the vouchers are issued
+    then (their validity starts from the choice)."""
+    user = current_user(request)
+    with transaction.atomic():
+        award = (
+            SeasonAward.objects.select_for_update()
+            .select_related("season")
+            .filter(pk=award_id, user=user, choice="")
+            .first()
+        )
+        if award is None or not _rule(award)["options"]:
+            raise DomainError(ErrorCode.LEAGUE_REWARD_NOT_FOUND, status=404)
+        options = _rule(award)["options"]
+        if option not in options:
+            raise DomainError(ErrorCode.LEAGUE_REWARD_OPTION_INVALID)
+        reason = f"{award.season.name}: {_label(award.kind, award.tier, award.position, 'ro')}"
+        award.vouchers = [*award.vouchers, *_issue(user, award.season, options[option], reason)]
+        award.choice = option
+        award.chosen_at = clock.now()
+        award.save(update_fields=["vouchers", "choice", "chosen_at"])
+        audit.record(
+            audit.actor_from_request(request),
+            "league.reward_chosen",
+            target=award,
+            after={"option": option},
+        )
+    return award
 
 
 def close_season(request: HttpRequest, season_id: uuid.UUID) -> LeagueSeason:

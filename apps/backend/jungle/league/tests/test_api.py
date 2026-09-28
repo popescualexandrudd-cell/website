@@ -11,7 +11,7 @@ from django.test import Client
 from jungle.accounts.models import User
 from jungle.audit.services import SYSTEM
 from jungle.conftest import Api, error_code, login_as
-from jungle.league import store
+from jungle.league import services, store
 from jungle.league.models import EventKind, LeagueSeason, SeasonStatus, Standing
 from jungle.league.projection import round_level
 from jungle.league.tests.conftest import at, placed, play
@@ -32,7 +32,7 @@ def test_r012_public_standings_show_only_name_level_lp_and_place(
     assert [r["position"] for r in rows] == [1, 2, 3, 4]
     for row in rows:
         assert set(row) == PUBLIC_FIELDS
-        assert [set(p) for p in row["players"]] == [{"first_name", "last_name"}]
+        assert [set(p) for p in row["players"]] == [{"id", "first_name", "last_name"}]
     names = {p["last_name"] for r in rows for p in r["players"]}
     assert names == {a.last_name, b.last_name, c.last_name, d.last_name}
     assert newcomer.last_name not in names
@@ -112,3 +112,54 @@ def test_r012_my_statistics_are_private(
     play(season, (a, c), (b, d), at("2027-04-06 16:00"))
     me = api.get("/league/me").json()
     assert [r["kind"] for r in me["recent"]].count("match") == 6
+
+
+def test_q49_results_and_player_history_are_public(
+    api: Api,
+    season: LeagueSeason,
+    join: Join,
+    location: Location,
+    kiosk: Any,
+    now: Any,
+) -> None:
+    """Q49 (owner, 28.09.2026): results with date, time, court and LP; each player's history."""
+    from jungle.league import matches
+    from jungle.league.tests.test_matches import Game, kiosk_call
+    from jungle.locations.models import Resource, ResourceKind
+
+    court = Resource.objects.create(
+        location=location, slug="teren-7", name="Teren 7", kind=ResourceKind.PADEL_COURT
+    )
+    game = Game(season, court, [join() for _ in range(4)])
+    game.pay()
+    now.move_to("2027-04-05T11:35:00+03:00")
+    match = matches.propose(kiosk_call(), kiosk, game.proposal())
+    for player in (game.b, game.c, game.d):
+        matches.respond(kiosk_call(), kiosk, match.pk, game.token(player), True)
+    shown = api.get(f"/league/results?location={location.slug}").json()
+    assert len(shown) == 1
+    result = shown[0]
+    assert result["court"] == "Teren 7" and result["finished_at"].startswith("2027-04-05T08:30")
+    assert result["winner"] == "a" and len(result["team_a"]) == 2
+    assert set(result["lp_delta"]) == {str(p.pk) for p in game.players}  # 0 during placement
+
+    page = api.get(f"/league/players/{game.a.pk}?location={location.slug}").json()
+    assert page["player"]["last_name"] == game.a.last_name
+    assert {x["ladder"] for x in page["ladders"]} == {"doubles", "singles"}
+    assert [m["id"] for m in page["matches"]] == [str(match.pk)]
+
+    services.leave(game.d, "test")  # left the league: not shown any more
+    shown = api.get(f"/league/results?location={location.slug}").json()
+    names = [(p["id"], p["first_name"]) for p in shown[0]["team_b"]]
+    assert (None, "Jucător") in names and str(game.d.pk) not in shown[0]["lp_delta"]
+    assert api.get(f"/league/players/{game.d.pk}?location={location.slug}").status_code == 404
+    assert api.get(f"/league/players/{game.a.pk}?location=nicaieri").status_code == 404
+
+
+def test_q49_a_profile_without_an_active_season(
+    api: Api, season: LeagueSeason, join: Join, location: Location
+) -> None:
+    player = join()
+    LeagueSeason.objects.filter(pk=season.pk).update(status=SeasonStatus.CLOSED)
+    page = api.get(f"/league/players/{player.pk}?location={location.slug}").json()
+    assert page["ladders"] == [] and page["matches"] == []

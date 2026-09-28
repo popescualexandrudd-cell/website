@@ -4,7 +4,11 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
-### Etapa 6 — 28.09.2026 (livrată, așteaptă aprobarea)
+### Etapa 6 — 28.09.2026 (aprobată 28.09.2026)
+#### Modificat la aprobare (răspunsurile proprietarului)
+- Q6: top 3 din fiecare rang aleg din cont între 15% la abonament și 4 vouchere de 20% la rezervări (`POST /league/me/rewards/{id}/choose`); Regii Junglei: 2 ore gratuite, o cutie de mingi, card special.
+- Q49: R-012 extins: rezultatele meciurilor de ligă (`GET /league/results`), pagina publică a jucătorului cu istoricul (`GET /league/players/{id}`), terenul și ora la meciurile de turneu și la Meciul zilei; jucătorii retrași apar ca „Jucător retras”; acordul ligii versiunea 2 (RO/EN).
+- Q11, Q27, Q28, Q47, Q48, Q50 confirmate.
 #### Adăugat
 - `jungle.league`: evenimente de ligă doar-adăugare, starea în cache și recalculare de la zero identică (§6.16), clasamente cu doar câmpurile R-012, intrarea în ligă (chestionar Q47, validarea antrenorului, acordul de la chioșc, 18+) și ieșirea (retragerea acordului, ștergerea contului), sezoane cu valori fixate la pornire (ADR-0022) și pornire din sezonul anterior (LG-130).
 - Fluxul scorului (§6.9): doar la Chioșcul de Ligă activ, al clubului, din rețeaua clubului (invariantul 1, refuzurile în jurnal); fereastra de 30 de minute; confirmare de toți; dispută; validare doar cu rezervarea plătită integral (Q11, 24 h), cu validare automată la plata ulterioară; expirare; rezolvarea managerului cu motiv (aplică, redeschide, anulează + recalculare); jurnal doar-adăugare al fiecărui pas; o singură aplicare la confirmări simultane (LG-162).

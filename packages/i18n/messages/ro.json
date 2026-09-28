@@ -184,7 +184,9 @@
     "league.tournament_too_few": "Prea puține înscrieri pentru tragere: {count} (Americano și Mexicano: multiplu de 4; King of the Court: număr par).",
     "league.fixture_not_found": "Meciul de turneu nu există.",
     "league.fixture_not_ready": "Meciul de turneu nu poate fi programat sau încheiat acum.",
-    "league.fixture_not_scheduled": "Meciul de turneu nu are încă un teren (o rezervare de tip turneu)."
+    "league.fixture_not_scheduled": "Meciul de turneu nu are încă un teren (o rezervare de tip turneu).",
+    "league.reward_not_found": "Recompensa nu există sau a fost deja aleasă.",
+    "league.reward_option_invalid": "Alege una dintre variantele recompensei."
   },
   "web": {
     "meta": {

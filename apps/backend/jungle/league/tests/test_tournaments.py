@@ -684,6 +684,8 @@ def test_tournaments_on_the_website(
     fixture = drawn["fixtures"][0]
     assert set(fixture) == {
         "id",
+        "court",
+        "starts_at",
         "phase",
         "round",
         "slot",
@@ -693,7 +695,8 @@ def test_tournaments_on_the_website(
         "winner",
         "score",
     }
-    assert set(fixture["team_a"][0]) == {"first_name", "last_name"}  # R-012: no court, no time
+    assert set(fixture["team_a"][0]) == {"id", "first_name", "last_name"}
+    assert (fixture["court"], fixture["starts_at"]) == ("", None)  # not on a court yet
     detail = api.get(f"/league/tournaments/{tournament_id}").json()
     assert len(detail["entries_list"]) == 2 and detail["status"] == "in_progress"
     finished = api.post(f"/staff/league/fixtures/{fixture['id']}/finished")
@@ -708,6 +711,8 @@ def test_tournaments_on_the_website(
         f"/staff/league/fixtures/{fixture['id']}/schedule", {"booking_id": str(booking.pk)}
     )
     assert scheduled.status_code == 200
+    assert scheduled.json()["court"] == "T9"  # Q49: court and time are public
+    assert scheduled.json()["starts_at"].startswith("2027-04-10T07:00")
     cancelled = api.post(f"/staff/league/tournaments/{tournament_id}/cancel", {"reason": "Test"})
     assert cancelled.json()["status"] == "cancelled"
     assert api.get(f"/league/tournaments/{tournament_id}").status_code == 404

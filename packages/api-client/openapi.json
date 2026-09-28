@@ -726,6 +726,21 @@
         "title": "ChildOut",
         "type": "object"
       },
+      "ChoiceIn": {
+        "properties": {
+          "option": {
+            "maxLength": 30,
+            "minLength": 1,
+            "title": "Option",
+            "type": "string"
+          }
+        },
+        "required": [
+          "option"
+        ],
+        "title": "ChoiceIn",
+        "type": "object"
+      },
       "ClaimIn": {
         "properties": {
           "code": {
@@ -1897,8 +1912,12 @@
         "type": "object"
       },
       "FixtureOut": {
-        "description": "R-012: names only; no court and no time.",
+        "description": "Q49 (28.09.2026): with the court and the start time once scheduled.",
         "properties": {
+          "court": {
+            "title": "Court",
+            "type": "string"
+          },
           "id": {
             "format": "uuid",
             "title": "Id",
@@ -1920,6 +1939,18 @@
           "slot": {
             "title": "Slot",
             "type": "integer"
+          },
+          "starts_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Starts At"
           },
           "status": {
             "title": "Status",
@@ -1946,6 +1977,8 @@
         },
         "required": [
           "id",
+          "court",
+          "starts_at",
           "phase",
           "round",
           "slot",
@@ -3171,10 +3204,24 @@
         "type": "string"
       },
       "PlayerOut": {
+        "description": "Public (Q49, 28.09.2026): the id links to the player's public history.",
         "properties": {
           "first_name": {
             "title": "First Name",
             "type": "string"
+          },
+          "id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Gol: jucător retras",
+            "title": "Id"
           },
           "last_name": {
             "title": "Last Name",
@@ -3398,6 +3445,79 @@
           }
         },
         "title": "ProfileIn",
+        "type": "object"
+      },
+      "ProfileOut": {
+        "properties": {
+          "ladders": {
+            "items": {
+              "$ref": "#/components/schemas/PublicLadderOut"
+            },
+            "title": "Ladders",
+            "type": "array"
+          },
+          "matches": {
+            "items": {
+              "$ref": "#/components/schemas/ResultOut"
+            },
+            "title": "Matches",
+            "type": "array"
+          },
+          "player": {
+            "$ref": "#/components/schemas/PlayerOut"
+          }
+        },
+        "required": [
+          "player",
+          "ladders",
+          "matches"
+        ],
+        "title": "ProfileOut",
+        "type": "object"
+      },
+      "PublicLadderOut": {
+        "properties": {
+          "division": {
+            "title": "Division",
+            "type": "string"
+          },
+          "ladder": {
+            "title": "Ladder",
+            "type": "string"
+          },
+          "level": {
+            "title": "Level",
+            "type": "number"
+          },
+          "lp": {
+            "title": "Lp",
+            "type": "integer"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "tier": {
+            "title": "Tier",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ladder",
+          "position",
+          "tier",
+          "division",
+          "level",
+          "lp"
+        ],
+        "title": "PublicLadderOut",
         "type": "object"
       },
       "QuestionnaireIn": {
@@ -4251,6 +4371,72 @@
         "title": "RestrictionOut",
         "type": "object"
       },
+      "ResultOut": {
+        "description": "Q49 (28.09.2026): a league match, public: when, where, who, the score, LP won or lost.",
+        "properties": {
+          "court": {
+            "title": "Court",
+            "type": "string"
+          },
+          "finished_at": {
+            "format": "date-time",
+            "title": "Finished At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "lp_delta": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Lp Delta",
+            "type": "object"
+          },
+          "score": {
+            "additionalProperties": true,
+            "title": "Score",
+            "type": "object"
+          },
+          "team_a": {
+            "items": {
+              "$ref": "#/components/schemas/PlayerOut"
+            },
+            "title": "Team A",
+            "type": "array"
+          },
+          "team_b": {
+            "items": {
+              "$ref": "#/components/schemas/PlayerOut"
+            },
+            "title": "Team B",
+            "type": "array"
+          },
+          "winner": {
+            "title": "Winner",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "finished_at",
+          "court",
+          "kind",
+          "team_a",
+          "team_b",
+          "score",
+          "winner",
+          "lp_delta"
+        ],
+        "title": "ResultOut",
+        "type": "object"
+      },
       "ReverseIn": {
         "properties": {
           "reason": {
@@ -4264,6 +4450,51 @@
           "reason"
         ],
         "title": "ReverseIn",
+        "type": "object"
+      },
+      "RewardOut": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "options": {
+            "additionalProperties": {
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "title": "Options",
+            "type": "object"
+          },
+          "position": {
+            "title": "Position",
+            "type": "integer"
+          },
+          "season": {
+            "title": "Season",
+            "type": "string"
+          },
+          "tier": {
+            "title": "Tier",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "season",
+          "kind",
+          "tier",
+          "position",
+          "options"
+        ],
+        "title": "RewardOut",
         "type": "object"
       },
       "RoleGrantIn": {
@@ -4848,12 +5079,17 @@
         "type": "object"
       },
       "SpotlightOut": {
-        "description": "R-012 only: no court, no time.",
+        "description": "Q49 (28.09.2026): with the court and the start time.",
         "properties": {
           "chosen_by_admin": {
             "default": false,
             "title": "Chosen By Admin",
             "type": "boolean"
+          },
+          "court": {
+            "default": "",
+            "title": "Court",
+            "type": "string"
           },
           "found": {
             "title": "Found",
@@ -4874,6 +5110,18 @@
             },
             "title": "Reasons",
             "type": "array"
+          },
+          "starts_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Starts At"
           }
         },
         "required": [
@@ -4890,6 +5138,11 @@
           },
           "first_name": {
             "title": "First Name",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
             "type": "string"
           },
           "last_name": {
@@ -4921,6 +5174,7 @@
           }
         },
         "required": [
+          "id",
           "first_name",
           "last_name",
           "tier",
@@ -9562,6 +9816,188 @@
         ]
       }
     },
+    "/api/v1/league/me/rewards": {
+      "get": {
+        "description": "Q6: season rewards waiting for the winner's choice.",
+        "operationId": "jungle_league_api_my_rewards",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RewardOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "My Rewards",
+        "tags": [
+          "league"
+        ]
+      }
+    },
+    "/api/v1/league/me/rewards/{award_id}/choose": {
+      "post": {
+        "operationId": "jungle_league_api_choose_reward",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "award_id",
+            "required": true,
+            "schema": {
+              "title": "Award Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChoiceIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RewardOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Choose Reward",
+        "tags": [
+          "league"
+        ]
+      }
+    },
+    "/api/v1/league/players/{user_id}": {
+      "get": {
+        "description": "Q49: a player's public page: rank, level, LP, place and match history.",
+        "operationId": "jungle_league_api_player_profile",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "User Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "location",
+            "required": true,
+            "schema": {
+              "title": "Location",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "summary": "Player Profile",
+        "tags": [
+          "league"
+        ]
+      }
+    },
     "/api/v1/league/questionnaire": {
       "post": {
         "description": "R-003: the level questionnaire; a coach validates it before the first league match.",
@@ -9625,6 +10061,73 @@
           }
         ],
         "summary": "Questionnaire",
+        "tags": [
+          "league"
+        ]
+      }
+    },
+    "/api/v1/league/results": {
+      "get": {
+        "description": "Q49: the latest league match results.",
+        "operationId": "jungle_league_api_results",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location",
+            "required": true,
+            "schema": {
+              "title": "Location",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 30,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ResultOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Results",
         "tags": [
           "league"
         ]

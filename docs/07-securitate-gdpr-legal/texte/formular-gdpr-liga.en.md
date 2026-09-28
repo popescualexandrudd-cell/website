@@ -1,4 +1,4 @@
-> **Internal note (not published):** drafted by Claude on 27.09.2026, following the owner's decision (Q41). **Drafted without legal review. We recommend review by a lawyer/DPO.** The public display of results and of the "Match of the day" is included explicitly, following the default answer to Q30 (TO_CONFIRM). The `[… — DE_CONFIRMAT]` fields are filled in with the company details (Q26) before publishing. Publish with: `uv run python apps/backend/manage.py publish_legal_document --kind league_gdpr --language en --file docs/07-securitate-gdpr-legal/texte/formular-gdpr-liga.en.md`
+> **Internal note (not published):** drafted by Claude on 27.09.2026, following the owner's decision (Q41). **Drafted without legal review. We recommend review by a lawyer/DPO.** Version 2 (28.09.2026): the public display of results with date, time and court, of each player's history and of the tournament schedule, following the owner's decision (Q49, Q30). Players sign again at the kiosk (it shows the new text). The `[… — DE_CONFIRMAT]` fields are filled in with the company details (Q26) before publishing. Publish with: `uv run python apps/backend/manage.py publish_legal_document --kind league_gdpr --language en --file docs/07-securitate-gdpr-legal/texte/formular-gdpr-liga.en.md`
 
 <!-- PUBLIC TEXT BELOW -->
 # Consent to personal data processing in the Jungle Padel League
@@ -17,14 +17,15 @@ The league is for people aged 18 or over only. We check your age from the date o
 - this consent: the version of the text, the date and time, the kiosk where you signed and the language shown.
 
 ## What becomes public
-On the website, on the club's screens and at the kiosks, **only** the following appears about you:
+On the website, on the club's screens and at the kiosks, the following appears about you:
 - your first and last name;
 - your level (rank and numeric level);
-- your league points (LP) and your place in the standings.
+- your league points (LP) and your place in the standings;
+- **your league matches**: date, time, court, partners and opponents, the score and the league points (LP) won or lost, gathered in a **match history** on your public page;
+- in tournaments: the **court and time** of your matches and their results;
+- the "**Match of the day**", if you are chosen, with its court and time.
 
-The **results of league matches** (who played and the score) and the **"Match of the day"** are public too, with the same data: name, surname, level.
-
-Nothing else becomes public: not your date of birth, phone number, email or detailed statistics. You see those only in your own account.
+Nothing else becomes public: not your date of birth, phone number, email, badges or detailed statistics. You see those only in your own account. If you withdraw your consent or delete your account, you appear as "Retired player" in the others' past results.
 
 ## Why, and on what legal basis
 - Running the league (scheduling, validating scores, calculating points and standings): our contract with you (GDPR, Art. 6(1)(b)).

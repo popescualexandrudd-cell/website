@@ -930,6 +930,63 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/league/me/rewards": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * My Rewards
+         * @description Q6: season rewards waiting for the winner's choice.
+         */
+        get: operations["jungle_league_api_my_rewards"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/league/me/rewards/{award_id}/choose": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Choose Reward */
+        post: operations["jungle_league_api_choose_reward"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/league/players/{user_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Player Profile
+         * @description Q49: a player's public page: rank, level, LP, place and match history.
+         */
+        get: operations["jungle_league_api_player_profile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/league/questionnaire": {
         parameters: {
             query?: never;
@@ -944,6 +1001,26 @@ export interface paths {
          * @description R-003: the level questionnaire; a coach validates it before the first league match.
          */
         post: operations["jungle_league_api_questionnaire"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/league/results": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Results
+         * @description Q49: the latest league match results.
+         */
+        get: operations["jungle_league_api_results"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -2943,6 +3020,11 @@ export interface components {
             /** Last Name */
             last_name: string;
         };
+        /** ChoiceIn */
+        ChoiceIn: {
+            /** Option */
+            option: string;
+        };
         /** ClaimIn */
         ClaimIn: {
             /** Code */
@@ -3440,9 +3522,11 @@ export interface components {
         };
         /**
          * FixtureOut
-         * @description R-012: names only; no court and no time.
+         * @description Q49 (28.09.2026): with the court and the start time once scheduled.
          */
         FixtureOut: {
+            /** Court */
+            court: string;
             /**
              * Id
              * Format: uuid
@@ -3458,6 +3542,8 @@ export interface components {
             };
             /** Slot */
             slot: number;
+            /** Starts At */
+            starts_at: string | null;
             /** Status */
             status: string;
             /** Team A */
@@ -3985,10 +4071,18 @@ export interface components {
          * @enum {string}
          */
         Period: "monthly" | "quarterly" | "annual";
-        /** PlayerOut */
+        /**
+         * PlayerOut
+         * @description Public (Q49, 28.09.2026): the id links to the player's public history.
+         */
         PlayerOut: {
             /** First Name */
             first_name: string;
+            /**
+             * Id
+             * @description Gol: jucător retras
+             */
+            id?: string | null;
             /** Last Name */
             last_name: string;
         };
@@ -4081,6 +4175,29 @@ export interface components {
             phone?: string | null;
             /** Preferred Language */
             preferred_language?: string | null;
+        };
+        /** ProfileOut */
+        ProfileOut: {
+            /** Ladders */
+            ladders: components["schemas"]["PublicLadderOut"][];
+            /** Matches */
+            matches: components["schemas"]["ResultOut"][];
+            player: components["schemas"]["PlayerOut"];
+        };
+        /** PublicLadderOut */
+        PublicLadderOut: {
+            /** Division */
+            division: string;
+            /** Ladder */
+            ladder: string;
+            /** Level */
+            level: number;
+            /** Lp */
+            lp: number;
+            /** Position */
+            position: number | null;
+            /** Tier */
+            tier: string;
         };
         /** QuestionnaireIn */
         QuestionnaireIn: {
@@ -4430,10 +4547,63 @@ export interface components {
              */
             user_id: string;
         };
+        /**
+         * ResultOut
+         * @description Q49 (28.09.2026): a league match, public: when, where, who, the score, LP won or lost.
+         */
+        ResultOut: {
+            /** Court */
+            court: string;
+            /**
+             * Finished At
+             * Format: date-time
+             */
+            finished_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Kind */
+            kind: string;
+            /** Lp Delta */
+            lp_delta: {
+                [key: string]: number;
+            };
+            /** Score */
+            score: {
+                [key: string]: unknown;
+            };
+            /** Team A */
+            team_a: components["schemas"]["PlayerOut"][];
+            /** Team B */
+            team_b: components["schemas"]["PlayerOut"][];
+            /** Winner */
+            winner: string;
+        };
         /** ReverseIn */
         ReverseIn: {
             /** Reason */
             reason: string;
+        };
+        /** RewardOut */
+        RewardOut: {
+            /** Id */
+            id: number;
+            /** Kind */
+            kind: string;
+            /** Options */
+            options: {
+                [key: string]: {
+                    [key: string]: unknown;
+                }[];
+            };
+            /** Position */
+            position: number;
+            /** Season */
+            season: string;
+            /** Tier */
+            tier: string;
         };
         /** RoleGrantIn */
         RoleGrantIn: {
@@ -4702,7 +4872,7 @@ export interface components {
         };
         /**
          * SpotlightOut
-         * @description R-012 only: no court, no time.
+         * @description Q49 (28.09.2026): with the court and the start time.
          */
         SpotlightOut: {
             /**
@@ -4710,6 +4880,11 @@ export interface components {
              * @default false
              */
             chosen_by_admin: boolean;
+            /**
+             * Court
+             * @default
+             */
+            court: string;
             /** Found */
             found: boolean;
             /**
@@ -4722,6 +4897,8 @@ export interface components {
              * @default []
              */
             reasons: string[];
+            /** Starts At */
+            starts_at?: string | null;
         };
         /** SpotlightPlayerOut */
         SpotlightPlayerOut: {
@@ -4729,6 +4906,11 @@ export interface components {
             division: string;
             /** First Name */
             first_name: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
             /** Last Name */
             last_name: string;
             /** Level */
@@ -7663,6 +7845,130 @@ export interface operations {
             };
         };
     };
+    jungle_league_api_my_rewards: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RewardOut"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_choose_reward: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                award_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChoiceIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RewardOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_player_profile: {
+        parameters: {
+            query: {
+                location: string;
+            };
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProfileOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     jungle_league_api_questionnaire: {
         parameters: {
             query?: never;
@@ -7696,6 +8002,47 @@ export interface operations {
             };
             /** @description Unauthorized */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_results: {
+        parameters: {
+            query: {
+                location: string;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResultOut"][];
+                };
+            };
+            /** @description Not Found */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
