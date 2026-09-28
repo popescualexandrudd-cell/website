@@ -52,6 +52,8 @@ class Action(StrEnum):
     CARDS_MANAGE = "cards.manage"
     LEAGUE_VALIDATE_LEVELS = "league.validate_levels"
     LEAGUE_MANAGE = "league.manage"
+    # Staff mode at the Payments Kiosk (PIN + card, §8.3): refill change, empty, count, close.
+    CASH_MANAGE = "cash.manage"
 
 
 ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
@@ -87,6 +89,7 @@ ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
             Action.CARDS_MANAGE,
             Action.LEAGUE_VALIDATE_LEVELS,
             Action.LEAGUE_MANAGE,
+            Action.CASH_MANAGE,
         }
     ),
     Role.RECEPTION: frozenset(
@@ -100,6 +103,7 @@ ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
             Action.PAYMENTS_VIEW,
             Action.CAFE_ORDERS,
             Action.CARDS_MANAGE,
+            Action.CASH_MANAGE,  # Q54: reception runs the kiosk's cash box (DE_CONFIRMAT)
         }
     ),
     # Coaches and the Pilates instructor manage their programme and see attendance (R-033);

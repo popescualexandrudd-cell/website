@@ -9,29 +9,17 @@ The kiosk's own authentication (device token, client certificate in production) 
 
 from __future__ import annotations
 
-import ipaddress
 import uuid
 
-from django.conf import settings
 from django.http import HttpRequest
 
 from jungle.audit import services as audit
-from jungle.configuration.services import get_config
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.http import client_ip
 from jungle.devices.models import Device, DeviceKind
+from jungle.devices.network import in_club_network
 
-
-def in_club_network(ip: str) -> bool:
-    try:
-        address = ipaddress.ip_address(ip)
-    except ValueError:
-        return False
-    if settings.KIOSK_ALLOW_LOOPBACK and address.is_loopback:
-        return True  # development and end-to-end tests only (refused in production)
-    return any(
-        address in ipaddress.ip_network(network) for network in get_config("league.kiosk_networks")
-    )
+__all__ = ["check", "in_club_network"]
 
 
 def _problem(device: Device | None, ip: str, location_id: uuid.UUID | None) -> str:

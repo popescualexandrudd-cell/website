@@ -358,11 +358,11 @@ def test_s8_2_one_scan_opens_a_short_session_on_this_kiosk(
 
     other = Device.objects.create(kind=DeviceKind.LEAGUE_KIOSK, location=location, name="Chioșc 2")
     stolen = Terminal(other).post("/check-in", {"card": session})
-    assert (stolen.status_code, error_code(stolen)) == (403, "league.kiosk_session_expired")
+    assert (stolen.status_code, error_code(stolen)) == (403, "devices.session_expired")
 
     assert terminal.post("/logout", {"session": opened["session"]}).status_code == 204
     ended = terminal.post("/check-in", {"card": session})
-    assert error_code(ended) == "league.kiosk_session_expired"
+    assert error_code(ended) == "devices.session_expired"
     assert (
         Client()
         .post(f"{BASE}/logout", {"session": "x"}, content_type="application/json")

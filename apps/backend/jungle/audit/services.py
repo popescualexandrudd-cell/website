@@ -34,6 +34,17 @@ def actor_from_request(request: HttpRequest) -> Actor:
     user = getattr(request, "user", None)
     ip = client_ip(request)
     request_id = str(getattr(request, "request_id", ""))
+    device = getattr(request, "device", None)  # set by device authentication (ADR-0012)
+    if device is not None:
+        # A club device, and the person whose card was scanned at it (if any).
+        return Actor(
+            kind=ActorKind.DEVICE,
+            user_id=user.pk if user is not None and user.is_authenticated else None,
+            device_id=device.pk,
+            label=device.name,
+            ip=ip,
+            request_id=request_id,
+        )
     if user is not None and user.is_authenticated:
         return Actor(
             kind=ActorKind.USER,

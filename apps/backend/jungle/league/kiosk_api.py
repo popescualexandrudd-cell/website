@@ -9,12 +9,10 @@ card scan); otherwise the plain code is accepted (development, or before the bri
 
 from __future__ import annotations
 
-import secrets
 import uuid
 from datetime import datetime
 from typing import Any
 
-from django.core.cache import cache
 from django.http import HttpRequest
 from ninja import Field, Router, Schema, Status
 
@@ -22,8 +20,14 @@ from jungle.attendance.services import record_arrival_at_device
 from jungle.cards import services as cards
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.schemas import errors
-from jungle.devices import bridge
 from jungle.devices.auth import device_auth, device_of
+from jungle.devices.kiosk_session import (
+    CardIn,
+    LogoutIn,
+    end_session,
+    open_session,
+    scanned_token,
+)
 from jungle.league import challenges, kiosk, kiosk_views, matches, spotlight
 from jungle.league.api import (
     ChallengeOut,
@@ -42,21 +46,8 @@ from jungle.privacy import league_consent
 
 router = Router(tags=["kiosk: league"], auth=device_auth)
 
-# A scan opens a short session on this kiosk, so the player can do several things after one
-# scan (a signed scan is accepted only once). It lives on the server, is bound to the device,
-# and ends after a minute without use or when the kiosk logs the player out (§8.2: 30 s idle).
-SESSION_SECONDS = 60
-
 
 # ---------------------------------------------------------------- schemas
-class CardIn(Schema):
-    token: str | None = Field(default=None, max_length=200, description="Codul citit (fără Bridge)")
-    signed: dict[str, Any] | None = Field(default=None, description="Scanarea semnată de Bridge")
-    session: str | None = Field(
-        default=None, max_length=64, description="Sesiunea deschisă de o scanare (POST /session)"
-    )
-
-
 class PersonOut(Schema):
     id: str
     first_name: str
@@ -198,29 +189,6 @@ class CheckInOut(Schema):
 
 
 # ---------------------------------------------------------------- helpers
-def _session_key(request: HttpRequest, session: str) -> str:
-    return f"kiosk-session:{device_of(request).pk}:{session}"
-
-
-def scanned_token(request: HttpRequest, card: CardIn) -> str:
-    """What the scanner read (signed by the device's bridge when it has one), or the card
-    behind a session this kiosk opened."""
-    device = device_of(request)
-    if card.session:
-        key = _session_key(request, card.session)
-        token = cache.get(key)
-        if token is None:
-            raise DomainError(ErrorCode.LEAGUE_KIOSK_SESSION_EXPIRED, status=403)
-        cache.touch(key, SESSION_SECONDS)
-        return str(token)
-    if device.public_key:
-        payload = bridge.verify(device, card.signed or {}, "scan")
-        return str(payload.get("code", ""))
-    if not card.token:
-        raise DomainError(ErrorCode.CARDS_INVALID, status=404)
-    return card.token
-
-
 def _guard(request: HttpRequest, action: str) -> None:
     device = device_of(request)
     kiosk.check(request, device, device.location_id, action)
@@ -261,10 +229,7 @@ def session_out(view: kiosk_views.Session, session: str) -> SessionOut:
 
 
 def _session(request: HttpRequest, card: CardIn) -> SessionOut:
-    token = scanned_token(request, card)
-    user = cards.resolve(token).user
-    session = card.session or secrets.token_urlsafe(24)
-    cache.set(_session_key(request, session), token, SESSION_SECONDS)
+    user, session = open_session(request, card)
     return session_out(kiosk_views.session(device_of(request), user), session)
 
 
@@ -330,14 +295,10 @@ def session(request: HttpRequest, payload: CardOnlyIn) -> SessionOut:
     return _session(request, payload.card)
 
 
-class LogoutIn(Schema):
-    session: str = Field(max_length=64)
-
-
 @router.post("/logout", response={204: None, **errors(401, 422)})
 def logout(request: HttpRequest, payload: LogoutIn) -> Status[None]:
     """The kiosk ends the session (the player left, or 30 s without a touch)."""
-    cache.delete(_session_key(request, payload.session))
+    end_session(request, payload.session)
     return Status(204, None)
 
 

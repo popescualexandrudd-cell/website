@@ -11,6 +11,7 @@ from __future__ import annotations
 import uuid
 from dataclasses import dataclass
 from datetime import date
+from typing import Any
 
 from django.db import connection, transaction
 from django.db.models import Max, QuerySet
@@ -154,8 +155,12 @@ def place_order(
     data: OrderData,
     *,
     device_id: uuid.UUID | None = None,
+    cash_account: LedgerAccount | None = None,
+    fiscal_receipt: str | None = None,
+    extra: dict[str, Any] | None = None,
 ) -> CafeOrder:
-    """A paid order (R-067: the same key never charges twice)."""
+    """A paid order (R-067: the same key never charges twice). At the Payments Kiosk the cash
+    goes into the kiosk's cash box and the kiosk prints the fiscal receipt (`jungle.checkout`)."""
     if not data.idempotency_key:
         raise DomainError(ErrorCode.PAYMENTS_IDEMPOTENCY_REQUIRED)
     if not data.lines:
@@ -197,16 +202,20 @@ def place_order(
             if data.tendered < total:
                 raise DomainError(ErrorCode.PAYMENTS_INSUFFICIENT_CASH)
             tendered, change = data.tendered, data.tendered - total
-            source = account(AccountKind.CASH, location=location)
-            receipt = fiscal.printer().print_receipt(
-                [
-                    fiscal.ReceiptLine(
-                        f"{line.quantity} × {products[line.product_id].name_ro}",
-                        products[line.product_id].price * line.quantity,
-                    )
-                    for line in data.lines
-                ],
-                tendered,
+            source = cash_account or account(AccountKind.CASH, location=location)
+            receipt = (
+                fiscal_receipt
+                if fiscal_receipt is not None
+                else fiscal.printer().print_receipt(
+                    [
+                        fiscal.ReceiptLine(
+                            f"{line.quantity} × {products[line.product_id].name_ro}",
+                            products[line.product_id].price * line.quantity,
+                        )
+                        for line in data.lines
+                    ],
+                    tendered,
+                )
             )
         elif data.method == PaymentMethod.BALANCE and customer is not None:
             source = account(AccountKind.CUSTOMER_BALANCE, user=customer)
@@ -233,7 +242,11 @@ def place_order(
             fingerprint=fingerprint,
             location=location,
             subject=f"cafe:{location.pk}:{day}:{number}",
-            metadata={"purpose": "sale", "payer": str(customer.pk) if customer else ""},
+            metadata={
+                **(extra or {}),
+                "purpose": "sale",
+                "payer": str(customer.pk) if customer else "",
+            },
         )
         Payment.objects.create(
             transaction=tx,
