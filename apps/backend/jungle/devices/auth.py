@@ -17,6 +17,7 @@ from datetime import timedelta
 from typing import Any
 
 from django.conf import settings
+from django.core.cache import cache
 from django.http import HttpRequest
 from ninja.security import APIKeyHeader
 
@@ -27,6 +28,10 @@ from jungle.devices.models import Device
 
 HEADER = "X-Device-Token"
 SEEN_EVERY = timedelta(minutes=1)  # last_seen_at is written at most once a minute
+# Failed attempts from one address: after this many in the window, that address is refused
+# at once (no database work, no more audit rows), so guessing cannot flood the audit log.
+MAX_FAILURES = 20
+FAILURE_WINDOW_SECONDS = 600
 
 
 def new_secret() -> str:
@@ -37,17 +42,31 @@ def hash_secret(secret: str) -> str:
     return hashlib.sha256(secret.encode()).hexdigest()
 
 
+def _failures_key(request: HttpRequest) -> str:
+    return f"device-auth-failures:{client_ip(request) or '-'}"
+
+
 def _refuse(request: HttpRequest, device_id: str, problem: str) -> None:
+    key = _failures_key(request)
+    cache.add(key, 0, FAILURE_WINDOW_SECONDS)
+    failures = cache.incr(key)
     audit.record(
         audit.actor_from_request(request),
         "devices.auth_refused",
-        after={"device": device_id[:40], "problem": problem, "ip": client_ip(request) or ""},
+        after={
+            "device": device_id[:40],
+            "problem": problem,
+            "ip": client_ip(request) or "",
+            "throttled": failures >= MAX_FAILURES,
+        },
     )
 
 
 def authenticate_device(request: HttpRequest, key: str | None) -> Device | None:
     if not key or "." not in key:
         return None
+    if cache.get(_failures_key(request), 0) >= MAX_FAILURES:
+        return None  # too many failures from this address: refused without a trace per try
     device_id, secret = key.split(".", 1)
     try:
         pk = uuid.UUID(device_id)

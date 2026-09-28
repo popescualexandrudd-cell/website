@@ -18,7 +18,7 @@ from jungle.conftest import Api, error_code
 from jungle.core import clock
 from jungle.core.errors import DomainError
 from jungle.core.permissions import Role
-from jungle.devices import bridge
+from jungle.devices import auth, bridge
 from jungle.devices.models import Device, DeviceKind
 from jungle.locations.models import Location
 
@@ -227,3 +227,17 @@ def test_adr0013_the_bridge_and_the_server_agree(device: Device, tmp_path: Any) 
     device.public_key = signer.public_key
     message = signer.sign("scan", code="CARD-1")
     assert bridge.verify(device, message, "scan")["code"] == "CARD-1"
+
+
+def test_adr0012_guessing_tokens_is_throttled(api: Api, staff: Any, device: Device) -> None:
+    staff(Role.ADMIN)
+    token = enroll(api, device).json()["token"]
+    for _ in range(auth.MAX_FAILURES):
+        assert whoami(f"{device.pk}.ghicit").status_code == 401
+    logs = AuditLog.objects.filter(action="devices.auth_refused")
+    assert logs.count() == auth.MAX_FAILURES
+    assert (logs.order_by("-pk").first().after or {})["throttled"] is True  # type: ignore[union-attr]
+    assert whoami(token).status_code == 401  # this address is refused for a while
+    assert logs.count() == auth.MAX_FAILURES  # without more audit rows
+    other = whoami(token, REMOTE_ADDR="10.0.0.77")
+    assert other.status_code == 200  # another address is not affected

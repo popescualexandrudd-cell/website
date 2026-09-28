@@ -54,6 +54,7 @@ Din rădăcina repository-ului:
 | Verificarea configurării Apple/Google Wallet | `uv run python apps/backend/manage.py wallet_check` |
 | Liga: scoruri și provocări expirate (la 5 minute) | `uv run python apps/backend/manage.py expire_league_matches` |
 | Liga: decay zilnic, avertizări, „Surpriza săptămânii” (zilnic, după miezul nopții) | `uv run python apps/backend/manage.py league_daily` |
+| DEMO pentru Chioșcul Ligii: chioșc înrolat, jucători demo, un meci tocmai terminat (refuzat în producție) | `uv run python apps/backend/manage.py kiosk_demo --public-key <cheia bridge-ului> --output kiosk.json` |
 | Fontul cardului tipărit (din fonturile site-ului) | `uvx --with brotli --from fonttools python apps/backend/scripts/build_card_font.py` |
 
 Baza de date: PostgreSQL (`DATABASE_URL`; implicit `postgres://jungle:jungle@localhost:5432/jungle`), de exemplu cu `docker compose -f deploy/compose/dev/compose.yaml up -d db redis`.
@@ -68,7 +69,7 @@ Variabilele de mediu sunt descrise în [`.env.example`](.env.example). Imaginea 
 | `jungle/audit` | jurnalul de audit (doar-adăugare) |
 | `jungle/configuration` | feature flags, configurare versionată, „ce mai trebuie confirmat” |
 | `jungle/legal` | documente legale versionate, acorduri (doar-adăugare) |
-| `jungle/devices` | dispozitivele clubului |
+| `jungle/devices` | dispozitivele clubului; înrolarea și autentificarea lor (token + certificat client, `auth`), mesajele semnate de Hardware Bridge (`bridge`) (Etapa 7) |
 | `jungle/notifications` | emailuri RO/EN |
 | `jungle/waitlist` | lista de așteptare (Etapa 1B): dublă confirmare, dezabonare cu ștergerea datelor, export CSV |
 | `jungle/pricing` | tarife pe 30 de minute (bandă, sezon, tip client, produs), oferta unei rezervări (Etapa 3) |
@@ -80,4 +81,4 @@ Variabilele de mediu sunt descrise în [`.env.example`](.env.example). Imaginea 
 | `jungle/cafe` | meniul, comenzile și coada cafenelei (Etapa 4) |
 | `jungle/cards` | cardul de membru (QR revocabil), coada și PDF-ul de tipar CR80, Apple Wallet și Google Wallet (Etapa 5) |
 | `jungle/privacy` | acordul ligii (Chioșc de Ligă, 18+), exportul datelor, ștergerea contului ca „Jucător retras” (Etapa 5) |
-| `jungle/league` | liga (Etapa 6): evenimente doar-adăugare + recalculare (`store`), clasamente (`projection`), intrarea în ligă și sezoane (`services`), fluxul scorului la chioșc (`matches`, `kiosk`), provocări, decay zilnic, închiderea sezonului și recompense (`closing`), insigne, Meciul zilei (`spotlight`), turnee (`draws`, `tournaments`); 100% acoperire pe ramuri |
+| `jungle/league` | liga (Etapa 6): evenimente doar-adăugare + recalculare (`store`), clasamente (`projection`), intrarea în ligă și sezoane (`services`), fluxul scorului la chioșc (`matches`, `kiosk`), provocări, decay zilnic, închiderea sezonului și recompense (`closing`), insigne, Meciul zilei (`spotlight`), turnee (`draws`, `tournaments`); API-ul Chioșcului Ligii (`kiosk_api`, `kiosk_views`, Etapa 7); 100% acoperire pe ramuri |

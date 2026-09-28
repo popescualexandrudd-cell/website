@@ -127,6 +127,10 @@ DATABASES = {
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REDIS_URL = env("REDIS_URL")
+if IS_PRODUCTION_LIKE and not REDIS_URL:
+    # One cache shared by every server process: rate limits, League Kiosk sessions and the
+    # anti-replay of signed bridge messages must not depend on which process answers.
+    raise ImproperlyConfigured(f"REDIS_URL must be set when JUNGLE_ENV={JUNGLE_ENV}")
 CACHES = {
     "default": (
         {"BACKEND": "django.core.cache.backends.redis.RedisCache", "LOCATION": REDIS_URL}

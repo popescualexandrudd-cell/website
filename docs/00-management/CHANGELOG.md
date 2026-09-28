@@ -4,6 +4,21 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 7 — 28.09.2026 (livrată, așteaptă aprobarea)
+#### Adăugat
+- Autentificarea aparatelor (ADR-0012): înrolare din API cu token afișat o dată (se păstrează doar amprenta SHA-256), certificat client (mTLS) obligatoriu în producție, cheia publică a Hardware Bridge; refuzurile în jurnal, limitate pe adresă; `GET /device/whoami`.
+- API-ul Chioșcului Ligii (`/api/v1/kiosk/league/*`, doar aparate autentificate): ecranul de repaus, clasamente cu căutare, sesiunea jucătorului (60 s pe server, legată de aparat, `POST /logout`), acordul GDPR, scorul, confirmări, provocări, meciuri de turneu și validarea directorului, check-in (R-030). Cu bridge înrolat, scanările trebuie semnate (nonce, fereastră de 2 minute).
+- `services/hardware-bridge` (ADR-0013): serviciu asyncio pe 127.0.0.1, doar pentru originea chioșcului; interfețele aparatelor cu simulatoare complete și defecte; cheie Ed25519, scanări și evenimente de numerar semnate, comenzi de numerar semnate de server, executate o singură dată; jurnal de numerar SQLite doar-adăugare (WAL, `synchronous=FULL`), recuperare după cădere de curent; 100% acoperire pe ramuri.
+- `apps/kiosk-league` (React + Vite): ecranul de repaus, sesiunea cu ieșire după 30 s, toate acțiunile din §8.2, RO/EN, tastatură pe ecran, mesaje din codurile de eroare; teste unitare și cap-coadă cu backendul și bridge-ul reale (axe).
+- `deploy/kiosk-os`: instalarea pe Debian (bridge ca serviciu, Chromium în `cage` cu politică restrictivă, pagină locală „temporar indisponibil”, watchdog, blocarea sistemului, actualizări de securitate), verificată fără instalare de `scripts/test-all`; procedura de instalare și înrolare, varianta Windows (`docs/09-hardware/`).
+- `manage.py kiosk_demo` (DEMO, refuzat în producție); `KIOSK_ALLOW_LOOPBACK` doar pentru dezvoltare.
+- LG-099 (DE_CONFIRMAT, Q51): un meci contează doar pentru jucătorii deja în ligă când s-a jucat.
+#### Reparat la revizuire
+- Un jucător intrat în ligă imediat după meci bloca scorul abia la ultima confirmare (acum: refuz imediat, cu mesaj).
+- Codul motorului `league.score_tournament_unfinished` lipsea din lista de erori (test nou pentru toate codurile motorului).
+- În producție, serverul refuză să pornească fără Redis (sesiunile chioșcului și anti-replay-ul trebuie să fie comune tuturor proceselor).
+- Construirea versiunii publicate a chioșcului e refuzată dacă un token de aparat e setat.
+
 ### Etapa 6 — 28.09.2026 (aprobată 28.09.2026)
 #### Modificat la aprobare (răspunsurile proprietarului)
 - Q6: top 3 din fiecare rang aleg din cont între 15% la abonament și 4 vouchere de 20% la rezervări (`POST /league/me/rewards/{id}/choose`); Regii Junglei: 2 ore gratuite, o cutie de mingi, card special.
