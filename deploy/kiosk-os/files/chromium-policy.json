@@ -1,0 +1,38 @@
+{
+  "URLBlocklist": [
+    "*"
+  ],
+  "URLAllowlist": [
+    "@KIOSK_URL@",
+    "@API_ORIGIN@",
+    "file:///opt/jungle-kiosk/*",
+    "ws://127.0.0.1:8765"
+  ],
+  "AutoSelectCertificateForUrls": [
+    "{\"pattern\":\"@KIOSK_ORIGIN@\",\"filter\":{}}",
+    "{\"pattern\":\"@API_ORIGIN@\",\"filter\":{}}"
+  ],
+  "DeveloperToolsAvailability": 2,
+  "DownloadRestrictions": 3,
+  "PrintingEnabled": false,
+  "PasswordManagerEnabled": false,
+  "AutofillAddressEnabled": false,
+  "AutofillCreditCardEnabled": false,
+  "BrowserSignin": 0,
+  "SyncDisabled": true,
+  "TranslateEnabled": false,
+  "SpellcheckEnabled": false,
+  "DefaultNotificationsSetting": 2,
+  "DefaultGeolocationSetting": 2,
+  "AudioCaptureAllowed": false,
+  "VideoCaptureAllowed": false,
+  "BrowserGuestModeEnabled": false,
+  "IncognitoModeAvailability": 1,
+  "BookmarkBarEnabled": false,
+  "EditBookmarksEnabled": false,
+  "MetricsReportingEnabled": false,
+  "SafeBrowsingProtectionLevel": 0,
+  "TaskManagerEndProcessEnabled": false,
+  "AllowFileSelectionDialogs": false,
+  "ShowHomeButton": false
+}

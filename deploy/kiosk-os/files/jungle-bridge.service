@@ -1,0 +1,36 @@
+# Hardware Bridge (ADR-0013): starts at boot, restarts on failure, runs as its own user with
+# the least rights; only its data folder is writable.
+[Unit]
+Description=Jungle Padel Hardware Bridge
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=jungle-bridge
+Group=jungle-bridge
+# plugdev/dialout: the USB and serial devices (scanner, cash, printers), once real drivers exist (Q23)
+SupplementaryGroups=plugdev dialout
+EnvironmentFile=/etc/jungle-bridge/bridge.env
+Environment=BRIDGE_DATA_DIR=/var/lib/jungle-bridge
+ExecStart=/opt/jungle-bridge/.venv/bin/jungle-bridge run
+Restart=always
+RestartSec=2
+StateDirectory=jungle-bridge
+StateDirectoryMode=0700
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

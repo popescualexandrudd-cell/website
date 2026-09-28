@@ -93,11 +93,12 @@
 | LG-091 | Rezervarea există, e de tip meci oficial și e la club | backend `league.matches.check_booking` (Etapa 6) |
 | LG-092 | Toți jucătorii au scanat cardul la intrarea pe teren | backend `league.matches.check_scans` (Etapa 6) |
 | LG-093 | Fereastra de scor: 30 de minute după finalul rezervării (turnee: Q28) | backend `league.matches.score_window` (Etapa 6; turnee: `propose_fixture`) |
-| LG-094 | Un jucător introduce, toți ceilalți confirmă sau contestă | backend `league.matches.propose` / `respond` (Etapa 6); ecranul chioșcului: Etapa 7 |
+| LG-094 | Un jucător introduce, toți ceilalți confirmă sau contestă | backend `league.matches.propose` / `respond` (Etapa 6); ecranul chioșcului: `apps/kiosk-league` (Etapa 7) |
 | LG-095 | Contestare → `DISPUTAT`; neconfirmat → `EXPIRAT` | backend `league.matches` (dispute, expirare, `resolve`) (Etapa 6) |
 | LG-096 | Validare doar cu rezervarea plătită integral (Q11: 24 de ore) | backend `league.matches._payment_gate` + cârligul de plată din registru (Etapa 6) |
 | LG-097 | `APLICAT`: MMR și LP prin motor, actualizări în timp real, notificări | backend `league.store.record` (Etapa 6); notificările: Etapa 12 |
-| LG-098 | Verificări independente între sisteme, toate logate; doar chioșcul de ligă înregistrat | backend `league.kiosk.check` + jurnalul `MatchTransition` (Etapa 6); autentificarea chioșcului: Etapa 7 |
+| LG-098 | Verificări independente între sisteme, toate logate; doar chioșcul de ligă înregistrat | backend `league.kiosk.check` + jurnalul `MatchTransition` (Etapa 6); autentificarea chioșcului: `devices.auth` (token, certificat client, cheia Hardware Bridge) (Etapa 7) |
+| LG-099 | Un meci contează doar pentru jucătorii care erau deja în ligă când s-a jucat (DE_CONFIRMAT, [Q51](../00-management/INTREBARI_DESCHISE.md#q51)) | backend `league.matches.check_registered_before` (Etapa 7) |
 
 ## 6.10 Anti-abuz și eligibilitate
 | ID | Regula | Unde |

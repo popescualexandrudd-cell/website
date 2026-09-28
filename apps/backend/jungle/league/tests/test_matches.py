@@ -721,3 +721,22 @@ def test_the_expiry_command_and_the_admin_views(
     staff(Role.MANAGER)
     everything = api.get(f"/staff/league/matches?location_id={game.booking.location_id}").json()
     assert [m["status"] for m in everything] == ["expired"]
+
+
+def test_lg099_a_player_who_joined_after_the_match_cannot_make_it_count(
+    season: LeagueSeason, court: Resource, join: Join, now: Any
+) -> None:
+    """A newcomer signs the consent at the kiosk right after playing: the match was played
+    before they were in the league, so it is refused at once (not at the last confirmation)."""
+    a, b, c = join(), join(), join()
+    booking = book(court, a, "2027-04-05 10:00", "2027-04-05 11:30")
+    now.move_to("2027-04-05T11:35:00+03:00", tick=False)
+    d = join()
+    for player in (a, b, c, d):
+        scan(booking, player)
+    card = cards.issue_card(SYSTEM, a).token
+    proposal = matches.Proposal(booking.pk, card, (a.pk, b.pk), (c.pk, d.pk), WIN_A)
+    with pytest.raises(DomainError) as exc:
+        matches.propose(kiosk_call(), Device.objects.get(), proposal)
+    assert refused(exc) == ("league.joined_after_match", 409)
+    assert exc.value.params == {"name": f"{d.first_name} {d.last_name}"}

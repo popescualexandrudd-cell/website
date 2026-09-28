@@ -71,6 +71,8 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q48](#q48) | Provocările: unde, cine răspunde, ce înseamnă lipsa răspunsului *(nouă, Etapa 6)* | MEDIE | nimic (varianta implicită e în lucru) | REZOLVATĂ |
 | [Q49](#q49) | Turneele: limita zilnică, înscrierea, ce se vede pe site *(nouă, Etapa 6)* | MEDIE | nimic (varianta implicită e în lucru) | REZOLVATĂ |
 | [Q50](#q50) | Insignele și „Meciul zilei”: praguri și ce se afișează *(nouă, Etapa 6)* | SCĂZUTĂ | nimic (se schimbă din setări) | REZOLVATĂ |
+| [Q51](#q51) | Un jucător nou care intră în ligă imediat după meci: meciul contează? *(nouă, Etapa 7)* | SCĂZUTĂ | nimic (varianta implicită e în lucru) | DESCHISĂ |
+| [Q52](#q52) | Chioșcul Ligii: 30 de secunde până la ieșire, limbile ecranului *(nouă, Etapa 7)* | SCĂZUTĂ | nimic (se schimbă ușor) | DESCHISĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -615,3 +617,21 @@ Titlul și instrucțiunea din §17, preluate integral:
   1. **Insigne** (vizibile doar în contul propriu): „Ucigaș de giganți” la o victorie contra unei echipe cu cel puțin un nivel peste; 10 victorii la rând; „Early Bird” după 5 meciuri terminate înainte de ora 10; 4 săptămâni la rând cu meciuri; „Surpriza săptămânii” (lunea, pentru săptămâna trecută); promovare; primul Diamant; Rege al Junglei. O insignă primită rămâne, chiar dacă un meci e anulat ulterior.
   2. **Meciul zilei**: se alege dintre meciurile de ligă de azi după un scor de miză (promovare la îndemână 3, duel între doi jucători din top 10: 3, unul din top 10: 1, provocare 2, rivalitate 2, diferență de nivel 1). Adminul îl poate schimba, cu motiv. Pe site și pe ecrane apar doar numele, rangul, nivelul, LP-ul și locul jucătorilor (fără teren și oră). Textul de prezentare scris de AI vine în Etapa 12.
 - **Răspunsul proprietarului (28.09.2026):** confirmat. (Meciul zilei arată acum și terenul și ora, după Q49.)
+
+### <a id="q51"></a>Q51 — Un jucător nou care intră în ligă imediat după meci: meciul contează?
+
+- **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
+- **Stare:** DESCHISĂ
+- **Situația:** un jucător nou joacă un meci oficial, apoi semnează acordul ligii la chioșc și abia după aceea se introduce scorul. În momentul meciului, el nu era în ligă.
+- **Varianta implicită (DE_CONFIRMAT, în lucru din 28.09.2026):** meciul **nu contează** în ligă; chioșcul refuză scorul imediat, cu mesajul „X s-a înscris în ligă după acest meci, deci meciul nu poate conta în ligă”. Motivul: liga se calculează în ordinea meciurilor, iar înainte de înscriere jucătorul nu are nivel în ligă. (Fără această regulă, scorul ar fi trecut de chioșc și s-ar fi blocat abia la ultima confirmare.) Regula: LG-099.
+- **Alternativă:** meciul contează, iar înscrierea se socotește de la începutul meciului.
+
+### <a id="q52"></a>Q52 — Chioșcul Ligii: 30 de secunde până la ieșire, limbile ecranului
+
+- **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
+- **Stare:** DESCHISĂ
+- **Variantele implicite (DE_CONFIRMAT):**
+  1. Ieșirea automată după **30 de secunde** fără atingere (din §8.2), cu numărătoare inversă în ultimele 10 secunde. Serverul mai ține sesiunea încă cel mult 60 de secunde, legată de acel chioșc.
+  2. Ecranul e în **română și engleză** (buton în colț); sesiunea pornește în limba aleasă de jucător în cont. §8.2 pomenește „și celelalte limbi”: se adaugă când le alegeți (textele sunt deja separate de cod).
+  3. Clasamentul de repaus se schimbă la **10 secunde** între Dublu, Simplu și Perechi.
+

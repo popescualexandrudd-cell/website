@@ -2200,9 +2200,32 @@
             "title": "Fixture Id",
             "type": "string"
           },
+          "match_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Match Id"
+          },
           "phase": {
             "title": "Phase",
             "type": "string"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
           },
           "status": {
             "title": "Status",

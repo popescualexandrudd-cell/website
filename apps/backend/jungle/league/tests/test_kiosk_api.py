@@ -330,6 +330,8 @@ def test_q28_tournament_matches_at_the_kiosk(
     director_card = cards.issue_card(SYSTEM, manager).token
     as_director = terminal.post("/session", {"card": card(director_card)}).json()
     assert as_director["director"] is True and len(as_director["fixtures"]) == 1
+    assert as_director["fixtures"][0]["match_id"] == scored.json()["id"]
+    assert as_director["fixtures"][0]["score"]["sets"][0]["a"] == 6
     validated = terminal.post(
         f"/matches/{scored.json()['id']}/director", {"card": card(director_card)}
     )

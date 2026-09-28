@@ -46,6 +46,7 @@ from jungle.league.models import (
     EventKind,
     Fixture,
     FixtureStatus,
+    LeagueEvent,
     LeagueMatch,
     LeagueSeason,
     MatchKind,
@@ -204,6 +205,21 @@ def check_daily_limit(match_players: list[User], finished_at: datetime, limit: i
             raise DomainError(ErrorCode.LEAGUE_DAILY_LIMIT, status=409)
 
 
+def check_registered_before(season: LeagueSeason, players: list[User], played_at: datetime) -> None:
+    """A match counts only for players already in the league when it was played: someone who
+    joins right after the match (at the kiosk, before the score) cannot make it count."""
+    for player in players:
+        registrations = LeagueEvent.objects.filter(
+            season=season, kind=EventKind.REGISTER, ref=str(player.pk)
+        )
+        if registrations.exists() and not registrations.filter(at__lte=played_at).exists():
+            raise DomainError(
+                ErrorCode.LEAGUE_JOINED_AFTER_MATCH,
+                status=409,
+                params={"name": f"{player.first_name} {player.last_name}"},
+            )
+
+
 def _users(ids: tuple[uuid.UUID, ...]) -> list[User]:
     found = {u.pk: u for u in User.objects.filter(pk__in=ids, is_active=True)}
     if len(found) != len(set(ids)):
@@ -258,6 +274,7 @@ def propose(request: HttpRequest, device: Device | None, data: Proposal) -> Leag
             raise DomainError(ErrorCode.LEAGUE_NOT_A_PLAYER, status=403)
         checks |= check_scans(booking, players)
         season = services.active_season(booking.location)
+        check_registered_before(season, players, booking.ends_at)
         kind = LEAGUE_SESSIONS[SessionType(booking.session_type)]
         score = _parse_score(data.score, kind, season)
         challenge = None

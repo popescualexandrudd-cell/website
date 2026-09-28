@@ -191,7 +191,8 @@
     "devices.signature_invalid": "The scan could not be verified. Scan the card again.",
     "devices.key_invalid": "The device's public key is not valid (Ed25519, 32 bytes, base64).",
     "league.kiosk_session_expired": "Your session has expired. Please scan your card again.",
-    "league.score_tournament_unfinished": "Tournament matches are played to the end: they cannot be marked unfinished."
+    "league.score_tournament_unfinished": "Tournament matches are played to the end: they cannot be marked unfinished.",
+    "league.joined_after_match": "{name} joined the league after this match, so the match cannot count in the league."
   },
   "web": {
     "meta": {
@@ -549,11 +550,22 @@
       "phase": "{tournament} · {phase}",
       "finished": "The match is over",
       "enterScore": "Enter the score",
-      "markedFinished": "The match is marked as finished. Enter the score within 30 minutes."
+      "markedFinished": "The match is marked as finished. Enter the score within 30 minutes.",
+      "validate": "Validate the score (director)",
+      "validated": "The director validated the score.",
+      "waiting": "Score entered: {score}"
     },
     "errors": {
       "generic": "Something went wrong. Try again or tell the front desk.",
       "fault": "The device has a problem ({code}). Please tell the front desk."
+    },
+    "tiers": {
+      "bronze": "Bronze",
+      "silver": "Silver",
+      "gold": "Gold",
+      "platinum": "Platinum",
+      "diamond": "Diamond",
+      "master": "Master"
     }
   }
 }

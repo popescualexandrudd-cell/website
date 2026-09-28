@@ -3931,8 +3931,14 @@ export interface components {
         FixtureViewOut: {
             /** Fixture Id */
             fixture_id: string;
+            /** Match Id */
+            match_id?: string | null;
             /** Phase */
             phase: string;
+            /** Score */
+            score?: {
+                [key: string]: unknown;
+            } | null;
             /** Status */
             status: string;
             /** Team A */

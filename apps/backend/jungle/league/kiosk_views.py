@@ -103,6 +103,8 @@ class FixtureView:
     status: str
     team_a: list[Person]
     team_b: list[Person]
+    match_id: str | None = None  # a score entered and waiting (the director can validate it)
+    score: dict[str, Any] | None = None
 
 
 @dataclass
@@ -248,13 +250,24 @@ def fixtures_for(device: Device, user: User, director: bool) -> list[FixtureView
         booking__isnull=False,
     ).select_related("tournament")
     mine = str(user.pk)
-    return [
-        FixtureView(
-            str(f.pk), f.tournament.name, f.phase, f.status, _people(f.team_a), _people(f.team_b)
+    views = []
+    for f in rows:
+        if not (director or mine in f.team_a + f.team_b):
+            continue
+        waiting = LeagueMatch.objects.filter(fixture=f, status=MatchStatus.PROPOSED).first()
+        views.append(
+            FixtureView(
+                str(f.pk),
+                f.tournament.name,
+                f.phase,
+                f.status,
+                _people(f.team_a),
+                _people(f.team_b),
+                str(waiting.pk) if waiting else None,
+                waiting.score if waiting else None,
+            )
         )
-        for f in rows
-        if director or mine in f.team_a + f.team_b
-    ]
+    return views
 
 
 def session(device: Device, user: User) -> Session:

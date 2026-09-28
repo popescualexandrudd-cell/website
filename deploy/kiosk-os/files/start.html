@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jungle Padel</title>
+<!-- ADR-0014: served from the machine itself. Opens the kiosk app as soon as the server
+     answers; until then shows "temporarily unavailable" and keeps trying. -->
+<link rel="stylesheet" href="tokens.css">
+<style>
+  html, body { margin: 0; height: 100%; background: var(--color-night-900); color: var(--color-bone-50);
+    font-family: var(--font-sans); cursor: none; user-select: none; }
+  main { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 16px; text-align: center; padding: 24px; box-sizing: border-box; }
+  h1 { font-family: var(--font-serif); font-weight: 500; color: var(--color-brass-300); font-size: 3rem; margin: 0; }
+  p { font-size: 1.6rem; margin: 0; }
+  .en { color: var(--color-bone-200); font-size: 1.2rem; }
+</style>
+</head>
+<body>
+<main role="status" aria-live="polite">
+  <h1>Jungle Padel</h1>
+  <p>Serviciu temporar indisponibil. Revenim automat în câteva secunde.</p>
+  <p class="en" lang="en">Service temporarily unavailable. We will be back automatically in a few seconds.</p>
+</main>
+<script>
+  const KIOSK_URL = "@KIOSK_URL@";
+  async function tryOpen() {
+    try {
+      await fetch(KIOSK_URL, { mode: "no-cors", cache: "no-store" });
+      location.replace(KIOSK_URL);
+    } catch {
+      setTimeout(tryOpen, 5000);
+    }
+  }
+  tryOpen();
+</script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+# The kiosk screen (ADR-0014): Chromium full screen inside cage (a Wayland compositor that shows
+# one application and nothing else: no desktop, no task switching), on tty1, as the unprivileged
+# user "kiosk". It starts on the local start page, which opens the kiosk app when the server
+# answers and shows "temporarily unavailable" otherwise.
+[Unit]
+Description=Jungle Padel kiosk screen
+After=systemd-user-sessions.service jungle-bridge.service network-online.target
+Wants=jungle-bridge.service network-online.target
+Conflicts=getty@tty1.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=kiosk
+PAMName=login
+TTYPath=/dev/tty1
+StandardInput=tty
+StandardOutput=journal
+StandardError=journal
+UtmpIdentifier=tty1
+UtmpMode=user
+Environment=XDG_SESSION_TYPE=wayland
+EnvironmentFile=/etc/jungle-kiosk/kiosk.env
+ExecStart=/usr/bin/cage -d -s -- /usr/bin/chromium \
+  --kiosk --ozone-platform=wayland --noerrdialogs --disable-infobars --no-first-run \
+  --disable-session-crashed-bubble --disable-features=Translate,TouchpadOverscrollHistoryNavigation \
+  --overscroll-history-navigation=0 --disable-pinch --check-for-update-interval=31536000 \
+  --autoplay-policy=no-user-gesture-required --password-store=basic \
+  file:///opt/jungle-kiosk/start.html
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=graphical.target

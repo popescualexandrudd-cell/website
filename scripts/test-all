@@ -35,6 +35,9 @@ step "League engine tests (pytest + hypothesis, 100% branch coverage, openskill 
 step "Hardware Bridge tests (simulators, signatures, cash journal, 100% branch coverage)"
 (cd services/hardware-bridge && uv run pytest --cov)
 
+step "Kiosk OS files (syntax, dry-run install, Chromium policy, service hardening)"
+deploy/kiosk-os/check.sh
+
 step "OpenAPI schema is up to date"
 tmp_dir="$(mktemp -d)"
 trap 'rm -rf "$tmp_dir"' EXIT

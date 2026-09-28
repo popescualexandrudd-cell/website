@@ -1,0 +1,6 @@
+[Unit]
+Description=Jungle Padel kiosk watchdog (bridge and screen)
+
+[Service]
+Type=oneshot
+ExecStart=/opt/jungle-kiosk/watchdog.sh

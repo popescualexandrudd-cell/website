@@ -186,8 +186,9 @@ def try_join(user: User) -> LeaguePlayer | None:
     return player
 
 
-def register_in_season(season: LeagueSeason, user: User) -> None:
-    """Registers the player in the season from the validated level (once)."""
+def register_in_season(season: LeagueSeason, user: User, at: datetime | None = None) -> None:
+    """Registers the player in the season from the validated level (once), now or at `at`
+    (demo data only: `kiosk_demo` registers its players from the start of the season)."""
     state = store.current_state(season)
     player_id = str(user.pk)
     if any(player_id in table for table in state.competitors.values()):
@@ -199,7 +200,7 @@ def register_in_season(season: LeagueSeason, user: User) -> None:
     store.record(
         season,
         EventKind.REGISTER,
-        clock.now(),
+        at or clock.now(),
         player_id,
         {
             "player": player_id,

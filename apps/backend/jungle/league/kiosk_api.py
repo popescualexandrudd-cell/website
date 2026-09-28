@@ -108,6 +108,8 @@ class FixtureViewOut(Schema):
     status: str
     team_a: list[PersonOut]
     team_b: list[PersonOut]
+    match_id: str | None = None
+    score: dict[str, Any] | None = None
 
 
 class SessionOut(Schema):

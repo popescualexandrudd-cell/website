@@ -75,6 +75,20 @@ def test_kiosk_demo_prepares_a_kiosk_players_and_a_finished_match(
     )
     assert unsigned.status_code == 200
     assert len(unsigned.json()["score_chances"]) == 2
+    ids = [p["id"] for p in again["players"]]
+    proposed = Client().post(
+        "/api/v1/kiosk/league/matches",
+        {
+            "card": {"session": unsigned.json()["session"]},
+            "booking_id": again["booking"]["id"],
+            "team_a": ids[:2],
+            "team_b": ids[2:],
+            "score": {"sets": [{"a": 6, "b": 1}, {"a": 6, "b": 2}]},
+        },
+        content_type="application/json",
+        HTTP_X_DEVICE_TOKEN=again["device_token"],
+    )
+    assert proposed.status_code == 201  # the demo players were in the league before it
 
 
 def test_kiosk_demo_refusals(time_machine: Any, settings: Any) -> None:

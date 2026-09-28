@@ -75,8 +75,8 @@ class Command(BaseCommand):
         staff.session = {MFA_SESSION_KEY: True}  # type: ignore[assignment]
         device, token = self._kiosk(location, public_key)
         season = self._season(location, staff)
-        players = [self._player(device, *names, sign=True) for names in PLAYERS]
-        newcomer = self._player(device, *NEWCOMER, sign=False)
+        players = [self._player(device, season, *names, sign=True) for names in PLAYERS]
+        newcomer = self._player(device, season, *NEWCOMER, sign=False)
         booking = self._finished_match(location, players)
         return {
             "device_id": str(device.pk),
@@ -129,7 +129,9 @@ class Command(BaseCommand):
         )
         return services.activate_season(staff, season.id)
 
-    def _player(self, device: Device, first: str, last: str, email: str, sign: bool) -> User:
+    def _player(
+        self, device: Device, season: LeagueSeason, first: str, last: str, email: str, sign: bool
+    ) -> User:
         user = User.objects.filter(email=email).first()
         if user is None:
             user = User.objects.create_user(
@@ -153,6 +155,9 @@ class Command(BaseCommand):
         if cards.active_card(user) is None:
             cards.issue_card(SYSTEM, user, reason="Card DEMO")
         if sign:
+            # In the league from the start of the demo season, so the match that just ended
+            # counts (a real player joining after a match cannot make it count).
+            services.register_in_season(season, user, at=season.starts_at)
             kiosk_call = RequestFactory().post("/", REMOTE_ADDR="127.0.0.1")
             league_consent.sign(kiosk_call, user, device, "ro")
         return user
