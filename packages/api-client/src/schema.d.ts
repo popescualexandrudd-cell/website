@@ -958,6 +958,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/kiosk/league/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Logout
+         * @description The kiosk ends the session (the player left, or 30 s without a touch).
+         */
+        post: operations["jungle_league_kiosk_api_logout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/kiosk/league/matches": {
         parameters: {
             query?: never;
@@ -3168,6 +3188,11 @@ export interface components {
         /** CardIn */
         CardIn: {
             /**
+             * Session
+             * @description Sesiunea deschisă de o scanare (POST /session)
+             */
+            session?: string | null;
+            /**
              * Signed
              * @description Scanarea semnată de Bridge
              */
@@ -4181,6 +4206,11 @@ export interface components {
             /** Mfa Setup Required */
             mfa_setup_required: boolean;
             user: components["schemas"]["MeOut"];
+        };
+        /** LogoutIn */
+        LogoutIn: {
+            /** Session */
+            session: string;
         };
         /**
          * Marker
@@ -5311,6 +5341,11 @@ export interface components {
             questionnaire: string;
             /** Score Chances */
             score_chances: components["schemas"]["ScoreChanceOut"][];
+            /**
+             * Session
+             * @description Se trimite la acțiunile următoare, în loc de card
+             */
+            session: string;
             /** To Confirm */
             to_confirm: components["schemas"]["WaitingMatchOut"][];
         };
@@ -8762,6 +8797,46 @@ export interface operations {
             };
             /** @description Forbidden */
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_kiosk_api_logout: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LogoutIn"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };

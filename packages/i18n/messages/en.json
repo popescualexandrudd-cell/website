@@ -189,7 +189,8 @@
     "league.reward_option_invalid": "Choose one of the reward's options.",
     "devices.auth_failed": "This device is not recognised. Ask the staff to enrol it again.",
     "devices.signature_invalid": "The scan could not be verified. Scan the card again.",
-    "devices.key_invalid": "The device's public key is not valid (Ed25519, 32 bytes, base64)."
+    "devices.key_invalid": "The device's public key is not valid (Ed25519, 32 bytes, base64).",
+    "league.kiosk_session_expired": "Your session has expired. Please scan your card again."
   },
   "web": {
     "meta": {

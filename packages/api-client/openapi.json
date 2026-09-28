@@ -472,6 +472,19 @@
       },
       "CardIn": {
         "properties": {
+          "session": {
+            "anyOf": [
+              {
+                "maxLength": 64,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Sesiunea deschisă de o scanare (POST /session)",
+            "title": "Session"
+          },
           "signed": {
             "anyOf": [
               {
@@ -2833,6 +2846,20 @@
           "mfa_setup_required"
         ],
         "title": "LoginOut",
+        "type": "object"
+      },
+      "LogoutIn": {
+        "properties": {
+          "session": {
+            "maxLength": 64,
+            "title": "Session",
+            "type": "string"
+          }
+        },
+        "required": [
+          "session"
+        ],
+        "title": "LogoutIn",
         "type": "object"
       },
       "Marker": {
@@ -5519,6 +5546,11 @@
             "title": "Score Chances",
             "type": "array"
           },
+          "session": {
+            "description": "Se trimite la acțiunile următoare, în loc de card",
+            "title": "Session",
+            "type": "string"
+          },
           "to_confirm": {
             "items": {
               "$ref": "#/components/schemas/WaitingMatchOut"
@@ -5528,6 +5560,7 @@
           }
         },
         "required": [
+          "session",
           "player",
           "language",
           "adult",
@@ -10979,6 +11012,57 @@
           }
         ],
         "summary": "Idle",
+        "tags": [
+          "kiosk: league"
+        ]
+      }
+    },
+    "/api/v1/kiosk/league/logout": {
+      "post": {
+        "description": "The kiosk ends the session (the player left, or 30 s without a touch).",
+        "operationId": "jungle_league_kiosk_api_logout",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogoutIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Logout",
         "tags": [
           "kiosk: league"
         ]

@@ -338,3 +338,32 @@ def test_q28_tournament_matches_at_the_kiosk(
     stranger = join()
     other = terminal.post("/session", {"card": card(cards.issue_card(SYSTEM, stranger).token)})
     assert other.json()["fixtures"] == []
+
+
+# ---------------------------------------------------------------- the kiosk session (§8.2)
+def test_s8_2_one_scan_opens_a_short_session_on_this_kiosk(
+    terminal: Terminal, game: Game, location: Location, now: Any
+) -> None:
+    key = Ed25519PrivateKey.generate()
+    Device.objects.filter(pk=terminal.device.pk).update(public_key=raw_key(key))
+    message = signed(key, scan_payload(terminal.device, code=game.token(game.a)))
+    opened = terminal.post("/session", {"card": {"signed": message}}).json()
+    session = {"session": opened["session"]}
+    assert len(opened["session"]) >= 30
+    again = terminal.post("/session", {"card": session}).json()  # refreshed, same session
+    assert again["session"] == opened["session"] and again["player"]["id"] == str(game.a.pk)
+    assert terminal.post("/check-in", {"card": session}).json()["first_name"] == game.a.first_name
+
+    other = Device.objects.create(kind=DeviceKind.LEAGUE_KIOSK, location=location, name="Chioșc 2")
+    stolen = Terminal(other).post("/check-in", {"card": session})
+    assert (stolen.status_code, error_code(stolen)) == (403, "league.kiosk_session_expired")
+
+    assert terminal.post("/logout", {"session": opened["session"]}).status_code == 204
+    ended = terminal.post("/check-in", {"card": session})
+    assert error_code(ended) == "league.kiosk_session_expired"
+    assert (
+        Client()
+        .post(f"{BASE}/logout", {"session": "x"}, content_type="application/json")
+        .status_code
+        == 401
+    )

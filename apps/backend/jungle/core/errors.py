@@ -201,6 +201,7 @@ class ErrorCode(StrEnum):
     DEVICES_AUTH_FAILED = "devices.auth_failed"
     DEVICES_SIGNATURE_INVALID = "devices.signature_invalid"
     DEVICES_KEY_INVALID = "devices.key_invalid"
+    LEAGUE_KIOSK_SESSION_EXPIRED = "league.kiosk_session_expired"
 
 
 class DomainError(Exception):

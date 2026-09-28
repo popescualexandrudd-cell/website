@@ -189,7 +189,8 @@
     "league.reward_option_invalid": "Alege una dintre variantele recompensei.",
     "devices.auth_failed": "Aparatul nu este recunoscut. Cereți personalului să-l înroleze din nou.",
     "devices.signature_invalid": "Scanarea nu a putut fi verificată. Scanează cardul din nou.",
-    "devices.key_invalid": "Cheia publică a aparatului nu este validă (Ed25519, 32 de octeți, base64)."
+    "devices.key_invalid": "Cheia publică a aparatului nu este validă (Ed25519, 32 de octeți, base64).",
+    "league.kiosk_session_expired": "Sesiunea a expirat. Scanează cardul din nou."
   },
   "web": {
     "meta": {
