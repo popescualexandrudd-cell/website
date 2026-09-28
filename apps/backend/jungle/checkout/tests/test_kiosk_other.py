@@ -399,3 +399,19 @@ def test_logout_ends_the_session(kiosk: Kiosk, card: Card, player: User) -> None
     session = session_of(kiosk, card(player))
     assert kiosk.post("/logout", {"session": session["session"]}).status_code == 204
     assert error_code(kiosk.post("/check-in", {"card": session})) == "devices.session_expired"
+
+
+def test_the_bridge_marks_as_synced_what_the_server_acknowledged(
+    kiosk: Kiosk, card: Card, player: User, booking: Booking
+) -> None:
+    """ADR-0013: after an outage the page sends `journal.pending` to the server; the signed
+    `journal.ack` it gets back lets the bridge stop sending them."""
+    kiosk.buy(
+        card(player), [{"kind": "booking", "subject_id": str(booking.pk)}], [200 * LEU, 50 * LEU]
+    )
+    pending = kiosk.ask("journal.pending")["events"]
+    assert pending
+    answer = kiosk.post("/events", {"events": pending}).json()
+    assert sorted(answer["recorded"]) == sorted(e["payload"]["event"] for e in pending)
+    assert kiosk.order(answer["ack"])["pending"] == 0
+    assert kiosk.post("/events", {"events": []}).json() == {"recorded": [], "ack": None}

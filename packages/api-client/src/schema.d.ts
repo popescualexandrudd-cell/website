@@ -1305,7 +1305,8 @@ export interface paths {
         put?: never;
         /**
          * Events
-         * @description What the bridge signed (notes, change, receipts, staff operations); idempotent.
+         * @description What the bridge signed (notes, change, receipts, staff operations); idempotent. The
+         *     answer carries the signed acknowledgement the bridge needs to mark them as synced.
          */
         post: operations["jungle_checkout_api_events"];
         delete?: never;
@@ -5780,6 +5781,13 @@ export interface components {
         };
         /** RecordedOut */
         RecordedOut: {
+            /**
+             * Ack
+             * @description Comanda semnată `journal.ack` pentru Bridge (ADR-0013)
+             */
+            ack?: {
+                [key: string]: unknown;
+            } | null;
             /** Recorded */
             recorded: string[];
         };

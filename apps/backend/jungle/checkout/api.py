@@ -23,7 +23,8 @@ from jungle.checkout.models import ChangeMode, Checkout, ItemKind, OperationKind
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.schemas import errors
 from jungle.core.security import session_auth
-from jungle.devices.auth import device_auth
+from jungle.devices import commands
+from jungle.devices.auth import device_auth, device_of
 from jungle.devices.kiosk_session import (
     CardIn,
     LogoutIn,
@@ -153,6 +154,9 @@ class EventsIn(Schema):
 
 class RecordedOut(Schema):
     recorded: list[str]
+    ack: dict[str, Any] | None = Field(
+        default=None, description="Comanda semnată `journal.ack` pentru Bridge (ADR-0013)"
+    )
 
 
 class Command(Schema):
@@ -418,8 +422,11 @@ def start(request: HttpRequest, checkout_id: uuid.UUID, payload: StartIn) -> Sta
 
 @router.post("/events", response={200: RecordedOut, **errors(400, 401, 403, 422)})
 def events(request: HttpRequest, payload: EventsIn) -> RecordedOut:
-    """What the bridge signed (notes, change, receipts, staff operations); idempotent."""
-    return RecordedOut(recorded=services.record_events(request, _events(payload)))
+    """What the bridge signed (notes, change, receipts, staff operations); idempotent. The
+    answer carries the signed acknowledgement the bridge needs to mark them as synced."""
+    recorded = services.record_events(request, _events(payload))
+    ack = commands.sign(device_of(request), "journal.ack", ids=recorded) if recorded else None
+    return RecordedOut(recorded=recorded, ack=ack)
 
 
 @router.post(
