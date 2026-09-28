@@ -310,6 +310,9 @@ class LeagueMatch(models.Model):
     challenge = models.ForeignKey(
         "Challenge", on_delete=models.PROTECT, null=True, blank=True, related_name="matches"
     )
+    fixture = models.ForeignKey(
+        "Fixture", on_delete=models.PROTECT, null=True, blank=True, related_name="league_matches"
+    )
 
     class Meta:
         ordering = ["-finished_at"]
@@ -321,7 +324,12 @@ class LeagueMatch(models.Model):
                 fields=["booking"],
                 condition=~models.Q(status="cancelled"),
                 name="one_live_match_per_booking",
-            )
+            ),
+            models.UniqueConstraint(
+                fields=["fixture"],
+                condition=~models.Q(status="cancelled"),
+                name="one_live_match_per_fixture",
+            ),
         ]
 
     def __str__(self) -> str:
@@ -558,3 +566,161 @@ class MatchOfTheDay(models.Model):
 
     def __str__(self) -> str:
         return f"{self.day} {self.booking_id}"
+
+
+# ---------------------------------------------------------------- tournaments (§6.14)
+class TournamentFormat(models.TextChoices):
+    KNOCKOUT = "knockout", "Eliminatoriu"
+    GROUPS_KNOCKOUT = "groups_knockout", "Grupe + eliminatoriu"
+    ROUND_ROBIN = "round_robin", "Fiecare cu fiecare"
+    AMERICANO = "americano", "Americano"
+    MEXICANO = "mexicano", "Mexicano"
+    KING_OF_THE_COURT = "king_of_the_court", "King of the Court"
+
+
+# Players register alone and change partners every round.
+INDIVIDUAL_FORMATS = (TournamentFormat.AMERICANO, TournamentFormat.MEXICANO)
+
+
+class TournamentStatus(models.TextChoices):
+    REGISTRATION = "registration", "Înscrieri deschise"
+    IN_PROGRESS = "in_progress", "În desfășurare"
+    FINISHED = "finished", "Încheiat"
+    CANCELLED = "cancelled", "Anulat"
+
+
+class Seeding(models.TextChoices):
+    RANK = "rank", "După rang (LP)"
+    RANDOM = "random", "Tragere la sorți"
+
+
+class Tournament(models.Model):
+    """§6.14: the system makes the draw, the admin puts the matches on courts; the paid
+    entry fee is the payment condition of its matches; LP × 1.5 and phase bonuses."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    season = models.ForeignKey(LeagueSeason, on_delete=models.PROTECT, related_name="tournaments")
+    location = models.ForeignKey("locations.Location", on_delete=models.PROTECT)
+    name = models.CharField(max_length=120)
+    format = models.CharField(max_length=20, choices=TournamentFormat.choices)
+    team_size = models.PositiveSmallIntegerField(help_text="Jucători pe echipă în meci: 1 sau 2.")
+    status = models.CharField(
+        max_length=15, choices=TournamentStatus.choices, default=TournamentStatus.REGISTRATION
+    )
+    starts_at = models.DateTimeField()
+    registration_closes_at = models.DateTimeField()
+    entry_fee = models.PositiveIntegerField(help_text="Taxa de participare, în bani.")
+    fee_provisional = models.BooleanField(default=True, help_text="DE_STABILIT (Q21).")
+    max_entries = models.PositiveSmallIntegerField()
+    seeding = models.CharField(max_length=10, choices=Seeding.choices, default=Seeding.RANK)
+    draw_seed = models.CharField(max_length=40, blank=True)
+    group_size = models.PositiveSmallIntegerField(default=4)
+    advance = models.PositiveSmallIntegerField(default=2, help_text="Calificați din fiecare grupă.")
+    rounds = models.PositiveSmallIntegerField(default=5, help_text="Mexicano, King of the Court.")
+    phase_bonuses = models.JSONField(default=dict, help_text="LP pe fază, fixate la creare.")
+    created_at = models.DateTimeField()
+    drawn_at = models.DateTimeField(null=True, blank=True)
+    finished_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-starts_at"]
+        verbose_name = "turneu"
+        verbose_name_plural = "turnee"
+
+    def __str__(self) -> str:
+        return self.name
+
+    @property
+    def individual(self) -> bool:
+        return self.format in INDIVIDUAL_FORMATS
+
+
+class EntryStatus(models.TextChoices):
+    REGISTERED = "registered", "Înscris"
+    WITHDRAWN = "withdrawn", "Retras"
+
+
+class TournamentEntry(models.Model):
+    """A pair (or a player) in the tournament; its entry fee is a payable item."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    tournament = models.ForeignKey(Tournament, on_delete=models.PROTECT, related_name="entries")
+    player_a = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="+"
+    )
+    player_b = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    status = models.CharField(
+        max_length=10, choices=EntryStatus.choices, default=EntryStatus.REGISTERED
+    )
+    seed = models.PositiveSmallIntegerField(null=True, blank=True)
+    registered_at = models.DateTimeField()
+    position = models.PositiveSmallIntegerField(null=True, blank=True, help_text="Locul final.")
+    bonus_lp = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["tournament", "seed", "registered_at"]
+        verbose_name = "înscriere la turneu"
+        verbose_name_plural = "înscrieri la turnee"
+
+    def __str__(self) -> str:
+        return f"{self.tournament_id} {self.seed}"
+
+    @property
+    def players(self) -> list[uuid.UUID]:
+        return [self.player_a_id, *([self.player_b_id] if self.player_b_id else [])]
+
+
+class FixtureStatus(models.TextChoices):
+    WAITING = "waiting", "Așteaptă echipele"
+    READY = "ready", "De jucat"
+    FINISHED = "finished", "Terminat, se introduce scorul"
+    DONE = "done", "Rezultat înregistrat"
+    BYE = "bye", "Calificare directă"
+
+
+class Fixture(models.Model):
+    """One match of the draw. Teams are lists of player ids (partners change in Americano)."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    tournament = models.ForeignKey(Tournament, on_delete=models.PROTECT, related_name="fixtures")
+    phase = models.CharField(max_length=20, help_text="group:A, round, semifinal, final …")
+    round = models.PositiveSmallIntegerField()
+    slot = models.PositiveSmallIntegerField()
+    team_a = models.JSONField(default=list, blank=True)
+    team_b = models.JSONField(default=list, blank=True)
+    entry_a = models.ForeignKey(
+        TournamentEntry, on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    entry_b = models.ForeignKey(
+        TournamentEntry, on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    next_fixture = models.ForeignKey(
+        "self", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    next_side = models.CharField(max_length=1, blank=True)
+    booking = models.ForeignKey(
+        "bookings.Booking", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    status = models.CharField(
+        max_length=10, choices=FixtureStatus.choices, default=FixtureStatus.WAITING
+    )
+    finished_at = models.DateTimeField(null=True, blank=True)
+    winner = models.CharField(max_length=1, blank=True)
+    score = models.JSONField(default=dict, blank=True)
+    games_a = models.PositiveSmallIntegerField(default=0)
+    games_b = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ["tournament", "round", "slot"]
+        verbose_name = "meci de turneu"
+        verbose_name_plural = "meciuri de turneu"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["tournament", "phase", "round", "slot"], name="fixture_once"
+            )
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.phase} {self.round}.{self.slot}"

@@ -7,6 +7,7 @@ from jungle.core.admin_site import ReadOnlyAdmin, emergency_admin_site
 from jungle.league.models import (
     Badge,
     Challenge,
+    Fixture,
     LeagueEvent,
     LeagueMatch,
     LeaguePlayer,
@@ -17,6 +18,8 @@ from jungle.league.models import (
     MatchTransition,
     SeasonAward,
     Standing,
+    Tournament,
+    TournamentEntry,
 )
 
 
@@ -94,3 +97,20 @@ class BadgeAdmin(ReadOnlyAdmin):
 @admin.register(MatchOfTheDay, site=emergency_admin_site)
 class MatchOfTheDayAdmin(ReadOnlyAdmin):
     list_display = ("day", "location", "booking", "chosen_by", "reason")
+
+
+@admin.register(Tournament, site=emergency_admin_site)
+class TournamentAdmin(ReadOnlyAdmin):
+    list_display = ("name", "format", "status", "starts_at", "entry_fee")
+    list_filter = ("status", "format")
+
+
+@admin.register(TournamentEntry, site=emergency_admin_site)
+class TournamentEntryAdmin(ReadOnlyAdmin):
+    list_display = ("tournament", "seed", "status", "position", "bonus_lp")
+
+
+@admin.register(Fixture, site=emergency_admin_site)
+class FixtureAdmin(ReadOnlyAdmin):
+    list_display = ("tournament", "phase", "round", "slot", "status", "winner")
+    list_filter = ("status",)

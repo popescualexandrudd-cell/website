@@ -39,11 +39,15 @@ from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.http import client_ip
 from jungle.core.permissions import Action, Role
 from jungle.devices.models import Device
-from jungle.league import challenges, kiosk, services, store
+from jungle.league import challenges, kiosk, services, store, tournaments
 from jungle.league.models import (
     OPEN_STATUSES,
+    Challenge,
     EventKind,
+    Fixture,
+    FixtureStatus,
     LeagueMatch,
+    LeagueSeason,
     MatchKind,
     MatchPlayer,
     MatchStatus,
@@ -51,6 +55,7 @@ from jungle.league.models import (
     Response,
     SeasonStatus,
     Side,
+    TournamentStatus,
 )
 from jungle.ledger import payments
 from jungle.locations.models import ResourceKind
@@ -185,7 +190,8 @@ def check_daily_limit(match_players: list[User], finished_at: datetime, limit: i
     end = datetime.combine(day + timedelta(days=1), time(), clock.BUSINESS_TZ)
     for player in match_players:
         count = (
-            LeagueMatch.objects.filter(
+            LeagueMatch.objects.exclude(kind=MatchKind.TOURNAMENT)  # not counted (LG-103)
+            .filter(
                 players__user=player,
                 status__in=(*OPEN_STATUSES, MatchStatus.APPLIED),
                 finished_at__gte=start,
@@ -260,41 +266,204 @@ def propose(request: HttpRequest, device: Device | None, data: Proposal) -> Leag
         check_daily_limit(
             players, booking.ends_at, store.config_for(season).max_official_matches_per_day
         )
-        match = LeagueMatch.objects.create(
-            season=season,
-            location=booking.location,
+        match = _start(
+            season,
+            booking.location_id,
+            kind,
+            score,
+            booking.ends_at,
+            closes,
+            proposer,
+            team_a,
+            team_b,
+            {proposer},
+            kiosk_device,
+            actor,
+            checks,
             booking=booking,
-            kind=kind,
-            status=MatchStatus.PROPOSED,
-            score=score,
-            finished_at=booking.ends_at,
-            window_closes_at=closes,
-            proposed_by=proposer,
-            proposed_at=now,
             challenge=challenge,
         )
-        MatchPlayer.objects.bulk_create(
-            MatchPlayer(
-                match=match,
-                user=player,
-                side=Side.A if player in team_a else Side.B,
-                response=Response.CONFIRMED if player == proposer else Response.PENDING,
-                responded_at=now if player == proposer else None,
-                device=kiosk_device if player == proposer else None,
+    return match
+
+
+# ---------------------------------------------------------------- tournament matches (Q28)
+def check_fixture(fixture: Fixture) -> dict[str, Any]:
+    """A tournament match marked finished, in a tournament still being played."""
+    if (
+        fixture.status != FixtureStatus.FINISHED
+        or fixture.tournament.status != TournamentStatus.IN_PROGRESS
+    ):
+        raise DomainError(ErrorCode.LEAGUE_FIXTURE_NOT_READY, status=409)
+    return {"fixture": str(fixture.pk), "tournament": str(fixture.tournament_id)}
+
+
+def _fixture_booking(fixture: Fixture) -> Booking:
+    if fixture.booking is None:  # pragma: no cover - only a match on a court is marked finished
+        raise DomainError(ErrorCode.LEAGUE_FIXTURE_NOT_SCHEDULED, status=409)
+    return fixture.booking
+
+
+def finish_fixture(
+    request: HttpRequest, device: Device | None, fixture_id: uuid.UUID, card_token: str
+) -> Fixture:
+    """Q28: at the kiosk, a player of the match or the director marks it finished."""
+    fixture = Fixture.objects.select_related("tournament").filter(pk=fixture_id).first()
+    kiosk_device = kiosk.check(
+        request, device, fixture.tournament.location_id if fixture else None, "league.finish"
+    )
+    if fixture is None:
+        raise DomainError(ErrorCode.LEAGUE_FIXTURE_NOT_FOUND, status=404)
+    person = cards.resolve(card_token).user
+    return tournaments.mark_finished(fixture.pk, person, kiosk_actor(request, kiosk_device, person))
+
+
+@dataclass(frozen=True)
+class FixtureScore:
+    fixture_id: uuid.UUID
+    card_token: str  # a player of the match, or the director (Q28)
+    score: dict[str, Any]
+
+
+def propose_fixture(request: HttpRequest, device: Device | None, data: FixtureScore) -> LeagueMatch:
+    """The score of a tournament match, at the kiosk, within 30 minutes of it being marked
+    finished (Q28). Entered by the director, it is confirmed at once."""
+    found = Fixture.objects.select_related("tournament").filter(pk=data.fixture_id).first()
+    kiosk_device = kiosk.check(
+        request, device, found.tournament.location_id if found else None, "league.propose"
+    )
+    if found is None:
+        raise DomainError(ErrorCode.LEAGUE_FIXTURE_NOT_FOUND, status=404)
+    person = cards.resolve(data.card_token).user
+    actor = kiosk_actor(request, kiosk_device, person)
+    director = tournaments.is_director(person, found.tournament.location_id)
+    now = clock.now()
+    with transaction.atomic():
+        fixture = (
+            Fixture.objects.select_for_update(of=("self",))
+            .select_related("tournament__season", "booking")
+            .get(pk=found.pk)
+        )
+        checks = check_fixture(fixture)
+        finished_at: datetime = fixture.finished_at or now  # set when marked finished
+        closes = finished_at + timedelta(minutes=int(get_config("league.score_window_minutes")))
+        if now >= closes:
+            raise DomainError(
+                ErrorCode.LEAGUE_WINDOW_CLOSED, status=409, params={"closes": _hm(closes)}
             )
-            for player in players
-        )
-        _log(match, MatchStatus.PROPOSED, actor, device=kiosk_device, checks=checks)
-        audit.record(
+        if fixture.league_matches.exclude(status=MatchStatus.CANCELLED).exists():
+            raise DomainError(ErrorCode.LEAGUE_SCORE_ALREADY_PROPOSED, status=409)
+        team_a = _users(tuple(uuid.UUID(p) for p in fixture.team_a))
+        team_b = _users(tuple(uuid.UUID(p) for p in fixture.team_b))
+        players = check_players(team_a, team_b)
+        if person not in players and not director:
+            raise DomainError(ErrorCode.LEAGUE_NOT_A_PLAYER, status=403)
+        checks |= check_scans(_fixture_booking(fixture), players)
+        season = fixture.tournament.season
+        score = _parse_score(data.score, MatchKind.TOURNAMENT, season)
+        match = _start(
+            season,
+            fixture.tournament.location_id,
+            MatchKind.TOURNAMENT,
+            score,
+            finished_at,
+            closes,
+            person,
+            team_a,
+            team_b,
+            set(players) if director else {person},
+            kiosk_device,
             actor,
-            "league.score_proposed",
-            target=match,
-            after={
-                "score": score,
-                "team_a": [str(p.pk) for p in team_a],
-                "team_b": [str(p.pk) for p in team_b],
-            },
+            checks | {"director": director},
+            fixture=fixture,
         )
+        if director:
+            _confirmed_by_all(match, actor, kiosk_device)
+    return match
+
+
+def director_confirm(
+    request: HttpRequest, device: Device | None, match_id: uuid.UUID, card_token: str
+) -> LeagueMatch:
+    """Q28: the tournament director validates a tournament score at the kiosk."""
+    found = LeagueMatch.objects.filter(pk=match_id).first()
+    kiosk_device = kiosk.check(
+        request, device, found.location_id if found else None, "league.director"
+    )
+    if found is None:
+        raise DomainError(ErrorCode.LEAGUE_MATCH_NOT_FOUND, status=404)
+    person = cards.resolve(card_token).user
+    if not tournaments.is_director(person, found.location_id):
+        raise DomainError(ErrorCode.AUTH_FORBIDDEN, status=403)
+    actor = kiosk_actor(request, kiosk_device, person)
+    with transaction.atomic():
+        match = LeagueMatch.objects.select_for_update(of=("self",)).get(pk=found.pk)
+        if match.status != MatchStatus.PROPOSED or match.fixture is None:
+            raise DomainError(ErrorCode.LEAGUE_MATCH_NOT_OPEN, status=409)
+        match.players.filter(response=Response.PENDING).update(
+            response=Response.CONFIRMED, responded_at=clock.now(), device=kiosk_device
+        )
+        _log(match, "director", actor, device=kiosk_device, checks={"by": str(person.pk)})
+        _confirmed_by_all(match, actor, kiosk_device)
+    return match
+
+
+def _start(
+    season: LeagueSeason,
+    location_id: uuid.UUID,
+    kind: str,
+    score: dict[str, Any],
+    finished_at: datetime,
+    closes: datetime,
+    proposer: User,
+    team_a: list[User],
+    team_b: list[User],
+    confirmed: set[User],
+    device: Device,
+    actor: audit.Actor,
+    checks: dict[str, Any],
+    *,
+    booking: Booking | None = None,
+    fixture: Fixture | None = None,
+    challenge: Challenge | None = None,
+) -> LeagueMatch:
+    """A new proposed match with its players (the proposer, or the director, has confirmed)."""
+    now = clock.now()
+    match = LeagueMatch.objects.create(
+        season=season,
+        location_id=location_id,
+        booking=booking,
+        fixture=fixture,
+        challenge=challenge,
+        kind=kind,
+        status=MatchStatus.PROPOSED,
+        score=score,
+        finished_at=finished_at,
+        window_closes_at=closes,
+        proposed_by=proposer,
+        proposed_at=now,
+    )
+    MatchPlayer.objects.bulk_create(
+        MatchPlayer(
+            match=match,
+            user=player,
+            side=Side.A if player in team_a else Side.B,
+            response=Response.CONFIRMED if player in confirmed else Response.PENDING,
+            responded_at=now if player in confirmed else None,
+            device=device if player in confirmed else None,
+        )
+        for player in team_a + team_b
+    )
+    _log(match, MatchStatus.PROPOSED, actor, device=device, checks=checks)
+    audit.record(
+        actor,
+        "league.score_proposed",
+        target=match,
+        after={
+            "score": score,
+            "team_a": [str(p.pk) for p in team_a],
+            "team_b": [str(p.pk) for p in team_b],
+        },
+    )
     return match
 
 
@@ -356,7 +525,7 @@ def _dispute(match: LeagueMatch, actor: audit.Actor, device: Device, person: Use
         kind=NOTICE_DISPUTE,
         payload={
             "match_id": str(match.pk),
-            "court": match.booking.resource.name if match.booking else "",
+            "court": _court(match),
             "finished_at": match.finished_at.isoformat(),
         },
         created_at=clock.now(),
@@ -372,21 +541,40 @@ def _players_of(match: LeagueMatch) -> tuple[list[User], list[User]]:
 
 
 def _confirmed_by_all(match: LeagueMatch, actor: audit.Actor, device: Device | None) -> None:
-    """CONFIRMAT_DE_TOȚI: the booking and the scans are checked again, then the payment."""
-    booking = match.booking
-    if booking is None:  # pragma: no cover - tournament matches arrive with Stage 6D
-        raise DomainError(ErrorCode.LEAGUE_BOOKING_NOT_ELIGIBLE)
+    """CONFIRMAT_DE_TOȚI: the booking (or the tournament match) and the scans are checked
+    again, then the payment."""
     team_a, team_b = _players_of(match)
-    checks = check_booking(booking, match.location_id) | check_scans(booking, team_a + team_b)
+    if match.fixture is not None:
+        fixture = match.fixture
+        checks = check_fixture(fixture) | check_scans(_fixture_booking(fixture), team_a + team_b)
+    else:
+        booking = _booking(match)
+        checks = check_booking(booking, match.location_id) | check_scans(booking, team_a + team_b)
     _log(match, "confirmed", actor, device=device, checks=checks)
-    _payment_gate(match, booking, actor, device)
+    _payment_gate(match, actor, device)
 
 
-def _payment_gate(
-    match: LeagueMatch, booking: Booking, actor: audit.Actor, device: Device | None
-) -> None:
-    """LG-096: validated only when the booking is fully paid; otherwise it waits (Q11)."""
-    payment = check_payment(booking)
+def _booking(match: LeagueMatch) -> Booking:
+    if match.booking is None:  # pragma: no cover - a league match always has one or a fixture
+        raise DomainError(ErrorCode.LEAGUE_BOOKING_NOT_ELIGIBLE)
+    return match.booking
+
+
+def _court(match: LeagueMatch) -> str:
+    booking = match.fixture.booking if match.fixture is not None else match.booking
+    return booking.resource.name if booking is not None else ""
+
+
+def _payment(match: LeagueMatch) -> dict[str, int]:
+    """The booking fully paid, or for a tournament every player's entry fee (§6.14)."""
+    if match.fixture is not None:
+        return tournaments.fixture_payment(match.fixture)
+    return check_payment(_booking(match))
+
+
+def _payment_gate(match: LeagueMatch, actor: audit.Actor, device: Device | None) -> None:
+    """LG-096: validated only when fully paid; otherwise it waits (Q11)."""
+    payment = _payment(match)
     if payment["to_pay"] == 0:
         _log(match, "validated", actor, device=device, checks={"payment": payment})
         _apply(match, actor)
@@ -445,27 +633,37 @@ def _finish(
     match.note = note
     match.save(update_fields=["status", "event", "applied_at", "note"])
     challenges.played(match.challenge_id)
+    if match.fixture is not None and event is not None:  # the draw moves on (§6.14)
+        record = event.records.order_by("-computation").first()
+        tournaments.record_result(match.fixture, record.payload["winner"], match.score)
     _log(match, status, actor, checks={"event": event.pk if event else None}, reason=note)
     audit.record(actor, f"league.match_{status}", target=match)
 
 
 # ---------------------------------------------------------------- payment and time
 def payment_received(due: payments.Due) -> None:
-    """A later payment at the Payments Kiosk validates the waiting score automatically."""
-    if due.booking is None:
+    """A later payment at the Payments Kiosk validates the waiting score automatically (a
+    booking, or a tournament entry fee: every waiting match of that tournament is checked)."""
+    if due.booking is not None:
+        waiting = LeagueMatch.objects.filter(booking=due.booking)
+    elif due.key.startswith("tournament_entry:"):
+        entry = tournaments.get_entry(uuid.UUID(due.key.split(":", 1)[1]))
+        waiting = LeagueMatch.objects.filter(fixture__tournament=entry.tournament)
+    else:
         return
-    with transaction.atomic():
-        match = (
-            LeagueMatch.objects.select_for_update()
-            .filter(booking=due.booking, status=MatchStatus.AWAITING_PAYMENT)
-            .first()
-        )
-        if match is None:
-            return
-        if match.payment_deadline is None or clock.now() > match.payment_deadline:
-            return  # too late: the expiry job closes it
-        if check_payment(due.booking)["to_pay"] == 0:
-            _payment_gate(match, due.booking, audit.SYSTEM, None)
+    for pk in list(
+        waiting.filter(status=MatchStatus.AWAITING_PAYMENT).values_list("pk", flat=True)
+    ):
+        with transaction.atomic():
+            match = LeagueMatch.objects.select_for_update(of=("self",)).get(pk=pk)
+            if (
+                match.status != MatchStatus.AWAITING_PAYMENT
+                or match.payment_deadline is None
+                or clock.now() > match.payment_deadline  # too late: the expiry job closes it
+            ):
+                continue
+            if _payment(match)["to_pay"] == 0:
+                _payment_gate(match, audit.SYSTEM, None)
 
 
 @dataclass(frozen=True)
@@ -483,6 +681,8 @@ def _expire(match_id: uuid.UUID, status: MatchStatus, when: str, reason: str) ->
         match.status = MatchStatus.EXPIRED
         match.note = reason
         match.save(update_fields=["status", "note"])
+        if match.fixture is not None:  # the tournament match can be finished and scored again
+            tournaments.reopen(match.fixture)
         _log(match, MatchStatus.EXPIRED, audit.SYSTEM, reason=reason)
         audit.record(audit.SYSTEM, "league.match_expired", target=match, reason=reason)
     return True
@@ -556,12 +756,18 @@ def resolve(request: HttpRequest, match_id: uuid.UUID, action: str, reason: str)
             match.reopened_until = clock.now() + timedelta(minutes=minutes)
             match.note = reason[:500]
             match.save(update_fields=["status", "reopened_until", "note"])
+            if match.fixture is not None:  # marked finished again, then a new window
+                tournaments.reopen(match.fixture)
             _log(match, "reopened", actor, reason=reason)
         elif (
             action == Resolution.CANCEL
             and match.status != MatchStatus.CANCELLED
-            and (match.event is None or match.season.status == SeasonStatus.ACTIVE)
-        ):  # a closed season is final (LG-134)
+            and (
+                match.event is None
+                # a closed season is final (LG-134); so is a result the draw already used
+                or (match.season.status == SeasonStatus.ACTIVE and match.fixture is None)
+            )
+        ):
             if match.event is not None:  # LG-161: recomputed as if it had never been played
                 store.record(
                     match.season,
@@ -575,6 +781,8 @@ def resolve(request: HttpRequest, match_id: uuid.UUID, action: str, reason: str)
             match.status = MatchStatus.CANCELLED
             match.note = reason[:500]
             match.save(update_fields=["status", "note"])
+            if match.fixture is not None:
+                tournaments.reopen(match.fixture)
             _log(match, MatchStatus.CANCELLED, actor, reason=reason)
         else:
             raise DomainError(ErrorCode.LEAGUE_MATCH_STATE_INVALID, status=409)

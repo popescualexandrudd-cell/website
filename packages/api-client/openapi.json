@@ -1588,6 +1588,24 @@
         "title": "EnrollmentOut",
         "type": "object"
       },
+      "EntryIn": {
+        "properties": {
+          "partner_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Partner Id"
+          }
+        },
+        "title": "EntryIn",
+        "type": "object"
+      },
       "EntryOut": {
         "properties": {
           "account": {
@@ -1876,6 +1894,68 @@
           "entries"
         ],
         "title": "FameSeasonOut",
+        "type": "object"
+      },
+      "FixtureOut": {
+        "description": "R-012: names only; no court and no time.",
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "phase": {
+            "title": "Phase",
+            "type": "string"
+          },
+          "round": {
+            "title": "Round",
+            "type": "integer"
+          },
+          "score": {
+            "additionalProperties": true,
+            "title": "Score",
+            "type": "object"
+          },
+          "slot": {
+            "title": "Slot",
+            "type": "integer"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "team_a": {
+            "items": {
+              "$ref": "#/components/schemas/PlayerOut"
+            },
+            "title": "Team A",
+            "type": "array"
+          },
+          "team_b": {
+            "items": {
+              "$ref": "#/components/schemas/PlayerOut"
+            },
+            "title": "Team B",
+            "type": "array"
+          },
+          "winner": {
+            "title": "Winner",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "phase",
+          "round",
+          "slot",
+          "team_a",
+          "team_b",
+          "status",
+          "winner",
+          "score"
+        ],
+        "title": "FixtureOut",
         "type": "object"
       },
       "FlagIn": {
@@ -2965,6 +3045,18 @@
             "minimum": 0,
             "title": "Tendered",
             "type": "integer"
+          },
+          "tournament_entry_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tournament Entry Id"
           }
         },
         "required": [
@@ -3641,11 +3733,15 @@
       "ReasonIn": {
         "properties": {
           "reason": {
-            "default": "",
+            "maxLength": 500,
+            "minLength": 1,
             "title": "Reason",
             "type": "string"
           }
         },
+        "required": [
+          "reason"
+        ],
         "title": "ReasonIn",
         "type": "object"
       },
@@ -4420,6 +4516,20 @@
           "scanned_at"
         ],
         "title": "ScanOut",
+        "type": "object"
+      },
+      "ScheduleIn": {
+        "properties": {
+          "booking_id": {
+            "format": "uuid",
+            "title": "Booking Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "booking_id"
+        ],
+        "title": "ScheduleIn",
         "type": "object"
       },
       "Season": {
@@ -5555,6 +5665,291 @@
         "title": "TokenIn",
         "type": "object"
       },
+      "TournamentDetailOut": {
+        "properties": {
+          "entries": {
+            "title": "Entries",
+            "type": "integer"
+          },
+          "entries_list": {
+            "items": {
+              "$ref": "#/components/schemas/TournamentEntryOut"
+            },
+            "title": "Entries List",
+            "type": "array"
+          },
+          "entry_fee": {
+            "title": "Entry Fee",
+            "type": "integer"
+          },
+          "fee_provisional": {
+            "title": "Fee Provisional",
+            "type": "boolean"
+          },
+          "fixtures": {
+            "items": {
+              "$ref": "#/components/schemas/FixtureOut"
+            },
+            "title": "Fixtures",
+            "type": "array"
+          },
+          "format": {
+            "title": "Format",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "max_entries": {
+            "title": "Max Entries",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "registration_closes_at": {
+            "format": "date-time",
+            "title": "Registration Closes At",
+            "type": "string"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "team_size": {
+            "title": "Team Size",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "format",
+          "team_size",
+          "status",
+          "starts_at",
+          "registration_closes_at",
+          "entry_fee",
+          "fee_provisional",
+          "max_entries",
+          "entries",
+          "entries_list",
+          "fixtures"
+        ],
+        "title": "TournamentDetailOut",
+        "type": "object"
+      },
+      "TournamentEntryOut": {
+        "properties": {
+          "bonus_lp": {
+            "title": "Bonus Lp",
+            "type": "integer"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "players": {
+            "items": {
+              "$ref": "#/components/schemas/PlayerOut"
+            },
+            "title": "Players",
+            "type": "array"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "seed": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seed"
+          }
+        },
+        "required": [
+          "id",
+          "players",
+          "seed",
+          "position",
+          "bonus_lp"
+        ],
+        "title": "TournamentEntryOut",
+        "type": "object"
+      },
+      "TournamentIn": {
+        "properties": {
+          "advance": {
+            "default": 2,
+            "maximum": 7,
+            "minimum": 1,
+            "title": "Advance",
+            "type": "integer"
+          },
+          "entry_fee": {
+            "maximum": 10000000,
+            "minimum": 0,
+            "title": "Entry Fee",
+            "type": "integer"
+          },
+          "format": {
+            "title": "Format",
+            "type": "string"
+          },
+          "group_size": {
+            "default": 4,
+            "maximum": 8,
+            "minimum": 2,
+            "title": "Group Size",
+            "type": "integer"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "max_entries": {
+            "maximum": 128,
+            "minimum": 2,
+            "title": "Max Entries",
+            "type": "integer"
+          },
+          "name": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "registration_closes_at": {
+            "format": "date-time",
+            "title": "Registration Closes At",
+            "type": "string"
+          },
+          "rounds": {
+            "default": 5,
+            "maximum": 20,
+            "minimum": 1,
+            "title": "Rounds",
+            "type": "integer"
+          },
+          "seeding": {
+            "default": "rank",
+            "pattern": "^(rank|random)$",
+            "title": "Seeding",
+            "type": "string"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "team_size": {
+            "maximum": 2,
+            "minimum": 1,
+            "title": "Team Size",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "location_id",
+          "name",
+          "format",
+          "team_size",
+          "starts_at",
+          "registration_closes_at",
+          "entry_fee",
+          "max_entries"
+        ],
+        "title": "TournamentIn",
+        "type": "object"
+      },
+      "TournamentOut": {
+        "properties": {
+          "entries": {
+            "title": "Entries",
+            "type": "integer"
+          },
+          "entry_fee": {
+            "title": "Entry Fee",
+            "type": "integer"
+          },
+          "fee_provisional": {
+            "title": "Fee Provisional",
+            "type": "boolean"
+          },
+          "format": {
+            "title": "Format",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "max_entries": {
+            "title": "Max Entries",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "registration_closes_at": {
+            "format": "date-time",
+            "title": "Registration Closes At",
+            "type": "string"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "team_size": {
+            "title": "Team Size",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "format",
+          "team_size",
+          "status",
+          "starts_at",
+          "registration_closes_at",
+          "entry_fee",
+          "fee_provisional",
+          "max_entries",
+          "entries"
+        ],
+        "title": "TournamentOut",
+        "type": "object"
+      },
       "TransactionOut": {
         "properties": {
           "created_at": {
@@ -6269,6 +6664,23 @@
                 }
               ],
               "title": "Subscription Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "tournament_entry_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Tournament Entry Id"
             }
           }
         ],
@@ -9352,6 +9764,273 @@
           }
         },
         "summary": "Standings",
+        "tags": [
+          "league"
+        ]
+      }
+    },
+    "/api/v1/league/tournament-entries/{entry_id}/withdraw": {
+      "post": {
+        "operationId": "jungle_league_api_withdraw",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "entry_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Entry Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TournamentEntryOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Withdraw",
+        "tags": [
+          "league"
+        ]
+      }
+    },
+    "/api/v1/league/tournaments": {
+      "get": {
+        "description": "§6.14: registrations, draws and results, live on the website.",
+        "operationId": "jungle_league_api_tournament_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location",
+            "required": true,
+            "schema": {
+              "title": "Location",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TournamentOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "summary": "Tournament List",
+        "tags": [
+          "league"
+        ]
+      }
+    },
+    "/api/v1/league/tournaments/{tournament_id}": {
+      "get": {
+        "operationId": "jungle_league_api_tournament",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tournament_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Tournament Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TournamentDetailOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "summary": "Tournament",
+        "tags": [
+          "league"
+        ]
+      }
+    },
+    "/api/v1/league/tournaments/{tournament_id}/entries": {
+      "post": {
+        "description": "A tournament entry is like a booking (it changes nothing in the league); the entry fee\nis paid like any other item (it is the payment condition of the matches).",
+        "operationId": "jungle_league_api_enter",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tournament_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Tournament Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntryIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TournamentEntryOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Enter",
         "tags": [
           "league"
         ]
@@ -12805,6 +13484,193 @@
         ]
       }
     },
+    "/api/v1/staff/league/fixtures/{fixture_id}/finished": {
+      "post": {
+        "description": "Q28: the director marks a tournament match finished; the score is then entered and\nconfirmed at the League Kiosk.",
+        "operationId": "jungle_league_api_fixture_finished",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "fixture_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Fixture Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FixtureOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Fixture Finished",
+        "tags": [
+          "staff: league"
+        ]
+      }
+    },
+    "/api/v1/staff/league/fixtures/{fixture_id}/schedule": {
+      "post": {
+        "operationId": "jungle_league_api_schedule_fixture",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "fixture_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Fixture Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScheduleIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FixtureOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Schedule Fixture",
+        "tags": [
+          "staff: league"
+        ]
+      }
+    },
     "/api/v1/staff/league/match-of-the-day": {
       "post": {
         "operationId": "jungle_league_api_choose_match_of_the_day",
@@ -13557,6 +14423,290 @@
           }
         ],
         "summary": "Rebuild",
+        "tags": [
+          "staff: league"
+        ]
+      }
+    },
+    "/api/v1/staff/league/tournaments": {
+      "post": {
+        "operationId": "jungle_league_api_create_tournament",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TournamentIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TournamentOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Create Tournament",
+        "tags": [
+          "staff: league"
+        ]
+      }
+    },
+    "/api/v1/staff/league/tournaments/{tournament_id}/cancel": {
+      "post": {
+        "description": "Every paid entry fee comes back as credit in the account.",
+        "operationId": "jungle_league_api_cancel_tournament",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tournament_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Tournament Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReasonIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TournamentOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Cancel Tournament",
+        "tags": [
+          "staff: league"
+        ]
+      }
+    },
+    "/api/v1/staff/league/tournaments/{tournament_id}/draw": {
+      "post": {
+        "operationId": "jungle_league_api_draw",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tournament_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Tournament Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TournamentDetailOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Draw",
         "tags": [
           "staff: league"
         ]

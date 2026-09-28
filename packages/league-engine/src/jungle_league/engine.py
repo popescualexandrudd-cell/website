@@ -235,7 +235,11 @@ def apply_match(
     group = frozenset(players)
     day = _local_day(match.finished_at)
     window_start = match.finished_at - timedelta(days=config.repetition_window_days)
-    for player in players:
+    # LG-103, LG-102: the daily limit and the diminishing returns guard the official matches
+    # players choose; tournament matches are drawn by the system and neither count nor are
+    # limited (DE_CONFIRMAT).
+    tournament = match.match_type is MatchType.TOURNAMENT
+    for player in () if tournament else players:
         today = sum(1 for moment, _ in state.recent.get(player, ()) if _local_day(moment) == day)
         if not within_daily_limit(today, config):
             raise LeagueError("league.daily_limit")
@@ -251,7 +255,7 @@ def apply_match(
     previous = sum(
         1 for moment, g in state.recent.get(players[0], ()) if g == group and moment > window_start
     )
-    m_rep = repetition_multiplier(previous, config)
+    m_rep = 1.0 if tournament else repetition_multiplier(previous, config)
     counted = result.counts and counts_despite_level_gap(level_a, level_b, config)
     new_key_state = replace(state, last_key=key)
     if not counted:
@@ -337,7 +341,7 @@ def apply_match(
         competitors[this_ladder] = table
 
     recent = dict(state.recent)
-    for player in players:
+    for player in () if tournament else players:
         kept = tuple(item for item in recent.get(player, ()) if item[0] > window_start)
         recent[player] = (*kept, (match.finished_at, group))
     new_state = replace(new_key_state, competitors=competitors, recent=recent)

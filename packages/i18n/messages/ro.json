@@ -174,7 +174,17 @@
     "league.challenge_required": "Pentru o rezervare de tip provocare trebuie să existe o provocare acceptată între acești jucători.",
     "league.season_not_over": "Sezonul se încheie pe {ends}.",
     "league.season_open_matches": "Mai sunt {count} meciuri neîncheiate (scor neconfirmat, neplătit sau disputat).",
-    "league.not_a_match_today": "Meciul zilei se alege dintre meciurile de ligă de azi."
+    "league.not_a_match_today": "Meciul zilei se alege dintre meciurile de ligă de azi.",
+    "league.tournament_not_found": "Turneul nu există.",
+    "league.tournament_invalid": "Datele turneului nu sunt valide (format, jucători pe echipă, date, taxă).",
+    "league.tournament_closed": "Înscrierile la acest turneu sunt închise.",
+    "league.tournament_full": "Turneul este complet.",
+    "league.tournament_already_entered": "{name} este deja înscris la acest turneu.",
+    "league.tournament_partner": "La acest turneu te înscrii în pereche (la Americano și Mexicano, individual).",
+    "league.tournament_too_few": "Prea puține înscrieri pentru tragere: {count} (Americano și Mexicano: multiplu de 4; King of the Court: număr par).",
+    "league.fixture_not_found": "Meciul de turneu nu există.",
+    "league.fixture_not_ready": "Meciul de turneu nu poate fi programat sau încheiat acum.",
+    "league.fixture_not_scheduled": "Meciul de turneu nu are încă un teren (o rezervare de tip turneu)."
   },
   "web": {
     "meta": {

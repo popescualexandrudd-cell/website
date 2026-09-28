@@ -34,6 +34,7 @@ class RevenueCategory(models.TextChoices):
     SUBSCRIPTIONS = "subscriptions", "Abonamente"
     CAFE = "cafe", "Cafenea"
     EVENTS = "events", "Evenimente"
+    TOURNAMENTS = "tournaments", "Turnee"
     FEES = "fees", "Taxe (anulare tardivă, neprezentare)"
 
 

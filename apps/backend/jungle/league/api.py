@@ -18,9 +18,18 @@ from jungle.accounts.services.authz import current_user
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.schemas import errors
 from jungle.core.security import session_auth
-from jungle.league import badges, challenges, closing, matches, services, spotlight
+from jungle.league import (
+    badges,
+    challenges,
+    closing,
+    matches,
+    services,
+    spotlight,
+    tournaments,
+)
 from jungle.league.models import (
     Challenge,
+    Fixture,
     Ladder,
     LeagueMatch,
     LeagueSeason,
@@ -28,6 +37,8 @@ from jungle.league.models import (
     RatingRecord,
     SeasonStatus,
     Standing,
+    Tournament,
+    TournamentEntry,
 )
 from jungle.league.projection import round_level
 from jungle.locations.services import get_location_by_slug
@@ -303,6 +314,131 @@ def spotlight_out(found: spotlight.Spotlight | None) -> SpotlightOut:
     )
 
 
+class TournamentOut(Schema):
+    id: uuid.UUID
+    name: str
+    format: str
+    team_size: int
+    status: str
+    starts_at: datetime
+    registration_closes_at: datetime
+    entry_fee: int
+    fee_provisional: bool
+    max_entries: int
+    entries: int
+
+
+class TournamentEntryOut(Schema):
+    id: uuid.UUID
+    players: list[PlayerOut]
+    seed: int | None
+    position: int | None
+    bonus_lp: int
+
+
+class FixtureOut(Schema):
+    """R-012: names only; no court and no time."""
+
+    id: uuid.UUID
+    phase: str
+    round: int
+    slot: int
+    team_a: list[PlayerOut]
+    team_b: list[PlayerOut]
+    status: str
+    winner: str
+    score: dict[str, object]
+
+
+class TournamentDetailOut(TournamentOut):
+    entries_list: list[TournamentEntryOut]
+    fixtures: list[FixtureOut]
+
+
+class TournamentIn(Schema):
+    location_id: uuid.UUID
+    name: str = Field(min_length=1, max_length=120)
+    format: str
+    team_size: int = Field(ge=1, le=2)
+    starts_at: datetime
+    registration_closes_at: datetime
+    entry_fee: int = Field(ge=0, le=10_000_000)
+    max_entries: int = Field(ge=2, le=128)
+    seeding: str = Field(default="rank", pattern=r"^(rank|random)$")
+    group_size: int = Field(default=4, ge=2, le=8)
+    advance: int = Field(default=2, ge=1, le=7)
+    rounds: int = Field(default=5, ge=1, le=20)
+
+
+class EntryIn(Schema):
+    partner_id: uuid.UUID | None = None
+
+
+class ReasonIn(Schema):
+    reason: str = Field(min_length=1, max_length=500)
+
+
+class ScheduleIn(Schema):
+    booking_id: uuid.UUID
+
+
+def _names(ids: list[str]) -> list[PlayerOut]:
+    people = {str(u.pk): u for u in User.objects.filter(pk__in=ids)}
+    return [
+        PlayerOut(first_name=people[i].first_name, last_name=people[i].last_name)
+        for i in ids
+        if i in people
+    ]
+
+
+def tournament_out(t: Tournament) -> TournamentOut:
+    return TournamentOut(
+        id=t.id,
+        name=t.name,
+        format=t.format,
+        team_size=t.team_size,
+        status=t.status,
+        starts_at=t.starts_at,
+        registration_closes_at=t.registration_closes_at,
+        entry_fee=t.entry_fee,
+        fee_provisional=t.fee_provisional,
+        max_entries=t.max_entries,
+        entries=t.entries.filter(status="registered").count(),
+    )
+
+
+def entry_out(e: TournamentEntry) -> TournamentEntryOut:
+    return TournamentEntryOut(
+        id=e.id,
+        players=_names([str(p) for p in e.players]),
+        seed=e.seed,
+        position=e.position,
+        bonus_lp=e.bonus_lp,
+    )
+
+
+def fixture_out(f: Fixture) -> FixtureOut:
+    return FixtureOut(
+        id=f.id,
+        phase=f.phase,
+        round=f.round,
+        slot=f.slot,
+        team_a=_names(f.team_a),
+        team_b=_names(f.team_b),
+        status=f.status,
+        winner=f.winner,
+        score=f.score,
+    )
+
+
+def tournament_detail(t: Tournament) -> TournamentDetailOut:
+    return TournamentDetailOut(
+        **tournament_out(t).dict(),
+        entries_list=[entry_out(e) for e in t.entries.filter(status="registered")],
+        fixtures=[fixture_out(f) for f in t.fixtures.all()],
+    )
+
+
 def _season(location: str, season_number: int | None) -> LeagueSeason:
     place = get_location_by_slug(location)
     seasons = LeagueSeason.objects.filter(location=place).exclude(status=SeasonStatus.PLANNED)
@@ -397,6 +533,22 @@ def match_of_the_day(request: HttpRequest, location: str) -> SpotlightOut:
     return spotlight_out(spotlight.match_of_the_day(get_location_by_slug(location)))
 
 
+@public_router.get("/tournaments", response={200: list[TournamentOut], **errors(404)}, auth=None)
+def tournament_list(request: HttpRequest, location: str) -> list[TournamentOut]:
+    """§6.14: registrations, draws and results, live on the website."""
+    return [tournament_out(t) for t in tournaments.list_for(get_location_by_slug(location))[:50]]
+
+
+@public_router.get(
+    "/tournaments/{tournament_id}", response={200: TournamentDetailOut, **errors(404)}, auth=None
+)
+def tournament(request: HttpRequest, tournament_id: uuid.UUID) -> TournamentDetailOut:
+    found = Tournament.objects.filter(pk=tournament_id).exclude(status="cancelled").first()
+    if found is None:
+        raise DomainError(ErrorCode.LEAGUE_TOURNAMENT_NOT_FOUND, status=404)
+    return tournament_detail(found)
+
+
 # ---------------------------------------------------------------- the player's own view
 def my_changes(player_id: str, limit: int = 20) -> list[RatingChangeOut]:
     """The player's latest LP changes in the active seasons (current computation only)."""
@@ -481,6 +633,26 @@ def my_challenges(request: HttpRequest) -> list[ChallengeOut]:
     """Challenges are issued and answered at the League Kiosk; here they are only shown."""
     user = current_user(request)
     return [challenge_out(c, user.pk) for c in challenges.my_challenges(request)[:50]]
+
+
+@me_router.post(
+    "/tournaments/{tournament_id}/entries",
+    response={201: TournamentEntryOut, **errors(400, 401, 403, 404, 409)},
+)
+def enter(
+    request: HttpRequest, tournament_id: uuid.UUID, payload: EntryIn
+) -> Status[TournamentEntryOut]:
+    """A tournament entry is like a booking (it changes nothing in the league); the entry fee
+    is paid like any other item (it is the payment condition of the matches)."""
+    return Status(201, entry_out(tournaments.register(request, tournament_id, payload.partner_id)))
+
+
+@me_router.post(
+    "/tournament-entries/{entry_id}/withdraw",
+    response={200: TournamentEntryOut, **errors(401, 403, 404, 409)},
+)
+def withdraw(request: HttpRequest, entry_id: uuid.UUID) -> TournamentEntryOut:
+    return entry_out(tournaments.withdraw(request, entry_id))
 
 
 @me_router.post("/questionnaire", response={201: QuestionnaireOut, **errors(400, 401, 422)})
@@ -578,3 +750,50 @@ def close(request: HttpRequest, season_id: uuid.UUID) -> SeasonOut:
 def choose_match_of_the_day(request: HttpRequest, payload: SpotlightIn) -> SpotlightOut:
     row = spotlight.choose(request, payload.location_id, payload.booking_id, payload.reason)
     return spotlight_out(spotlight.match_of_the_day(row.location))
+
+
+@staff_router.post(
+    "/league/tournaments", response={201: TournamentOut, **errors(400, 401, 403, 404, 409, 422)}
+)
+def create_tournament(request: HttpRequest, payload: TournamentIn) -> Status[TournamentOut]:
+    data = tournaments.TournamentData(**payload.dict())
+    return Status(201, tournament_out(tournaments.create(request, data)))
+
+
+@staff_router.post(
+    "/league/tournaments/{tournament_id}/draw",
+    response={200: TournamentDetailOut, **errors(401, 403, 404, 409)},
+)
+def draw(request: HttpRequest, tournament_id: uuid.UUID) -> TournamentDetailOut:
+    return tournament_detail(tournaments.draw(request, tournament_id))
+
+
+@staff_router.post(
+    "/league/tournaments/{tournament_id}/cancel",
+    response={200: TournamentOut, **errors(400, 401, 403, 404, 409, 422)},
+)
+def cancel_tournament(
+    request: HttpRequest, tournament_id: uuid.UUID, payload: ReasonIn
+) -> TournamentOut:
+    """Every paid entry fee comes back as credit in the account."""
+    return tournament_out(tournaments.cancel(request, tournament_id, payload.reason))
+
+
+@staff_router.post(
+    "/league/fixtures/{fixture_id}/schedule",
+    response={200: FixtureOut, **errors(400, 401, 403, 404, 409, 422)},
+)
+def schedule_fixture(
+    request: HttpRequest, fixture_id: uuid.UUID, payload: ScheduleIn
+) -> FixtureOut:
+    return fixture_out(tournaments.schedule(request, fixture_id, payload.booking_id))
+
+
+@staff_router.post(
+    "/league/fixtures/{fixture_id}/finished",
+    response={200: FixtureOut, **errors(401, 403, 404, 409)},
+)
+def fixture_finished(request: HttpRequest, fixture_id: uuid.UUID) -> FixtureOut:
+    """Q28: the director marks a tournament match finished; the score is then entered and
+    confirmed at the League Kiosk."""
+    return fixture_out(tournaments.mark_finished_by_staff(request, fixture_id))

@@ -56,6 +56,7 @@ class PaymentIn(Schema):
     booking_id: uuid.UUID | None = None
     enrollment_id: uuid.UUID | None = None
     subscription_id: uuid.UUID | None = None
+    tournament_entry_id: uuid.UUID | None = None
     payer_id: uuid.UUID
     amount: int = Field(gt=0, le=100_000_000)
     method: PaymentMethod
@@ -142,8 +143,9 @@ def payment_status(
     booking_id: uuid.UUID | None = None,
     enrollment_id: uuid.UUID | None = None,
     subscription_id: uuid.UUID | None = None,
+    tournament_entry_id: uuid.UUID | None = None,
 ) -> MoneyOut:
-    subject = payments.Subject(booking_id, enrollment_id, subscription_id)
+    subject = payments.Subject(booking_id, enrollment_id, subscription_id, tournament_entry_id)
     return _money(payments.status_for(request, subject))
 
 
@@ -172,7 +174,12 @@ def record_payment(
     `Idempotency-Key` again after a timeout — it is never charged twice."""
     payment = payments.record_payment(
         request,
-        payments.Subject(payload.booking_id, payload.enrollment_id, payload.subscription_id),
+        payments.Subject(
+            payload.booking_id,
+            payload.enrollment_id,
+            payload.subscription_id,
+            payload.tournament_entry_id,
+        ),
         payments.PaymentData(
             payer_id=payload.payer_id,
             amount=payload.amount,

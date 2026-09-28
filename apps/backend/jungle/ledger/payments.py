@@ -419,21 +419,35 @@ def _paid_by_payer(due: Due) -> dict[str, int]:
 # ---------------------------------------------------------------- entry points
 @dataclass(frozen=True)
 class Subject:
-    """Which item a payment is for: exactly one of the three."""
+    """Which item a payment is for: exactly one of them."""
 
     booking_id: uuid.UUID | None = None
     enrollment_id: uuid.UUID | None = None
     subscription_id: uuid.UUID | None = None
+    tournament_entry_id: uuid.UUID | None = None
 
 
 def resolve_due(subject: Subject) -> Due:
-    given = [v for v in (subject.booking_id, subject.enrollment_id, subject.subscription_id) if v]
+    given = [
+        v
+        for v in (
+            subject.booking_id,
+            subject.enrollment_id,
+            subject.subscription_id,
+            subject.tournament_entry_id,
+        )
+        if v
+    ]
     if len(given) != 1:
         raise DomainError(
             ErrorCode.VALIDATION_INVALID,
-            params={"field": "booking_id/enrollment_id/subscription_id"},
+            params={"field": "booking_id/enrollment_id/subscription_id/tournament_entry_id"},
         )
     booking_id, enrollment_id = subject.booking_id, subject.enrollment_id
+    if subject.tournament_entry_id is not None:  # §6.14: the entry fee of a league tournament
+        from jungle.league.tournaments import due_for_entry, get_entry
+
+        return due_for_entry(get_entry(subject.tournament_entry_id))
     if subject.subscription_id is not None:
         from jungle.subscriptions.services import due_for_subscription, get_subscription
 

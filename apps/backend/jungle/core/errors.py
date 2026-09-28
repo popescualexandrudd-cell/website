@@ -186,6 +186,16 @@ class ErrorCode(StrEnum):
     LEAGUE_SEASON_NOT_OVER = "league.season_not_over"
     LEAGUE_SEASON_OPEN_MATCHES = "league.season_open_matches"
     LEAGUE_NOT_A_MATCH_TODAY = "league.not_a_match_today"
+    LEAGUE_TOURNAMENT_NOT_FOUND = "league.tournament_not_found"
+    LEAGUE_TOURNAMENT_INVALID = "league.tournament_invalid"
+    LEAGUE_TOURNAMENT_CLOSED = "league.tournament_closed"
+    LEAGUE_TOURNAMENT_FULL = "league.tournament_full"
+    LEAGUE_TOURNAMENT_ALREADY_ENTERED = "league.tournament_already_entered"
+    LEAGUE_TOURNAMENT_PARTNER = "league.tournament_partner"
+    LEAGUE_TOURNAMENT_TOO_FEW = "league.tournament_too_few"
+    LEAGUE_FIXTURE_NOT_FOUND = "league.fixture_not_found"
+    LEAGUE_FIXTURE_NOT_READY = "league.fixture_not_ready"
+    LEAGUE_FIXTURE_NOT_SCHEDULED = "league.fixture_not_scheduled"
 
 
 class DomainError(Exception):

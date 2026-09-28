@@ -159,6 +159,16 @@ def test_lg_103_three_official_matches_per_local_day(league):
     assert event is not None
 
 
+def test_lg_103_lg_102_tournament_matches_are_neither_limited_nor_counted(league):
+    state = league
+    for i in range(5):  # a tournament day: five matches, same opponent, full value
+        state, event = apply_match(state, singles(f"t{i}", i, match_type=MatchType.TOURNAMENT), C)
+        assert event.repetition_multiplier == 1.0
+    assert state.recent.get("ana", ()) == ()
+    for i, other in enumerate(["cristi", "dan", "elena"]):  # still three official ones
+        state, _ = apply_match(state, singles(f"m{i}", 6 + i, b=other), C)
+
+
 def test_lg_102_same_group_diminishing_returns(league):
     state = league
     multipliers = []

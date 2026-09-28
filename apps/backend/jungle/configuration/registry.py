@@ -632,6 +632,14 @@ CONFIG: dict[str, ConfigSpec] = {
             number_map(SPOTLIGHT_KEYS),
         ),
         ConfigSpec(
+            "league.tournament_bonuses",
+            {"winner": 30, "finalist": 20, "semifinal": 10, "quarterfinal": 5},
+            Marker.TO_CONFIRM,
+            "Bonusul de LP pe fază la turnee (§6.14, LG-141), peste LP × 1,5.",
+            number_map(("winner", "finalist", "semifinal", "quarterfinal")),
+            question="Q28",
+        ),
+        ConfigSpec(
             "auth.staff_session_hours",
             8,
             Marker.DEFAULT,

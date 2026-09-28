@@ -174,7 +174,17 @@
     "league.challenge_required": "A challenge booking needs an accepted challenge between these players.",
     "league.season_not_over": "The season ends on {ends}.",
     "league.season_open_matches": "There are still {count} unfinished matches (score not confirmed, not paid or disputed).",
-    "league.not_a_match_today": "The Match of the day is chosen among today's league matches."
+    "league.not_a_match_today": "The Match of the day is chosen among today's league matches.",
+    "league.tournament_not_found": "The tournament does not exist.",
+    "league.tournament_invalid": "The tournament's details are not valid (format, players per team, dates, fee).",
+    "league.tournament_closed": "Registration for this tournament is closed.",
+    "league.tournament_full": "The tournament is full.",
+    "league.tournament_already_entered": "{name} is already registered for this tournament.",
+    "league.tournament_partner": "You register as a pair for this tournament (individually for Americano and Mexicano).",
+    "league.tournament_too_few": "Too few entries for the draw: {count} (Americano and Mexicano: a multiple of 4; King of the Court: an even number).",
+    "league.fixture_not_found": "The tournament match does not exist.",
+    "league.fixture_not_ready": "The tournament match cannot be scheduled or finished now.",
+    "league.fixture_not_scheduled": "The tournament match has no court yet (a tournament booking)."
   },
   "web": {
     "meta": {
