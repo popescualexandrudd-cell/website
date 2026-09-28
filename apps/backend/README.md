@@ -52,6 +52,8 @@ Din rădăcina repository-ului:
 | Ștergerea înscrierilor neconfirmate (zilnic) | `uv run python apps/backend/manage.py purge_waitlist` |
 | Neprezentări, rezervări încheiate, blocări (la 5 minute) | `uv run python apps/backend/manage.py process_no_shows` |
 | Verificarea configurării Apple/Google Wallet | `uv run python apps/backend/manage.py wallet_check` |
+| Liga: scoruri și provocări expirate (la 5 minute) | `uv run python apps/backend/manage.py expire_league_matches` |
+| Liga: decay zilnic, avertizări, „Surpriza săptămânii” (zilnic, după miezul nopții) | `uv run python apps/backend/manage.py league_daily` |
 | Fontul cardului tipărit (din fonturile site-ului) | `uvx --with brotli --from fonttools python apps/backend/scripts/build_card_font.py` |
 
 Baza de date: PostgreSQL (`DATABASE_URL`; implicit `postgres://jungle:jungle@localhost:5432/jungle`), de exemplu cu `docker compose -f deploy/compose/dev/compose.yaml up -d db redis`.
@@ -78,3 +80,4 @@ Variabilele de mediu sunt descrise în [`.env.example`](.env.example). Imaginea 
 | `jungle/cafe` | meniul, comenzile și coada cafenelei (Etapa 4) |
 | `jungle/cards` | cardul de membru (QR revocabil), coada și PDF-ul de tipar CR80, Apple Wallet și Google Wallet (Etapa 5) |
 | `jungle/privacy` | acordul ligii (Chioșc de Ligă, 18+), exportul datelor, ștergerea contului ca „Jucător retras” (Etapa 5) |
+| `jungle/league` | liga (Etapa 6): evenimente doar-adăugare + recalculare (`store`), clasamente (`projection`), intrarea în ligă și sezoane (`services`), fluxul scorului la chioșc (`matches`, `kiosk`), provocări, decay zilnic, închiderea sezonului și recompense (`closing`), insigne, Meciul zilei (`spotlight`), turnee (`draws`, `tournaments`); 100% acoperire pe ramuri |

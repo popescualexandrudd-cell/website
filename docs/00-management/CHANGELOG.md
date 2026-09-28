@@ -4,6 +4,23 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 6 — 28.09.2026 (livrată, așteaptă aprobarea)
+#### Adăugat
+- `jungle.league`: evenimente de ligă doar-adăugare, starea în cache și recalculare de la zero identică (§6.16), clasamente cu doar câmpurile R-012, intrarea în ligă (chestionar Q47, validarea antrenorului, acordul de la chioșc, 18+) și ieșirea (retragerea acordului, ștergerea contului), sezoane cu valori fixate la pornire (ADR-0022) și pornire din sezonul anterior (LG-130).
+- Fluxul scorului (§6.9): doar la Chioșcul de Ligă activ, al clubului, din rețeaua clubului (invariantul 1, refuzurile în jurnal); fereastra de 30 de minute; confirmare de toți; dispută; validare doar cu rezervarea plătită integral (Q11, 24 h), cu validare automată la plata ulterioară; expirare; rezolvarea managerului cu motiv (aplică, redeschide, anulează + recalculare); jurnal doar-adăugare al fiecărui pas; o singură aplicare la confirmări simultane (LG-162).
+- Provocări (§6.11, la chioșc), decay zilnic și avertizări (LG-106, LG-107), închiderea sezonului cu recompense ca vouchere (Q6), Regii Junglei și cardul special, Hall of Fame, insigne, cardul Diamant automat (R-024), Meciul zilei (§6.15).
+- Turnee (§6.14): eliminatoriu, grupe + eliminatoriu, fiecare cu fiecare, Americano, Mexicano, King of the Court; tragere după rang sau la sorți cu sămânță; taxa de participare în registru; scorul la chioșc (Q28); LP × 1,5 și bonus pe fază.
+- Motor: meciurile de turneu nu au limită zilnică și nici randament descrescător (Q49, DE_CONFIRMAT); simularea neschimbată.
+- `manage.py expire_league_matches` (la 5 minute), `manage.py league_daily` (zilnic); emailuri RO/EN pentru provocări, decay și recompense.
+- `scripts/test-all` impune 100% acoperire pe ramuri și pentru `jungle/league`; 135 de teste noi (490 în backend).
+#### Reparat la revizuire
+- Managerul nu mai poate scrie un scor la o dispută (redeschide fereastra de la chioșc).
+- Meciurile terminate în același minut nu mai forțează recalcularea întregului sezon.
+- Starea salvată și recalcularea de la zero sunt identice până la ultimul caracter (ora în UTC).
+- Un sezon închis nu mai poate primi evenimente de la o cerere începută înainte de închidere.
+- Setările de tip listă de opțiuni ale motorului (al treilea refuz) sunt citite corect.
+- Grupele de turneu nu mai pot avea o singură pereche; referința bonusului de turneu încape în baza de date.
+
 ### Etapa 5 — 27.09.2026 (aprobată 27.09.2026)
 #### Adăugat
 - `jungle.cards`: card de membru cu cod QR aleatoriu și revocabil (R-020, R-022), reemitere care invalidează cardurile vechi, blocare de către personal, scanare cu codul cardului (R-025), coada de carduri de tipărit și PDF-ul CR80 cu fontul inclus (R-021), cardul Diamant cu emblemă aleasă, o singură dată (R-024, Q1).

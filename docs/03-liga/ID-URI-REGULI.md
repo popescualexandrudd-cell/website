@@ -12,7 +12,7 @@
 | LG-002 | Un meci de dublu actualizează ratingul individual al celor 4 și ratingul celor 2 perechi | motor |
 | LG-003 | Perechea e o combinație neordonată de doi jucători („ana+bogdan” = „bogdan+ana”) | motor |
 | LG-004 | O pereche nouă pornește de la media μ de dublu a celor doi, cu σ0 și plasare. **DE_CONFIRMAT** (specificația nu spune de unde pornește perechea) | motor |
-| LG-005 | Doar padel momentan; „sportul” rămâne o dimensiune pentru mai târziu | Etapa 6 |
+| LG-005 | Doar padel momentan; „sportul” rămâne o dimensiune pentru mai târziu | backend `league.matches` (doar terenuri de padel), Etapa 6 |
 
 ## 6.2 MMR
 | ID | Regula | Unde |
@@ -89,15 +89,15 @@
 ## 6.9 Fluxul de validare
 | ID | Regula | Unde |
 |---|---|---|
-| LG-090 | Stările `PROGRAMAT` … `APLICAT` și stările terminale | Etapa 6 |
-| LG-091 | Rezervarea există, e de tip meci oficial și e la club | Etapa 6 |
-| LG-092 | Toți jucătorii au scanat cardul la intrarea pe teren | Etapa 6 |
-| LG-093 | Fereastra de scor: 30 de minute după finalul rezervării (turnee: Q28) | Etapa 6 |
-| LG-094 | Un jucător introduce, toți ceilalți confirmă sau contestă | Etapa 6 / 7 |
-| LG-095 | Contestare → `DISPUTAT`; neconfirmat → `EXPIRAT` | Etapa 6 |
-| LG-096 | Validare doar cu rezervarea plătită integral (Q11: 24 de ore) | Etapa 6 |
-| LG-097 | `APLICAT`: MMR și LP prin motor, actualizări în timp real, notificări | Etapa 6 (motorul e gata) |
-| LG-098 | Verificări independente între sisteme, toate logate; doar chioșcul de ligă înregistrat | Etapa 6 / 7 |
+| LG-090 | Stările `PROGRAMAT` … `APLICAT` și stările terminale | backend `league.matches` (Etapa 6) |
+| LG-091 | Rezervarea există, e de tip meci oficial și e la club | backend `league.matches.check_booking` (Etapa 6) |
+| LG-092 | Toți jucătorii au scanat cardul la intrarea pe teren | backend `league.matches.check_scans` (Etapa 6) |
+| LG-093 | Fereastra de scor: 30 de minute după finalul rezervării (turnee: Q28) | backend `league.matches.score_window` (Etapa 6; turnee: `propose_fixture`) |
+| LG-094 | Un jucător introduce, toți ceilalți confirmă sau contestă | backend `league.matches.propose` / `respond` (Etapa 6); ecranul chioșcului: Etapa 7 |
+| LG-095 | Contestare → `DISPUTAT`; neconfirmat → `EXPIRAT` | backend `league.matches` (dispute, expirare, `resolve`) (Etapa 6) |
+| LG-096 | Validare doar cu rezervarea plătită integral (Q11: 24 de ore) | backend `league.matches._payment_gate` + cârligul de plată din registru (Etapa 6) |
+| LG-097 | `APLICAT`: MMR și LP prin motor, actualizări în timp real, notificări | backend `league.store.record` (Etapa 6); notificările: Etapa 12 |
+| LG-098 | Verificări independente între sisteme, toate logate; doar chioșcul de ligă înregistrat | backend `league.kiosk.check` + jurnalul `MatchTransition` (Etapa 6); autentificarea chioșcului: Etapa 7 |
 
 ## 6.10 Anti-abuz și eligibilitate
 | ID | Regula | Unde |
@@ -107,47 +107,52 @@
 | LG-102 | Aceiași jucători exacți în ultimele 7 zile: meciurile 1–2 100%, al 3-lea 50%, apoi 25% | motor |
 | LG-103 | Maximum 3 meciuri oficiale pe zi per jucător (ziua în ora României) | motor |
 | LG-104 | Limita de diferență de nivel: dezactivată implicit (Q5); dacă e activată, meciul devine antrenament | motor |
-| LG-105 | Detecția de anomalii (semnalare în admin, nu modifică nimic) | Etapa 6 / 12 |
+| LG-105 | Detecția de anomalii (semnalare în admin, nu modifică nimic) | Etapa 12 (detecția de anomalii, cu AI) |
 | LG-106 | Decay pentru Diamant și Maestru după 14 zile: −5 / −10 LP pe zi, cel mult până la Diamant IV; o dată pe zi | motor |
-| LG-107 | Notificare cu 3 zile înainte de decay | motor (cine), trimiterea în Etapa 12 |
-| LG-108 | Minorii excluși; fără acord GDPR nu intri în ligă | Etapa 5 / 6 |
+| LG-107 | Notificare cu 3 zile înainte de decay | motor (cine) + backend `league.daily` (emailul, Etapa 6) |
+| LG-108 | Minorii excluși; fără acord GDPR nu intri în ligă | Etapa 5 / 6 (`privacy.league_consent`, `league.services.eligible`) |
 
 ## 6.11 Provocări directe
 | ID | Regula | Unde |
 |---|---|---|
 | LG-110 | Adversarul poate fi cu maximum o treaptă peste. **DE_CONFIRMAT:** și pe aceeași treaptă | motor |
 | LG-111 | 72 de ore pentru răspuns; 2 refuzuri pe sezon; al treilea: implicit nimic (doar afișat), opțional înfrângere tehnică | motor |
-| LG-112 | Meciul se joacă în cel mult 7 zile | motor (termenul), programarea în Etapa 6 |
+| LG-112 | Meciul se joacă în cel mult 7 zile | motor (termenul) + backend `league.challenges` (Etapa 6) |
 | LG-113 | Provocatorul care câștigă primește +5 LP | motor |
 
 ## 6.12 Recompense
 | ID | Regula | Unde |
 |---|---|---|
-| LG-120 | Top 3 Regi ai Junglei: ore gratuite, mingi, card special | Etapa 6 |
-| LG-121 | 10–20% reducere pentru top 3 din fiecare rang (Q6) | Etapa 4 / 6 |
-| LG-122 | Motor de recompense configurabil per sezon | Etapa 6 |
-| LG-123 | Card fizic la promovarea în Diamant (R-024) | Etapa 5 |
+| LG-120 | Top 3 Regi ai Junglei: ore gratuite, mingi, card special | backend `league.closing` (Etapa 6) |
+| LG-121 | 10–20% reducere pentru top 3 din fiecare rang (Q6) | backend `league.closing` (vouchere, Etapa 6) |
+| LG-122 | Motor de recompense configurabil per sezon | backend `league.closing` + setarea `league.rewards` (Etapa 6) |
+| LG-123 | Card fizic la promovarea în Diamant (R-024) | Etapa 5 (cardul) + backend `league.badges` (oferta automată, Etapa 6) |
 
 ## 6.13 Sezoane
 | ID | Regula | Unde |
 |---|---|---|
-| LG-130 | Sezoane de 3 luni; „Sezonul 0 – Calibrare” (Q27) | Etapa 6 |
+| LG-130 | Sezoane de 3 luni; „Sezonul 0 – Calibrare” (Q27) | backend `league.services.activate_season` (Etapa 6) |
 | LG-131 | Resetare: LP = 0; `μ' = μ̄ + 0,75·(μ − μ̄)` (μ̄ = media clasamentului respectiv) | motor |
 | LG-132 | `σ' = min(σ0, σ + 1,5)` | motor |
 | LG-133 | 3 meciuri de re-plasare; rangul, plafonat la rangul final din sezonul anterior | motor |
-| LG-134 | Arhivarea sezonului (Hall of Fame) | Etapa 6 / 11 |
+| LG-134 | Arhivarea sezonului (Hall of Fame) | backend `league.closing` (Hall of Fame, Etapa 6); pagina de pe site: Etapa 11 |
 
 ## 6.14 Tipuri de meci
 | ID | Regula | Unde |
 |---|---|---|
 | LG-140 | Doar meciurile oficiale, de turneu și provocările ajung în motor; antrenamentele și lecțiile nu schimbă MMR sau LP | motor |
 | LG-141 | Turneu: LP × 1,5 + bonus pe fază (configurabil) | motor (`award_bonus`) |
-| LG-142 | Tablourile și formatele de turneu | Etapa 6 |
+| LG-142 | Tablourile și formatele de turneu | backend `league.draws`, `league.tournaments` (Etapa 6) |
 
 ## 6.15–6.16 Gamificare și corectitudine tehnică
 | ID | Regula | Unde |
 |---|---|---|
-| LG-150 | Insigne, Meciul zilei, grafice | Etapa 6 / 12 |
+| LG-150 | Insigne, Meciul zilei, grafice | backend `league.badges`, `league.spotlight` (Etapa 6); graficele și textul AI: Etapa 11 / 12 |
 | LG-160 | Fiecare meci aplicat produce un eveniment imutabil (valori înainte/după pentru jucători și perechi); aplicarea e idempotentă și în ordinea cronologică a finalului | motor |
 | LG-161 | Anularea unui meci = recalculare deterministă de la acel punct; identică cu recalcularea de la zero (test de proprietate) | motor |
-| LG-162 | Două confirmări simultane nu pot aplica meciul de două ori (blocare + cheie de idempotență) | Etapa 6 |
+| LG-162 | Două confirmări simultane nu pot aplica meciul de două ori (blocare + cheie de idempotență) | backend `league.matches.respond` (blocarea rândului, testată cu fire paralele, Etapa 6) |
+
+## Note din Etapa 6 (28.09.2026)
+- **LG-102, LG-103 la turnee (DE_CONFIRMAT, [Q49](../00-management/INTREBARI_DESCHISE.md#q49)):** meciurile de turneu nu intră în limita zilnică și nu au randament descrescător (sunt trase la sorți de sistem). Textul regulilor nu se schimbă; motorul aplică excepția doar tipului „turneu”. Simularea a fost rulată din nou: rapoartele din `simulari/` au rămas identice.
+- **LG-110 … LG-113 (DE_CONFIRMAT, [Q48](../00-management/INTREBARI_DESCHISE.md#q48)):** provocările se lansează și se acceptă la Chioșcul Ligii; lipsa răspunsului în 72 de ore contează ca refuz.
+

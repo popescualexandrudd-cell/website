@@ -3,7 +3,7 @@
 > Actualizat la fiecare sesiune de lucru. Prima secțiune spune mereu **unde suntem acum**.
 
 ## Unde suntem acum
-- **Etapa curentă:** Etapa 6 (integrarea ligii), începută pe 27.09.2026.
+- **Etapa curentă:** Etapa 6 (integrarea ligii), **livrată pe 28.09.2026, așteaptă aprobarea**. Raport: [verificare/etapa-6/RAPORT.md](verificare/etapa-6/RAPORT.md); exemplu de sezon cu date demo: [verificare/etapa-6/EXEMPLU.md](verificare/etapa-6/EXEMPLU.md).
 - **Etapa 5 (carduri, Apple Wallet și Google Wallet, GDPR):** aprobată de proprietar pe 27.09.2026 (merge în `main`). Raport: [verificare/etapa-5/RAPORT.md](verificare/etapa-5/RAPORT.md).
 - **Etapa 4 (bani, abonamente, corporate, vouchere, cafenea):** aprobată de proprietar pe 27.09.2026 (merge în `main`), împreună cu răspunsurile la Q9 (doar numerar), Q13, Q21 (prețuri orientative), Q35 (un pachet de firmă, 20%). Raport: [verificare/etapa-4/RAPORT.md](verificare/etapa-4/RAPORT.md).
 - **Etapa 3 (rezervări, prețuri, anulări, prezențe):** aprobată de proprietar pe 27.09.2026 (merge în `main`), împreună cu răspunsurile la Q2, Q3, Q15, Q16. Raport: [verificare/etapa-3/RAPORT.md](verificare/etapa-3/RAPORT.md).
@@ -12,7 +12,7 @@
 - **Etapa 1A:** aprobată de proprietar pe 27.09.2026 (merge în `main`). Raport: [verificare/etapa-1a/RAPORT.md](verificare/etapa-1a/RAPORT.md).
 - **Etapa 0:** aprobată de proprietar pe 26.09.2026 (tag `etapa-0`, branch `main`).
 - **Următoarea etapă:** 7 (Hardware Bridge + Chioșcul de Ligă), după aprobarea Etapei 6.
-- **Întrebări încă deschise care contează curând:** Q26 (datele firmei: subsol și texte legale), Q39 (domeniu, marcă), Q24 (furnizor de email), Q23 (modelele de hardware), Q44 (randări sau fotografii ale spațiilor), Q45 (valorile implicite ale ligii), Q46 (un text neclar din schiță); Q21 (prețurile: tarifele rămân DEMO, `DE_STABILIT`); Q24 (conturile Apple Developer și Google Wallet ale firmei — ghid în `docs/08-deploy-si-mentenanta/02-ghid-apple-google-wallet.md`); Q1 (emblemele cardului Diamant); Q30 (rezultatele publice ale meciurilor) — vezi [INTREBARI_DESCHISE.md](INTREBARI_DESCHISE.md).
+- **Întrebări încă deschise care contează curând:** Q26 (datele firmei: subsol și texte legale), Q39 (domeniu, marcă), Q24 (furnizor de email), Q23 (modelele de hardware), Q44 (randări sau fotografii ale spațiilor), Q45 (valorile implicite ale ligii), Q46 (un text neclar din schiță); Q21 (prețurile: tarifele rămân DEMO, `DE_STABILIT`); Q24 (conturile Apple Developer și Google Wallet ale firmei — ghid în `docs/08-deploy-si-mentenanta/02-ghid-apple-google-wallet.md`); Q1 (emblemele cardului Diamant); Q30 (rezultatele publice ale meciurilor); pentru liga din Etapa 6: Q6, Q11, Q27, Q28 și noile Q47–Q50 (provocări, turnee, insigne) — vezi [INTREBARI_DESCHISE.md](INTREBARI_DESCHISE.md).
 - **Branch de lucru:** `claude/hopeful-euler-rguibn` (repository `popescualexandrudd-cell/website`).
 
 ## Starea etapelor
@@ -26,7 +26,7 @@
 | 3 | Rezervări, prețuri, anulări, prezențe | nov. 2026 | **Aprobată 27.09.2026** |
 | 4 | Bani, abonamente, corporate, vouchere, cafenea | nov.–dec. 2026 | **Aprobată 27.09.2026** |
 | 5 | Carduri, Wallet, GDPR | dec. 2026 | **Aprobată 27.09.2026** |
-| 6 | Integrarea ligii | dec. 2026 | În lucru |
+| 6 | Integrarea ligii | dec. 2026 | **Livrată 28.09.2026**, așteaptă aprobarea |
 | 7 | Hardware Bridge + Chioșcul de Ligă | dec. 2026–ian. 2027 | Neîncepută |
 | 8 | Chioșcul de Plăți + afișajul cafenelei | ian. 2027 | Neîncepută |
 | 9 | Ecranele | ian. 2027 | Neîncepută |
@@ -37,6 +37,11 @@
 | 14 | Deploy, securitate, backup, hardware real | feb. 2027 | Neîncepută |
 | 15 | Beta, încărcare, instruire | feb.–mar. 2027 | Neîncepută |
 | 16 | Inaugurare și go-live | mar. 2027 | Neîncepută |
+
+## Etapa 6 — cum verifici (click cu click)
+1. Deschide [verificare/etapa-6/RAPORT.md](verificare/etapa-6/RAPORT.md) (ce s-a construit, rezultate, ce e de confirmat).
+2. Deschide [verificare/etapa-6/EXEMPLU.md](verificare/etapa-6/EXEMPLU.md): un sezon demo produs de codul real (clasament, un meci pas cu pas la chioșc, un turneu, recompense).
+3. Citește Q47–Q50 din [INTREBARI_DESCHISE.md](INTREBARI_DESCHISE.md) și răspunde unde nu ești de acord.
 
 ## Etapa 5 — cum verifici (click cu click)
 1. Pe GitHub, branch-ul `claude/hopeful-euler-rguibn`, deschide `docs/00-management/verificare/etapa-5/RAPORT.md`.
@@ -109,3 +114,4 @@
 - **27.09.2026** — Etapa 2 livrată: `packages/league-engine` (MMR Weng-Lin verificat față de openskill, nivel, plasare, ranguri, LP, validatorul de scor, meciuri neterminate, anti-abuz, decay, provocări, sezoane, recalculare deterministă); 173 de teste, 100% acoperire pe ramuri; simularea mare (500 de jucători, 50.000 de meciuri): corelație rang–nivel real 0,96–0,98; „LP așteptat” calibrat (DE_CONFIRMAT); regula la 40–40 verificată la FIP (Star Point). Întrebare nouă: Q45.
 - **27.09.2026** — Proprietarul a ales identitatea B4 „Noapte și alamă” de pe pânza de design și a trimis schița clubului. Etapa 1B, revizia 3: temă întunecată (bleumarin, alamă, os), fonturi Fraunces + Instrument Sans, arena 3D refăcută după schiță (4 terenuri 2 × 2, pasarela-lounge la 3 m între rânduri, seara), planul clubului pe site. Toate testele trec; Lighthouse mobil 94/100/100/100, desktop 100/100/100/100. Întrebare nouă: Q46.
 - **27.09.2026** — Etapele 1B și 2 aprobate de proprietar (merge în `main`; tag-urile `etapa-1b` și `etapa-2` doar local, push-ul de tag-uri e refuzat). Q46: 4 aparate Reformer momentan, pasarela la 3 m. Început Etapa 3.
+- **28.09.2026** — Etapa 6 livrată: liga legată de club (intrare, sezoane, fluxul scorului doar la Chioșcul de Ligă cu validare prin plată, provocări, decay, închiderea sezonului cu recompense, Hall of Fame, insigne, Meciul zilei, turnee în 6 formate); 490 de teste backend (135 noi), `jungle/league` cu 100% acoperire pe ramuri; exemplu de sezon demo. Întrebări noi: Q47–Q50.
