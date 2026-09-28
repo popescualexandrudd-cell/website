@@ -1,6 +1,6 @@
 # Raport de verificare — Etapa 7 (Hardware Bridge + Chioșcul Ligii)
 
-> Data: 28.09.2026. Branch: `claude/hopeful-euler-rguibn`. Starea: **livrată, așteaptă aprobarea proprietarului**.
+> Data: 28.09.2026. Branch: `claude/hopeful-euler-rguibn`. Starea: **aprobată de proprietar pe 28.09.2026** (Q51 și Q52 confirmate, fără modificări).
 
 În Etapa 6, liga știa deja tot: ce meci s-a jucat, cine confirmă, cine a plătit. Îi lipsea **locul** în care jucătorii fac asta: Chioșcul Ligii, singurul aparat din club unde se introduc și se confirmă scorurile. În Etapa 7 am construit chioșcul și tot ce îl leagă de aparatele fizice.
 
@@ -77,7 +77,7 @@ Capturi de ecran, făcute de testele automate: [repaus](ecrane/1-repaus.png), [a
    - Pentru endpoint-urile chioșcului, un test verifică faptul că acceptă doar aparate autentificate. Site-ul și telefonul primesc refuz.
    - Transmiterea scorului de la un chioșc aflat în afara rețelei clubului e refuzată și trecută în jurnal.
 
-## Ce e de confirmat (lucrăm cu varianta implicită)
+## Ce era de confirmat (confirmat de proprietar pe 28.09.2026)
 | Întrebare | Varianta folosită |
 |---|---|
 | **Q51** (nouă) jucătorul intrat în ligă după meci | meciul nu contează; refuz imediat, cu mesaj |

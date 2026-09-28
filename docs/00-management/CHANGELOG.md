@@ -4,7 +4,7 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
-### Etapa 7 — 28.09.2026 (livrată, așteaptă aprobarea)
+### Etapa 7 — 28.09.2026 (aprobată 28.09.2026; Q51 și Q52 confirmate)
 #### Adăugat
 - Autentificarea aparatelor (ADR-0012): înrolare din API cu token afișat o dată (se păstrează doar amprenta SHA-256), certificat client (mTLS) obligatoriu în producție, cheia publică a Hardware Bridge; refuzurile în jurnal, limitate pe adresă; `GET /device/whoami`.
 - API-ul Chioșcului Ligii (`/api/v1/kiosk/league/*`, doar aparate autentificate): ecranul de repaus, clasamente cu căutare, sesiunea jucătorului (60 s pe server, legată de aparat, `POST /logout`), acordul GDPR, scorul, confirmări, provocări, meciuri de turneu și validarea directorului, check-in (R-030). Cu bridge înrolat, scanările trebuie semnate (nonce, fereastră de 2 minute).
@@ -12,7 +12,7 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 - `apps/kiosk-league` (React + Vite): ecranul de repaus, sesiunea cu ieșire după 30 s, toate acțiunile din §8.2, RO/EN, tastatură pe ecran, mesaje din codurile de eroare; teste unitare și cap-coadă cu backendul și bridge-ul reale (axe).
 - `deploy/kiosk-os`: instalarea pe Debian (bridge ca serviciu, Chromium în `cage` cu politică restrictivă, pagină locală „temporar indisponibil”, watchdog, blocarea sistemului, actualizări de securitate), verificată fără instalare de `scripts/test-all`; procedura de instalare și înrolare, varianta Windows (`docs/09-hardware/`).
 - `manage.py kiosk_demo` (DEMO, refuzat în producție); `KIOSK_ALLOW_LOOPBACK` doar pentru dezvoltare.
-- LG-099 (DE_CONFIRMAT, Q51): un meci contează doar pentru jucătorii deja în ligă când s-a jucat.
+- LG-099 (Q51, confirmat): un meci contează doar pentru jucătorii deja în ligă când s-a jucat.
 #### Reparat la revizuire
 - Un jucător intrat în ligă imediat după meci bloca scorul abia la ultima confirmare (acum: refuz imediat, cu mesaj).
 - Codul motorului `league.score_tournament_unfinished` lipsea din lista de erori (test nou pentru toate codurile motorului).

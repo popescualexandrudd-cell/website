@@ -98,7 +98,7 @@
 | LG-096 | Validare doar cu rezervarea plătită integral (Q11: 24 de ore) | backend `league.matches._payment_gate` + cârligul de plată din registru (Etapa 6) |
 | LG-097 | `APLICAT`: MMR și LP prin motor, actualizări în timp real, notificări | backend `league.store.record` (Etapa 6); notificările: Etapa 12 |
 | LG-098 | Verificări independente între sisteme, toate logate; doar chioșcul de ligă înregistrat | backend `league.kiosk.check` + jurnalul `MatchTransition` (Etapa 6); autentificarea chioșcului: `devices.auth` (token, certificat client, cheia Hardware Bridge) (Etapa 7) |
-| LG-099 | Un meci contează doar pentru jucătorii care erau deja în ligă când s-a jucat (DE_CONFIRMAT, [Q51](../00-management/INTREBARI_DESCHISE.md#q51)) | backend `league.matches.check_registered_before` (Etapa 7) |
+| LG-099 | Un meci contează doar pentru jucătorii care erau deja în ligă când s-a jucat (confirmat de proprietar la 28.09.2026, [Q51](../00-management/INTREBARI_DESCHISE.md#q51)) | backend `league.matches.check_registered_before` (Etapa 7) |
 
 ## 6.10 Anti-abuz și eligibilitate
 | ID | Regula | Unde |

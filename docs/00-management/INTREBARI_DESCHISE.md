@@ -71,8 +71,8 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q48](#q48) | Provocările: unde, cine răspunde, ce înseamnă lipsa răspunsului *(nouă, Etapa 6)* | MEDIE | nimic (varianta implicită e în lucru) | REZOLVATĂ |
 | [Q49](#q49) | Turneele: limita zilnică, înscrierea, ce se vede pe site *(nouă, Etapa 6)* | MEDIE | nimic (varianta implicită e în lucru) | REZOLVATĂ |
 | [Q50](#q50) | Insignele și „Meciul zilei”: praguri și ce se afișează *(nouă, Etapa 6)* | SCĂZUTĂ | nimic (se schimbă din setări) | REZOLVATĂ |
-| [Q51](#q51) | Un jucător nou care intră în ligă imediat după meci: meciul contează? *(nouă, Etapa 7)* | SCĂZUTĂ | nimic (varianta implicită e în lucru) | DESCHISĂ |
-| [Q52](#q52) | Chioșcul Ligii: 30 de secunde până la ieșire, limbile ecranului *(nouă, Etapa 7)* | SCĂZUTĂ | nimic (se schimbă ușor) | DESCHISĂ |
+| [Q51](#q51) | Un jucător nou care intră în ligă imediat după meci: meciul contează? *(nouă, Etapa 7)* | SCĂZUTĂ | nimic (varianta implicită e în lucru) | REZOLVATĂ |
+| [Q52](#q52) | Chioșcul Ligii: 30 de secunde până la ieșire, limbile ecranului *(nouă, Etapa 7)* | SCĂZUTĂ | nimic (se schimbă ușor) | REZOLVATĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -621,17 +621,18 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q51"></a>Q51 — Un jucător nou care intră în ligă imediat după meci: meciul contează?
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Situația:** un jucător nou joacă un meci oficial, apoi semnează acordul ligii la chioșc și abia după aceea se introduce scorul. În momentul meciului, el nu era în ligă.
 - **Varianta implicită (DE_CONFIRMAT, în lucru din 28.09.2026):** meciul **nu contează** în ligă; chioșcul refuză scorul imediat, cu mesajul „X s-a înscris în ligă după acest meci, deci meciul nu poate conta în ligă”. Motivul: liga se calculează în ordinea meciurilor, iar înainte de înscriere jucătorul nu are nivel în ligă. (Fără această regulă, scorul ar fi trecut de chioșc și s-ar fi blocat abia la ultima confirmare.) Regula: LG-099.
 - **Alternativă:** meciul contează, iar înscrierea se socotește de la începutul meciului.
+- **Răspunsul proprietarului (28.09.2026):** confirmat: meciul nu contează (LG-099).
 
 ### <a id="q52"></a>Q52 — Chioșcul Ligii: 30 de secunde până la ieșire, limbile ecranului
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Variantele implicite (DE_CONFIRMAT):**
   1. Ieșirea automată după **30 de secunde** fără atingere (din §8.2), cu numărătoare inversă în ultimele 10 secunde. Serverul mai ține sesiunea încă cel mult 60 de secunde, legată de acel chioșc.
   2. Ecranul e în **română și engleză** (buton în colț); sesiunea pornește în limba aleasă de jucător în cont. §8.2 pomenește „și celelalte limbi”: se adaugă când le alegeți (textele sunt deja separate de cod).
   3. Clasamentul de repaus se schimbă la **10 secunde** între Dublu, Simplu și Perechi.
-
+- **Răspunsul proprietarului (28.09.2026):** confirmat (30 s, RO + EN, 10 s).
