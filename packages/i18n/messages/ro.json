@@ -190,7 +190,8 @@
     "devices.auth_failed": "Aparatul nu este recunoscut. Cereți personalului să-l înroleze din nou.",
     "devices.signature_invalid": "Scanarea nu a putut fi verificată. Scanează cardul din nou.",
     "devices.key_invalid": "Cheia publică a aparatului nu este validă (Ed25519, 32 de octeți, base64).",
-    "league.kiosk_session_expired": "Sesiunea a expirat. Scanează cardul din nou."
+    "league.kiosk_session_expired": "Sesiunea a expirat. Scanează cardul din nou.",
+    "league.score_tournament_unfinished": "Meciurile de turneu se joacă până la capăt: nu pot fi marcate „neterminat”."
   },
   "web": {
     "meta": {
@@ -417,6 +418,142 @@
       "necessary": "Necesare (întotdeauna active)",
       "statistics": "Statistici anonime",
       "policy": "Politica de cookies"
+    }
+  },
+  "kiosk": {
+    "title": "Chioșcul Ligii",
+    "offline": "Serviciu temporar indisponibil. Revenim automat în câteva secunde.",
+    "bridgeMissing": "Cititorul de carduri nu răspunde. Anunță recepția.",
+    "notConfigured": "Chioșcul nu este înrolat. Anunță recepția.",
+    "language": "English",
+    "idle": {
+      "scan": "Scanează cardul",
+      "scanHint": "Ține codul QR al cardului în fața cititorului.",
+      "doubles": "Clasament Dublu",
+      "singles": "Clasament Simplu",
+      "pairs": "Clasament Perechi",
+      "kings": "Regii Junglei",
+      "matchOfTheDay": "Meciul zilei",
+      "noMatchOfTheDay": "Meciul zilei se anunță în curând.",
+      "challenges": "Provocările zilei",
+      "noChallenges": "Nicio provocare deschisă.",
+      "vs": "vs",
+      "empty": "Clasamentul apare după primele meciuri ale sezonului.",
+      "court": "{court}, ora {time}",
+      "standingsButton": "Clasamente complete"
+    },
+    "session": {
+      "hello": "Salut, {name}!",
+      "logout": "Ieșire",
+      "idleSoon": "Ieșire automată în {seconds} s",
+      "position": "Locul {position}",
+      "unranked": "În plasament: încă {left} meciuri",
+      "lp": "{lp} LP",
+      "level": "Nivel {level}",
+      "played": "{played} din {minimum} meciuri minime în sezon",
+      "ladder": {
+        "doubles": "Dublu",
+        "singles": "Simplu",
+        "pairs": "Perechi"
+      },
+      "notInLeague": "Nu ești încă în ligă.",
+      "questionnaire": {
+        "none": "Completează chestionarul de nivel în cont; un antrenor îl validează.",
+        "pending": "Chestionarul de nivel așteaptă validarea unui antrenor.",
+        "validated": "Nivelul tău e validat."
+      },
+      "minor": "Liga este pentru jucători de peste 18 ani.",
+      "consentOutdated": "Acordul ligii are o versiune nouă. Citește și semnează din nou."
+    },
+    "actions": {
+      "consent": "Înscriere în ligă (GDPR)",
+      "score": "Introdu scorul",
+      "confirm": "Confirmă sau contestă",
+      "challenges": "Provocări",
+      "checkIn": "Check-in",
+      "standings": "Clasamente",
+      "fixtures": "Meciuri de turneu",
+      "back": "Înapoi",
+      "count": "{count, plural, one {# de făcut} few {# de făcut} other {# de făcut}}"
+    },
+    "consent": {
+      "title": "Acordul pentru ligă",
+      "accept": "Am citit și sunt de acord",
+      "submit": "Semnez acordul",
+      "done": "Gata! Acordul e semnat. Bine ai venit în ligă.",
+      "version": "Versiunea {version}"
+    },
+    "score": {
+      "title": "Introdu scorul",
+      "none": "Nu ai niciun meci terminat cu scorul de introdus. Scorul se poate introduce doar după meci, dacă toți jucătorii și-au scanat cardul la intrarea pe teren.",
+      "pick": "Alege meciul",
+      "booking": "{court}, {start}–{end}",
+      "closes": "Poți introduce scorul până la {time}",
+      "teams": "Echipele",
+      "teamA": "Echipa A",
+      "teamB": "Echipa B",
+      "swap": "Atinge un jucător ca să-l muți în cealaltă echipă.",
+      "set": "Setul {number}",
+      "tiebreak": "Tie-break",
+      "superTiebreak": "Super tie-break",
+      "addSet": "Adaugă setul 3",
+      "removeSet": "Șterge setul 3",
+      "unfinished": "Meciul nu s-a terminat (ex. s-a terminat timpul)",
+      "submit": "Trimite scorul",
+      "sent": "Scorul a fost trimis. Ceilalți jucători îl confirmă aici, la chioșc, scanându-și cardul.",
+      "more": "Mai mult",
+      "less": "Mai puțin",
+      "teamsInvalid": "Fiecare echipă are nevoie de cel puțin un jucător, la fel de mulți în ambele."
+    },
+    "confirm": {
+      "title": "Confirmă sau contestă",
+      "none": "Nu ai niciun scor de confirmat.",
+      "until": "Confirmă până la {time}",
+      "accept": "Confirm scorul",
+      "dispute": "Contest scorul",
+      "accepted": "Mulțumim! Ai confirmat scorul.",
+      "disputed": "Ai contestat scorul. Un administrator va verifica."
+    },
+    "challenges": {
+      "title": "Provocări",
+      "received": "Provocări primite",
+      "none": "Nu ai nicio provocare primită.",
+      "from": "De la {names}",
+      "until": "Răspunde până la {time}",
+      "accept": "Accept",
+      "refuse": "Refuz",
+      "accepted": "Ai acceptat provocarea. Rezervați terenul ca meci de provocare.",
+      "refused": "Ai refuzat provocarea.",
+      "new": "Lansează o provocare",
+      "partner": "Joci în doi? Partenerul tău scanează cardul acum.",
+      "partnerScanned": "Partener: {name}",
+      "alone": "Joc singur",
+      "pickOpponents": "Alege adversarii ({count, plural, one {# jucător} few {# jucători} other {# de jucători}})",
+      "send": "Trimite provocarea",
+      "sent": "Provocarea a fost trimisă. Adversarii primesc un email."
+    },
+    "checkIn": {
+      "done": "Bine ai venit, {name}! Check-in făcut la {time}."
+    },
+    "standings": {
+      "title": "Clasamente",
+      "search": "Caută după nume",
+      "none": "Niciun jucător găsit.",
+      "clear": "Șterge",
+      "space": "Spațiu",
+      "notEligible": "sub minimul de meciuri"
+    },
+    "fixtures": {
+      "title": "Meciuri de turneu",
+      "none": "Nu ai niciun meci de turneu de marcat aici.",
+      "phase": "{tournament} · {phase}",
+      "finished": "Meciul s-a terminat",
+      "enterScore": "Introdu scorul",
+      "markedFinished": "Meciul e marcat ca terminat. Introduceți scorul în 30 de minute."
+    },
+    "errors": {
+      "generic": "Ceva n-a mers. Încearcă din nou sau anunță recepția.",
+      "fault": "Aparatul are o problemă ({code}). Anunță recepția."
     }
   }
 }

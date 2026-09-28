@@ -3,8 +3,8 @@ registered League Kiosk, and the server checks it every time: the device (a Leag
 active, of the booking's club) and the network it calls from. Any other source (website,
 phone, admin, AI, another device) is refused and the attempt is logged.
 
-The kiosk's own authentication (client certificate and device token) is added in Stage 7;
-the device reaches these services already identified.
+The kiosk's own authentication (device token, client certificate in production) happens in
+`jungle.devices.auth`; the device reaches these services already identified.
 """
 
 from __future__ import annotations
@@ -12,6 +12,7 @@ from __future__ import annotations
 import ipaddress
 import uuid
 
+from django.conf import settings
 from django.http import HttpRequest
 
 from jungle.audit import services as audit
@@ -26,6 +27,8 @@ def in_club_network(ip: str) -> bool:
         address = ipaddress.ip_address(ip)
     except ValueError:
         return False
+    if settings.KIOSK_ALLOW_LOOPBACK and address.is_loopback:
+        return True  # development and end-to-end tests only (refused in production)
     return any(
         address in ipaddress.ip_network(network) for network in get_config("league.kiosk_networks")
     )

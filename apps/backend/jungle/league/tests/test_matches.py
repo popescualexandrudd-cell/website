@@ -311,10 +311,14 @@ def test_invariant_1_scores_only_at_the_registered_league_kiosk(
     assert not LeagueMatch.objects.exists()
 
 
-def test_invariant_1_club_network(db: None) -> None:
+def test_invariant_1_club_network(db: None, settings: Any) -> None:
     assert kiosk_guard.in_club_network("192.168.10.20")
     assert not kiosk_guard.in_club_network("8.8.8.8")
     assert not kiosk_guard.in_club_network("nu-e-o-adresa")
+    assert not kiosk_guard.in_club_network("127.0.0.1")
+    settings.KIOSK_ALLOW_LOOPBACK = True  # development only
+    assert kiosk_guard.in_club_network("127.0.0.1")
+    assert not kiosk_guard.in_club_network("8.8.8.8")
 
 
 def test_invariant_1_confirmations_only_at_the_kiosk(

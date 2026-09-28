@@ -330,3 +330,22 @@ def test_listeners_are_registered_once_and_models_read_well(
     with pytest.raises(DomainError) as exc:
         services.active_season(season.location)
     assert exc.value.code is ErrorCode.LEAGUE_NO_ACTIVE_SEASON
+
+
+def test_every_engine_error_code_is_translated() -> None:
+    """Each stable code the engine raises is listed in core/errors.py (and so translated)."""
+    import re
+    from pathlib import Path
+
+    import jungle_league
+
+    from jungle.core.errors import ErrorCode
+
+    source = Path(jungle_league.__file__).parent
+    raised = {
+        code
+        for path in source.glob("*.py")
+        for code in re.findall(r'"(league\.[a-z_]+)"', path.read_text())
+    }
+    assert raised
+    assert sorted(raised - {c.value for c in ErrorCode}) == []

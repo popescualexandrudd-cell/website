@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 
 import dj_database_url
+from corsheaders.defaults import default_headers as default_cors_headers
 from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -173,8 +174,11 @@ CSRF_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_SECURE = IS_PRODUCTION_LIKE
 CSRF_COOKIE_DOMAIN = env("CSRF_COOKIE_DOMAIN")
 CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS")
-CORS_ALLOWED_ORIGINS = env_list("CORS_ALLOWED_ORIGINS", "http://localhost:3000")
+CORS_ALLOWED_ORIGINS = env_list(
+    "CORS_ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:5174"
+)  # the website and the League Kiosk (Stage 7)
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = (*default_cors_headers, "x-device-token")
 
 # Security headers (§12.1). TLS is terminated by Caddy (ADR-0015).
 SECURE_CONTENT_TYPE_NOSNIFF = True
@@ -193,6 +197,11 @@ DEVICE_CERT_HEADER = os.environ.get("DEVICE_CERT_HEADER", "HTTP_X_CLIENT_CERT_SH
 DEVICE_MTLS_REQUIRED = env_bool("DEVICE_MTLS_REQUIRED", IS_PRODUCTION_LIKE)
 # How long a signed message from a Hardware Bridge is accepted (seconds, anti-replay).
 BRIDGE_MESSAGE_WINDOW_SECONDS = env_int("BRIDGE_MESSAGE_WINDOW_SECONDS", 120)
+# Development and the end-to-end tests only: a League Kiosk on this machine (127.0.0.1) counts
+# as on the club's network. Refused in staging and production.
+KIOSK_ALLOW_LOOPBACK = env_bool("KIOSK_ALLOW_LOOPBACK", False)
+if KIOSK_ALLOW_LOOPBACK and IS_PRODUCTION_LIKE:
+    raise ImproperlyConfigured("KIOSK_ALLOW_LOOPBACK is for development only")
 
 # Email (adapter = Django email backend; provider still to be chosen, Q24)
 EMAIL_BACKEND = env(

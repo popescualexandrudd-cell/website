@@ -202,6 +202,7 @@ class ErrorCode(StrEnum):
     DEVICES_SIGNATURE_INVALID = "devices.signature_invalid"
     DEVICES_KEY_INVALID = "devices.key_invalid"
     LEAGUE_KIOSK_SESSION_EXPIRED = "league.kiosk_session_expired"
+    LEAGUE_SCORE_TOURNAMENT_UNFINISHED = "league.score_tournament_unfinished"
 
 
 class DomainError(Exception):

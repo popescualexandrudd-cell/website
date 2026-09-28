@@ -190,7 +190,8 @@
     "devices.auth_failed": "This device is not recognised. Ask the staff to enrol it again.",
     "devices.signature_invalid": "The scan could not be verified. Scan the card again.",
     "devices.key_invalid": "The device's public key is not valid (Ed25519, 32 bytes, base64).",
-    "league.kiosk_session_expired": "Your session has expired. Please scan your card again."
+    "league.kiosk_session_expired": "Your session has expired. Please scan your card again.",
+    "league.score_tournament_unfinished": "Tournament matches are played to the end: they cannot be marked unfinished."
   },
   "web": {
     "meta": {
@@ -417,6 +418,142 @@
       "necessary": "Necessary (always on)",
       "statistics": "Anonymous statistics",
       "policy": "Cookie policy"
+    }
+  },
+  "kiosk": {
+    "title": "League Kiosk",
+    "offline": "Service temporarily unavailable. We will be back automatically in a few seconds.",
+    "bridgeMissing": "The card reader is not responding. Please tell the front desk.",
+    "notConfigured": "This kiosk is not enrolled. Please tell the front desk.",
+    "language": "Română",
+    "idle": {
+      "scan": "Scan your card",
+      "scanHint": "Hold your card's QR code in front of the reader.",
+      "doubles": "Doubles standings",
+      "singles": "Singles standings",
+      "pairs": "Pairs standings",
+      "kings": "Kings of the Jungle",
+      "matchOfTheDay": "Match of the day",
+      "noMatchOfTheDay": "The Match of the day will be announced soon.",
+      "challenges": "Today's challenges",
+      "noChallenges": "No open challenges.",
+      "vs": "vs",
+      "empty": "The standings appear after the season's first matches.",
+      "court": "{court}, at {time}",
+      "standingsButton": "Full standings"
+    },
+    "session": {
+      "hello": "Hi, {name}!",
+      "logout": "Log out",
+      "idleSoon": "Logging out in {seconds} s",
+      "position": "Place {position}",
+      "unranked": "In placement: {left} matches to go",
+      "lp": "{lp} LP",
+      "level": "Level {level}",
+      "played": "{played} of {minimum} minimum matches this season",
+      "ladder": {
+        "doubles": "Doubles",
+        "singles": "Singles",
+        "pairs": "Pairs"
+      },
+      "notInLeague": "You are not in the league yet.",
+      "questionnaire": {
+        "none": "Fill in the level questionnaire in your account; a coach validates it.",
+        "pending": "Your level questionnaire is waiting for a coach to validate it.",
+        "validated": "Your level is validated."
+      },
+      "minor": "The league is for players over 18.",
+      "consentOutdated": "The league consent has a new version. Please read and sign it again."
+    },
+    "actions": {
+      "consent": "Join the league (GDPR)",
+      "score": "Enter the score",
+      "confirm": "Confirm or dispute",
+      "challenges": "Challenges",
+      "checkIn": "Check in",
+      "standings": "Standings",
+      "fixtures": "Tournament matches",
+      "back": "Back",
+      "count": "{count, plural, one {# to do} other {# to do}}"
+    },
+    "consent": {
+      "title": "League consent",
+      "accept": "I have read it and I agree",
+      "submit": "Sign the consent",
+      "done": "Done! The consent is signed. Welcome to the league.",
+      "version": "Version {version}"
+    },
+    "score": {
+      "title": "Enter the score",
+      "none": "You have no finished match to enter a score for. A score can be entered only after the match, if every player scanned their card when entering the court.",
+      "pick": "Choose the match",
+      "booking": "{court}, {start}–{end}",
+      "closes": "You can enter the score until {time}",
+      "teams": "Teams",
+      "teamA": "Team A",
+      "teamB": "Team B",
+      "swap": "Tap a player to move them to the other team.",
+      "set": "Set {number}",
+      "tiebreak": "Tie-break",
+      "superTiebreak": "Super tie-break",
+      "addSet": "Add set 3",
+      "removeSet": "Remove set 3",
+      "unfinished": "The match did not finish (e.g. time ran out)",
+      "submit": "Send the score",
+      "sent": "The score was sent. The other players confirm it here, at the kiosk, by scanning their card.",
+      "more": "More",
+      "less": "Less",
+      "teamsInvalid": "Each team needs at least one player, the same number on both sides."
+    },
+    "confirm": {
+      "title": "Confirm or dispute",
+      "none": "You have no score to confirm.",
+      "until": "Confirm by {time}",
+      "accept": "Confirm the score",
+      "dispute": "Dispute the score",
+      "accepted": "Thank you! You confirmed the score.",
+      "disputed": "You disputed the score. An administrator will check it."
+    },
+    "challenges": {
+      "title": "Challenges",
+      "received": "Challenges received",
+      "none": "You have no challenges.",
+      "from": "From {names}",
+      "until": "Answer by {time}",
+      "accept": "Accept",
+      "refuse": "Refuse",
+      "accepted": "You accepted the challenge. Book the court as a challenge match.",
+      "refused": "You refused the challenge.",
+      "new": "Issue a challenge",
+      "partner": "Playing as a pair? Your partner scans their card now.",
+      "partnerScanned": "Partner: {name}",
+      "alone": "I play alone",
+      "pickOpponents": "Choose the opponents ({count, plural, one {# player} other {# players}})",
+      "send": "Send the challenge",
+      "sent": "The challenge was sent. The opponents get an email."
+    },
+    "checkIn": {
+      "done": "Welcome, {name}! Checked in at {time}."
+    },
+    "standings": {
+      "title": "Standings",
+      "search": "Search by name",
+      "none": "No player found.",
+      "clear": "Clear",
+      "space": "Space",
+      "notEligible": "below the minimum of matches"
+    },
+    "fixtures": {
+      "title": "Tournament matches",
+      "none": "You have no tournament match to mark here.",
+      "phase": "{tournament} · {phase}",
+      "finished": "The match is over",
+      "enterScore": "Enter the score",
+      "markedFinished": "The match is marked as finished. Enter the score within 30 minutes."
+    },
+    "errors": {
+      "generic": "Something went wrong. Try again or tell the front desk.",
+      "fault": "The device has a problem ({code}). Please tell the front desk."
     }
   }
 }
