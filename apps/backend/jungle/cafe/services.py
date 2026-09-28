@@ -24,7 +24,11 @@ from jungle.cafe.models import CafeCategory, CafeOrder, CafeOrderLine, CafeProdu
 from jungle.configuration.models import Marker
 from jungle.core import clock
 from jungle.core.errors import DomainError, ErrorCode
+from jungle.core.http import client_ip
 from jungle.core.permissions import Action
+from jungle.devices.auth import device_of
+from jungle.devices.models import Device, DeviceKind
+from jungle.devices.network import in_club_network
 from jungle.ledger import fiscal
 from jungle.ledger.models import (
     AccountKind,
@@ -362,3 +366,63 @@ def ready_numbers(location: Location) -> list[int]:
         .order_by("ready_at")
         .values_list("number", flat=True)
     )
+
+
+# ---------------------------------------------------------------- the café display (§8.7)
+def display_guard(request: HttpRequest) -> Device:
+    """An active café display of the club, on the club's network."""
+    device = device_of(request)
+    current = Device.objects.filter(
+        pk=device.pk, kind=DeviceKind.CAFE_DISPLAY, is_active=True
+    ).first()
+    if current is None or not in_club_network(client_ip(request) or ""):
+        audit.record(
+            audit.actor_from_request(request),
+            "cafe.display_refused",
+            after={"device": str(device.pk), "ip": client_ip(request) or ""},
+        )
+        raise DomainError(ErrorCode.AUTH_FORBIDDEN, status=403)
+    return current
+
+
+def display_queue(device: Device) -> QuerySet[CafeOrder]:
+    return (
+        CafeOrder.objects.filter(
+            location_id=device.location_id,
+            day=clock.today_local(),
+            status__in=(OrderStatus.NEW, OrderStatus.PREPARING, OrderStatus.READY),
+        )
+        .prefetch_related("lines")
+        .order_by("created_at")
+    )
+
+
+def advance_at_display(
+    request: HttpRequest, device: Device, order_id: uuid.UUID, to_status: str
+) -> CafeOrder:
+    """The bar taps the order on the display: new → preparing → ready → picked up. When it is
+    ready, its number appears on the lobby screens (§8.5, §8.7)."""
+    with transaction.atomic():
+        order = (
+            CafeOrder.objects.select_for_update()
+            .filter(pk=order_id, location_id=device.location_id)
+            .first()
+        )
+        if order is None:
+            raise DomainError(ErrorCode.CAFE_ORDER_NOT_FOUND, status=404)
+        if NEXT_STATUS.get(OrderStatus(order.status)) != to_status:
+            raise DomainError(ErrorCode.CAFE_INVALID_TRANSITION, status=409)
+        order.status = to_status
+        now = clock.now()
+        if to_status == OrderStatus.READY:
+            order.ready_at = now
+        elif to_status == OrderStatus.PICKED_UP:
+            order.picked_up_at = now
+        order.save()
+        audit.record(
+            audit.actor_from_request(request),
+            "cafe.order_advanced",
+            target=order,
+            after={"status": to_status, "number": order.number},
+        )
+    return order

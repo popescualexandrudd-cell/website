@@ -22,6 +22,9 @@ from jungle.cards.api import me_router as cards_router
 from jungle.cards.api import public_router as cards_public_router
 from jungle.cards.api import staff_router as cards_staff_router
 from jungle.cards.wallet_api import router as apple_wallet_router
+from jungle.checkout.api import display_router as cafe_display_router
+from jungle.checkout.api import router as payments_kiosk_router
+from jungle.checkout.api import staff_router as checkout_staff_router
 from jungle.configuration.api import public_router as config_public_router
 from jungle.configuration.api import staff_router as config_staff_router
 from jungle.core.api import router as health_router
@@ -99,6 +102,9 @@ api.add_router("/league", league_public_router)
 api.add_router("/league", league_me_router)
 api.add_router("/staff", league_staff_router)
 api.add_router("/kiosk/league", league_kiosk_router)
+api.add_router("/kiosk/payments", payments_kiosk_router)
+api.add_router("/staff", checkout_staff_router)
+api.add_router("/device/cafe", cafe_display_router)
 
 
 def _error(

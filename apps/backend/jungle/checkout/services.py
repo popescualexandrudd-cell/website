@@ -22,7 +22,7 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any
 
 from django.db import transaction
@@ -71,6 +71,7 @@ CHECKOUT_EVENTS = (
 )
 MAX_EVENTS = 100  # per request
 NOTICE_KIND = "checkout.cash_attention"
+FAULT_NOTICE = "checkout.device_fault"
 
 
 def cash_box(device: Device) -> LedgerAccount:
@@ -811,3 +812,42 @@ def pay_with_balance(
         device_id=device.pk,
     )
     return {"amount": payment.amount, "order": None}
+
+
+# ---------------------------------------------------------------- device faults
+FAULTS = frozenset(
+    {
+        "note_jam",
+        "insufficient_change",
+        "low_change",
+        "cassette_full",
+        "power_loss",
+        "paper_out",
+        "offline",
+        "note_rejected",
+    }
+)
+FAULT_REPEAT = timedelta(minutes=30)
+
+
+def report_fault(request: HttpRequest, code: str) -> None:
+    """§8.3: "rest scăzut", "casetă plină", "blocaj bancnotă"… reach the staff (once per half
+    hour per device and fault, so a jam does not flood them)."""
+    device = guard(request)
+    if code not in FAULTS:
+        raise DomainError(ErrorCode.VALIDATION_INVALID, params={"field": "code"})
+    recent = StaffNotice.objects.filter(
+        location_id=device.location_id,
+        kind=FAULT_NOTICE,
+        payload__device=str(device.pk),
+        payload__code=code,
+        created_at__gte=clock.now() - FAULT_REPEAT,
+    )
+    if not recent.exists():
+        StaffNotice.objects.create(
+            location_id=device.location_id,
+            recipient_role=Role.RECEPTION,
+            kind=FAULT_NOTICE,
+            payload={"device": str(device.pk), "device_name": device.name, "code": code},
+            created_at=clock.now(),
+        )
