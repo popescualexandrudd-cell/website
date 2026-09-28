@@ -31,7 +31,8 @@ class Scanner(ABC):
 
 class CashDevice(ABC):
     """Banknote acceptor and recycler that gives change (SSP, ccTalk, MDB: checked on the
-    model bought, never assumed)."""
+    model bought, never assumed). A note first waits in escrow; the bridge then keeps it
+    (`stack`) or gives it back (`return_escrow`)."""
 
     @abstractmethod
     async def enable(self) -> None:
@@ -43,11 +44,23 @@ class CashDevice(ABC):
 
     @abstractmethod
     async def next_note(self) -> int:
-        """Waits for the next note accepted and stacked; returns its value in bani."""
+        """Waits for the next valid note and holds it in escrow; returns its value in bani."""
+
+    @abstractmethod
+    async def stack(self) -> None:
+        """Keeps the note in escrow (into the recycler, or the cassette)."""
+
+    @abstractmethod
+    async def return_escrow(self) -> None:
+        """Gives the note in escrow back to the customer."""
 
     @abstractmethod
     def can_dispense(self, amount: int) -> bool:
         """Whether the recycler holds exactly this change (asked before a payment starts)."""
+
+    @abstractmethod
+    def dispensable(self, amount: int) -> int:
+        """The largest amount, at most `amount`, the recycler can give exactly."""
 
     @abstractmethod
     async def dispense(self, amount: int) -> dict[int, int]:
@@ -56,6 +69,22 @@ class CashDevice(ABC):
     @abstractmethod
     def levels(self) -> dict[int, int]:
         """The notes available for change, {value: count}."""
+
+    @abstractmethod
+    def cassette_space(self) -> int:
+        """How many more notes the cassette takes."""
+
+    @abstractmethod
+    def cassette_amount(self) -> int:
+        """The value of the notes in the cassette (not used for change), in bani."""
+
+    @abstractmethod
+    async def refill(self, notes: dict[int, int]) -> int:
+        """Staff put notes for change in; returns their value."""
+
+    @abstractmethod
+    async def empty_cassette(self) -> int:
+        """Staff take the cassette's notes out; returns their value."""
 
 
 @dataclass(frozen=True)

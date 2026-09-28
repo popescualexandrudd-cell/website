@@ -198,6 +198,14 @@ async def test_stopping_and_a_jammed_note(bridge: Bridge, server: Server) -> Non
     await page.ask("sim.fault", device="cash", fault="note_jam")
     await page.ask("sim.insert", amount=10 * LEU)
     assert await page.next() == {"event": "fault", "device": "cash", "code": "note_jam"}
+
+    cash.fail("insufficient_change")  # no change at all: reported as 0, signed
+    await pay(page, server, "txn-nochange", LEU, [5 * LEU])
+    await page.next(), await page.next()
+    none = await page.order(
+        server, "cash.dispense", txn="txn-nochange", amount=4 * LEU, allow_partial=True
+    )
+    assert none["given"] == 0 and none["signed"]["payload"]["fault"] == ""
     assert not cash.enabled and bridge.journal.is_open("txn-0002")  # the server decides
     assert (await page.ask("sim.insert", amount=3 * LEU))["error"] == "note_rejected"
 
@@ -221,3 +229,161 @@ async def test_after_a_power_cut_the_bridge_reconciles(make_bridge: Any, server:
     (event,) = after.recovered
     assert (event.txn, event.kind, event.amount) == ("txn-0001", j.INTERRUPTED, 10 * LEU)
     assert after.journal.open_transactions() == []
+
+
+# ---------------------------------------------------------------- Stage 8: the Payments Kiosk
+LINES = [{"name": "Teren 1, 90 min", "quantity": 1, "unit_price": 12 * LEU, "vat_group": "A"}]
+
+
+async def pay(
+    page: Page, server: Server, txn: str, due: int, notes: list[int], **extra: Any
+) -> None:
+    started = await page.order(server, "cash.accept", txn=txn, amount=due, **extra)
+    assert started["ok"], started
+    for value in notes:
+        await page.ask("sim.insert", amount=value)
+
+
+async def test_exact_only_gives_back_notes_that_need_change(bridge: Bridge, server: Server) -> None:
+    page = Page(bridge)
+    await pay(
+        page,
+        server,
+        "txn-exact",
+        12 * LEU,
+        [50 * LEU, 10 * LEU, 5 * LEU, LEU, LEU],
+        exact_only=True,
+    )
+    events = [await page.next() for _ in range(5)]
+    assert events[0] == {"event": "cash.returned", "amount": 50 * LEU}
+    assert events[2] == {"event": "cash.returned", "amount": 5 * LEU}
+    assert [e["total"] for e in events if e["event"] == "cash.accepted"] == [
+        10 * LEU,
+        11 * LEU,
+        12 * LEU,
+    ]
+    assert (await page.next())["event"] == "cash.complete"
+
+
+async def test_partial_change_is_reported_signed(bridge: Bridge, server: Server) -> None:
+    page = Page(bridge)
+    cash = bridge.devices.cash
+    assert isinstance(cash, SimCash)
+    cash.stock = {LEU: 2, 5 * LEU: 0, 10 * LEU: 0, 50 * LEU: 0}
+    await pay(page, server, "txn-change", 12 * LEU, [50 * LEU])
+    await page.next(), await page.next()
+    change = await page.order(
+        server, "cash.dispense", txn="txn-change", amount=38 * LEU, allow_partial=True
+    )
+    assert change["given"] == 2 * LEU
+    payload = change["signed"]["payload"]
+    assert (payload["amount"], payload["asked"], payload["fault"]) == (2 * LEU, 38 * LEU, "")
+    again = await page.order(
+        server, "cash.dispense", txn="txn-change", amount=LEU, allow_partial=True
+    )
+    assert again["error"] == "already_dispensed"
+
+    await pay(page, server, "txn-jammed", LEU, [LEU])
+    await page.next(), await page.next()
+    cash.stock[LEU] = 5
+    cash.fail("note_jam")
+    jammed = await page.order(
+        server, "cash.dispense", txn="txn-jammed", amount=LEU, allow_partial=True
+    )
+    assert jammed["given"] == 0 and jammed["signed"]["payload"]["fault"] == "note_jam"
+    assert await page.next() == {"event": "fault", "device": "cash", "code": "note_jam"}
+
+
+async def test_change_quote_before_paying(bridge: Bridge) -> None:
+    page = Page(bridge)
+    full = await page.ask("cash.quote", amount=12 * LEU)
+    assert full["change_guaranteed"] is True and full["exact_possible"] is True
+    bani = await page.ask("cash.quote", amount=1234)
+    assert bani["change_guaranteed"] is False and bani["exact_possible"] is False
+    cash = bridge.devices.cash
+    assert isinstance(cash, SimCash)
+    cash.stock = {LEU: 1, 5 * LEU: 0, 10 * LEU: 0, 50 * LEU: 0}
+    assert (await page.ask("cash.quote", amount=12 * LEU))["change_guaranteed"] is False
+    health = await page.ask("health")
+    assert "low_change" in health["alerts"]
+    cash.cassette = [100 * LEU] * (cash.capacity - 1)
+    assert "cassette_full" in (await page.ask("health"))["alerts"]
+
+
+async def test_staff_operations(bridge: Bridge, server: Server) -> None:
+    page = Page(bridge)
+    cash = bridge.devices.cash
+    assert isinstance(cash, SimCash)
+    refill = await page.order(server, "cash.refill", txn="op-refill-1", notes={str(LEU): 10})
+    assert refill["signed"]["payload"]["amount"] == 10 * LEU and cash.levels()[LEU] == 30
+    used = await page.order(server, "cash.refill", txn="op-refill-1", notes={str(LEU): 1})
+    assert used["error"] == "txn_used"
+    for notes in (None, {}, {"x": 1}, {str(LEU): 0}, {str(LEU): True}):
+        bad = await page.order(server, "cash.refill", txn=f"op-bad-{id(notes)}", notes=notes)
+        assert bad["error"] == "invalid"
+    wrong = await page.order(server, "cash.refill", txn="op-refill-2", notes={str(200 * LEU): 1})
+    assert wrong["error"] == "not_recycled"
+    cash.cassette = [100 * LEU, 200 * LEU]
+    emptied = await page.order(server, "cash.empty", txn="op-empty-1")
+    assert emptied["signed"]["payload"]["amount"] == 300 * LEU and cash.cassette == []
+    counted = await page.order(server, "cash.count", txn="op-count-1")
+    payload = counted["signed"]["payload"]
+    assert payload["amount"] == sum(v * n for v, n in cash.levels().items())
+    assert payload["cassette"] == 0 and payload["recycler"][str(LEU)] == 30
+    z = await page.order(server, "fiscal.z", txn="op-zreport-1")
+    assert z["number"] == "SIM-Z-0001" and z["signed"]["payload"]["type"] == "fiscal.z"
+
+
+async def test_fiscal_receipt_once_per_transaction(bridge: Bridge, server: Server) -> None:
+    page = Page(bridge)
+    unknown = await page.order(
+        server, "fiscal.print", txn="txn-none-9", lines=LINES, paid={"cash": 1200}
+    )
+    assert unknown["error"] == "txn_unknown"
+    await pay(page, server, "txn-receipt", 12 * LEU, [10 * LEU, LEU, LEU])
+    for _ in range(4):
+        await page.next()
+    for lines in (
+        None,
+        [],
+        [{"name": "x"}],
+        [{**LINES[0], "vat_group": "Z"}],
+        [LINES[0]] * 61,
+        ["x"],
+    ):
+        bad = await page.order(
+            server, "fiscal.print", txn="txn-receipt", lines=lines, paid={"cash": 1200}
+        )
+        assert bad["error"] == "invalid"
+    for paid in (None, {"cash": -1}, {"cash": True}):
+        bad = await page.order(server, "fiscal.print", txn="txn-receipt", lines=LINES, paid=paid)
+        assert bad["error"] == "invalid"
+    await page.ask("sim.fault", device="fiscal", fault="paper_out")
+    jam = await page.order(
+        server, "fiscal.print", txn="txn-receipt", lines=LINES, paid={"cash": 1200}
+    )
+    assert jam["error"] == "paper_out"
+    await page.ask("sim.fault", device="fiscal", fault=None)
+    printed = await page.order(
+        server, "fiscal.print", txn="txn-receipt", lines=LINES, paid={"cash": 1200}
+    )
+    assert printed["receipt"] == "SIM-000001"
+    assert printed["signed"]["payload"]["receipt"] == "SIM-000001"
+    again = await page.order(
+        server, "fiscal.print", txn="txn-receipt", lines=LINES, paid={"cash": 1200}
+    )
+    assert again["error"] == "already_printed"
+
+
+async def test_journal_sync_with_the_servers_acknowledgement(
+    bridge: Bridge, server: Server
+) -> None:
+    page = Page(bridge)
+    await page.order(server, "cash.refill", txn="op-refill-9", notes={str(LEU): 1})
+    pending = (await page.ask("journal.pending"))["events"]
+    assert len(pending) == 1
+    ids = [pending[0]["payload"]["event"]]
+    assert (await page.order(server, "journal.ack", ids=ids))["pending"] == 0
+    assert (await page.order(server, "journal.ack", ids="x"))["error"] == "invalid"
+    unsigned = await page.ask("journal.ack", command={"payload": {"ids": ids}})
+    assert unsigned["error"] == "signature"

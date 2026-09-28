@@ -24,25 +24,48 @@ async def test_scanner_reads_what_is_fed() -> None:
     assert await scanner.read() == "CARD-1"
 
 
-async def test_cash_accepts_recycles_and_stacks() -> None:
+async def test_cash_escrow_recycles_stacks_and_returns() -> None:
     cash = SimCash({LEU: 0, 5 * LEU: 0}, capacity=1)
     cash.insert(5 * LEU)
-    with pytest.raises(DeviceFault, match="disabled"):  # the acceptor is off
+    with pytest.raises(DeviceFault, match="disabled"):  # the acceptor is off: handed back
         await cash.next_note()
+    assert cash.returned == [5 * LEU]
     await cash.enable()
     cash.insert(5 * LEU)
     assert await cash.next_note() == 5 * LEU
+    assert (cash.escrow,) == (5 * LEU,)  # a tuple: mypy must not narrow the attribute
+    await cash.stack()
     assert cash.levels() == {LEU: 0, 5 * LEU: 1}  # kept for change
+    with pytest.raises(DeviceFault, match="no_escrow"):
+        await cash.stack()
     cash.insert(100 * LEU)
     assert await cash.next_note() == 100 * LEU
-    assert cash.cassette == 1
+    await cash.stack()
+    assert (cash.cassette_amount(), cash.cassette_space()) == (100 * LEU, 0)
     cash.insert(100 * LEU)
     with pytest.raises(DeviceFault, match="cassette_full"):
         await cash.next_note()
+    cash.insert(LEU)  # a note used for change still fits (it goes to the recycler)
+    await cash.return_escrow()  # nothing in escrow: nothing happens
+    assert await cash.next_note() == LEU
+    await cash.return_escrow()
+    assert cash.returned[-1] == LEU and cash.escrow is None
     with pytest.raises(DeviceFault, match="note_rejected"):
         cash.insert(3 * LEU)
+    assert await cash.empty_cassette() == 100 * LEU and cash.cassette_amount() == 0
+    assert await cash.refill({LEU: 10}) == 10 * LEU and cash.levels()[LEU] == 10
+    with pytest.raises(DeviceFault, match="not_recycled"):
+        await cash.refill({200 * LEU: 1})
     await cash.disable()
     assert not cash.enabled
+
+
+async def test_partial_change() -> None:
+    cash = SimCash({LEU: 2, 5 * LEU: 1, 10 * LEU: 0, 50 * LEU: 0})
+    assert cash.dispensable(20 * LEU) == 7 * LEU
+    assert cash.dispensable(4 * LEU) == 2 * LEU
+    cash.fail("insufficient_change")
+    assert cash.dispensable(4 * LEU) == 0
 
 
 @pytest.mark.parametrize("fault", ["note_jam", "power_loss", "cassette_full"])

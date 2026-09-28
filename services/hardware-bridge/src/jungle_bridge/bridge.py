@@ -26,8 +26,10 @@ from typing import Any
 
 from jungle_bridge import journal as cash_journal
 from jungle_bridge.config import Settings
-from jungle_bridge.drivers.base import DeviceFault, Devices
+from jungle_bridge.drivers.base import DeviceFault, Devices, ReceiptLine
 from jungle_bridge.drivers.simulator import (
+    ACCEPTED,
+    LEU,
     SimCash,
     SimFiscalPrinter,
     SimReceiptPrinter,
@@ -42,6 +44,31 @@ Send = Callable[[str], Awaitable[None]]
 MAX_RECEIPT_LINES = 60
 MAX_LINE = 64
 MAX_AMOUNT = 1_000_000  # 10 000 RON: far above anything paid at a kiosk
+MAX_PENDING = 100
+LOW_CHANGE_NOTES = 5  # fewer notes of a value for change: "rest scăzut" (§8.3)
+CASSETTE_ALMOST_FULL = 20  # notes of space left: "casetă plină"
+
+
+def _receipt_lines(value: Any) -> list[ReceiptLine]:
+    if not isinstance(value, list) or not 0 < len(value) <= MAX_RECEIPT_LINES:
+        raise Refused("invalid")
+    lines = []
+    for item in value:
+        if (
+            not isinstance(item, dict)
+            or not isinstance(item.get("name"), str)
+            or not 0 < len(item["name"]) <= 40
+            or not isinstance(item.get("quantity"), int)
+            or not 0 < item["quantity"] <= 99
+            or not isinstance(item.get("unit_price"), int)
+            or not 0 <= item["unit_price"] <= MAX_AMOUNT
+            or item.get("vat_group") not in ("A", "B", "C", "D", "E")
+        ):
+            raise Refused("invalid")
+        lines.append(
+            ReceiptLine(item["name"], item["quantity"], item["unit_price"], item["vat_group"])
+        )
+    return lines
 
 
 class Refused(Exception):
@@ -101,18 +128,25 @@ class Bridge:
             code = await self.devices.scanner.read()
             await self.broadcast({"event": "scan", "signed": self.signer.sign("scan", code=code)})
 
-    async def _collect(self, txn: str, due: int) -> None:
+    async def _collect(self, txn: str, due: int, exact_only: bool) -> None:
         cash = self.devices.cash
         try:
             while self.journal.total(txn, cash_journal.ACCEPTED) < due:
                 value = await cash.next_note()
+                total = self.journal.total(txn, cash_journal.ACCEPTED)
+                if exact_only and total + value > due:
+                    # "Exact amount only": a note that would need change goes back.
+                    await cash.return_escrow()
+                    await self.broadcast({"event": "cash.returned", "amount": value})
+                    continue
+                await cash.stack()
                 # On disk first (ADR-0013): only then does anyone hear about the note.
                 event = self.journal.append(txn, cash_journal.ACCEPTED, value)
                 await self.broadcast(
                     {
                         "event": "cash.accepted",
                         "signed": event.envelope,
-                        "total": self.journal.total(txn, cash_journal.ACCEPTED),
+                        "total": total + value,
                         "due": due,
                     }
                 )
@@ -153,6 +187,14 @@ class Bridge:
             "cash.dispense": self._cash_dispense,
             "cash.stop": self._cash_stop,
             "cash.close": self._cash_close,
+            "cash.quote": self._cash_quote,
+            "cash.refill": self._cash_refill,
+            "cash.empty": self._cash_empty,
+            "cash.count": self._cash_count,
+            "fiscal.print": self._fiscal_print,
+            "fiscal.z": self._fiscal_z,
+            "journal.pending": self._journal_pending,
+            "journal.ack": self._journal_ack,
             "sim.scan": self._sim_scan,
             "sim.insert": self._sim_insert,
             "sim.fault": self._sim_fault,
@@ -173,9 +215,17 @@ class Bridge:
         }
 
     async def _health(self, _: dict[str, Any]) -> dict[str, Any]:
+        cash = self.devices.cash
+        levels = cash.levels()
+        alerts = []
+        if any(count < LOW_CHANGE_NOTES for count in levels.values()):
+            alerts.append("low_change")
+        if cash.cassette_space() < CASSETTE_ALMOST_FULL:
+            alerts.append("cassette_full")
         return {
             "health": await self.devices.health.status(),
-            "cash_levels": {str(k): v for k, v in sorted(self.devices.cash.levels().items())},
+            "cash_levels": {str(k): v for k, v in sorted(levels.items())},
+            "alerts": alerts,
             "open_transactions": self.journal.open_transactions(),
             "pending_sync": len(self.journal.pending()),
         }
@@ -210,7 +260,8 @@ class Bridge:
             raise Refused("txn_used")
         await self.devices.cash.enable()
         self.journal.append(txn, cash_journal.STARTED, due)
-        self.collecting = asyncio.create_task(self._collect(txn, due))
+        exact_only = payload.get("exact_only") is True
+        self.collecting = asyncio.create_task(self._collect(txn, due, exact_only))
         return {"txn": txn}
 
     def _open(self, txn: str) -> None:
@@ -232,14 +283,131 @@ class Bridge:
         await self.devices.cash.disable()
 
     async def _cash_dispense(self, message: dict[str, Any]) -> dict[str, Any]:
+        """Change (or a refund) for a transaction, once. With `allow_partial` the machine gives
+        what it can and reports exactly that, signed (possibly 0): the server credits the rest
+        to the customer's account."""
         txn, payload = self._command(message, "cash.dispense")
         amount = _amount(payload.get("amount"))
         self._open(txn)
-        given = await self.devices.cash.dispense(amount)
+        if self.journal.has(txn, cash_journal.DISPENSED):
+            raise Refused("already_dispensed")
+        cash = self.devices.cash
+        if payload.get("allow_partial") is not True:
+            given = await cash.dispense(amount)
+            event = self.journal.append(
+                txn, cash_journal.DISPENSED, amount, notes={str(k): v for k, v in given.items()}
+            )
+            return {"txn": txn, "signed": event.envelope}
+        possible = cash.dispensable(amount)
+        fault = ""
+        given = {}
+        try:
+            if possible:
+                given = await cash.dispense(possible)
+        except DeviceFault as exc:
+            fault, possible = exc.code, 0
         event = self.journal.append(
-            txn, cash_journal.DISPENSED, amount, notes={str(k): v for k, v in given.items()}
+            txn,
+            cash_journal.DISPENSED,
+            possible,
+            notes={str(k): v for k, v in given.items()},
+            asked=amount,
+            fault=fault,
+        )
+        if fault:
+            await self.broadcast({"event": "fault", "device": "cash", "code": fault})
+        return {"txn": txn, "signed": event.envelope, "given": possible}
+
+    async def _cash_quote(self, message: dict[str, Any]) -> dict[str, Any]:
+        """Before any money goes in (§8.3): can the machine give change for this amount?
+        Change is at most the largest accepted note minus a leu; notes are whole lei."""
+        due = _amount(message.get("amount"))
+        cash = self.devices.cash
+        worst = max(ACCEPTED) - LEU
+        guaranteed = all(cash.can_dispense(v) for v in range(LEU, worst + 1, LEU))
+        return {
+            "change_guaranteed": guaranteed and due % LEU == 0,
+            "exact_possible": due % LEU == 0,
+        }
+
+    def _operation(self, message: dict[str, Any], kind: str) -> tuple[str, dict[str, Any]]:
+        txn, payload = self._command(message, kind)
+        if self.journal.events(txn):
+            raise Refused("txn_used")
+        return txn, payload
+
+    async def _cash_refill(self, message: dict[str, Any]) -> dict[str, Any]:
+        txn, payload = self._operation(message, "cash.refill")
+        notes = payload.get("notes")
+        if not isinstance(notes, dict) or not notes:
+            raise Refused("invalid")
+        try:
+            counts = {int(k): v for k, v in notes.items()}
+        except ValueError as exc:
+            raise Refused("invalid") from exc
+        if any(not isinstance(v, int) or isinstance(v, bool) or v <= 0 for v in counts.values()):
+            raise Refused("invalid")
+        amount = await self.devices.cash.refill(counts)
+        event = self.journal.append(txn, cash_journal.REFILLED, amount, notes=notes)
+        return {"txn": txn, "signed": event.envelope}
+
+    async def _cash_empty(self, message: dict[str, Any]) -> dict[str, Any]:
+        txn, _ = self._operation(message, "cash.empty")
+        amount = await self.devices.cash.empty_cassette()
+        event = self.journal.append(txn, cash_journal.EMPTIED, amount)
+        return {"txn": txn, "signed": event.envelope}
+
+    async def _cash_count(self, message: dict[str, Any]) -> dict[str, Any]:
+        txn, _ = self._operation(message, "cash.count")
+        cash = self.devices.cash
+        levels = cash.levels()
+        recycler = sum(value * count for value, count in levels.items())
+        cassette = cash.cassette_amount()
+        event = self.journal.append(
+            txn,
+            cash_journal.COUNTED,
+            recycler + cassette,
+            recycler={str(k): v for k, v in sorted(levels.items())},
+            cassette=cassette,
         )
         return {"txn": txn, "signed": event.envelope}
+
+    async def _fiscal_print(self, message: dict[str, Any]) -> dict[str, Any]:
+        """The fiscal receipt for a cash transaction (R-066), printed once."""
+        txn, payload = self._command(message, "fiscal.print")
+        if not self.journal.has(txn, cash_journal.STARTED):
+            raise Refused("txn_unknown")
+        if self.journal.has(txn, cash_journal.FISCAL_PRINTED):
+            raise Refused("already_printed")
+        lines = _receipt_lines(payload.get("lines"))
+        paid = payload.get("paid")
+        if not isinstance(paid, dict) or not all(
+            isinstance(v, int) and not isinstance(v, bool) and v >= 0 for v in paid.values()
+        ):
+            raise Refused("invalid")
+        number = await self.devices.fiscal.print_receipt(lines, paid)
+        total = sum(line.quantity * line.unit_price for line in lines)
+        event = self.journal.append(txn, cash_journal.FISCAL_PRINTED, total, receipt=number)
+        return {"txn": txn, "signed": event.envelope, "receipt": number}
+
+    async def _fiscal_z(self, message: dict[str, Any]) -> dict[str, Any]:
+        txn, _ = self._operation(message, "fiscal.z")
+        number = await self.devices.fiscal.z_report()
+        event = self.journal.append(txn, cash_journal.Z_REPORT, 0, number=number)
+        return {"txn": txn, "signed": event.envelope, "number": number}
+
+    async def _journal_pending(self, _: dict[str, Any]) -> dict[str, Any]:
+        """Events the server has not acknowledged yet (after an outage or a restart)."""
+        return {"events": [e.envelope for e in self.journal.pending()[:MAX_PENDING]]}
+
+    async def _journal_ack(self, message: dict[str, Any]) -> dict[str, Any]:
+        """The server confirms, signed, which events it recorded."""
+        payload = self.verifier.verify(message.get("command"), "journal.ack")
+        ids = payload.get("ids")
+        if not isinstance(ids, list) or not all(isinstance(i, str) for i in ids):
+            raise Refused("invalid")
+        self.journal.mark_synced(ids)
+        return {"pending": len(self.journal.pending())}
 
     async def _cash_close(self, message: dict[str, Any]) -> dict[str, Any]:
         txn, _ = self._command(message, "cash.close")

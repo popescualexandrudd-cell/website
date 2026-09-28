@@ -49,7 +49,9 @@ class SimCash(CashDevice):
     def __init__(self, levels: dict[int, int] | None = None, capacity: int = 500):
         self.stock = dict(levels if levels is not None else dict.fromkeys(RECYCLED, 20))
         self.capacity = capacity  # notes the cassette holds
-        self.cassette = 0
+        self.cassette: list[int] = []
+        self.escrow: int | None = None
+        self.returned: list[int] = []  # notes given back to the customer
         self.enabled = False
         self.notes: asyncio.Queue[int] = asyncio.Queue()
         self.fault: str | None = None
@@ -76,19 +78,32 @@ class SimCash(CashDevice):
     async def next_note(self) -> int:
         value = await self.notes.get()
         if not self.enabled:
+            self.returned.append(value)
             raise DeviceFault("cash", "disabled")
         if self.fault in CASH_FAULTS:
             raise DeviceFault("cash", str(self.fault))
-        if self.cassette >= self.capacity:
+        if value not in self.stock and len(self.cassette) >= self.capacity:
+            self.returned.append(value)
             raise DeviceFault("cash", "cassette_full")
+        self.escrow = value
+        return value
+
+    async def stack(self) -> None:
+        value, self.escrow = self.escrow, None
+        if value is None:
+            raise DeviceFault("cash", "no_escrow")
         if value in self.stock:
             self.stock[value] += 1  # recycled: available for change
         else:
-            self.cassette += 1
-        return value
+            self.cassette.append(value)
 
-    def _plan(self, amount: int) -> dict[int, int] | None:
-        """Fewest notes that make exactly `amount` from what is available (bounded change)."""
+    async def return_escrow(self) -> None:
+        if self.escrow is not None:
+            self.returned.append(self.escrow)
+        self.escrow = None
+
+    def _reachable(self, amount: int) -> dict[int, dict[int, int]]:
+        """Every total up to `amount` the recycler can give, with the fewest notes."""
         best: dict[int, dict[int, int]] = {0: {}}
         for value in sorted(self.stock, reverse=True):
             for total, used in list(best.items()):
@@ -99,15 +114,20 @@ class SimCash(CashDevice):
                     candidate = {**used, value: count}
                     if reached not in best or sum(candidate.values()) < sum(best[reached].values()):
                         best[reached] = candidate
-        return best.get(amount)
+        return best
 
     def can_dispense(self, amount: int) -> bool:
-        return self.fault != "insufficient_change" and self._plan(amount) is not None
+        return self.fault != "insufficient_change" and amount in self._reachable(amount)
+
+    def dispensable(self, amount: int) -> int:
+        if self.fault == "insufficient_change":
+            return 0
+        return max(self._reachable(amount))
 
     async def dispense(self, amount: int) -> dict[int, int]:
         if self.fault in ("power_loss", "note_jam"):
             raise DeviceFault("cash", str(self.fault))
-        plan = self._plan(amount) if self.fault != "insufficient_change" else None
+        plan = self._reachable(amount).get(amount) if self.fault != "insufficient_change" else None
         if plan is None:
             raise DeviceFault("cash", "insufficient_change")
         for value, count in plan.items():
@@ -116,6 +136,23 @@ class SimCash(CashDevice):
 
     def levels(self) -> dict[int, int]:
         return dict(self.stock)
+
+    def cassette_space(self) -> int:
+        return self.capacity - len(self.cassette)
+
+    def cassette_amount(self) -> int:
+        return sum(self.cassette)
+
+    async def refill(self, notes: dict[int, int]) -> int:
+        if any(value not in self.stock for value in notes):
+            raise DeviceFault("cash", "not_recycled")
+        for value, count in notes.items():
+            self.stock[value] += count
+        return sum(value * count for value, count in notes.items())
+
+    async def empty_cassette(self) -> int:
+        amount, self.cassette = sum(self.cassette), []
+        return amount
 
 
 class SimFiscalPrinter(FiscalPrinter):
