@@ -12,6 +12,7 @@ BASE = {
     "JUNGLE_ENV": "prod",
     "DJANGO_SECRET_KEY": "x" * 60,
     "FIELD_ENCRYPTION_KEY": "y" * 60,
+    "DEVICE_COMMAND_KEY": "c" * 44,
     "DJANGO_SETTINGS_MODULE": "jungle.settings",
 }
 
@@ -32,6 +33,10 @@ def load(**extra: str) -> subprocess.CompletedProcess[str]:
     ("extra", "message"),
     [
         ({}, "REDIS_URL must be set"),
+        (
+            {"REDIS_URL": "redis://r:6379/0", "DEVICE_COMMAND_KEY": ""},
+            "DEVICE_COMMAND_KEY must be set",
+        ),
         ({"REDIS_URL": "redis://r:6379/0", "KIOSK_ALLOW_LOOPBACK": "true"}, "development only"),
     ],
 )

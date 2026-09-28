@@ -114,7 +114,7 @@ class BadgeOut(Schema):
     awarded_at: datetime
 
 
-class MeOut(Schema):
+class LeagueMeOut(Schema):
     in_league: bool
     adult: bool
     consent_signed: bool
@@ -395,7 +395,7 @@ class EntryIn(Schema):
     partner_id: uuid.UUID | None = None
 
 
-class ReasonIn(Schema):
+class LeagueReasonIn(Schema):
     reason: str = Field(min_length=1, max_length=500)
 
 
@@ -679,8 +679,8 @@ def my_changes(player_id: str, limit: int = 20) -> list[RatingChangeOut]:
     return changes
 
 
-@me_router.get("/me", response={200: MeOut, **errors(401)})
-def me(request: HttpRequest) -> MeOut:
+@me_router.get("/me", response={200: LeagueMeOut, **errors(401)})
+def me(request: HttpRequest) -> LeagueMeOut:
     """Private statistics: only the player sees them (R-012)."""
     user = current_user(request)
     rows = Standing.objects.filter(season__status=SeasonStatus.ACTIVE, competitor_id=str(user.pk))
@@ -689,7 +689,7 @@ def me(request: HttpRequest) -> MeOut:
         "none" if latest is None else ("validated" if latest.validated_at else "pending")
     )
     recent = my_changes(str(user.pk))
-    return MeOut(
+    return LeagueMeOut(
         in_league=services.is_playing(user),
         adult=league_consent.is_adult(user),
         consent_signed=league_consent.status(user, user.preferred_language).signed,
@@ -898,7 +898,7 @@ def draw(request: HttpRequest, tournament_id: uuid.UUID) -> TournamentDetailOut:
     response={200: TournamentOut, **errors(400, 401, 403, 404, 409, 422)},
 )
 def cancel_tournament(
-    request: HttpRequest, tournament_id: uuid.UUID, payload: ReasonIn
+    request: HttpRequest, tournament_id: uuid.UUID, payload: LeagueReasonIn
 ) -> TournamentOut:
     """Every paid entry fee comes back as credit in the account."""
     return tournament_out(tournaments.cancel(request, tournament_id, payload.reason))

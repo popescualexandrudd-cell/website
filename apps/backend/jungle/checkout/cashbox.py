@@ -9,6 +9,7 @@ ledger (a difference is reported to the manager, R-064).
 
 from __future__ import annotations
 
+import math
 import re
 import secrets
 import uuid
@@ -97,7 +98,7 @@ def _check_pin(user: User, pin: str) -> None:
         record = KioskPin.objects.select_for_update().filter(user=user).first()
         now = clock.now()
         if record is not None and record.locked_until and record.locked_until > now:
-            minutes = int((record.locked_until - now).total_seconds() // 60) + 1
+            minutes = math.ceil((record.locked_until - now).total_seconds() / 60)
             raise DomainError(
                 ErrorCode.CHECKOUT_PIN_LOCKED, status=403, params={"minutes": minutes}
             )

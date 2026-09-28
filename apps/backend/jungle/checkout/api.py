@@ -42,7 +42,7 @@ staff_router = Router(tags=["staff: kiosk"], auth=session_auth)
 
 
 # ---------------------------------------------------------------- schemas
-class IdleOut(Schema):
+class PaymentsIdleOut(Schema):
     location_slug: str
     location_name: str
     menu: list[CategoryOut]
@@ -59,7 +59,7 @@ class PayableOut(Schema):
     organizer: str
 
 
-class VoucherOut(Schema):
+class PaymentsVoucherOut(Schema):
     code: str
     kind: str
     value: int
@@ -73,7 +73,7 @@ class ActiveSubscriptionOut(Schema):
     ends_on: str
 
 
-class SessionOut(Schema):
+class PaymentsSessionOut(Schema):
     session: str
     first_name: str
     last_name: str
@@ -81,20 +81,20 @@ class SessionOut(Schema):
     credit: int
     payables: list[PayableOut]
     shared: list[PayableOut]
-    vouchers: list[VoucherOut]
+    vouchers: list[PaymentsVoucherOut]
     subscriptions: list[ActiveSubscriptionOut]
 
 
-class CardOnlyIn(Schema):
+class PaymentsCardOnlyIn(Schema):
     card: CardIn
 
 
-class CheckInOut(Schema):
+class PaymentsCheckInOut(Schema):
     scanned_at: datetime
     first_name: str
 
 
-class SplitOut(Schema):
+class PaymentsSplitOut(Schema):
     price: int
     paid: int
     to_pay: int
@@ -199,7 +199,7 @@ class BalanceOut(Schema):
     order: int | None
 
 
-class VoucherIn(Schema):
+class PaymentsVoucherIn(Schema):
     card: CardIn
     code: str = Field(min_length=4, max_length=20)
     item: ItemIn
@@ -275,7 +275,7 @@ class PinIn(Schema):
     pin: str = Field(min_length=6, max_length=6)
 
 
-class OkOut(Schema):
+class PaymentsOkOut(Schema):
     ok: bool
 
 
@@ -336,13 +336,13 @@ def _operation(op: Any) -> OperationOut:
 
 
 # ---------------------------------------------------------------- idle and the customer
-@router.get("/idle", response={200: IdleOut, **errors(401, 403)})
-def idle(request: HttpRequest) -> IdleOut:
+@router.get("/idle", response={200: PaymentsIdleOut, **errors(401, 403)})
+def idle(request: HttpRequest) -> PaymentsIdleOut:
     """The idle screen: the café menu (the subscription offers come from the public
     configurator, by `location_slug`)."""
     device = services.guard(request)
     location = device.location
-    return IdleOut(
+    return PaymentsIdleOut(
         location_slug=location.slug,
         location_name=location.name,
         menu=[
@@ -357,12 +357,12 @@ def idle(request: HttpRequest) -> IdleOut:
     )
 
 
-@router.post("/session", response={200: SessionOut, **errors(401, 403, 404, 422)})
-def session(request: HttpRequest, payload: CardOnlyIn) -> SessionOut:
+@router.post("/session", response={200: PaymentsSessionOut, **errors(401, 403, 404, 422)})
+def session(request: HttpRequest, payload: PaymentsCardOnlyIn) -> PaymentsSessionOut:
     device = services.guard(request)
     user, token = open_session(request, payload.card)
     view = views.session(user, device)
-    return SessionOut(
+    return PaymentsSessionOut(
         session=token,
         first_name=view.first_name,
         last_name=view.last_name,
@@ -370,7 +370,7 @@ def session(request: HttpRequest, payload: CardOnlyIn) -> SessionOut:
         credit=view.credit,
         payables=[PayableOut(**vars(p)) for p in view.payables],
         shared=[PayableOut(**vars(p)) for p in view.shared],
-        vouchers=[VoucherOut(**vars(v)) for v in view.vouchers],
+        vouchers=[PaymentsVoucherOut(**vars(v)) for v in view.vouchers],
         subscriptions=[ActiveSubscriptionOut(**s) for s in view.subscriptions],  # type: ignore[arg-type]
     )
 
@@ -381,21 +381,23 @@ def logout(request: HttpRequest, payload: LogoutIn) -> Status[None]:
     return Status(204, None)
 
 
-@router.post("/check-in", response={200: CheckInOut, **errors(401, 403, 404, 422)})
-def check_in(request: HttpRequest, payload: CardOnlyIn) -> CheckInOut:
+@router.post("/check-in", response={200: PaymentsCheckInOut, **errors(401, 403, 404, 422)})
+def check_in(request: HttpRequest, payload: PaymentsCardOnlyIn) -> PaymentsCheckInOut:
     """§8.3 flow 1 (R-030)."""
     device = services.guard(request)
     user = person(request, payload.card)
     scan = record_arrival_at_device(device, user)
-    return CheckInOut(scanned_at=scan.scanned_at, first_name=user.first_name)
+    return PaymentsCheckInOut(scanned_at=scan.scanned_at, first_name=user.first_name)
 
 
-@router.get("/bookings/{booking_id}/split", response={200: SplitOut, **errors(401, 403, 404, 422)})
-def split(request: HttpRequest, booking_id: uuid.UUID, parts: int = 4) -> SplitOut:
+@router.get(
+    "/bookings/{booking_id}/split", response={200: PaymentsSplitOut, **errors(401, 403, 404, 422)}
+)
+def split(request: HttpRequest, booking_id: uuid.UUID, parts: int = 4) -> PaymentsSplitOut:
     """R-060, R-061: the shares of the hour, and what is still to pay, live."""
     device = services.guard(request)
     result = views.split(booking_id, parts, device)
-    return SplitOut(**vars(result))
+    return PaymentsSplitOut(**vars(result))
 
 
 # ---------------------------------------------------------------- cash
@@ -475,7 +477,7 @@ def pay_balance(request: HttpRequest, payload: BalanceIn) -> BalanceOut:
 
 
 @router.post("/voucher", response={200: PaidOut, **errors(400, 401, 403, 404, 409, 422)})
-def voucher(request: HttpRequest, payload: VoucherIn) -> PaidOut:
+def voucher(request: HttpRequest, payload: PaymentsVoucherIn) -> PaidOut:
     """§8.3 flow 6: a voucher of the card holder, used here (R-121)."""
     services.guard(request)
     user = person(request, payload.card)
@@ -526,11 +528,11 @@ def freeze(request: HttpRequest, subscription_id: uuid.UUID, payload: KioskFreez
     return FrozenOut(starts_on=record.starts_on, ends_on=record.ends_on)
 
 
-@router.post("/alerts", response={200: OkOut, **errors(400, 401, 403, 422)})
-def alert(request: HttpRequest, payload: AlertIn) -> OkOut:
+@router.post("/alerts", response={200: PaymentsOkOut, **errors(400, 401, 403, 422)})
+def alert(request: HttpRequest, payload: AlertIn) -> PaymentsOkOut:
     """A device fault the bridge reported (jam, low change, cassette full, no paper)."""
     services.report_fault(request, payload.code)
-    return OkOut(ok=True)
+    return PaymentsOkOut(ok=True)
 
 
 # ---------------------------------------------------------------- staff mode
@@ -560,11 +562,11 @@ def list_operations(request: HttpRequest, payload: StaffTokenIn) -> list[Operati
     return [_operation(op) for op in cashbox.operations(request, payload.token)]
 
 
-@staff_router.post("/kiosk-pin", response={200: OkOut, **errors(400, 401, 403, 422)})
-def set_pin(request: HttpRequest, payload: PinIn) -> OkOut:
+@staff_router.post("/kiosk-pin", response={200: PaymentsOkOut, **errors(400, 401, 403, 422)})
+def set_pin(request: HttpRequest, payload: PinIn) -> PaymentsOkOut:
     """A staff member who handles cash sets their PIN for the kiosk's staff mode (Q54)."""
     cashbox.set_pin(request, payload.pin)
-    return OkOut(ok=True)
+    return PaymentsOkOut(ok=True)
 
 
 # ---------------------------------------------------------------- the café display (§8.7)

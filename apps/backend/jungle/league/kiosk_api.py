@@ -103,7 +103,7 @@ class FixtureViewOut(Schema):
     score: dict[str, Any] | None = None
 
 
-class SessionOut(Schema):
+class KioskSessionOut(Schema):
     session: str = Field(description="Se trimite la acțiunile următoare, în loc de card")
     player: PersonOut
     language: str
@@ -151,7 +151,7 @@ class ConsentIn(Schema):
     accepted: bool = Field(description="Bifa obligatorie (R-010)")
 
 
-class ConsentOut(Schema):
+class KioskConsentOut(Schema):
     signed: bool
     version: int | None
 
@@ -198,8 +198,8 @@ def _people(people: list[kiosk_views.Person]) -> list[PersonOut]:
     return [PersonOut(**vars(p)) for p in people]
 
 
-def session_out(view: kiosk_views.Session, session: str) -> SessionOut:
-    return SessionOut(
+def session_out(view: kiosk_views.Session, session: str) -> KioskSessionOut:
+    return KioskSessionOut(
         session=session,
         player=PersonOut(**vars(view.player)),
         language=view.language,
@@ -228,7 +228,7 @@ def session_out(view: kiosk_views.Session, session: str) -> SessionOut:
     )
 
 
-def _session(request: HttpRequest, card: CardIn) -> SessionOut:
+def _session(request: HttpRequest, card: CardIn) -> KioskSessionOut:
     user, session = open_session(request, card)
     return session_out(kiosk_views.session(device_of(request), user), session)
 
@@ -288,8 +288,8 @@ def standings(
     return shown
 
 
-@router.post("/session", response={200: SessionOut, **errors(401, 403, 404, 422)})
-def session(request: HttpRequest, payload: CardOnlyIn) -> SessionOut:
+@router.post("/session", response={200: KioskSessionOut, **errors(401, 403, 404, 422)})
+def session(request: HttpRequest, payload: CardOnlyIn) -> KioskSessionOut:
     """After a scan: the player's own screen (logged out by the kiosk after 30 s idle)."""
     _guard(request, "league.kiosk_session")
     return _session(request, payload.card)
@@ -311,15 +311,15 @@ def consent_text(request: HttpRequest, language: str = "ro") -> ConsentTextOut:
     )
 
 
-@router.post("/consent", response={200: ConsentOut, **errors(400, 401, 403, 404, 422)})
-def sign_consent(request: HttpRequest, payload: ConsentIn) -> ConsentOut:
+@router.post("/consent", response={200: KioskConsentOut, **errors(400, 401, 403, 404, 422)})
+def sign_consent(request: HttpRequest, payload: ConsentIn) -> KioskConsentOut:
     """R-010, R-011: only with the box ticked, at this League Kiosk."""
     if not payload.accepted:
         raise DomainError(ErrorCode.VALIDATION_INVALID, params={"field": "accepted"})
     _guard(request, "league.kiosk_consent_sign")
     user = cards.resolve(scanned_token(request, payload.card)).user
     consent = league_consent.sign(request, user, device_of(request), payload.language)
-    return ConsentOut(signed=True, version=consent.document.version)
+    return KioskConsentOut(signed=True, version=consent.document.version)
 
 
 @router.post("/matches", response={201: MatchOut, **errors(400, 401, 403, 404, 409, 422)})

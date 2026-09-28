@@ -15,10 +15,9 @@ from jungle.cafe.models import CafeOrder, CafeProduct
 from jungle.checkout.models import CashEvent, Checkout, CheckoutStatus
 from jungle.checkout.services import cash_box
 from jungle.checkout.tests.conftest import HOUR_PRICE, LEU, Kiosk
-from jungle.conftest import error_code
 from jungle.ledger import payments
 from jungle.ledger.models import Payment
-from jungle.ledger.services import balance, customer_credit
+from jungle.ledger.services import balance
 
 pytestmark = pytest.mark.django_db
 Card = Callable[[User], dict[str, Any]]
@@ -48,7 +47,10 @@ def test_r060_r066_a_share_of_the_hour_and_a_coffee_in_cash_with_change(
     assert checkout.fiscal_receipt == "SIM-000001"
     assert settled["orders"] == [1]
     assert settled["receipt"]["payload"]["lines"][1] == {
-        "name": "Espresso", "quantity": 2, "unit_price": 1200, "vat_group": "A"
+        "name": "Espresso",
+        "quantity": 2,
+        "unit_price": 1200,
+        "vat_group": "A",
     }
     # The ledger: the kiosk's own cash box holds what stayed in the machine.
     assert balance(cash_box(kiosk.device)) == 11000 - 600
@@ -57,7 +59,11 @@ def test_r060_r066_a_share_of_the_hour_and_a_coffee_in_cash_with_change(
     payment = Payment.objects.get(
         transaction__metadata__checkout=str(checkout.pk), transaction__kind="payment"
     )
-    assert (payment.amount, payment.fiscal_receipt, payment.device_id) == (8000, "", kiosk.device.pk)
+    assert (payment.amount, payment.fiscal_receipt, payment.device_id) == (
+        8000,
+        "",
+        kiosk.device.pk,
+    )
     order = CafeOrder.objects.get()
     assert (order.total, order.customer_id, order.device_id) == (2400, player.pk, kiosk.device.pk)
     kinds = sorted(CashEvent.objects.filter(checkout=checkout).values_list("kind", flat=True))
@@ -72,6 +78,8 @@ def test_r060_r066_a_share_of_the_hour_and_a_coffee_in_cash_with_change(
 def test_r067_an_exact_payment_settles_at_once(
     kiosk: Kiosk, card: Card, player: User, booking: Booking
 ) -> None:
-    settled = kiosk.buy(card(player), [booking_item(booking)], [200 * LEU, 10 * LEU, 10 * LEU, 10 * LEU, 10 * LEU])
+    settled = kiosk.buy(
+        card(player), [booking_item(booking)], [200 * LEU, 10 * LEU, 10 * LEU, 10 * LEU, 10 * LEU]
+    )
     assert settled["checkout"]["dispensed"] == 0 and settled["checkout"]["credited"] == 0
     assert payments.money_status(payments.due_for_booking(booking)).to_pay == 0

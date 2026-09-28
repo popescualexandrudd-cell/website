@@ -60,3 +60,24 @@ def test_unknown_language_falls_back_to_romanian_and_unknown_template_fails() ->
     assert mail.outbox[-1].subject.startswith("Confirmă")
     with pytest.raises(ValueError, match="unknown email template"):
         send_templated_email("nope", "x@example.test", "ro", {})
+
+
+def test_schema_names_are_unique_across_the_api() -> None:
+    """Django Ninja names OpenAPI components after the class: two schemas with the same name
+    in different modules silently become one in the generated client (Stage 8 found it)."""
+    from collections import defaultdict
+
+    from ninja import Schema
+
+    from jungle.api import api
+
+    api.get_openapi_schema()  # imports every router
+    seen: dict[str, set[str]] = defaultdict(set)
+    pending = list(Schema.__subclasses__())
+    while pending:
+        cls = pending.pop()
+        pending.extend(cls.__subclasses__())
+        if cls.__module__.startswith("jungle."):
+            seen[cls.__name__].add(cls.__module__)
+    clashes = {name: modules for name, modules in seen.items() if len(modules) > 1}
+    assert clashes == {}

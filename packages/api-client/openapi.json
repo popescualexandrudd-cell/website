@@ -64,6 +64,29 @@
         "title": "ActiveIn",
         "type": "object"
       },
+      "ActiveSubscriptionOut": {
+        "properties": {
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "ends_on": {
+            "title": "Ends On",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "description",
+          "ends_on"
+        ],
+        "title": "ActiveSubscriptionOut",
+        "type": "object"
+      },
       "AdvanceIn": {
         "properties": {
           "status": {
@@ -74,6 +97,20 @@
           "status"
         ],
         "title": "AdvanceIn",
+        "type": "object"
+      },
+      "AlertIn": {
+        "properties": {
+          "code": {
+            "pattern": "^[a-z_]{3,40}$",
+            "title": "Code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "title": "AlertIn",
         "type": "object"
       },
       "AuditOut": {
@@ -247,6 +284,54 @@
           "awarded_at"
         ],
         "title": "BadgeOut",
+        "type": "object"
+      },
+      "BalanceIn": {
+        "properties": {
+          "card": {
+            "$ref": "#/components/schemas/CardIn"
+          },
+          "idempotency_key": {
+            "maxLength": 80,
+            "minLength": 8,
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "item": {
+            "$ref": "#/components/schemas/ItemIn"
+          }
+        },
+        "required": [
+          "card",
+          "item",
+          "idempotency_key"
+        ],
+        "title": "BalanceIn",
+        "type": "object"
+      },
+      "BalanceOut": {
+        "properties": {
+          "amount": {
+            "title": "Amount",
+            "type": "integer"
+          },
+          "order": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Order"
+          }
+        },
+        "required": [
+          "amount",
+          "order"
+        ],
+        "title": "BalanceOut",
         "type": "object"
       },
       "Band": {
@@ -434,7 +519,7 @@
         "title": "BookingOut",
         "type": "object"
       },
-      "CancelIn": {
+      "CafeCancelIn": {
         "properties": {
           "reason": {
             "maxLength": 500,
@@ -446,7 +531,140 @@
         "required": [
           "reason"
         ],
+        "title": "CafeCancelIn",
+        "type": "object"
+      },
+      "CafeLineIn": {
+        "properties": {
+          "product_id": {
+            "format": "uuid",
+            "title": "Product Id",
+            "type": "string"
+          },
+          "quantity": {
+            "maximum": 20,
+            "minimum": 1,
+            "title": "Quantity",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "product_id",
+          "quantity"
+        ],
+        "title": "CafeLineIn",
+        "type": "object"
+      },
+      "CafeOrderIn": {
+        "properties": {
+          "customer_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Customer Id"
+          },
+          "lines": {
+            "items": {
+              "$ref": "#/components/schemas/LineIn"
+            },
+            "maxItems": 30,
+            "minItems": 1,
+            "title": "Lines",
+            "type": "array"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "method": {
+            "$ref": "#/components/schemas/PaymentMethod"
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          },
+          "tendered": {
+            "default": 0,
+            "maximum": 10000000,
+            "minimum": 0,
+            "title": "Tendered",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "location_id",
+          "lines",
+          "method",
+          "reason"
+        ],
+        "title": "CafeOrderIn",
+        "type": "object"
+      },
+      "CancelIn": {
+        "properties": {
+          "reason": {
+            "default": "",
+            "maxLength": 250,
+            "title": "Reason",
+            "type": "string"
+          },
+          "waive": {
+            "default": false,
+            "title": "Waive",
+            "type": "boolean"
+          }
+        },
         "title": "CancelIn",
+        "type": "object"
+      },
+      "CancelOut": {
+        "properties": {
+          "close": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Command"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "refund": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Command"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "stop": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Command"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "stop",
+          "refund",
+          "close"
+        ],
+        "title": "CancelOut",
         "type": "object"
       },
       "CancelVoucherIn": {
@@ -747,6 +965,15 @@
         "title": "ChallengeOut",
         "type": "object"
       },
+      "ChangeMode": {
+        "enum": [
+          "normal",
+          "exact",
+          "credit"
+        ],
+        "title": "ChangeMode",
+        "type": "string"
+      },
       "CheckInOut": {
         "properties": {
           "first_name": {
@@ -764,6 +991,85 @@
           "first_name"
         ],
         "title": "CheckInOut",
+        "type": "object"
+      },
+      "CheckoutIn": {
+        "properties": {
+          "card": {
+            "$ref": "#/components/schemas/CardIn"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ItemIn"
+            },
+            "maxItems": 10,
+            "minItems": 1,
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "card",
+          "items"
+        ],
+        "title": "CheckoutIn",
+        "type": "object"
+      },
+      "CheckoutOut": {
+        "properties": {
+          "amount_due": {
+            "title": "Amount Due",
+            "type": "integer"
+          },
+          "change_mode": {
+            "title": "Change Mode",
+            "type": "string"
+          },
+          "credited": {
+            "title": "Credited",
+            "type": "integer"
+          },
+          "dispensed": {
+            "title": "Dispensed",
+            "type": "integer"
+          },
+          "fiscal_receipt": {
+            "title": "Fiscal Receipt",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "inserted": {
+            "title": "Inserted",
+            "type": "integer"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ItemOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "change_mode",
+          "amount_due",
+          "inserted",
+          "dispensed",
+          "credited",
+          "fiscal_receipt",
+          "items"
+        ],
+        "title": "CheckoutOut",
         "type": "object"
       },
       "ChildIn": {
@@ -979,6 +1285,25 @@
           "code"
         ],
         "title": "CodeOut",
+        "type": "object"
+      },
+      "Command": {
+        "properties": {
+          "payload": {
+            "additionalProperties": true,
+            "title": "Payload",
+            "type": "object"
+          },
+          "signature": {
+            "title": "Signature",
+            "type": "string"
+          }
+        },
+        "required": [
+          "payload",
+          "signature"
+        ],
+        "title": "Command",
         "type": "object"
       },
       "CompanyOut": {
@@ -1218,25 +1543,52 @@
       },
       "ConsentOut": {
         "properties": {
-          "signed": {
-            "title": "Signed",
-            "type": "boolean"
+          "action": {
+            "title": "Action",
+            "type": "string"
           },
-          "version": {
+          "device_id": {
             "anyOf": [
               {
-                "type": "integer"
+                "format": "uuid",
+                "type": "string"
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Version"
+            "title": "Device Id"
+          },
+          "document_kind": {
+            "title": "Document Kind",
+            "type": "string"
+          },
+          "document_version": {
+            "title": "Document Version",
+            "type": "integer"
+          },
+          "language": {
+            "title": "Language",
+            "type": "string"
+          },
+          "occurred_at": {
+            "format": "date-time",
+            "title": "Occurred At",
+            "type": "string"
+          },
+          "text_sha256": {
+            "title": "Text Sha256",
+            "type": "string"
           }
         },
         "required": [
-          "signed",
-          "version"
+          "document_kind",
+          "document_version",
+          "language",
+          "action",
+          "text_sha256",
+          "occurred_at",
+          "device_id"
         ],
         "title": "ConsentOut",
         "type": "object"
@@ -1645,6 +1997,20 @@
         "title": "DiamondOut",
         "type": "object"
       },
+      "DisplayAdvanceIn": {
+        "properties": {
+          "status": {
+            "pattern": "^(preparing|ready|picked_up)$",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "DisplayAdvanceIn",
+        "type": "object"
+      },
       "DocumentKind": {
         "enum": [
           "terms",
@@ -1878,7 +2244,7 @@
         "properties": {
           "items": {
             "items": {
-              "$ref": "#/components/schemas/EntryOut"
+              "$ref": "#/components/schemas/WaitlistEntryOut"
             },
             "title": "Items",
             "type": "array"
@@ -1893,6 +2259,26 @@
           "items"
         ],
         "title": "EntryPageOut",
+        "type": "object"
+      },
+      "Envelope": {
+        "properties": {
+          "payload": {
+            "additionalProperties": true,
+            "title": "Payload",
+            "type": "object"
+          },
+          "signature": {
+            "maxLength": 200,
+            "title": "Signature",
+            "type": "string"
+          }
+        },
+        "required": [
+          "payload",
+          "signature"
+        ],
+        "title": "Envelope",
         "type": "object"
       },
       "ErrorBody": {
@@ -2031,6 +2417,21 @@
         "title": "EventOut",
         "type": "object"
       },
+      "EventsIn": {
+        "properties": {
+          "events": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Envelope"
+            },
+            "maxItems": 100,
+            "title": "Events",
+            "type": "array"
+          }
+        },
+        "title": "EventsIn",
+        "type": "object"
+      },
       "FameEntryOut": {
         "properties": {
           "first_name": {
@@ -2094,6 +2495,36 @@
           "entries"
         ],
         "title": "FameSeasonOut",
+        "type": "object"
+      },
+      "FinishOut": {
+        "properties": {
+          "dispense": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Command"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "settled": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SettledOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "dispense",
+          "settled"
+        ],
+        "title": "FinishOut",
         "type": "object"
       },
       "FixtureOut": {
@@ -2344,6 +2775,26 @@
         "title": "FreezeOut",
         "type": "object"
       },
+      "FrozenOut": {
+        "properties": {
+          "ends_on": {
+            "format": "date",
+            "title": "Ends On",
+            "type": "string"
+          },
+          "starts_on": {
+            "format": "date",
+            "title": "Starts On",
+            "type": "string"
+          }
+        },
+        "required": [
+          "starts_on",
+          "ends_on"
+        ],
+        "title": "FrozenOut",
+        "type": "object"
+      },
       "GoogleWalletOut": {
         "properties": {
           "url": {
@@ -2549,6 +3000,242 @@
         "title": "IntervalOut",
         "type": "object"
       },
+      "ItemIn": {
+        "properties": {
+          "amount": {
+            "anyOf": [
+              {
+                "maximum": 100000000,
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amount"
+          },
+          "cafe_lines": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/CafeLineIn"
+            },
+            "maxItems": 30,
+            "title": "Cafe Lines",
+            "type": "array"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/ItemKind"
+          },
+          "subject_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subject Id"
+          }
+        },
+        "required": [
+          "kind"
+        ],
+        "title": "ItemIn",
+        "type": "object"
+      },
+      "ItemKind": {
+        "enum": [
+          "booking",
+          "enrollment",
+          "subscription",
+          "tournament_entry",
+          "cafe"
+        ],
+        "title": "ItemKind",
+        "type": "string"
+      },
+      "ItemOut": {
+        "properties": {
+          "amount": {
+            "title": "Amount",
+            "type": "integer"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "subject_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subject Id"
+          }
+        },
+        "required": [
+          "kind",
+          "subject_id",
+          "amount",
+          "description"
+        ],
+        "title": "ItemOut",
+        "type": "object"
+      },
+      "KioskConsentOut": {
+        "properties": {
+          "signed": {
+            "title": "Signed",
+            "type": "boolean"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version"
+          }
+        },
+        "required": [
+          "signed",
+          "version"
+        ],
+        "title": "KioskConsentOut",
+        "type": "object"
+      },
+      "KioskFreezeIn": {
+        "properties": {
+          "card": {
+            "$ref": "#/components/schemas/CardIn"
+          },
+          "days": {
+            "maximum": 60,
+            "minimum": 1,
+            "title": "Days",
+            "type": "integer"
+          },
+          "starts_on": {
+            "format": "date",
+            "title": "Starts On",
+            "type": "string"
+          }
+        },
+        "required": [
+          "starts_on",
+          "days",
+          "card"
+        ],
+        "title": "KioskFreezeIn",
+        "type": "object"
+      },
+      "KioskSessionOut": {
+        "properties": {
+          "adult": {
+            "title": "Adult",
+            "type": "boolean"
+          },
+          "challenges": {
+            "items": {
+              "$ref": "#/components/schemas/WaitingChallengeOut"
+            },
+            "title": "Challenges",
+            "type": "array"
+          },
+          "consent_outdated": {
+            "title": "Consent Outdated",
+            "type": "boolean"
+          },
+          "consent_signed": {
+            "title": "Consent Signed",
+            "type": "boolean"
+          },
+          "director": {
+            "title": "Director",
+            "type": "boolean"
+          },
+          "fixtures": {
+            "items": {
+              "$ref": "#/components/schemas/FixtureViewOut"
+            },
+            "title": "Fixtures",
+            "type": "array"
+          },
+          "in_league": {
+            "title": "In League",
+            "type": "boolean"
+          },
+          "ladders": {
+            "items": {
+              "$ref": "#/components/schemas/LadderOut"
+            },
+            "title": "Ladders",
+            "type": "array"
+          },
+          "language": {
+            "title": "Language",
+            "type": "string"
+          },
+          "player": {
+            "$ref": "#/components/schemas/PersonOut"
+          },
+          "questionnaire": {
+            "title": "Questionnaire",
+            "type": "string"
+          },
+          "score_chances": {
+            "items": {
+              "$ref": "#/components/schemas/ScoreChanceOut"
+            },
+            "title": "Score Chances",
+            "type": "array"
+          },
+          "session": {
+            "description": "Se trimite la acțiunile următoare, în loc de card",
+            "title": "Session",
+            "type": "string"
+          },
+          "to_confirm": {
+            "items": {
+              "$ref": "#/components/schemas/WaitingMatchOut"
+            },
+            "title": "To Confirm",
+            "type": "array"
+          }
+        },
+        "required": [
+          "session",
+          "player",
+          "language",
+          "adult",
+          "consent_signed",
+          "consent_outdated",
+          "questionnaire",
+          "in_league",
+          "director",
+          "ladders",
+          "score_chances",
+          "to_confirm",
+          "challenges",
+          "fixtures"
+        ],
+        "title": "KioskSessionOut",
+        "type": "object"
+      },
       "Ladder": {
         "description": "LG-001.",
         "enum": [
@@ -2617,6 +3304,74 @@
           "minimum"
         ],
         "title": "LadderOut",
+        "type": "object"
+      },
+      "LeagueMeOut": {
+        "properties": {
+          "adult": {
+            "title": "Adult",
+            "type": "boolean"
+          },
+          "badges": {
+            "items": {
+              "$ref": "#/components/schemas/BadgeOut"
+            },
+            "title": "Badges",
+            "type": "array"
+          },
+          "consent_signed": {
+            "title": "Consent Signed",
+            "type": "boolean"
+          },
+          "in_league": {
+            "title": "In League",
+            "type": "boolean"
+          },
+          "ladders": {
+            "items": {
+              "$ref": "#/components/schemas/MyLadderOut"
+            },
+            "title": "Ladders",
+            "type": "array"
+          },
+          "questionnaire": {
+            "description": "none, pending sau validated",
+            "title": "Questionnaire",
+            "type": "string"
+          },
+          "recent": {
+            "items": {
+              "$ref": "#/components/schemas/RatingChangeOut"
+            },
+            "title": "Recent",
+            "type": "array"
+          }
+        },
+        "required": [
+          "in_league",
+          "adult",
+          "consent_signed",
+          "questionnaire",
+          "ladders",
+          "recent",
+          "badges"
+        ],
+        "title": "LeagueMeOut",
+        "type": "object"
+      },
+      "LeagueReasonIn": {
+        "properties": {
+          "reason": {
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reason"
+        ],
+        "title": "LeagueReasonIn",
         "type": "object"
       },
       "LegalDocumentOut": {
@@ -2993,53 +3748,93 @@
       },
       "MeOut": {
         "properties": {
-          "adult": {
-            "title": "Adult",
-            "type": "boolean"
-          },
-          "badges": {
-            "items": {
-              "$ref": "#/components/schemas/BadgeOut"
-            },
-            "title": "Badges",
-            "type": "array"
-          },
-          "consent_signed": {
-            "title": "Consent Signed",
-            "type": "boolean"
-          },
-          "in_league": {
-            "title": "In League",
-            "type": "boolean"
-          },
-          "ladders": {
-            "items": {
-              "$ref": "#/components/schemas/MyLadderOut"
-            },
-            "title": "Ladders",
-            "type": "array"
-          },
-          "questionnaire": {
-            "description": "none, pending sau validated",
-            "title": "Questionnaire",
+          "account_type": {
+            "title": "Account Type",
             "type": "string"
           },
-          "recent": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "date_of_birth": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date Of Birth"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "email_verified": {
+            "title": "Email Verified",
+            "type": "boolean"
+          },
+          "first_name": {
+            "title": "First Name",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "last_name": {
+            "title": "Last Name",
+            "type": "string"
+          },
+          "mfa_enabled": {
+            "title": "Mfa Enabled",
+            "type": "boolean"
+          },
+          "mfa_verified": {
+            "title": "Mfa Verified",
+            "type": "boolean"
+          },
+          "phone": {
+            "title": "Phone",
+            "type": "string"
+          },
+          "preferred_language": {
+            "title": "Preferred Language",
+            "type": "string"
+          },
+          "roles": {
             "items": {
-              "$ref": "#/components/schemas/RatingChangeOut"
+              "$ref": "#/components/schemas/RoleOut"
             },
-            "title": "Recent",
+            "title": "Roles",
             "type": "array"
           }
         },
         "required": [
-          "in_league",
-          "adult",
-          "consent_signed",
-          "questionnaire",
-          "ladders",
-          "recent",
-          "badges"
+          "id",
+          "email",
+          "first_name",
+          "last_name",
+          "phone",
+          "date_of_birth",
+          "preferred_language",
+          "account_type",
+          "email_verified",
+          "created_at",
+          "roles",
+          "mfa_enabled",
+          "mfa_verified"
         ],
         "title": "MeOut",
         "type": "object"
@@ -3265,6 +4060,150 @@
         "title": "OkOut",
         "type": "object"
       },
+      "OperationIn": {
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/OperationKind"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "integer"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "token": {
+            "maxLength": 64,
+            "title": "Token",
+            "type": "string"
+          }
+        },
+        "required": [
+          "token",
+          "kind"
+        ],
+        "title": "OperationIn",
+        "type": "object"
+      },
+      "OperationKind": {
+        "enum": [
+          "refill",
+          "empty",
+          "count",
+          "day_close"
+        ],
+        "title": "OperationKind",
+        "type": "string"
+      },
+      "OperationOut": {
+        "properties": {
+          "amount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amount"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "difference": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Difference"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "ledger_amount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ledger Amount"
+          },
+          "requested": {
+            "additionalProperties": true,
+            "title": "Requested",
+            "type": "object"
+          },
+          "result": {
+            "additionalProperties": true,
+            "title": "Result",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "requested",
+          "result",
+          "amount",
+          "ledger_amount",
+          "difference",
+          "created_at",
+          "completed_at"
+        ],
+        "title": "OperationOut",
+        "type": "object"
+      },
+      "OperationStartedOut": {
+        "properties": {
+          "command": {
+            "$ref": "#/components/schemas/Command"
+          },
+          "operation": {
+            "$ref": "#/components/schemas/OperationOut"
+          }
+        },
+        "required": [
+          "operation",
+          "command"
+        ],
+        "title": "OperationStartedOut",
+        "type": "object"
+      },
       "OptionsOut": {
         "properties": {
           "bundle_discounts": {
@@ -3290,7 +4229,7 @@
           },
           "rates": {
             "items": {
-              "$ref": "#/components/schemas/RateOut"
+              "$ref": "#/components/schemas/SubscriptionRateOut"
             },
             "title": "Rates",
             "type": "array"
@@ -3312,54 +4251,34 @@
       },
       "OrderIn": {
         "properties": {
-          "customer_id": {
-            "anyOf": [
-              {
-                "format": "uuid",
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Customer Id"
-          },
-          "lines": {
-            "items": {
-              "$ref": "#/components/schemas/LineIn"
-            },
-            "maxItems": 30,
-            "minItems": 1,
-            "title": "Lines",
-            "type": "array"
-          },
           "location_id": {
             "format": "uuid",
             "title": "Location Id",
             "type": "string"
           },
-          "method": {
-            "$ref": "#/components/schemas/PaymentMethod"
+          "period": {
+            "$ref": "#/components/schemas/Period"
           },
-          "reason": {
-            "maxLength": 500,
-            "minLength": 1,
-            "title": "Reason",
+          "selections": {
+            "items": {
+              "$ref": "#/components/schemas/SelectionIn"
+            },
+            "maxItems": 3,
+            "minItems": 1,
+            "title": "Selections",
+            "type": "array"
+          },
+          "starts_on": {
+            "format": "date",
+            "title": "Starts On",
             "type": "string"
-          },
-          "tendered": {
-            "default": 0,
-            "maximum": 10000000,
-            "minimum": 0,
-            "title": "Tendered",
-            "type": "integer"
           }
         },
         "required": [
           "location_id",
-          "lines",
-          "method",
-          "reason"
+          "selections",
+          "period",
+          "starts_on"
         ],
         "title": "OrderIn",
         "type": "object"
@@ -3431,6 +4350,19 @@
         "title": "OrderStatus",
         "type": "string"
       },
+      "PaidOut": {
+        "properties": {
+          "amount": {
+            "title": "Amount",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "amount"
+        ],
+        "title": "PaidOut",
+        "type": "object"
+      },
       "PasswordChangeIn": {
         "properties": {
           "current_password": {
@@ -3475,6 +4407,63 @@
           "new_password"
         ],
         "title": "PasswordResetConfirmIn",
+        "type": "object"
+      },
+      "PayableOut": {
+        "properties": {
+          "debt": {
+            "title": "Debt",
+            "type": "boolean"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "organizer": {
+            "title": "Organizer",
+            "type": "string"
+          },
+          "price": {
+            "title": "Price",
+            "type": "integer"
+          },
+          "starts_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Starts At"
+          },
+          "subject_id": {
+            "format": "uuid",
+            "title": "Subject Id",
+            "type": "string"
+          },
+          "to_pay": {
+            "title": "To Pay",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "kind",
+          "subject_id",
+          "description",
+          "price",
+          "to_pay",
+          "debt",
+          "starts_at",
+          "organizer"
+        ],
+        "title": "PayableOut",
         "type": "object"
       },
       "PaymentIn": {
@@ -3625,6 +4614,228 @@
         "title": "PaymentOut",
         "type": "object"
       },
+      "PaymentsCardOnlyIn": {
+        "properties": {
+          "card": {
+            "$ref": "#/components/schemas/CardIn"
+          }
+        },
+        "required": [
+          "card"
+        ],
+        "title": "PaymentsCardOnlyIn",
+        "type": "object"
+      },
+      "PaymentsCheckInOut": {
+        "properties": {
+          "first_name": {
+            "title": "First Name",
+            "type": "string"
+          },
+          "scanned_at": {
+            "format": "date-time",
+            "title": "Scanned At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "scanned_at",
+          "first_name"
+        ],
+        "title": "PaymentsCheckInOut",
+        "type": "object"
+      },
+      "PaymentsIdleOut": {
+        "properties": {
+          "location_name": {
+            "title": "Location Name",
+            "type": "string"
+          },
+          "location_slug": {
+            "title": "Location Slug",
+            "type": "string"
+          },
+          "menu": {
+            "items": {
+              "$ref": "#/components/schemas/CategoryOut"
+            },
+            "title": "Menu",
+            "type": "array"
+          }
+        },
+        "required": [
+          "location_slug",
+          "location_name",
+          "menu"
+        ],
+        "title": "PaymentsIdleOut",
+        "type": "object"
+      },
+      "PaymentsOkOut": {
+        "properties": {
+          "ok": {
+            "title": "Ok",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ok"
+        ],
+        "title": "PaymentsOkOut",
+        "type": "object"
+      },
+      "PaymentsSessionOut": {
+        "properties": {
+          "credit": {
+            "title": "Credit",
+            "type": "integer"
+          },
+          "first_name": {
+            "title": "First Name",
+            "type": "string"
+          },
+          "language": {
+            "title": "Language",
+            "type": "string"
+          },
+          "last_name": {
+            "title": "Last Name",
+            "type": "string"
+          },
+          "payables": {
+            "items": {
+              "$ref": "#/components/schemas/PayableOut"
+            },
+            "title": "Payables",
+            "type": "array"
+          },
+          "session": {
+            "title": "Session",
+            "type": "string"
+          },
+          "shared": {
+            "items": {
+              "$ref": "#/components/schemas/PayableOut"
+            },
+            "title": "Shared",
+            "type": "array"
+          },
+          "subscriptions": {
+            "items": {
+              "$ref": "#/components/schemas/ActiveSubscriptionOut"
+            },
+            "title": "Subscriptions",
+            "type": "array"
+          },
+          "vouchers": {
+            "items": {
+              "$ref": "#/components/schemas/PaymentsVoucherOut"
+            },
+            "title": "Vouchers",
+            "type": "array"
+          }
+        },
+        "required": [
+          "session",
+          "first_name",
+          "last_name",
+          "language",
+          "credit",
+          "payables",
+          "shared",
+          "vouchers",
+          "subscriptions"
+        ],
+        "title": "PaymentsSessionOut",
+        "type": "object"
+      },
+      "PaymentsSplitOut": {
+        "properties": {
+          "paid": {
+            "title": "Paid",
+            "type": "integer"
+          },
+          "price": {
+            "title": "Price",
+            "type": "integer"
+          },
+          "shares": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Shares",
+            "type": "array"
+          },
+          "to_pay": {
+            "title": "To Pay",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "price",
+          "paid",
+          "to_pay",
+          "shares"
+        ],
+        "title": "PaymentsSplitOut",
+        "type": "object"
+      },
+      "PaymentsVoucherIn": {
+        "properties": {
+          "card": {
+            "$ref": "#/components/schemas/CardIn"
+          },
+          "code": {
+            "maxLength": 20,
+            "minLength": 4,
+            "title": "Code",
+            "type": "string"
+          },
+          "item": {
+            "$ref": "#/components/schemas/ItemIn"
+          }
+        },
+        "required": [
+          "card",
+          "code",
+          "item"
+        ],
+        "title": "PaymentsVoucherIn",
+        "type": "object"
+      },
+      "PaymentsVoucherOut": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "target": {
+            "title": "Target",
+            "type": "string"
+          },
+          "valid_until": {
+            "title": "Valid Until",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "code",
+          "kind",
+          "value",
+          "target",
+          "valid_until"
+        ],
+        "title": "PaymentsVoucherOut",
+        "type": "object"
+      },
       "PendingDecisionOut": {
         "properties": {
           "description": {
@@ -3687,6 +4898,21 @@
           "last_name"
         ],
         "title": "PersonOut",
+        "type": "object"
+      },
+      "PinIn": {
+        "properties": {
+          "pin": {
+            "maxLength": 6,
+            "minLength": 6,
+            "title": "Pin",
+            "type": "string"
+          }
+        },
+        "required": [
+          "pin"
+        ],
+        "title": "PinIn",
         "type": "object"
       },
       "PlayerOut": {
@@ -4218,121 +5444,150 @@
       },
       "QuoteOut": {
         "properties": {
-          "components": {
-            "items": {
-              "$ref": "#/components/schemas/ComponentOut"
-            },
-            "title": "Components",
-            "type": "array"
-          },
-          "discounts": {
-            "items": {
-              "type": "integer"
-            },
-            "title": "Discounts",
-            "type": "array"
-          },
-          "gross": {
-            "title": "Gross",
-            "type": "integer"
-          },
-          "monthly_sum": {
-            "title": "Monthly Sum",
-            "type": "integer"
-          },
-          "months": {
-            "title": "Months",
-            "type": "integer"
-          },
           "provisional": {
             "description": "cel puțin un tarif este DE_STABILIT",
             "title": "Provisional",
             "type": "boolean"
           },
-          "rounding": {
-            "title": "Rounding",
-            "type": "integer"
+          "segments": {
+            "items": {
+              "$ref": "#/components/schemas/SegmentOut"
+            },
+            "title": "Segments",
+            "type": "array"
           },
           "total": {
-            "description": "bani, rotunjit la leu întreg (R-084)",
+            "description": "bani (RON × 100)",
             "title": "Total",
             "type": "integer"
           }
         },
         "required": [
-          "components",
-          "monthly_sum",
-          "months",
-          "gross",
-          "discounts",
           "total",
-          "rounding",
-          "provisional"
+          "provisional",
+          "segments"
         ],
         "title": "QuoteOut",
         "type": "object"
       },
       "RateIn": {
         "properties": {
+          "amount_per_half_hour": {
+            "maximum": 10000000,
+            "minimum": 0,
+            "title": "Amount Per Half Hour",
+            "type": "integer"
+          },
+          "band": {
+            "$ref": "#/components/schemas/Band"
+          },
           "confirmed": {
             "default": false,
             "title": "Confirmed",
             "type": "boolean"
+          },
+          "customer_type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CustomerType"
+              }
+            ],
+            "default": "standard"
           },
           "location_id": {
             "format": "uuid",
             "title": "Location Id",
             "type": "string"
           },
-          "monthly_price": {
-            "maximum": 100000000,
-            "minimum": 0,
-            "title": "Monthly Price",
-            "type": "integer"
+          "note": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Note",
+            "type": "string"
           },
-          "sessions_per_month": {
-            "maximum": 31,
-            "minimum": 1,
-            "title": "Sessions Per Month",
-            "type": "integer"
+          "product": {
+            "$ref": "#/components/schemas/Product"
           },
-          "sport": {
-            "$ref": "#/components/schemas/Sport"
+          "resource_kind": {
+            "$ref": "#/components/schemas/ResourceKind"
+          },
+          "season": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Season"
+              }
+            ],
+            "default": "all"
           }
         },
         "required": [
           "location_id",
-          "sport",
-          "sessions_per_month",
-          "monthly_price"
+          "resource_kind",
+          "product",
+          "band",
+          "amount_per_half_hour"
         ],
         "title": "RateIn",
         "type": "object"
       },
       "RateOut": {
         "properties": {
+          "amount_per_half_hour": {
+            "description": "bani (RON × 100) pentru 30 de minute",
+            "title": "Amount Per Half Hour",
+            "type": "integer"
+          },
+          "band": {
+            "title": "Band",
+            "type": "string"
+          },
+          "customer_type": {
+            "title": "Customer Type",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
           "marker": {
+            "description": "CONFIRMED sau TO_SET (DE_STABILIT)",
             "title": "Marker",
             "type": "string"
           },
-          "monthly_price": {
-            "title": "Monthly Price",
-            "type": "integer"
+          "note": {
+            "title": "Note",
+            "type": "string"
           },
-          "sessions_per_month": {
-            "title": "Sessions Per Month",
-            "type": "integer"
+          "product": {
+            "title": "Product",
+            "type": "string"
           },
-          "sport": {
-            "title": "Sport",
+          "resource_kind": {
+            "title": "Resource Kind",
+            "type": "string"
+          },
+          "season": {
+            "title": "Season",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
             "type": "string"
           }
         },
         "required": [
-          "sport",
-          "sessions_per_month",
-          "monthly_price",
-          "marker"
+          "id",
+          "resource_kind",
+          "product",
+          "season",
+          "band",
+          "customer_type",
+          "amount_per_half_hour",
+          "marker",
+          "note",
+          "updated_at"
         ],
         "title": "RateOut",
         "type": "object"
@@ -4385,16 +5640,28 @@
       "ReasonIn": {
         "properties": {
           "reason": {
-            "maxLength": 500,
-            "minLength": 1,
+            "default": "",
             "title": "Reason",
             "type": "string"
           }
         },
-        "required": [
-          "reason"
-        ],
         "title": "ReasonIn",
+        "type": "object"
+      },
+      "RecordedOut": {
+        "properties": {
+          "recorded": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Recorded",
+            "type": "array"
+          }
+        },
+        "required": [
+          "recorded"
+        ],
+        "title": "RecordedOut",
         "type": "object"
       },
       "RecoveryCodesOut": {
@@ -4441,6 +5708,23 @@
           }
         },
         "title": "RedeemIn",
+        "type": "object"
+      },
+      "RefundedOut": {
+        "properties": {
+          "close": {
+            "$ref": "#/components/schemas/Command"
+          },
+          "credited": {
+            "title": "Credited",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "credited",
+          "close"
+        ],
+        "title": "RefundedOut",
         "type": "object"
       },
       "RegisterIn": {
@@ -5510,93 +6794,24 @@
       },
       "SessionOut": {
         "properties": {
-          "adult": {
-            "title": "Adult",
+          "authenticated": {
+            "title": "Authenticated",
             "type": "boolean"
           },
-          "challenges": {
-            "items": {
-              "$ref": "#/components/schemas/WaitingChallengeOut"
-            },
-            "title": "Challenges",
-            "type": "array"
-          },
-          "consent_outdated": {
-            "title": "Consent Outdated",
-            "type": "boolean"
-          },
-          "consent_signed": {
-            "title": "Consent Signed",
-            "type": "boolean"
-          },
-          "director": {
-            "title": "Director",
-            "type": "boolean"
-          },
-          "fixtures": {
-            "items": {
-              "$ref": "#/components/schemas/FixtureViewOut"
-            },
-            "title": "Fixtures",
-            "type": "array"
-          },
-          "in_league": {
-            "title": "In League",
-            "type": "boolean"
-          },
-          "ladders": {
-            "items": {
-              "$ref": "#/components/schemas/LadderOut"
-            },
-            "title": "Ladders",
-            "type": "array"
-          },
-          "language": {
-            "title": "Language",
-            "type": "string"
-          },
-          "player": {
-            "$ref": "#/components/schemas/PersonOut"
-          },
-          "questionnaire": {
-            "title": "Questionnaire",
-            "type": "string"
-          },
-          "score_chances": {
-            "items": {
-              "$ref": "#/components/schemas/ScoreChanceOut"
-            },
-            "title": "Score Chances",
-            "type": "array"
-          },
-          "session": {
-            "description": "Se trimite la acțiunile următoare, în loc de card",
-            "title": "Session",
-            "type": "string"
-          },
-          "to_confirm": {
-            "items": {
-              "$ref": "#/components/schemas/WaitingMatchOut"
-            },
-            "title": "To Confirm",
-            "type": "array"
+          "user": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MeOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
-          "session",
-          "player",
-          "language",
-          "adult",
-          "consent_signed",
-          "consent_outdated",
-          "questionnaire",
-          "in_league",
-          "director",
-          "ladders",
-          "score_chances",
-          "to_confirm",
-          "challenges",
-          "fixtures"
+          "authenticated",
+          "user"
         ],
         "title": "SessionOut",
         "type": "object"
@@ -5614,6 +6829,41 @@
         ],
         "title": "SessionType",
         "type": "string"
+      },
+      "SettledOut": {
+        "properties": {
+          "checkout": {
+            "$ref": "#/components/schemas/CheckoutOut"
+          },
+          "close": {
+            "$ref": "#/components/schemas/Command"
+          },
+          "orders": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Orders",
+            "type": "array"
+          },
+          "receipt": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Command"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "checkout",
+          "orders",
+          "receipt",
+          "close"
+        ],
+        "title": "SettledOut",
+        "type": "object"
       },
       "SignupIn": {
         "properties": {
@@ -6188,6 +7438,25 @@
         "title": "StaffEventOut",
         "type": "object"
       },
+      "StaffLoginIn": {
+        "properties": {
+          "card": {
+            "$ref": "#/components/schemas/CardIn"
+          },
+          "pin": {
+            "maxLength": 6,
+            "minLength": 6,
+            "title": "Pin",
+            "type": "string"
+          }
+        },
+        "required": [
+          "card",
+          "pin"
+        ],
+        "title": "StaffLoginIn",
+        "type": "object"
+      },
       "StaffMatchOut": {
         "properties": {
           "booking_id": {
@@ -6334,6 +7603,24 @@
         "title": "StaffOrderIn",
         "type": "object"
       },
+      "StaffOut": {
+        "properties": {
+          "first_name": {
+            "title": "First Name",
+            "type": "string"
+          },
+          "token": {
+            "title": "Token",
+            "type": "string"
+          }
+        },
+        "required": [
+          "token",
+          "first_name"
+        ],
+        "title": "StaffOut",
+        "type": "object"
+      },
       "StaffQuestionnaireOut": {
         "properties": {
           "answers": {
@@ -6403,6 +7690,20 @@
         "title": "StaffQuestionnaireOut",
         "type": "object"
       },
+      "StaffTokenIn": {
+        "properties": {
+          "token": {
+            "maxLength": 64,
+            "title": "Token",
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ],
+        "title": "StaffTokenIn",
+        "type": "object"
+      },
       "StandingOut": {
         "description": "R-012: nothing else is public.",
         "properties": {
@@ -6451,6 +7752,38 @@
         "title": "StandingOut",
         "type": "object"
       },
+      "StartIn": {
+        "properties": {
+          "card": {
+            "$ref": "#/components/schemas/CardIn"
+          },
+          "change_mode": {
+            "$ref": "#/components/schemas/ChangeMode"
+          }
+        },
+        "required": [
+          "card",
+          "change_mode"
+        ],
+        "title": "StartIn",
+        "type": "object"
+      },
+      "StartOut": {
+        "properties": {
+          "checkout": {
+            "$ref": "#/components/schemas/CheckoutOut"
+          },
+          "command": {
+            "$ref": "#/components/schemas/Command"
+          }
+        },
+        "required": [
+          "checkout",
+          "command"
+        ],
+        "title": "StartOut",
+        "type": "object"
+      },
       "StatsOut": {
         "properties": {
           "by_status": {
@@ -6473,6 +7806,62 @@
           "confirmed_by_level"
         ],
         "title": "StatsOut",
+        "type": "object"
+      },
+      "SubscriptionIn": {
+        "properties": {
+          "card": {
+            "$ref": "#/components/schemas/CardIn"
+          },
+          "period": {
+            "$ref": "#/components/schemas/Period"
+          },
+          "selections": {
+            "items": {
+              "$ref": "#/components/schemas/SelectionIn"
+            },
+            "maxItems": 3,
+            "minItems": 1,
+            "title": "Selections",
+            "type": "array"
+          },
+          "starts_on": {
+            "format": "date",
+            "title": "Starts On",
+            "type": "string"
+          }
+        },
+        "required": [
+          "card",
+          "selections",
+          "period",
+          "starts_on"
+        ],
+        "title": "SubscriptionIn",
+        "type": "object"
+      },
+      "SubscriptionOrderedOut": {
+        "properties": {
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "price_total": {
+            "title": "Price Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "price_total",
+          "description"
+        ],
+        "title": "SubscriptionOrderedOut",
         "type": "object"
       },
       "SubscriptionOut": {
@@ -6570,6 +7959,127 @@
           "usage"
         ],
         "title": "SubscriptionOut",
+        "type": "object"
+      },
+      "SubscriptionQuoteOut": {
+        "properties": {
+          "components": {
+            "items": {
+              "$ref": "#/components/schemas/ComponentOut"
+            },
+            "title": "Components",
+            "type": "array"
+          },
+          "discounts": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Discounts",
+            "type": "array"
+          },
+          "gross": {
+            "title": "Gross",
+            "type": "integer"
+          },
+          "monthly_sum": {
+            "title": "Monthly Sum",
+            "type": "integer"
+          },
+          "months": {
+            "title": "Months",
+            "type": "integer"
+          },
+          "provisional": {
+            "description": "cel puțin un tarif este DE_STABILIT",
+            "title": "Provisional",
+            "type": "boolean"
+          },
+          "rounding": {
+            "title": "Rounding",
+            "type": "integer"
+          },
+          "total": {
+            "description": "bani, rotunjit la leu întreg (R-084)",
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "components",
+          "monthly_sum",
+          "months",
+          "gross",
+          "discounts",
+          "total",
+          "rounding",
+          "provisional"
+        ],
+        "title": "SubscriptionQuoteOut",
+        "type": "object"
+      },
+      "SubscriptionRateIn": {
+        "properties": {
+          "confirmed": {
+            "default": false,
+            "title": "Confirmed",
+            "type": "boolean"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "monthly_price": {
+            "maximum": 100000000,
+            "minimum": 0,
+            "title": "Monthly Price",
+            "type": "integer"
+          },
+          "sessions_per_month": {
+            "maximum": 31,
+            "minimum": 1,
+            "title": "Sessions Per Month",
+            "type": "integer"
+          },
+          "sport": {
+            "$ref": "#/components/schemas/Sport"
+          }
+        },
+        "required": [
+          "location_id",
+          "sport",
+          "sessions_per_month",
+          "monthly_price"
+        ],
+        "title": "SubscriptionRateIn",
+        "type": "object"
+      },
+      "SubscriptionRateOut": {
+        "properties": {
+          "marker": {
+            "title": "Marker",
+            "type": "string"
+          },
+          "monthly_price": {
+            "title": "Monthly Price",
+            "type": "integer"
+          },
+          "sessions_per_month": {
+            "title": "Sessions Per Month",
+            "type": "integer"
+          },
+          "sport": {
+            "title": "Sport",
+            "type": "string"
+          }
+        },
+        "required": [
+          "sport",
+          "sessions_per_month",
+          "monthly_price",
+          "marker"
+        ],
+        "title": "SubscriptionRateOut",
         "type": "object"
       },
       "TokenIn": {
@@ -7474,6 +8984,76 @@
         "title": "WaitingMatchOut",
         "type": "object"
       },
+      "WaitlistEntryOut": {
+        "properties": {
+          "confirmed_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confirmed At"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "language": {
+            "title": "Language",
+            "type": "string"
+          },
+          "level": {
+            "title": "Level",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "name",
+          "level",
+          "language",
+          "source",
+          "status",
+          "created_at",
+          "confirmed_at"
+        ],
+        "title": "WaitlistEntryOut",
+        "type": "object"
+      },
       "WaitlistOut": {
         "properties": {
           "ends_at": {
@@ -7514,6 +9094,20 @@
           "status"
         ],
         "title": "WaitlistOut",
+        "type": "object"
+      },
+      "WaitlistTokenIn": {
+        "properties": {
+          "token": {
+            "maxLength": 500,
+            "title": "Token",
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ],
+        "title": "WaitlistTokenIn",
         "type": "object"
       }
     },
@@ -10157,6 +11751,155 @@
         ]
       }
     },
+    "/api/v1/device/cafe/orders/{order_id}/advance": {
+      "post": {
+        "operationId": "jungle_checkout_api_display_advance",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "order_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Order Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DisplayAdvanceIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Display Advance",
+        "tags": [
+          "device: café display"
+        ]
+      }
+    },
+    "/api/v1/device/cafe/queue": {
+      "get": {
+        "operationId": "jungle_checkout_api_display_queue",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/OrderOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Display Queue",
+        "tags": [
+          "device: café display"
+        ]
+      }
+    },
     "/api/v1/device/whoami": {
       "get": {
         "description": "A device checks it is enrolled (and signals that it is alive).",
@@ -10715,7 +12458,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConsentOut"
+                  "$ref": "#/components/schemas/KioskConsentOut"
                 }
               }
             },
@@ -11407,7 +13150,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SessionOut"
+                  "$ref": "#/components/schemas/KioskSessionOut"
                 }
               }
             },
@@ -11558,6 +13301,1898 @@
         ]
       }
     },
+    "/api/v1/kiosk/payments/alerts": {
+      "post": {
+        "description": "A device fault the bridge reported (jam, low change, cassette full, no paper).",
+        "operationId": "jungle_checkout_api_alert",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlertIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentsOkOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Alert",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/bookings/{booking_id}/split": {
+      "get": {
+        "description": "R-060, R-061: the shares of the hour, and what is still to pay, live.",
+        "operationId": "jungle_checkout_api_split",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "booking_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Booking Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "parts",
+            "required": false,
+            "schema": {
+              "default": 4,
+              "title": "Parts",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentsSplitOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Split",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/check-in": {
+      "post": {
+        "description": "§8.3 flow 1 (R-030).",
+        "operationId": "jungle_checkout_api_check_in",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentsCardOnlyIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentsCheckInOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Check In",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/checkouts": {
+      "post": {
+        "operationId": "jungle_checkout_api_create_checkout",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckoutIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckoutOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Create Checkout",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/checkouts/{checkout_id}": {
+      "get": {
+        "description": "The kiosk page, restarted, checks what became of a transaction the bridge still has.",
+        "operationId": "jungle_checkout_api_get_checkout",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "checkout_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Checkout Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckoutOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Get Checkout",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/checkouts/{checkout_id}/cancel": {
+      "post": {
+        "operationId": "jungle_checkout_api_cancel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "checkout_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Checkout Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventsIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CancelOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Cancel",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/checkouts/{checkout_id}/finish": {
+      "post": {
+        "operationId": "jungle_checkout_api_finish",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "checkout_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Checkout Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventsIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinishOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Finish",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/checkouts/{checkout_id}/refunded": {
+      "post": {
+        "operationId": "jungle_checkout_api_refunded",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "checkout_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Checkout Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventsIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefundedOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Refunded",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/checkouts/{checkout_id}/settle": {
+      "post": {
+        "operationId": "jungle_checkout_api_settle",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "checkout_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Checkout Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventsIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettledOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Settle",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/checkouts/{checkout_id}/start": {
+      "post": {
+        "operationId": "jungle_checkout_api_start",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "checkout_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Checkout Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Start",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/events": {
+      "post": {
+        "description": "What the bridge signed (notes, change, receipts, staff operations); idempotent.",
+        "operationId": "jungle_checkout_api_events",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventsIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordedOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Events",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/idle": {
+      "get": {
+        "description": "The idle screen: the café menu (the subscription offers come from the public\nconfigurator, by `location_slug`).",
+        "operationId": "jungle_checkout_api_idle",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentsIdleOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Idle",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/logout": {
+      "post": {
+        "operationId": "jungle_checkout_api_logout",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogoutIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Logout",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/pay-balance": {
+      "post": {
+        "description": "§8.3 flow 6: the credit in the account pays.",
+        "operationId": "jungle_checkout_api_pay_balance",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BalanceIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Pay Balance",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/session": {
+      "post": {
+        "operationId": "jungle_checkout_api_session",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentsCardOnlyIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentsSessionOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Session",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/staff/login": {
+      "post": {
+        "operationId": "jungle_checkout_api_staff_login",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StaffLoginIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Staff Login",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/staff/logout": {
+      "post": {
+        "operationId": "jungle_checkout_api_staff_logout",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StaffTokenIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Staff Logout",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/staff/operations": {
+      "post": {
+        "operationId": "jungle_checkout_api_start_operation",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OperationIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationStartedOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Start Operation",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/staff/operations/list": {
+      "post": {
+        "operationId": "jungle_checkout_api_list_operations",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StaffTokenIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/OperationOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "List Operations",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/subscriptions": {
+      "post": {
+        "description": "§8.3 flow 4: the 3-step configurator (R-081); then it is paid like any item.",
+        "operationId": "jungle_checkout_api_order_subscription",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubscriptionIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionOrderedOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Order Subscription",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/subscriptions/{subscription_id}/freeze": {
+      "post": {
+        "description": "§8.3 flow 4: freezing (R-086).",
+        "operationId": "jungle_checkout_api_freeze",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "subscription_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Subscription Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KioskFreezeIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FrozenOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Freeze",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
+    "/api/v1/kiosk/payments/voucher": {
+      "post": {
+        "description": "§8.3 flow 6: a voucher of the card holder, used here (R-121).",
+        "operationId": "jungle_checkout_api_voucher",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentsVoucherIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaidOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Voucher",
+        "tags": [
+          "kiosk: payments"
+        ]
+      }
+    },
     "/api/v1/league/hall-of-fame": {
       "get": {
         "description": "LG-134: the winners of every closed season (Season 0 has no prizes).",
@@ -11705,7 +15340,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MeOut"
+                  "$ref": "#/components/schemas/LeagueMeOut"
                 }
               }
             },
@@ -13601,7 +17236,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/OrderIn"
+                "$ref": "#/components/schemas/CafeOrderIn"
               }
             }
           },
@@ -13709,7 +17344,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CancelIn"
+                "$ref": "#/components/schemas/CafeCancelIn"
               }
             }
           },
@@ -16087,6 +19722,84 @@
         ]
       }
     },
+    "/api/v1/staff/kiosk-pin": {
+      "post": {
+        "description": "A staff member who handles cash sets their PIN for the kiosk's staff mode (Q54).",
+        "operationId": "jungle_checkout_api_set_pin",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PinIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentsOkOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Set Pin",
+        "tags": [
+          "staff: kiosk"
+        ]
+      }
+    },
     "/api/v1/staff/league/fixtures/{fixture_id}/finished": {
       "post": {
         "description": "Q28: the director marks a tournament match finished; the score is then entered and\nconfirmed at the League Kiosk.",
@@ -17148,7 +20861,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ReasonIn"
+                "$ref": "#/components/schemas/LeagueReasonIn"
               }
             }
           },
@@ -18532,7 +22245,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RateIn"
+                "$ref": "#/components/schemas/SubscriptionRateIn"
               }
             }
           },
@@ -18543,7 +22256,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RateOut"
+                  "$ref": "#/components/schemas/SubscriptionRateOut"
                 }
               }
             },
@@ -19636,7 +23349,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/QuoteOut"
+                  "$ref": "#/components/schemas/SubscriptionQuoteOut"
                 }
               }
             },
@@ -19956,7 +23669,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TokenIn"
+                "$ref": "#/components/schemas/WaitlistTokenIn"
               }
             }
           },
@@ -20008,7 +23721,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TokenIn"
+                "$ref": "#/components/schemas/WaitlistTokenIn"
               }
             }
           },
