@@ -54,10 +54,10 @@ Capturi de ecran, făcute de testele automate: [repaus](ecrane/1-repaus.png), [a
 ## Rezultate
 | Verificare | Rezultat |
 |---|---|
-| Teste backend | **@BACKEND@**, toate trec; acoperire totală 98% |
+| Teste backend | **538**, toate trec; acoperire totală 98% |
 | Liga în backend (`jungle/league`, cu chioșcul) și banii | **100% acoperire pe ramuri** |
-| Hardware Bridge | **@BRIDGE@ de teste, 100% acoperire pe ramuri**, inclusiv căderea de curent, comenzile repetate și paginile de pe alt site |
-| Chioșcul Ligii, teste unitare | **@KIOSK@** (texte, ora clubului, scorul, legătura cu bridge-ul, ecranele) |
+| Hardware Bridge | **56 de teste, 100% acoperire pe ramuri**, inclusiv căderea de curent, comenzile repetate și paginile de pe alt site |
+| Chioșcul Ligii, teste unitare | **18** (texte, ora clubului, scorul, legătura cu bridge-ul, ecranele) |
 | Cap-coadă | site: 26 de teste; **Chioșcul Ligii: 6 teste cu backendul real, Hardware Bridge real și scanări semnate**: repaus, card necunoscut, înscriere GDPR, scor introdus și confirmat de ceilalți trei jucători, check-in, căutare, ieșire după 30 s; accesibilitate verificată (axe) |
 | Instalarea pe aparat | verificată fără instalare (`deploy/kiosk-os/check.sh`) |
 | ruff, mypy strict, migrații, client API, traduceri RO/EN | 0 probleme |
