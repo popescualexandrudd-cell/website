@@ -16,7 +16,7 @@ from typing import Any
 from websockets.asyncio.server import Server, ServerConnection, serve
 from websockets.exceptions import ConnectionClosed
 
-from jungle_bridge.bridge import Bridge
+from jungle_bridge.bridge import Bridge, Send
 from jungle_bridge.config import Settings
 from jungle_bridge.drivers.base import Devices
 from jungle_bridge.journal import Journal
@@ -36,9 +36,25 @@ def build(settings: Settings, devices: Devices, clock: Callable[[], datetime] = 
     return bridge
 
 
+def pusher(ws: ServerConnection) -> Send:
+    """What the bridge pushes to this page. A push the page does not take in time is cancelled
+    by the bridge; the connection is then cut (a half-sent message cannot stay on it) and the
+    page connects again by itself."""
+
+    async def push(text: str) -> None:
+        try:
+            await ws.send(text)
+        except asyncio.CancelledError:
+            ws.transport.abort()
+            raise
+
+    return push
+
+
 def handler(bridge: Bridge) -> Callable[[ServerConnection], Any]:
     async def connection(ws: ServerConnection) -> None:
-        bridge.clients.add(ws.send)
+        push = pusher(ws)
+        bridge.clients.add(push)
         try:
             async for raw in ws:
                 reply = await bridge.handle(raw)
@@ -46,7 +62,7 @@ def handler(bridge: Bridge) -> Callable[[ServerConnection], Any]:
         except ConnectionClosed:
             log.info("kiosk page disconnected")
         finally:
-            bridge.clients.discard(ws.send)
+            bridge.clients.discard(push)
 
     return connection
 

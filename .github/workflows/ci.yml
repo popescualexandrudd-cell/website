@@ -28,3 +28,11 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile && pnpm --filter @jungle/web exec playwright install --with-deps chromium
       - run: scripts/test-all
+      # An e2e failure keeps its traces and screenshots (Playwright `test-results`) for a week.
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-test-results
+          path: apps/*/test-results/
+          retention-days: 7
+          if-no-files-found: ignore

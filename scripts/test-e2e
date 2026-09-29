@@ -20,6 +20,14 @@ cleanup() {
 }
 trap cleanup EXIT
 
+# A failed Playwright run: what the servers said (the traces are in apps/*/test-results).
+failed() {
+  for log in "$@"; do echo "==> $log"; cat "$log"; done
+  echo "==> backend.log (last 200 lines)"
+  tail -n 200 "$WORK/backend.log"
+  exit 1
+}
+
 if [ -z "${PW_CHROMIUM_PATH:-}" ] && [ -x /opt/pw-browsers/chromium-1194/chrome-linux/chrome ]; then
   export PW_CHROMIUM_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome
 fi
@@ -52,7 +60,7 @@ done
 
 if [ -z "${E2E_ONLY:-}" ]; then
   echo "==> Playwright (website)"
-  E2E_MAIL_DIR="$MAIL_DIR" pnpm --filter @jungle/web exec playwright test
+  E2E_MAIL_DIR="$MAIL_DIR" pnpm --filter @jungle/web exec playwright test || failed
 fi
 
 if [ "${E2E_ONLY:-}" != "payments" ]; then
@@ -76,8 +84,8 @@ for _ in $(seq 1 60); do curl -fs -o /dev/null http://localhost:5174/ && break; 
 curl -fs -o /dev/null http://localhost:5174/ || { echo "kiosk not ready"; cat "$WORK"/kiosk*.log "$WORK/bridge.log"; exit 1; }
 
 echo "==> Playwright (League Kiosk)"
-E2E_KIOSK_DATA="$WORK/kiosk.json" E2E_SCREENSHOTS="${E2E_SCREENSHOTS:-}" pnpm --filter @jungle/kiosk-league exec playwright test || {
-  cat "$WORK/bridge.log"; exit 1; }
+E2E_KIOSK_DATA="$WORK/kiosk.json" E2E_SCREENSHOTS="${E2E_SCREENSHOTS:-}" pnpm --filter @jungle/kiosk-league exec playwright test ||
+  failed "$WORK/bridge.log"
 fi
 
 echo "==> Payments Kiosk and café display: demo data, two Hardware Bridges (simulators), production builds"
@@ -113,5 +121,5 @@ done
 
 echo "==> Playwright (Payments Kiosk + café display)"
 E2E_PAYMENTS_DATA="$WORK/payments.json" E2E_SCREENSHOTS="${E2E_SCREENSHOTS:-}" \
-  pnpm --filter @jungle/kiosk-payments exec playwright test || {
-  cat "$WORK/bridge-payments.log" "$WORK/bridge-display.log"; exit 1; }
+  pnpm --filter @jungle/kiosk-payments exec playwright test ||
+  failed "$WORK/bridge-payments.log" "$WORK/bridge-display.log"

@@ -47,6 +47,7 @@ MAX_AMOUNT = 1_000_000  # 10 000 RON: far above anything paid at a kiosk
 MAX_PENDING = 100
 LOW_CHANGE_NOTES = 5  # fewer notes of a value for change: "rest scăzut" (§8.3)
 CASSETTE_ALMOST_FULL = 20  # notes of space left: "casetă plină"
+PUSH_SECONDS = 2  # a page on the same machine takes a pushed message at once
 
 
 def _receipt_lines(value: Any) -> list[ReceiptLine]:
@@ -114,13 +115,17 @@ class Bridge:
 
     # ------------------------------------------------------------ pushing to the pages
     async def broadcast(self, message: dict[str, Any]) -> None:
+        """To every page at once: a page that went away, or does not take the message within
+        PUSH_SECONDS (closing, frozen), is dropped and never holds the others back."""
         text = json.dumps(message)
-        for send in list(self.clients):
-            try:
-                await send(text)
-            except Exception:  # a page that went away must not stop the others
-                log.info("dropping a closed kiosk page")
-                self.clients.discard(send)
+        await asyncio.gather(*(self._push(send, text) for send in list(self.clients)))
+
+    async def _push(self, send: Send, text: str) -> None:
+        try:
+            await asyncio.wait_for(send(text), PUSH_SECONDS)
+        except Exception:
+            log.info("dropping a kiosk page that does not take messages")
+            self.clients.discard(send)
 
     async def scanner_loop(self) -> None:
         """Each code read is signed and pushed to the kiosk page."""
@@ -152,10 +157,13 @@ class Bridge:
                 )
             await cash.disable()
             total = self.journal.total(txn, cash_journal.ACCEPTED)
-            await self.broadcast({"event": "cash.complete", "txn": txn, "total": total})
+            last: dict[str, Any] = {"event": "cash.complete", "txn": txn, "total": total}
         except DeviceFault as fault:
             await cash.disable()
-            await self.broadcast({"event": "fault", "device": fault.device, "code": fault.code})
+            last = {"event": "fault", "device": fault.device, "code": fault.code}
+        # Over before the page hears of it: the page's next command is never "busy".
+        self.collecting = None
+        await self.broadcast(last)
 
     # ------------------------------------------------------------ messages from the pages
     async def handle(self, raw: str | bytes) -> dict[str, Any]:

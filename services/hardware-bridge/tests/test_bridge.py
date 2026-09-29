@@ -8,6 +8,7 @@ import json
 from typing import Any
 
 import pytest
+from jungle_bridge import bridge as bridge_module
 from jungle_bridge import journal as j
 from jungle_bridge.bridge import Bridge
 from jungle_bridge.drivers.simulator import LEU, SimCash
@@ -89,6 +90,25 @@ async def test_a_closed_page_does_not_stop_the_others(bridge: Bridge) -> None:
     await bridge.broadcast({"event": "x"})
     assert await page.next() == {"event": "x"}
     assert gone not in bridge.clients
+
+
+async def test_a_page_that_does_not_take_messages_does_not_hold_back_the_others(
+    bridge: Bridge, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A page that is closing can make a send wait up to 10 s: the scan reaches the live page
+    at once, and the stuck page is dropped after PUSH_SECONDS."""
+    monkeypatch.setattr(bridge_module, "PUSH_SECONDS", 0.05)
+    stuck_forever = asyncio.Event()
+
+    async def stuck(_: str) -> None:
+        await stuck_forever.wait()
+
+    bridge.clients.add(stuck)
+    page = Page(bridge)
+    pushing = asyncio.create_task(bridge.broadcast({"event": "scan"}))
+    assert await page.next() == {"event": "scan"}
+    await pushing
+    assert stuck not in bridge.clients and page.send in bridge.clients
 
 
 async def test_simulator_control_is_off_in_production(make_bridge: Any) -> None:

@@ -8,7 +8,7 @@ from typing import Any
 
 import pytest
 from jungle_bridge.bridge import Bridge
-from jungle_bridge.server import start
+from jungle_bridge.server import pusher, start
 from websockets.asyncio.client import connect
 from websockets.exceptions import ConnectionClosed, InvalidStatus
 
@@ -58,3 +58,24 @@ async def test_other_pages_are_refused(bridge: Bridge, origin: str | None) -> No
     finally:
         server.close()
         await server.wait_closed()
+
+
+async def test_a_push_cut_short_closes_that_page(bridge: Bridge) -> None:
+    """A push cancelled mid-way (the page did not take it in time) cuts the connection: a
+    half-sent message cannot stay on it; the page connects again by itself."""
+    aborted: list[bool] = []
+
+    class Transport:
+        def abort(self) -> None:
+            aborted.append(True)
+
+    class Stuck:
+        transport = Transport()
+
+        async def send(self, _: str) -> None:
+            await asyncio.Event().wait()
+
+    push = pusher(Stuck())  # type: ignore[arg-type]
+    with pytest.raises(TimeoutError):
+        await asyncio.wait_for(push("x"), 0.01)
+    assert aborted == [True]
