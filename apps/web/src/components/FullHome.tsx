@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { FullHero } from "./FullHero";
 
 /** The 19 sections of the home page (§9.2), delivered and approved one by one (Stage 11). */
 export const SECTIONS = [
@@ -24,22 +25,33 @@ export const SECTIONS = [
 ] as const;
 
 /** How many sections are built (delivered for approval or approved), in the order above. */
-export const BUILT = 1;
+export const BUILT = 2;
 
 /**
- * The home page of the full site while it is being built: a map of the sections, the built ones
- * marked, the others to come. Marked as a preview; visitors keep seeing the pre-launch page until
- * the owner turns on the full site (Q57). Each approved section replaces its line with itself.
+ * The home page of the full site while it is being built: the sections built so far (the header
+ * is in the layout), then a map of all of them, the built ones marked, the others to come. Marked
+ * as a preview; visitors keep seeing the pre-launch page until the owner publishes the full site
+ * (Q57). Each new section takes its place above the map.
  */
-export async function FullHome() {
+export function FullHome() {
+  return (
+    <>
+      <FullHero next="sectiuni" />
+      <SectionMap />
+    </>
+  );
+}
+
+/** The map of the 19 sections, the built ones marked (a preview for the owner). */
+async function SectionMap() {
   const t = await getTranslations("web.site.home");
   return (
-    <section className="page site-preview" aria-labelledby="preview-title">
+    <section id="sectiuni" className="section site-preview" aria-labelledby="preview-title">
       <div className="container">
         <p className="kicker">{t("kicker")}</p>
-        <h1 id="preview-title" className="h2">
+        <h2 id="preview-title" className="h2">
           {t("title")}
-        </h1>
+        </h2>
         <p className="lead">{t("lead", { built: BUILT, total: SECTIONS.length })}</p>
         <ol className="section-map">
           {SECTIONS.map((key, i) => (

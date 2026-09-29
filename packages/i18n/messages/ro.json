@@ -467,6 +467,16 @@
           "contact": "Contact"
         }
       },
+      "hero": {
+        "eyebrow": "Pantelimon · Deschidere în martie 2027",
+        "title": "Intră în junglă.",
+        "lead": "Patru terenuri de padel indoor cu o pasarelă-lounge la 3 metri între ele, cafeneaua și, peste alee, pilates Reformer și sala de evenimente. Rezervi online, plătești la chioșc și îți urmărești locul în ligă, live.",
+        "book": "Rezervă un teren",
+        "league": "Vezi liga live",
+        "scroll": "Descoperă clubul",
+        "renderAlt": "Randare 3D, seara: vedere de pe pasarela-lounge de la 3 metri, peste balustrada de sticlă, spre terenurile de padel cu pereți de sticlă, luminate de benzi LED.",
+        "renderNote": "Randare 3D ilustrativă, realizată de noi după schița clubului. Nu este o fotografie și nici proiectul final."
+      },
       "pages": {
         "padel": "Padel",
         "league": "Liga Jungle",

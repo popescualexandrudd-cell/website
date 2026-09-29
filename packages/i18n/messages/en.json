@@ -467,6 +467,16 @@
           "contact": "Contact"
         }
       },
+      "hero": {
+        "eyebrow": "Pantelimon · Opening March 2027",
+        "title": "Step into the jungle.",
+        "lead": "Four indoor padel courts with a lounge walkway 3 metres up between them, the café and, across the lane, Reformer pilates and the events room. Book online, pay at the kiosk and follow your place in the league, live.",
+        "book": "Book a court",
+        "league": "See the league live",
+        "scroll": "Discover the club",
+        "renderAlt": "3D rendering, evening: the view from the gallery lounge 3 metres up, over the glass balustrade, towards the glass-walled padel courts lit by LED lines.",
+        "renderNote": "Illustrative 3D rendering made by us from the club's sketch. Not a photograph and not the final design."
+      },
       "pages": {
         "padel": "Padel",
         "league": "Jungle League",

@@ -4,6 +4,12 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, secțiunea 2 — 29.09.2026 (livrată, așteaptă aprobarea)
+#### Adăugat
+- Hero-ul site-ului complet (§9.2, secțiunea 2), `FullHero`: randarea arenei aprobată în Etapa 1B (imaginea statică, apoi scena 3D pe aparatele capabile), marcată ilustrativă (Q44); „Intră în junglă.” / „Step into the jungle.”; „Rezervă un teren” (`/rezervari`) și „Vezi liga live” (`/liga`); „Descoperă clubul” spre secțiunea următoare. Mișcare doar prin transformări (randarea se așază, textul urcă o dată, săgeata respiră), oprită pentru „mișcare redusă”. Texte `web.site.hero.*` RO + EN.
+- Pagina principală a site-ului complet: Hero-ul, apoi harta secțiunilor (acum h2, `BUILT = 2`).
+- Teste cap-coadă `e2e/full/hero.spec.ts` (acțiunile RO/EN, indicatorul de scroll, mișcarea redusă); Lighthouse mobil 95 · 100 · 100 · 100, desktop 100 · 100 · 100 · 100 (rapoartele în `verificare/etapa-11/`).
+
 ### Reparat — 29.09.2026 (panoul de admin, calendarul)
 - O rezervare care nu intră în orele zilei afișate (de exemplu 23:00–00:30, văzută în ziua de după) era desenată peste celula de la 08:00, cu înălțime aproape zero, și o acoperea (găsit de verificarea de accesibilitate, WCAG 2.5.8, când testele au rulat seara). Acum partea din program se desenează normal, iar o rezervare fără nicio parte în program apare sub calendar, în „În afara programului zilei”, de unde se deschide ca oricare alta.
 - `manage.py payments_demo`: rezervarea demo cade în programul clubului (Q3); seara târziu, a doua zi dimineață.

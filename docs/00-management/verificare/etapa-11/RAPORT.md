@@ -5,7 +5,7 @@
 | Secțiune (§9.2) | Livrată | Starea |
 |---|---|---|
 | Fundația site-ului complet + **1. Antetul fix** | 29.09.2026 | **aprobată 29.09.2026** |
-| 2. Hero „Intră în junglă” | — | în lucru |
+| 2. Hero „Intră în junglă” | 29.09.2026 | **așteaptă aprobarea** |
 | 3–19 | — | mai târziu, câte una |
 
 ---
@@ -69,3 +69,45 @@ Pe ecrane mai înguste de 1280 px (telefon, tabletă, laptop mic), meniul se str
 3. În captura 1: harta arată „Antetul fix” ca gata și „Hero «Intră în junglă»” ca următoarea secțiune.
 4. Citiți **Q57** în [INTREBARI_DESCHISE.md](../../INTREBARI_DESCHISE.md) și spuneți-ne când vreți să apară site-ul complet.
 5. Dacă antetul vă place, scrieți „aprob secțiunea 1”. Dacă vreți altceva (ordinea meniului, textul butonului), spuneți ce anume.
+
+---
+
+## Secțiunea 2 — Hero „Intră în junglă”
+
+### Ce s-a construit
+Primul ecran al paginii principale, pe toată înălțimea ecranului (§9.2, secțiunea 2):
+- **Imaginea:** vederea de pe pasarela-lounge, la 3 m, spre terenuri, adică randarea arenei făcută de noi după schița clubului și aprobată în Etapa 1B.
+  - Pe calculatoarele și telefoanele cu placă video potrivită, peste ea apare scena 3D în timp real.
+  - Imaginea e marcată: „Randare 3D ilustrativă, realizată de noi după schița clubului. Nu este o fotografie și nici proiectul final.”
+- **Textele:** deasupra titlului, „Pantelimon · Deschidere în martie 2027”; titlul **„Intră în junglă.”**; apoi, doar fapte: patru terenuri de padel indoor cu pasarela-lounge între ele, cafeneaua și, peste alee, pilates Reformer și sala de evenimente; rezervi online, plătești la chioșc, îți urmărești locul în ligă, live.
+- **Două acțiuni:** „Rezervă un teren” (duce la `/ro/rezervari`) și „Vezi liga live” (duce la `/ro/liga`). Ambele pagini sunt deocamdată „În construcție” și primesc conținut în secțiunile lor.
+- **„Descoperă clubul”,** cu o săgeată, jos: duce la secțiunea următoare. Acum aceea e harta secțiunilor; după secțiunea 3, va fi turul clubului.
+- **Mișcare cinematică, dar calmă:** randarea se „așază” încet, textul urcă o singură dată, săgeata „respiră”. Cine a ales pe telefon sau calculator „mișcare redusă” vede totul nemișcat.
+- **În engleză:** „Step into the jungle.”, cu „Book a court” și „See the league live”.
+
+**Ce n-am pus, intenționat:** în §9.2 scrie „vizual al halei (plante, lumini)”. Luminile sunt în randare. Plantele le vom adăuga când avem proiectul de design interior, ca să nu inventăm cum arată clubul (Q44, încă deschisă).
+
+### Capturi de ecran
+4. [Hero pe calculator](ecrane/desktop-03-hero.png)
+5. [Hero pe telefon](ecrane/mobile-03-hero.png)
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Cap-coadă | 3 teste noi (calculator + telefon):<br>• titlul, imaginea cu descriere, nota „ilustrativă”, cele două acțiuni în română, apoi în engleză;<br>• „Descoperă clubul” duce la secțiunea următoare;<br>• cu „mișcare redusă” nu se mișcă nimic.<br>Accesibilitatea e verificată cu axe. Toate testele site-ului trec: 28 de rulări pentru pagina de pre-lansare, 17 pentru site-ul complet. |
+| Lighthouse, mobil | **Performanță 95 · Accesibilitate 100 · Bune practici 100 · SEO 100** ([raport](lighthouse-mobil-sectiunea-2.html)). Cel mai mare element apare la 2,9 s în simularea de rețea mobilă lentă, ca la pagina de pre-lansare. Pagina nu „sare” deloc la încărcare (CLS 0). |
+| Lighthouse, calculator | **100 · 100 · 100 · 100** ([raport](lighthouse-desktop-sectiunea-2.html)) |
+| Toate verificările proiectului | trec înainte de push |
+
+### Dubla revizuire: probleme găsite și reparate
+1. **O formulare inexactă:** prima variantă a textului spunea că pasarela e „deasupra” terenurilor. După schiță e la 3 m, între rânduri, deci am corectat. Pilates și sala de evenimente apar „peste alee”, nu „sub același acoperiș”.
+2. **Viteza:** animația textului mută doar poziția, nu transparența. Titlul e vizibil din primul cadru și nu întârzie afișarea paginii (Lighthouse o confirmă).
+3. **Din perspectiva unui atacator:** secțiunea nu aduce nimic nou (doar legături interne, nicio resursă de la terți, niciun formular).
+
+### Ce e de hotărât
+Nimic nou. Rămâne **Q44** (proiectul de design interior sau fotografii reale ale spațiilor), pentru plante și pentru imaginile celorlalte spații.
+
+### Cum verificați (click cu click)
+1. Deschideți capturile 4 și 5.
+2. Dacă vreți, deschideți rapoartele Lighthouse de mai sus (se deschid în browser).
+3. Dacă Hero-ul vă place, scrieți „aprob secțiunea 2”. Dacă vreți alt titlu sau alt text, spuneți ce anume.

@@ -35,3 +35,6 @@ export const IconMenu = ({ size = 22 }: P) => (
 export const IconClose = ({ size = 22 }: P) => (
   <svg {...base(size)}><path d="M6 6l12 12M18 6L6 18" /></svg>
 );
+export const IconArrowDown = ({ size = 20 }: P) => (
+  <svg {...base(size)}><path d="M12 4v16M6 14l6 6 6-6" /></svg>
+);

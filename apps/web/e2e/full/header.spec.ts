@@ -20,11 +20,12 @@ test("§9.2.1: the full site's header on the home page, with the map of the sect
   const header = page.locator("header.site-header--full");
   await expect(header).toBeVisible();
   await expect(header.getByRole("link", { name: "Rezervă" })).toBeVisible(); // always visible, a phone too
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Site-ul Jungle Padel, secțiune cu secțiune");
+  await expect(page.getByRole("heading", { level: 2, name: "Site-ul Jungle Padel, secțiune cu secțiune" })).toBeVisible();
   const map = page.locator(".section-map li");
   await expect(map).toHaveCount(19);
-  await expect(map.first()).toHaveAttribute("data-built", "true");
-  await expect(map.nth(1)).toContainText("Urmează");
+  await expect(map.nth(0)).toHaveAttribute("data-built", "true");
+  await expect(map.nth(1)).toHaveAttribute("data-built", "true"); // the hero (section 2)
+  await expect(map.nth(2)).toContainText("Urmează");
   if (info.project.name === "desktop") {
     const menu = page.getByRole("navigation", { name: "Meniul principal" }).first();
     await expect(menu.getByRole("link")).toHaveText(MENU_RO);
