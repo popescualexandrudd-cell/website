@@ -69,7 +69,7 @@ describe("the public fields of a player (R-012)", () => {
   });
 
   it("shows nothing that is not known, and 'Jucător' for someone not public (Q55)", () => {
-    const hidden = { name: "", tier: "", division: "", lp: null, level: null, position: null };
+    const hidden = { name: "", in_league: false, tier: "", division: "", lp: null, level: null, position: null };
     expect(playerName("ro", hidden)).toBe("Jucător");
     expect(playerDetails("ro", hidden)).toBe("");
     expect(playerDetails("ro", { ...hidden, name: "Ana", level: 3 })).toBe("Nivel 3.0");

@@ -4,7 +4,14 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
-### Etapa 9 — 29.09.2026 (aprobată 29.09.2026; Q55 deschisă)
+### Q55 aplicată — 29.09.2026 (răspunsul proprietarului)
+#### Schimbat
+- Ecranele: toți jucătorii de pe teren apar pe nume; cei din ligă au insigna „Ligă” și, doar ei, rangul, LP-ul și nivelul (R-012). Un cont șters sau o persoană care s-a opus (GDPR art. 21, `screens.NameObjection`, notată de recepție în adminul tehnic) apare ca „Jucător”. Politica de confidențialitate (ciorna RO + EN) spune asta.
+#### Adăugat
+- Chioșcul Ligii: „Echipele pe teren”. Cei 4 jucători scanați pe un teren își aleg singuri echipele („Cu cine joci?”); ecranul terenului se schimbă imediat (`POST /kiosk/league/lineups`, `/lineups/{booking_id}`; `screens.CourtLineup`, în jurnal). Nu după introducerea meciului, nu la turnee sau provocări. Coduri noi: `screens.not_on_court`, `screens.teams_fixed`.
+- `screens.pairs_from_scan_order` și `screens.announcements` sunt confirmate de proprietar.
+
+### Etapa 9 — 29.09.2026 (aprobată 29.09.2026; Q55 rezolvată)
 #### Adăugat
 - `jungle.screens` (§8.5, 100% acoperire pe ramuri): `GET /api/v1/device/screen/state`, doar pentru ecrane înrolate, active, din rețeaua clubului (refuzurile în jurnal).
   - **Ecranul unui teren:** sesiunea curentă cu tipul, durata și jucătorii (doar câmpurile R-012; cine nu e public apare „Jucător”, Q55), echipele (din meciul de la chioșc, meciul de turneu, provocarea acceptată sau scanările de la intrarea pe teren), următoarea rezervare, Meciul zilei, cod QR spre liga de pe site.

@@ -12,6 +12,7 @@ from jungle.attendance.models import Scan
 from jungle.bookings.models import Booking
 from jungle.cafe.models import CafeOrder
 from jungle.league.models import LeagueSeason, LeagueSnapshot, MatchOfTheDay
+from jungle.screens.models import CourtLineup
 from jungle.screens.realtime import changed
 
 
@@ -41,3 +42,8 @@ def league_changed(sender: Any, instance: LeagueSnapshot, **kwargs: Any) -> None
         "location_id", flat=True
     )
     changed(location.first(), "league")
+
+
+@receiver(post_save, sender=CourtLineup)
+def lineup_changed(sender: Any, instance: CourtLineup, **kwargs: Any) -> None:
+    changed(instance.booking.location_id, "players")

@@ -12,12 +12,12 @@ export const match: Session = {
   match_of_the_day: true,
   teams: [
     [
-      { name: "Popescu Alexandru Daniel", tier: "diamond", division: "II", lp: 67, level: 5.2, position: 1 },
-      { name: "Moșteanu Rareș", tier: "diamond", division: "III", lp: 12, level: 5.0, position: 2 },
+      { name: "Popescu Alexandru Daniel", in_league: true, tier: "diamond", division: "II", lp: 67, level: 5.2, position: 1 },
+      { name: "Moșteanu Rareș", in_league: true, tier: "diamond", division: "III", lp: 12, level: 5.0, position: 2 },
     ],
     [
-      { name: "Jucător 3", tier: "platinum", division: "I", lp: 88, level: 4.8, position: 4 },
-      { name: "Jucător 4", tier: "diamond", division: "IV", lp: 40, level: 4.9, position: 3 },
+      { name: "Jucător 3", in_league: true, tier: "platinum", division: "I", lp: 88, level: 4.8, position: 4 },
+      { name: "Jucător 4", in_league: true, tier: "diamond", division: "IV", lp: 40, level: 4.9, position: 3 },
     ],
   ],
 };

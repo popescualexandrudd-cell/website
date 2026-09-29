@@ -17,6 +17,7 @@ export type ConsentText = Schemas["ConsentTextOut"];
 export type Match = Schemas["MatchOut"];
 export type Challenge = Schemas["ChallengeOut"];
 export type Person = Schemas["PersonOut"];
+export type Lineup = Schemas["LineupOut"];
 export type Ladder = "doubles" | "singles" | "pairs";
 export type Score = {
   sets: { a: number; b: number; tiebreak?: [number, number] | null; super_tiebreak?: boolean }[];
@@ -85,6 +86,14 @@ export function kioskApi(apiUrl: string, deviceToken: string, fetchImpl?: typeof
         }),
       ),
     checkIn: (card: Card) => unwrap(client.POST(`${base}/check-in`, { body: { card } })),
+    lineups: (card: Card) => unwrap(client.POST(`${base}/lineups`, { body: { card } })),
+    choosePartner: (bookingId: string, card: Card, partnerId: string) =>
+      unwrap(
+        client.POST(`${base}/lineups/{booking_id}`, {
+          params: { path: { booking_id: bookingId } },
+          body: { card, partner_id: partnerId },
+        }),
+      ),
   };
 }
 

@@ -95,3 +95,10 @@ Arată:
 3. Comparați prima captură cu exemplul din specificație (§8.5, mai sus): terenul, tipul meciului, jucătorii cu rang, LP și nivel, timpul rămas, ce urmează.
 4. În [INTREBARI_DESCHISE.md](../../INTREBARI_DESCHISE.md), citiți **Q55** și răspundeți unde nu sunteți de acord.
 5. Dacă vreți să le încercați pe un calculator (cu ajutorul cuiva tehnic): pașii din [apps/court-screens/README.md](../../../../apps/court-screens/README.md).
+
+## După aprobare: răspunsul la Q55 (29.09.2026)
+- **Toți jucătorii apar pe nume** pe ecranele terenurilor. Cei din ligă au insigna **„Ligă”** și, doar ei, rangul, LP-ul și nivelul.
+- **Excepțiile:** cine își șterge contul, sau cere să nu apară pe nume (dreptul de opoziție din GDPR), apare ca „Jucător”. Recepția notează cererea în adminul tehnic; pagina din panoul de admin vine în Etapa 10. Politica de confidențialitate (ciorna) spune asta.
+- **La Chioșcul Ligii, butonul nou „Echipele pe teren”:** după scanare, oricare dintre cei 4 jucători de pe teren alege „Cu cine joci?”, iar ecranul terenului se schimbă imediat. Implicit rămân perechile în ordinea scanării. Nu se poate după ce meciul a fost introdus, la meciurile de turneu sau la provocări.
+- Anunțurile clubului și codul QR rămân cum erau, confirmate.
+

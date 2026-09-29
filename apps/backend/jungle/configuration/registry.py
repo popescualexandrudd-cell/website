@@ -739,16 +739,17 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "screens.pairs_from_scan_order",
             True,
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Ecranul terenului: dacă echipele nu sunt încă știute, 4 jucători apar în perechi, "
-            "în ordinea scanării la intrarea pe teren (§8.5).",
+            "în ordinea scanării la intrarea pe teren; jucătorii le pot schimba la Chioșcul "
+            "Ligii (Q55, confirmat de proprietar pe 29.09.2026).",
             boolean,
             question="Q55",
         ),
         ConfigSpec(
             "screens.announcements",
             [],
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Anunțurile clubului pe ecrane (reclame interne, §8.5), în română și engleză.",
             announcements,
             question="Q55",

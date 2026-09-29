@@ -193,6 +193,8 @@
     "league.score_tournament_unfinished": "Tournament matches are played to the end: they cannot be marked unfinished.",
     "league.joined_after_match": "{name} joined the league after this match, so the match cannot count in the league.",
     "devices.session_expired": "Your session has expired. Please scan your card again.",
+    "screens.not_on_court": "You are not on a court where the teams can be chosen now.",
+    "screens.teams_fixed": "The teams are already set (the match has been entered, or it is a tournament match).",
     "checkout.kiosk_only": "Cash payments are taken only at the club's Payments Kiosk.",
     "checkout.busy": "The kiosk is finishing another payment. Please try again in a minute.",
     "checkout.not_found": "The payment was not found.",
@@ -495,7 +497,8 @@
       "standings": "Standings",
       "fixtures": "Tournament matches",
       "back": "Back",
-      "count": "{count, plural, one {# to do} other {# to do}}"
+      "count": "{count, plural, one {# to do} other {# to do}}",
+      "teams": "Teams on court"
     },
     "consent": {
       "title": "League consent",
@@ -586,6 +589,14 @@
       "platinum": "Platinum",
       "diamond": "Diamond",
       "master": "Master"
+    },
+    "teams": {
+      "title": "Teams on court",
+      "loading": "Loading…",
+      "none": "You are not on a court where the teams can be chosen now (4 players must have scanned in on the court, and the match must not be entered yet).",
+      "now": "The teams now",
+      "question": "Who do you play with? The other two make the other team. The court screen changes at once.",
+      "done": "The teams have changed. You can see them on the court screen."
     }
   },
   "payKiosk": {
@@ -867,6 +878,7 @@
     "minutes": "{minutes} min",
     "vs": "vs",
     "versus": "versus",
+    "leagueBadge": "League",
     "player": "Player",
     "lp": "{lp} LP",
     "level": "Level {level}",

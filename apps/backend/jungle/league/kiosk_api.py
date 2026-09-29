@@ -43,6 +43,7 @@ from jungle.league.models import Ladder, LeagueSeason, SeasonStatus, Standing
 from jungle.legal.models import DocumentKind
 from jungle.legal.services import current_document
 from jungle.privacy import league_consent
+from jungle.screens import lineups
 
 router = Router(tags=["kiosk: league"], auth=device_auth)
 
@@ -166,6 +167,33 @@ class ProposeIn(Schema):
 
 class CardOnlyIn(Schema):
     card: CardIn
+
+
+class LineupOut(Schema):
+    """A court where the teams can be chosen (Q55): its four players and the teams now."""
+
+    booking_id: uuid.UUID
+    court: str
+    starts_at: datetime
+    ends_at: datetime
+    players: list[PersonOut]
+    teams: list[list[uuid.UUID]]
+
+
+class PartnerIn(Schema):
+    card: CardIn
+    partner_id: uuid.UUID
+
+
+def lineup_out(found: lineups.Lineup) -> LineupOut:
+    return LineupOut(
+        booking_id=found.booking_id,
+        court=found.court,
+        starts_at=found.starts_at,
+        ends_at=found.ends_at,
+        players=[PersonOut(**vars(kiosk_views.person(u))) for u in found.players],
+        teams=found.teams,
+    )
 
 
 class RespondIn(Schema):
@@ -423,3 +451,24 @@ def check_in(request: HttpRequest, payload: CardOnlyIn) -> CheckInOut:
     user = cards.resolve(scanned_token(request, payload.card)).user
     scan = record_arrival_at_device(device_of(request), user)
     return CheckInOut(scanned_at=scan.scanned_at, first_name=user.first_name)
+
+
+@router.post("/lineups", response={200: list[LineupOut], **errors(401, 403, 404, 422)})
+def court_lineups(request: HttpRequest, payload: CardOnlyIn) -> list[LineupOut]:
+    """Q55: the courts where this player can choose the teams now (four players checked in)."""
+    _guard(request, "league.kiosk_lineups")
+    user = cards.resolve(scanned_token(request, payload.card)).user
+    return [lineup_out(x) for x in lineups.for_player(device_of(request), user)]
+
+
+@router.post(
+    "/lineups/{booking_id}", response={200: LineupOut, **errors(400, 401, 403, 404, 409, 422)}
+)
+def choose_partner(request: HttpRequest, booking_id: uuid.UUID, payload: PartnerIn) -> LineupOut:
+    """Q55: "I play with …"; the two others make the other team (shown on the court screen)."""
+    _guard(request, "league.kiosk_lineup")
+    user = cards.resolve(scanned_token(request, payload.card)).user
+    chosen = lineups.choose_partner(
+        request, device_of(request), user, booking_id, payload.partner_id
+    )
+    return lineup_out(chosen)

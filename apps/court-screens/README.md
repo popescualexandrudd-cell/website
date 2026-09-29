@@ -1,12 +1,13 @@
 # Ecranele de la terenuri și din lobby / cafenea / mezanin
 
-> **Stare:** construit în Etapa 9 (29.09.2026), în așteptarea aprobării proprietarului.
+> **Stare:** construit în Etapa 9, aprobat de proprietar pe 29.09.2026; Q55 aplicată (toți pe nume, insigna „Ligă”, echipele alese la Chioșcul Ligii).
 
 ## Ce face (§8.5)
 
 - **Ecranul unui teren** (aparatul are terenul setat la înrolare):
   - în timpul unei sesiuni, ca în exemplul din specificație: `TEREN 4 · 14:00–15:30 · 90 MIN · MECI OFICIAL DE LIGĂ`;
-  - jucătorii cu **doar câmpurile publice din R-012**: nume, rang, LP, nivel. Cine nu e public apare ca „Jucător” (Q55);
+  - **toți jucătorii pe nume** (Q55); cei din ligă au insigna **„Ligă”** și, doar ei, rangul, LP-ul și nivelul (R-012). Un cont șters, sau cine s-a opus (GDPR art. 21), apare ca „Jucător”;
+  - echipele: cele din meciul introdus, meciul de turneu sau provocare; altfel cele alese de jucători la Chioșcul Ligii; altfel perechi după ordinea scanării;
   - „vs” între echipe, timpul rămas (`00:47`), următoarea rezervare, eticheta „Meciul zilei”, codul QR spre liga de pe site.
   - Cât terenul e liber: vizualul „jungle” animat (nemișcat dacă sistemul cere mișcare redusă), ce urmează, clasamentul, evenimentele și anunțurile clubului.
 - **Ecranul din lobby / cafenea / mezanin** (aparat fără teren): starea tuturor terenurilor, Meciul zilei, clasamentele, Regii Junglei, evenimentele, numerele comenzilor de la cafenea gata de ridicat.

@@ -202,6 +202,9 @@ class ErrorCode(StrEnum):
     DEVICES_SIGNATURE_INVALID = "devices.signature_invalid"
     DEVICES_KEY_INVALID = "devices.key_invalid"
     DEVICES_SESSION_EXPIRED = "devices.session_expired"
+    # Screens: the teams chosen at the League Kiosk (Q55)
+    SCREENS_NOT_ON_COURT = "screens.not_on_court"
+    SCREENS_TEAMS_FIXED = "screens.teams_fixed"
     LEAGUE_SCORE_TOURNAMENT_UNFINISHED = "league.score_tournament_unfinished"
     LEAGUE_JOINED_AFTER_MATCH = "league.joined_after_match"
     CHECKOUT_KIOSK_ONLY = "checkout.kiosk_only"

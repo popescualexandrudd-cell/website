@@ -3525,6 +3525,58 @@
         "title": "LineOut",
         "type": "object"
       },
+      "LineupOut": {
+        "description": "A court where the teams can be chosen (Q55): its four players and the teams now.",
+        "properties": {
+          "booking_id": {
+            "format": "uuid",
+            "title": "Booking Id",
+            "type": "string"
+          },
+          "court": {
+            "title": "Court",
+            "type": "string"
+          },
+          "ends_at": {
+            "format": "date-time",
+            "title": "Ends At",
+            "type": "string"
+          },
+          "players": {
+            "items": {
+              "$ref": "#/components/schemas/PersonOut"
+            },
+            "title": "Players",
+            "type": "array"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "teams": {
+            "items": {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "title": "Teams",
+            "type": "array"
+          }
+        },
+        "required": [
+          "booking_id",
+          "court",
+          "starts_at",
+          "ends_at",
+          "players",
+          "teams"
+        ],
+        "title": "LineupOut",
+        "type": "object"
+      },
       "LocationIn": {
         "properties": {
           "address": {
@@ -4387,6 +4439,24 @@
           "amount"
         ],
         "title": "PaidOut",
+        "type": "object"
+      },
+      "PartnerIn": {
+        "properties": {
+          "card": {
+            "$ref": "#/components/schemas/CardIn"
+          },
+          "partner_id": {
+            "format": "uuid",
+            "title": "Partner Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "card",
+          "partner_id"
+        ],
+        "title": "PartnerIn",
         "type": "object"
       },
       "PasswordChangeIn": {
@@ -6827,11 +6897,15 @@
         "type": "object"
       },
       "ScreenPlayerOut": {
-        "description": "R-012 only; an empty name is a player who is not public (\"Jucător\").",
+        "description": "Everyone by name (Q55); rank, LP and level only for league players (`in_league`, R-012);\nan empty name is an erased account (\"Jucător\").",
         "properties": {
           "division": {
             "title": "Division",
             "type": "string"
+          },
+          "in_league": {
+            "title": "In League",
+            "type": "boolean"
           },
           "level": {
             "anyOf": [
@@ -6877,6 +6951,7 @@
         },
         "required": [
           "name",
+          "in_league",
           "tier",
           "division",
           "lp",
@@ -13315,6 +13390,197 @@
           }
         ],
         "summary": "Idle",
+        "tags": [
+          "kiosk: league"
+        ]
+      }
+    },
+    "/api/v1/kiosk/league/lineups": {
+      "post": {
+        "description": "Q55: the courts where this player can choose the teams now (four players checked in).",
+        "operationId": "jungle_league_kiosk_api_court_lineups",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CardOnlyIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LineupOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Court Lineups",
+        "tags": [
+          "kiosk: league"
+        ]
+      }
+    },
+    "/api/v1/kiosk/league/lineups/{booking_id}": {
+      "post": {
+        "description": "Q55: \"I play with …\"; the two others make the other team (shown on the court screen).",
+        "operationId": "jungle_league_kiosk_api_choose_partner",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "booking_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Booking Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PartnerIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LineupOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Choose Partner",
         "tags": [
           "kiosk: league"
         ]

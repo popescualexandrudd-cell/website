@@ -193,6 +193,8 @@
     "league.score_tournament_unfinished": "Meciurile de turneu se joacă până la capăt: nu pot fi marcate „neterminat”.",
     "league.joined_after_match": "{name} s-a înscris în ligă după acest meci, deci meciul nu poate conta în ligă.",
     "devices.session_expired": "Sesiunea a expirat. Scanează cardul din nou.",
+    "screens.not_on_court": "Nu ești pe un teren unde se pot alege echipele acum.",
+    "screens.teams_fixed": "Echipele sunt deja stabilite (meciul e introdus sau e un meci de turneu).",
     "checkout.kiosk_only": "Plățile în numerar se fac doar la Chioșcul de Plăți al clubului.",
     "checkout.busy": "Chioșcul termină o altă plată. Încearcă din nou peste un minut.",
     "checkout.not_found": "Plata nu a fost găsită.",
@@ -495,7 +497,8 @@
       "standings": "Clasamente",
       "fixtures": "Meciuri de turneu",
       "back": "Înapoi",
-      "count": "{count, plural, one {# de făcut} few {# de făcut} other {# de făcut}}"
+      "count": "{count, plural, one {# de făcut} few {# de făcut} other {# de făcut}}",
+      "teams": "Echipele pe teren"
     },
     "consent": {
       "title": "Acordul pentru ligă",
@@ -586,6 +589,14 @@
       "platinum": "Platină",
       "diamond": "Diamant",
       "master": "Maestru"
+    },
+    "teams": {
+      "title": "Echipele pe teren",
+      "loading": "Se încarcă…",
+      "none": "Acum nu ești pe un teren unde se pot alege echipele (trebuie să fiți 4 jucători scanați la intrarea pe teren, iar meciul să nu fie introdus încă).",
+      "now": "Echipele acum",
+      "question": "Cu cine joci? Ceilalți doi formează cealaltă echipă. Ecranul terenului se schimbă imediat.",
+      "done": "Echipele s-au schimbat. Le vedeți pe ecranul terenului."
     }
   },
   "payKiosk": {
@@ -867,6 +878,7 @@
     "minutes": "{minutes} min",
     "vs": "vs",
     "versus": "contra",
+    "leagueBadge": "Ligă",
     "player": "Jucător",
     "lp": "{lp} LP",
     "level": "Nivel {level}",

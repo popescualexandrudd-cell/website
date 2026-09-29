@@ -13,6 +13,7 @@
 | Bookings, attendance, card scans, payments, balance and debts | Providing the services, payments, fiscal receipts, accounting | contract (b); legal obligation (c) |
 | League data: results, rating, points, rank | Running the league | contract (b) and the consent signed at the league kiosk (a) |
 | Public display of first name, last name, level, points and ranking position | Leaderboards on the website, club screens and kiosks | your consent in the league form (a) |
+| The names of the people playing on a court, on that court's screen and the club screens, for the length of the booking | Letting players and people at the club know who is playing (§8.5) | legitimate interest (f); you can object at any time (section 6) and you appear as "Player" |
 | Name, email, playing level (waitlist) | Opening announcements | your consent (a) |
 | Technical logs: IP address, date and time, actions in your account | Security, fraud prevention, proof of consent | legitimate interest (f); legal obligation (c) |
 | Messages sent to the AI assistant (once enabled) | Answers and bookings on request | contract (b); data minimised and pseudonymised |
@@ -21,6 +22,8 @@ We never sell your data or use it for personalised advertising.
 
 ## 3. What is public
 On the website, the club screens and the kiosks only these appear: **first name, last name, level (rank and numeric level), points and ranking position**. Detailed statistics are visible only to you, in your account.
+
+On a court's screen, while you play there, **your name also appears even if you are not in the league** (nothing else). League players are marked "League". If you do not want to appear by name, tell us (at the reception or by email) and you will appear as "Player".
 
 ## 4. Who receives the data
 Only the providers who help us operate, under contract and only on our instructions:

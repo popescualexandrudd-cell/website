@@ -7,6 +7,7 @@ import { Consent } from "./Consent";
 import { Fixtures } from "./Fixtures";
 import { Home } from "./Home";
 import { ScoreEntry } from "./ScoreEntry";
+import { Teams } from "./Teams";
 
 afterEach(cleanup);
 
@@ -195,5 +196,55 @@ describe("Q28 tournament matches", () => {
     expect(screen.queryByText("Meciul nu s-a terminat (ex. s-a terminat timpul)")).toBeNull(); // LG-084
     await act(async () => fireEvent.click(screen.getByText("Trimite scorul")));
     expect(fixtureScore).toHaveBeenCalledWith("f-1", { session: "s-1" }, expect.objectContaining({ unfinished: false }));
+  });
+});
+
+describe("Q55: the players choose their teams", () => {
+  const players = [person("p1", "Ana"), person("p2", "Bogdan"), person("p3", "Cristi"), person("p4", "Dana")];
+  const court = (teams: string[][]) => ({
+    booking_id: "b-1",
+    court: "Teren 4",
+    starts_at: "2027-04-05T11:00:00Z",
+    ends_at: "2027-04-05T12:30:00Z",
+    players,
+    teams,
+  });
+
+  it("shows the teams now and changes them with one touch", async () => {
+    const choosePartner = vi.fn(async () => court([["p1", "p3"], ["p2", "p4"]]));
+    const kiosk = mount(<Teams />, session(), {
+      lineups: vi.fn(async () => [court([["p1", "p2"], ["p3", "p4"]])]),
+      choosePartner,
+    });
+    await act(async () => undefined);
+    expect(screen.getByLabelText("Echipele acum").textContent).toBe("Ana Demo & Bogdan Demo vs Cristi Demo & Dana Demo");
+    expect(screen.getByRole("button", { name: "Bogdan Demo" }).getAttribute("aria-pressed")).toBe("true");
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "Cristi Demo" }));
+    });
+    expect(choosePartner).toHaveBeenCalledWith("b-1", { session: "s-1" }, "p3");
+    expect(screen.getByLabelText("Echipele acum").textContent).toBe("Ana Demo & Cristi Demo vs Bogdan Demo & Dana Demo");
+    expect(kiosk.notify).toHaveBeenCalled();
+  });
+
+  it("says when there is nothing to choose, and reports errors", async () => {
+    const fail = new Error("away");
+    const kiosk = mount(<Teams />, session(), { lineups: vi.fn(async () => Promise.reject(fail)) });
+    await act(async () => undefined);
+    expect(kiosk.fail).toHaveBeenCalledWith(fail);
+    expect(screen.getByText(/Acum nu ești pe un teren/)).toBeTruthy();
+  });
+
+  it("a refused choice is reported", async () => {
+    const refused = new Error("teams fixed");
+    const kiosk = mount(<Teams />, session(), {
+      lineups: vi.fn(async () => [court([["p1", "p2"], ["p3", "p4"]])]),
+      choosePartner: vi.fn(async () => Promise.reject(refused)),
+    });
+    await act(async () => undefined);
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "Dana Demo" }));
+    });
+    expect(kiosk.fail).toHaveBeenCalledWith(refused);
   });
 });

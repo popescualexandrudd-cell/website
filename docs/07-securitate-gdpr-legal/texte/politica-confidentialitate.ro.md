@@ -13,6 +13,7 @@
 | Rezervări, prezențe, scanările cardului, plăți, sold și datorii | Furnizarea serviciilor, încasări, bon fiscal, evidență contabilă | contract (lit. b); obligație legală (lit. c) |
 | Date de ligă: rezultate, rating, puncte, rang | Organizarea ligii | contract (lit. b) și acordul semnat la chioșcul ligii (lit. a) |
 | Afișarea publică a numelui, prenumelui, nivelului, punctelor și locului în clasament | Clasamente pe site, pe ecrane și la chioșcuri | acordul tău din formularul ligii (lit. a) |
+| Numele și prenumele celor care joacă pe un teren, pe ecranul acelui teren și pe ecranele din club, cât timp durează rezervarea | Informarea jucătorilor și a celor din club despre cine joacă (§8.5) | interes legitim (lit. f); te poți opune oricând (secțiunea 6) și apari ca „Jucător” |
 | Nume, email, nivel de joc (lista de așteptare) | Anunțuri despre deschidere | acordul tău (lit. a) |
 | Jurnale tehnice: adresa IP, data și ora, acțiunile făcute în cont | Securitate, prevenirea fraudei, dovada acordurilor | interes legitim (lit. f); obligație legală (lit. c) |
 | Mesaje trimise asistentului AI (după activarea lui) | Răspunsuri și rezervări la cerere | contract (lit. b); datele sunt minimizate și pseudonimizate |
@@ -21,6 +22,8 @@ Nu vindem datele nimănui și nu le folosim pentru publicitate personalizată.
 
 ## 3. Ce apare public
 Pe site, pe ecranele din club și la chioșcuri apar doar: **numele, prenumele, nivelul (rangul și nivelul numeric), punctele și locul în clasament**. Statisticile detaliate le vezi doar tu, în contul tău.
+
+Pe ecranul unui teren, cât timp joci acolo, apare și **numele tău, chiar dacă nu ești în ligă** (fără alte date). Jucătorii din ligă sunt marcați cu „Ligă”. Dacă nu vrei să apari pe nume, spune-ne (la recepție sau pe email) și vei apărea ca „Jucător”.
 
 ## 4. Cui transmitem datele
 Doar furnizorilor care ne ajută să funcționăm, pe bază de contract și numai după instrucțiunile noastre:

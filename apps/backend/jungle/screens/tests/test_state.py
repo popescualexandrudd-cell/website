@@ -38,11 +38,12 @@ from jungle.ledger.models import LedgerTransaction
 from jungle.locations.models import Location, Resource, ResourceKind
 from jungle.privacy import services as privacy
 from jungle.screens import views
+from jungle.screens.models import NameObjection
 from jungle.screens.tests.conftest import Screen, book, enter
 
 pytestmark = pytest.mark.django_db
 Join = Callable[..., User]
-PLAYER_FIELDS = {"name", "tier", "division", "lp", "level", "position"}
+PLAYER_FIELDS = {"name", "in_league", "tier", "division", "lp", "level", "position"}
 
 
 def names(team: list[dict[str, Any]]) -> list[str]:
@@ -71,6 +72,7 @@ def test_r012_the_court_screen_shows_the_match_and_only_public_fields(
     for player in current["teams"][0] + current["teams"][1]:
         assert set(player) == PLAYER_FIELDS  # R-012: nothing else leaves the server
         assert player["tier"] and player["division"] and player["position"] is not None
+        assert player["in_league"] is True
     row = Standing.objects.get(season=season, ladder="doubles", competitor_id=str(a.pk))
     assert current["teams"][0][0]["lp"] == row.lp
     assert state["court"]["next"]["session_type"] == "training"
@@ -80,36 +82,34 @@ def test_r012_the_court_screen_shows_the_match_and_only_public_fields(
     assert state["courts"] == [] and state["cafe_ready"] == []
 
 
-def test_q55_someone_outside_the_league_is_never_named(
+def test_q55_everyone_by_name_league_players_marked(
     season: LeagueSeason,
     join: Join,
     make_user: Callable[..., User],
     court: Resource,
     court_screen: Screen,
 ) -> None:
-    """Q55: a guest, a player who has not joined yet, or one who withdrew appears as
-    "Jucător" (an empty name for the screen), with no rank or LP."""
-    member, guest, gone = join(), make_user(), join()
+    """Q55 (the owner's answer, 29.09.2026): everyone on the court appears by name; players in
+    the league are marked (the "Ligă" badge) and only they show rank, LP and level (R-012). A
+    player who withdrew from the league appears by name, unmarked; an erased account appears
+    as "Jucător" (an empty name)."""
+    member, guest, gone, erased, objected = join(), make_user(), join(), make_user(), join()
     match = book(court, member, at("2027-04-05 08:30"), session_type=SessionType.FREE_RENTAL)
-    enter(match, member, guest, gone)
+    enter(match, member, guest, gone, erased, objected)
+    # GDPR art. 21: someone who objected appears as "Jucător", league or not.
+    objection = NameObjection.objects.create(user=objected, note="cerere la recepție")
+    assert str(objection) == str(objected.pk)
     LeaguePlayer.objects.filter(user=gone).update(status=PlayerStatus.WITHDRAWN)
-    teams = court_screen.state()["court"]["current"]["teams"]
-    assert len(teams) == 1  # three people: no teams to guess
-    shown = teams[0]
-    assert shown[0]["name"] == full(member)
+    User.objects.filter(pk=erased.pk).update(deleted_at=clock.now())
+    set_config("screens.pairs_from_scan_order", False)
+    shown = court_screen.state()["court"]["current"]["teams"][0]
+    assert shown[0]["name"] == full(member) and shown[0]["in_league"] is True
     assert shown[0]["tier"] == "" and shown[0]["lp"] is None  # joined, not placed yet
-    assert (
-        shown[1]
-        == shown[2]
-        == {
-            "name": "",
-            "tier": "",
-            "division": "",
-            "lp": None,
-            "level": None,
-            "position": None,
-        }
-    )
+    plain = {"tier": "", "division": "", "lp": None, "level": None, "position": None}
+    assert shown[1] == {"name": full(guest), "in_league": False, **plain}
+    assert shown[2] == {"name": full(gone), "in_league": False, **plain}
+    assert shown[3] == {"name": "", "in_league": False, **plain}
+    assert shown[4] == {"name": "", "in_league": False, **plain}
 
 
 def test_q55_teams_from_the_scans_or_as_they_come(

@@ -1029,6 +1029,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/kiosk/league/lineups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Court Lineups
+         * @description Q55: the courts where this player can choose the teams now (four players checked in).
+         */
+        post: operations["jungle_league_kiosk_api_court_lineups"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kiosk/league/lineups/{booking_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Choose Partner
+         * @description Q55: "I play with …"; the two others make the other team (shown on the court screen).
+         */
+        post: operations["jungle_league_kiosk_api_choose_partner"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/kiosk/league/logout": {
         parameters: {
             query?: never;
@@ -4944,6 +4984,33 @@ export interface components {
             /** Unit Price */
             unit_price: number;
         };
+        /**
+         * LineupOut
+         * @description A court where the teams can be chosen (Q55): its four players and the teams now.
+         */
+        LineupOut: {
+            /**
+             * Booking Id
+             * Format: uuid
+             */
+            booking_id: string;
+            /** Court */
+            court: string;
+            /**
+             * Ends At
+             * Format: date-time
+             */
+            ends_at: string;
+            /** Players */
+            players: components["schemas"]["PersonOut"][];
+            /**
+             * Starts At
+             * Format: date-time
+             */
+            starts_at: string;
+            /** Teams */
+            teams: string[][];
+        };
         /** LocationIn */
         LocationIn: {
             /**
@@ -5302,6 +5369,15 @@ export interface components {
         PaidOut: {
             /** Amount */
             amount: number;
+        };
+        /** PartnerIn */
+        PartnerIn: {
+            card: components["schemas"]["CardIn"];
+            /**
+             * Partner Id
+             * Format: uuid
+             */
+            partner_id: string;
         };
         /** PasswordChangeIn */
         PasswordChangeIn: {
@@ -6290,11 +6366,14 @@ export interface components {
         };
         /**
          * ScreenPlayerOut
-         * @description R-012 only; an empty name is a player who is not public ("Jucător").
+         * @description Everyone by name (Q55); rank, LP and level only for league players (`in_league`, R-012);
+         *     an empty name is an erased account ("Jucător").
          */
         ScreenPlayerOut: {
             /** Division */
             division: string;
+            /** In League */
+            in_league: boolean;
             /** Level */
             level: number | null;
             /** Lp */
@@ -10259,6 +10338,146 @@ export interface operations {
             };
             /** @description Forbidden */
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_kiosk_api_court_lineups: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CardOnlyIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LineupOut"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_kiosk_api_choose_partner: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                booking_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PartnerIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LineupOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };

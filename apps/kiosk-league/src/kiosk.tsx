@@ -4,7 +4,7 @@ import type { Card, KioskApi, Session } from "./lib/api";
 import type { Lang, Params } from "./lib/i18n";
 import { t } from "./lib/i18n";
 
-export type Screen = "home" | "consent" | "score" | "confirm" | "challenges" | "standings" | "fixtures";
+export type Screen = "home" | "consent" | "score" | "confirm" | "challenges" | "standings" | "fixtures" | "teams";
 
 export type Kiosk = {
   lang: Lang;

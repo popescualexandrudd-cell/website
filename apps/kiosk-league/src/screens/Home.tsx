@@ -69,6 +69,7 @@ export function Home() {
           <Tile label={t("actions.fixtures")} count={session.fixtures.length} onClick={go("fixtures")} />
         ) : null}
         <Tile label={t("actions.checkIn")} onClick={() => void checkIn()} />
+        <Tile label={t("actions.teams")} onClick={go("teams")} />
         <Tile label={t("actions.standings")} onClick={go("standings")} />
       </nav>
     </div>

@@ -23,9 +23,11 @@ router = Router(tags=["device: screens"], auth=device_auth)
 
 
 class ScreenPlayerOut(Schema):
-    """R-012 only; an empty name is a player who is not public ("Jucător")."""
+    """Everyone by name (Q55); rank, LP and level only for league players (`in_league`, R-012);
+    an empty name is an erased account ("Jucător")."""
 
     name: str
+    in_league: bool
     tier: str
     division: str
     lp: int | None

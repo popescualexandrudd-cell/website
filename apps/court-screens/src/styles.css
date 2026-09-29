@@ -92,6 +92,14 @@ body {
   vertical-align: middle;
 }
 
+.badge--league {
+  margin-left: 0.6rem;
+  background: transparent;
+  border: 2px solid var(--color-brass-400);
+  color: var(--color-brass-300);
+  font-size: 0.7em;
+}
+
 .badge--spotlight {
   background: var(--color-brass-400);
   color: var(--color-night-950);

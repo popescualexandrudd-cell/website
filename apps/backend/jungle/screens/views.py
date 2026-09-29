@@ -7,8 +7,9 @@
 - A **lobby screen** (lobby, café, mezzanine): every court's state, the Match of the day, the
   standings, the Kings of the Jungle, events, and the café orders ready to collect.
 
-A player who is not in the league (or who withdrew the consent) never appears by name: the
-screen shows "Jucător" (Q55, DE_CONFIRMAT).
+Everyone on a court appears by name (Q55, the owner's answer of 29.09.2026); players in the
+league are marked and show their rank, LP and level; an erased account, or someone who objected
+to appearing by name (GDPR art. 21, `NameObjection`), shows "Jucător".
 """
 
 from __future__ import annotations
@@ -43,6 +44,7 @@ from jungle.league.models import (
     TournamentStatus,
 )
 from jungle.locations.models import Location, Resource, ResourceKind
+from jungle.screens.models import CourtLineup, NameObjection
 
 COURT_KINDS = (ResourceKind.PADEL_COURT, ResourceKind.TENNIS_COURT)
 LIVE = (BookingStatus.CONFIRMED, BookingStatus.COMPLETED)
@@ -50,9 +52,12 @@ LIVE = (BookingStatus.CONFIRMED, BookingStatus.COMPLETED)
 
 @dataclass(frozen=True)
 class Player:
-    """R-012 only. An empty name: not public (the screen shows "Jucător")."""
+    """Everyone on court by name (Q55, 29.09.2026); the league's public fields (R-012) only for
+    players in the league, marked `in_league` (the screen shows a "Ligă" badge). An empty name:
+    an erased account (the screen shows "Jucător")."""
 
     name: str
+    in_league: bool = False
     tier: str = ""
     division: str = ""
     lp: int | None = None
@@ -138,6 +143,7 @@ def _players(
     ids: list[uuid.UUID], season: LeagueSeason | None, ladder: str, visible: set[str]
 ) -> list[Player]:
     users = {u.pk: u for u in User.objects.filter(pk__in=ids)}
+    hidden = set(NameObjection.objects.filter(user_id__in=ids).values_list("user_id", flat=True))
     rows = (
         {
             r.competitor_id: r
@@ -151,17 +157,21 @@ def _players(
     shown = []
     for player_id in ids:
         user = users.get(player_id)
-        if user is None or str(player_id) not in visible:
+        if user is None or user.deleted_at is not None or not user.is_active or player_id in hidden:
             shown.append(Player(name=""))
+            continue
+        if str(player_id) not in visible:
+            shown.append(Player(name=_display_name(user)))
             continue
         row = rows.get(str(player_id))
         if row is None:
-            shown.append(Player(name=_display_name(user)))
+            shown.append(Player(name=_display_name(user), in_league=True))
             continue
         placed = row.rank_index is not None
         shown.append(
             Player(
                 name=_display_name(user),
+                in_league=True,
                 tier=row.tier if placed else "",
                 division=row.division if placed else "",
                 lp=row.lp if placed else None,
@@ -176,10 +186,9 @@ def _uuids(values: list[Any]) -> list[uuid.UUID]:
     return [uuid.UUID(str(v)) for v in values if v]
 
 
-def teams_of(booking: Booking, season: LeagueSeason | None) -> list[list[uuid.UUID]]:
-    """Who plays, in teams when they are known: the match entered at the kiosk, a tournament
-    fixture, an accepted challenge; otherwise the check-ins on court, in pairs by the order of
-    the scans when there are four (`screens.pairs_from_scan_order`, Q55)."""
+def fixed_teams(booking: Booking) -> list[list[uuid.UUID]] | None:
+    """The teams nobody can change on the court: the match entered at the kiosk (or its
+    tournament match), or the tournament draw."""
     match = (
         LeagueMatch.objects.filter(Q(booking=booking) | Q(fixture__booking=booking))
         .order_by("-proposed_at")
@@ -195,13 +204,32 @@ def teams_of(booking: Booking, season: LeagueSeason | None) -> list[list[uuid.UU
     fixture = Fixture.objects.filter(booking=booking).first()
     if fixture is not None and (fixture.team_a or fixture.team_b):
         return [_uuids(fixture.team_a), _uuids(fixture.team_b)]
-    scanned = list(
+    return None
+
+
+def scanned_in(booking: Booking) -> list[uuid.UUID]:
+    """Who checked in on the court, in the order of the scans."""
+    return list(
         dict.fromkeys(
             Scan.objects.filter(booking=booking, kind=ScanKind.COURT_ENTRY)
             .order_by("scanned_at")
             .values_list("user_id", flat=True)
         )
     )
+
+
+def teams_of(booking: Booking, season: LeagueSeason | None) -> list[list[uuid.UUID]]:
+    """Who plays, in teams when they are known: the match entered at the kiosk, a tournament
+    fixture, an accepted challenge, the teams the players chose at the kiosk (Q55); otherwise
+    the check-ins on court, in pairs by the order of the scans when there are four
+    (`screens.pairs_from_scan_order`, Q55)."""
+    fixed = fixed_teams(booking)
+    if fixed is not None:
+        return fixed
+    scanned = scanned_in(booking)
+    lineup = CourtLineup.objects.filter(booking=booking).first()
+    if lineup is not None and set(_uuids(lineup.team_a + lineup.team_b)) == set(scanned):
+        return [_uuids(lineup.team_a), _uuids(lineup.team_b)]
     if not scanned and booking.session_type == SessionType.CHALLENGE and season is not None:
         who = booking.organizer_id
         challenge = (

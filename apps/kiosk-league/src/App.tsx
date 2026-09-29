@@ -21,6 +21,7 @@ import { Home } from "./screens/Home";
 import { IdleScreen } from "./screens/Idle";
 import { ScoreEntry } from "./screens/ScoreEntry";
 import { Standings } from "./screens/Standings";
+import { Teams } from "./screens/Teams";
 
 export const IDLE_LOGOUT_MS = 30_000;
 const BRIDGE_URL = import.meta.env.VITE_BRIDGE_URL ?? "ws://127.0.0.1:8765";
@@ -229,6 +230,8 @@ function SessionScreens({ screen }: { screen: Screen }) {
       return <Standings />;
     case "fixtures":
       return <Fixtures />;
+    case "teams":
+      return <Teams />;
     default:
       return <Home />;
   }

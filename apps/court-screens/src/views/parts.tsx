@@ -27,6 +27,7 @@ export function Teams({ lang, session }: { lang: Lang; session: Session }) {
               <li key={`${player.name}:${position}`} className="player">
                 <span className={player.name ? "player__name" : "player__name player__name--anonymous"}>
                   {playerName(lang, player)}
+                  {player.in_league ? <span className="badge badge--league">{t(lang, "leagueBadge")}</span> : null}
                 </span>
                 <span className="player__details">{playerDetails(lang, player)}</span>
               </li>

@@ -27,10 +27,10 @@ describe("the court screen (§8.5)", () => {
     );
     const players = screen.getAllByRole("listitem").map((li) => li.textContent);
     expect(players).toEqual([
-      "Popescu Alexandru DanielDiamant II · 67 LP · Nivel 5.2",
-      "Moșteanu RareșDiamant III · 12 LP · Nivel 5.0",
-      "Jucător 3Platină I · 88 LP · Nivel 4.8",
-      "Jucător 4Diamant IV · 40 LP · Nivel 4.9",
+      "Popescu Alexandru DanielLigăDiamant II · 67 LP · Nivel 5.2",
+      "Moșteanu RareșLigăDiamant III · 12 LP · Nivel 5.0",
+      "Jucător 3LigăPlatină I · 88 LP · Nivel 4.8",
+      "Jucător 4LigăDiamant IV · 40 LP · Nivel 4.9",
     ]);
     expect(screen.getByText("vs")).toBeTruthy();
     expect(screen.getByText("Meciul zilei")).toBeTruthy();
@@ -40,7 +40,7 @@ describe("the court screen (§8.5)", () => {
   });
 
   it("names nobody who is not public, and works in English", () => {
-    const hidden = { name: "", tier: "", division: "", lp: null, level: null, position: null };
+    const hidden = { name: "", in_league: false, tier: "", division: "", lp: null, level: null, position: null };
     const current = courtState.court?.current;
     if (!current || !courtState.court) throw new Error("fixture");
     const state: ScreenState = {
@@ -49,6 +49,7 @@ describe("the court screen (§8.5)", () => {
     };
     render(<Court lang="en" state={state} now={NOW} />);
     expect(screen.getByText("Player")).toBeTruthy();
+    expect(screen.queryByText("League")).toBeNull(); // Q55: the badge only for league players
     expect(screen.queryByText("vs")).toBeNull();
     expect(screen.queryByText("Match of the day")).toBeNull();
     expect(screen.getByText("Time left: 00:47")).toBeTruthy();
