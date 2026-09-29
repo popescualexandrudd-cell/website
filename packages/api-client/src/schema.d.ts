@@ -1656,6 +1656,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/league/lp-preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Lp Preview View
+         * @description §9.2.7: the points simulator. The LP of one plain doubles match, computed by the league
+         *     engine with the running season's values; nothing about any player is read or stored.
+         */
+        get: operations["jungle_league_api_lp_preview_view"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/league/match-of-the-day": {
         parameters: {
             query?: never;
@@ -5535,6 +5556,31 @@ export interface components {
             session: string;
         };
         /**
+         * LpPreviewOut
+         * @description §9.2.7: the points simulator; everything computed by the league engine.
+         */
+        LpPreviewOut: {
+            after: components["schemas"]["PreviewRankOut"];
+            before: components["schemas"]["PreviewRankOut"];
+            /**
+             * Change
+             * @description none, promoted sau demoted
+             */
+            change: string;
+            /**
+             * Lp
+             * @description LP câștigate (+) sau pierdute (−) în meci (§6.6)
+             */
+            lp: number;
+            /** @description Rangul spre care liga duce nivelul tău (LG-061) */
+            towards: components["schemas"]["PreviewRankOut"];
+            /**
+             * Win Probability
+             * @description Șansa echipei tale, 0–1 (§6.2)
+             */
+            win_probability: number;
+        };
+        /**
          * Marker
          * @enum {string}
          */
@@ -6623,6 +6669,18 @@ export interface components {
             id?: string | null;
             /** Last Name */
             last_name: string;
+        };
+        /** PreviewRankOut */
+        PreviewRankOut: {
+            /**
+             * Division
+             * @description Gol pentru Maestru
+             */
+            division: string | null;
+            /** Lp */
+            lp: number;
+            /** Tier */
+            tier: string;
         };
         /** PrintIn */
         PrintIn: {
@@ -13420,6 +13478,55 @@ export interface operations {
             };
             /** @description Bad Request */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_lp_preview_view: {
+        parameters: {
+            query: {
+                location: string;
+                you: number;
+                partner: number;
+                rival_a: number;
+                rival_b: number;
+                tier?: "bronze" | "silver" | "gold" | "platinum" | "diamond" | "master";
+                division?: ("IV" | "III" | "II" | "I") | null;
+                lp?: number;
+                result?: "win" | "loss";
+                kind?: "official" | "tournament";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LpPreviewOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

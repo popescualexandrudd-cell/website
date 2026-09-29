@@ -3865,6 +3865,46 @@
         "title": "LogoutIn",
         "type": "object"
       },
+      "LpPreviewOut": {
+        "description": "§9.2.7: the points simulator; everything computed by the league engine.",
+        "properties": {
+          "after": {
+            "$ref": "#/components/schemas/PreviewRankOut"
+          },
+          "before": {
+            "$ref": "#/components/schemas/PreviewRankOut"
+          },
+          "change": {
+            "description": "none, promoted sau demoted",
+            "title": "Change",
+            "type": "string"
+          },
+          "lp": {
+            "description": "LP câștigate (+) sau pierdute (−) în meci (§6.6)",
+            "title": "Lp",
+            "type": "integer"
+          },
+          "towards": {
+            "$ref": "#/components/schemas/PreviewRankOut",
+            "description": "Rangul spre care liga duce nivelul tău (LG-061)"
+          },
+          "win_probability": {
+            "description": "Șansa echipei tale, 0–1 (§6.2)",
+            "title": "Win Probability",
+            "type": "number"
+          }
+        },
+        "required": [
+          "win_probability",
+          "lp",
+          "before",
+          "after",
+          "change",
+          "towards"
+        ],
+        "title": "LpPreviewOut",
+        "type": "object"
+      },
       "Marker": {
         "enum": [
           "confirmed",
@@ -6464,6 +6504,37 @@
           "last_name"
         ],
         "title": "PlayerOut",
+        "type": "object"
+      },
+      "PreviewRankOut": {
+        "properties": {
+          "division": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Gol pentru Maestru",
+            "title": "Division"
+          },
+          "lp": {
+            "title": "Lp",
+            "type": "integer"
+          },
+          "tier": {
+            "title": "Tier",
+            "type": "string"
+          }
+        },
+        "required": [
+          "tier",
+          "division",
+          "lp"
+        ],
+        "title": "PreviewRankOut",
         "type": "object"
       },
       "PrintIn": {
@@ -17694,6 +17765,181 @@
           }
         },
         "summary": "Level Guess View",
+        "tags": [
+          "league"
+        ]
+      }
+    },
+    "/api/v1/league/lp-preview": {
+      "get": {
+        "description": "§9.2.7: the points simulator. The LP of one plain doubles match, computed by the league\nengine with the running season's values; nothing about any player is read or stored.",
+        "operationId": "jungle_league_api_lp_preview_view",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location",
+            "required": true,
+            "schema": {
+              "title": "Location",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "you",
+            "required": true,
+            "schema": {
+              "maximum": 7,
+              "minimum": 1,
+              "title": "You",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "partner",
+            "required": true,
+            "schema": {
+              "maximum": 7,
+              "minimum": 1,
+              "title": "Partner",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "rival_a",
+            "required": true,
+            "schema": {
+              "maximum": 7,
+              "minimum": 1,
+              "title": "Rival A",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "rival_b",
+            "required": true,
+            "schema": {
+              "maximum": 7,
+              "minimum": 1,
+              "title": "Rival B",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "tier",
+            "required": false,
+            "schema": {
+              "default": "bronze",
+              "enum": [
+                "bronze",
+                "silver",
+                "gold",
+                "platinum",
+                "diamond",
+                "master"
+              ],
+              "title": "Tier",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "division",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "IV",
+                    "III",
+                    "II",
+                    "I"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Division"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lp",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "title": "Lp",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "result",
+            "required": false,
+            "schema": {
+              "default": "win",
+              "enum": [
+                "win",
+                "loss"
+              ],
+              "title": "Result",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "default": "official",
+              "enum": [
+                "official",
+                "tournament"
+              ],
+              "title": "Kind",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LpPreviewOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Lp Preview View",
         "tags": [
           "league"
         ]

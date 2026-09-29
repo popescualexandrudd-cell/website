@@ -755,6 +755,95 @@
           }
         }
       },
+      "league": {
+        "kicker": "Liga Jungle",
+        "title": "Din Bronz până la Regele Junglei.",
+        "lead": "O ligă cu ranguri, puncte de ligă (LP) și sezoane de trei luni, pentru adulți (18+). Scorul se introduce și se confirmă doar la Chioșcul Ligii, în club; pe site, liga se urmărește live.",
+        "ranks": {
+          "title": "Rangurile",
+          "label": "Rangurile ligii, de la Bronz la Regele Junglei",
+          "bronze": "Bronz",
+          "silver": "Argint",
+          "gold": "Aur",
+          "platinum": "Platină",
+          "diamond": "Diamant",
+          "master": "Maestru",
+          "king": "Regele Junglei",
+          "divisions": "4 trepte, IV → I, câte 100 LP",
+          "masterNote": "LP fără limită",
+          "kingNote": "Primii 10 Maeștri după LP",
+          "rules": "La 100 LP urci o treaptă, iar surplusul se păstrează. Sub 0 LP cobori o treaptă și pornești de la 75 LP. După o promovare, următoarele 3 meciuri nu te pot retrograda."
+        },
+        "earn": {
+          "title": "Cum se câștigă LP",
+          "even": {
+            "title": "Echipe egale: în jur de ±20",
+            "text": "La echipe de același nivel, victoria aduce în jur de 20 LP, iar înfrângerea costă cam tot atât."
+          },
+          "upset": {
+            "title": "Surpriza valorează mai mult",
+            "text": "Dacă bați o echipă mai bună, câștigi mai mult; dacă pierzi cu ea, pierzi mai puțin. O victorie aduce între 3 și 60 LP, o înfrângere costă între 3 și 60."
+          },
+          "level": {
+            "title": "Nivelul te duce spre rangul tău",
+            "text": "Dacă nivelul tău e peste rangul pe care îl ai, urci mai repede și pierzi mai puțin; dacă e sub el, invers."
+          },
+          "tournament": {
+            "title": "Turneele: ×1,5",
+            "text": "Meciurile de turneu aduc de 1,5 ori mai multe LP, plus bonusuri pentru fazele atinse."
+          },
+          "placement": {
+            "title": "Primele 5 meciuri: plasarea",
+            "text": "Nu aduc LP: stabilesc rangul de pornire, cel mult Platină IV."
+          }
+        },
+        "seasons": {
+          "title": "Sezoane de trei luni",
+          "text": "La începutul fiecărui sezon, LP pornesc de la 0, iar rangul se stabilește din nou după 3 meciuri de replasare. În clasamentul final și la premii intră cine a jucat cel puțin 12 meciuri oficiale în sezon. Primul sezon, „Sezonul 0 – Calibrare”, durează o lună și nu are premii."
+        },
+        "rewards": {
+          "title": "Premiile sezonului",
+          "ranks": "Primii 3 din fiecare rang aleg: 15% reducere la abonament sau 4 vouchere de 20% la rezervări.",
+          "kings": "Regii Junglei (primii 3) primesc în plus 2 ore gratuite, o cutie de mingi și un card special.",
+          "diamond": "La promovarea în Diamant primești un card fizic nou, cu o emblemă din junglă aleasă de tine."
+        },
+        "sim": {
+          "title": "Simulatorul de puncte",
+          "lead": "Alege nivelurile, rangul tău și rezultatul și vezi câte LP câștigi sau pierzi. Calculul îl face motorul ligii, pe server, cu valorile sezonului.",
+          "you": "Nivelul tău",
+          "partner": "Partenerul tău",
+          "rivalA": "Primul adversar",
+          "rivalB": "Al doilea adversar",
+          "rank": "Rangul tău acum",
+          "lp": "LP în treapta ta",
+          "result": "Rezultatul",
+          "win": "Câștig",
+          "loss": "Pierd",
+          "kind": "Meciul",
+          "official": "Meci oficial",
+          "tournament": "Meci de turneu",
+          "chance": "Șansa echipei tale: {chance}",
+          "busy": "Calculăm…",
+          "error": "Nu putem calcula acum. Încearcă din nou în câteva momente.",
+          "before": "Înainte",
+          "after": "După",
+          "promoted": "Promovezi în {rank}!",
+          "demoted": "Cobori în {rank}.",
+          "towards": "La nivelul {level}, liga te duce, în timp, spre {rank}.",
+          "note": "Simulare pentru un meci obișnuit de dublu, între jucători cu un sezon de meciuri în spate; în ligă contează și cât de sigur e nivelul fiecăruia. Nu se salvează nimic."
+        },
+        "standings": {
+          "title": "Clasamentul live",
+          "busy": "Se încarcă clasamentul…",
+          "empty": "Clasamentul apare după primele meciuri ale sezonului.",
+          "position": "Locul",
+          "players": "Jucători",
+          "rank": "Rang",
+          "level": "Nivel",
+          "lp": "LP",
+          "all": "Vezi clasamentul complet"
+        }
+      },
       "pages": {
         "padel": "Padel",
         "league": "Liga Jungle",

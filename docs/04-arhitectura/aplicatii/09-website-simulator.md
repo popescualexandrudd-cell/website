@@ -73,3 +73,16 @@ Fiecare pagină există în toate limbile active, cu URL-uri localizate (`/ro/..
   - apoi, după obiectiv: **lecții cu antrenor** (să învăț), **meciuri deschise** (să joc cu alții) sau **Liga Jungle** (18+, chestionar validat, acord semnat la Chioșcul Ligii).
 - **Precompletarea:** linkul „Continuă cu chestionarul oficial” duce la `/cont` cu `band`, `years_playing`, `racket_background` și `tournaments` în adresă. Pagina contului le va citi când va fi construită.
 - **Mingea** ricoșează în pereții de sticlă la fiecare răspuns și aterizează, la rezultat, pe scara 1–7. Stă nemișcată la „mișcare redusă” și e decorativă: nivelul e scris și în text.
+
+### Secțiunea 7 — Liga Jungle și simulatorul de puncte (30.09.2026)
+- **Conținutul** vine din regulile ligii:
+  - rangurile pe o scară care urcă, Bronz → Maestru → Regele Junglei (§6.5);
+  - cum se câștigă LP (§6.6), plasarea (§6.4);
+  - sezoanele și minimul de 12 meciuri (§6.10, §6.13, Q27);
+  - premiile: Q6, răspunsul din 28.09.2026, și R-024.
+- **Simulatorul de puncte** întreabă motorul ligii pe server (`GET /api/v1/league/lp-preview`, `jungle.league.lp_preview`), nu o copie a formulei. Folosește valorile sezonului în curs; înainte de primul sezon, setarea `league.config`.
+  - **Ce alege vizitatorul:** cele patru niveluri (1.0–7.0, din jumătate în jumătate), rangul și LP-ul lui, rezultatul (câștig sau pierd), meciul (oficial sau de turneu).
+  - **Ce primește:** LP-ul câștigat sau pierdut, șansa echipei lui, rangul înainte și după (promovare sau retrogradare) și rangul spre care îl duce liga în timp (rangul de plasare pentru nivelul lui, LG-061).
+  - **Ce presupune:** un meci obișnuit de dublu, între jucători cu un sezon de meciuri (σ = 5 pentru toți, cât are un jucător după minimul de meciuri al unui sezon; `docs/03-liga/simulari/CALIBRARE.md`); meci terminat, nerepetat, fără protecția de după promovare.
+  - Nu citește și nu salvează nimic despre vreun jucător.
+- **Clasamentul live:** primii 5 din clasamentul de dublu al sezonului în curs, doar câmpurile publice (R-012), reîmprospătat la fiecare minut. Înainte de primul sezon, site-ul nu cere clasamentul serverului și spune când apare.

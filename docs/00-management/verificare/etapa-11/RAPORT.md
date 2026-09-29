@@ -12,7 +12,8 @@
 | 4. „Acum în club” (live) | 29.09.2026 | **livrată** |
 | 5. Padel | 30.09.2026 | **livrată** |
 | 6. Simulatorul „Care e nivelul tău?” | 30.09.2026 | **livrată** |
-| 7–19 | — | urmează, câte una |
+| 7. Liga Jungle + simulatorul de puncte | 30.09.2026 | **livrată** |
+| 8–19 | — | urmează, câte una |
 
 ---
 
@@ -300,3 +301,56 @@ Alături, un teren văzut de sus, cu pereții de sticlă. La fiecare răspuns, o
 1. Deschideți capturile 12–15: o întrebare și rezultatul, pe calculator și pe telefon.
 2. Citiți întrebările și descrierile de mai sus. Dacă vreți altă întrebare, alt text sau altă regulă pentru trepte ori recomandări, spuneți-ne ce anume.
 3. Dacă simulatorul vă place, scrieți „aprob secțiunea 6”.
+
+---
+
+## Secțiunea 7 — Liga Jungle și simulatorul de puncte
+
+### Ce s-a construit
+După simulatorul de nivel urmează liga (§9.2, secțiunea 7), sub titlul „Din Bronz până la Regele Junglei.”:
+- **Rangurile pe o scară care urcă:** Bronz, Argint, Aur, Platină, Diamant, Maestru, Regele Junglei. Fiecare treaptă e mai înaltă decât cea dinainte și are emblema ei: scut pentru metale, diamant, stea, coroană. Sub scară, regulile pe scurt:
+  - la 100 LP urci o treaptă, cu surplusul păstrat;
+  - sub 0 LP cobori și pornești de la 75 LP;
+  - 3 meciuri de protecție după o promovare.
+- **Cum se câștigă LP**, în cinci carduri: echipe egale (în jur de ±20), surpriza valorează mai mult (între 3 și 60 LP), nivelul te duce spre rangul tău, turneele (×1,5), plasarea (primele 5 meciuri, cel mult Platină IV).
+- **Sezoanele:** trei luni, LP de la 0, minimum 12 meciuri oficiale pentru clasamentul final și premii, „Sezonul 0 – Calibrare” de o lună, fără premii (Q27).
+- **Premiile sezonului**, exact cum le-ați hotărât (Q6, 28.09.2026):
+  - primii 3 din fiecare rang aleg 15% la abonament sau 4 vouchere de 20% la rezervări;
+  - Regii Junglei primesc în plus 2 ore gratuite, mingi și cardul special;
+  - la promovarea în Diamant, un card fizic nou cu emblemă din junglă (R-024).
+- **Simulatorul de puncte:**
+  - **ce alege vizitatorul:** nivelul lui, al partenerului și al celor doi adversari, rangul și LP-ul lui, rezultatul (câștig sau pierd), meciul (oficial sau de turneu);
+  - **ce vede, imediat:** câte LP câștigă sau pierde, șansa echipei lui, rangul înainte și după (cu „Promovezi în Aur IV!” sau „Cobori în …”) și rangul spre care îl duce liga în timp, la nivelul lui.
+- **Clasamentul live:** primii 5 din clasamentul de dublu al sezonului în curs (nume, rang, nivel, LP, R-012), reîmprospătat la fiecare minut, cu butonul „Vezi clasamentul complet”. Înainte de primul sezon scrie „Clasamentul apare după primele meciuri ale sezonului.”
+
+**Ce am ales și de ce:**
+1. **Punctele le calculează motorul ligii, pe server**, cum cere §9.2: nu există o copie a formulei în site. Se folosesc valorile sezonului în curs; înainte de primul sezon, setarea din panou pentru sezonul următor. Testele compară fiecare număr din pagină cu răspunsul motorului.
+2. **Incertitudinea nivelului:** motorul are nevoie și de cât de sigur e nivelul fiecărui jucător. Simulatorul presupune jucători cu un sezon de meciuri în spate (σ = 5, cât dă simularea din Etapa 2 după 12 meciuri). Scrie asta sub simulator, cinstit: „în ligă contează și cât de sigur e nivelul fiecăruia”.
+3. **Un meci obișnuit de dublu:** terminat, nerepetat, fără protecția de după promovare. Bonusurile de fază din turnee nu intră în simulator (le spune cardul „Turneele”).
+4. **Pe site, liga doar se vede** (invariantul 2): textul spune că scorul se introduce și se confirmă doar la Chioșcul Ligii, iar simulatorul nu scrie nimic nicăieri.
+
+### Capturi de ecran
+16. [Rangurile, pe calculator](ecrane/desktop-09-liga.png)
+17. [Rangurile, pe telefon](ecrane/mobile-09-liga.png)
+18. [Simulatorul de puncte, pe calculator](ecrane/desktop-10-liga-simulator.png)
+19. [Simulatorul de puncte, pe telefon](ecrane/mobile-10-liga-simulator.png)
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Teste pe server | 24 noi:<br>• echipe egale ±20; sub rangul nivelului urci mai repede;<br>• surpriza;<br>• turneu ×1,5 cu promovare și surplus;<br>• retrogradare la 75 LP;<br>• podeaua Bronz IV;<br>• Maestru;<br>• rangul spre care duce nivelul;<br>• rangurile imposibile refuzate;<br>• valorile sezonului în curs sau ale setării;<br>• adresa publică nu citește și nu scrie nimic.<br>Liga rămâne la 100% acoperire pe ramuri. |
+| Teste unitare pe site | 4 noi: cele 21 de ranguri în ordine, nivelurile, ce se trimite serverului. |
+| Cap-coadă | 5 noi (calculator + telefon):<br>• rangurile, cardurile, sezoanele și premiile;<br>• simulatorul: fiecare număr comparat cu motorul (câștig, înfrângere, promovare la 99 LP, adversar mai puternic, Maestru), iar pe telefon un control atins din tastatură nu rămâne ascuns sub rezultat;<br>• motorul indisponibil;<br>• clasamentul live;<br>• engleza.<br>Toate testele site-ului trec: 28 + 51. |
+| Lighthouse, pagina principală | mobil **95 · 100 · 100 · 100** (LCP 2,8 s, CLS 0), calculator **100 · 100 · 100 · 100** ([mobil](lighthouse-mobil.html), [calculator](lighthouse-desktop.html)). Timpul de afișare pe mobil variază de la o rulare la alta, între 2,8 și 3,4 s; rămâne de măsurat pe serverul real (Etapa 14). |
+
+### Dubla revizuire: probleme găsite și reparate
+1. **Glisoarele nu aveau nume pentru cititoarele de ecran.** Eticheta cuprindea și valoarea afișată (un element `output`), iar browserul lega eticheta de acea valoare, nu de glisor. Verificarea automată (axe) nu a observat; a observat testul care caută glisorul după nume. Acum fiecare etichetă e legată explicit de glisorul ei.
+2. **Pe telefon, rezultatul era sub toate controalele.** Mutai un glisor și nu vedeai efectul. Acum rezultatul stă primul și rămâne fixat sub antet cât muți controalele.
+3. **Rezultatul fixat putea ascunde un control atins din tastatură** (WCAG 2.2, criteriul 2.4.11). Acum pagina derulează controlul în afara rezultatului, iar testul verifică asta pe telefon.
+4. **Un test mai vechi (secțiunea 1) pica uneori:** verificarea de accesibilitate rula înainte ca pagina nouă să-și primească titlul, după trecerea din română în engleză. Testul așteaptă acum titlul.
+5. **Din perspectiva unui atacator:** adresa nouă doar calculează. Primește doar valori din listă și în limite: niveluri 1–7, LP 0–99, Maestru până la 5.000; orice altceva e refuzat. Nu atinge baza de date în afara citirii valorilor sezonului și nu spune nimic despre vreun jucător.
+
+### Cum verificați (click cu click)
+1. Deschideți capturile 16–19.
+2. Citiți regulile și premiile de mai sus: sunt cele confirmate de dumneavoastră (Q6, Q27). Spuneți-ne dacă vreți alt text.
+3. Dacă secțiunea vă place, scrieți „aprob secțiunea 7”.

@@ -3,7 +3,7 @@
 > Actualizat la fiecare sesiune de lucru. Prima secțiune spune mereu **unde suntem acum**.
 
 ## Unde suntem acum
-- **Etapa curentă:** Etapa 11 (website-ul complet, secțiune cu secțiune, fiecare aprobată separat). **Secțiunea 1 (antetul fix) + fundația site-ului complet:** aprobată de proprietar pe 29.09.2026 (în `main`). Site-ul complet stă ascuns în spatele comutatorului `full_site` până îl publică proprietarul (Q57, rezolvată). **Secțiunile 2 (Hero „Intră în junglă”), 3 (turul clubului la scroll), 4 („Acum în club”, live), 5 (Padel) și 6 (simulatorul „Care e nivelul tău?”):** livrate pe 29–30.09.2026, pe branch. Decizia proprietarului (29.09.2026): în Etapa 11 alegerile le facem noi și continuăm secțiune după secțiune. Raport: [verificare/etapa-11/RAPORT.md](verificare/etapa-11/RAPORT.md).
+- **Etapa curentă:** Etapa 11 (website-ul complet, secțiune cu secțiune, fiecare aprobată separat). **Secțiunea 1 (antetul fix) + fundația site-ului complet:** aprobată de proprietar pe 29.09.2026 (în `main`). Site-ul complet stă ascuns în spatele comutatorului `full_site` până îl publică proprietarul (Q57, rezolvată). **Secțiunile 2 (Hero „Intră în junglă”), 3 (turul clubului la scroll), 4 („Acum în club”, live), 5 (Padel), 6 (simulatorul „Care e nivelul tău?”) și 7 (Liga Jungle, cu simulatorul de puncte):** livrate pe 29–30.09.2026, pe branch. Decizia proprietarului (29.09.2026): în Etapa 11 alegerile le facem noi și continuăm secțiune după secțiune. Raport: [verificare/etapa-11/RAPORT.md](verificare/etapa-11/RAPORT.md).
 - **Etapa 10 (panoul de admin):** aprobată de proprietar pe 29.09.2026 (merge în `main`, tag local `etapa-10`). Q56 rămâne deschisă, cu varianta implicită (rapoartele doar admin + manager). Raport: [verificare/etapa-10/RAPORT.md](verificare/etapa-10/RAPORT.md).
 - **Etapa 9 (ecranele de teren și lobby):** aprobată de proprietar pe 29.09.2026 (merge în `main`, tag local `etapa-9`). Q55 rezolvată (toți pe nume, insigna „Ligă”, echipele alese la Chioșcul Ligii). Raport: [verificare/etapa-9/RAPORT.md](verificare/etapa-9/RAPORT.md).
 - **Etapa 8 (Chioșcul de Plăți + afișajul cafenelei):** aprobată de proprietar pe 29.09.2026 (merge în `main`, tag local `etapa-8`). Q53 și Q54 rămân deschise, cu variantele implicite. Raport: [verificare/etapa-8/RAPORT.md](verificare/etapa-8/RAPORT.md).
@@ -36,7 +36,7 @@
 | 8 | Chioșcul de Plăți + afișajul cafenelei | ian. 2027 | **Aprobată 29.09.2026** |
 | 9 | Ecranele | ian. 2027 | **Aprobată 29.09.2026** |
 | 10 | Panoul de admin complet | ian. 2027 | **Aprobată 29.09.2026** |
-| 11 | Website-ul „simulator” | ian.–feb. 2027 | În lucru: secțiunea 1 aprobată 29.09.2026; secțiunile 2–6 livrate |
+| 11 | Website-ul „simulator” | ian.–feb. 2027 | În lucru: secțiunea 1 aprobată 29.09.2026; secțiunile 2–7 livrate |
 | 12 | AI + notificări | feb. 2027 | Neîncepută |
 | 13 | SEO, marketing, branding, vânzări | în paralel, feb. 2027 | Neîncepută |
 | 14 | Deploy, securitate, backup, hardware real | feb. 2027 | Neîncepută |
@@ -138,3 +138,4 @@
 - **30.09.2026** — Etapa 11, secțiunea 4 livrată: „Acum în club”, live din API-ul public, la fiecare minut (terenurile liber / ocupat / închis fără nume, Meciul zilei, Regii Junglei, următorul turneu); ora clubului; nicio cerere eșuată înainte de primul sezon. Lighthouse mobil 93/100/100/100, desktop 100.
 - **30.09.2026** — Etapa 11, secțiunea 5 livrată: Padel (ce e, de ce e ușor de început, schema unui teren standard, terenurile, lecțiile, cum rezervi fără prețuri până la Q21, formatele Americano / Mexicano / King of the Court). Lighthouse mobil 95/100/100/100, desktop 100.
 - **30.09.2026** — Etapa 11, secțiunea 6 livrată: simulatorul „Care e nivelul tău?” (întrebări pe pastile, mingea care ricoșează și aterizează pe scara 1–7, nivelul calculat pe server cu formula chestionarului oficial Q47, recomandarea, chestionarul oficial precompletat; nu se salvează nimic). Fonturile cu literele românești se cer de la început. Lighthouse mobil 91/100/100/100 (LCP simulat 3,3 s, ca în 1B de măsurat pe serverul real), desktop 100.
+- **30.09.2026** — Etapa 11, secțiunea 7 livrată: Liga Jungle (rangurile pe o scară care urcă, cum se câștigă LP, sezoanele, premiile Q6, clasamentul live) și simulatorul de puncte, cu LP calculat de motorul ligii pe server (`GET /api/v1/league/lp-preview`), nu cu o copie a formulei. Lighthouse mobil 95/100/100/100, desktop 100.

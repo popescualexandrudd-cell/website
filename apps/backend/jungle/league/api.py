@@ -8,6 +8,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 from decimal import Decimal
+from typing import Annotated
 
 from django.db.models import F, Q
 from django.http import HttpRequest
@@ -23,6 +24,7 @@ from jungle.league import (
     challenges,
     closing,
     level_guess,
+    lp_preview,
     matches,
     projection,
     public,
@@ -147,6 +149,23 @@ class LevelGuessOut(Schema):
     level: Decimal = Field(description="Nivelul estimat, 1.0–7.0 (formula chestionarului, Q47)")
     questionnaire: QuestionnaireIn
     recommendations: list[level_guess.Recommendation]
+
+
+class PreviewRankOut(Schema):
+    tier: str
+    division: str | None = Field(description="Gol pentru Maestru")
+    lp: int
+
+
+class LpPreviewOut(Schema):
+    """§9.2.7: the points simulator; everything computed by the league engine."""
+
+    win_probability: float = Field(description="Șansa echipei tale, 0–1 (§6.2)")
+    lp: int = Field(description="LP câștigate (+) sau pierdute (−) în meci (§6.6)")
+    before: PreviewRankOut
+    after: PreviewRankOut
+    change: str = Field(description="none, promoted sau demoted")
+    towards: PreviewRankOut = Field(description="Rangul spre care liga duce nivelul tău (LG-061)")
 
 
 class StaffQuestionnaireOut(QuestionnaireOut):
@@ -639,6 +658,46 @@ def level_guess_view(
         level=shown.level,
         questionnaire=QuestionnaireIn(**shown.questionnaire),
         recommendations=shown.recommendations,
+    )
+
+
+LevelParam = Annotated[float, Field(ge=1, le=7)]
+
+
+def preview_rank_out(rank: lp_preview.Rank) -> PreviewRankOut:
+    return PreviewRankOut(tier=rank.tier, division=rank.division, lp=rank.lp)
+
+
+@public_router.get("/lp-preview", response={200: LpPreviewOut, **errors(404, 422)}, auth=None)
+def lp_preview_view(
+    request: HttpRequest,
+    location: str,
+    you: LevelParam,
+    partner: LevelParam,
+    rival_a: LevelParam,
+    rival_b: LevelParam,
+    tier: lp_preview.Tier = "bronze",
+    division: lp_preview.Division | None = None,
+    lp: int = 0,
+    result: lp_preview.Result = "win",
+    kind: lp_preview.Kind = "official",
+) -> LpPreviewOut:
+    """§9.2.7: the points simulator. The LP of one plain doubles match, computed by the league
+    engine with the running season's values; nothing about any player is read or stored."""
+    shown = lp_preview.preview(
+        lp_preview.config_now(get_location_by_slug(location)),
+        (you, partner, rival_a, rival_b),
+        lp_preview.rank_state(tier, division, lp),
+        result,
+        kind,
+    )
+    return LpPreviewOut(
+        win_probability=round(shown.win_probability, 3),
+        lp=shown.lp,
+        before=preview_rank_out(shown.before),
+        after=preview_rank_out(shown.after),
+        change=shown.change.value,
+        towards=preview_rank_out(shown.towards),
     )
 
 

@@ -4,6 +4,20 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, secțiunea 7 — 30.09.2026 (livrată)
+#### Adăugat
+- Liga Jungle (§9.2, secțiunea 7): `League` + `PointsSimulator` + `StandingsPreview`, rangurile în `src/lib/league.ts`.
+  - rangurile pe o scară care urcă, Bronz → Regele Junglei;
+  - cum se câștigă LP; sezoanele (minimum 12 meciuri, Sezonul 0); premiile (Q6, R-024);
+  - simulatorul de puncte;
+  - clasamentul live (primii 5, R-012);
+  - texte `web.site.league.*` RO + EN.
+- Server: `GET /api/v1/league/lp-preview` (public, nu citește și nu salvează nimic despre jucători), `jungle.league.lp_preview`. Motorul ligii calculează LP-ul, șansa, rangul după meci și rangul spre care duce nivelul, cu valorile sezonului în curs (σ = 5 pentru toți, meci obișnuit de dublu).
+- Teste: 24 pe server, 4 unitare pe site, 5 cap-coadă (`e2e/full/league.spec.ts`).
+#### Reparat
+- Testul antetului așteaptă titlul paginii noi înainte de verificarea de accesibilitate (pica uneori după schimbarea limbii).
+- Lighthouse mobil 95 · 100 · 100 · 100, desktop 100 · 100 · 100 · 100.
+
 ### Etapa 11, secțiunea 6 — 30.09.2026 (livrată)
 #### Adăugat
 - Simulatorul „Care e nivelul tău?” (§9.2, secțiunea 6): `Level` + `LevelSimulator`, întrebările în `src/lib/level.ts`. Câte o întrebare pe pastile (6, sau 3 pentru cine n-a jucat); mingea ricoșează în pereții de sticlă și aterizează pe scara 1–7. Rezultat: nivelul estimat, descrierea treptei, ce să încerci (lecție de inițiere, lecții cu antrenor, meciuri deschise, Liga Jungle) și linkul spre chestionarul oficial, precompletat (R-003). Texte `web.site.level.*` RO + EN.

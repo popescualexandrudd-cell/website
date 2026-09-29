@@ -755,6 +755,95 @@
           }
         }
       },
+      "league": {
+        "kicker": "Jungle League",
+        "title": "From Bronze to King of the Jungle.",
+        "lead": "A league with ranks, league points (LP) and three-month seasons, for adults (18+). Scores are entered and confirmed only at the League Kiosk, at the club; on the website you follow the league live.",
+        "ranks": {
+          "title": "The ranks",
+          "label": "The league's ranks, from Bronze to King of the Jungle",
+          "bronze": "Bronze",
+          "silver": "Silver",
+          "gold": "Gold",
+          "platinum": "Platinum",
+          "diamond": "Diamond",
+          "master": "Master",
+          "king": "King of the Jungle",
+          "divisions": "4 divisions, IV → I, 100 LP each",
+          "masterNote": "No LP limit",
+          "kingNote": "The top 10 Masters by LP",
+          "rules": "At 100 LP you move up a division and keep the surplus. Below 0 LP you drop a division and start from 75 LP. After a promotion, your next 3 matches cannot demote you."
+        },
+        "earn": {
+          "title": "How LP is earned",
+          "even": {
+            "title": "Even teams: about ±20",
+            "text": "Between teams of the same level, a win brings about 20 LP and a loss costs about as much."
+          },
+          "upset": {
+            "title": "An upset is worth more",
+            "text": "Beat a stronger team and you win more; lose to it and you lose less. A win brings between 3 and 60 LP, a loss costs between 3 and 60."
+          },
+          "level": {
+            "title": "Your level pulls you towards your rank",
+            "text": "If your level is above your current rank, you climb faster and lose less; if it is below, the reverse."
+          },
+          "tournament": {
+            "title": "Tournaments: ×1.5",
+            "text": "Tournament matches bring 1.5 times more LP, plus bonuses for the rounds you reach."
+          },
+          "placement": {
+            "title": "The first 5 matches: placement",
+            "text": "They bring no LP: they set your starting rank, at most Platinum IV."
+          }
+        },
+        "seasons": {
+          "title": "Three-month seasons",
+          "text": "At the start of each season LP goes back to 0, and your rank is set again after 3 re-placement matches. The final standings and the prizes count those who played at least 12 official matches in the season. The first season, \"Season 0 – Calibration\", lasts one month and has no prizes."
+        },
+        "rewards": {
+          "title": "The season's prizes",
+          "ranks": "The top 3 of each rank choose: 15% off their subscription or 4 vouchers of 20% off bookings.",
+          "kings": "The Kings of the Jungle (top 3) also get 2 free hours, a box of balls and a special card.",
+          "diamond": "On promotion to Diamond you get a new physical card, with a jungle emblem of your choice."
+        },
+        "sim": {
+          "title": "The points simulator",
+          "lead": "Choose the levels, your rank and the result, and see how many LP you win or lose. The league engine does the calculation, on the server, with the season's values.",
+          "you": "Your level",
+          "partner": "Your partner",
+          "rivalA": "First opponent",
+          "rivalB": "Second opponent",
+          "rank": "Your rank now",
+          "lp": "LP in your division",
+          "result": "The result",
+          "win": "Win",
+          "loss": "Loss",
+          "kind": "The match",
+          "official": "Official match",
+          "tournament": "Tournament match",
+          "chance": "Your team's chance: {chance}",
+          "busy": "Calculating…",
+          "error": "We can't calculate right now. Please try again in a few moments.",
+          "before": "Before",
+          "after": "After",
+          "promoted": "You move up to {rank}!",
+          "demoted": "You drop to {rank}.",
+          "towards": "At level {level}, the league takes you, over time, towards {rank}.",
+          "note": "A simulation of a regular doubles match between players with a season of matches behind them; in the league, how certain each player's level is also counts. Nothing is saved."
+        },
+        "standings": {
+          "title": "Live standings",
+          "busy": "Loading the standings…",
+          "empty": "The standings appear after the season's first matches.",
+          "position": "Place",
+          "players": "Players",
+          "rank": "Rank",
+          "level": "Level",
+          "lp": "LP",
+          "all": "See the full standings"
+        }
+      },
       "pages": {
         "padel": "Padel",
         "league": "Jungle League",

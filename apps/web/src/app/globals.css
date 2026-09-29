@@ -1895,6 +1895,312 @@ body[data-menu-open="true"] {
   }
 }
 
+/* ------------------------------------------------------------------ full site: the league (Stage 11, §9.2.7) */
+.league__h3 {
+  margin: 56px 0 16px;
+  font-family: var(--font-serif);
+  font-size: clamp(24px, 2.4vw, 30px);
+  font-weight: 400;
+  color: var(--text);
+}
+.league__text,
+.league__rules {
+  margin: 0;
+  max-width: 70ch;
+  color: var(--text-2);
+}
+.league__rules {
+  margin-top: 20px;
+}
+.ranks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  align-items: end;
+  gap: 10px;
+}
+.rank {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  /* A rising staircase: every step a little higher than the one before. */
+  padding: 18px 10px calc(18px + var(--step, 0) * 14px);
+  text-align: center;
+  background: var(--color-night-800);
+  border: 1px solid var(--line);
+  border-top: 3px solid currentColor;
+}
+.rank__emblem {
+  width: 48px;
+  height: 48px;
+}
+.rank__name {
+  font-weight: 600;
+  color: var(--text);
+}
+.rank__note {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text-2);
+}
+.rank--bronze {
+  color: var(--color-brass-600);
+}
+.rank--silver {
+  color: var(--color-metal-silver);
+}
+.rank--gold {
+  color: var(--color-metal-gold);
+}
+.rank--platinum {
+  color: var(--color-metal-platinum);
+}
+.rank--diamond {
+  color: var(--color-bone-50);
+}
+.rank--master {
+  color: var(--color-brass-300);
+}
+.rank--king {
+  color: var(--color-brass-400);
+  background: var(--color-night-700);
+}
+.league__cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: 14px;
+}
+.league__card {
+  padding: 20px 22px;
+  background: var(--color-night-800);
+  border: 1px solid var(--line);
+}
+.league__card h4 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+.league__card p {
+  margin: 0;
+  color: var(--text-2);
+}
+.league__split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px;
+}
+.league__rewards {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 10px;
+  color: var(--text-2);
+}
+.league__rewards li::marker {
+  color: var(--accent);
+}
+.points__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 32px;
+  margin-top: 24px;
+  padding: 28px;
+  background: var(--color-night-800);
+  border: 1px solid var(--line);
+}
+.points__form {
+  display: grid;
+  gap: 22px;
+}
+.points__levels,
+.points__rank {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 24px;
+}
+.points__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.points__label {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+.points__value {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--accent);
+}
+.points__field input[type="range"] {
+  width: 100%;
+  min-height: 44px;
+  margin: 0;
+  accent-color: var(--color-brass-400);
+}
+.points__choices {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.points__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.points__result {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px;
+  background: var(--color-night-900);
+  border: 1px solid var(--line);
+  align-self: start;
+}
+.points__status {
+  margin: 0;
+  color: var(--text-2);
+}
+.points__lp {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(56px, 7vw, 80px);
+  line-height: 1;
+  color: var(--accent);
+}
+.points__lp.is-loss {
+  color: var(--text);
+}
+.points__lp span {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+.points__chance,
+.points__towards,
+.points__change {
+  margin: 0;
+  color: var(--text-2);
+}
+.points__change {
+  font-weight: 600;
+  color: var(--text);
+}
+.points__ranks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 4px 0;
+}
+.points__ranks dt {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.points__ranks dd {
+  margin: 2px 0 0;
+  font-weight: 600;
+  color: var(--text);
+}
+.standings__scroll {
+  overflow-x: auto;
+}
+.standings__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+.standings__table th,
+.standings__table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+.standings__table th {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.points__note {
+  margin: 12px 0 0;
+  max-width: 80ch;
+}
+.league__more {
+  margin: 28px 0 0;
+}
+@media (max-width: 1100px) {
+  .ranks {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .rank {
+    padding-bottom: 18px;
+  }
+}
+@media (max-width: 900px) {
+  .league__split,
+  .points__layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  .points__layout {
+    padding: 20px 16px;
+  }
+  /* On a phone the result comes first and stays under the header while the controls move. */
+  .points__result {
+    order: -1;
+    position: sticky;
+    top: calc(var(--header-h) + 8px);
+    z-index: 1;
+    gap: 4px;
+    padding: 14px 16px;
+  }
+  .points__lp {
+    font-size: 44px;
+  }
+  /* A control reached with the keyboard is scrolled below the pinned result, never under it
+     (WCAG 2.4.11). */
+  .points__form input,
+  .points__form select,
+  .points__form button {
+    scroll-margin-top: calc(var(--header-h) + 270px);
+  }
+  .points__ranks {
+    margin: 0;
+  }
+}
+@media (max-width: 560px) {
+  .ranks {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .points__rank {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .points__levels {
+    gap: 12px 16px;
+  }
+}
+
 /* ------------------------------------------------------------------ full site: the build map */
 .site-preview .lead {
   max-width: 720px;

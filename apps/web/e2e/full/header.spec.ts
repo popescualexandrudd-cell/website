@@ -29,7 +29,8 @@ test("§9.2.1: the full site's header on the home page, with the map of the sect
   await expect(map.nth(3)).toHaveAttribute("data-built", "true"); // now at the club (section 4)
   await expect(map.nth(4)).toHaveAttribute("data-built", "true"); // padel (section 5)
   await expect(map.nth(5)).toHaveAttribute("data-built", "true"); // the level simulator (section 6)
-  await expect(map.nth(6)).toContainText("Urmează");
+  await expect(map.nth(6)).toHaveAttribute("data-built", "true"); // the league (section 7)
+  await expect(map.nth(7)).toContainText("Urmează");
   if (info.project.name === "desktop") {
     const menu = page.getByRole("navigation", { name: "Meniul principal" }).first();
     await expect(menu.getByRole("link")).toHaveText(MENU_RO);
@@ -58,6 +59,9 @@ test("a menu page in the language chosen, marked as the current page, and back i
   await expect(page).toHaveURL(/\/en\/league$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Jungle League");
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  // After an in-page navigation the new title arrives a moment later (streamed metadata): wait for
+  // it, or the accessibility check can run on a page without a title.
+  await expect(page).toHaveTitle("Jungle League · Jungle Padel");
   await expectAccessible(page);
 });
 
