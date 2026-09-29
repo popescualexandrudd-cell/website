@@ -914,5 +914,66 @@
       "diamond": "Diamond",
       "master": "Master"
     }
+  },
+  "admin": {
+    "loading": "Loading…",
+    "offline": "The connection to the server was lost. Please try again.",
+    "errors": {
+      "generic": "Something went wrong. Please try again."
+    },
+    "language": "Română",
+    "logout": "Sign out",
+    "close": "Close",
+    "empty": "You have no module here.",
+    "location": "Location",
+    "login": {
+      "title": "Jungle Padel administration",
+      "email": "Email",
+      "password": "Password",
+      "code": "The code from your authenticator app",
+      "submit": "Sign in",
+      "setupIntro": "Two-factor authentication is required for the panel. Add this key to your authenticator app (Google Authenticator, Microsoft Authenticator, 1Password…), then type the code it shows.",
+      "secret": "The key for the authenticator app",
+      "openApp": "Open in the authenticator app (on a phone)",
+      "confirm": "Confirm",
+      "recoveryIntro": "Your recovery codes: each works once, if you lose your phone. Keep them safe, offline. You will not see them again.",
+      "recovery": "Recovery codes",
+      "saved": "I saved them, open the panel"
+    },
+    "denied": {
+      "title": "No access to the panel",
+      "text": "Your account has no staff role. If this is a mistake, tell the manager."
+    },
+    "nav": {
+      "label": "Panel modules",
+      "dashboard": "Dashboard"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "occupancy": "Court occupancy today",
+      "bookings": "Bookings today",
+      "cash": "Cash taken today",
+      "revenue": "Revenue today",
+      "alerts": "Alerts",
+      "notices": "Unread notices: {count}",
+      "decisions": "Owner decisions pending (TO_CONFIRM): {count}",
+      "devices": "Deactivated devices: {count}",
+      "courts": "The courts now",
+      "court": "Court",
+      "now": "Now",
+      "booked": "Booked today",
+      "free": "Free",
+      "busyUntil": "{type}, until {time}",
+      "bookedOf": "{booked} h of {open} h"
+    },
+    "sessionTypes": {
+      "official_match": "Official league match",
+      "training": "Training",
+      "lesson": "Lesson",
+      "tournament": "Tournament",
+      "challenge": "Challenge",
+      "free_rental": "Rental",
+      "event": "Event"
+    }
   }
 }

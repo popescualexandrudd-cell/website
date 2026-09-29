@@ -89,6 +89,7 @@ INSTALLED_APPS = [
     "jungle.league",
     "jungle.checkout",
     "jungle.screens",
+    "jungle.panel",
 ]
 
 MIDDLEWARE = [

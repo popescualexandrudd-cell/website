@@ -1753,6 +1753,58 @@
         "title": "CorporateOut",
         "type": "object"
       },
+      "CourtNowOut": {
+        "properties": {
+          "booked_minutes_today": {
+            "title": "Booked Minutes Today",
+            "type": "integer"
+          },
+          "busy": {
+            "title": "Busy",
+            "type": "boolean"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "open_minutes_today": {
+            "title": "Open Minutes Today",
+            "type": "integer"
+          },
+          "session_type": {
+            "title": "Session Type",
+            "type": "string"
+          },
+          "until": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Until"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "busy",
+          "until",
+          "session_type",
+          "booked_minutes_today",
+          "open_minutes_today"
+        ],
+        "title": "CourtNowOut",
+        "type": "object"
+      },
       "CsrfOut": {
         "properties": {
           "csrf_token": {
@@ -1812,6 +1864,62 @@
         ],
         "title": "CustomerType",
         "type": "string"
+      },
+      "DashboardOut": {
+        "properties": {
+          "bookings_today": {
+            "title": "Bookings Today",
+            "type": "integer"
+          },
+          "cash_taken_today": {
+            "title": "Cash Taken Today",
+            "type": "integer"
+          },
+          "courts": {
+            "items": {
+              "$ref": "#/components/schemas/CourtNowOut"
+            },
+            "title": "Courts",
+            "type": "array"
+          },
+          "day": {
+            "title": "Day",
+            "type": "string"
+          },
+          "inactive_devices": {
+            "title": "Inactive Devices",
+            "type": "integer"
+          },
+          "occupancy_percent": {
+            "title": "Occupancy Percent",
+            "type": "integer"
+          },
+          "pending_decisions": {
+            "title": "Pending Decisions",
+            "type": "integer"
+          },
+          "revenue_today": {
+            "title": "Revenue Today",
+            "type": "integer"
+          },
+          "unread_notices": {
+            "title": "Unread Notices",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "day",
+          "bookings_today",
+          "occupancy_percent",
+          "cash_taken_today",
+          "revenue_today",
+          "unread_notices",
+          "pending_decisions",
+          "inactive_devices",
+          "courts"
+        ],
+        "title": "DashboardOut",
+        "type": "object"
       },
       "DecisionIn": {
         "properties": {
@@ -4441,6 +4549,42 @@
         "title": "PaidOut",
         "type": "object"
       },
+      "PanelUserOut": {
+        "properties": {
+          "email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "first_name": {
+            "title": "First Name",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "last_name": {
+            "title": "Last Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "first_name",
+          "last_name",
+          "email"
+        ],
+        "title": "PanelUserOut",
+        "type": "object"
+      },
       "PartnerIn": {
         "properties": {
           "card": {
@@ -4972,6 +5116,34 @@
         ],
         "title": "Period",
         "type": "string"
+      },
+      "PermissionsOut": {
+        "properties": {
+          "roles": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Roles",
+            "type": "array"
+          },
+          "scopes": {
+            "items": {
+              "$ref": "#/components/schemas/ScopeOut"
+            },
+            "title": "Scopes",
+            "type": "array"
+          },
+          "user": {
+            "$ref": "#/components/schemas/PanelUserOut"
+          }
+        },
+        "required": [
+          "user",
+          "roles",
+          "scopes"
+        ],
+        "title": "PermissionsOut",
+        "type": "object"
       },
       "PersonOut": {
         "properties": {
@@ -6703,6 +6875,33 @@
           "booking_id"
         ],
         "title": "ScheduleIn",
+        "type": "object"
+      },
+      "ScopeOut": {
+        "properties": {
+          "actions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Actions",
+            "type": "array"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "location_name": {
+            "title": "Location Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "location_id",
+          "location_name",
+          "actions"
+        ],
+        "title": "ScopeOut",
         "type": "object"
       },
       "ScoreChanceOut": {
@@ -22173,6 +22372,121 @@
         "summary": "Read Notice",
         "tags": [
           "staff: attendance"
+        ]
+      }
+    },
+    "/api/v1/staff/panel/dashboard": {
+      "get": {
+        "operationId": "jungle_panel_api_dashboard",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Dashboard",
+        "tags": [
+          "staff: panel"
+        ]
+      }
+    },
+    "/api/v1/staff/panel/permissions": {
+      "get": {
+        "operationId": "jungle_panel_api_permissions",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PermissionsOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Permissions",
+        "tags": [
+          "staff: panel"
         ]
       }
     },

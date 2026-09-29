@@ -2999,6 +2999,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/staff/panel/dashboard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dashboard */
+        get: operations["jungle_panel_api_dashboard"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/panel/permissions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Permissions */
+        get: operations["jungle_panel_api_permissions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/staff/payments": {
         parameters: {
             query?: never;
@@ -4243,6 +4277,26 @@ export interface components {
             /** Registration Code */
             registration_code: string;
         };
+        /** CourtNowOut */
+        CourtNowOut: {
+            /** Booked Minutes Today */
+            booked_minutes_today: number;
+            /** Busy */
+            busy: boolean;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Open Minutes Today */
+            open_minutes_today: number;
+            /** Session Type */
+            session_type: string;
+            /** Until */
+            until: string | null;
+        };
         /** CsrfOut */
         CsrfOut: {
             /** Csrf Token */
@@ -4269,6 +4323,27 @@ export interface components {
          * @enum {string}
          */
         CustomerType: "standard" | "member" | "corporate";
+        /** DashboardOut */
+        DashboardOut: {
+            /** Bookings Today */
+            bookings_today: number;
+            /** Cash Taken Today */
+            cash_taken_today: number;
+            /** Courts */
+            courts: components["schemas"]["CourtNowOut"][];
+            /** Day */
+            day: string;
+            /** Inactive Devices */
+            inactive_devices: number;
+            /** Occupancy Percent */
+            occupancy_percent: number;
+            /** Pending Decisions */
+            pending_decisions: number;
+            /** Revenue Today */
+            revenue_today: number;
+            /** Unread Notices */
+            unread_notices: number;
+        };
         /** DecisionIn */
         DecisionIn: {
             /** Approve */
@@ -5370,6 +5445,20 @@ export interface components {
             /** Amount */
             amount: number;
         };
+        /** PanelUserOut */
+        PanelUserOut: {
+            /** Email */
+            email: string | null;
+            /** First Name */
+            first_name: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Last Name */
+            last_name: string;
+        };
         /** PartnerIn */
         PartnerIn: {
             card: components["schemas"]["CardIn"];
@@ -5574,6 +5663,14 @@ export interface components {
          * @enum {string}
          */
         Period: "monthly" | "quarterly" | "annual";
+        /** PermissionsOut */
+        PermissionsOut: {
+            /** Roles */
+            roles: string[];
+            /** Scopes */
+            scopes: components["schemas"]["ScopeOut"][];
+            user: components["schemas"]["PanelUserOut"];
+        };
         /** PersonOut */
         PersonOut: {
             /** First Name */
@@ -6294,6 +6391,18 @@ export interface components {
              * Format: uuid
              */
             booking_id: string;
+        };
+        /** ScopeOut */
+        ScopeOut: {
+            /** Actions */
+            actions: string[];
+            /**
+             * Location Id
+             * Format: uuid
+             */
+            location_id: string;
+            /** Location Name */
+            location_name: string;
         };
         /** ScoreChanceOut */
         ScoreChanceOut: {
@@ -16710,6 +16819,93 @@ export interface operations {
             };
             /** @description Unprocessable Content */
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_panel_api_dashboard: {
+        parameters: {
+            query: {
+                location_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DashboardOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_panel_api_permissions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PermissionsOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };

@@ -914,5 +914,66 @@
       "diamond": "Diamant",
       "master": "Maestru"
     }
+  },
+  "admin": {
+    "loading": "Se încarcă…",
+    "offline": "Legătura cu serverul s-a întrerupt. Încearcă din nou.",
+    "errors": {
+      "generic": "Ceva nu a mers. Încearcă din nou."
+    },
+    "language": "English",
+    "logout": "Ieșire",
+    "close": "Închide",
+    "empty": "Nu ai acces la niciun modul aici.",
+    "location": "Locația",
+    "login": {
+      "title": "Administrare Jungle Padel",
+      "email": "Email",
+      "password": "Parola",
+      "code": "Codul din aplicația de autentificare",
+      "submit": "Intră",
+      "setupIntro": "Pentru panou e obligatorie autentificarea în doi pași. Adaugă această cheie în aplicația de autentificare (Google Authenticator, Microsoft Authenticator, 1Password…), apoi scrie codul pe care ți-l arată.",
+      "secret": "Cheia pentru aplicația de autentificare",
+      "openApp": "Deschide în aplicația de autentificare (pe telefon)",
+      "confirm": "Confirm",
+      "recoveryIntro": "Codurile de rezervă: fiecare merge o singură dată, dacă pierzi telefonul. Păstrează-le în siguranță, offline. Nu le mai vezi a doua oară.",
+      "recovery": "Codurile de rezervă",
+      "saved": "Le-am salvat, intru în panou"
+    },
+    "denied": {
+      "title": "Nu ai acces la panou",
+      "text": "Contul tău nu are un rol de personal. Dacă e o greșeală, anunță managerul."
+    },
+    "nav": {
+      "label": "Modulele panoului",
+      "dashboard": "Tablou de bord"
+    },
+    "dashboard": {
+      "title": "Tablou de bord",
+      "occupancy": "Ocuparea terenurilor azi",
+      "bookings": "Rezervări azi",
+      "cash": "Încasat azi (numerar)",
+      "revenue": "Venituri azi",
+      "alerts": "Alerte",
+      "notices": "Notificări necitite: {count}",
+      "decisions": "Decizii ale proprietarului în așteptare (DE_CONFIRMAT): {count}",
+      "devices": "Aparate dezactivate: {count}",
+      "courts": "Terenurile acum",
+      "court": "Teren",
+      "now": "Acum",
+      "booked": "Rezervat azi",
+      "free": "Liber",
+      "busyUntil": "{type}, până la {time}",
+      "bookedOf": "{booked} h din {open} h"
+    },
+    "sessionTypes": {
+      "official_match": "Meci oficial de ligă",
+      "training": "Antrenament",
+      "lesson": "Lecție",
+      "tournament": "Turneu",
+      "challenge": "Provocare",
+      "free_rental": "Închiriere",
+      "event": "Eveniment"
+    }
   }
 }
