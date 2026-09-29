@@ -41,3 +41,30 @@ def test_device_needs_existing_location(api: Api, staff) -> None:
 def test_manager_cannot_manage_devices(api: Api, staff) -> None:
     staff(Role.MANAGER)
     assert error_code(api.get("/staff/devices")) == "auth.forbidden"
+
+
+def test_a_court_screen_names_its_court(api: Api, staff, location: Location) -> None:
+    """§8.5: a screen with a court shows that court; without one, it is a lobby screen."""
+    from jungle.locations.models import Resource, ResourceKind
+
+    staff(Role.ADMIN)
+    court = Resource.objects.create(
+        location=location, slug="teren-4", name="Teren 4", kind=ResourceKind.PADEL_COURT
+    )
+    body = {"kind": "screen", "location_id": str(location.pk), "name": "Ecran Teren 4"}
+    created = api.post("/staff/devices", {**body, "resource_id": str(court.pk)})
+    assert created.status_code == 201 and created.json()["resource_id"] == str(court.pk)
+    assert api.post("/staff/devices", {**body, "name": "Lobby"}).json()["resource_id"] is None
+    other = Location.objects.create(slug="alt-club", name="Alt club")
+    elsewhere = Resource.objects.create(
+        location=other, slug="teren-1", name="Teren 1", kind=ResourceKind.PADEL_COURT
+    )
+    studio = Resource.objects.create(
+        location=location, slug="sala", name="Sala", kind=ResourceKind.PILATES_STUDIO
+    )
+    for resource, kind in ((elsewhere, "screen"), (studio, "screen"), (court, "league_kiosk")):
+        refused = api.post(
+            "/staff/devices", {**body, "kind": kind, "resource_id": str(resource.pk)}
+        )
+        assert error_code(refused) == "validation.invalid"
+        assert refused.json()["error"]["params"] == {"field": "resource_id"}

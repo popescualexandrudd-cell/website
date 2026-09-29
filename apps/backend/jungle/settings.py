@@ -58,6 +58,7 @@ FIELD_ENCRYPTION_KEY = secret("FIELD_ENCRYPTION_KEY", "dev-only-insecure-field-e
 ALLOWED_HOSTS = env_list("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1")
 
 INSTALLED_APPS = [
+    "daphne",  # `runserver` serves WebSockets too (ADR-0005); production runs `daphne` itself
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -66,6 +67,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.postgres",
     "corsheaders",
+    "channels",
     "jungle.core",
     "jungle.locations",
     "jungle.accounts",
@@ -86,6 +88,7 @@ INSTALLED_APPS = [
     "jungle.privacy",
     "jungle.league",
     "jungle.checkout",
+    "jungle.screens",
 ]
 
 MIDDLEWARE = [
@@ -137,6 +140,16 @@ CACHES = {
         {"BACKEND": "django.core.cache.backends.redis.RedisCache", "LOCATION": REDIS_URL}
         if REDIS_URL
         else {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}
+    )
+}
+
+# Live updates (ADR-0005): the screens hear "something changed" and reload their state from
+# the API. Redis in production (every process); in development, one process in memory.
+CHANNEL_LAYERS = {
+    "default": (
+        {"BACKEND": "channels_redis.core.RedisChannelLayer", "CONFIG": {"hosts": [REDIS_URL]}}
+        if REDIS_URL
+        else {"BACKEND": "channels.layers.InMemoryChannelLayer"}
     )
 }
 

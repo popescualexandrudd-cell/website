@@ -19,6 +19,9 @@ dependencies = [
     "reportlab>=5.0.1",
     "httpx[http2]>=0.28.1",
     "jungle-league-engine",
+    "channels>=4.2",
+    "channels-redis>=4.2",
+    "daphne>=4.1",
 ]
 
 [dependency-groups]
@@ -70,7 +73,7 @@ disallow_untyped_defs = false
 disallow_incomplete_defs = false
 
 [[tool.mypy.overrides]]
-module = ["dj_database_url", "phonenumbers.*", "pyotp.*", "corsheaders.*"]
+module = ["dj_database_url", "phonenumbers.*", "pyotp.*", "corsheaders.*", "channels.*"]
 ignore_missing_imports = true
 
 [tool.django-stubs]

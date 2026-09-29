@@ -792,6 +792,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/device/screen/state": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** State */
+        get: operations["jungle_screens_api_state"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/device/screen/ticket": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Ticket
+         * @description A one-time pass (60 s) to open the WebSocket of live updates.
+         */
+        post: operations["jungle_screens_api_ticket"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/device/whoami": {
         parameters: {
             query?: never;
@@ -4229,6 +4266,11 @@ export interface components {
             location_id: string;
             /** Name */
             name: string;
+            /**
+             * Resource Id
+             * @description Doar pentru ecranul unui teren; fără: ecran de lobby
+             */
+            resource_id?: string | null;
         };
         /**
          * DeviceKind
@@ -4262,6 +4304,11 @@ export interface components {
             location_id: string;
             /** Name */
             name: string;
+            /**
+             * Resource Id
+             * @description Terenul unui ecran (§8.5)
+             */
+            resource_id?: string | null;
         };
         /** DiamondOut */
         DiamondOut: {
@@ -6197,6 +6244,154 @@ export interface components {
              * Format: date-time
              */
             window_closes_at: string;
+        };
+        /** ScreenCourtOut */
+        ScreenCourtOut: {
+            current: components["schemas"]["ScreenSessionOut"] | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            next: components["schemas"]["ScreenNextOut"] | null;
+        };
+        /** ScreenEventOut */
+        ScreenEventOut: {
+            /** Starts At */
+            starts_at: string | null;
+            /** Title */
+            title: string;
+        };
+        /** ScreenLeagueOut */
+        ScreenLeagueOut: {
+            /** Doubles */
+            doubles: components["schemas"]["ScreenRowOut"][];
+            /** Kings */
+            kings: components["schemas"]["ScreenRowOut"][];
+            match_of_the_day: components["schemas"]["ScreenSessionOut"] | null;
+            /** Match Of The Day Court */
+            match_of_the_day_court: string;
+            /** Pairs */
+            pairs: components["schemas"]["ScreenRowOut"][];
+            /** Singles */
+            singles: components["schemas"]["ScreenRowOut"][];
+        };
+        /** ScreenNextOut */
+        ScreenNextOut: {
+            /** Session Type */
+            session_type: string;
+            /**
+             * Starts At
+             * Format: date-time
+             */
+            starts_at: string;
+        };
+        /**
+         * ScreenPlayerOut
+         * @description R-012 only; an empty name is a player who is not public ("Jucător").
+         */
+        ScreenPlayerOut: {
+            /** Division */
+            division: string;
+            /** Level */
+            level: number | null;
+            /** Lp */
+            lp: number | null;
+            /** Name */
+            name: string;
+            /** Position */
+            position: number | null;
+            /** Tier */
+            tier: string;
+        };
+        /** ScreenRowOut */
+        ScreenRowOut: {
+            /** Division */
+            division: string;
+            /** Level */
+            level: number;
+            /** Lp */
+            lp: number;
+            /** Names */
+            names: string[];
+            /** Position */
+            position: number;
+            /** Tier */
+            tier: string;
+        };
+        /** ScreenSessionOut */
+        ScreenSessionOut: {
+            /**
+             * Booking Id
+             * Format: uuid
+             */
+            booking_id: string;
+            /**
+             * Ends At
+             * Format: date-time
+             */
+            ends_at: string;
+            /** Match Of The Day */
+            match_of_the_day: boolean;
+            /** Minutes */
+            minutes: number;
+            /** Session Type */
+            session_type: string;
+            /**
+             * Starts At
+             * Format: date-time
+             */
+            starts_at: string;
+            /** Teams */
+            teams: components["schemas"]["ScreenPlayerOut"][][];
+        };
+        /** ScreenStateOut */
+        ScreenStateOut: {
+            /** Announcements */
+            announcements: {
+                [key: string]: string;
+            }[];
+            /** Cafe Ready */
+            cafe_ready: number[];
+            court: components["schemas"]["ScreenCourtOut"] | null;
+            /** Courts */
+            courts: components["schemas"]["ScreenCourtOut"][];
+            /** Events */
+            events: components["schemas"]["ScreenEventOut"][];
+            /**
+             * Kind
+             * @description court sau lobby
+             */
+            kind: string;
+            league: components["schemas"]["ScreenLeagueOut"];
+            /** Location Name */
+            location_name: string;
+            /** Qr Svg */
+            qr_svg: string;
+            /** Qr Url */
+            qr_url: string;
+            /**
+             * Server Time
+             * Format: date-time
+             */
+            server_time: string;
+        };
+        /** ScreenTicketOut */
+        ScreenTicketOut: {
+            /**
+             * Expires In
+             * @default 60
+             */
+            expires_in: number;
+            /**
+             * Path
+             * @default /ws/screens/
+             */
+            path: string;
+            /** Ticket */
+            ticket: string;
         };
         /**
          * Season
@@ -9301,6 +9496,82 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["OrderOut"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_screens_api_state: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScreenStateOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_screens_api_ticket: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScreenTicketOut"];
                 };
             };
             /** @description Unauthorized */

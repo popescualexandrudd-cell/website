@@ -16,7 +16,9 @@ from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.permissions import Action
 from jungle.devices import auth, bridge
 from jungle.devices.models import Device, DeviceKind
-from jungle.locations.models import Location
+from jungle.locations.models import Location, Resource, ResourceKind
+
+COURT_KINDS = (ResourceKind.PADEL_COURT, ResourceKind.TENNIS_COURT)
 
 
 def list_devices(request: HttpRequest) -> QuerySet[Device]:
@@ -25,14 +27,28 @@ def list_devices(request: HttpRequest) -> QuerySet[Device]:
 
 
 def register_device(
-    request: HttpRequest, kind: DeviceKind, location_id: uuid.UUID, name: str
+    request: HttpRequest,
+    kind: DeviceKind,
+    location_id: uuid.UUID,
+    name: str,
+    resource_id: uuid.UUID | None = None,
 ) -> Device:
+    """A court screen names its court (§8.5); a screen without one is a lobby screen."""
     authorize(request, Action.DEVICES_MANAGE, location_id=location_id)
     location = Location.objects.filter(pk=location_id).first()
     if location is None:
         raise DomainError(ErrorCode.LOCATIONS_NOT_FOUND, status=404)
+    resource = None
+    if resource_id is not None:
+        resource = Resource.objects.filter(
+            pk=resource_id, location=location, kind__in=COURT_KINDS
+        ).first()
+        if resource is None or kind != DeviceKind.SCREEN:
+            raise DomainError(ErrorCode.VALIDATION_INVALID, params={"field": "resource_id"})
     with transaction.atomic():
-        device = Device.objects.create(kind=kind, location=location, name=name.strip())
+        device = Device.objects.create(
+            kind=kind, location=location, name=name.strip(), resource=resource
+        )
         audit.record(
             audit.actor_from_request(request),
             "devices.registered",

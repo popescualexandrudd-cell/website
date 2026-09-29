@@ -24,6 +24,7 @@ class DeviceOut(Schema):
     kind: str
     location_id: uuid.UUID
     name: str
+    resource_id: uuid.UUID | None = Field(default=None, description="Terenul unui ecran (§8.5)")
     is_active: bool
     last_seen_at: datetime | None
     enrolled_at: datetime | None
@@ -34,6 +35,9 @@ class DeviceIn(Schema):
     kind: DeviceKind
     location_id: uuid.UUID
     name: str = Field(min_length=1, max_length=120)
+    resource_id: uuid.UUID | None = Field(
+        default=None, description="Doar pentru ecranul unui teren; fără: ecran de lobby"
+    )
 
 
 class EnrollIn(Schema):
@@ -66,7 +70,9 @@ def list_devices(request: HttpRequest) -> list[DeviceOut]:
 
 @router.post("", response={201: DeviceOut, **errors(401, 403, 404, 422)})
 def register_device(request: HttpRequest, payload: DeviceIn) -> Status[DeviceOut]:
-    device = services.register_device(request, payload.kind, payload.location_id, payload.name)
+    device = services.register_device(
+        request, payload.kind, payload.location_id, payload.name, payload.resource_id
+    )
     return Status(201, DeviceOut.from_orm(device))
 
 

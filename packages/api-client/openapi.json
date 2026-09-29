@@ -1886,6 +1886,19 @@
             "minLength": 1,
             "title": "Name",
             "type": "string"
+          },
+          "resource_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Doar pentru ecranul unui teren; fără: ecran de lobby",
+            "title": "Resource Id"
           }
         },
         "required": [
@@ -1958,6 +1971,19 @@
           "name": {
             "title": "Name",
             "type": "string"
+          },
+          "resource_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Terenul unui ecran (§8.5)",
+            "title": "Resource Id"
           }
         },
         "required": [
@@ -6656,6 +6682,409 @@
           "players"
         ],
         "title": "ScoreChanceOut",
+        "type": "object"
+      },
+      "ScreenCourtOut": {
+        "properties": {
+          "current": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ScreenSessionOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "next": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ScreenNextOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "current",
+          "next"
+        ],
+        "title": "ScreenCourtOut",
+        "type": "object"
+      },
+      "ScreenEventOut": {
+        "properties": {
+          "starts_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Starts At"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "starts_at"
+        ],
+        "title": "ScreenEventOut",
+        "type": "object"
+      },
+      "ScreenLeagueOut": {
+        "properties": {
+          "doubles": {
+            "items": {
+              "$ref": "#/components/schemas/ScreenRowOut"
+            },
+            "title": "Doubles",
+            "type": "array"
+          },
+          "kings": {
+            "items": {
+              "$ref": "#/components/schemas/ScreenRowOut"
+            },
+            "title": "Kings",
+            "type": "array"
+          },
+          "match_of_the_day": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ScreenSessionOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "match_of_the_day_court": {
+            "title": "Match Of The Day Court",
+            "type": "string"
+          },
+          "pairs": {
+            "items": {
+              "$ref": "#/components/schemas/ScreenRowOut"
+            },
+            "title": "Pairs",
+            "type": "array"
+          },
+          "singles": {
+            "items": {
+              "$ref": "#/components/schemas/ScreenRowOut"
+            },
+            "title": "Singles",
+            "type": "array"
+          }
+        },
+        "required": [
+          "doubles",
+          "singles",
+          "pairs",
+          "kings",
+          "match_of_the_day",
+          "match_of_the_day_court"
+        ],
+        "title": "ScreenLeagueOut",
+        "type": "object"
+      },
+      "ScreenNextOut": {
+        "properties": {
+          "session_type": {
+            "title": "Session Type",
+            "type": "string"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "starts_at",
+          "session_type"
+        ],
+        "title": "ScreenNextOut",
+        "type": "object"
+      },
+      "ScreenPlayerOut": {
+        "description": "R-012 only; an empty name is a player who is not public (\"Jucător\").",
+        "properties": {
+          "division": {
+            "title": "Division",
+            "type": "string"
+          },
+          "level": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Level"
+          },
+          "lp": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lp"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "tier": {
+            "title": "Tier",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "tier",
+          "division",
+          "lp",
+          "level",
+          "position"
+        ],
+        "title": "ScreenPlayerOut",
+        "type": "object"
+      },
+      "ScreenRowOut": {
+        "properties": {
+          "division": {
+            "title": "Division",
+            "type": "string"
+          },
+          "level": {
+            "title": "Level",
+            "type": "number"
+          },
+          "lp": {
+            "title": "Lp",
+            "type": "integer"
+          },
+          "names": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Names",
+            "type": "array"
+          },
+          "position": {
+            "title": "Position",
+            "type": "integer"
+          },
+          "tier": {
+            "title": "Tier",
+            "type": "string"
+          }
+        },
+        "required": [
+          "position",
+          "names",
+          "tier",
+          "division",
+          "lp",
+          "level"
+        ],
+        "title": "ScreenRowOut",
+        "type": "object"
+      },
+      "ScreenSessionOut": {
+        "properties": {
+          "booking_id": {
+            "format": "uuid",
+            "title": "Booking Id",
+            "type": "string"
+          },
+          "ends_at": {
+            "format": "date-time",
+            "title": "Ends At",
+            "type": "string"
+          },
+          "match_of_the_day": {
+            "title": "Match Of The Day",
+            "type": "boolean"
+          },
+          "minutes": {
+            "title": "Minutes",
+            "type": "integer"
+          },
+          "session_type": {
+            "title": "Session Type",
+            "type": "string"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "teams": {
+            "items": {
+              "items": {
+                "$ref": "#/components/schemas/ScreenPlayerOut"
+              },
+              "type": "array"
+            },
+            "title": "Teams",
+            "type": "array"
+          }
+        },
+        "required": [
+          "booking_id",
+          "starts_at",
+          "ends_at",
+          "minutes",
+          "session_type",
+          "match_of_the_day",
+          "teams"
+        ],
+        "title": "ScreenSessionOut",
+        "type": "object"
+      },
+      "ScreenStateOut": {
+        "properties": {
+          "announcements": {
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "title": "Announcements",
+            "type": "array"
+          },
+          "cafe_ready": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Cafe Ready",
+            "type": "array"
+          },
+          "court": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ScreenCourtOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "courts": {
+            "items": {
+              "$ref": "#/components/schemas/ScreenCourtOut"
+            },
+            "title": "Courts",
+            "type": "array"
+          },
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/ScreenEventOut"
+            },
+            "title": "Events",
+            "type": "array"
+          },
+          "kind": {
+            "description": "court sau lobby",
+            "title": "Kind",
+            "type": "string"
+          },
+          "league": {
+            "$ref": "#/components/schemas/ScreenLeagueOut"
+          },
+          "location_name": {
+            "title": "Location Name",
+            "type": "string"
+          },
+          "qr_svg": {
+            "title": "Qr Svg",
+            "type": "string"
+          },
+          "qr_url": {
+            "title": "Qr Url",
+            "type": "string"
+          },
+          "server_time": {
+            "format": "date-time",
+            "title": "Server Time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "location_name",
+          "server_time",
+          "league",
+          "events",
+          "announcements",
+          "court",
+          "courts",
+          "cafe_ready",
+          "qr_url",
+          "qr_svg"
+        ],
+        "title": "ScreenStateOut",
+        "type": "object"
+      },
+      "ScreenTicketOut": {
+        "properties": {
+          "expires_in": {
+            "default": 60,
+            "title": "Expires In",
+            "type": "integer"
+          },
+          "path": {
+            "default": "/ws/screens/",
+            "title": "Path",
+            "type": "string"
+          },
+          "ticket": {
+            "title": "Ticket",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket"
+        ],
+        "title": "ScreenTicketOut",
         "type": "object"
       },
       "Season": {
@@ -11910,6 +12339,101 @@
         "summary": "Display Queue",
         "tags": [
           "device: café display"
+        ]
+      }
+    },
+    "/api/v1/device/screen/state": {
+      "get": {
+        "operationId": "jungle_screens_api_state",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScreenStateOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "State",
+        "tags": [
+          "device: screens"
+        ]
+      }
+    },
+    "/api/v1/device/screen/ticket": {
+      "post": {
+        "description": "A one-time pass (60 s) to open the WebSocket of live updates.",
+        "operationId": "jungle_screens_api_ticket",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScreenTicketOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "DeviceAuth": []
+          }
+        ],
+        "summary": "Ticket",
+        "tags": [
+          "device: screens"
         ]
       }
     },

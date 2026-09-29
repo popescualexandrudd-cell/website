@@ -154,3 +154,25 @@ def test_public_company_details_for_the_footer(api: Api, staff) -> None:
     body = api.get("/config/company").json()
     assert body["complete"] is True
     assert body["email"] == "dpo@example.test"
+
+
+def test_screen_settings_are_checked() -> None:
+    """§8.5 (Q55): the announcements in both languages, the QR address over HTTPS."""
+    from jungle.configuration import registry
+
+    assert registry.boolean(False) and not registry.boolean("yes")
+    good = [{"ro": "Turneu sâmbătă", "en": "Saturday tournament"}]
+    assert registry.announcements(good) and registry.announcements([])
+    for bad in (
+        "text",
+        [{"ro": "doar română"}],
+        [{"ro": " ", "en": "x"}],
+        [{"ro": "x" * 161, "en": "x"}],
+        [{"ro": 1, "en": "x"}],
+        ["text"],
+        good * 21,
+    ):
+        assert not registry.announcements(bad)
+    assert registry.optional_url("") and registry.optional_url("https://junglepadel.ro/liga")
+    assert not registry.optional_url("http://junglepadel.ro") and not registry.optional_url(None)
+    assert not registry.optional_url("https://" + "x" * 200)

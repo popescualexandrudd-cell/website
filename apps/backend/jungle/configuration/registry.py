@@ -276,6 +276,30 @@ def season_dates(value: Any) -> bool:
     return bool(value["summer_start"] != value["winter_start"])
 
 
+def boolean(value: Any) -> bool:
+    return isinstance(value, bool)
+
+
+def announcements(value: Any) -> bool:
+    """The club's own messages on the screens (§8.5), in both languages."""
+    return (
+        isinstance(value, list)
+        and len(value) <= 20
+        and all(
+            isinstance(a, dict)
+            and set(a) == {"ro", "en"}
+            and all(isinstance(t, str) and 0 < len(t.strip()) <= 160 for t in a.values())
+            for a in value
+        )
+    )
+
+
+def optional_url(value: Any) -> bool:
+    return isinstance(value, str) and (
+        value == "" or (value.startswith("https://") and len(value) <= 200)
+    )
+
+
 def company_details(value: Any) -> bool:
     return (
         isinstance(value, dict)
@@ -711,6 +735,30 @@ CONFIG: dict[str, ConfigSpec] = {
             "Cât rămâne blocat PIN-ul după prea multe încercări greșite (minute).",
             positive_int,
             question="Q54",
+        ),
+        ConfigSpec(
+            "screens.pairs_from_scan_order",
+            True,
+            Marker.TO_CONFIRM,
+            "Ecranul terenului: dacă echipele nu sunt încă știute, 4 jucători apar în perechi, "
+            "în ordinea scanării la intrarea pe teren (§8.5).",
+            boolean,
+            question="Q55",
+        ),
+        ConfigSpec(
+            "screens.announcements",
+            [],
+            Marker.TO_CONFIRM,
+            "Anunțurile clubului pe ecrane (reclame interne, §8.5), în română și engleză.",
+            announcements,
+            question="Q55",
+        ),
+        ConfigSpec(
+            "screens.qr_url",
+            "",
+            Marker.DEFAULT,
+            "Adresa din codul QR de pe ecrane (goală: pagina publică a ligii de pe site).",
+            optional_url,
         ),
         ConfigSpec(
             "auth.staff_session_hours",

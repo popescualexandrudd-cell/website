@@ -46,6 +46,7 @@ from jungle.privacy.api import me_router as privacy_router
 from jungle.privacy.api import staff_router as privacy_staff_router
 from jungle.rewards.api import me_router as rewards_router
 from jungle.rewards.api import staff_router as rewards_staff_router
+from jungle.screens.api import router as screens_router
 from jungle.subscriptions.api import me_router as subscriptions_router
 from jungle.subscriptions.api import public_router as subscriptions_public_router
 from jungle.subscriptions.api import staff_router as subscriptions_staff_router
@@ -105,6 +106,7 @@ api.add_router("/kiosk/league", league_kiosk_router)
 api.add_router("/kiosk/payments", payments_kiosk_router)
 api.add_router("/staff", checkout_staff_router)
 api.add_router("/device/cafe", cafe_display_router)
+api.add_router("/device/screen", screens_router)
 
 
 def _error(

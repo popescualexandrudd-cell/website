@@ -29,6 +29,15 @@ class Device(models.Model):
         verbose_name="locație",
     )
     name = models.CharField("nume", max_length=120)
+    resource = models.ForeignKey(
+        "locations.Resource",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="screens",
+        verbose_name="teren",
+        help_text="Doar pentru ecranul unui teren (§8.5); fără teren: ecran de lobby.",
+    )
     is_active = models.BooleanField("activ", default=True)
     public_key = models.TextField(
         blank=True, help_text="Cheia publică Ed25519 a Hardware Bridge (Etapa 7)."
