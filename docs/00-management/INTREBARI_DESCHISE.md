@@ -76,6 +76,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q53](#q53) | Chioșcul de Plăți: numerar, rest, credit, bon fiscal | MEDIE | Etapa 8 (nu blochează; lucrez cu varianta implicită) | DESCHISĂ |
 | [Q54](#q54) | Chioșcul de Plăți: modul personal (cine, PIN) | MEDIE | Etapa 8 (nu blochează) | DESCHISĂ |
 | [Q55](#q55) | Ecranele: cine apare pe nume, echipele, anunțurile | MEDIE | Etapa 9 (nu blochează) | REZOLVATĂ 29.09.2026 |
+| [Q56](#q56) | Panoul de admin: cine vede rapoartele financiare *(nouă, Etapa 10)* | SCĂZUTĂ | nimic (se schimbă ușor) | DESCHISĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -685,3 +686,12 @@ Titlul și instrucțiunea din §17, preluate integral:
   2. **Echipele:** implicit, în perechi după ordinea scanării; în plus, **jucătorii își aleg singuri echipele la Chioșcul Ligii** („Echipele pe teren”: „Cu cine joci?”), iar ecranul terenului se schimbă imediat. Nu se poate după introducerea meciului, la un meci de turneu sau la o provocare.
   3. **Anunțurile clubului:** confirmat (texte scurte RO + EN, implicit niciunul).
   4. **Codul QR:** confirmat (pagina ligii de pe site).
+- **Aplicat în Etapa 10 (29.09.2026):** cererea „nu mai afișa numele pe ecrane” se notează acum din panoul de admin, pe fișa persoanei (Utilizatori), de recepție, manager sau admin (permisiunea `privacy.requests`), cu motiv, în jurnal.
+
+### <a id="q56"></a>Q56 — Panoul de admin: cine vede rapoartele financiare
+
+- **Prioritate:** SCĂZUTĂ · **Blochează:** nimic (lucrez cu varianta implicită)
+- **Stare:** DESCHISĂ (din 29.09.2026)
+- **Varianta implicită (DE_CONFIRMAT):** rapoartele pe perioade (venituri pe categorii, reduceri, ocuparea terenurilor) și exporturile CSV (registrul pentru contabil, rezervările) le văd **doar adminul și managerul** (permisiunea nouă `reports.view`). Recepția vede, ca până acum, registrul zilei, numerarul chioșcurilor și seiful (de care are nevoie la închiderea zilei), dar nu rapoartele pe perioade.
+- **Alternative:** rapoartele doar pentru admin (proprietar); sau și pentru recepție.
+

@@ -88,7 +88,7 @@ export function Calendar() {
       <div className="calendar" style={{ gridTemplateColumns: `64px repeat(${columns.length}, minmax(120px, 1fr))` }}>
         <div className="calendar__corner" />
         {columns.map((r) => (
-          <div key={r.id} className="calendar__head" role="columnheader">
+          <div key={r.id} className="calendar__head" aria-hidden="true">
             {r.name}
           </div>
         ))}
@@ -102,6 +102,9 @@ export function Calendar() {
         {columns.map((r) => (
           <div key={r.id} className="calendar__column" style={{ height: slots.length * ROW_PX }} aria-label={r.name} role="group">
             {slots.map((m) => {
+              // A cell under a booking is not a target: the booking covers it.
+              const covered = live.some((b) => b.resource_id === r.id && clubMinutes(b.starts_at, day) <= m && m < clubMinutes(b.ends_at, day));
+              if (covered) return null;
               const bookable = manage && (BOOKABLE[r.kind]?.length ?? 0) > 0;
               return (
                 <button

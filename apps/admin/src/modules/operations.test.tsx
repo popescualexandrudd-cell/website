@@ -140,7 +140,7 @@ describe("the bookings calendar", () => {
   it("draws the day and books a free cell for a customer", async () => {
     const panel = mount(<Calendar />, ["bookings.view", "bookings.manage"]);
     await settle();
-    expect(screen.getAllByRole("columnheader").map((h) => h.textContent)).toEqual(["Teren 1", "Teren 2", "Reformer 1", "Sala de evenimente"]);
+    expect(Array.from(document.querySelectorAll(".calendar__head")).map((h) => h.textContent)).toEqual(["Teren 1", "Teren 2", "Reformer 1", "Sala de evenimente"]);
     expect(screen.getByText(/anulate: 1/)).toBeTruthy();
     expect(screen.getByRole("button", { name: /Ana Pop/ }).style.top).toBe(`${4 * 28}px`); // 10:00, two hours after 08:00
     expect((screen.getByRole("button", { name: "Sala de evenimente, 10:00" }) as HTMLButtonElement).disabled).toBe(true);

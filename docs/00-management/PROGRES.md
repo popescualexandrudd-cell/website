@@ -3,8 +3,8 @@
 > Actualizat la fiecare sesiune de lucru. Prima secțiune spune mereu **unde suntem acum**.
 
 ## Unde suntem acum
-- **Etapa curentă:** Etapa 10 (panoul de admin), după răspunsul la Q55.
-- **Etapa 9 (ecranele de teren și lobby):** aprobată de proprietar pe 29.09.2026 (merge în `main`, tag local `etapa-9`). Q55: proprietarul a ales să răspundă; până la răspuns, variantele implicite. Raport: [verificare/etapa-9/RAPORT.md](verificare/etapa-9/RAPORT.md).
+- **Etapa curentă:** Etapa 10 (panoul de admin): **livrată pe 29.09.2026, așteaptă aprobarea proprietarului**. Raport: [verificare/etapa-10/RAPORT.md](verificare/etapa-10/RAPORT.md). Întrebare nouă: Q56.
+- **Etapa 9 (ecranele de teren și lobby):** aprobată de proprietar pe 29.09.2026 (merge în `main`, tag local `etapa-9`). Q55 rezolvată (toți pe nume, insigna „Ligă”, echipele alese la Chioșcul Ligii). Raport: [verificare/etapa-9/RAPORT.md](verificare/etapa-9/RAPORT.md).
 - **Etapa 8 (Chioșcul de Plăți + afișajul cafenelei):** aprobată de proprietar pe 29.09.2026 (merge în `main`, tag local `etapa-8`). Q53 și Q54 rămân deschise, cu variantele implicite. Raport: [verificare/etapa-8/RAPORT.md](verificare/etapa-8/RAPORT.md).
 - **Etapa 7 (Hardware Bridge + Chioșcul Ligii):** aprobată de proprietar pe 28.09.2026 (merge în `main`, tag local `etapa-7`), cu Q51 și Q52 confirmate. Raport: [verificare/etapa-7/RAPORT.md](verificare/etapa-7/RAPORT.md).
 - **Etapa 6 (integrarea ligii):** aprobată de proprietar pe 28.09.2026 (merge în `main`), cu Q6 schimbat (alegere între 15% la abonament și 4 × 20% la rezervări), Q49 (teren, oră, rezultate și istoric publice; R-012 și acordul ligii v2) și Q11, Q27, Q28, Q47, Q48, Q50 confirmate. Raport: [verificare/etapa-6/RAPORT.md](verificare/etapa-6/RAPORT.md).
@@ -15,7 +15,7 @@
 - **Etapa 1B (pagina de pre-lansare, revizia 3 „Noapte și alamă”):** aprobată de proprietar pe 27.09.2026 (merge în `main`). Raport: [verificare/etapa-1b/RAPORT.md](verificare/etapa-1b/RAPORT.md).
 - **Etapa 1A:** aprobată de proprietar pe 27.09.2026 (merge în `main`). Raport: [verificare/etapa-1a/RAPORT.md](verificare/etapa-1a/RAPORT.md).
 - **Etapa 0:** aprobată de proprietar pe 26.09.2026 (tag `etapa-0`, branch `main`).
-- **Următoarea etapă:** 10 (panoul de admin), după aprobarea Etapei 9.
+- **Următoarea etapă:** 11 (website-ul complet), după aprobarea Etapei 10.
 - **Întrebări încă deschise care contează curând:** Q26 (datele firmei: subsol și texte legale), Q39 (domeniu, marcă), Q24 (furnizor de email), Q23 (modelele de hardware), Q44 (randări sau fotografii ale spațiilor), Q45 (valorile implicite ale ligii), Q46 (un text neclar din schiță); Q21 (prețurile: tarifele rămân DEMO, `DE_STABILIT`); Q24 (conturile Apple Developer și Google Wallet ale firmei — ghid în `docs/08-deploy-si-mentenanta/02-ghid-apple-google-wallet.md`); Q1 (emblemele cardului Diamant); Q30 (rezultatele publice ale meciurilor); pentru Etapa 8: Q53 (numerar, rest, credit, fiscal), Q54 (modul personal), Q10 (plăți), Q33 (cafenea), contabilul (fiscalul) — vezi [INTREBARI_DESCHISE.md](INTREBARI_DESCHISE.md).
 - **Branch de lucru:** `claude/hopeful-euler-rguibn` (repository `popescualexandrudd-cell/website`).
 
@@ -126,3 +126,5 @@
 - **29.09.2026** — CI: toate cele 6 rulări picate (27–29.09) analizate; 5 veneau din push-uri făcute înainte ca verificările să fie verzi, una dintr-o problemă reală în Hardware Bridge (reparată). Hook-ul `.githooks/pre-push` refuză de acum orice push fără `scripts/test-all` verde (regula 9 din `CLAUDE.md`).
 - **29.09.2026** — Etapa 9 livrată: ecranele de teren și de lobby (§8.5), live prin Channels + Redis, `apps/court-screens`, `screens_demo`. Întrebare nouă: Q55.
 - **29.09.2026** — Etapa 9 aprobată de proprietar (merge în `main`, tag local `etapa-9`); răspunsul la Q55 urmează.
+- **29.09.2026** — Q55 aplicată (toți jucătorii pe nume, insigna „Ligă”, opoziția GDPR, echipele alese la Chioșcul Ligii); în `main`.
+- **29.09.2026** — Etapa 10 livrată: panoul de administrare (`apps/admin`, §8.6) cu intrare 2FA obligatorie, meniu după permisiuni și locație, tablou de bord live, utilizatori, calendar cu mutare prin tragere, resurse, prețuri, abonamente, firme, clase, prezențe, ligă (fără câmp de scor), plăți și registru, numerar și rapoarte Z, cafenea, evenimente, rapoarte și exporturi CSV, personal și roluri, dispozitive, setări și feature flags, jurnal de audit, starea sistemului; modulele Etapelor 11–12 marcate. `jungle/panel` (100% acoperire), `manage.py panel_demo`, teste cap-coadă cu 2FA. Întrebare nouă: Q56.

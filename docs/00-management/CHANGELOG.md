@@ -4,6 +4,20 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 10 — 29.09.2026 (livrată; așteaptă aprobarea)
+#### Adăugat
+- `apps/admin` (React + Vite, port 5179): panoul de administrare (§8.6), pe aceeași adresă cu API-ul (proxy `/api`, cookie de sesiune + CSRF).
+  - Intrare cu parolă și cod TOTP (2FA obligatoriu, ADR-0011); la prima intrare, configurarea 2FA și cele 10 coduri de rezervă, arătate o singură dată.
+  - Meniul arată doar modulele permise rolului la locația aleasă; serverul verifică din nou orice acțiune.
+  - Module: tablou de bord live; utilizatori (R-004) și niveluri (R-003); calendarul rezervărilor pe resurse, cu rezervare nouă, mutare prin tragere sau din detalii, anulare, plată în numerar ca excepție (Q9, cheie de idempotență R-067); resurse; prețuri cu marcajul DE_STABILIT; abonamente (R-082, Q12, R-086) și firme (R-088, Q35); clase și prezențe (R-101, R-070); prezențe și blocări după neprezentări (R-073); liga (decizii cu motiv, sezoane, turnee, Meciul zilei; fără câmp de scor, invariantul 1); plăți și registru (corecții doar prin înregistrări inverse), vouchere; numerar, seif, operațiunile personalului, rapoartele Z, PIN-ul pentru chioșc (Q54); cafenea (coadă, comandă la bar, meniu); evenimente; rapoarte și exporturi CSV (în jurnal, protejate de formule); personal și roluri; dispozitive (înrolare, token arătat o dată, oprire cu motiv); setări versionate și feature flags; jurnalul de audit; starea sistemului. Modulele Etapelor 11–12 apar marcate.
+  - Ora clubului (Europe/Bucharest) peste tot, și la trecerea la ora de vară (`src/clock.ts`); RO/EN (`admin.*`).
+- `jungle.panel` (100% acoperire pe ramuri): permisiunile pe locații, tabloul de bord, programul zilei, toate resursele, antrenorii, abonamentele, firmele, clasele săptămânii, sezoanele, registrul zilei, numerarul și operațiunile, voucherele, meniul complet al cafenelei, rapoartele pe perioade, exporturile CSV, personalul și matricea rolurilor, starea sistemului.
+- `POST /api/v1/staff/bookings/{id}/move`: mutarea unei rezervări cu aceleași reguli ca o rezervare nouă (R-041, R-043, Q3, antrenorul liber), cu motiv în jurnal; locul eliberat merge la primul din lista de așteptare (R-074). Cod nou: `booking.not_movable`.
+- Permisiunea nouă `reports.view` (admin, manager; Q56, DE_CONFIRMAT). Setarea `JUNGLE_VERSION` (versiunea afișată în starea sistemului). Lista setărilor are descrierea fiecărei chei.
+- `manage.py panel_demo` (conturi demo de manager și recepție fără 2FA, rezervări demo); partea `admin` în `scripts/test-e2e` (`E2E_ONLY=admin`).
+#### Reparat la revizuire
+- Orele alese în panou se trimit în ora clubului, nu a calculatorului; plățile trecute de personal au cheie de idempotență per încercare; doar numerar (Q9); un preț pe oră cu număr impar de bani e refuzat, nu rotunjit; celulele calendarului de sub o rezervare nu mai sunt ținte ascunse (accesibilitate).
+
 ### Q55 aplicată — 29.09.2026 (răspunsul proprietarului)
 #### Schimbat
 - Ecranele: toți jucătorii de pe teren apar pe nume; cei din ligă au insigna „Ligă” și, doar ei, rangul, LP-ul și nivelul (R-012). Un cont șters sau o persoană care s-a opus (GDPR art. 21, `screens.NameObjection`, notată de recepție în adminul tehnic) apare ca „Jucător”. Politica de confidențialitate (ciorna RO + EN) spune asta.

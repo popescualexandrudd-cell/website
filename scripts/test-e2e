@@ -2,11 +2,12 @@
 # End-to-end tests across apps (§13.1): real backend + production build of the website + Playwright;
 # then the League Kiosk: the real Hardware Bridge (simulators, signed scans) + its production build;
 # then the Payments Kiosk and the café display, each with its own real Hardware Bridge (Stage 8);
-# then the court and lobby screens, live through Redis as in production (Stage 9).
+# then the court and lobby screens, live through Redis as in production (Stage 9);
+# then the admin panel with two-factor sign-in (Stage 10).
 # Needs PostgreSQL (DATABASE_URL server, default localhost), Redis (E2E_REDIS_URL, or a local
 # `redis-server` started here) and a Chromium for Playwright
 # (PW_CHROMIUM_PATH, or `pnpm --filter @jungle/web exec playwright install chromium`).
-# E2E_ONLY=kiosk, payments or screens runs only that part (after the backend).
+# E2E_ONLY=kiosk, payments, screens or admin runs only that part (after the backend).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
@@ -30,6 +31,8 @@ failed() {
   exit 1
 }
 
+# The preview servers run as vite itself (not through pnpm, which leaves its child running when
+# stopped), so the cleanup stops them and the next run never tests a stale build.
 # Whether a part runs: all of them, or only the one named in E2E_ONLY.
 part() { [ -z "${E2E_ONLY:-}" ] || [ "$E2E_ONLY" = "$1" ]; }
 
@@ -62,7 +65,7 @@ export NEXT_PUBLIC_API_URL=http://localhost:8000 NEXT_PUBLIC_SITE_URL=http://loc
 # A stand-in statistics script: the consent tests check that it is added only after "Accept".
 export NEXT_PUBLIC_UMAMI_SRC=http://localhost:3000/e2e-statistics.js NEXT_PUBLIC_UMAMI_WEBSITE_ID=e2e
 pnpm --filter @jungle/web build >"$WORK/build.log" 2>&1 || { cat "$WORK/build.log"; exit 1; }
-(cd apps/web && exec pnpm start >"$WORK/web.log" 2>&1) &
+(cd apps/web && exec node_modules/.bin/next start --port 3000 >"$WORK/web.log" 2>&1) &
 PIDS+=($!)
 
 fi
@@ -91,7 +94,7 @@ BRIDGE_DEVICE_TOKEN="$(python3 -c 'import json,sys; print(json.load(open(sys.arg
 (BRIDGE_DEVICE_ID="$BRIDGE_DEVICE_ID" BRIDGE_DEVICE_TOKEN="$BRIDGE_DEVICE_TOKEN" exec uv run jungle-bridge run >"$WORK/bridge.log" 2>&1) &
 PIDS+=($!)
 pnpm --filter @jungle/kiosk-league build >"$WORK/kiosk-build.log" 2>&1 || { cat "$WORK/kiosk-build.log"; exit 1; }
-(cd apps/kiosk-league && exec pnpm preview >"$WORK/kiosk.log" 2>&1) &
+(cd apps/kiosk-league && exec node_modules/.bin/vite preview --port 5174 --strictPort >"$WORK/kiosk.log" 2>&1) &
 PIDS+=($!)
 for _ in $(seq 1 60); do curl -fs -o /dev/null http://localhost:5174/ && break; sleep 1; done
 curl -fs -o /dev/null http://localhost:5174/ || { echo "kiosk not ready"; cat "$WORK"/kiosk*.log "$WORK/bridge.log"; exit 1; }
@@ -124,9 +127,9 @@ VITE_BRIDGE_URL=ws://127.0.0.1:8766 pnpm --filter @jungle/kiosk-payments build >
   cat "$WORK/payments-build.log"; exit 1; }
 VITE_BRIDGE_URL=ws://127.0.0.1:8767 pnpm --filter @jungle/cafe-display build >"$WORK/display-build.log" 2>&1 || {
   cat "$WORK/display-build.log"; exit 1; }
-(cd apps/kiosk-payments && exec pnpm preview >"$WORK/payments.log" 2>&1) &
+(cd apps/kiosk-payments && exec node_modules/.bin/vite preview --port 5175 --strictPort >"$WORK/payments.log" 2>&1) &
 PIDS+=($!)
-(cd apps/cafe-display && exec pnpm preview >"$WORK/display.log" 2>&1) &
+(cd apps/cafe-display && exec node_modules/.bin/vite preview --port 5176 --strictPort >"$WORK/display.log" 2>&1) &
 PIDS+=($!)
 for url in http://localhost:5175/ http://localhost:5176/; do
   for _ in $(seq 1 60); do curl -fs -o /dev/null "$url" && break; sleep 1; done
@@ -162,9 +165,9 @@ VITE_BRIDGE_URL=ws://127.0.0.1:8768 pnpm --filter @jungle/court-screens build >"
   cat "$WORK/screens-build.log"; exit 1; }
 (cd apps/court-screens && VITE_BRIDGE_URL=ws://127.0.0.1:8769 pnpm exec vite build --outDir "$WORK/lobby-dist" --emptyOutDir \
   >"$WORK/lobby-build.log" 2>&1) || { cat "$WORK/lobby-build.log"; exit 1; }
-(cd apps/court-screens && exec pnpm preview >"$WORK/screens.log" 2>&1) &
+(cd apps/court-screens && exec node_modules/.bin/vite preview --port 5177 --strictPort >"$WORK/screens.log" 2>&1) &
 PIDS+=($!)
-(cd apps/court-screens && exec pnpm exec vite preview --port 5178 --strictPort --outDir "$WORK/lobby-dist" \
+(cd apps/court-screens && exec node_modules/.bin/vite preview --port 5178 --strictPort --outDir "$WORK/lobby-dist" \
   >"$WORK/lobby.log" 2>&1) &
 PIDS+=($!)
 for url in http://localhost:5177/ http://localhost:5178/; do
@@ -176,4 +179,33 @@ echo "==> Playwright (court and lobby screens)"
 E2E_SCREENS_DATA="$WORK/screens.json" E2E_SCREENSHOTS="${E2E_SCREENSHOTS:-}" \
   pnpm --filter @jungle/court-screens exec playwright test ||
   failed "$WORK/bridge-court.log" "$WORK/bridge-lobby.log"
+fi
+
+if part admin; then
+echo "==> Admin panel: an administrator with 2FA, demo staff and bookings, the production build"
+ADMIN_PASSWORD="e2e-$(python3 -c 'import secrets; print(secrets.token_urlsafe(18))')"
+(cd apps/backend && JUNGLE_ADMIN_PASSWORD="$ADMIN_PASSWORD" uv run python manage.py bootstrap_admin \
+  --email admin-e2e@demo.invalid --first-name Admin --last-name E2E >"$WORK/admin.txt")
+ADMIN_SECRET="$(python3 -c 'import re,sys; print(re.search(r"secret=([A-Z2-7]+)", open(sys.argv[1]).read()).group(1))' "$WORK/admin.txt")"
+(cd apps/backend && JUNGLE_DEMO_PASSWORD="$ADMIN_PASSWORD" uv run python manage.py panel_demo --output "$WORK/panel.json")
+python3 - "$WORK/panel.json" "$WORK/admin.json" "$ADMIN_PASSWORD" "$ADMIN_SECRET" <<'PY'
+import json, sys
+demo = json.load(open(sys.argv[1]))
+admin = {"email": "admin-e2e@demo.invalid", "password": sys.argv[3], "secret": sys.argv[4]}
+json.dump({"admin": admin, "password": sys.argv[3], "demo": demo}, open(sys.argv[2], "w"))
+PY
+pnpm --filter @jungle/admin build >"$WORK/admin-build.log" 2>&1 || { cat "$WORK/admin-build.log"; exit 1; }
+if curl -fs -o /dev/null http://localhost:5179/; then
+  echo "port 5179 is already taken (a panel server left from an earlier run?)"; exit 1
+fi
+# vite itself, not through pnpm: stopping it at the end then stops the server too.
+(cd apps/admin && VITE_API_ORIGIN=http://127.0.0.1:8000 exec node_modules/.bin/vite preview --port 5179 --strictPort \
+  >"$WORK/admin.log" 2>&1) &
+PIDS+=($!)
+for _ in $(seq 1 60); do curl -fs -o /dev/null http://localhost:5179/ && break; sleep 1; done
+curl -fs -o /dev/null http://localhost:5179/ || { echo "not ready: admin"; cat "$WORK/admin.log"; exit 1; }
+
+echo "==> Playwright (admin panel)"
+E2E_ADMIN_DATA="$WORK/admin.json" E2E_SCREENSHOTS="${E2E_SCREENSHOTS:-}" \
+  pnpm --filter @jungle/admin exec playwright test || failed "$WORK/admin.log"
 fi

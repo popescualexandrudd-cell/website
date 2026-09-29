@@ -1,6 +1,6 @@
 # Panoul de admin (React + Vite)
 
-> **Stare:** în construcție în Etapa 10 (început pe 29.09.2026). Gata: autentificarea cu 2FA, meniul după permisiuni și locație, tabloul de bord live, utilizatorii (R-004: detalii, roluri, activare, carduri, „fără nume pe ecrane”, ștergere GDPR), validarea nivelurilor (R-003), calendarul rezervărilor, resursele, prețurile, abonamentele, firmele, clasele de pilates și prezențele, liga, plățile și registrul, numerarul și rapoartele Z, cafeneaua, evenimentele, rapoartele și exporturile, personalul și rolurile, dispozitivele, setările și feature flags, jurnalul de audit, starea sistemului. Modulele Etapelor 11–12 apar în meniu, marcate. Urmează testele cap-coadă și raportul etapei.
+> **Stare:** Etapa 10 livrată pe 29.09.2026, așteaptă aprobarea (raport: `docs/00-management/verificare/etapa-10/RAPORT.md`). Gata: autentificarea cu 2FA, meniul după permisiuni și locație, tabloul de bord live, utilizatorii (R-004: detalii, roluri, activare, carduri, „fără nume pe ecrane”, ștergere GDPR), validarea nivelurilor (R-003), calendarul rezervărilor, resursele, prețurile, abonamentele, firmele, clasele de pilates și prezențele, liga, plățile și registrul, numerarul și rapoartele Z, cafeneaua, evenimentele, rapoartele și exporturile, personalul și rolurile, dispozitivele, setările și feature flags, jurnalul de audit, starea sistemului. Modulele Etapelor 11–12 apar în meniu, marcate.
 
 ## Ce face (§8.6)
 
@@ -47,6 +47,12 @@ pnpm --filter @jungle/admin build   # build de producție
 ```
 
 Primul cont de admin: `bootstrap_admin` (vezi `CLAUDE.md`).
+
+Date demo pentru încercare (niciodată în producție): după `seed_initial --demo`,
+`JUNGLE_DEMO_PASSWORD=<parolă de 12+ caractere> uv run python apps/backend/manage.py panel_demo`
+dă o parolă managerului (`manager@demo.invalid`) și recepției (`receptie@demo.invalid`) demo, fără 2FA (se configurează la prima intrare), și două rezervări demo mâine.
+
+Cap-coadă: `E2E_ONLY=admin scripts/test-e2e` (backend real, build de producție, Playwright + axe; `E2E_SCREENSHOTS=<folder>` salvează capturile).
 
 ## Deploy
 
