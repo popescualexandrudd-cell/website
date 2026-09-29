@@ -1,10 +1,12 @@
-"""The admin panel's own reads (§8.6): permissions per location and the live dashboard. Every
-other module of the panel calls the staff API of its domain."""
+"""The admin panel's own reads (§8.6): permissions per location, the live dashboard, and what
+the modules list (resources, subscriptions, classes, money, café). Every change goes through the
+staff API of its domain, which checks the permission again."""
 
 from __future__ import annotations
 
 import uuid
 from datetime import date, datetime
+from typing import Any
 
 from django.http import HttpRequest
 from ninja import Field, Router, Schema
@@ -13,8 +15,9 @@ from jungle.accounts.services.authz import authorize
 from jungle.core.permissions import Action
 from jungle.core.schemas import errors
 from jungle.core.security import session_auth
+from jungle.league.api import SeasonOut
 from jungle.locations.api import ResourceOut
-from jungle.panel import catalog, people, services
+from jungle.panel import catalog, money, people, services
 
 router = Router(tags=["staff: panel"], auth=session_auth)
 
@@ -237,3 +240,121 @@ def week_classes(
 ) -> list[catalog.ClassView]:
     """The seven days from `week_of` (club time), cancelled classes included."""
     return catalog.week_classes(request, location_id, week_of)
+
+
+# ---------------------------------------------------------------- money (ADR-0009)
+class PanelEntryOut(Schema):
+    account: str
+    kind: str
+    amount: int
+
+
+class PanelTransactionOut(Schema):
+    id: uuid.UUID
+    kind: str
+    description: str
+    reason: str
+    actor: str
+    subject: str
+    created_at: datetime
+    reverses_id: uuid.UUID | None
+    reversed: bool
+    entries: list[PanelEntryOut]
+
+
+@router.get("/transactions", response={200: list[PanelTransactionOut], **errors(401, 403, 422)})
+def transactions(
+    request: HttpRequest, location_id: uuid.UUID, day: date
+) -> list[money.TransactionView]:
+    """The ledger transactions of a club day (at most 200), with their entries."""
+    return money.transactions(request, location_id, day)
+
+
+class PanelKioskCashOut(Schema):
+    device_id: uuid.UUID
+    name: str
+    is_active: bool
+    in_box: int
+    received_today: int
+    change_given_today: int
+    moved_today: int
+
+
+class PanelOperationOut(Schema):
+    id: uuid.UUID
+    device: str
+    kind: str
+    staff: str
+    amount: int | None
+    ledger_amount: int | None
+    difference: int | None
+    result: dict[str, Any]
+    created_at: datetime
+    completed_at: datetime | None
+
+
+class PanelCashOut(Schema):
+    safe: int
+    kiosks: list[PanelKioskCashOut]
+    operations: list[PanelOperationOut]
+
+
+@router.get("/cash", response={200: PanelCashOut, **errors(401, 403, 404, 422)})
+def cash(request: HttpRequest, location_id: uuid.UUID) -> money.CashView:
+    """The kiosks' cash boxes, the safe, and the latest staff operations with the Z reports."""
+    return money.cash(request, location_id)
+
+
+class PanelVoucherOut(Schema):
+    id: uuid.UUID
+    code: str
+    holder_id: uuid.UUID
+    holder: str
+    kind: str
+    value: int
+    target: str
+    valid_from: date
+    valid_until: date
+    source: str
+    reason: str
+    status: str
+    issued_at: datetime
+    redeemed_at: datetime | None
+
+
+@router.get("/vouchers", response={200: list[PanelVoucherOut], **errors(401, 403, 422)})
+def vouchers(
+    request: HttpRequest, location_id: uuid.UUID, status: str = ""
+) -> list[money.VoucherView]:
+    return money.vouchers(request, location_id, status)
+
+
+class PanelProductOut(Schema):
+    id: uuid.UUID
+    name_ro: str
+    name_en: str
+    price: int
+    marker: str
+    is_available: bool
+    sort_order: int
+
+
+class PanelCategoryOut(Schema):
+    id: uuid.UUID
+    name_ro: str
+    name_en: str
+    sort_order: int
+    products: list[PanelProductOut]
+
+
+@router.get("/cafe/menu", response={200: list[PanelCategoryOut], **errors(401, 403, 422)})
+def cafe_menu(request: HttpRequest, location_id: uuid.UUID) -> list[money.CategoryView]:
+    """The café's whole menu, the products taken off it included."""
+    return money.cafe_menu(request, location_id)
+
+
+# ---------------------------------------------------------------- league (§6)
+@router.get("/league/seasons", response={200: list[SeasonOut], **errors(401, 403, 422)})
+def league_seasons(request: HttpRequest, location_id: uuid.UUID) -> list[SeasonOut]:
+    """Every season, the planned ones included, for the league's administration."""
+    return [SeasonOut.from_orm(s) for s in catalog.seasons(request, location_id)]

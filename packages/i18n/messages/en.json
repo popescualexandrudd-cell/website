@@ -956,7 +956,11 @@
       "subscriptions": "Subscriptions",
       "corporate": "Companies (corporate)",
       "resources": "Resources",
-      "pricing": "Prices"
+      "pricing": "Prices",
+      "league": "League",
+      "money": "Payments and ledger",
+      "cash": "Cash and fiscal",
+      "cafe": "Café"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -1115,7 +1119,11 @@
       "start": "Start time",
       "cancelBooking": "Cancel the booking",
       "cancelled": "The booking has been cancelled.",
-      "waive": "No cancellation fee (approved exception)"
+      "waive": "No cancellation fee (approved exception)",
+      "code": "Booking code",
+      "recordPayment": "Record a payment",
+      "amount": "Amount (lei, cash)",
+      "paymentRecorded": "The payment of {amount} has been recorded."
     },
     "resources": {
       "title": "Resources",
@@ -1337,6 +1345,241 @@
         "item_not_paid": "an item could not be paid",
         "refund_not_given": "a refund could not be given; it became credit"
       }
+    },
+    "league": {
+      "title": "League",
+      "invariant": "Scores are entered and confirmed only at the League Kiosk. Here you only decide what happens to a proposed score, with a reason.",
+      "matches": "Matches to decide",
+      "status": "Status",
+      "noMatches": "No matches in this status.",
+      "match": "The match on {court}",
+      "side": "team {side}",
+      "score": "Score",
+      "history": "History",
+      "apply": "Apply the score",
+      "reopen": "Reopen",
+      "cancelMatch": "Cancel the match",
+      "resolved": {
+        "apply": "The score has been applied.",
+        "reopen": "The match has been reopened.",
+        "cancel": "The match has been cancelled."
+      },
+      "matchStatuses": {
+        "proposed": "Score proposed",
+        "awaiting_payment": "Awaiting payment",
+        "applied": "Applied",
+        "disputed": "Disputed",
+        "expired": "Expired",
+        "cancelled": "Cancelled",
+        "training": "Turned into training",
+        "validated": "Validated",
+        "confirmed": "Confirmed by all"
+      },
+      "responses": {
+        "pending": "waiting",
+        "confirmed": "confirmed",
+        "disputed": "disputed",
+        "none": "—"
+      },
+      "seasons": "Seasons",
+      "newSeason": "New season",
+      "number": "Number",
+      "name": "Name",
+      "from": "From",
+      "to": "To",
+      "calibration": "Calibration season (no prizes)",
+      "calibrationShort": "calibration",
+      "create": "Create",
+      "activate": "Start the season",
+      "close": "End the season",
+      "rebuild": "Rebuild the standings",
+      "seasonDone": {
+        "activate": "The season has started.",
+        "close": "The season has ended: final standings and rewards have been given.",
+        "rebuild": "The standings have been rebuilt from the log."
+      },
+      "seasonStatuses": {
+        "planned": "Planned",
+        "active": "Running",
+        "closed": "Ended"
+      },
+      "tournaments": "Tournaments",
+      "newTournament": "New tournament",
+      "format": "Format",
+      "teamSize": "Teams",
+      "doubles": "Doubles (pairs)",
+      "singles": "Singles",
+      "startsOn": "Day",
+      "time": "Time",
+      "closes": "Registration until",
+      "fee": "Entry fee (lei)",
+      "max": "Maximum teams",
+      "entries": "Entries: {count} of {max}",
+      "formats": {
+        "knockout": "Knockout",
+        "groups_knockout": "Groups + knockout",
+        "round_robin": "Round robin",
+        "americano": "Americano",
+        "mexicano": "Mexicano",
+        "king_of_the_court": "King of the Court"
+      },
+      "tournamentStatuses": {
+        "registration": "Registration open",
+        "in_progress": "Running",
+        "finished": "Finished",
+        "cancelled": "Cancelled"
+      },
+      "draw": "Make the draw",
+      "drawn": "The draw has been made.",
+      "cancelTournament": "Cancel the tournament",
+      "tournamentCancelled": "The tournament has been cancelled.",
+      "entriesTitle": "Teams entered",
+      "seed": "seed {seed}",
+      "fixtures": "Matches",
+      "round": "Round {round}, match {slot}",
+      "unscheduled": "no court yet",
+      "bookingId": "Booking code",
+      "schedule": "Put on a court",
+      "scheduled": "The match has been put on a court.",
+      "finished": "Match finished",
+      "finishedDone": "The match is marked finished: the score is entered at the League Kiosk.",
+      "winner": "team {side} wins",
+      "spotlight": "Match of the Day",
+      "noSpotlight": "No Match of the Day today.",
+      "chosen": "chosen by the administrator",
+      "choose": "Choose the Match of the Day"
+    },
+    "money": {
+      "title": "Payments and ledger",
+      "ledger": "The day's ledger",
+      "ledgerIntro": "The ledger is never edited: a mistake is corrected by a reverse entry, with a reason and its author.",
+      "none": "No transactions on this day.",
+      "time": "Time",
+      "what": "What",
+      "entries": "Entries",
+      "who": "Who",
+      "actions": "Actions",
+      "reason": "Reason: {reason}",
+      "isReversed": "corrected (reverse entry)",
+      "reverse": "Correct (reverse entry)",
+      "reversed": "The correction has been recorded.",
+      "kinds": {
+        "charge": "Amount due",
+        "payment": "Payment",
+        "credit": "Account credit",
+        "refund": "Refund",
+        "reversal": "Correction",
+        "sale": "Sale",
+        "voucher_issue": "Voucher issued",
+        "voucher_redeem": "Voucher used",
+        "transfer": "Cash moved"
+      },
+      "accounts": {
+        "cash": "Cash",
+        "card": "Card",
+        "receivable": "Customer debts",
+        "customer_balance": "Customer credit",
+        "vouchers": "Vouchers",
+        "revenue": "Revenue",
+        "discounts": "Discounts"
+      },
+      "vouchers": "Vouchers",
+      "newVoucher": "New voucher",
+      "holder": "Customer",
+      "voucherKind": "Type",
+      "voucherKinds": {
+        "amount": "Fixed amount",
+        "hour": "Free padel time",
+        "percent": "Percentage discount"
+      },
+      "valueOf": {
+        "amount": "Amount (lei)",
+        "hour": "Minutes",
+        "percent": "Percent"
+      },
+      "target": "For",
+      "targets": {
+        "any": "Anything",
+        "booking": "Court booking",
+        "subscription": "Subscription"
+      },
+      "validDays": "Valid (days)",
+      "badValue": "Enter a valid value.",
+      "issue": "Issue the voucher",
+      "issued": "Voucher {code} has been issued.",
+      "noVouchers": "No vouchers.",
+      "minutes": "{count} min",
+      "cancelVoucher": "Cancel the voucher",
+      "voucherCancelled": "The voucher has been cancelled.",
+      "voucherStatuses": {
+        "active": "Active",
+        "redeemed": "Used",
+        "cancelled": "Cancelled"
+      }
+    },
+    "cash": {
+      "title": "Cash and fiscal",
+      "safe": "In the safe",
+      "inactive": "disabled",
+      "today": "Today: received {received}, change given {change}, moved from/to the safe {moved}",
+      "noKiosks": "No Payments Kiosk at this location.",
+      "operations": "Staff operations at the kiosk",
+      "noOperations": "No operations yet.",
+      "when": "When",
+      "kind": "What",
+      "kiosk": "Kiosk",
+      "staff": "Who",
+      "amount": "Amount",
+      "details": "Details",
+      "open": "in progress",
+      "difference": "Difference from the ledger: {difference} (ledger: {ledger})",
+      "z": "Z report no. {number}",
+      "kinds": {
+        "refill": "Change refilled",
+        "empty": "Cash box emptied",
+        "count": "Count",
+        "day_close": "Day close (Z report)"
+      },
+      "pinTitle": "My kiosk PIN",
+      "pinIntro": "For the Payments Kiosk's staff mode: your card + this 6-digit PIN. Do not tell anyone.",
+      "pin": "New PIN (6 digits)",
+      "pinAgain": "Repeat the PIN",
+      "pinMismatch": "The two PINs are not the same.",
+      "savePin": "Save the PIN",
+      "pinSaved": "The PIN has been saved."
+    },
+    "cafe": {
+      "title": "Café",
+      "queue": "Orders",
+      "noOrders": "No orders in progress.",
+      "statuses": {
+        "new": "New",
+        "preparing": "Preparing",
+        "ready": "Ready",
+        "picked_up": "Picked up",
+        "cancelled": "Cancelled"
+      },
+      "to": {
+        "preparing": "Start preparing",
+        "ready": "It's ready",
+        "picked_up": "Picked up"
+      },
+      "cancelOrder": "Cancel the order",
+      "cancelled": "The order has been cancelled.",
+      "counter": "Order at the bar",
+      "counterIntro": "Only as an exception: payment is made at the Payments Kiosk; here a cash payment is recorded, with a reason.",
+      "total": "Total: {total}",
+      "order": "Record the order",
+      "ordered": "Order #{number} has been recorded.",
+      "menu": "Menu",
+      "menuIntro": "A product taken off the menu is not deleted: it stays in the order history. Prices not decided by the owner are TO BE SET.",
+      "newCategory": "New category",
+      "nameRo": "Name (RO)",
+      "nameEn": "Name (EN)",
+      "price": "Price (lei)",
+      "available": "On the menu",
+      "newProduct": "New product in {category}",
+      "add": "Add"
     }
   }
 }

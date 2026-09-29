@@ -11,7 +11,7 @@ import { type Schemas, unwrap } from "../api";
 import { addDays, clubDay, clubMinutes, clubMoment, hhmm, toMinutes } from "../clock";
 import { formatDate, formatMoney, formatTime } from "../i18n";
 import { usePanel, useT } from "../panel";
-import { type Picked, ReasonAction, UserPicker, useData } from "../ui";
+import { type Picked, ReasonAction, toBani, toLei, UserPicker, useData } from "../ui";
 
 type Booking = Schemas["StaffBookingOut"];
 type Resource = Schemas["ResourceOut"];
@@ -318,6 +318,9 @@ function Details({
   const [resource, setResource] = useState(booking.resource_id);
   const [minutes, setMinutes] = useState(clubMinutes(booking.starts_at, day));
   const [waive, setWaive] = useState(false);
+  const [paid, setPaid] = useState(toLei(booking.price_total));
+  // R-067: one key per payment; a retry after a lost answer is not paid twice.
+  const [payKey, setPayKey] = useState(() => crypto.randomUUID());
   const same = columns.find((c) => c.id === booking.resource_id)?.kind;
   const open = booking.status === "confirmed";
   return (
@@ -339,6 +342,10 @@ function Details({
         </dd>
         <dt>{t("calendar.status")}</dt>
         <dd>{t(`bookingStatus.${booking.status}`)}</dd>
+        <dt>{t("calendar.code")}</dt>
+        <dd>
+          <code>{booking.id}</code>
+        </dd>
       </dl>
       <p>
         <a href={`#/users/${booking.organizer_id}`}>{t("calendar.openCustomer")}</a>
@@ -381,6 +388,38 @@ function Details({
               </select>
             </label>
           </ReasonAction>
+          {can("payments.record") ? (
+            <ReasonAction
+              label={t("calendar.recordPayment")}
+              onConfirm={async (reason) => {
+                const amount = toBani(paid);
+                if (amount === null || amount === 0) throw new Error("amount");
+                await unwrap(
+                  api.client.POST("/api/v1/staff/payments", {
+                    params: { header: { "Idempotency-Key": payKey } },
+                    // Q9: the club takes cash only (card payments come with their adapter).
+                    body: { payer_id: booking.organizer_id, booking_id: booking.id, amount, method: "cash", tendered: amount, reason },
+                  }),
+                );
+                setPayKey(crypto.randomUUID());
+                notify(t("calendar.paymentRecorded", { amount: formatMoney(lang, amount) }));
+                await onChanged();
+              }}
+            >
+              <label>
+                {t("calendar.amount")}
+                <input
+                  inputMode="decimal"
+                  required
+                  value={paid}
+                  onChange={(e) => {
+                    setPaid(e.target.value);
+                    setPayKey(crypto.randomUUID()); // another amount, another key
+                  }}
+                />
+              </label>
+            </ReasonAction>
+          ) : null}
           <ReasonAction
             danger
             label={t("calendar.cancelBooking")}

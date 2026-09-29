@@ -4665,6 +4665,72 @@
         "title": "PanelCardOut",
         "type": "object"
       },
+      "PanelCashOut": {
+        "properties": {
+          "kiosks": {
+            "items": {
+              "$ref": "#/components/schemas/PanelKioskCashOut"
+            },
+            "title": "Kiosks",
+            "type": "array"
+          },
+          "operations": {
+            "items": {
+              "$ref": "#/components/schemas/PanelOperationOut"
+            },
+            "title": "Operations",
+            "type": "array"
+          },
+          "safe": {
+            "title": "Safe",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "safe",
+          "kiosks",
+          "operations"
+        ],
+        "title": "PanelCashOut",
+        "type": "object"
+      },
+      "PanelCategoryOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "name_en": {
+            "title": "Name En",
+            "type": "string"
+          },
+          "name_ro": {
+            "title": "Name Ro",
+            "type": "string"
+          },
+          "products": {
+            "items": {
+              "$ref": "#/components/schemas/PanelProductOut"
+            },
+            "title": "Products",
+            "type": "array"
+          },
+          "sort_order": {
+            "title": "Sort Order",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name_ro",
+          "name_en",
+          "sort_order",
+          "products"
+        ],
+        "title": "PanelCategoryOut",
+        "type": "object"
+      },
       "PanelClassOut": {
         "properties": {
           "capacity": {
@@ -4790,6 +4856,29 @@
         "title": "PanelCorporateOut",
         "type": "object"
       },
+      "PanelEntryOut": {
+        "properties": {
+          "account": {
+            "title": "Account",
+            "type": "string"
+          },
+          "amount": {
+            "title": "Amount",
+            "type": "integer"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          }
+        },
+        "required": [
+          "account",
+          "kind",
+          "amount"
+        ],
+        "title": "PanelEntryOut",
+        "type": "object"
+      },
       "PanelHiddenIn": {
         "properties": {
           "hidden": {
@@ -4846,6 +4935,140 @@
         "title": "PanelHoursOut",
         "type": "object"
       },
+      "PanelKioskCashOut": {
+        "properties": {
+          "change_given_today": {
+            "title": "Change Given Today",
+            "type": "integer"
+          },
+          "device_id": {
+            "format": "uuid",
+            "title": "Device Id",
+            "type": "string"
+          },
+          "in_box": {
+            "title": "In Box",
+            "type": "integer"
+          },
+          "is_active": {
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "moved_today": {
+            "title": "Moved Today",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "received_today": {
+            "title": "Received Today",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "device_id",
+          "name",
+          "is_active",
+          "in_box",
+          "received_today",
+          "change_given_today",
+          "moved_today"
+        ],
+        "title": "PanelKioskCashOut",
+        "type": "object"
+      },
+      "PanelOperationOut": {
+        "properties": {
+          "amount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amount"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "device": {
+            "title": "Device",
+            "type": "string"
+          },
+          "difference": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Difference"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "ledger_amount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ledger Amount"
+          },
+          "result": {
+            "additionalProperties": true,
+            "title": "Result",
+            "type": "object"
+          },
+          "staff": {
+            "title": "Staff",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "device",
+          "kind",
+          "staff",
+          "amount",
+          "ledger_amount",
+          "difference",
+          "result",
+          "created_at",
+          "completed_at"
+        ],
+        "title": "PanelOperationOut",
+        "type": "object"
+      },
       "PanelPersonOut": {
         "properties": {
           "id": {
@@ -4863,6 +5086,50 @@
           "name"
         ],
         "title": "PanelPersonOut",
+        "type": "object"
+      },
+      "PanelProductOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "is_available": {
+            "title": "Is Available",
+            "type": "boolean"
+          },
+          "marker": {
+            "title": "Marker",
+            "type": "string"
+          },
+          "name_en": {
+            "title": "Name En",
+            "type": "string"
+          },
+          "name_ro": {
+            "title": "Name Ro",
+            "type": "string"
+          },
+          "price": {
+            "title": "Price",
+            "type": "integer"
+          },
+          "sort_order": {
+            "title": "Sort Order",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name_ro",
+          "name_en",
+          "price",
+          "marker",
+          "is_available",
+          "sort_order"
+        ],
+        "title": "PanelProductOut",
         "type": "object"
       },
       "PanelProfileOut": {
@@ -4996,6 +5263,77 @@
         "title": "PanelSubscriptionOut",
         "type": "object"
       },
+      "PanelTransactionOut": {
+        "properties": {
+          "actor": {
+            "title": "Actor",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "entries": {
+            "items": {
+              "$ref": "#/components/schemas/PanelEntryOut"
+            },
+            "title": "Entries",
+            "type": "array"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "reversed": {
+            "title": "Reversed",
+            "type": "boolean"
+          },
+          "reverses_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reverses Id"
+          },
+          "subject": {
+            "title": "Subject",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "description",
+          "reason",
+          "actor",
+          "subject",
+          "created_at",
+          "reverses_id",
+          "reversed",
+          "entries"
+        ],
+        "title": "PanelTransactionOut",
+        "type": "object"
+      },
       "PanelUsageOut": {
         "properties": {
           "makeups_available": {
@@ -5063,6 +5401,97 @@
           "email"
         ],
         "title": "PanelUserOut",
+        "type": "object"
+      },
+      "PanelVoucherOut": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "holder": {
+            "title": "Holder",
+            "type": "string"
+          },
+          "holder_id": {
+            "format": "uuid",
+            "title": "Holder Id",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "issued_at": {
+            "format": "date-time",
+            "title": "Issued At",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "redeemed_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Redeemed At"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "target": {
+            "title": "Target",
+            "type": "string"
+          },
+          "valid_from": {
+            "format": "date",
+            "title": "Valid From",
+            "type": "string"
+          },
+          "valid_until": {
+            "format": "date",
+            "title": "Valid Until",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "holder_id",
+          "holder",
+          "kind",
+          "value",
+          "target",
+          "valid_from",
+          "valid_until",
+          "source",
+          "reason",
+          "status",
+          "issued_at",
+          "redeemed_at"
+        ],
+        "title": "PanelVoucherOut",
         "type": "object"
       },
       "PartnerIn": {
@@ -22969,6 +23398,158 @@
         ]
       }
     },
+    "/api/v1/staff/panel/cafe/menu": {
+      "get": {
+        "description": "The café's whole menu, the products taken off it included.",
+        "operationId": "jungle_panel_api_cafe_menu",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PanelCategoryOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Cafe Menu",
+        "tags": [
+          "staff: panel"
+        ]
+      }
+    },
+    "/api/v1/staff/panel/cash": {
+      "get": {
+        "description": "The kiosks' cash boxes, the safe, and the latest staff operations with the Z reports.",
+        "operationId": "jungle_panel_api_cash",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PanelCashOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Cash",
+        "tags": [
+          "staff: panel"
+        ]
+      }
+    },
     "/api/v1/staff/panel/classes": {
       "get": {
         "description": "The seven days from `week_of` (club time), cancelled classes included.",
@@ -23343,6 +23924,79 @@
         ]
       }
     },
+    "/api/v1/staff/panel/league/seasons": {
+      "get": {
+        "description": "Every season, the planned ones included, for the league's administration.",
+        "operationId": "jungle_panel_api_league_seasons",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SeasonOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "League Seasons",
+        "tags": [
+          "staff: panel"
+        ]
+      }
+    },
     "/api/v1/staff/panel/permissions": {
       "get": {
         "operationId": "jungle_panel_api_permissions",
@@ -23546,6 +24200,89 @@
         ]
       }
     },
+    "/api/v1/staff/panel/transactions": {
+      "get": {
+        "description": "The ledger transactions of a club day (at most 200), with their entries.",
+        "operationId": "jungle_panel_api_transactions",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "day",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "Day",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PanelTransactionOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Transactions",
+        "tags": [
+          "staff: panel"
+        ]
+      }
+    },
     "/api/v1/staff/panel/users/{user_id}/hidden-on-screens": {
       "post": {
         "description": "Q55 (GDPR art. 21): \"do not show my name on the screens\", noted at the person's request.",
@@ -23718,6 +24455,88 @@
           }
         ],
         "summary": "Profile",
+        "tags": [
+          "staff: panel"
+        ]
+      }
+    },
+    "/api/v1/staff/panel/vouchers": {
+      "get": {
+        "operationId": "jungle_panel_api_vouchers",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "default": "",
+              "title": "Status",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PanelVoucherOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Vouchers",
         "tags": [
           "staff: panel"
         ]

@@ -956,7 +956,11 @@
       "subscriptions": "Abonamente",
       "corporate": "Firme (corporate)",
       "resources": "Resurse",
-      "pricing": "Prețuri"
+      "pricing": "Prețuri",
+      "league": "Liga",
+      "money": "Plăți și registru",
+      "cash": "Numerar și fiscal",
+      "cafe": "Cafenea"
     },
     "dashboard": {
       "title": "Tablou de bord",
@@ -1115,7 +1119,11 @@
       "start": "Ora de început",
       "cancelBooking": "Anulez rezervarea",
       "cancelled": "Rezervarea a fost anulată.",
-      "waive": "Fără taxă de anulare (excepție aprobată)"
+      "waive": "Fără taxă de anulare (excepție aprobată)",
+      "code": "Codul rezervării",
+      "recordPayment": "Înregistrez o plată",
+      "amount": "Suma (lei, numerar)",
+      "paymentRecorded": "Plata de {amount} a fost înregistrată."
     },
     "resources": {
       "title": "Resurse",
@@ -1337,6 +1345,241 @@
         "item_not_paid": "un produs nu a putut fi plătit",
         "refund_not_given": "o rambursare nu a putut fi dată; a devenit credit"
       }
+    },
+    "league": {
+      "title": "Liga",
+      "invariant": "Scorurile se introduc și se confirmă doar la Chioșcul de Ligă. Aici se decide doar ce se întâmplă cu un scor propus, cu motiv.",
+      "matches": "Meciuri de decis",
+      "status": "Starea",
+      "noMatches": "Niciun meci în această stare.",
+      "match": "Meciul de pe {court}",
+      "side": "echipa {side}",
+      "score": "Scorul",
+      "history": "Istoricul",
+      "apply": "Aplic scorul",
+      "reopen": "Redeschid",
+      "cancelMatch": "Anulez meciul",
+      "resolved": {
+        "apply": "Scorul a fost aplicat.",
+        "reopen": "Meciul a fost redeschis.",
+        "cancel": "Meciul a fost anulat."
+      },
+      "matchStatuses": {
+        "proposed": "Scor propus",
+        "awaiting_payment": "Așteaptă plata",
+        "applied": "Aplicat",
+        "disputed": "Disputat",
+        "expired": "Expirat",
+        "cancelled": "Anulat",
+        "training": "Convertit în antrenament",
+        "validated": "Validat",
+        "confirmed": "Confirmat de toți"
+      },
+      "responses": {
+        "pending": "așteaptă",
+        "confirmed": "a confirmat",
+        "disputed": "a contestat",
+        "none": "—"
+      },
+      "seasons": "Sezoane",
+      "newSeason": "Sezon nou",
+      "number": "Numărul",
+      "name": "Numele",
+      "from": "De la",
+      "to": "Până la",
+      "calibration": "Sezon de calibrare (fără premii)",
+      "calibrationShort": "calibrare",
+      "create": "Creez",
+      "activate": "Pornesc sezonul",
+      "close": "Închei sezonul",
+      "rebuild": "Recalculez clasamentul",
+      "seasonDone": {
+        "activate": "Sezonul a pornit.",
+        "close": "Sezonul s-a încheiat: clasamentul final și recompensele au fost acordate.",
+        "rebuild": "Clasamentul a fost recalculat din jurnal."
+      },
+      "seasonStatuses": {
+        "planned": "Planificat",
+        "active": "În desfășurare",
+        "closed": "Încheiat"
+      },
+      "tournaments": "Turnee",
+      "newTournament": "Turneu nou",
+      "format": "Formatul",
+      "teamSize": "Echipe",
+      "doubles": "Dublu (perechi)",
+      "singles": "Simplu",
+      "startsOn": "Ziua",
+      "time": "Ora",
+      "closes": "Înscrieri până la",
+      "fee": "Taxa de înscriere (lei)",
+      "max": "Număr maxim de echipe",
+      "entries": "Înscrieri: {count} din {max}",
+      "formats": {
+        "knockout": "Eliminatoriu",
+        "groups_knockout": "Grupe + eliminatoriu",
+        "round_robin": "Fiecare cu fiecare",
+        "americano": "Americano",
+        "mexicano": "Mexicano",
+        "king_of_the_court": "King of the Court"
+      },
+      "tournamentStatuses": {
+        "registration": "Înscrieri deschise",
+        "in_progress": "În desfășurare",
+        "finished": "Încheiat",
+        "cancelled": "Anulat"
+      },
+      "draw": "Fac tragerea la sorți",
+      "drawn": "Tragerea la sorți a fost făcută.",
+      "cancelTournament": "Anulez turneul",
+      "tournamentCancelled": "Turneul a fost anulat.",
+      "entriesTitle": "Echipele înscrise",
+      "seed": "cap de serie {seed}",
+      "fixtures": "Meciurile",
+      "round": "Runda {round}, meciul {slot}",
+      "unscheduled": "fără teren încă",
+      "bookingId": "Codul rezervării",
+      "schedule": "Pun pe teren",
+      "scheduled": "Meciul a fost pus pe teren.",
+      "finished": "Meci terminat",
+      "finishedDone": "Meciul e marcat terminat: scorul se introduce la Chioșcul de Ligă.",
+      "winner": "câștigă echipa {side}",
+      "spotlight": "Meciul zilei",
+      "noSpotlight": "Niciun Meci al zilei azi.",
+      "chosen": "ales de administrator",
+      "choose": "Aleg Meciul zilei"
+    },
+    "money": {
+      "title": "Plăți și registru",
+      "ledger": "Registrul zilei",
+      "ledgerIntro": "Registrul nu se modifică niciodată: o greșeală se corectează printr-o înregistrare inversă, cu motiv și autor.",
+      "none": "Nicio tranzacție în această zi.",
+      "time": "Ora",
+      "what": "Ce",
+      "entries": "Înregistrări",
+      "who": "Cine",
+      "actions": "Acțiuni",
+      "reason": "Motiv: {reason}",
+      "isReversed": "corectată (înregistrare inversă)",
+      "reverse": "Corectez (înregistrare inversă)",
+      "reversed": "Corecția a fost înregistrată.",
+      "kinds": {
+        "charge": "Sumă datorată",
+        "payment": "Plată",
+        "credit": "Credit în cont",
+        "refund": "Rambursare",
+        "reversal": "Corecție",
+        "sale": "Vânzare",
+        "voucher_issue": "Voucher emis",
+        "voucher_redeem": "Voucher folosit",
+        "transfer": "Mutare de numerar"
+      },
+      "accounts": {
+        "cash": "Numerar",
+        "card": "Card",
+        "receivable": "Datorii ale clientului",
+        "customer_balance": "Credit al clientului",
+        "vouchers": "Vouchere",
+        "revenue": "Venituri",
+        "discounts": "Reduceri"
+      },
+      "vouchers": "Vouchere",
+      "newVoucher": "Voucher nou",
+      "holder": "Clientul",
+      "voucherKind": "Tipul",
+      "voucherKinds": {
+        "amount": "Sumă fixă",
+        "hour": "Timp gratuit de padel",
+        "percent": "Reducere procentuală"
+      },
+      "valueOf": {
+        "amount": "Suma (lei)",
+        "hour": "Minute",
+        "percent": "Procent"
+      },
+      "target": "Pentru",
+      "targets": {
+        "any": "Orice",
+        "booking": "Rezervare de teren",
+        "subscription": "Abonament"
+      },
+      "validDays": "Valabil (zile)",
+      "badValue": "Scrie o valoare validă.",
+      "issue": "Emit voucherul",
+      "issued": "Voucherul {code} a fost emis.",
+      "noVouchers": "Niciun voucher.",
+      "minutes": "{count} min",
+      "cancelVoucher": "Anulez voucherul",
+      "voucherCancelled": "Voucherul a fost anulat.",
+      "voucherStatuses": {
+        "active": "Activ",
+        "redeemed": "Folosit",
+        "cancelled": "Anulat"
+      }
+    },
+    "cash": {
+      "title": "Numerar și fiscal",
+      "safe": "În seif",
+      "inactive": "dezactivat",
+      "today": "Azi: primit {received}, rest dat {change}, mutat din/în seif {moved}",
+      "noKiosks": "Niciun Chioșc de Plăți la această locație.",
+      "operations": "Operațiunile personalului la chioșc",
+      "noOperations": "Nicio operațiune încă.",
+      "when": "Când",
+      "kind": "Ce",
+      "kiosk": "Chioșcul",
+      "staff": "Cine",
+      "amount": "Suma",
+      "details": "Detalii",
+      "open": "în curs",
+      "difference": "Diferență față de registru: {difference} (registrul: {ledger})",
+      "z": "Raport Z nr. {number}",
+      "kinds": {
+        "refill": "Alimentare rest",
+        "empty": "Golire casetă",
+        "count": "Numărare",
+        "day_close": "Închidere de zi (raport Z)"
+      },
+      "pinTitle": "PIN-ul meu pentru chioșc",
+      "pinIntro": "Pentru modul personal al Chioșcului de Plăți: cardul tău + acest PIN de 6 cifre. Nu-l spune nimănui.",
+      "pin": "PIN nou (6 cifre)",
+      "pinAgain": "Repetă PIN-ul",
+      "pinMismatch": "Cele două PIN-uri nu sunt la fel.",
+      "savePin": "Salvez PIN-ul",
+      "pinSaved": "PIN-ul a fost salvat."
+    },
+    "cafe": {
+      "title": "Cafenea",
+      "queue": "Comenzile",
+      "noOrders": "Nicio comandă în lucru.",
+      "statuses": {
+        "new": "Nouă",
+        "preparing": "În preparare",
+        "ready": "Gata",
+        "picked_up": "Ridicată",
+        "cancelled": "Anulată"
+      },
+      "to": {
+        "preparing": "Încep prepararea",
+        "ready": "E gata",
+        "picked_up": "A fost ridicată"
+      },
+      "cancelOrder": "Anulez comanda",
+      "cancelled": "Comanda a fost anulată.",
+      "counter": "Comandă la bar",
+      "counterIntro": "Doar ca excepție: plata se face la Chioșcul de Plăți; aici se trece o plată în numerar, cu motiv.",
+      "total": "Total: {total}",
+      "order": "Trec comanda",
+      "ordered": "Comanda #{number} a fost trecută.",
+      "menu": "Meniul",
+      "menuIntro": "Un produs scos din meniu nu se șterge: rămâne în istoricul comenzilor. Prețurile nehotărâte de proprietar sunt DE_STABILIT.",
+      "newCategory": "Categorie nouă",
+      "nameRo": "Nume (RO)",
+      "nameEn": "Nume (EN)",
+      "price": "Preț (lei)",
+      "available": "În meniu",
+      "newProduct": "Produs nou în {category}",
+      "add": "Adaug"
     }
   }
 }

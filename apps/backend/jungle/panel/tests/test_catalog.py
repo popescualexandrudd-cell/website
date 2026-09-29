@@ -15,6 +15,7 @@ from jungle.bookings.models import ClassEnrollment, ClassSession, ClassStatus, E
 from jungle.conftest import Api, error_code, grant
 from jungle.core import clock
 from jungle.core.permissions import Role
+from jungle.league.models import LeagueSeason, SeasonStatus
 from jungle.locations.models import Location
 from jungle.subscriptions.models import (
     CorporateAccount,
@@ -152,3 +153,20 @@ def test_each_read_needs_its_permission(api: Api, staff: Callable[..., User], cl
     where = f"location_id={club.location.pk}"
     assert error_code(api.get(f"/staff/panel/subscriptions?{where}")) == "auth.forbidden"
     assert error_code(api.get(f"/staff/panel/corporate?{where}")) == "auth.forbidden"
+
+
+def test_every_season_for_the_league_administration(
+    api: Api, staff: Callable[..., User], club: Any
+) -> None:
+    staff(Role.MANAGER, club.location)
+    for number, status in ((0, SeasonStatus.CLOSED), (1, SeasonStatus.PLANNED)):
+        LeagueSeason.objects.create(
+            location=club.location,
+            number=number,
+            name=f"Sezonul {number}",
+            starts_at=clock.now(),
+            ends_at=clock.now() + timedelta(days=90),
+            status=status,
+        )
+    found = api.get(f"/staff/panel/league/seasons?location_id={club.location.pk}").json()
+    assert [(s["number"], s["status"]) for s in found] == [(1, "planned"), (0, "closed")]

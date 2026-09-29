@@ -3019,6 +3019,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/staff/panel/cafe/menu": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Cafe Menu
+         * @description The café's whole menu, the products taken off it included.
+         */
+        get: operations["jungle_panel_api_cafe_menu"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/panel/cash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Cash
+         * @description The kiosks' cash boxes, the safe, and the latest staff operations with the Z reports.
+         */
+        get: operations["jungle_panel_api_cash"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/staff/panel/classes": {
         parameters: {
             query?: never;
@@ -3110,6 +3150,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/staff/panel/league/seasons": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * League Seasons
+         * @description Every season, the planned ones included, for the league's administration.
+         */
+        get: operations["jungle_panel_api_league_seasons"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/staff/panel/permissions": {
         parameters: {
             query?: never;
@@ -3167,6 +3227,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/staff/panel/transactions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Transactions
+         * @description The ledger transactions of a club day (at most 200), with their entries.
+         */
+        get: operations["jungle_panel_api_transactions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/staff/panel/users/{user_id}/hidden-on-screens": {
         parameters: {
             query?: never;
@@ -3196,6 +3276,23 @@ export interface paths {
         };
         /** Profile */
         get: operations["jungle_panel_api_profile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/panel/vouchers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Vouchers */
+        get: operations["jungle_panel_api_vouchers"];
         put?: never;
         post?: never;
         delete?: never;
@@ -5676,6 +5773,31 @@ export interface components {
             /** Status */
             status: string;
         };
+        /** PanelCashOut */
+        PanelCashOut: {
+            /** Kiosks */
+            kiosks: components["schemas"]["PanelKioskCashOut"][];
+            /** Operations */
+            operations: components["schemas"]["PanelOperationOut"][];
+            /** Safe */
+            safe: number;
+        };
+        /** PanelCategoryOut */
+        PanelCategoryOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name En */
+            name_en: string;
+            /** Name Ro */
+            name_ro: string;
+            /** Products */
+            products: components["schemas"]["PanelProductOut"][];
+            /** Sort Order */
+            sort_order: number;
+        };
         /** PanelClassOut */
         PanelClassOut: {
             /** Capacity */
@@ -5740,6 +5862,15 @@ export interface components {
             /** Registration Code */
             registration_code: string;
         };
+        /** PanelEntryOut */
+        PanelEntryOut: {
+            /** Account */
+            account: string;
+            /** Amount */
+            amount: number;
+            /** Kind */
+            kind: string;
+        };
         /** PanelHiddenIn */
         PanelHiddenIn: {
             /** Hidden */
@@ -5767,6 +5898,57 @@ export interface components {
             /** Opens */
             opens: string;
         };
+        /** PanelKioskCashOut */
+        PanelKioskCashOut: {
+            /** Change Given Today */
+            change_given_today: number;
+            /**
+             * Device Id
+             * Format: uuid
+             */
+            device_id: string;
+            /** In Box */
+            in_box: number;
+            /** Is Active */
+            is_active: boolean;
+            /** Moved Today */
+            moved_today: number;
+            /** Name */
+            name: string;
+            /** Received Today */
+            received_today: number;
+        };
+        /** PanelOperationOut */
+        PanelOperationOut: {
+            /** Amount */
+            amount: number | null;
+            /** Completed At */
+            completed_at: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Device */
+            device: string;
+            /** Difference */
+            difference: number | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Kind */
+            kind: string;
+            /** Ledger Amount */
+            ledger_amount: number | null;
+            /** Result */
+            result: {
+                [key: string]: unknown;
+            };
+            /** Staff */
+            staff: string;
+        };
         /** PanelPersonOut */
         PanelPersonOut: {
             /**
@@ -5776,6 +5958,26 @@ export interface components {
             id: string;
             /** Name */
             name: string;
+        };
+        /** PanelProductOut */
+        PanelProductOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Is Available */
+            is_available: boolean;
+            /** Marker */
+            marker: string;
+            /** Name En */
+            name_en: string;
+            /** Name Ro */
+            name_ro: string;
+            /** Price */
+            price: number;
+            /** Sort Order */
+            sort_order: number;
         };
         /** PanelProfileOut */
         PanelProfileOut: {
@@ -5833,6 +6035,35 @@ export interface components {
             /** User Name */
             user_name: string;
         };
+        /** PanelTransactionOut */
+        PanelTransactionOut: {
+            /** Actor */
+            actor: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Description */
+            description: string;
+            /** Entries */
+            entries: components["schemas"]["PanelEntryOut"][];
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Kind */
+            kind: string;
+            /** Reason */
+            reason: string;
+            /** Reversed */
+            reversed: boolean;
+            /** Reverses Id */
+            reverses_id: string | null;
+            /** Subject */
+            subject: string;
+        };
         /** PanelUsageOut */
         PanelUsageOut: {
             /** Makeups Available */
@@ -5859,6 +6090,52 @@ export interface components {
             id: string;
             /** Last Name */
             last_name: string;
+        };
+        /** PanelVoucherOut */
+        PanelVoucherOut: {
+            /** Code */
+            code: string;
+            /** Holder */
+            holder: string;
+            /**
+             * Holder Id
+             * Format: uuid
+             */
+            holder_id: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Issued At
+             * Format: date-time
+             */
+            issued_at: string;
+            /** Kind */
+            kind: string;
+            /** Reason */
+            reason: string;
+            /** Redeemed At */
+            redeemed_at: string | null;
+            /** Source */
+            source: string;
+            /** Status */
+            status: string;
+            /** Target */
+            target: string;
+            /**
+             * Valid From
+             * Format: date
+             */
+            valid_from: string;
+            /**
+             * Valid Until
+             * Format: date
+             */
+            valid_until: string;
+            /** Value */
+            value: number;
         };
         /** PartnerIn */
         PartnerIn: {
@@ -17311,6 +17588,113 @@ export interface operations {
             };
         };
     };
+    jungle_panel_api_cafe_menu: {
+        parameters: {
+            query: {
+                location_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PanelCategoryOut"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_panel_api_cash: {
+        parameters: {
+            query: {
+                location_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PanelCashOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     jungle_panel_api_week_classes: {
         parameters: {
             query: {
@@ -17558,6 +17942,55 @@ export interface operations {
             };
         };
     };
+    jungle_panel_api_league_seasons: {
+        parameters: {
+            query: {
+                location_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SeasonOut"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     jungle_panel_api_permissions: {
         parameters: {
             query?: never;
@@ -17695,6 +18128,56 @@ export interface operations {
             };
         };
     };
+    jungle_panel_api_transactions: {
+        parameters: {
+            query: {
+                location_id: string;
+                day: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PanelTransactionOut"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     jungle_panel_api_hidden_on_screens: {
         parameters: {
             query?: never;
@@ -17799,6 +18282,56 @@ export interface operations {
             };
             /** @description Not Found */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_panel_api_vouchers: {
+        parameters: {
+            query: {
+                location_id: string;
+                status?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PanelVoucherOut"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };

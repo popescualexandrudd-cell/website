@@ -17,6 +17,7 @@ from jungle.accounts.services.authz import authorize
 from jungle.bookings.models import ClassSession, EnrollmentStatus
 from jungle.core import clock
 from jungle.core.permissions import Action, Role
+from jungle.league.models import LeagueSeason
 from jungle.locations.models import Resource
 from jungle.subscriptions import services as subscriptions
 from jungle.subscriptions.models import CorporateAccount, Subscription
@@ -205,3 +206,9 @@ def week_classes(request: HttpRequest, location_id: uuid.UUID, first_day: date) 
         )
         for c in found
     ]
+
+
+def seasons(request: HttpRequest, location_id: uuid.UUID) -> list[LeagueSeason]:
+    """Every season of the location, the planned ones too (the public list hides them)."""
+    authorize(request, Action.LEAGUE_MANAGE, location_id)
+    return list(LeagueSeason.objects.filter(location_id=location_id).order_by("-number"))

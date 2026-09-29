@@ -6,7 +6,7 @@ import { vi } from "vitest";
 import { adminApi } from "./api";
 import { type Panel, PanelContext } from "./panel";
 
-export type Call = { method: string; path: string; query: string; body: unknown };
+export type Call = { method: string; path: string; query: string; body: unknown; idempotencyKey: string | null };
 
 export const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
@@ -16,7 +16,7 @@ export function fakeApi(answers: Record<string, (body: unknown, url: URL) => Res
   const fetchStub = async (request: Request) => {
     const url = new URL(request.url);
     const body = request.method === "GET" ? null : await request.clone().json().catch(() => null);
-    calls.push({ method: request.method, path: url.pathname, query: url.search, body });
+    calls.push({ method: request.method, path: url.pathname, query: url.search, body, idempotencyKey: request.headers.get("Idempotency-Key") });
     const answer = answers[`${request.method} ${url.pathname}`];
     return answer ? answer(body, url) : json({ error: { code: "common.not_found", params: {} } }, 404);
   };
