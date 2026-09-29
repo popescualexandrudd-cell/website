@@ -481,3 +481,26 @@ textarea:focus-visible,
 .calendar__booking.is-selected {
   background: var(--color-night-500);
 }
+
+.nav__later {
+  color: var(--color-bone-200);
+  font-size: 0.85rem;
+}
+
+.value {
+  margin: 0 0 4px;
+  max-width: 420px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: ui-monospace, monospace;
+  font-size: 0.85rem;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+textarea {
+  min-width: 260px;
+}

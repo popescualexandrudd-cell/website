@@ -1,6 +1,6 @@
 # Panoul de admin (React + Vite)
 
-> **Stare:** în construcție în Etapa 10 (început pe 29.09.2026). Gata: autentificarea cu 2FA, meniul după permisiuni și locație, tabloul de bord live, utilizatorii (R-004: detalii, roluri, activare, carduri, „fără nume pe ecrane”, ștergere GDPR), validarea nivelurilor (R-003), calendarul rezervărilor, resursele, prețurile, abonamentele, firmele, clasele de pilates și prezențele, liga, plățile și registrul, numerarul și rapoartele Z, cafeneaua. Urmează evenimentele, dispozitivele, setările, rapoartele, jurnalul de audit și starea sistemului, în aceeași etapă.
+> **Stare:** în construcție în Etapa 10 (început pe 29.09.2026). Gata: autentificarea cu 2FA, meniul după permisiuni și locație, tabloul de bord live, utilizatorii (R-004: detalii, roluri, activare, carduri, „fără nume pe ecrane”, ștergere GDPR), validarea nivelurilor (R-003), calendarul rezervărilor, resursele, prețurile, abonamentele, firmele, clasele de pilates și prezențele, liga, plățile și registrul, numerarul și rapoartele Z, cafeneaua, evenimentele, rapoartele și exporturile, personalul și rolurile, dispozitivele, setările și feature flags, jurnalul de audit, starea sistemului. Modulele Etapelor 11–12 apar în meniu, marcate. Urmează testele cap-coadă și raportul etapei.
 
 ## Ce face (§8.6)
 
@@ -28,6 +28,14 @@ Notificările, comunitatea, AI-ul, conținutul site-ului și traducerile vin cu 
 - **Plăți și registru** (`GET /api/v1/staff/panel/transactions`): tranzacțiile zilei cu înregistrările lor; o greșeală se corectează doar printr-o înregistrare inversă, cu motiv. Voucherele (`GET /api/v1/staff/panel/vouchers`): emitere și anulare cu motiv. O plată în numerar trecută de personal (excepție, Q9/Q10) poartă o cheie de idempotență per încercare (R-067).
 - **Numerar și fiscal** (`GET /api/v1/staff/panel/cash`): ce e în fiecare Chioșc de Plăți și în seif, mișcările zilei, operațiunile personalului (alimentare, golire, numărare cu diferența față de registru, închiderea de zi cu raportul Z); PIN-ul propriu pentru modul personal al chioșcului (Q54).
 - **Cafenea**: coada de comenzi (nouă → în preparare → gata → ridicată, anulare cu motiv), comanda la bar ca excepție și meniul complet (`GET /api/v1/staff/panel/cafe/menu`: și produsele scoase din meniu), cu prețurile DE_STABILIT până le hotărăște proprietarul.
+- **Evenimente**: cererile pentru sala de evenimente, aprobate (sala se rezervă) sau refuzate, cu un răspuns pentru client.
+- **Rapoarte și exporturi** (`GET /api/v1/staff/panel/reports`, permisiunea nouă `reports.view`, doar admin și manager): pe o perioadă de zile ale clubului, veniturile pe categorii, reducerile, numerarul, rezervările pe tipuri, anulările și neprezentările, ocuparea fiecărui teren în programul de funcționare, clasele, conturile noi. Exporturile CSV (`/reports/export.csv?kind=transactions|bookings`) sunt trecute în jurnal, iar celulele de text sunt protejate de formule. Tot aici: cifrele listei de așteptare și exportul ei.
+- **Personal și roluri** (`GET /api/v1/staff/panel/staff`): cine are un rol aici, dacă are 2FA configurat, și ce poate face fiecare rol.
+- **Dispozitive**: adăugare, înrolare (tokenul apare o singură dată), dezactivare cu motiv, „văzut ultima dată”.
+- **Setări și feature flags**: „Ce mai trebuie confirmat”, flag-urile (cu motiv), setările versionate (o valoare nouă = o versiune nouă, verificată de server, cu motiv și dată de la care se aplică, în ora clubului).
+- **Jurnalul de audit**: căutare după acțiune și obiect, cu valorile dinainte și de după.
+- **Starea sistemului** (`GET /api/v1/staff/panel/system`): versiunea (`JUNGLE_VERSION`), ora serverului, baza de date, cache-ul (Redis), deciziile în așteptare, dispozitivele locației (online: văzute în ultimele 5 minute).
+- **Etapele 11–12**: conținutul site-ului, traducerile, notificările, comunitatea, asistentul AI apar în meniu, marcate cu etapa lor.
 - Adminul tehnic Django (`/django-admin/`) rămâne „modul de urgență”, doar pentru rolul Admin.
 
 ## Rulare, testare

@@ -51,6 +51,8 @@ def secret(name: str, dev_default: str) -> str:
 
 
 DEBUG = env_bool("DJANGO_DEBUG", JUNGLE_ENV == "dev")
+# The deployed release (the git commit or tag, set by the deploy); shown in the panel's status.
+APP_VERSION = env("JUNGLE_VERSION", "dev") or "dev"
 SECRET_KEY = secret("DJANGO_SECRET_KEY", "dev-only-insecure-secret-key-change-me-0123456789")
 # Key material for encrypting secrets at rest (TOTP secrets). Any long random string.
 FIELD_ENCRYPTION_KEY = secret("FIELD_ENCRYPTION_KEY", "dev-only-insecure-field-encryption-key")

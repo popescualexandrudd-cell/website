@@ -70,6 +70,7 @@ def test_config_defaults_and_pending_decisions(api: Api, staff) -> None:
         "marker": "default",
         "version": 0,
         "effective_from": None,
+        "description": "Încercări greșite înainte de blocarea temporară a contului.",
     }
 
 

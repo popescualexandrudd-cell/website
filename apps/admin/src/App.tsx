@@ -135,6 +135,7 @@ export function App() {
                 <li key={m.route}>
                   <a href={`#/${m.route}`} aria-current={m === current ? "page" : undefined}>
                     {t(lang, `nav.${m.label}`)}
+                    {m.stage ? <span className="nav__later"> · {t(lang, "upcoming.short", { stage: m.stage })}</span> : null}
                   </a>
                 </li>
               ))}

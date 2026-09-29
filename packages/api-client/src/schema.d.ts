@@ -3187,6 +3187,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/staff/panel/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Report
+         * @description The period's revenue per category, bookings, occupancy and classes (club days).
+         */
+        get: operations["jungle_panel_api_report"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/panel/reports/export.csv": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Export Csv
+         * @description `kind=transactions` (the ledger entries, for the accountant) or `kind=bookings`.
+         */
+        get: operations["jungle_panel_api_export_csv"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/staff/panel/resources": {
         parameters: {
             query?: never;
@@ -3207,6 +3247,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/staff/panel/staff": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Staff
+         * @description Who holds a staff role here, and what each role may do (§8.1).
+         */
+        get: operations["jungle_panel_api_staff"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/staff/panel/subscriptions": {
         parameters: {
             query?: never;
@@ -3219,6 +3279,26 @@ export interface paths {
          * @description The latest subscriptions of the location (at most 200), optionally of one status.
          */
         get: operations["jungle_panel_api_subscription_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/panel/system": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * System
+         * @description The release, the server's clock, the database and cache, the location's devices.
+         */
+        get: operations["jungle_panel_api_system"];
         put?: never;
         post?: never;
         delete?: never;
@@ -4429,6 +4509,11 @@ export interface components {
         };
         /** ConfigOut */
         ConfigOut: {
+            /**
+             * Description
+             * @default
+             */
+            description: string;
             /** Effective From */
             effective_from: string | null;
             /** Key */
@@ -5862,6 +5947,37 @@ export interface components {
             /** Registration Code */
             registration_code: string;
         };
+        /** PanelCourtUseOut */
+        PanelCourtUseOut: {
+            /** Booked Minutes */
+            booked_minutes: number;
+            /** Name */
+            name: string;
+            /** Open Minutes */
+            open_minutes: number;
+            /** Percent */
+            percent: number;
+        };
+        /** PanelDeviceHealthOut */
+        PanelDeviceHealthOut: {
+            /** Enrolled */
+            enrolled: boolean;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Is Active */
+            is_active: boolean;
+            /** Kind */
+            kind: string;
+            /** Last Seen At */
+            last_seen_at: string | null;
+            /** Name */
+            name: string;
+            /** Online */
+            online: boolean;
+        };
         /** PanelEntryOut */
         PanelEntryOut: {
             /** Account */
@@ -5994,6 +6110,81 @@ export interface components {
             /** Level Waiting */
             level_waiting: boolean;
         };
+        /** PanelReportOut */
+        PanelReportOut: {
+            /** Bookings */
+            bookings: {
+                [key: string]: number;
+            };
+            /** Cancelled */
+            cancelled: number;
+            /** Cash Taken */
+            cash_taken: number;
+            /** Class Attended */
+            class_attended: number;
+            /** Class Places */
+            class_places: number;
+            /** Courts */
+            courts: components["schemas"]["PanelCourtUseOut"][];
+            /** Discounts */
+            discounts: number;
+            /**
+             * First
+             * Format: date
+             */
+            first: string;
+            /**
+             * Last
+             * Format: date
+             */
+            last: string;
+            /** New Accounts */
+            new_accounts: number;
+            /** No Shows */
+            no_shows: number;
+            /** Revenue */
+            revenue: {
+                [key: string]: number;
+            };
+            /** Revenue Total */
+            revenue_total: number;
+        };
+        /** PanelStaffMemberOut */
+        PanelStaffMemberOut: {
+            /** Email */
+            email: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Is Active */
+            is_active: boolean;
+            /** Mfa Enabled */
+            mfa_enabled: boolean;
+            /** Name */
+            name: string;
+            /** Roles */
+            roles: components["schemas"]["PanelStaffRoleOut"][];
+        };
+        /** PanelStaffOut */
+        PanelStaffOut: {
+            /** Matrix */
+            matrix: {
+                [key: string]: string[];
+            };
+            /** People */
+            people: components["schemas"]["PanelStaffMemberOut"][];
+        };
+        /** PanelStaffRoleOut */
+        PanelStaffRoleOut: {
+            /** Id */
+            id: number;
+            /** Location */
+            location: string;
+            /** Role */
+            role: string;
+        };
         /** PanelSubscriptionOut */
         PanelSubscriptionOut: {
             /** Corporate */
@@ -6034,6 +6225,26 @@ export interface components {
             user_id: string;
             /** User Name */
             user_name: string;
+        };
+        /** PanelSystemOut */
+        PanelSystemOut: {
+            /** Cache */
+            cache: boolean;
+            /** Database */
+            database: boolean;
+            /** Devices */
+            devices: components["schemas"]["PanelDeviceHealthOut"][];
+            /** Pending Decisions */
+            pending_decisions: number;
+            /**
+             * Server Time
+             * Format: date-time
+             */
+            server_time: string;
+            /** Time Zone */
+            time_zone: string;
+            /** Version */
+            version: string;
         };
         /** PanelTransactionOut */
         PanelTransactionOut: {
@@ -18029,6 +18240,109 @@ export interface operations {
             };
         };
     };
+    jungle_panel_api_report: {
+        parameters: {
+            query: {
+                location_id: string;
+                first: string;
+                last: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PanelReportOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_panel_api_export_csv: {
+        parameters: {
+            query: {
+                location_id: string;
+                kind: string;
+                first: string;
+                last: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     jungle_panel_api_resources: {
         parameters: {
             query: {
@@ -18047,6 +18361,55 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ResourceOut"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_panel_api_staff: {
+        parameters: {
+            query: {
+                location_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PanelStaffOut"];
                 };
             };
             /** @description Unauthorized */
@@ -18110,6 +18473,64 @@ export interface operations {
             };
             /** @description Forbidden */
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_panel_api_system: {
+        parameters: {
+            query: {
+                location_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PanelSystemOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

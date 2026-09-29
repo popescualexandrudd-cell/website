@@ -2,18 +2,24 @@
  * member may use at the chosen location. */
 import type { ComponentType } from "react";
 import { Attendance } from "./Attendance";
+import { Audit } from "./Audit";
 import { Cafe } from "./Cafe";
 import { Calendar } from "./Calendar";
 import { Cash } from "./Cash";
 import { Classes } from "./Classes";
 import { Corporate } from "./Corporate";
+import { Devices } from "./Devices";
+import { Events } from "./Events";
 import { Dashboard } from "./Dashboard";
 import { League } from "./League";
 import { Levels } from "./Levels";
 import { Money } from "./Money";
 import { Pricing } from "./Pricing";
+import { Reports } from "./Reports";
 import { Resources } from "./Resources";
+import { Settings } from "./Settings";
 import { Subscriptions } from "./Subscriptions";
+import { Staff, SystemStatus, upcoming } from "./System";
 import { Users } from "./Users";
 
 export type Module = {
@@ -23,6 +29,8 @@ export type Module = {
   /** Any one of these actions opens the module. */
   actions: string[];
   component: ComponentType;
+  /** A module that comes with a later stage (shown, marked, not yet working). */
+  stage?: number;
 };
 
 export const MODULES: Module[] = [
@@ -40,6 +48,19 @@ export const MODULES: Module[] = [
   { route: "money", label: "money", actions: ["payments.view", "vouchers.manage"], component: Money },
   { route: "cash", label: "cash", actions: ["payments.view", "cash.manage"], component: Cash },
   { route: "cafe", label: "cafe", actions: ["cafe.orders", "cafe.manage"], component: Cafe },
+  { route: "events", label: "events", actions: ["events.manage"], component: Events },
+  { route: "reports", label: "reports", actions: ["reports.view", "waitlist.view"], component: Reports },
+  { route: "staff", label: "staff", actions: ["users.view"], component: Staff },
+  { route: "devices", label: "devices", actions: ["devices.manage"], component: Devices },
+  { route: "settings", label: "settings", actions: ["config.view", "flags.manage"], component: Settings },
+  { route: "audit", label: "audit", actions: ["audit.view"], component: Audit },
+  { route: "system", label: "system", actions: ["config.view"], component: SystemStatus },
+  // Later stages (§8.6): shown and marked, so the owner sees the whole panel.
+  { route: "content", label: "content", actions: ["config.manage"], component: upcoming("content", 11), stage: 11 },
+  { route: "translations", label: "translations", actions: ["config.manage"], component: upcoming("translations", 11), stage: 11 },
+  { route: "notifications", label: "notifications", actions: ["config.manage"], component: upcoming("notifications", 12), stage: 12 },
+  { route: "community", label: "community", actions: ["config.manage"], component: upcoming("community", 12), stage: 12 },
+  { route: "ai", label: "ai", actions: ["config.manage"], component: upcoming("ai", 12), stage: 12 },
 ];
 
 export function allowed(modules: Module[], can: (action: string) => boolean): Module[] {

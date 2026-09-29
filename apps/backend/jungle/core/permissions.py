@@ -56,6 +56,8 @@ class Action(StrEnum):
     CASH_MANAGE = "cash.manage"
     # A person's request about their data on the screens (Q55, GDPR art. 21), noted by staff.
     PRIVACY_REQUESTS = "privacy.requests"
+    # The owner's reports and exports (revenue per category, occupancy; CSV for the accountant).
+    REPORTS_VIEW = "reports.view"
 
 
 ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
@@ -93,6 +95,7 @@ ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
             Action.LEAGUE_MANAGE,
             Action.CASH_MANAGE,
             Action.PRIVACY_REQUESTS,
+            Action.REPORTS_VIEW,
         }
     ),
     Role.RECEPTION: frozenset(

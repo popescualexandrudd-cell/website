@@ -48,6 +48,7 @@ class ConfigOut(Schema):
     marker: str
     version: int
     effective_from: datetime | None
+    description: str = ""
 
 
 class ConfigIn(Schema):
@@ -72,6 +73,7 @@ def _config_out(v: services.ConfigValue) -> ConfigOut:
         marker=v.marker,
         version=v.version,
         effective_from=v.effective_from,
+        description=services.CONFIG[v.key].description,
     )
 
 
@@ -128,6 +130,7 @@ def publish_config(request: HttpRequest, key: str, payload: ConfigIn) -> Status[
         marker=row.marker,
         version=row.version,
         effective_from=row.effective_from,
+        description=services.CONFIG[row.key].description,
     )
     return Status(201, out)
 

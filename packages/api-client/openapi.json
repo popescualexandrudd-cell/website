@@ -1461,6 +1461,11 @@
       },
       "ConfigOut": {
         "properties": {
+          "description": {
+            "default": "",
+            "title": "Description",
+            "type": "string"
+          },
           "effective_from": {
             "anyOf": [
               {
@@ -4856,6 +4861,86 @@
         "title": "PanelCorporateOut",
         "type": "object"
       },
+      "PanelCourtUseOut": {
+        "properties": {
+          "booked_minutes": {
+            "title": "Booked Minutes",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "open_minutes": {
+            "title": "Open Minutes",
+            "type": "integer"
+          },
+          "percent": {
+            "title": "Percent",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "booked_minutes",
+          "open_minutes",
+          "percent"
+        ],
+        "title": "PanelCourtUseOut",
+        "type": "object"
+      },
+      "PanelDeviceHealthOut": {
+        "properties": {
+          "enrolled": {
+            "title": "Enrolled",
+            "type": "boolean"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "is_active": {
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "last_seen_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Seen At"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "online": {
+            "title": "Online",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "kind",
+          "is_active",
+          "enrolled",
+          "online",
+          "last_seen_at"
+        ],
+        "title": "PanelDeviceHealthOut",
+        "type": "object"
+      },
       "PanelEntryOut": {
         "properties": {
           "account": {
@@ -5183,6 +5268,182 @@
         "title": "PanelProfileOut",
         "type": "object"
       },
+      "PanelReportOut": {
+        "properties": {
+          "bookings": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Bookings",
+            "type": "object"
+          },
+          "cancelled": {
+            "title": "Cancelled",
+            "type": "integer"
+          },
+          "cash_taken": {
+            "title": "Cash Taken",
+            "type": "integer"
+          },
+          "class_attended": {
+            "title": "Class Attended",
+            "type": "integer"
+          },
+          "class_places": {
+            "title": "Class Places",
+            "type": "integer"
+          },
+          "courts": {
+            "items": {
+              "$ref": "#/components/schemas/PanelCourtUseOut"
+            },
+            "title": "Courts",
+            "type": "array"
+          },
+          "discounts": {
+            "title": "Discounts",
+            "type": "integer"
+          },
+          "first": {
+            "format": "date",
+            "title": "First",
+            "type": "string"
+          },
+          "last": {
+            "format": "date",
+            "title": "Last",
+            "type": "string"
+          },
+          "new_accounts": {
+            "title": "New Accounts",
+            "type": "integer"
+          },
+          "no_shows": {
+            "title": "No Shows",
+            "type": "integer"
+          },
+          "revenue": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Revenue",
+            "type": "object"
+          },
+          "revenue_total": {
+            "title": "Revenue Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "first",
+          "last",
+          "revenue_total",
+          "revenue",
+          "discounts",
+          "cash_taken",
+          "bookings",
+          "cancelled",
+          "no_shows",
+          "courts",
+          "class_places",
+          "class_attended",
+          "new_accounts"
+        ],
+        "title": "PanelReportOut",
+        "type": "object"
+      },
+      "PanelStaffMemberOut": {
+        "properties": {
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "is_active": {
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "mfa_enabled": {
+            "title": "Mfa Enabled",
+            "type": "boolean"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "roles": {
+            "items": {
+              "$ref": "#/components/schemas/PanelStaffRoleOut"
+            },
+            "title": "Roles",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email",
+          "mfa_enabled",
+          "is_active",
+          "roles"
+        ],
+        "title": "PanelStaffMemberOut",
+        "type": "object"
+      },
+      "PanelStaffOut": {
+        "properties": {
+          "matrix": {
+            "additionalProperties": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "title": "Matrix",
+            "type": "object"
+          },
+          "people": {
+            "items": {
+              "$ref": "#/components/schemas/PanelStaffMemberOut"
+            },
+            "title": "People",
+            "type": "array"
+          }
+        },
+        "required": [
+          "matrix",
+          "people"
+        ],
+        "title": "PanelStaffOut",
+        "type": "object"
+      },
+      "PanelStaffRoleOut": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "location": {
+            "title": "Location",
+            "type": "string"
+          },
+          "role": {
+            "title": "Role",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "role",
+          "location"
+        ],
+        "title": "PanelStaffRoleOut",
+        "type": "object"
+      },
       "PanelSubscriptionOut": {
         "properties": {
           "corporate": {
@@ -5261,6 +5522,53 @@
           "usage"
         ],
         "title": "PanelSubscriptionOut",
+        "type": "object"
+      },
+      "PanelSystemOut": {
+        "properties": {
+          "cache": {
+            "title": "Cache",
+            "type": "boolean"
+          },
+          "database": {
+            "title": "Database",
+            "type": "boolean"
+          },
+          "devices": {
+            "items": {
+              "$ref": "#/components/schemas/PanelDeviceHealthOut"
+            },
+            "title": "Devices",
+            "type": "array"
+          },
+          "pending_decisions": {
+            "title": "Pending Decisions",
+            "type": "integer"
+          },
+          "server_time": {
+            "format": "date-time",
+            "title": "Server Time",
+            "type": "string"
+          },
+          "time_zone": {
+            "title": "Time Zone",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "version",
+          "server_time",
+          "time_zone",
+          "database",
+          "cache",
+          "pending_decisions",
+          "devices"
+        ],
+        "title": "PanelSystemOut",
         "type": "object"
       },
       "PanelTransactionOut": {
@@ -24044,6 +24352,194 @@
         ]
       }
     },
+    "/api/v1/staff/panel/reports": {
+      "get": {
+        "description": "The period's revenue per category, bookings, occupancy and classes (club days).",
+        "operationId": "jungle_panel_api_report",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "first",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "First",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "last",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "Last",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PanelReportOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Report",
+        "tags": [
+          "staff: panel"
+        ]
+      }
+    },
+    "/api/v1/staff/panel/reports/export.csv": {
+      "get": {
+        "description": "`kind=transactions` (the ledger entries, for the accountant) or `kind=bookings`.",
+        "operationId": "jungle_panel_api_export_csv",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "kind",
+            "required": true,
+            "schema": {
+              "title": "Kind",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "first",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "First",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "last",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "Last",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Export Csv",
+        "tags": [
+          "staff: panel"
+        ]
+      }
+    },
     "/api/v1/staff/panel/resources": {
       "get": {
         "description": "Every resource of the location, the inactive ones included.",
@@ -24112,6 +24608,75 @@
           }
         ],
         "summary": "Resources",
+        "tags": [
+          "staff: panel"
+        ]
+      }
+    },
+    "/api/v1/staff/panel/staff": {
+      "get": {
+        "description": "Who holds a staff role here, and what each role may do (§8.1).",
+        "operationId": "jungle_panel_api_staff",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PanelStaffOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Staff",
         "tags": [
           "staff: panel"
         ]
@@ -24195,6 +24760,85 @@
           }
         ],
         "summary": "Subscription List",
+        "tags": [
+          "staff: panel"
+        ]
+      }
+    },
+    "/api/v1/staff/panel/system": {
+      "get": {
+        "description": "The release, the server's clock, the database and cache, the location's devices.",
+        "operationId": "jungle_panel_api_system",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PanelSystemOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "System",
         "tags": [
           "staff: panel"
         ]

@@ -8,7 +8,7 @@ import uuid
 from datetime import date, datetime
 from typing import Any
 
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from ninja import Field, Router, Schema
 
 from jungle.accounts.services.authz import authorize
@@ -17,7 +17,7 @@ from jungle.core.schemas import errors
 from jungle.core.security import session_auth
 from jungle.league.api import SeasonOut
 from jungle.locations.api import ResourceOut
-from jungle.panel import catalog, money, people, services
+from jungle.panel import catalog, insights, money, people, services
 
 router = Router(tags=["staff: panel"], auth=session_auth)
 
@@ -358,3 +358,99 @@ def cafe_menu(request: HttpRequest, location_id: uuid.UUID) -> list[money.Catego
 def league_seasons(request: HttpRequest, location_id: uuid.UUID) -> list[SeasonOut]:
     """Every season, the planned ones included, for the league's administration."""
     return [SeasonOut.from_orm(s) for s in catalog.seasons(request, location_id)]
+
+
+# ---------------------------------------------------------------- reports (owner's side)
+class PanelCourtUseOut(Schema):
+    name: str
+    booked_minutes: int
+    open_minutes: int
+    percent: int
+
+
+class PanelReportOut(Schema):
+    first: date
+    last: date
+    revenue_total: int
+    revenue: dict[str, int]
+    discounts: int
+    cash_taken: int
+    bookings: dict[str, int]
+    cancelled: int
+    no_shows: int
+    courts: list[PanelCourtUseOut]
+    class_places: int
+    class_attended: int
+    new_accounts: int
+
+
+@router.get("/reports", response={200: PanelReportOut, **errors(401, 403, 422)})
+def report(
+    request: HttpRequest, location_id: uuid.UUID, first: date, last: date
+) -> insights.Report:
+    """The period's revenue per category, bookings, occupancy and classes (club days)."""
+    return insights.report(request, location_id, first, last)
+
+
+@router.get("/reports/export.csv", response={200: str, **errors(401, 403, 422)})
+def export_csv(
+    request: HttpRequest, location_id: uuid.UUID, kind: str, first: date, last: date
+) -> HttpResponse:
+    """`kind=transactions` (the ledger entries, for the accountant) or `kind=bookings`."""
+    body = insights.export_csv(request, location_id, kind, first, last)
+    response = HttpResponse(body, content_type="text/csv; charset=utf-8")
+    response["Content-Disposition"] = f'attachment; filename="{kind}-{first}-{last}.csv"'
+    return response
+
+
+# ---------------------------------------------------------------- staff and system
+class PanelStaffRoleOut(Schema):
+    id: int
+    role: str
+    location: str
+
+
+class PanelStaffMemberOut(Schema):
+    id: uuid.UUID
+    name: str
+    email: str
+    mfa_enabled: bool
+    is_active: bool
+    roles: list[PanelStaffRoleOut]
+
+
+class PanelStaffOut(Schema):
+    matrix: dict[str, list[str]]
+    people: list[PanelStaffMemberOut]
+
+
+@router.get("/staff", response={200: PanelStaffOut, **errors(401, 403, 422)})
+def staff(request: HttpRequest, location_id: uuid.UUID) -> insights.StaffOverview:
+    """Who holds a staff role here, and what each role may do (§8.1)."""
+    return insights.staff_overview(request, location_id)
+
+
+class PanelDeviceHealthOut(Schema):
+    id: uuid.UUID
+    name: str
+    kind: str
+    is_active: bool
+    enrolled: bool
+    online: bool
+    last_seen_at: datetime | None
+
+
+class PanelSystemOut(Schema):
+    version: str
+    server_time: datetime
+    time_zone: str
+    database: bool
+    cache: bool
+    pending_decisions: int
+    devices: list[PanelDeviceHealthOut]
+
+
+@router.get("/system", response={200: PanelSystemOut, **errors(401, 403, 404, 422)})
+def system(request: HttpRequest, location_id: uuid.UUID) -> insights.SystemStatus:
+    """The release, the server's clock, the database and cache, the location's devices."""
+    return insights.system_status(request, location_id)
