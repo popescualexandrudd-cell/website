@@ -25,7 +25,8 @@ test("§9.2.1: the full site's header on the home page, with the map of the sect
   await expect(map).toHaveCount(19);
   await expect(map.nth(0)).toHaveAttribute("data-built", "true");
   await expect(map.nth(1)).toHaveAttribute("data-built", "true"); // the hero (section 2)
-  await expect(map.nth(2)).toContainText("Urmează");
+  await expect(map.nth(2)).toHaveAttribute("data-built", "true"); // the tour (section 3)
+  await expect(map.nth(3)).toContainText("Urmează");
   if (info.project.name === "desktop") {
     const menu = page.getByRole("navigation", { name: "Meniul principal" }).first();
     await expect(menu.getByRole("link")).toHaveText(MENU_RO);
@@ -42,7 +43,8 @@ test("a menu page in the language chosen, marked as the current page, and back i
   await expect(page).toHaveURL(/\/ro\/liga$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Liga Jungle");
   await expect(page.getByText(/se construiește în Etapa 11/)).toBeVisible();
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  // After a navigation from the menu the new page's tag comes last (the old one may linger a moment).
+  await expect(page.locator('meta[name="robots"]').last()).toHaveAttribute("content", /noindex/);
   if (info.project.name === "desktop") {
     await expect(page.getByRole("link", { name: "Liga", exact: true }).first()).toHaveAttribute("aria-current", "page");
     await page.getByRole("link", { name: "English" }).first().click();

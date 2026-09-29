@@ -1,12 +1,15 @@
 # Raport de verificare — Etapa 11 (site-ul complet, secțiune cu secțiune)
 
-> Branch: `claude/hopeful-euler-rguibn`. Site-ul complet se livrează **secțiune cu secțiune** (§9.2), fiecare cu aprobarea dumneavoastră. Acest raport crește cu fiecare secțiune.
+> Branch: `claude/hopeful-euler-rguibn`. Site-ul complet se livrează **secțiune cu secțiune** (§9.2). Acest raport crește cu fiecare secțiune.
+>
+> **Decizia proprietarului (29.09.2026):** „alege ce crezi că este mai bine doar la această etapă”. În Etapa 11, alegerile de conținut și design le facem noi, după documentație și regulile proiectului, și continuăm secțiune după secțiune. Dumneavoastră vedeți totul aici și ne spuneți oricând ce vreți schimbat.
 
 | Secțiune (§9.2) | Livrată | Starea |
 |---|---|---|
 | Fundația site-ului complet + **1. Antetul fix** | 29.09.2026 | **aprobată 29.09.2026** |
-| 2. Hero „Intră în junglă” | 29.09.2026 | **așteaptă aprobarea** |
-| 3–19 | — | mai târziu, câte una |
+| 2. Hero „Intră în junglă” | 29.09.2026 | **livrată** |
+| 3. Turul clubului la scroll | 29.09.2026 | **livrată** |
+| 4–19 | — | urmează, câte una |
 
 ---
 
@@ -95,8 +98,8 @@ Primul ecran al paginii principale, pe toată înălțimea ecranului (§9.2, sec
 | Verificare | Rezultat |
 |---|---|
 | Cap-coadă | 3 teste noi (calculator + telefon):<br>• titlul, imaginea cu descriere, nota „ilustrativă”, cele două acțiuni în română, apoi în engleză;<br>• „Descoperă clubul” duce la secțiunea următoare;<br>• cu „mișcare redusă” nu se mișcă nimic.<br>Accesibilitatea e verificată cu axe. Toate testele site-ului trec: 28 de rulări pentru pagina de pre-lansare, 17 pentru site-ul complet. |
-| Lighthouse, mobil | **Performanță 95 · Accesibilitate 100 · Bune practici 100 · SEO 100** ([raport](lighthouse-mobil-sectiunea-2.html)). Cel mai mare element apare la 2,9 s în simularea de rețea mobilă lentă, ca la pagina de pre-lansare. Pagina nu „sare” deloc la încărcare (CLS 0). |
-| Lighthouse, calculator | **100 · 100 · 100 · 100** ([raport](lighthouse-desktop-sectiunea-2.html)) |
+| Lighthouse, mobil | **Performanță 95 · Accesibilitate 100 · Bune practici 100 · SEO 100** (măsurătoarea cea mai recentă: [raport](lighthouse-mobil.html)). Cel mai mare element apare la 2,9 s în simularea de rețea mobilă lentă, ca la pagina de pre-lansare. Pagina nu „sare” deloc la încărcare (CLS 0). |
+| Lighthouse, calculator | **100 · 100 · 100 · 100** ([raport](lighthouse-desktop.html)) |
 | Toate verificările proiectului | trec înainte de push |
 
 ### Dubla revizuire: probleme găsite și reparate
@@ -111,3 +114,53 @@ Nimic nou. Rămâne **Q44** (proiectul de design interior sau fotografii reale a
 1. Deschideți capturile 4 și 5.
 2. Dacă vreți, deschideți rapoartele Lighthouse de mai sus (se deschid în browser).
 3. Dacă Hero-ul vă place, scrieți „aprob secțiunea 2”. Dacă vreți alt titlu sau alt text, spuneți ce anume.
+
+---
+
+## Secțiunea 3 — Turul clubului la scroll
+
+### Ce s-a construit
+Sub Hero, „Descoperă clubul” duce acum aici: **opt opriri, în ordinea unui vizitator** (§9.2, secțiunea 3):
+1. parcarea;
+2. aleea;
+3. recepția și vestiarele;
+4. terenurile;
+5. mezaninul (pasarela-lounge);
+6. cafeneaua;
+7. pilates Reformer;
+8. sala de evenimente.
+
+**Pe calculator,** planul clubului stă fix în stânga, iar opririle se derulează în dreapta. Oprirea ajunsă în mijlocul ecranului se luminează pe plan (conturul de alamă), iar punctul „ești aici” se mută la ea.
+
+**Pe telefon,** planul stă sus, sub antet, și opririle trec pe sub el.
+
+**Planul** e cel redesenat după schița dumneavoastră, deja aprobat pe pagina de pre-lansare. Am ales planul și nu randări, pentru că spațiile (recepție, cafenea, studio, sală) nu au încă proiect de interior (Q44). Sub plan scrie: „Plan schematic după schița clubului, fără scară. Randările spațiilor vin odată cu proiectul de arhitectură.”
+
+**Textele** spun doar ce e confirmat:
+- 18 + 10 locuri de parcare, acces din două străzi;
+- aleea între cele două clădiri;
+- cardul primit la recepție și scanat la chioșcuri;
+- 4 terenuri cu pereți de sticlă, cu ecran la fiecare teren;
+- pasarela la 3 m;
+- cafeneaua cu scară spre pasarelă, cu comandă și de la Chioșcul de Plăți;
+- 4 aparate Reformer, extensibil la 6;
+- sala de evenimente pentru 15–20 de persoane.
+
+**Accesibilitate:** fără JavaScript sau cu „mișcare redusă”, opririle se citesc ca o listă normală, lângă plan. Oprirea curentă e anunțată cititoarelor de ecran („pasul curent”).
+
+**Ce n-am pus, intenționat:** că se scanează cardul la intrarea pe teren. Scanarea la teren e încă o opțiune de hardware nehotărâtă (Q23, R-031).
+
+### Capturi de ecran
+6. [Turul pe calculator, la mezanin](ecrane/desktop-04-tur.png)
+7. [Turul pe telefon, la mezanin](ecrane/mobile-04-tur.png)
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Cap-coadă | 2 teste noi (calculator + telefon):<br>• opririle în ordine, planul cu descriere și notă;<br>• la derulare, mezaninul, apoi sala de evenimente devin „aici”, iar planul le luminează zona și rămâne pe ecran;<br>• textele în engleză.<br>Accesibilitatea e verificată cu axe. Toate testele site-ului trec: 28 de rulări pentru pre-lansare, 21 pentru site-ul complet. |
+| Lighthouse, pagina principală cu Hero și tur | mobil **93 · 100 · 100 · 100** (cel mai mare element la 3,2 s în simularea de rețea mobilă lentă; pagina nu „sare”, CLS 0), calculator **100 · 100 · 100 · 100** ([mobil](lighthouse-mobil.html), [calculator](lighthouse-desktop.html)) |
+
+### Dubla revizuire: probleme găsite și reparate
+1. **„Cu care intri pe teren”** (textul inițial la recepție) nu e sigur: scanarea la teren e încă nehotărâtă (Q23). Am corectat: cardul se scanează la chioșcuri, pentru plăți, check-in și ligă.
+2. **Contrastul:** opririle care nu sunt „aici” nu sunt estompate (textul ar fi scăzut sub contrastul cerut). Se schimbă doar marginea de alamă a opririi curente.
+3. **Din perspectiva unui atacator:** nimic nou (fără date, formulare sau resurse de la terți).

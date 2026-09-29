@@ -477,6 +477,46 @@
         "renderAlt": "Randare 3D, seara: vedere de pe pasarela-lounge de la 3 metri, peste balustrada de sticlă, spre terenurile de padel cu pereți de sticlă, luminate de benzi LED.",
         "renderNote": "Randare 3D ilustrativă, realizată de noi după schița clubului. Nu este o fotografie și nici proiectul final."
       },
+      "tour": {
+        "kicker": "Turul clubului",
+        "title": "Opt opriri, de la parcare la sala de evenimente.",
+        "lead": "Derulează ca un vizitator: planul clubului îți arată, la fiecare pas, unde ești.",
+        "note": "Plan schematic după schița clubului, fără scară. Randările spațiilor vin odată cu proiectul de arhitectură.",
+        "stops": {
+          "parking": {
+            "title": "Parcarea",
+            "text": "Pe Șoseaua Biruinței, lângă Selgros Pantelimon. Clubul are acces din două străzi și parcare proprie: 18 locuri în spate și 10 în față."
+          },
+          "alley": {
+            "title": "Aleea",
+            "text": "O alee trece printre cele două clădiri, cu acces de la ambele capete: pe de o parte hala de padel, pe cealaltă clădirea cu studioul de pilates și sala de evenimente."
+          },
+          "reception": {
+            "title": "Recepția și vestiarele",
+            "text": "La intrarea în hala de padel: recepția și, alături, vestiarele. La recepție primești cardul clubului: îl scanezi la chioșcuri, pentru plăți, check-in și ligă."
+          },
+          "courts": {
+            "title": "Terenurile",
+            "text": "Patru terenuri de padel închise, cu pereți de sticlă, în două rânduri, într-o hală încălzită iarna și răcită vara. La fiecare teren, un ecran arată jucătorii, rangul din ligă și timpul rămas."
+          },
+          "gallery": {
+            "title": "Mezaninul",
+            "text": "Între cele două rânduri de terenuri, o pasarelă-lounge la 3 metri înălțime: de aici privești meciurile de sus."
+          },
+          "cafe": {
+            "title": "Cafeneaua",
+            "text": "Cafea de specialitate la parter, cu scară spre pasarela-lounge. Poți comanda și de la Chioșcul de Plăți, cu cardul clubului."
+          },
+          "pilates": {
+            "title": "Pilates Reformer",
+            "text": "Peste alee, un studio încălzit iarna și răcit vara, cu 4 aparate Reformer la deschidere, extensibil la 6: clase pe niveluri, ședințe private și duo."
+          },
+          "events": {
+            "title": "Sala de evenimente",
+            "text": "În aceeași clădire cu studioul de pilates, o sală separată pentru petreceri și evenimente private de 15–20 de persoane."
+          }
+        }
+      },
       "pages": {
         "padel": "Padel",
         "league": "Liga Jungle",

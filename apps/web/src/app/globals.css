@@ -1382,6 +1382,116 @@ body[data-menu-open="true"] {
   scroll-margin-top: var(--header-h);
 }
 
+/* ------------------------------------------------------------------ full site: the tour (Stage 11, §9.2.3) */
+.tour {
+  scroll-margin-top: var(--header-h);
+}
+.tour__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 56px;
+  margin-top: 48px;
+  align-items: start;
+}
+.tour__plan {
+  position: sticky;
+  top: calc(var(--header-h) + 24px);
+  margin: 0;
+}
+.tour__stage {
+  position: relative;
+}
+.tour__stage > svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.tour__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.tour__area {
+  fill: var(--color-brass-400);
+  fill-opacity: 0.22;
+  stroke: var(--color-brass-400);
+  stroke-width: 4;
+  animation: tour-light var(--motion-duration-slow) var(--motion-ease-out) both;
+}
+.tour__dot {
+  fill: var(--color-brass-400);
+  stroke: var(--color-night-950);
+  stroke-width: 4;
+  transition: transform var(--motion-duration-slow) var(--motion-ease-out);
+}
+.tour__plan figcaption {
+  margin-top: 12px;
+  font-size: 13px;
+}
+.tour__stops {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.tour__stop {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px 0 24px 28px;
+  border-left: 2px solid var(--line);
+  transition: border-color var(--motion-duration-slow) var(--motion-ease-out);
+}
+.tour__stop[aria-current="step"] {
+  border-left-color: var(--color-brass-400);
+}
+.tour__stop p {
+  margin: 0;
+  max-width: 460px;
+  color: var(--text-2);
+}
+.tour__number {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  color: var(--accent);
+}
+.tour__title {
+  margin: 6px 0 12px;
+  font-family: var(--font-serif);
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 500;
+  color: var(--text);
+}
+@keyframes tour-light {
+  from {
+    fill-opacity: 0;
+    stroke-opacity: 0;
+  }
+  to {
+    fill-opacity: 0.22;
+    stroke-opacity: 1;
+  }
+}
+/* A phone or a tablet: the plan stays on top, the stops pass under it. */
+@media (max-width: 900px) {
+  .tour__layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .tour__plan {
+    top: var(--header-h);
+    z-index: 1;
+    padding: 8px 0;
+    background: var(--bg);
+  }
+  .tour__plan figcaption {
+    display: none;
+  }
+  .tour__stop {
+    min-height: 45vh;
+  }
+}
+
 /* ------------------------------------------------------------------ full site: the build map */
 .site-preview .lead {
   max-width: 720px;

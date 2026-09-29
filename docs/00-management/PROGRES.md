@@ -3,7 +3,7 @@
 > Actualizat la fiecare sesiune de lucru. Prima secțiune spune mereu **unde suntem acum**.
 
 ## Unde suntem acum
-- **Etapa curentă:** Etapa 11 (website-ul complet, secțiune cu secțiune, fiecare aprobată separat). **Secțiunea 1 (antetul fix) + fundația site-ului complet:** aprobată de proprietar pe 29.09.2026 (în `main`). Site-ul complet stă ascuns în spatele comutatorului `full_site` până îl publică proprietarul (Q57, rezolvată). **Secțiunea 2 (Hero „Intră în junglă”):** livrată pe 29.09.2026, așteaptă aprobarea (Lighthouse mobil 95/100/100/100). Raport: [verificare/etapa-11/RAPORT.md](verificare/etapa-11/RAPORT.md).
+- **Etapa curentă:** Etapa 11 (website-ul complet, secțiune cu secțiune, fiecare aprobată separat). **Secțiunea 1 (antetul fix) + fundația site-ului complet:** aprobată de proprietar pe 29.09.2026 (în `main`). Site-ul complet stă ascuns în spatele comutatorului `full_site` până îl publică proprietarul (Q57, rezolvată). **Secțiunile 2 (Hero „Intră în junglă”) și 3 (turul clubului la scroll):** livrate pe 29.09.2026, pe branch. Decizia proprietarului (29.09.2026): în Etapa 11 alegerile le facem noi și continuăm secțiune după secțiune. Raport: [verificare/etapa-11/RAPORT.md](verificare/etapa-11/RAPORT.md).
 - **Etapa 10 (panoul de admin):** aprobată de proprietar pe 29.09.2026 (merge în `main`, tag local `etapa-10`). Q56 rămâne deschisă, cu varianta implicită (rapoartele doar admin + manager). Raport: [verificare/etapa-10/RAPORT.md](verificare/etapa-10/RAPORT.md).
 - **Etapa 9 (ecranele de teren și lobby):** aprobată de proprietar pe 29.09.2026 (merge în `main`, tag local `etapa-9`). Q55 rezolvată (toți pe nume, insigna „Ligă”, echipele alese la Chioșcul Ligii). Raport: [verificare/etapa-9/RAPORT.md](verificare/etapa-9/RAPORT.md).
 - **Etapa 8 (Chioșcul de Plăți + afișajul cafenelei):** aprobată de proprietar pe 29.09.2026 (merge în `main`, tag local `etapa-8`). Q53 și Q54 rămân deschise, cu variantele implicite. Raport: [verificare/etapa-8/RAPORT.md](verificare/etapa-8/RAPORT.md).
@@ -36,7 +36,7 @@
 | 8 | Chioșcul de Plăți + afișajul cafenelei | ian. 2027 | **Aprobată 29.09.2026** |
 | 9 | Ecranele | ian. 2027 | **Aprobată 29.09.2026** |
 | 10 | Panoul de admin complet | ian. 2027 | **Aprobată 29.09.2026** |
-| 11 | Website-ul „simulator” | ian.–feb. 2027 | În lucru: secțiunea 1 aprobată 29.09.2026; secțiunea 2 livrată, așteaptă aprobarea |
+| 11 | Website-ul „simulator” | ian.–feb. 2027 | În lucru: secțiunea 1 aprobată 29.09.2026; secțiunile 2–3 livrate |
 | 12 | AI + notificări | feb. 2027 | Neîncepută |
 | 13 | SEO, marketing, branding, vânzări | în paralel, feb. 2027 | Neîncepută |
 | 14 | Deploy, securitate, backup, hardware real | feb. 2027 | Neîncepută |
@@ -134,3 +134,4 @@
 - **29.09.2026** — Etapa 11, secțiunea 1 livrată: fundația site-ului complet (comutatorul `full_site`, Q57, cu reîmprospătarea imediată a site-ului la schimbare; adresele localizate ale paginilor din §9.3, marcate „În construcție” și `noindex`) și antetul fix (meniul, limba, contul, „Rezervă”; meniul strâns sub 1280 px). Fișier nou `.dockerignore` (nimic construit local și niciun `.env` în imagini). Întrebare nouă: Q57.
 - **29.09.2026** — Proprietarul: „Aprob totul”. Secțiunea 1 a Etapei 11 aprobată (merge în `main`); reparația chioșcurilor era deja în `main`. Q57 rezolvată: site-ul complet apare doar când îl publică proprietarul. Început secțiunea 2 (Hero).
 - **29.09.2026** — Două probleme găsite de testele rulate seara, reparate și aduse în `main` (120a6f7): în panoul de admin, o rezervare în afara orelor zilei nu mai e desenată peste celula de la 08:00 (listă separată sub calendar); testul ecranului de teren ține cont că, după 23:00, rezervarea următoare e a doua zi. Etapa 11, secțiunea 2 livrată: Hero „Intră în junglă” (randarea aprobată în 1B, două acțiuni, „Descoperă clubul”, mișcare discretă, nimic pentru „mișcare redusă”); Lighthouse mobil 95/100/100/100, desktop 100.
+- **29.09.2026** — Proprietarul: „continuă cu următoarea etapă și alege ce crezi că este mai bine doar la această etapă”: în Etapa 11 alegerile de conținut și design le facem noi, după documentație. Secțiunea 3 livrată: turul clubului la scroll, pe planul redesenat după schiță (opt opriri, zona luminată pe plan, „ești aici”); Lighthouse mobil 93/100/100/100, desktop 100.

@@ -35,8 +35,8 @@ test("in English; the cue leads down to the next section", async ({ page }) => {
   await expect(hero.getByRole("link", { name: "Book a court" })).toHaveAttribute("href", "/en/bookings");
   await expect(hero.getByRole("link", { name: "See the league live" })).toHaveAttribute("href", "/en/league");
   await hero.getByRole("link", { name: "Discover the club" }).click();
-  await expect(page).toHaveURL(/#sectiuni$/);
-  await expect(page.getByRole("heading", { level: 2, name: "The Jungle Padel website, section by section" })).toBeInViewport();
+  await expect(page).toHaveURL(/#tur$/);
+  await expect(page.getByRole("heading", { level: 2, name: "Eight stops, from the car park to the events room." })).toBeInViewport();
 });
 
 test("reduced motion: nothing keeps moving (WCAG 2.3.3)", async ({ page }) => {

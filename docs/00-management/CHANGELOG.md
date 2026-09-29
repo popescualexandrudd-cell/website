@@ -4,7 +4,12 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
-### Etapa 11, secțiunea 2 — 29.09.2026 (livrată, așteaptă aprobarea)
+### Etapa 11, secțiunea 3 — 29.09.2026 (livrată; alegerile Etapei 11 delegate de proprietar)
+#### Adăugat
+- Turul clubului la scroll (§9.2, secțiunea 3): `Tour` + `TourStops`, opt opriri în ordinea vizitatorului (parcare → alee → recepție → terenuri → mezanin → cafenea → pilates → sala de evenimente), lângă planul redesenat după schiță (`SitePlan`, fără randări inventate, Q44). Oprirea din mijlocul ecranului se luminează pe plan și primește punctul „ești aici” (`aria-current="step"`); fără JavaScript sau cu mișcare redusă, o listă simplă. Pe telefon, planul rămâne sus. Texte `web.site.tour.*` RO + EN, doar fapte confirmate. „Descoperă clubul” din Hero duce aici.
+- Teste cap-coadă `e2e/full/tour.spec.ts`; Lighthouse mobil 93 · 100 · 100 · 100, desktop 100 · 100 · 100 · 100 (în `verificare/etapa-11/` rămân doar cele mai recente rapoarte).
+
+### Etapa 11, secțiunea 2 — 29.09.2026 (livrată)
 #### Adăugat
 - Hero-ul site-ului complet (§9.2, secțiunea 2), `FullHero`: randarea arenei aprobată în Etapa 1B (imaginea statică, apoi scena 3D pe aparatele capabile), marcată ilustrativă (Q44); „Intră în junglă.” / „Step into the jungle.”; „Rezervă un teren” (`/rezervari`) și „Vezi liga live” (`/liga`); „Descoperă clubul” spre secțiunea următoare. Mișcare doar prin transformări (randarea se așază, textul urcă o dată, săgeata respiră), oprită pentru „mișcare redusă”. Texte `web.site.hero.*` RO + EN.
 - Pagina principală a site-ului complet: Hero-ul, apoi harta secțiunilor (acum h2, `BUILT = 2`).

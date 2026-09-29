@@ -477,6 +477,46 @@
         "renderAlt": "3D rendering, evening: the view from the gallery lounge 3 metres up, over the glass balustrade, towards the glass-walled padel courts lit by LED lines.",
         "renderNote": "Illustrative 3D rendering made by us from the club's sketch. Not a photograph and not the final design."
       },
+      "tour": {
+        "kicker": "Club tour",
+        "title": "Eight stops, from the car park to the events room.",
+        "lead": "Scroll as a visitor would: at every step, the club plan shows where you are.",
+        "note": "Schematic plan from the club's sketch, not to scale. Renderings of the spaces will come with the architectural design.",
+        "stops": {
+          "parking": {
+            "title": "The car park",
+            "text": "On Șoseaua Biruinței, next to Selgros Pantelimon. The club is reached from two streets and has its own parking: 18 spaces at the back and 10 at the front."
+          },
+          "alley": {
+            "title": "The lane",
+            "text": "A lane runs between the two buildings, open at both ends: the padel hall on one side, the building with the Pilates studio and the events room on the other."
+          },
+          "reception": {
+            "title": "Reception and changing rooms",
+            "text": "At the entrance to the padel hall: the reception and, next to it, the changing rooms. At the reception you get your club card: you scan it at the kiosks to pay, check in and play in the league."
+          },
+          "courts": {
+            "title": "The courts",
+            "text": "Four indoor padel courts with glass walls, in two rows, in a hall heated in winter and cooled in summer. At each court, a screen shows the players, their league rank and the time left."
+          },
+          "gallery": {
+            "title": "The mezzanine",
+            "text": "Between the two rows of courts, a lounge walkway 3 metres up: watch the matches from above."
+          },
+          "cafe": {
+            "title": "The café",
+            "text": "Specialty coffee on the ground floor, with stairs up to the lounge walkway. You can also order at the Payments Kiosk, with your club card."
+          },
+          "pilates": {
+            "title": "Reformer Pilates",
+            "text": "Across the lane, a studio heated in winter and cooled in summer, with 4 Reformer machines at opening, expandable to 6: classes by level, private and duo sessions."
+          },
+          "events": {
+            "title": "The events room",
+            "text": "In the same building as the Pilates studio, a separate room for parties and private events of 15–20 people."
+          }
+        }
+      },
       "pages": {
         "padel": "Padel",
         "league": "Jungle League",
