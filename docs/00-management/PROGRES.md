@@ -3,7 +3,8 @@
 > Actualizat la fiecare sesiune de lucru. Prima secțiune spune mereu **unde suntem acum**.
 
 ## Unde suntem acum
-- **Etapa curentă:** Etapa 8 (Chioșcul de Plăți + afișajul cafenelei), **livrată pe 29.09.2026, în așteptarea aprobării**. Partea de backend a intrat deja în `main` pe 28.09.2026, la cererea proprietarului (PR #1); ecranele sunt pe branch-ul de lucru. Raport: [verificare/etapa-8/RAPORT.md](verificare/etapa-8/RAPORT.md). Întrebări noi: Q53, Q54.
+- **Etapa curentă:** Etapa 9 (ecranele de teren și lobby), începută pe 29.09.2026.
+- **Etapa 8 (Chioșcul de Plăți + afișajul cafenelei):** aprobată de proprietar pe 29.09.2026 (merge în `main`, tag local `etapa-8`). Q53 și Q54 rămân deschise, cu variantele implicite. Raport: [verificare/etapa-8/RAPORT.md](verificare/etapa-8/RAPORT.md).
 - **Etapa 7 (Hardware Bridge + Chioșcul Ligii):** aprobată de proprietar pe 28.09.2026 (merge în `main`, tag local `etapa-7`), cu Q51 și Q52 confirmate. Raport: [verificare/etapa-7/RAPORT.md](verificare/etapa-7/RAPORT.md).
 - **Etapa 6 (integrarea ligii):** aprobată de proprietar pe 28.09.2026 (merge în `main`), cu Q6 schimbat (alegere între 15% la abonament și 4 × 20% la rezervări), Q49 (teren, oră, rezultate și istoric publice; R-012 și acordul ligii v2) și Q11, Q27, Q28, Q47, Q48, Q50 confirmate. Raport: [verificare/etapa-6/RAPORT.md](verificare/etapa-6/RAPORT.md).
 - **Etapa 5 (carduri, Apple Wallet și Google Wallet, GDPR):** aprobată de proprietar pe 27.09.2026 (merge în `main`). Raport: [verificare/etapa-5/RAPORT.md](verificare/etapa-5/RAPORT.md).
@@ -13,7 +14,7 @@
 - **Etapa 1B (pagina de pre-lansare, revizia 3 „Noapte și alamă”):** aprobată de proprietar pe 27.09.2026 (merge în `main`). Raport: [verificare/etapa-1b/RAPORT.md](verificare/etapa-1b/RAPORT.md).
 - **Etapa 1A:** aprobată de proprietar pe 27.09.2026 (merge în `main`). Raport: [verificare/etapa-1a/RAPORT.md](verificare/etapa-1a/RAPORT.md).
 - **Etapa 0:** aprobată de proprietar pe 26.09.2026 (tag `etapa-0`, branch `main`).
-- **Următoarea etapă:** 9 (Ecranele), după aprobarea Etapei 8.
+- **Următoarea etapă:** 10 (panoul de admin), după aprobarea Etapei 9.
 - **Întrebări încă deschise care contează curând:** Q26 (datele firmei: subsol și texte legale), Q39 (domeniu, marcă), Q24 (furnizor de email), Q23 (modelele de hardware), Q44 (randări sau fotografii ale spațiilor), Q45 (valorile implicite ale ligii), Q46 (un text neclar din schiță); Q21 (prețurile: tarifele rămân DEMO, `DE_STABILIT`); Q24 (conturile Apple Developer și Google Wallet ale firmei — ghid în `docs/08-deploy-si-mentenanta/02-ghid-apple-google-wallet.md`); Q1 (emblemele cardului Diamant); Q30 (rezultatele publice ale meciurilor); pentru Etapa 8: Q53 (numerar, rest, credit, fiscal), Q54 (modul personal), Q10 (plăți), Q33 (cafenea), contabilul (fiscalul) — vezi [INTREBARI_DESCHISE.md](INTREBARI_DESCHISE.md).
 - **Branch de lucru:** `claude/hopeful-euler-rguibn` (repository `popescualexandrudd-cell/website`).
 
@@ -120,3 +121,4 @@
 - **28.09.2026** — Etapa 6 aprobată. Q6: top 3 pe rang aleg din cont 15% la abonament sau 4 × 20% la rezervări; Regii Junglei: 2 ore, o cutie de mingi, card special. Q49: teren, oră, rezultate și istoricul jucătorilor devin publice (R-012 și acordul ligii v2). Q11, Q27, Q28, Q47, Q48, Q50 confirmate. Început Etapa 7.
 - **28.09.2026** — Etapa 7 aprobată (Q51, Q52 confirmate). Început Etapa 8. La cererea proprietarului, partea de backend a Etapei 8 și setarea `"ultracode": true` au intrat în `main` prin PR #1; ramura `claude/amazing-turing-kqq4p7` (skill-uri de design, MCP 21st.dev, framer-motion) n-a putut fi unită din mediul de lucru (blocată ca „cod terț”), rămâne pe GitHub pentru decizia proprietarului.
 - **29.09.2026** — Etapa 8 livrată: Chioșcul de Plăți (numerar cu rest, bon fiscal, credit, vouchere, abonamente, împărțirea orei, cafenea, mod personal cu PIN), afișajul cafenelei, `packages/kiosk-kit`; teste cap-coadă cu două Hardware Bridge reale. Întrebări noi: Q53, Q54.
+- **29.09.2026** — Etapa 8 aprobată (merge în `main`, tag local `etapa-8`); Q53 și Q54 rămân deschise, cu variantele implicite. Început Etapa 9.

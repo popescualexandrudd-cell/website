@@ -4,7 +4,7 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
-### Etapa 8 — 29.09.2026 (livrată; în așteptarea aprobării; Q53 și Q54 noi)
+### Etapa 8 — 29.09.2026 (aprobată 29.09.2026; Q53 și Q54 noi, deschise)
 #### Adăugat
 - `jungle.checkout` (§8.3, 100% acoperire pe ramuri): plata cu numerar la Chioșcul de Plăți: coș (rezervări întregi sau o parte din oră, clase, abonamente, taxe de turneu, cafenea), întrebarea „dă rest?” înainte de bani, „doar suma exactă” sau restul ca credit cu acordul clientului, notele semnate de bridge trimise imediat, restul (parțial dacă aparatul nu poate, diferența devine credit), registrul (câte o plată pe articol, în casa chioșcului), bonul fiscal (R-066) și închiderea; anularea cu banii înapoi; reconcilierea după cădere de curent și a banilor sosiți târziu sau necunoscuți; plata din credit (R-067) și cu voucher (R-121); abonament la chioșc (configuratorul R-081) și înghețare (R-086); împărțirea orei (R-060, R-061); datoriile primele; check-in (R-030); alertele aparatului către recepție.
 - Modul personal al chioșcului (Q54): PIN de 6 cifre setat din cont cu 2FA, blocare după greșeli; alimentare rest, golire casetă, numărare comparată cu registrul (diferența la manager, R-064), raportul Z cu totalurile zilei.

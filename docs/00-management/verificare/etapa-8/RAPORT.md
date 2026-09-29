@@ -1,6 +1,6 @@
 # Raport de verificare — Etapa 8 (Chioșcul de Plăți + afișajul cafenelei)
 
-> Data: 29.09.2026. Branch: `claude/hopeful-euler-rguibn`. Starea: **livrată, în așteptarea aprobării proprietarului**. Partea de backend a intrat deja în `main` pe 28.09.2026 (PR #1, la cererea proprietarului); ecranele sunt pe branch.
+> Data: 29.09.2026. Branch: `claude/hopeful-euler-rguibn`. Starea: **aprobată de proprietar pe 29.09.2026** (Q53 și Q54 rămân deschise, cu variantele implicite). Partea de backend a intrat deja în `main` pe 28.09.2026 (PR #1, la cererea proprietarului); ecranele sunt pe branch.
 
 În Etapa 7 am construit Hardware Bridge și Chioșcul Ligii. În Etapa 8 am construit **al doilea aparat**: Chioșcul de Plăți, unde clientul plătește singur, cu **numerar și rest**, primește **bon fiscal**, iar comenzile de la cafenea ajung pe **afișajul barului**.
 
