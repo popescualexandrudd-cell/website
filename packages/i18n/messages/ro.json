@@ -852,5 +852,55 @@
     "sound": "Pornește sunetul",
     "soundOn": "Sunet pornit",
     "newOrder": "Comandă nouă: {number}"
+  },
+  "screens": {
+    "loading": "Se încarcă…",
+    "bridgeMissing": "Ecranul nu primește configurarea. Anunță recepția.",
+    "notConfigured": "Ecranul nu este înrolat. Anunță recepția.",
+    "refused": "Ecranul nu are acces la server. Anunță recepția.",
+    "live": "Conectat",
+    "reconnecting": "Se reconectează…",
+    "stale": "date de la {time}",
+    "errors": {
+      "generic": "Ceva nu a mers."
+    },
+    "minutes": "{minutes} min",
+    "vs": "vs",
+    "versus": "contra",
+    "player": "Jucător",
+    "lp": "{lp} LP",
+    "level": "Nivel {level}",
+    "timeLeft": "Timp rămas: {time}",
+    "next": "Următorul: {time} {type}",
+    "free": "Liber",
+    "freeNow": "Teren liber",
+    "matchOfTheDay": "Meciul zilei",
+    "qr": "Liga, pe telefonul tău",
+    "qrAlt": "Cod QR spre {url}",
+    "standings": "Clasament dublu",
+    "pairs": "Clasament perechi",
+    "singles": "Clasament simplu",
+    "kings": "Regii Junglei",
+    "events": "Evenimente",
+    "cafeReady": "Comenzi gata de ridicat",
+    "courts": "Terenurile",
+    "announcement": "Anunț",
+    "types": {
+      "official_match": "Meci oficial de ligă",
+      "training": "Antrenament",
+      "lesson": "Lecție",
+      "tournament": "Turneu",
+      "challenge": "Provocare",
+      "free_rental": "Închiriere",
+      "event": "Eveniment"
+    },
+    "tiers": {
+      "bronze": "Bronz",
+      "silver": "Argint",
+      "gold": "Aur",
+      "platinum": "Platină",
+      "diamond": "Diamant",
+      "master": "Maestru"
+    }
   }
 }

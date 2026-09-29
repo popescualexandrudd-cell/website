@@ -4,6 +4,19 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 9 — 29.09.2026 (în așteptarea aprobării; Q55 nouă)
+#### Adăugat
+- `jungle.screens` (§8.5, 100% acoperire pe ramuri): `GET /api/v1/device/screen/state`, doar pentru ecrane înrolate, active, din rețeaua clubului (refuzurile în jurnal).
+  - **Ecranul unui teren:** sesiunea curentă cu tipul, durata și jucătorii (doar câmpurile R-012; cine nu e public apare „Jucător”, Q55), echipele (din meciul de la chioșc, meciul de turneu, provocarea acceptată sau scanările de la intrarea pe teren), următoarea rezervare, Meciul zilei, cod QR spre liga de pe site.
+  - **Ecranul de lobby:** toate terenurile, clasamentele, Regii Junglei, evenimentele, anunțurile clubului, comenzile de cafenea gata.
+- Timp real (ADR-0005): Django Channels + daphne, un bilet de o singură folosință pentru WebSocket (`POST /device/screen/ticket`), anunțuri după commit la orice rezervare, intrare pe teren, schimbare în ligă sau comandă de cafenea; prin Redis între procese.
+- Aparatele: un ecran poate avea terenul lui (`resource_id` la înrolare). Configurări noi: `screens.pairs_from_scan_order`, `screens.announcements` (Q55, DE_CONFIRMAT), `screens.qr_url`.
+- `apps/court-screens` (React + Vite): ecranul de teren exact ca exemplul din §8.5, vizualul „jungle” animat cât terenul e liber, ecranul de lobby, legătura live cu reconectare, ultima stare păstrată (fără ecrane goale), indicator discret de conexiune, RO/EN.
+- `manage.py screens_demo` (exemplul din §8.5, cu numele cerute; `--rental` pentru o schimbare live); testele cap-coadă cu backendul real, Redis și câte un Hardware Bridge pe fiecare ecran; Redis în CI.
+#### Reparat la revizuire
+- Clasamentele de pe ecrane lasă deoparte imediat un jucător care s-a retras din ligă, chiar înainte ca tabelul clasamentului să fie rescris.
+- Lobby-ul nu încăpea pe un ecran Full HD (Meciul zilei împingea clasamentul în afara ecranului); indicatorul de conexiune acoperea textul de sub codul QR.
+
 ### Reparat — 29.09.2026 (CI pe `main`)
 - Hardware Bridge: o scanare sau o bancnotă se trimite acum tuturor paginilor deodată, iar o pagină care nu o preia în 2 secunde (de exemplu una care tocmai se închide) e deconectată și se reconectează singură. Înainte, o pagină pe cale să se închidă putea întârzia scanarea pentru pagina vie până la 10 secunde (testul cap-coadă al abonamentului a picat o dată în CI).
 - Hardware Bridge: o încasare terminată (sau oprită de un defect) se consideră încheiată înainte ca pagina să afle, deci următoarea comandă a paginii nu mai primește „busy”.

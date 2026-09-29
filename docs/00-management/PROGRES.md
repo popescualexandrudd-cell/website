@@ -3,7 +3,7 @@
 > Actualizat la fiecare sesiune de lucru. Prima secțiune spune mereu **unde suntem acum**.
 
 ## Unde suntem acum
-- **Etapa curentă:** Etapa 9 (ecranele de teren și lobby), începută pe 29.09.2026.
+- **Etapa curentă:** Etapa 9 (ecranele de teren și lobby), livrată pe 29.09.2026, **în așteptarea aprobării**. Raport: [verificare/etapa-9/RAPORT.md](verificare/etapa-9/RAPORT.md). Întrebare nouă: Q55.
 - **Etapa 8 (Chioșcul de Plăți + afișajul cafenelei):** aprobată de proprietar pe 29.09.2026 (merge în `main`, tag local `etapa-8`). Q53 și Q54 rămân deschise, cu variantele implicite. Raport: [verificare/etapa-8/RAPORT.md](verificare/etapa-8/RAPORT.md).
 - **Etapa 7 (Hardware Bridge + Chioșcul Ligii):** aprobată de proprietar pe 28.09.2026 (merge în `main`, tag local `etapa-7`), cu Q51 și Q52 confirmate. Raport: [verificare/etapa-7/RAPORT.md](verificare/etapa-7/RAPORT.md).
 - **Etapa 6 (integrarea ligii):** aprobată de proprietar pe 28.09.2026 (merge în `main`), cu Q6 schimbat (alegere între 15% la abonament și 4 × 20% la rezervări), Q49 (teren, oră, rezultate și istoric publice; R-012 și acordul ligii v2) și Q11, Q27, Q28, Q47, Q48, Q50 confirmate. Raport: [verificare/etapa-6/RAPORT.md](verificare/etapa-6/RAPORT.md).
@@ -31,8 +31,8 @@
 | 5 | Carduri, Wallet, GDPR | dec. 2026 | **Aprobată 27.09.2026** |
 | 6 | Integrarea ligii | dec. 2026 | **Aprobată 28.09.2026** |
 | 7 | Hardware Bridge + Chioșcul de Ligă | dec. 2026–ian. 2027 | **Aprobată 28.09.2026** |
-| 8 | Chioșcul de Plăți + afișajul cafenelei | ian. 2027 | În lucru |
-| 9 | Ecranele | ian. 2027 | Neîncepută |
+| 8 | Chioșcul de Plăți + afișajul cafenelei | ian. 2027 | **Aprobată 29.09.2026** |
+| 9 | Ecranele | ian. 2027 | Livrată 29.09.2026, în așteptarea aprobării |
 | 10 | Panoul de admin complet | ian. 2027 | Neîncepută |
 | 11 | Website-ul „simulator” | ian.–feb. 2027 | Neîncepută |
 | 12 | AI + notificări | feb. 2027 | Neîncepută |
@@ -122,3 +122,5 @@
 - **28.09.2026** — Etapa 7 aprobată (Q51, Q52 confirmate). Început Etapa 8. La cererea proprietarului, partea de backend a Etapei 8 și setarea `"ultracode": true` au intrat în `main` prin PR #1; ramura `claude/amazing-turing-kqq4p7` (skill-uri de design, MCP 21st.dev, framer-motion) n-a putut fi unită din mediul de lucru (blocată ca „cod terț”), rămâne pe GitHub pentru decizia proprietarului.
 - **29.09.2026** — Etapa 8 livrată: Chioșcul de Plăți (numerar cu rest, bon fiscal, credit, vouchere, abonamente, împărțirea orei, cafenea, mod personal cu PIN), afișajul cafenelei, `packages/kiosk-kit`; teste cap-coadă cu două Hardware Bridge reale. Întrebări noi: Q53, Q54.
 - **29.09.2026** — Etapa 8 aprobată (merge în `main`, tag local `etapa-8`); Q53 și Q54 rămân deschise, cu variantele implicite. Început Etapa 9.
+- **29.09.2026** — CI: toate cele 6 rulări picate (27–29.09) analizate; 5 veneau din push-uri făcute înainte ca verificările să fie verzi, una dintr-o problemă reală în Hardware Bridge (reparată). Hook-ul `.githooks/pre-push` refuză de acum orice push fără `scripts/test-all` verde (regula 9 din `CLAUDE.md`).
+- **29.09.2026** — Etapa 9 livrată: ecranele de teren și de lobby (§8.5), live prin Channels + Redis, `apps/court-screens`, `screens_demo`. Întrebare nouă: Q55.

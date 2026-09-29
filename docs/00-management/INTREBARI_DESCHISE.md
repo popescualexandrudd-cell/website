@@ -75,6 +75,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q52](#q52) | Chioșcul Ligii: 30 de secunde până la ieșire, limbile ecranului *(nouă, Etapa 7)* | SCĂZUTĂ | nimic (se schimbă ușor) | REZOLVATĂ |
 | [Q53](#q53) | Chioșcul de Plăți: numerar, rest, credit, bon fiscal | MEDIE | Etapa 8 (nu blochează; lucrez cu varianta implicită) | DESCHISĂ |
 | [Q54](#q54) | Chioșcul de Plăți: modul personal (cine, PIN) | MEDIE | Etapa 8 (nu blochează) | DESCHISĂ |
+| [Q55](#q55) | Ecranele: cine apare pe nume, echipele, anunțurile | MEDIE | Etapa 9 (nu blochează) | DESCHISĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -667,3 +668,16 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Alternative:** doar managerul; PIN de 4 cifre; alt prag de blocare.
 - **Răspunsul proprietarului:** —
 
+## Întrebări noi, apărute în Etapa 9
+
+### <a id="q55"></a>Q55 — Ecranele de la terenuri și din lobby: cine apare pe nume, echipele, anunțurile
+
+- **Prioritate:** MEDIE · **Blochează:** nimic (lucrez cu variantele implicite, configurabile în admin)
+- **Stare:** DESCHISĂ
+- **Variantele implicite (DE_CONFIRMAT, din 29.09.2026):**
+  1. **Pe ecrane apar pe nume doar jucătorii din ligă** (cu acordul GDPR semnat la chioșc), cu câmpurile publice din R-012: nume, rang, LP, nivel. Oricine altcineva de pe teren (un invitat, cineva care nu e în ligă, cineva care și-a retras acordul) apare doar ca **„Jucător”**, fără nume și fără alte date.
+  2. **Echipele:** dacă meciul a fost deja introdus la Chioșcul Ligii, sau e un meci de turneu ori o provocare acceptată, echipele sunt cele de acolo. Altfel, când 4 jucători și-au scanat cardul la intrarea pe teren, ecranul îi arată **în perechi, în ordinea scanării** (primii doi contra ultimii doi) (`screens.pairs_from_scan_order`); cu 2 jucători, unul contra altul; cu 3, unul sub altul, fără „vs”.
+  3. **Anunțurile clubului pe ecrane** („reclame interne”, §8.5): texte scurte (maximum 160 de caractere), în română și engleză, scrise de club în admin (`screens.announcements`); se rotesc la 12 secunde. Implicit nu e niciunul.
+  4. **Codul QR** de pe ecrane duce la pagina publică a ligii de pe site (`screens.qr_url`, implicit `/ro/liga`).
+- **Alternative:** perechile doar după introducerea scorului (până atunci, jucătorii unul sub altul); invitații cu prenumele (ar cere acordul lor); fără anunțuri pe ecranele de la terenuri.
+- **Răspunsul proprietarului:** —

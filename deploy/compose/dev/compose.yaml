@@ -29,9 +29,11 @@ services:
       DATABASE_URL: postgres://jungle:jungle@db:5432/jungle
       REDIS_URL: redis://redis:6379/0
       EMAIL_BACKEND: django.core.mail.backends.console.EmailBackend
+    # ASGI (daphne): the API and the screens' WebSocket (/ws/screens/, ADR-0005) on one port.
+    # In production the proxy sends /ws/ to a separate ASGI process (deploy/proxy/README.md).
     command: >
       sh -c "python manage.py migrate && python manage.py seed_initial --demo &&
-             gunicorn jungle.wsgi:application --bind 0.0.0.0:8000 --reload"
+             daphne -b 0.0.0.0 -p 8000 jungle.asgi:application"
     ports: ["8000:8000"]
     depends_on:
       db: {condition: service_healthy}

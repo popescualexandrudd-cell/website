@@ -16,8 +16,15 @@ jobs:
         ports: ["5432:5432"]
         options: >-
           --health-cmd "pg_isready -U jungle" --health-interval 5s --health-retries 10
+      # The end-to-end tests use Redis as production does (cache, live updates of the screens).
+      redis:
+        image: redis:7
+        ports: ["6379:6379"]
+        options: >-
+          --health-cmd "redis-cli ping" --health-interval 5s --health-retries 10
     env:
       DATABASE_URL: postgres://jungle:jungle@localhost:5432/jungle
+      E2E_REDIS_URL: redis://localhost:6379/1
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6

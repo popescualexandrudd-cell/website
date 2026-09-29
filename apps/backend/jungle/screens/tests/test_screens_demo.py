@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import timedelta
 from io import StringIO
 from pathlib import Path
 from typing import Any
@@ -100,6 +101,24 @@ def test_refused_in_production_without_seed_or_on_a_taken_court(
     monkeypatch.setattr(KioskDemo, "_season", refuse)
     with pytest.raises(CommandError, match="auth.forbidden"):
         run()
+
+
+def test_a_demo_rental_now_to_see_the_screens_change(seeded: None) -> None:
+    with pytest.raises(CommandError, match="screens_demo first"):
+        run("--rental", "Teren 1")  # no demo players yet
+    result = run()
+    lobby = screen(result, "lobby")
+    assert lobby.state()["courts"][0]["current"] is None
+    rental = run("--rental", "Teren 1")
+    booking = Booking.objects.get(pk=rental["booking"]["id"])
+    assert (booking.resource.name, booking.session_type) == ("Teren 1", "free_rental")
+    assert booking.organizer.is_demo and booking.ends_at - booking.starts_at == timedelta(hours=1)
+    first = lobby.state()["courts"][0]
+    assert first["name"] == "Teren 1" and first["current"]["booking_id"] == rental["booking"]["id"]
+    with pytest.raises(CommandError, match="taken"):
+        run("--rental", "Teren 1")
+    with pytest.raises(CommandError, match="screens_demo first"):
+        run("--rental", "Teren 99")
 
 
 def test_needs_the_initial_data(time_machine: Any) -> None:

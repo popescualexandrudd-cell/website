@@ -1,0 +1,449 @@
+/* The court and lobby screens (§8.5): read from a distance, never touched. Large type, high
+   contrast, colours and fonts only from the design tokens ("Noapte și alamă", B4). The base
+   (fonts, night background, panels) comes from @jungle/kiosk-kit. */
+html,
+body {
+  font-size: clamp(18px, 1.6vw, 34px);
+  cursor: none;
+}
+
+.screen {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.2rem 1.6rem 3rem;
+  overflow: hidden;
+}
+
+.screen__head {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.screen__head--row {
+  justify-content: space-between;
+}
+
+.screen__grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.screen__column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.screen--waiting {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.court__line {
+  margin: 0;
+  font-size: 1.9rem;
+  letter-spacing: 0.04em;
+  color: var(--color-brass-300);
+}
+
+.court__name {
+  margin: 0;
+  font-size: 3rem;
+}
+
+.court__free {
+  margin: 0;
+  font-size: 1.6rem;
+  color: var(--color-forest-400);
+}
+
+.court__next,
+.court__time {
+  margin: 0;
+  font-size: 1.4rem;
+  color: var(--color-bone-200);
+}
+
+.court__foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: auto;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2em 0.8em;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.badge--spotlight {
+  background: var(--color-brass-400);
+  color: var(--color-night-950);
+}
+
+.teams {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.teams__vs {
+  margin: 0.2rem 0;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  color: var(--color-brass-300);
+}
+
+.team {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.player {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.5rem 0.9rem;
+  background: var(--color-night-800);
+  border: 1px solid var(--color-night-600);
+  border-radius: var(--radius-md);
+}
+
+.player__name {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.player__name--anonymous {
+  color: var(--color-bone-200);
+  font-weight: 400;
+}
+
+.player__details {
+  font-size: 1.3rem;
+  color: var(--color-bone-200);
+}
+
+.qr {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  color: var(--color-bone-200);
+}
+
+.qr__code {
+  width: 7rem;
+  height: 7rem;
+  padding: 0.3rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-bone-50);
+  color: var(--color-night-950);
+}
+
+.qr__code svg {
+  width: 100%;
+  height: 100%;
+}
+
+.standings__rows,
+.events,
+.cafe-ready__numbers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.standings__row {
+  display: grid;
+  grid-template-columns: 2.2rem minmax(0, 1fr) auto;
+  gap: 0.6rem;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid var(--color-night-600);
+}
+
+.standings__position {
+  color: var(--color-brass-300);
+  font-weight: 600;
+}
+
+.standings__details {
+  color: var(--color-bone-200);
+}
+
+.events li {
+  padding: 0.2rem 0;
+}
+
+.events__title {
+  font-weight: 600;
+}
+
+.announcement {
+  position: relative;
+  margin: 0;
+  padding: 0.6rem 1rem;
+  border-left: 4px solid var(--color-brass-400);
+  background: var(--color-night-800);
+  border-radius: var(--radius-sm);
+  font-size: 1.3rem;
+}
+
+.lobby {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.lobby__courts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.lobby__side {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.screen__head-end {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.screen--lobby .qr {
+  flex-direction: row;
+  max-width: 14rem;
+  text-align: left;
+}
+
+.screen--lobby .qr__code {
+  width: 4rem;
+  height: 4rem;
+  flex: none;
+}
+
+/* The lobby shows much at once: smaller type, the side column's players on one line each. */
+.screen--lobby h2 {
+  font-size: 1rem;
+  margin-bottom: 0.4rem;
+}
+
+.screen--lobby .panel {
+  padding: 0.7rem 1rem;
+}
+
+.spotlight .teams {
+  gap: 0.2rem;
+}
+
+.spotlight .teams__vs {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.spotlight .player {
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 0.25rem 0.6rem;
+}
+
+.spotlight .player__name {
+  font-size: 0.85rem;
+}
+
+.spotlight .player__details,
+.screen--lobby .standings__row,
+.screen--lobby .events {
+  font-size: 0.75rem;
+}
+
+.court-card {
+  font-size: 0.85rem;
+  padding: 1rem 1.2rem;
+  background: var(--color-night-800);
+  border: 2px solid var(--color-night-600);
+  border-radius: var(--radius-lg);
+}
+
+.court-card--busy {
+  border-color: var(--color-brass-400);
+}
+
+.court-card__name {
+  margin: 0 0 0.3rem;
+  font-size: 1.5rem;
+  color: var(--color-bone-50);
+}
+
+.court-card__type {
+  margin: 0;
+  color: var(--color-brass-300);
+}
+
+.court-card__players {
+  margin: 0.3rem 0;
+  font-weight: 600;
+}
+
+.court-card__free {
+  margin: 0;
+  color: var(--color-forest-400);
+  font-size: 1.3rem;
+}
+
+.cafe-ready__numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.cafe-ready__numbers li {
+  min-width: 3.4rem;
+  padding: 0.2rem 0.6rem;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  color: var(--color-brass-300);
+  border: 2px solid var(--color-brass-400);
+  border-radius: var(--radius-md);
+}
+
+.clock {
+  margin: 0;
+  font-size: 1.6rem;
+  color: var(--color-bone-200);
+}
+
+/* The discreet connection indicator (§8.5): a dot in a corner; words only when it is down. */
+.connection {
+  position: fixed;
+  top: 0.3rem;
+  right: 0.8rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--color-bone-200);
+}
+
+.connection__dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--color-danger);
+}
+
+.connection--live .connection__dot {
+  background: var(--color-forest-400);
+}
+
+.screen__refused {
+  position: fixed;
+  left: 1rem;
+  bottom: 2.5rem;
+}
+
+/* The jungle (§8.5 "vizual jungle animat"): decorative, behind everything. */
+.jungle {
+  position: absolute;
+  inset: auto 0 0 0;
+  width: 100%;
+  height: 60vh;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.jungle__layer {
+  transform-origin: 50% 100%;
+  animation: sway 9s var(--motion-ease-out) infinite alternate;
+}
+
+.jungle__layer--back {
+  fill: var(--color-forest-700);
+  animation-duration: 13s;
+}
+
+.jungle__layer--middle {
+  fill: var(--color-night-600);
+  animation-duration: 11s;
+  animation-delay: -3s;
+}
+
+.jungle__layer--front {
+  fill: var(--color-night-700);
+}
+
+.jungle__ball {
+  fill: var(--color-brass-400);
+  animation: bounce 4s var(--motion-ease-out) infinite alternate;
+}
+
+@keyframes sway {
+  from {
+    transform: rotate(-1.2deg);
+  }
+  to {
+    transform: rotate(1.2deg);
+  }
+}
+
+@keyframes bounce {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(18px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jungle__layer,
+  .jungle__ball {
+    animation: none;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .screen__grid,
+  .lobby,
+  .lobby__courts {
+    grid-template-columns: 1fr;
+  }
+}

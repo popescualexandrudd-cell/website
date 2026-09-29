@@ -67,6 +67,11 @@ class Command(BaseCommand):
         parser.add_argument("--court-key", default="", help="the court screen's bridge key")
         parser.add_argument("--lobby-key", default="", help="the lobby screen's bridge key")
         parser.add_argument("--output", default="", help="write the JSON here instead of stdout")
+        parser.add_argument(
+            "--rental",
+            default="",
+            help="only: a DEMO rental starting now on this court (to see the screens change live)",
+        )
 
     def handle(self, *args: Any, **options: Any) -> None:
         if settings.IS_PRODUCTION_LIKE:
@@ -81,7 +86,10 @@ class Command(BaseCommand):
         keys = [str(options["court_key"]).strip(), str(options["lobby_key"]).strip()]
         try:
             with transaction.atomic():
-                result = self._prepare(location, manager, court, keys)
+                if options["rental"]:
+                    result = self._rental(location, str(options["rental"]))
+                else:
+                    result = self._prepare(location, manager, court, keys)
         except DomainError as exc:
             raise CommandError(f"screens_demo: {exc.code.value}") from exc
         text = json.dumps(result, ensure_ascii=False, indent=2)
@@ -125,6 +133,33 @@ class Command(BaseCommand):
             "booking": {"id": str(booking.pk), "court": court.name},
             "players": [f"{p.last_name} {p.first_name}" for p in players],
         }
+
+    def _rental(self, location: Location, court_name: str) -> dict[str, Any]:
+        """A DEMO rental from the current half hour, for an hour: the screens hear the change
+        at once (after the commit) and show the court busy."""
+        court = Resource.objects.filter(
+            location=location, name=court_name, kind=ResourceKind.PADEL_COURT
+        ).first()
+        organizer = User.objects.filter(email=email_of(0)).first()
+        if court is None or organizer is None:
+            raise CommandError("run screens_demo first, with a court of the club")
+        now = clock.now()
+        start = now.replace(minute=now.minute - now.minute % 30, second=0, microsecond=0)
+        try:
+            with transaction.atomic():
+                booking = Booking.objects.create(
+                    location=location,
+                    resource=court,
+                    organizer=organizer,
+                    created_by=organizer,
+                    starts_at=start,
+                    ends_at=start + timedelta(minutes=60),
+                    session_type=SessionType.FREE_RENTAL,
+                    price_total=0,
+                )
+        except IntegrityError as exc:
+            raise CommandError(f"{court.name} is taken now") from exc
+        return {"booking": {"id": str(booking.pk), "court": court.name}}
 
     def _player(self, index: int, surname: str, first: str) -> User:
         email = email_of(index)

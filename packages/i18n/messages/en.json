@@ -852,5 +852,55 @@
     "sound": "Turn the sound on",
     "soundOn": "Sound on",
     "newOrder": "New order: {number}"
+  },
+  "screens": {
+    "loading": "Loading…",
+    "bridgeMissing": "The screen gets no configuration. Please tell the reception.",
+    "notConfigured": "The screen is not enrolled. Please tell the reception.",
+    "refused": "The screen has no access to the server. Please tell the reception.",
+    "live": "Connected",
+    "reconnecting": "Reconnecting…",
+    "stale": "data from {time}",
+    "errors": {
+      "generic": "Something went wrong."
+    },
+    "minutes": "{minutes} min",
+    "vs": "vs",
+    "versus": "versus",
+    "player": "Player",
+    "lp": "{lp} LP",
+    "level": "Level {level}",
+    "timeLeft": "Time left: {time}",
+    "next": "Next: {time} {type}",
+    "free": "Free",
+    "freeNow": "Court free",
+    "matchOfTheDay": "Match of the day",
+    "qr": "The league, on your phone",
+    "qrAlt": "QR code to {url}",
+    "standings": "Doubles standings",
+    "pairs": "Pairs standings",
+    "singles": "Singles standings",
+    "kings": "Kings of the Jungle",
+    "events": "Events",
+    "cafeReady": "Orders ready to collect",
+    "courts": "The courts",
+    "announcement": "Announcement",
+    "types": {
+      "official_match": "Official league match",
+      "training": "Training",
+      "lesson": "Lesson",
+      "tournament": "Tournament",
+      "challenge": "Challenge",
+      "free_rental": "Rental",
+      "event": "Event"
+    },
+    "tiers": {
+      "bronze": "Bronze",
+      "silver": "Silver",
+      "gold": "Gold",
+      "platinum": "Platinum",
+      "diamond": "Diamond",
+      "master": "Master"
+    }
   }
 }

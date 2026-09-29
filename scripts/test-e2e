@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 # End-to-end tests across apps (§13.1): real backend + production build of the website + Playwright;
 # then the League Kiosk: the real Hardware Bridge (simulators, signed scans) + its production build;
-# then the Payments Kiosk and the café display, each with its own real Hardware Bridge (Stage 8).
-# Needs PostgreSQL (DATABASE_URL server, default localhost) and a Chromium for Playwright
+# then the Payments Kiosk and the café display, each with its own real Hardware Bridge (Stage 8);
+# then the court and lobby screens, live through Redis as in production (Stage 9).
+# Needs PostgreSQL (DATABASE_URL server, default localhost), Redis (E2E_REDIS_URL, or a local
+# `redis-server` started here) and a Chromium for Playwright
 # (PW_CHROMIUM_PATH, or `pnpm --filter @jungle/web exec playwright install chromium`).
-# E2E_ONLY=kiosk runs only the League Kiosk part; E2E_ONLY=payments only the Payments Kiosk part.
+# E2E_ONLY=kiosk, payments or screens runs only that part (after the backend).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
@@ -28,17 +30,28 @@ failed() {
   exit 1
 }
 
+# Whether a part runs: all of them, or only the one named in E2E_ONLY.
+part() { [ -z "${E2E_ONLY:-}" ] || [ "$E2E_ONLY" = "$1" ]; }
+
 if [ -z "${PW_CHROMIUM_PATH:-}" ] && [ -x /opt/pw-browsers/chromium-1194/chrome-linux/chrome ]; then
   export PW_CHROMIUM_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome
 fi
 
-echo "==> Fresh e2e database"
+echo "==> Fresh e2e database; Redis (cache and live updates, as in production)"
+if [ -n "${E2E_REDIS_URL:-}" ]; then
+  REDIS_URL="$E2E_REDIS_URL"
+else
+  redis-server --port 6390 --bind 127.0.0.1 --save "" --appendonly no --dir "$WORK" >"$WORK/redis.log" 2>&1 &
+  PIDS+=($!)
+  for _ in $(seq 1 30); do redis-cli -p 6390 ping >/dev/null 2>&1 && break; sleep 0.2; done
+  REDIS_URL=redis://127.0.0.1:6390/0
+fi
 psql "$BASE_DB_URL" -q -c "DROP DATABASE IF EXISTS jungle_e2e" -c "CREATE DATABASE jungle_e2e" >/dev/null
 
 export DATABASE_URL="$E2E_DB_URL" JUNGLE_ENV=dev DJANGO_SETTINGS_MODULE=jungle.settings DJANGO_DEBUG=false \
   EMAIL_BACKEND=django.core.mail.backends.filebased.EmailBackend EMAIL_FILE_PATH="$MAIL_DIR" \
-  WEB_BASE_URL=http://localhost:3000 CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5174,http://localhost:5175,http://localhost:5176 \
-  KIOSK_ALLOW_LOOPBACK=true
+  WEB_BASE_URL=http://localhost:3000 KIOSK_ALLOW_LOOPBACK=true REDIS_URL="$REDIS_URL" \
+  CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5174,http://localhost:5175,http://localhost:5176,http://localhost:5177,http://localhost:5178
 (cd apps/backend && uv run python manage.py migrate -v0 && uv run python manage.py seed_initial --demo >/dev/null)
 (cd apps/backend && exec uv run python manage.py runserver 127.0.0.1:8000 --noreload >"$WORK/backend.log" 2>&1) &
 PIDS+=($!)
@@ -63,7 +76,7 @@ if [ -z "${E2E_ONLY:-}" ]; then
   E2E_MAIL_DIR="$MAIL_DIR" pnpm --filter @jungle/web exec playwright test || failed
 fi
 
-if [ "${E2E_ONLY:-}" != "payments" ]; then
+if part kiosk; then
 echo "==> League Kiosk: demo data, Hardware Bridge (simulators), production build"
 # The demo match ends on the last half hour and its score window lasts 30 minutes:
 # never start in the last 3 minutes of a window.
@@ -88,6 +101,7 @@ E2E_KIOSK_DATA="$WORK/kiosk.json" E2E_SCREENSHOTS="${E2E_SCREENSHOTS:-}" pnpm --
   failed "$WORK/bridge.log"
 fi
 
+if part payments; then
 echo "==> Payments Kiosk and café display: demo data, two Hardware Bridges (simulators), production builds"
 SERVER_KEY="$(cd apps/backend && uv run python manage.py device_command_key)"
 PAY_DIR="$WORK/bridge-payments"
@@ -123,3 +137,43 @@ echo "==> Playwright (Payments Kiosk + café display)"
 E2E_PAYMENTS_DATA="$WORK/payments.json" E2E_SCREENSHOTS="${E2E_SCREENSHOTS:-}" \
   pnpm --filter @jungle/kiosk-payments exec playwright test ||
   failed "$WORK/bridge-payments.log" "$WORK/bridge-display.log"
+fi
+
+if part screens; then
+echo "==> Court and lobby screens: demo data (§8.5), two Hardware Bridges, two production builds"
+COURT_DIR="$WORK/bridge-court"
+LOBBY_DIR="$WORK/bridge-lobby"
+COURT_KEY="$(BRIDGE_DATA_DIR="$COURT_DIR" BRIDGE_ALLOWED_ORIGINS=http://localhost:5177 BRIDGE_DEVICE_ID=00000000-0000-0000-0000-000000000000 uv run jungle-bridge public-key)"
+LOBBY_KEY="$(BRIDGE_DATA_DIR="$LOBBY_DIR" BRIDGE_ALLOWED_ORIGINS=http://localhost:5178 BRIDGE_DEVICE_ID=00000000-0000-0000-0000-000000000000 uv run jungle-bridge public-key)"
+(cd apps/backend && uv run python manage.py screens_demo --court-key "$COURT_KEY" --lobby-key "$LOBBY_KEY" --output "$WORK/screens.json")
+screen_field() { python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d[sys.argv[2]][sys.argv[3]])' "$WORK/screens.json" "$1" "$2"; }
+(BRIDGE_DATA_DIR="$COURT_DIR" BRIDGE_PORT=8768 BRIDGE_ALLOWED_ORIGINS=http://localhost:5177 \
+  BRIDGE_API_URL=http://localhost:8000/api/v1 BRIDGE_SIMULATOR_CONTROL=0 \
+  BRIDGE_DEVICE_ID="$(screen_field court device_id)" BRIDGE_DEVICE_TOKEN="$(screen_field court device_token)" \
+  exec uv run jungle-bridge run >"$WORK/bridge-court.log" 2>&1) &
+PIDS+=($!)
+(BRIDGE_DATA_DIR="$LOBBY_DIR" BRIDGE_PORT=8769 BRIDGE_ALLOWED_ORIGINS=http://localhost:5178 \
+  BRIDGE_API_URL=http://localhost:8000/api/v1 BRIDGE_SIMULATOR_CONTROL=0 \
+  BRIDGE_DEVICE_ID="$(screen_field lobby device_id)" BRIDGE_DEVICE_TOKEN="$(screen_field lobby device_token)" \
+  exec uv run jungle-bridge run >"$WORK/bridge-lobby.log" 2>&1) &
+PIDS+=($!)
+# One build per screen machine (each knows its own bridge's port), the same code.
+VITE_BRIDGE_URL=ws://127.0.0.1:8768 pnpm --filter @jungle/court-screens build >"$WORK/screens-build.log" 2>&1 || {
+  cat "$WORK/screens-build.log"; exit 1; }
+(cd apps/court-screens && VITE_BRIDGE_URL=ws://127.0.0.1:8769 pnpm exec vite build --outDir "$WORK/lobby-dist" --emptyOutDir \
+  >"$WORK/lobby-build.log" 2>&1) || { cat "$WORK/lobby-build.log"; exit 1; }
+(cd apps/court-screens && exec pnpm preview >"$WORK/screens.log" 2>&1) &
+PIDS+=($!)
+(cd apps/court-screens && exec pnpm exec vite preview --port 5178 --strictPort --outDir "$WORK/lobby-dist" \
+  >"$WORK/lobby.log" 2>&1) &
+PIDS+=($!)
+for url in http://localhost:5177/ http://localhost:5178/; do
+  for _ in $(seq 1 60); do curl -fs -o /dev/null "$url" && break; sleep 1; done
+  curl -fs -o /dev/null "$url" || { echo "not ready: $url"; cat "$WORK"/screens*.log "$WORK"/lobby*.log; exit 1; }
+done
+
+echo "==> Playwright (court and lobby screens)"
+E2E_SCREENS_DATA="$WORK/screens.json" E2E_SCREENSHOTS="${E2E_SCREENSHOTS:-}" \
+  pnpm --filter @jungle/court-screens exec playwright test ||
+  failed "$WORK/bridge-court.log" "$WORK/bridge-lobby.log"
+fi
