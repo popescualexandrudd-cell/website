@@ -119,8 +119,9 @@ export function App() {
   const actions = actionsAt(permissions, locationId);
   const can = (action: string) => actions.has(action);
   const menu = allowed(MODULES, can);
-  const current = menu.find((m) => m.route === route) ?? menu[0];
-  const panel: Panel = { api, lang, permissions, locationId, can, notify, fail, go };
+  const [base = "", ...path] = route.split("/");
+  const current = menu.find((m) => m.route === base) ?? menu[0];
+  const panel: Panel = { api, lang, permissions, locationId, can, notify, fail, go, path: current?.route === base ? path : [] };
   const Current = current?.component;
 
   return (
@@ -170,7 +171,7 @@ export function App() {
               </button>
             </p>
           ) : null}
-          <main className="content">{Current ? <Current key={`${current?.route}:${locationId}`} /> : <p>{t(lang, "empty")}</p>}</main>
+          <main className="content">{Current ? <Current key={`${route}:${locationId}`} /> : <p>{t(lang, "empty")}</p>}</main>
         </div>
       </div>
     </PanelContext.Provider>

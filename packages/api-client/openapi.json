@@ -4549,6 +4549,184 @@
         "title": "PaidOut",
         "type": "object"
       },
+      "PanelBookingOut": {
+        "properties": {
+          "ends_at": {
+            "format": "date-time",
+            "title": "Ends At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "resource": {
+            "title": "Resource",
+            "type": "string"
+          },
+          "session_type": {
+            "title": "Session Type",
+            "type": "string"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "resource",
+          "starts_at",
+          "ends_at",
+          "status",
+          "session_type"
+        ],
+        "title": "PanelBookingOut",
+        "type": "object"
+      },
+      "PanelCardOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "issued_at": {
+            "format": "date-time",
+            "title": "Issued At",
+            "type": "string"
+          },
+          "number": {
+            "title": "Number",
+            "type": "string"
+          },
+          "revoke_reason": {
+            "title": "Revoke Reason",
+            "type": "string"
+          },
+          "revoked_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Revoked At"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "number",
+          "status",
+          "issued_at",
+          "revoked_at",
+          "revoke_reason"
+        ],
+        "title": "PanelCardOut",
+        "type": "object"
+      },
+      "PanelHiddenIn": {
+        "properties": {
+          "hidden": {
+            "title": "Hidden",
+            "type": "boolean"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "note": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Note",
+            "type": "string"
+          }
+        },
+        "required": [
+          "location_id",
+          "hidden"
+        ],
+        "title": "PanelHiddenIn",
+        "type": "object"
+      },
+      "PanelHiddenOut": {
+        "properties": {
+          "hidden_on_screens": {
+            "title": "Hidden On Screens",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "hidden_on_screens"
+        ],
+        "title": "PanelHiddenOut",
+        "type": "object"
+      },
+      "PanelProfileOut": {
+        "properties": {
+          "bookings": {
+            "items": {
+              "$ref": "#/components/schemas/PanelBookingOut"
+            },
+            "title": "Bookings",
+            "type": "array"
+          },
+          "cards": {
+            "items": {
+              "$ref": "#/components/schemas/PanelCardOut"
+            },
+            "title": "Cards",
+            "type": "array"
+          },
+          "hidden_on_screens": {
+            "title": "Hidden On Screens",
+            "type": "boolean"
+          },
+          "in_league": {
+            "title": "In League",
+            "type": "boolean"
+          },
+          "level_validated": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Level Validated"
+          },
+          "level_waiting": {
+            "title": "Level Waiting",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "in_league",
+          "level_validated",
+          "level_waiting",
+          "hidden_on_screens",
+          "cards",
+          "bookings"
+        ],
+        "title": "PanelProfileOut",
+        "type": "object"
+      },
       "PanelUserOut": {
         "properties": {
           "email": {
@@ -22485,6 +22663,183 @@
           }
         ],
         "summary": "Permissions",
+        "tags": [
+          "staff: panel"
+        ]
+      }
+    },
+    "/api/v1/staff/panel/users/{user_id}/hidden-on-screens": {
+      "post": {
+        "description": "Q55 (GDPR art. 21): \"do not show my name on the screens\", noted at the person's request.",
+        "operationId": "jungle_panel_api_hidden_on_screens",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "User Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PanelHiddenIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PanelHiddenOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Hidden On Screens",
+        "tags": [
+          "staff: panel"
+        ]
+      }
+    },
+    "/api/v1/staff/panel/users/{user_id}/profile": {
+      "get": {
+        "operationId": "jungle_panel_api_profile",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "User Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PanelProfileOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Profile",
         "tags": [
           "staff: panel"
         ]

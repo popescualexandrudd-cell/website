@@ -1,6 +1,6 @@
 # Panoul de admin (React + Vite)
 
-> **Stare:** în construcție în Etapa 10 (început pe 29.09.2026). Gata: autentificarea cu 2FA, meniul după permisiuni și locație, tabloul de bord live. Urmează celelalte module din §8.6, în aceeași etapă.
+> **Stare:** în construcție în Etapa 10 (început pe 29.09.2026). Gata: autentificarea cu 2FA, meniul după permisiuni și locație, tabloul de bord live, utilizatorii (R-004: detalii, roluri, activare, carduri, „fără nume pe ecrane”, ștergere GDPR), validarea nivelurilor (R-003). Urmează celelalte module din §8.6, în aceeași etapă.
 
 ## Ce face (§8.6)
 

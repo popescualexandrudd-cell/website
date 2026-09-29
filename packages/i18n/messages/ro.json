@@ -946,7 +946,9 @@
     },
     "nav": {
       "label": "Modulele panoului",
-      "dashboard": "Tablou de bord"
+      "dashboard": "Tablou de bord",
+      "users": "Utilizatori",
+      "levels": "Niveluri de validat"
     },
     "dashboard": {
       "title": "Tablou de bord",
@@ -974,6 +976,98 @@
       "challenge": "Provocare",
       "free_rental": "Închiriere",
       "event": "Eveniment"
+    },
+    "reason": "Motivul",
+    "cancel": "Renunț",
+    "previous": "Înapoi",
+    "next": "Înainte",
+    "yes": "Da",
+    "no": "Nu",
+    "saved": "S-a salvat.",
+    "roles": {
+      "admin": "Admin",
+      "manager": "Manager",
+      "reception": "Recepție",
+      "coach": "Antrenor / instructor"
+    },
+    "bookingStatus": {
+      "confirmed": "Confirmată",
+      "cancelled": "Anulată",
+      "completed": "Încheiată",
+      "no_show": "Neprezentare"
+    },
+    "users": {
+      "title": "Utilizatori",
+      "search": "Caută după nume, email sau telefon",
+      "find": "Caută",
+      "newGuest": "Cont nou la recepție",
+      "create": "Creez contul",
+      "guestCreated": "Contul a fost creat.",
+      "active": "Activ",
+      "inactive": "Dezactivat",
+      "count": "{from}–{to} din {total}",
+      "fields": {
+        "name": "Nume",
+        "first_name": "Prenume",
+        "last_name": "Nume",
+        "email": "Email",
+        "phone": "Telefon",
+        "status": "Stare",
+        "birth": "Data nașterii",
+        "type": "Tipul contului",
+        "language": "Limba",
+        "created": "Creat la",
+        "mfa": "Autentificare în doi pași",
+        "credit": "Credit în cont",
+        "debt": "Datorii",
+        "league": "Liga",
+        "level": "Nivel validat",
+        "screens": "Pe ecranele clubului"
+      },
+      "types": {
+        "full": "Cont complet",
+        "guest": "Cont rapid (invitat)",
+        "child": "Cont de copil"
+      },
+      "verified": "confirmat",
+      "notVerified": "neconfirmat",
+      "inLeague": "În ligă",
+      "notInLeague": "Nu e în ligă",
+      "levelWaiting": "Chestionar în așteptare",
+      "hidden": "Apare ca „Jucător” (a cerut să nu apară pe nume)",
+      "shown": "Apare pe nume",
+      "deactivate": "Dezactivez contul",
+      "activate": "Reactivez contul",
+      "hideName": "Nu mai afișa numele pe ecrane",
+      "showName": "Afișează din nou numele pe ecrane",
+      "reissue": "Card nou",
+      "print": "de tipărit la recepție",
+      "erase": "Șterg contul (GDPR)",
+      "erased": "Contul a fost șters (datele au fost anonimizate).",
+      "eraseWarning": "Ștergerea nu se poate anula: datele personale se anonimizează, în ligă apare „Jucător retras”, iar evidența contabilă se păstrează (obligație legală).",
+      "forfeit": "Creditul rămas se pierde (clientul a fost informat)",
+      "roles": "Roluri de personal",
+      "noRoles": "Niciun rol de personal.",
+      "revoke": "Retrag rolul",
+      "grant": "Dau un rol",
+      "role": "Rolul",
+      "everywhere": "Toate locațiile",
+      "cards": "Carduri",
+      "cardNumber": "Număr",
+      "issued": "Emis la",
+      "cardActive": "Activ",
+      "cardBlocked": "Blocat",
+      "block": "Blochez cardul",
+      "bookings": "Rezervări recente",
+      "consents": "Acorduri (GDPR)"
+    },
+    "levels": {
+      "title": "Niveluri de validat",
+      "intro": "Jucătorii care vor să intre în ligă completează chestionarul; nivelul de start îl validează antrenorul sau managerul (R-003).",
+      "none": "Niciun chestionar în așteptare.",
+      "level": "Nivelul (estimat {estimated})",
+      "validate": "Validez",
+      "done": "Nivelul a fost validat."
     }
   }
 }

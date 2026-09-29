@@ -946,7 +946,9 @@
     },
     "nav": {
       "label": "Panel modules",
-      "dashboard": "Dashboard"
+      "dashboard": "Dashboard",
+      "users": "Users",
+      "levels": "Levels to validate"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -974,6 +976,98 @@
       "challenge": "Challenge",
       "free_rental": "Rental",
       "event": "Event"
+    },
+    "reason": "Reason",
+    "cancel": "Cancel",
+    "previous": "Previous",
+    "next": "Next",
+    "yes": "Yes",
+    "no": "No",
+    "saved": "Saved.",
+    "roles": {
+      "admin": "Admin",
+      "manager": "Manager",
+      "reception": "Reception",
+      "coach": "Coach / instructor"
+    },
+    "bookingStatus": {
+      "confirmed": "Confirmed",
+      "cancelled": "Cancelled",
+      "completed": "Completed",
+      "no_show": "No-show"
+    },
+    "users": {
+      "title": "Users",
+      "search": "Search by name, email or phone",
+      "find": "Search",
+      "newGuest": "New account at the reception",
+      "create": "Create the account",
+      "guestCreated": "The account was created.",
+      "active": "Active",
+      "inactive": "Deactivated",
+      "count": "{from}–{to} of {total}",
+      "fields": {
+        "name": "Name",
+        "first_name": "First name",
+        "last_name": "Last name",
+        "email": "Email",
+        "phone": "Phone",
+        "status": "Status",
+        "birth": "Date of birth",
+        "type": "Account type",
+        "language": "Language",
+        "created": "Created",
+        "mfa": "Two-factor authentication",
+        "credit": "Credit",
+        "debt": "Debts",
+        "league": "League",
+        "level": "Validated level",
+        "screens": "On the club screens"
+      },
+      "types": {
+        "full": "Full account",
+        "guest": "Quick account (guest)",
+        "child": "Child account"
+      },
+      "verified": "confirmed",
+      "notVerified": "not confirmed",
+      "inLeague": "In the league",
+      "notInLeague": "Not in the league",
+      "levelWaiting": "Questionnaire waiting",
+      "hidden": "Shown as \"Player\" (asked not to appear by name)",
+      "shown": "Shown by name",
+      "deactivate": "Deactivate the account",
+      "activate": "Reactivate the account",
+      "hideName": "Stop showing the name on the screens",
+      "showName": "Show the name on the screens again",
+      "reissue": "New card",
+      "print": "to print at the reception",
+      "erase": "Erase the account (GDPR)",
+      "erased": "The account was erased (the data was anonymised).",
+      "eraseWarning": "Erasure cannot be undone: personal data is anonymised, the league shows \"Withdrawn player\", and the accounting records are kept (legal obligation).",
+      "forfeit": "The remaining credit is forfeited (the customer was informed)",
+      "roles": "Staff roles",
+      "noRoles": "No staff role.",
+      "revoke": "Revoke the role",
+      "grant": "Grant a role",
+      "role": "Role",
+      "everywhere": "All locations",
+      "cards": "Cards",
+      "cardNumber": "Number",
+      "issued": "Issued",
+      "cardActive": "Active",
+      "cardBlocked": "Blocked",
+      "block": "Block the card",
+      "bookings": "Recent bookings",
+      "consents": "Consents (GDPR)"
+    },
+    "levels": {
+      "title": "Levels to validate",
+      "intro": "Players who want to join the league fill in the questionnaire; the coach or the manager validates the starting level (R-003).",
+      "none": "No questionnaire waiting.",
+      "level": "Level (estimated {estimated})",
+      "validate": "Validate",
+      "done": "The level was validated."
     }
   }
 }

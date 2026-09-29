@@ -7,11 +7,11 @@ import uuid
 from datetime import datetime
 
 from django.http import HttpRequest
-from ninja import Router, Schema
+from ninja import Field, Router, Schema
 
 from jungle.core.schemas import errors
 from jungle.core.security import session_auth
-from jungle.panel import services
+from jungle.panel import people, services
 
 router = Router(tags=["staff: panel"], auth=session_auth)
 
@@ -73,3 +73,62 @@ def permissions(request: HttpRequest) -> PermissionsOut:
 @router.get("/dashboard", response={200: DashboardOut, **errors(401, 403, 422)})
 def dashboard(request: HttpRequest, location_id: uuid.UUID) -> services.Dashboard:
     return services.dashboard(request, location_id)
+
+
+# ---------------------------------------------------------------- users (R-004)
+class PanelCardOut(Schema):
+    id: uuid.UUID
+    number: str
+    status: str
+    issued_at: datetime
+    revoked_at: datetime | None
+    revoke_reason: str
+
+
+class PanelBookingOut(Schema):
+    id: uuid.UUID
+    resource: str
+    starts_at: datetime
+    ends_at: datetime
+    status: str
+    session_type: str
+
+
+class PanelProfileOut(Schema):
+    in_league: bool
+    level_validated: str | None
+    level_waiting: bool
+    hidden_on_screens: bool
+    cards: list[PanelCardOut]
+    bookings: list[PanelBookingOut]
+
+
+class PanelHiddenIn(Schema):
+    location_id: uuid.UUID
+    hidden: bool
+    note: str = Field(default="", max_length=200)
+
+
+class PanelHiddenOut(Schema):
+    hidden_on_screens: bool
+
+
+@router.get(
+    "/users/{user_id}/profile", response={200: PanelProfileOut, **errors(401, 403, 404, 422)}
+)
+def profile(request: HttpRequest, user_id: uuid.UUID, location_id: uuid.UUID) -> people.Profile:
+    return people.profile(request, user_id, location_id)
+
+
+@router.post(
+    "/users/{user_id}/hidden-on-screens",
+    response={200: PanelHiddenOut, **errors(401, 403, 404, 422)},
+)
+def hidden_on_screens(
+    request: HttpRequest, user_id: uuid.UUID, payload: PanelHiddenIn
+) -> PanelHiddenOut:
+    """Q55 (GDPR art. 21): "do not show my name on the screens", noted at the person's request."""
+    hidden = people.set_hidden_on_screens(
+        request, user_id, payload.location_id, payload.hidden, payload.note.strip()
+    )
+    return PanelHiddenOut(hidden_on_screens=hidden)

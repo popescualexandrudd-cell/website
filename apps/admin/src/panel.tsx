@@ -15,6 +15,8 @@ export type Panel = {
   notify: (text: string, kind?: "ok" | "error") => void;
   fail: (error: unknown) => void;
   go: (route: string) => void;
+  /** What follows the module in the address: `#/users/<id>` gives `["<id>"]`. */
+  path: string[];
 };
 
 export const PanelContext = createContext<Panel | null>(null);

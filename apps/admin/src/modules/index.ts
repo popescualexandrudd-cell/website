@@ -2,6 +2,8 @@
  * member may use at the chosen location. */
 import type { ComponentType } from "react";
 import { Dashboard } from "./Dashboard";
+import { Levels } from "./Levels";
+import { Users } from "./Users";
 
 export type Module = {
   route: string;
@@ -12,7 +14,11 @@ export type Module = {
   component: ComponentType;
 };
 
-export const MODULES: Module[] = [{ route: "dashboard", label: "dashboard", actions: ["bookings.view"], component: Dashboard }];
+export const MODULES: Module[] = [
+  { route: "dashboard", label: "dashboard", actions: ["bookings.view"], component: Dashboard },
+  { route: "users", label: "users", actions: ["users.view"], component: Users },
+  { route: "levels", label: "levels", actions: ["league.validate_levels"], component: Levels },
+];
 
 export function allowed(modules: Module[], can: (action: string) => boolean): Module[] {
   return modules.filter((m) => m.actions.some(can));

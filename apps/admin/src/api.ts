@@ -8,7 +8,7 @@ import type { components, paths } from "@jungle/api-client";
 import { unwrap } from "@jungle/kiosk-kit";
 import createClient from "openapi-fetch";
 
-export { ApiError, Offline } from "@jungle/kiosk-kit";
+export { ApiError, Offline, unwrap } from "@jungle/kiosk-kit";
 
 export type Schemas = components["schemas"];
 export type Permissions = Schemas["PermissionsOut"];

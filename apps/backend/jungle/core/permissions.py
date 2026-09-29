@@ -54,6 +54,8 @@ class Action(StrEnum):
     LEAGUE_MANAGE = "league.manage"
     # Staff mode at the Payments Kiosk (PIN + card, §8.3): refill change, empty, count, close.
     CASH_MANAGE = "cash.manage"
+    # A person's request about their data on the screens (Q55, GDPR art. 21), noted by staff.
+    PRIVACY_REQUESTS = "privacy.requests"
 
 
 ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
@@ -90,6 +92,7 @@ ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
             Action.LEAGUE_VALIDATE_LEVELS,
             Action.LEAGUE_MANAGE,
             Action.CASH_MANAGE,
+            Action.PRIVACY_REQUESTS,
         }
     ),
     Role.RECEPTION: frozenset(
@@ -104,6 +107,7 @@ ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
             Action.CAFE_ORDERS,
             Action.CARDS_MANAGE,
             Action.CASH_MANAGE,  # Q54: reception runs the kiosk's cash box (DE_CONFIRMAT)
+            Action.PRIVACY_REQUESTS,  # Q55: "do not show my name on the screens"
         }
     ),
     # Coaches and the Pilates instructor manage their programme and see attendance (R-033);
