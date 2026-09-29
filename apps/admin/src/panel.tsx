@@ -36,3 +36,8 @@ export function useT(): (key: string, params?: Record<string, unknown>) => strin
 export function actionsAt(permissions: Permissions, locationId: string): Set<string> {
   return new Set(permissions.scopes.find((s) => s.location_id === locationId)?.actions ?? []);
 }
+
+/** The slug of the chosen location (public reads take it: prices, options). */
+export function locationSlug(permissions: Permissions, locationId: string): string {
+  return permissions.scopes.find((s) => s.location_id === locationId)?.location_slug ?? "";
+}

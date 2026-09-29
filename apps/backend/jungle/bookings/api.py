@@ -449,6 +449,24 @@ def book_for_client(request: HttpRequest, payload: StaffBookingIn) -> Status[Sta
     return Status(201, staff_booking_out(booking))
 
 
+class MoveIn(Schema):
+    resource_id: uuid.UUID
+    starts_at: datetime
+    reason: str = Field(min_length=3, max_length=250)
+
+
+@staff_router.post(
+    "/bookings/{booking_id}/move",
+    response={200: StaffBookingOut, **errors(400, 401, 403, 404, 409, 422)},
+)
+def move_booking(request: HttpRequest, booking_id: uuid.UUID, payload: MoveIn) -> StaffBookingOut:
+    """The admin calendar: another time or court of the same kind, with a reason (audited)."""
+    moved = services.move_booking(
+        request, booking_id, payload.resource_id, payload.starts_at, payload.reason
+    )
+    return staff_booking_out(moved)
+
+
 @staff_router.post("/classes", response={201: ClassOut, **errors(400, 401, 403, 404, 409, 422)})
 def create_class(request: HttpRequest, payload: ClassIn) -> Status[ClassOut]:
     session = class_services.create_class_session(

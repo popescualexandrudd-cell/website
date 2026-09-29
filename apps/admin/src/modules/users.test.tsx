@@ -83,7 +83,7 @@ function mount(ui: React.ReactNode, path: string[] = [], actions: string[] = [])
   const panel: Panel = {
     api: adminApi(fetchStub as unknown as typeof fetch, () => "csrftoken=T"),
     lang: "ro",
-    permissions: { user: { id: "me", first_name: "Eu", last_name: "Admin", email: null }, roles: ["admin"], scopes: [{ location_id: "l1", location_name: "Jungle Padel", actions }] },
+    permissions: { user: { id: "me", first_name: "Eu", last_name: "Admin", email: null }, roles: ["admin"], scopes: [{ location_id: "l1", location_name: "Jungle Padel", location_slug: "jungle", actions }] },
     locationId: "l1",
     can: (a) => actions.includes(a),
     notify: vi.fn(),

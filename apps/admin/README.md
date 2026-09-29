@@ -1,6 +1,6 @@
 # Panoul de admin (React + Vite)
 
-> **Stare:** în construcție în Etapa 10 (început pe 29.09.2026). Gata: autentificarea cu 2FA, meniul după permisiuni și locație, tabloul de bord live, utilizatorii (R-004: detalii, roluri, activare, carduri, „fără nume pe ecrane”, ștergere GDPR), validarea nivelurilor (R-003). Urmează celelalte module din §8.6, în aceeași etapă.
+> **Stare:** în construcție în Etapa 10 (început pe 29.09.2026). Gata: autentificarea cu 2FA, meniul după permisiuni și locație, tabloul de bord live, utilizatorii (R-004: detalii, roluri, activare, carduri, „fără nume pe ecrane”, ștergere GDPR), validarea nivelurilor (R-003), calendarul rezervărilor, resursele, prețurile, abonamentele, firmele, clasele de pilates și prezențele. Urmează liga, banii, cafeneaua și restul modulelor din §8.6, în aceeași etapă.
 
 ## Ce face (§8.6)
 
@@ -18,6 +18,12 @@ Notificările, comunitatea, AI-ul, conținutul site-ului și traducerile vin cu 
   - ocuparea terenurilor azi, rezervările, numerarul încasat și veniturile zilei;
   - alertele: notificări necitite, decizii DE_CONFIRMAT, aparate dezactivate;
   - terenurile acum.
+- **Calendarul rezervărilor** (o zi, o coloană pe teren / aparat Reformer / sala de evenimente, rânduri de 30 de minute în programul zilei, `GET /api/v1/staff/panel/hours`):
+  - o celulă liberă deschide o rezervare nouă pentru un client (căutat după nume, email sau telefon);
+  - o rezervare se mută trăgând-o pe altă celulă sau din detaliile ei (și cu tastatura), cu motiv (`POST /api/v1/staff/bookings/{id}/move`: aceleași reguli ca online — grila, fără suprapuneri, antrenorul liber — iar locul eliberat merge la primul din lista de așteptare);
+  - anularea cere motiv; „fără taxă de anulare” e o excepție trecută în jurnal.
+  - Ora e mereu ora clubului (Europe/Bucharest), inclusiv în ziua trecerii la ora de vară (`src/clock.ts`).
+- **Resurse** (toate, și cele scoase din uz: `GET /api/v1/staff/panel/resources`), **prețuri** (tarife pe oră și abonamente, cu marcajul DE_STABILIT până le hotărăște proprietarul), **abonamente** (vânzare la recepție, „La cerere”, plătite de firmă, înghețare R-086), **firme** (angajați, raportul lunii), **clase** (săptămâna, clasă nouă, lista participanților și prezența), **prezențe** (notificări, blocări după neprezentări R-073, prezență trecută manual).
 - Adminul tehnic Django (`/django-admin/`) rămâne „modul de urgență”, doar pentru rolul Admin.
 
 ## Rulare, testare

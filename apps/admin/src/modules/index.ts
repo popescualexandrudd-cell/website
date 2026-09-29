@@ -1,8 +1,15 @@
 /** The panel's modules (§8.6) and the action each needs; the menu shows only what the staff
  * member may use at the chosen location. */
 import type { ComponentType } from "react";
+import { Attendance } from "./Attendance";
+import { Calendar } from "./Calendar";
+import { Classes } from "./Classes";
+import { Corporate } from "./Corporate";
 import { Dashboard } from "./Dashboard";
 import { Levels } from "./Levels";
+import { Pricing } from "./Pricing";
+import { Resources } from "./Resources";
+import { Subscriptions } from "./Subscriptions";
 import { Users } from "./Users";
 
 export type Module = {
@@ -16,7 +23,14 @@ export type Module = {
 
 export const MODULES: Module[] = [
   { route: "dashboard", label: "dashboard", actions: ["bookings.view"], component: Dashboard },
+  { route: "calendar", label: "calendar", actions: ["bookings.view"], component: Calendar },
   { route: "users", label: "users", actions: ["users.view"], component: Users },
+  { route: "classes", label: "classes", actions: ["bookings.view", "classes.manage"], component: Classes },
+  { route: "attendance", label: "attendance", actions: ["attendance.view", "restrictions.manage"], component: Attendance },
+  { route: "subscriptions", label: "subscriptions", actions: ["subscriptions.manage"], component: Subscriptions },
+  { route: "corporate", label: "corporate", actions: ["corporate.manage"], component: Corporate },
+  { route: "resources", label: "resources", actions: ["resources.manage"], component: Resources },
+  { route: "pricing", label: "pricing", actions: ["pricing.manage"], component: Pricing },
   { route: "levels", label: "levels", actions: ["league.validate_levels"], component: Levels },
 ];
 

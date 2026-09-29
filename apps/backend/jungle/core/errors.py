@@ -71,6 +71,7 @@ class ErrorCode(StrEnum):
     BOOKING_RESTRICTED = "booking.restricted"
     BOOKING_RESOURCE_NOT_BOOKABLE = "booking.resource_not_bookable"
     BOOKING_NOT_CANCELLABLE = "booking.not_cancellable"
+    BOOKING_NOT_MOVABLE = "booking.not_movable"
     BOOKING_TYPE_LOCKED = "booking.type_locked"
     BOOKING_INVALID_TYPE = "booking.invalid_type"
     BOOKING_COACH_REQUIRED = "booking.coach_required"

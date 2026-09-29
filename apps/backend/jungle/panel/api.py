@@ -4,14 +4,17 @@ other module of the panel calls the staff API of its domain."""
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
+from datetime import date, datetime
 
 from django.http import HttpRequest
 from ninja import Field, Router, Schema
 
+from jungle.accounts.services.authz import authorize
+from jungle.core.permissions import Action
 from jungle.core.schemas import errors
 from jungle.core.security import session_auth
-from jungle.panel import people, services
+from jungle.locations.api import ResourceOut
+from jungle.panel import catalog, people, services
 
 router = Router(tags=["staff: panel"], auth=session_auth)
 
@@ -19,6 +22,7 @@ router = Router(tags=["staff: panel"], auth=session_auth)
 class ScopeOut(Schema):
     location_id: uuid.UUID
     location_name: str
+    location_slug: str
     actions: list[str]
 
 
@@ -132,3 +136,104 @@ def hidden_on_screens(
         request, user_id, payload.location_id, payload.hidden, payload.note.strip()
     )
     return PanelHiddenOut(hidden_on_screens=hidden)
+
+
+# ---------------------------------------------------------------- operations (calendar, classes)
+class PanelPersonOut(Schema):
+    id: uuid.UUID
+    name: str
+
+
+@router.get("/resources", response={200: list[ResourceOut], **errors(401, 403, 422)})
+def resources(request: HttpRequest, location_id: uuid.UUID) -> list[ResourceOut]:
+    """Every resource of the location, the inactive ones included."""
+    return [ResourceOut.from_orm(r) for r in catalog.resources(request, location_id)]
+
+
+class PanelHoursOut(Schema):
+    opens: str
+    closes: str
+
+
+@router.get("/hours", response={200: PanelHoursOut, **errors(401, 403, 422)})
+def hours(request: HttpRequest, location_id: uuid.UUID, day: date) -> PanelHoursOut:
+    """The day's opening hours in club time (Q3), for the calendar's rows."""
+    authorize(request, Action.BOOKINGS_VIEW, location_id)
+    opens, closes = services.opening_hours(day)
+    return PanelHoursOut(opens=opens, closes=closes)
+
+
+@router.get("/coaches", response={200: list[PanelPersonOut], **errors(401, 403, 422)})
+def coaches(request: HttpRequest, location_id: uuid.UUID) -> list[catalog.Person]:
+    return catalog.coaches(request, location_id)
+
+
+class PanelUsageOut(Schema):
+    sport: str
+    sessions_per_month: int
+    used_this_month: int
+    makeups_available: int
+    peak_allowed: bool
+
+
+class PanelSubscriptionOut(Schema):
+    id: uuid.UUID
+    user_id: uuid.UUID
+    user_name: str
+    corporate: str
+    period: str
+    starts_on: date
+    ends_on: date
+    status: str
+    custom: bool
+    price_total: int
+    price_provisional: bool
+    frozen_days: int
+    usage: list[PanelUsageOut]
+
+
+@router.get("/subscriptions", response={200: list[PanelSubscriptionOut], **errors(401, 403, 422)})
+def subscription_list(
+    request: HttpRequest, location_id: uuid.UUID, status: str = ""
+) -> list[catalog.SubscriptionView]:
+    """The latest subscriptions of the location (at most 200), optionally of one status."""
+    return catalog.subscription_list(request, location_id, status)
+
+
+class PanelCorporateOut(Schema):
+    id: uuid.UUID
+    name: str
+    registration_code: str
+    billing_email: str
+    is_active: bool
+    members: list[PanelPersonOut]
+
+
+@router.get("/corporate", response={200: list[PanelCorporateOut], **errors(401, 403, 422)})
+def corporate_list(request: HttpRequest, location_id: uuid.UUID) -> list[catalog.CorporateView]:
+    return catalog.corporate_list(request, location_id)
+
+
+class PanelClassOut(Schema):
+    id: uuid.UUID
+    kind: str
+    studio_id: uuid.UUID
+    studio: str
+    instructor_id: uuid.UUID
+    instructor: str
+    starts_at: datetime
+    ends_at: datetime
+    capacity: int
+    enrolled: int
+    waiting: int
+    status: str
+    price_total: int
+    price_provisional: bool
+
+
+@router.get("/classes", response={200: list[PanelClassOut], **errors(401, 403, 422)})
+def week_classes(
+    request: HttpRequest, location_id: uuid.UUID, week_of: date
+) -> list[catalog.ClassView]:
+    """The seven days from `week_of` (club time), cancelled classes included."""
+    return catalog.week_classes(request, location_id, week_of)

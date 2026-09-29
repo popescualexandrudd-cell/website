@@ -165,18 +165,25 @@ def _coach(coach_id: uuid.UUID | None, resource: Resource) -> User | None:
     return coach
 
 
-def check_coach_free(coach: User, starts_at: datetime, ends_at: datetime) -> None:
-    """A coach who teaches a class is not bookable for a lesson at the same time, and back.
-    (Lessons among themselves are guarded by the database constraint.)"""
+def check_classes_free(coach: User, starts_at: datetime, ends_at: datetime) -> None:
+    """A coach who teaches a class is not bookable for a lesson at the same time."""
     from jungle.bookings.models import ClassSession, ClassStatus
 
     teaching = ClassSession.objects.filter(
         instructor=coach, starts_at__lt=ends_at, ends_at__gt=starts_at
     ).exclude(status=ClassStatus.CANCELLED)
+    if teaching.exists():
+        raise DomainError(ErrorCode.BOOKING_COACH_BUSY, status=409)
+
+
+def check_coach_free(coach: User, starts_at: datetime, ends_at: datetime) -> None:
+    """A coach who teaches a class is not bookable for a lesson at the same time, and back.
+    (Lessons among themselves are guarded by the database constraint.)"""
+    check_classes_free(coach, starts_at, ends_at)
     lessons = Booking.objects.filter(
         coach=coach, starts_at__lt=ends_at, ends_at__gt=starts_at
     ).exclude(status=BookingStatus.CANCELLED)
-    if teaching.exists() or lessons.exists():
+    if lessons.exists():
         raise DomainError(ErrorCode.BOOKING_COACH_BUSY, status=409)
 
 
@@ -366,6 +373,63 @@ def cancel_booking(
         subscriptions.on_cancelled(booking.cancellation_outcome, booking=booking)  # Q14
         settle(due_for_booking(booking))  # R-070, R-071: debt or credit in the account
         promote_waiting(booking.resource, booking.starts_at, booking.ends_at)
+    return booking
+
+
+def move_booking(
+    request: HttpRequest,
+    booking_id: uuid.UUID,
+    resource_id: uuid.UUID,
+    starts_at: datetime,
+    reason: str,
+) -> Booking:
+    """The admin calendar (§8.6): staff move a booking to another time or court of the same kind
+    at the same club, with a reason, under the same rules as a new booking (grid, duration,
+    opening hours, not in the past, no overlap — R-043 —, the coach free). The price stays the
+    one agreed; the freed slot goes to the first person waiting for it."""
+    if not reason.strip():
+        raise DomainError(ErrorCode.VALIDATION_INVALID, params={"field": "reason"})
+    with transaction.atomic():
+        booking = Booking.objects.select_for_update().filter(pk=booking_id).first()
+        if booking is None:
+            raise DomainError(ErrorCode.BOOKING_NOT_FOUND, status=404)
+        authorize(request, Action.BOOKINGS_MANAGE, booking.location_id)
+        if booking.status != BookingStatus.CONFIRMED or booking.ends_at <= clock.now():
+            raise DomainError(ErrorCode.BOOKING_NOT_MOVABLE, status=409)
+        resource = get_resource(resource_id)
+        old_resource = Resource.objects.get(pk=booking.resource_id)
+        if resource.location_id != booking.location_id or resource.kind != old_resource.kind:
+            raise DomainError(ErrorCode.VALIDATION_INVALID, params={"field": "resource_id"})
+        minutes = int((booking.ends_at - booking.starts_at).total_seconds() // 60)
+        data = BookingData(resource.pk, starts_at, minutes, booking.session_type, booking.coach_id)
+        ends_at = validate_slot(resource, data)
+        if booking.coach is not None:
+            teaching_or_other = Booking.objects.filter(
+                coach=booking.coach, starts_at__lt=ends_at, ends_at__gt=starts_at
+            ).exclude(pk=booking.pk)
+            if teaching_or_other.exclude(status=BookingStatus.CANCELLED).exists():
+                raise DomainError(ErrorCode.BOOKING_COACH_BUSY, status=409)
+            check_classes_free(booking.coach, starts_at, ends_at)
+        before = _brief(booking)
+        old = (old_resource, booking.starts_at, booking.ends_at)
+        booking.resource = resource
+        booking.starts_at = starts_at.astimezone(UTC)  # UTC in the database (ADR-0010)
+        booking.ends_at = ends_at
+        try:
+            with transaction.atomic():
+                _lock_schedules(booking)
+                booking.save(update_fields=["resource", "starts_at", "ends_at"])
+        except IntegrityError as exc:
+            raise _translate_integrity(exc) from exc
+        audit.record(
+            audit.actor_from_request(request),
+            "booking.moved",
+            target=booking,
+            before=before,
+            after=_brief(booking),
+            reason=reason,
+        )
+        promote_waiting(*old)
     return booking
 
 

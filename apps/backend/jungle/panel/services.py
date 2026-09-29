@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime, time, timedelta
+from datetime import date, datetime, time, timedelta
 
 from django.db.models import Sum
 from django.http import HttpRequest
@@ -32,6 +32,7 @@ TAKINGS = (TransactionKind.PAYMENT, TransactionKind.SALE)
 class Scope:
     location_id: uuid.UUID
     location_name: str
+    location_slug: str
     actions: list[str]
 
 
@@ -58,7 +59,9 @@ def permissions(request: HttpRequest) -> Permissions:
             if role.location_id is None or role.location_id == location.pk:
                 actions |= ROLE_ACTIONS[Role(role.role)]
         if actions:
-            scopes.append(Scope(location.pk, location.name, sorted(a.value for a in actions)))
+            scopes.append(
+                Scope(location.pk, location.name, location.slug, sorted(a.value for a in actions))
+            )
     return Permissions(user, sorted({r.role for r in roles}), scopes)
 
 
@@ -92,13 +95,17 @@ def _day_bounds() -> tuple[datetime, datetime]:
     return start, start + timedelta(days=1)
 
 
-def _open_minutes() -> int:
-    """Today's opening hours (`bookings.opening_hours`, Q3), in minutes."""
-    day = clock.today_local()
+def opening_hours(day: date) -> tuple[str, str]:
+    """The day's opening hours in club time (`bookings.opening_hours`, Q3): ("08:00", "23:00")."""
     open_at, close_at = get_config("bookings.opening_hours")[
         "weekend" if day.weekday() >= 5 else "weekday"
     ]
-    minutes = [int(t[:2]) * 60 + int(t[3:]) for t in (open_at, close_at)]
+    return str(open_at), str(close_at)
+
+
+def _open_minutes() -> int:
+    """Today's opening hours, in minutes."""
+    minutes = [int(t[:2]) * 60 + int(t[3:]) for t in opening_hours(clock.today_local())]
     return minutes[1] - minutes[0]
 
 

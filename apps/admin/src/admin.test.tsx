@@ -24,8 +24,8 @@ const permissions = {
   user: { id: "u1", first_name: "Ana", last_name: "Manager", email: "ana@club.ro" },
   roles: ["manager"],
   scopes: [
-    { location_id: "l1", location_name: "Jungle Padel", actions: ["bookings.view", "users.view"] },
-    { location_id: "l2", location_name: "Alt club", actions: [] },
+    { location_id: "l1", location_name: "Jungle Padel", location_slug: "jungle", actions: ["bookings.view", "users.view"] },
+    { location_id: "l2", location_name: "Alt club", location_slug: "jungle", actions: [] },
   ],
 };
 

@@ -300,3 +300,184 @@ textarea:focus-visible,
   align-items: center;
   margin-top: 12px;
 }
+
+.check {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  min-height: 0;
+  font-size: 1rem;
+}
+
+.check input {
+  width: 18px;
+  height: 18px;
+}
+
+.panel-box {
+  margin: 16px 0;
+  padding: 16px;
+  background: var(--color-night-800);
+  border: 1px solid var(--color-night-600);
+  border-radius: var(--radius-md);
+}
+
+.panel-box h2 {
+  margin-top: 0;
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  border: 1px solid var(--color-night-500);
+}
+
+.tag--ok {
+  border-color: var(--color-forest-400);
+  color: var(--color-bone-50);
+}
+
+.tag--todo {
+  border-color: var(--color-brass-400);
+  color: var(--color-brass-300);
+}
+
+.amount-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.picker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.picker label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.picker__list {
+  flex-basis: 100%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.picked {
+  margin: 0;
+}
+
+/* The day calendar: a column per resource, half-hour rows (Q3 opening hours). */
+.calendar {
+  display: grid;
+  overflow-x: auto;
+  border: 1px solid var(--color-night-600);
+  border-radius: var(--radius-sm);
+}
+
+.calendar__corner,
+.calendar__head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 8px;
+  background: var(--color-night-900);
+  border-bottom: 1px solid var(--color-night-600);
+}
+
+.calendar__head {
+  color: var(--color-bone-50);
+  font-weight: 500;
+}
+
+.calendar__times {
+  grid-column: 1;
+  border-right: 1px solid var(--color-night-600);
+}
+
+.calendar__time {
+  box-sizing: border-box;
+  padding: 0 6px;
+  font-size: 0.8rem;
+  color: var(--color-bone-200);
+  border-top: 1px solid var(--color-night-700);
+}
+
+.calendar__column {
+  position: relative;
+  border-right: 1px solid var(--color-night-700);
+}
+
+.calendar__cell {
+  position: absolute;
+  left: 0;
+  right: 0;
+  box-sizing: border-box;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--color-night-700);
+  cursor: pointer;
+}
+
+.calendar__cell:hover:not(:disabled),
+.calendar__cell:focus-visible {
+  background: var(--color-night-700);
+}
+
+.calendar__cell:focus-visible,
+.calendar__booking:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: -3px;
+}
+
+.calendar__cell:disabled {
+  cursor: default;
+}
+
+.calendar__booking {
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: hidden;
+  padding: 3px 6px;
+  font: inherit;
+  font-size: 0.8rem;
+  text-align: left;
+  color: var(--color-bone-50);
+  background: var(--color-night-600);
+  border: 1px solid var(--color-brass-600);
+  border-left: 4px solid var(--color-brass-400);
+  border-radius: var(--radius-sm);
+  cursor: grab;
+}
+
+.calendar__booking--lesson,
+.calendar__booking--training {
+  border-left-color: var(--color-forest-400);
+}
+
+.calendar__booking--official_match,
+.calendar__booking--tournament,
+.calendar__booking--challenge {
+  border-left-color: var(--color-metal-gold);
+}
+
+.calendar__booking.is-selected {
+  background: var(--color-night-500);
+}
