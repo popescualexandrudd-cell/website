@@ -43,7 +43,7 @@ Variabile de mediu: [`.env.example`](.env.example) (`NEXT_PUBLIC_API_URL`, `NEXT
 ### Site-ul complet și pagina de pre-lansare (Q57)
 - `src/lib/flags.ts` citește comutatorul `full_site` din `GET /api/v1/config/flags` (memorie de 5 minute, eticheta `flags`); doar un „pornit” clar dă site-ul complet, orice eroare lasă pagina de pre-lansare.
 - `src/app/api/revalidate/route.ts`: backend-ul cere reîmprospătarea imediată după ce salvează un comutator sau o setare (`X-Revalidate-Secret`, doar etichetele `flags` și `config`); fără `REVALIDATE_SECRET` adresa răspunde 404.
-- Oprit: `layout.tsx` pune antetul paginii de pre-lansare, iar paginile noi (`Upcoming`) răspund 404. Pornit: `SiteHeader` și pagina principală `FullHome`: secțiunile gata (Hero-ul `FullHero`, turul `Tour` + `TourStops` pe `SitePlan`, „Acum în club” `NowInClub` + `LiveClub`, live din API, logica în `src/lib/live.ts`, Padel `Padel` + `PadelCourt`), apoi harta secțiunilor §9.2 (`BUILT` = câte sunt gata).
+- Oprit: `layout.tsx` pune antetul paginii de pre-lansare, iar paginile noi (`Upcoming`) răspund 404. Pornit: `SiteHeader` și pagina principală `FullHome`: secțiunile gata (Hero-ul `FullHero`, turul `Tour` + `TourStops` pe `SitePlan`, „Acum în club” `NowInClub` + `LiveClub`, live din API, logica în `src/lib/live.ts`, Padel `Padel` + `PadelCourt`, simulatorul de nivel `Level` + `LevelSimulator`, cu întrebările în `src/lib/level.ts` și nivelul din `GET /api/v1/league/level-guess`), apoi harta secțiunilor §9.2 (`BUILT` = câte sunt gata).
 - Testele cap-coadă rulează întâi pagina de pre-lansare, apoi pornesc comutatorul de pe server (`manage.py set_flag full_site on`) și rulează `e2e/full/` (`E2E_SITE_MODE=full`). Doar site-ul: `E2E_ONLY=web scripts/test-e2e`.
 
 ### Structura

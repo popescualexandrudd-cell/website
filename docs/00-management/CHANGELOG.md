@@ -4,6 +4,15 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, secțiunea 6 — 30.09.2026 (livrată)
+#### Adăugat
+- Simulatorul „Care e nivelul tău?” (§9.2, secțiunea 6): `Level` + `LevelSimulator`, întrebările în `src/lib/level.ts`. Câte o întrebare pe pastile (6, sau 3 pentru cine n-a jucat); mingea ricoșează în pereții de sticlă și aterizează pe scara 1–7. Rezultat: nivelul estimat, descrierea treptei, ce să încerci (lecție de inițiere, lecții cu antrenor, meciuri deschise, Liga Jungle) și linkul spre chestionarul oficial, precompletat (R-003). Texte `web.site.level.*` RO + EN.
+- Server: `GET /api/v1/league/level-guess` (public, nu salvează nimic), `jungle.league.level_guess`. Răspunsurile devin răspunsurile chestionarului oficial, iar nivelul e estimarea lui (Q47): simulatorul și chestionarul dau același număr. Regulile, în `docs/04-arhitectura/aplicatii/09-website-simulator.md`.
+- Teste: 24 pe server, 5 unitare pe site, 5 cap-coadă (`e2e/full/level.spec.ts`).
+#### Schimbat
+- Pe paginile în română, fonturile cu literele ă, ș, ț se cer de la început (preload), nu după așezarea textului.
+- Lighthouse mobil 91 · 100 · 100 · 100 (LCP simulat 3,3 s, de măsurat pe serverul real, Etapa 14), desktop 100 · 100 · 100 · 100.
+
 ### Etapa 11, secțiunea 5 — 30.09.2026 (livrată)
 #### Adăugat
 - Padel (§9.2, secțiunea 5): `Padel` + `PadelCourt` (schema unui teren standard 20 × 10 m, ilustrativă); ce e padelul, de ce e ușor de început, terenurile clubului, lecțiile (R-090, R-003), cum rezervi (R-041, Q3, ora împărțită între jucători; fără prețuri, Q21), formatele de turneu Americano / Mexicano / King of the Court (după `league.draws`), „Rezervă un teren”. Texte `web.site.padel.*` RO + EN.

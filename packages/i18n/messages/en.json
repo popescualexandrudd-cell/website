@@ -607,6 +607,154 @@
         },
         "book": "Book a court"
       },
+      "level": {
+        "kicker": "Simulator",
+        "title": "What's your level?",
+        "lead": "A few questions, one minute, and you will know where you would sit on padel's level scale, from 1 to 7, and where to start with us.",
+        "progress": "Question {current} of {total}",
+        "back": "Back",
+        "restart": "Start again",
+        "noscript": "The simulator needs JavaScript. You can also fill in the level questionnaire when you create your account.",
+        "questions": {
+          "padel": {
+            "title": "How long have you been playing padel?",
+            "never": "I haven't played yet",
+            "under_year": "Less than a year",
+            "one_to_three": "Between 1 and 3 years",
+            "over_three": "More than 3 years"
+          },
+          "skill": {
+            "title": "What best describes your game?",
+            "first": {
+              "label": "First steps",
+              "hint": "The basic shots work sometimes; a ball coming off the wall still surprises me."
+            },
+            "rallies": {
+              "label": "I keep rallies going",
+              "hint": "I know the rules and my place on court; volleys and my first shots off the wall appear."
+            },
+            "walls": {
+              "label": "I play off the walls",
+              "hint": "I play off the wall with direction, use the lob on purpose, and my volley is steady."
+            },
+            "tactics": {
+              "label": "I build the point",
+              "hint": "Reliable bandeja and víbora, good exits from the corner, few unforced errors."
+            },
+            "competition": {
+              "label": "Tournament player",
+              "hint": "A complete game without obvious weak spots; results in club or regional tournaments."
+            },
+            "elite": {
+              "label": "National circuit",
+              "hint": "Results on national circuits, close to ranked players."
+            }
+          },
+          "tournaments": {
+            "title": "Have you played padel tournaments?",
+            "none": "No",
+            "club": "Yes, club tournaments",
+            "regional_national": "Yes, regional or national"
+          },
+          "racket": {
+            "title": "Have you played tennis or another racket sport?",
+            "none": "No",
+            "recreational": "Yes, for fun",
+            "competitive": "Yes, in competitions"
+          },
+          "frequency": {
+            "title": "How often do you play now?",
+            "rarely": "Rarely",
+            "monthly": "A few times a month",
+            "weekly": "Once a week",
+            "several": "Several times a week"
+          },
+          "goal": {
+            "title": "What do you want now?",
+            "learn": "To learn and improve",
+            "play": "To play with others, for fun",
+            "compete": "To join the league"
+          }
+        },
+        "result": {
+          "title": "Your estimated level",
+          "busy": "Working out your level…",
+          "error": "We can't work out your level right now. Please try again in a few moments.",
+          "retry": "Try again",
+          "recsTitle": "Where to start",
+          "official": "Continue with the official questionnaire.",
+          "officialHelp": "You fill it in when you create your account, and your answers here pre-fill it. A coach validates it before your first league match.",
+          "note": "An indicative estimate, with the same formula as the official questionnaire. We don't keep your answers. In the league, your level is then calculated from your match results."
+        },
+        "recs": {
+          "intro_lesson": {
+            "title": "An introductory lesson",
+            "text": "With a coach you learn the basic shots, the rules and how to use the walls. The best start.",
+            "cta": "Book a lesson"
+          },
+          "coaching": {
+            "title": "Lessons with a coach",
+            "text": "Private, duo or group sessions, to move up to the next level.",
+            "cta": "Book a lesson"
+          },
+          "open_matches": {
+            "title": "Open matches",
+            "text": "Play in fours, with players of a similar level. You book the court and the hour is shared between the players.",
+            "cta": "Book a court"
+          },
+          "league": {
+            "title": "Jungle League",
+            "text": "Official matches, with rank, LP and standings, for adults (18+). Before your first match: the level questionnaire validated by a coach and the consent signed at the League Kiosk.",
+            "cta": "See the league"
+          }
+        },
+        "bands": {
+          "b10": {
+            "name": "Complete beginner",
+            "text": "Your first hours of padel. The basic shots work sometimes, and a ball coming off the wall is still a surprise."
+          },
+          "b15": {
+            "name": "Beginner",
+            "text": "Short rallies at a slow pace. You let the ball go past the wall, but you don't control it yet."
+          },
+          "b20": {
+            "name": "Advanced beginner",
+            "text": "The basic shots, controlled at low speed. You know the rules and your place on court; your serve is reliable."
+          },
+          "b25": {
+            "name": "Early intermediate",
+            "text": "Longer rallies. Volleys and the first shots off the wall appear; you move up to the net together with your partner."
+          },
+          "b30": {
+            "name": "Intermediate",
+            "text": "You play off the wall in most situations, with direction. You use the defensive lob on purpose; your volley is steady at medium pace."
+          },
+          "b35": {
+            "name": "Good intermediate",
+            "text": "You control the pace: you choose between a lob, a slow ball and an attack. The bandeja comes into play; you move in tandem with your partner."
+          },
+          "b40": {
+            "name": "Advanced intermediate",
+            "text": "Reliable bandeja and víbora, good exits from the corner. You build the point with intent, with few unforced errors."
+          },
+          "b45": {
+            "name": "Advanced",
+            "text": "A variety of spins and speeds; smashes out of the court on easy balls. You read your opponents and anticipate."
+          },
+          "b50": {
+            "name": "Strong advanced",
+            "text": "A complete game without obvious weak spots. Constant pressure at the net, solid defence from the back."
+          },
+          "b55": {
+            "name": "Competition",
+            "text": "Club and regional tournament level: elaborate tactics, reliable winners, good fitness over long matches."
+          },
+          "b60": {
+            "name": "High competition",
+            "text": "Results on national circuits, close to ranked players. At 7: professional level."
+          }
+        }
+      },
       "pages": {
         "padel": "Padel",
         "league": "Jungle League",

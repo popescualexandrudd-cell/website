@@ -607,6 +607,154 @@
         },
         "book": "Rezervă un teren"
       },
+      "level": {
+        "kicker": "Simulator",
+        "title": "Care e nivelul tău?",
+        "lead": "Câteva întrebări, un minut, și afli unde te-ai situa pe scara de nivel a padelului, de la 1 la 7, și cu ce să începi la noi.",
+        "progress": "Întrebarea {current} din {total}",
+        "back": "Înapoi",
+        "restart": "Reia de la început",
+        "noscript": "Simulatorul are nevoie de JavaScript. Chestionarul de nivel îl poți completa și când îți faci contul.",
+        "questions": {
+          "padel": {
+            "title": "De cât timp joci padel?",
+            "never": "Încă n-am jucat",
+            "under_year": "De mai puțin de un an",
+            "one_to_three": "Între 1 și 3 ani",
+            "over_three": "De peste 3 ani"
+          },
+          "skill": {
+            "title": "Ce descrie cel mai bine jocul tău?",
+            "first": {
+              "label": "Primii pași",
+              "hint": "Loviturile de bază ies uneori; mingea care vine din perete mă surprinde încă."
+            },
+            "rallies": {
+              "label": "Țin schimburi",
+              "hint": "Știu regulile și locul meu pe teren; apar voleul și primele mingi luate din perete."
+            },
+            "walls": {
+              "label": "Joc din perete",
+              "hint": "Joc din perete cu direcție, folosesc lobul conștient, voleul e stabil."
+            },
+            "tactics": {
+              "label": "Construiesc punctul",
+              "hint": "Bandeja și víbora sigure, ieșiri bune din colț, puține greșeli neforțate."
+            },
+            "competition": {
+              "label": "Joc de turneu",
+              "hint": "Joc complet, fără puncte slabe evidente; rezultate în turnee de club sau regionale."
+            },
+            "elite": {
+              "label": "Circuit național",
+              "hint": "Rezultate în circuite naționale, aproape de jucătorii clasați."
+            }
+          },
+          "tournaments": {
+            "title": "Ai jucat turnee de padel?",
+            "none": "Nu",
+            "club": "Da, turnee de club",
+            "regional_national": "Da, regionale sau naționale"
+          },
+          "racket": {
+            "title": "Ai jucat tenis sau alt sport cu rachetă?",
+            "none": "Nu",
+            "recreational": "Da, din plăcere",
+            "competitive": "Da, la competiții"
+          },
+          "frequency": {
+            "title": "Cât de des joci acum?",
+            "rarely": "Rar",
+            "monthly": "De câteva ori pe lună",
+            "weekly": "O dată pe săptămână",
+            "several": "De mai multe ori pe săptămână"
+          },
+          "goal": {
+            "title": "Ce îți dorești acum?",
+            "learn": "Să învăț și să progresez",
+            "play": "Să joc cu alții, din plăcere",
+            "compete": "Să intru în ligă"
+          }
+        },
+        "result": {
+          "title": "Nivelul tău estimat",
+          "busy": "Calculăm nivelul…",
+          "error": "Nu putem calcula nivelul acum. Încearcă din nou în câteva momente.",
+          "retry": "Încearcă din nou",
+          "recsTitle": "Cu ce să începi",
+          "official": "Continuă cu chestionarul oficial.",
+          "officialHelp": "Îl completezi când îți faci contul, iar răspunsurile de aici îl precompletează. Un antrenor îl validează înainte de primul tău meci de ligă.",
+          "note": "Estimare orientativă, cu aceeași formulă ca chestionarul oficial. Nu păstrăm răspunsurile. În ligă, nivelul se calculează apoi din rezultatele meciurilor."
+        },
+        "recs": {
+          "intro_lesson": {
+            "title": "O lecție de inițiere",
+            "text": "Cu un antrenor afli loviturile de bază, regulile și cum folosești pereții. Cel mai bun început.",
+            "cta": "Programează o lecție"
+          },
+          "coaching": {
+            "title": "Lecții cu antrenor",
+            "text": "Ședințe private, duo sau de grup, ca să treci la nivelul următor.",
+            "cta": "Programează o lecție"
+          },
+          "open_matches": {
+            "title": "Meciuri deschise",
+            "text": "Joacă în patru, cu jucători de nivel apropiat. Rezervi terenul, iar ora se împarte între jucători.",
+            "cta": "Rezervă un teren"
+          },
+          "league": {
+            "title": "Liga Jungle",
+            "text": "Meciuri oficiale, cu rang, LP și clasament, pentru adulți (18+). Înainte de primul meci: chestionarul de nivel validat de un antrenor și acordul semnat la Chioșcul Ligii.",
+            "cta": "Vezi liga"
+          }
+        },
+        "bands": {
+          "b10": {
+            "name": "Începător absolut",
+            "text": "Primele ore de padel. Loviturile de bază ies uneori, iar mingea care vine din perete e încă o surpriză."
+          },
+          "b15": {
+            "name": "Începător",
+            "text": "Schimburi scurte, cu ritm lent. Lași mingea să treacă de perete, dar încă nu o controlezi."
+          },
+          "b20": {
+            "name": "Începător avansat",
+            "text": "Loviturile de bază, controlate la viteză mică. Știi regulile și locul tău pe teren; serviciul e sigur."
+          },
+          "b25": {
+            "name": "Intermediar de început",
+            "text": "Schimburi mai lungi. Apar voleul și primele lovituri din perete; urci la fileu împreună cu partenerul."
+          },
+          "b30": {
+            "name": "Intermediar",
+            "text": "Joci din perete în majoritatea situațiilor, cu direcție. Folosești lobul defensiv conștient; voleul e stabil la viteză medie."
+          },
+          "b35": {
+            "name": "Intermediar bun",
+            "text": "Controlezi ritmul: alegi între lob, minge lentă și atac. Bandeja apare în joc; te miști în tandem cu partenerul."
+          },
+          "b40": {
+            "name": "Intermediar avansat",
+            "text": "Bandeja și víbora sigure, ieșiri bune din colț. Construiești punctul cu intenție, cu puține greșeli neforțate."
+          },
+          "b45": {
+            "name": "Avansat",
+            "text": "Varietate de efecte și viteze; smash spre ieșire în situațiile ușoare. Citești jocul adversarului și anticipezi."
+          },
+          "b50": {
+            "name": "Avansat puternic",
+            "text": "Joc complet, fără puncte slabe evidente. Presiune constantă la fileu, apărare solidă din fund."
+          },
+          "b55": {
+            "name": "Competiție",
+            "text": "Nivel de turnee de club și regionale: tactică elaborată, lovituri decisive sigure, fizic bun pe meciuri lungi."
+          },
+          "b60": {
+            "name": "Competiție înaltă",
+            "text": "Rezultate în circuite naționale, aproape de jucătorii clasați. La 7: nivel profesionist."
+          }
+        }
+      },
       "pages": {
         "padel": "Padel",
         "league": "Liga Jungle",

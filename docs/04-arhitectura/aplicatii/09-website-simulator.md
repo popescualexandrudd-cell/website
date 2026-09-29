@@ -49,3 +49,27 @@ Fiecare pagină există în toate limbile active, cu URL-uri localizate (`/ro/..
 - Mobil pe primul loc; PWA instalabilă (cont, rezervări, notificări push).
 - Fiecare secțiune e o componentă separată, în fișierul ei, cu conținut din CMS (editabil din admin) și traduceri din catalog.
 - Conținutul demo se marchează clar și nu inventează fapte (prețuri, cifre, recenzii) prezentate ca reale.
+
+## Completări din Etapa 11 (alegeri făcute prin delegarea proprietarului din 29.09.2026)
+
+### Secțiunea 6 — Simulatorul „Care e nivelul tău?” (30.09.2026)
+- **Întrebările**, câte una, pe pastile:
+  1. De cât timp joci padel (încă n-am jucat · sub un an · 1–3 ani · peste 3 ani).
+  2. Ce descrie cel mai bine jocul tău (6 descrieri scurte, după [NIVELURI.md](../../03-liga/NIVELURI.md)).
+  3. Turnee de padel (nu · de club · regionale sau naționale).
+  4. Tenis sau alt sport cu rachetă (nu · din plăcere · la competiții).
+  5. Cât de des joci (rar · de câteva ori pe lună · o dată pe săptămână · de mai multe ori pe săptămână).
+  6. Ce îți dorești (să învăț · să joc cu alții · să intru în ligă).
+
+  Cine n-a jucat încă padel răspunde doar la 1, 4 și 6.
+- **Nivelul se calculează pe server** (`GET /api/v1/league/level-guess`, `jungle.league.level_guess`), cu formula chestionarului oficial (Q47). Răspunsurile devin răspunsurile chestionarului oficial (R-003):
+  - **Treapta:** fiecare descriere acoperă două trepte (1.0/1.5, 2.0/2.5, 3.0/3.5, 4.0/4.5, 5.0/5.5; ultima, 6.0, e una singură). Se alege treapta de sus după cel puțin un an de padel jucat săptămânal sau mai des, altfel treapta de jos. Cine n-a jucat: treapta 1.0, fără turnee.
+  - **Anii de padel:** capătul de jos al răspunsului (0, 0, 1, 3).
+  - **Sportul cu rachetă și turneele:** trec neschimbate.
+
+  Nu se păstrează nimic. Chestionarul oficial, precompletat din simulator, dă același nivel; antrenorul îl validează înainte de primul meci de ligă.
+- **Recomandarea:**
+  - un începător (n-a jucat sau are sub 2.0) începe cu o **lecție de inițiere**;
+  - apoi, după obiectiv: **lecții cu antrenor** (să învăț), **meciuri deschise** (să joc cu alții) sau **Liga Jungle** (18+, chestionar validat, acord semnat la Chioșcul Ligii).
+- **Precompletarea:** linkul „Continuă cu chestionarul oficial” duce la `/cont` cu `band`, `years_playing`, `racket_background` și `tournaments` în adresă. Pagina contului le va citi când va fi construită.
+- **Mingea** ricoșează în pereții de sticlă la fiecare răspuns și aterizează, la rezultat, pe scara 1–7. Stă nemișcată la „mișcare redusă” și e decorativă: nivelul e scris și în text.

@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { FullHero } from "./FullHero";
+import { Level } from "./Level";
 import { NowInClub } from "./NowInClub";
 import { Padel } from "./Padel";
 import { Tour } from "./Tour";
@@ -28,7 +29,7 @@ export const SECTIONS = [
 ] as const;
 
 /** How many sections are built (delivered for approval or approved), in the order above. */
-export const BUILT = 5;
+export const BUILT = 6;
 
 /**
  * The home page of the full site while it is being built: the sections built so far (the header
@@ -43,6 +44,7 @@ export function FullHome() {
       <Tour id="tur" />
       <NowInClub id="acum" />
       <Padel id="padel" />
+      <Level id="nivel" />
       <SectionMap />
     </>
   );

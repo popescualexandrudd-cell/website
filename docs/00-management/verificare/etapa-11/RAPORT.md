@@ -11,7 +11,8 @@
 | 3. Turul clubului la scroll | 29.09.2026 | **livrată** |
 | 4. „Acum în club” (live) | 29.09.2026 | **livrată** |
 | 5. Padel | 30.09.2026 | **livrată** |
-| 6–19 | — | urmează, câte una |
+| 6. Simulatorul „Care e nivelul tău?” | 30.09.2026 | **livrată** |
+| 7–19 | — | urmează, câte una |
 
 ---
 
@@ -232,3 +233,70 @@ Secțiunea despre atracția principală (§9.2, secțiunea 5), titlul „Ușor d
 1. **Formatele** sunt descrise după codul care le joacă (tragerea la sorți a turneelor), nu după o definiție generală.
 2. **Faptele despre sport** (dimensiunile terenului, serviciul, numărătoarea) sunt regulile standard ale padelului. Cele despre club (terenuri, lecții, program, vârf, împărțirea orei) vin din documentație (R-041, R-090, R-003, Q3).
 3. **Din perspectiva unui atacator:** doar conținut static.
+
+---
+
+## Secțiunea 6 — Simulatorul „Care e nivelul tău?”
+
+### Ce s-a construit
+După Padel urmează un simulator (§9.2, secțiunea 6). Vizitatorul răspunde la câte o întrebare pe rând, apăsând pe „pastile”:
+1. de cât timp joacă padel;
+2. ce descrie cel mai bine jocul lui: 6 descrieri scurte, de la „Primii pași” la „Circuit național”, luate din ghidul nivelurilor;
+3. dacă a jucat turnee de padel;
+4. dacă a jucat tenis sau alt sport cu rachetă;
+5. cât de des joacă;
+6. ce își dorește: să învețe, să joace cu alții sau să intre în ligă.
+
+Cine n-a jucat încă padel răspunde doar la trei întrebări (1, 4 și 6).
+
+Alături, un teren văzut de sus, cu pereții de sticlă. La fiecare răspuns, o minge de padel ricoșează în pereți. La final, mingea aterizează pe scara 1–7, la nivelul estimat, iar lângă ea apar:
+- **nivelul estimat**, de exemplu „3,75 · Intermediar bun”, cu descrierea lui din ghidul nivelurilor;
+- **„Cu ce să începi”:**
+  - o **lecție de inițiere** pentru începători;
+  - apoi, după ce își dorește: **lecții cu antrenor**, **meciuri deschise** sau **Liga Jungle**. La ligă scrie condițiile reale: 18+, chestionarul validat de antrenor, acordul semnat la Chioșcul Ligii.
+
+  Fiecare recomandare are linkul ei: rezervări sau liga;
+- **„Continuă cu chestionarul oficial”:** răspunsurile de aici precompletează chestionarul de nivel din cont (R-003);
+- butoanele **„Înapoi”** (răspunsul dat rămâne marcat) și **„Reia de la început”**.
+
+**Ce am ales și de ce:**
+1. **Nivelul îl calculează serverul, cu formula chestionarului oficial** (Q47, confirmată de dumneavoastră pe 28.09.2026). Astfel, simulatorul și chestionarul dau același număr, iar antrenorul validează nivelul ca până acum.
+2. **Cum devin răspunsurile un nivel:**
+   - fiecare descriere a jocului acoperă două trepte din ghid (de exemplu „Joc din perete”: 3.0 sau 3.5);
+   - treapta de sus se alege după cel puțin un an de padel jucat săptămânal sau mai des;
+   - apoi se aplică formula Q47: mijlocul treptei, −0,25 sub un an de padel, +0,25 pentru competiții la alt sport cu rachetă, +0,25 pentru turnee regionale sau naționale.
+
+   Detaliile sunt în `docs/04-arhitectura/aplicatii/09-website-simulator.md`.
+3. **Nu se păstrează nimic.** Răspunsurile nu se salvează și nu identifică pe nimeni: fără cont, fără cookie.
+4. **Pagina contului nu există încă.** Linkul spre chestionarul oficial duce la „Cont”, cu răspunsurile în adresă. Precompletarea va funcționa când construim contul (paginile din §9.3).
+5. **Mingea e doar decor:** nivelul e scris și în text. La „mișcare redusă”, mingea nu se mișcă.
+
+### Capturi de ecran
+12. [O întrebare, pe calculator](ecrane/desktop-07-nivel-intrebare.png)
+13. [O întrebare, pe telefon](ecrane/mobile-07-nivel-intrebare.png)
+14. [Rezultatul, pe calculator](ecrane/desktop-08-nivel-rezultat.png)
+15. [Rezultatul, pe telefon](ecrane/mobile-08-nivel-rezultat.png)
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Teste pe server | 24 noi:<br>• treptele alese din răspunsuri și nivelul (inclusiv plafonul de 7,0);<br>• cine n-a jucat pornește de la treapta 1.0;<br>• întrebările lipsă sunt refuzate;<br>• recomandările;<br>• adresa publică nu salvează nimic și dă exact nivelul pe care îl dă chestionarul oficial precompletat.<br>Liga rămâne la 100% acoperire pe ramuri. |
+| Teste unitare pe site | 5 noi: ordinea întrebărilor, ce se trimite serverului, scara 1–7. |
+| Cap-coadă | 5 noi (calculator + telefon):<br>• drumul cu 6 întrebări: 3,75, „Intermediar bun”, Liga Jungle, linkul precompletat; apoi „Înapoi”, alt obiectiv, altă recomandare, „Reia de la început”;<br>• doar cu tastatura, cine n-a jucat: 1,0, lecție de inițiere + meciuri deschise;<br>• serverul nu răspunde: mesajul, apoi „Încearcă din nou” reușește;<br>• mingea ricoșează la fiecare răspuns și stă nemișcată la „mișcare redusă”;<br>• textele în engleză.<br>Toate testele site-ului trec: 28 + 41. |
+| Lighthouse, pagina principală | mobil **91 · 100 · 100 · 100** (CLS 0), calculator **100 · 100 · 100 · 100** ([mobil](lighthouse-mobil.html), [calculator](lighthouse-desktop.html)). |
+
+**Timpul de afișare pe mobil (LCP):** 3,3 s în simularea de rețea mobilă lentă. Ținta din §9.4 este sub 2,5 s.
+- Pagina de pre-lansare aprobată în 1B avea deja 2,9 s. Site-ul complet are mai mult cod pentru secțiunile interactive, iar Lighthouse îl socotește înaintea primei afișări.
+- Am adăugat ce se putea repara acum: fonturile cu literele românești (ă, ș, ț) se cer de la început. Înainte le descoperea browserul târziu, abia după ce așeza textul.
+- Rămâne de măsurat pe serverul real (Etapa 14), ca în 1B. Dacă și acolo depășește ținta, facem o trecere dedicată de performanță înainte de publicare.
+
+### Dubla revizuire: probleme găsite și reparate
+1. **Pe telefon, rezultatul apărea fără minge.** Pagina derula doar până la text, iar terenul cu scara rămânea deasupra, în afara ecranului. Acum rezultatul aduce în ecran terenul și începutul textului. Pe calculator, terenul rămâne pe loc cât citiți.
+2. **Testul mingii pe telefon:** testele de telefon rulează mereu cu „mișcare redusă”, deci mingea stătea, corect, nemișcată. Testul pornește acum cu mișcarea normală, apoi o oprește.
+3. **Din perspectiva unui atacator:** adresa nouă de pe server e publică, dar doar calculează. Nu citește și nu scrie nimic în baza de date, primește doar valorile din listă (orice altceva e refuzat) și nu spune nimic despre alți utilizatori.
+4. **Liga:** simulatorul nu înscrie pe nimeni. Recomandarea spune condițiile reale, iar nivelul oficial rămâne cel validat de antrenor.
+
+### Cum verificați (click cu click)
+1. Deschideți capturile 12–15: o întrebare și rezultatul, pe calculator și pe telefon.
+2. Citiți întrebările și descrierile de mai sus. Dacă vreți altă întrebare, alt text sau altă regulă pentru trepte ori recomandări, spuneți-ne ce anume.
+3. Dacă simulatorul vă place, scrieți „aprob secțiunea 6”.

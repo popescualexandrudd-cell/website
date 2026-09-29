@@ -3573,6 +3573,40 @@
         "title": "Level",
         "type": "string"
       },
+      "LevelGuessOut": {
+        "description": "§9.2.6: the website's level simulator; the questionnaire pre-fills the official one.",
+        "properties": {
+          "level": {
+            "description": "Nivelul estimat, 1.0–7.0 (formula chestionarului, Q47)",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Level",
+            "type": "string"
+          },
+          "questionnaire": {
+            "$ref": "#/components/schemas/QuestionnaireIn"
+          },
+          "recommendations": {
+            "items": {
+              "enum": [
+                "intro_lesson",
+                "coaching",
+                "open_matches",
+                "league"
+              ],
+              "type": "string"
+            },
+            "title": "Recommendations",
+            "type": "array"
+          }
+        },
+        "required": [
+          "level",
+          "questionnaire",
+          "recommendations"
+        ],
+        "title": "LevelGuessOut",
+        "type": "object"
+      },
       "LiftIn": {
         "properties": {
           "location_id": {
@@ -17506,6 +17540,160 @@
           }
         },
         "summary": "Kings",
+        "tags": [
+          "league"
+        ]
+      }
+    },
+    "/api/v1/league/level-guess": {
+      "get": {
+        "description": "§9.2.6: the level simulator on the website. Nothing is stored; the level is the official\nquestionnaire's estimate of the pre-filled answers (R-003, Q47), which a coach validates.",
+        "operationId": "jungle_league_api_level_guess_view",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "padel",
+            "required": true,
+            "schema": {
+              "enum": [
+                "never",
+                "under_year",
+                "one_to_three",
+                "over_three"
+              ],
+              "title": "Padel",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "racket",
+            "required": true,
+            "schema": {
+              "enum": [
+                "none",
+                "recreational",
+                "competitive"
+              ],
+              "title": "Racket",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "goal",
+            "required": true,
+            "schema": {
+              "enum": [
+                "learn",
+                "play",
+                "compete"
+              ],
+              "title": "Goal",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "skill",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "first",
+                    "rallies",
+                    "walls",
+                    "tactics",
+                    "competition",
+                    "elite"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Skill"
+            }
+          },
+          {
+            "in": "query",
+            "name": "tournaments",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "none",
+                    "club",
+                    "regional_national"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Tournaments"
+            }
+          },
+          {
+            "in": "query",
+            "name": "frequency",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "rarely",
+                    "monthly",
+                    "weekly",
+                    "several"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Frequency"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LevelGuessOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Level Guess View",
         "tags": [
           "league"
         ]

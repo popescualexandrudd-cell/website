@@ -22,6 +22,7 @@ from jungle.league import (
     badges,
     challenges,
     closing,
+    level_guess,
     matches,
     projection,
     public,
@@ -138,6 +139,14 @@ class QuestionnaireOut(Schema):
     submitted_at: datetime
     validated_level: Decimal | None
     validated_at: datetime | None
+
+
+class LevelGuessOut(Schema):
+    """§9.2.6: the website's level simulator; the questionnaire pre-fills the official one."""
+
+    level: Decimal = Field(description="Nivelul estimat, 1.0–7.0 (formula chestionarului, Q47)")
+    questionnaire: QuestionnaireIn
+    recommendations: list[level_guess.Recommendation]
 
 
 class StaffQuestionnaireOut(QuestionnaireOut):
@@ -611,6 +620,26 @@ def match_of_the_day(request: HttpRequest, location: str) -> SpotlightOut:
 def tournament_list(request: HttpRequest, location: str) -> list[TournamentOut]:
     """§6.14: registrations, draws and results, live on the website."""
     return [tournament_out(t) for t in tournaments.list_for(get_location_by_slug(location))[:50]]
+
+
+@public_router.get("/level-guess", response={200: LevelGuessOut, **errors(400, 422)}, auth=None)
+def level_guess_view(
+    request: HttpRequest,
+    padel: level_guess.Padel,
+    racket: level_guess.Racket,
+    goal: level_guess.Goal,
+    skill: level_guess.Skill | None = None,
+    tournaments: level_guess.Tournaments | None = None,
+    frequency: level_guess.Frequency | None = None,
+) -> LevelGuessOut:
+    """§9.2.6: the level simulator on the website. Nothing is stored; the level is the official
+    questionnaire's estimate of the pre-filled answers (R-003, Q47), which a coach validates."""
+    shown = level_guess.guess(padel, racket, goal, skill, tournaments, frequency)
+    return LevelGuessOut(
+        level=shown.level,
+        questionnaire=QuestionnaireIn(**shown.questionnaire),
+        recommendations=shown.recommendations,
+    )
 
 
 @public_router.get(

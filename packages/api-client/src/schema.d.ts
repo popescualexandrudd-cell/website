@@ -1635,6 +1635,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/league/level-guess": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Level Guess View
+         * @description §9.2.6: the level simulator on the website. Nothing is stored; the level is the official
+         *     questionnaire's estimate of the pre-filled answers (R-003, Q47), which a coach validates.
+         */
+        get: operations["jungle_league_api_level_guess_view"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/league/match-of-the-day": {
         parameters: {
             query?: never;
@@ -5383,6 +5404,20 @@ export interface components {
          * @enum {string}
          */
         Level: "beginner" | "intermediate" | "advanced" | "competitive";
+        /**
+         * LevelGuessOut
+         * @description §9.2.6: the website's level simulator; the questionnaire pre-fills the official one.
+         */
+        LevelGuessOut: {
+            /**
+             * Level
+             * @description Nivelul estimat, 1.0–7.0 (formula chestionarului, Q47)
+             */
+            level: string;
+            questionnaire: components["schemas"]["QuestionnaireIn"];
+            /** Recommendations */
+            recommendations: ("intro_lesson" | "coaching" | "open_matches" | "league")[];
+        };
         /** LiftIn */
         LiftIn: {
             /**
@@ -13349,6 +13384,51 @@ export interface operations {
             };
             /** @description Not Found */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_league_api_level_guess_view: {
+        parameters: {
+            query: {
+                padel: "never" | "under_year" | "one_to_three" | "over_three";
+                racket: "none" | "recreational" | "competitive";
+                goal: "learn" | "play" | "compete";
+                skill?: ("first" | "rallies" | "walls" | "tactics" | "competition" | "elite") | null;
+                tournaments?: ("none" | "club" | "regional_national") | null;
+                frequency?: ("rarely" | "monthly" | "weekly" | "several") | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LevelGuessOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };
