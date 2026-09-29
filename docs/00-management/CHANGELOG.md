@@ -4,7 +4,7 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
-### Etapa 9 — 29.09.2026 (în așteptarea aprobării; Q55 nouă)
+### Etapa 9 — 29.09.2026 (aprobată 29.09.2026; Q55 deschisă)
 #### Adăugat
 - `jungle.screens` (§8.5, 100% acoperire pe ramuri): `GET /api/v1/device/screen/state`, doar pentru ecrane înrolate, active, din rețeaua clubului (refuzurile în jurnal).
   - **Ecranul unui teren:** sesiunea curentă cu tipul, durata și jucătorii (doar câmpurile R-012; cine nu e public apare „Jucător”, Q55), echipele (din meciul de la chioșc, meciul de turneu, provocarea acceptată sau scanările de la intrarea pe teren), următoarea rezervare, Meciul zilei, cod QR spre liga de pe site.

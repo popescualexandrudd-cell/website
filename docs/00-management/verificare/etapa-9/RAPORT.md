@@ -1,6 +1,6 @@
 # Raport de verificare — Etapa 9 (ecranele de la terenuri și din lobby)
 
-> Data: 29.09.2026. Branch: `claude/hopeful-euler-rguibn`. Starea: **livrată, în așteptarea aprobării proprietarului**. Q55 e nouă, cu variantele implicite.
+> Data: 29.09.2026. Branch: `claude/hopeful-euler-rguibn`. Starea: **aprobată de proprietar pe 29.09.2026**. Q55 rămâne deschisă până la răspunsul proprietarului, cu variantele implicite.
 
 În Etapa 8 am construit Chioșcul de Plăți și afișajul cafenelei. În Etapa 9 am construit **ecranele clubului** (§8.5):
 - câte un ecran la fiecare teren;
