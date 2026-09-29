@@ -77,7 +77,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q54](#q54) | Chioșcul de Plăți: modul personal (cine, PIN) | MEDIE | Etapa 8 (nu blochează) | DESCHISĂ |
 | [Q55](#q55) | Ecranele: cine apare pe nume, echipele, anunțurile | MEDIE | Etapa 9 (nu blochează) | REZOLVATĂ 29.09.2026 |
 | [Q56](#q56) | Panoul de admin: cine vede rapoartele financiare *(nouă, Etapa 10)* | SCĂZUTĂ | nimic (se schimbă ușor) | DESCHISĂ |
-| [Q57](#q57) | Site-ul complet: când înlocuiește pagina de pre-lansare *(nouă, Etapa 11)* | MEDIE | nimic (comutator în panou) | DESCHISĂ |
+| [Q57](#q57) | Site-ul complet: când înlocuiește pagina de pre-lansare *(nouă, Etapa 11)* | MEDIE | nimic (comutator în panou) | REZOLVATĂ 29.09.2026 |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -701,7 +701,8 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q57"></a>Q57 — Site-ul complet: când înlocuiește pagina de pre-lansare
 
 - **Prioritate:** MEDIE · **Blochează:** nimic (lucrez cu varianta implicită)
-- **Stare:** DESCHISĂ (din 29.09.2026)
+- **Stare:** REZOLVATĂ (29.09.2026)
+- **Răspunsul proprietarului (29.09.2026):** „când le ofer eu și când public varianta”. Site-ul complet apare **doar când îl publică proprietarul**, manual, fără o dată automată. Rămâne valabilă varianta implicită de mai jos (comutatorul `full_site`, oprit până atunci), acum confirmată.
 - **Context:** în Etapa 11 construim site-ul complet (§9.2), secțiune cu secțiune. Până la lansare, vizitatorii văd pagina de pre-lansare aprobată în Etapa 1B (lista de așteptare).
 - **Varianta implicită (DE_CONFIRMAT):** site-ul complet stă **ascuns în spatele comutatorului `full_site`**, oprit. Vizitatorii văd în continuare pagina de pre-lansare; paginile noi (Padel, Liga, Pilates, Rezervări, Cont…) nu există pentru ei (răspund „pagină negăsită” și nu apar în Google). Îl porniți dumneavoastră când hotărâți, din panoul de admin (**Setări și feature flags** → `full_site`, cu motiv) sau, tehnic, cu `manage.py set_flag full_site on --reason "..."`. Site-ul se schimbă în câteva secunde (serverul îi cere site-ului să se reîmprospăteze); dacă acel semnal se pierde, cel târziu în 5 minute.
 - **Alternative:** pornirea automată la o dată fixă (de exemplu cu o lună înainte de deschiderea din martie 2027); sau site-ul complet vizibil imediat, cu mențiunea „în construcție”.

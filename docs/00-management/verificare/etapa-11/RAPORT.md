@@ -4,8 +4,8 @@
 
 | Secțiune (§9.2) | Livrată | Starea |
 |---|---|---|
-| Fundația site-ului complet + **1. Antetul fix** | 29.09.2026 | **așteaptă aprobarea** |
-| 2. Hero „Intră în junglă” | — | urmează, după aprobarea secțiunii 1 |
+| Fundația site-ului complet + **1. Antetul fix** | 29.09.2026 | **aprobată 29.09.2026** |
+| 2. Hero „Intră în junglă” | — | în lucru |
 | 3–19 | — | mai târziu, câte una |
 
 ---
@@ -61,7 +61,7 @@ Pe ecrane mai înguste de 1280 px (telefon, tabletă, laptop mic), meniul se str
 ### Ce e de hotărât
 | Întrebare | Varianta folosită până la răspuns |
 |---|---|
-| **Q57** (nouă): când apare site-ul complet | rămâne ascuns (comutatorul `full_site` oprit); îl porniți dumneavoastră din panou, când hotărâți |
+| **Q57**: când apare site-ul complet | **rezolvată 29.09.2026**: doar când îl publicați dumneavoastră (comutatorul `full_site`, din panou) |
 
 ### Cum verificați (click cu click)
 1. Pe GitHub, branch-ul `claude/hopeful-euler-rguibn`, deschideți acest raport (`docs/00-management/verificare/etapa-11/RAPORT.md`).

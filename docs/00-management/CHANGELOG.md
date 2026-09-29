@@ -4,7 +4,7 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
-### Etapa 11, secțiunea 1 — 29.09.2026 (livrată, așteaptă aprobarea; Q57 nouă)
+### Etapa 11, secțiunea 1 — 29.09.2026 (aprobată 29.09.2026; Q57 rezolvată: site-ul complet apare doar când îl publică proprietarul)
 #### Adăugat
 - Comutatorul `full_site` (ADR-0022, Q57, DE_CONFIRMAT, oprit implicit): oprit, vizitatorii văd pagina de pre-lansare (Etapa 1B), iar paginile site-ului complet răspund 404; pornit, site-ul complet. Se schimbă din panou (Setări și feature flags) sau cu `manage.py set_flag <cheie> on|off --reason ...` (în jurnal, ca SYSTEM).
 - Reîmprospătarea imediată a site-ului: după salvarea unui comutator sau a unei setări, backend-ul cere site-ului (`POST /api/revalidate`, parola comună `WEB_REVALIDATE_SECRET` = `REVALIDATE_SECRET`, comparată în timp constant; doar etichetele `flags` și `config`) să-și reîmprospăteze paginile (`jungle.configuration.web`, semnale `post_save`, după commit). Fără semnal, cel târziu în 5 minute.

@@ -333,7 +333,8 @@ FLAGS: dict[str, FlagSpec] = {
         FlagSpec(
             "full_site",
             False,
-            "Site-ul complet (Etapa 11, Q57); oprit: vizitatorii văd pagina de pre-lansare.",
+            "Site-ul complet (Etapa 11); oprit: vizitatorii văd pagina de pre-lansare. Îl pornește "
+            "proprietarul când îl publică (Q57, confirmat de proprietar pe 29.09.2026).",
         ),
     ]
 }
