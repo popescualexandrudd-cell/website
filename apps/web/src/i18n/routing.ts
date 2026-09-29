@@ -16,6 +16,17 @@ export const routing = defineRouting({
     "/privacy": { ro: "/confidentialitate", en: "/privacy" },
     "/refunds": { ro: "/anulare-si-rambursare", en: "/refunds" },
     "/cookies": { ro: "/cookies", en: "/cookies" },
+    // The full site (Stage 11, §9.3): the pages of the main menu, the bookings and the account.
+    "/padel": { ro: "/padel", en: "/padel" },
+    "/league": { ro: "/liga", en: "/league" },
+    "/tennis": { ro: "/tenis", en: "/tennis" },
+    "/pilates": { ro: "/pilates", en: "/pilates" },
+    "/packages": { ro: "/pachete", en: "/packages" },
+    "/events": { ro: "/evenimente", en: "/events" },
+    "/cafe": { ro: "/cafenea", en: "/cafe" },
+    "/contact": { ro: "/contact", en: "/contact" },
+    "/bookings": { ro: "/rezervari", en: "/bookings" },
+    "/account": { ro: "/cont", en: "/account" },
   },
 });
 

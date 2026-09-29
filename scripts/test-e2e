@@ -7,7 +7,7 @@
 # Needs PostgreSQL (DATABASE_URL server, default localhost), Redis (E2E_REDIS_URL, or a local
 # `redis-server` started here) and a Chromium for Playwright
 # (PW_CHROMIUM_PATH, or `pnpm --filter @jungle/web exec playwright install chromium`).
-# E2E_ONLY=kiosk, payments, screens or admin runs only that part (after the backend).
+# E2E_ONLY=web, kiosk, payments, screens or admin runs only that part (after the backend).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
@@ -61,6 +61,9 @@ else
 fi
 psql "$BASE_DB_URL" -q -c "DROP DATABASE IF EXISTS jungle_e2e" -c "CREATE DATABASE jungle_e2e" >/dev/null
 
+# The secret the backend and the website share for refreshing the pages after a flag changes (Q57).
+REVALIDATE_SECRET="e2e-$(python3 -c 'import secrets; print(secrets.token_urlsafe(24))')"
+export REVALIDATE_SECRET WEB_REVALIDATE_URL=http://localhost:3000/api/revalidate WEB_REVALIDATE_SECRET="$REVALIDATE_SECRET"
 export DATABASE_URL="$E2E_DB_URL" JUNGLE_ENV=dev DJANGO_SETTINGS_MODULE=jungle.settings DJANGO_DEBUG=false \
   EMAIL_BACKEND=django.core.mail.backends.filebased.EmailBackend EMAIL_FILE_PATH="$MAIL_DIR" \
   WEB_BASE_URL=http://localhost:3000 KIOSK_ALLOW_LOOPBACK=true REDIS_URL="$REDIS_URL" \
@@ -69,24 +72,31 @@ export DATABASE_URL="$E2E_DB_URL" JUNGLE_ENV=dev DJANGO_SETTINGS_MODULE=jungle.s
 (cd apps/backend && exec uv run python manage.py runserver 127.0.0.1:8000 --noreload >"$WORK/backend.log" 2>&1) &
 PIDS+=($!)
 
-if [ -z "${E2E_ONLY:-}" ]; then
+if part web; then
 echo "==> Production build of the website"
 export NEXT_PUBLIC_API_URL=http://localhost:8000 NEXT_PUBLIC_SITE_URL=http://localhost:3000 NEXT_TELEMETRY_DISABLED=1
 # A stand-in statistics script: the consent tests check that it is added only after "Accept".
 export NEXT_PUBLIC_UMAMI_SRC=http://localhost:3000/e2e-statistics.js NEXT_PUBLIC_UMAMI_WEBSITE_ID=e2e
+# The data cache of an earlier run (e.g. the full site turned on) must not leak into this build.
+rm -rf apps/web/.next/cache/fetch-cache
 pnpm --filter @jungle/web build >"$WORK/build.log" 2>&1 || { cat "$WORK/build.log"; exit 1; }
 (cd apps/web && exec node_modules/.bin/next start --port 3000 >"$WORK/web.log" 2>&1) &
 PIDS+=($!)
 
 fi
-for url in http://127.0.0.1:8000/api/v1/health $([ -z "${E2E_ONLY:-}" ] && echo http://localhost:3000/ro); do
+for url in http://127.0.0.1:8000/api/v1/health $(part web && echo http://localhost:3000/ro); do
   for _ in $(seq 1 60); do curl -fs -o /dev/null "$url" && break; sleep 1; done
   curl -fs -o /dev/null "$url" || { echo "server not ready: $url"; cat "$WORK"/*.log; exit 1; }
 done
 
-if [ -z "${E2E_ONLY:-}" ]; then
-  echo "==> Playwright (website)"
-  E2E_MAIL_DIR="$MAIL_DIR" pnpm --filter @jungle/web exec playwright test || failed
+if part web; then
+  echo "==> Playwright (website: the pre-launch page)"
+  E2E_MAIL_DIR="$MAIL_DIR" pnpm --filter @jungle/web exec playwright test || failed "$WORK/web.log"
+  echo "==> The full site turned on from the server; the website refreshes at once (Q57)"
+  (cd apps/backend && uv run python manage.py set_flag full_site on --reason "e2e: the full site")
+  echo "==> Playwright (website: the full site, Stage 11)"
+  E2E_SITE_MODE=full E2E_SCREENSHOTS="${E2E_SCREENSHOTS:-}" pnpm --filter @jungle/web exec playwright test ||
+    failed "$WORK/web.log"
 fi
 
 if part kiosk; then

@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { use, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { HeroVisual } from "@/components/HeroVisual";
 import { IconCar, IconCheck, IconCoffee, IconLocker, IconLotus, IconMusic, IconPin, IconRoute } from "@/components/Icons";
 import { LeagueCard } from "@/components/LeagueCard";
@@ -8,6 +8,8 @@ import { Reveal } from "@/components/Reveal";
 import { SitePlan } from "@/components/SitePlan";
 import { TimelineProgress } from "@/components/TimelineProgress";
 import { WaitlistForm } from "@/components/WaitlistForm";
+import { FullHome } from "@/components/FullHome";
+import { siteMode } from "@/lib/flags";
 import { ADDRESS, FACTS, MAP_URL, SITE_URL } from "@/lib/site";
 
 // The footer shows the company details from the admin configuration: refresh the static page every 5 minutes.
@@ -20,9 +22,14 @@ const FACILITIES: { key: "lockers" | "pilates" | "events" | "lounge"; icon: () =
   { key: "lounge", icon: () => <IconCoffee size={44} /> },
 ];
 
-export default function HomePage({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = use(params);
+/** The pre-launch page (Stage 1B) until the owner turns on the full site (`full_site`, Q57). */
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   setRequestLocale(locale);
+  return (await siteMode()) === "full" ? <FullHome /> : <PrelaunchHome locale={locale} />;
+}
+
+function PrelaunchHome({ locale }: { locale: string }) {
   const t = useTranslations("web");
   const points = t.raw("arena.points") as string[];
   const steps = t.raw("ecosystem.steps") as { title: string; text: string }[];

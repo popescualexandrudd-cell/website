@@ -4,6 +4,17 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, secțiunea 1 — 29.09.2026 (livrată, așteaptă aprobarea; Q57 nouă)
+#### Adăugat
+- Comutatorul `full_site` (ADR-0022, Q57, DE_CONFIRMAT, oprit implicit): oprit, vizitatorii văd pagina de pre-lansare (Etapa 1B), iar paginile site-ului complet răspund 404; pornit, site-ul complet. Se schimbă din panou (Setări și feature flags) sau cu `manage.py set_flag <cheie> on|off --reason ...` (în jurnal, ca SYSTEM).
+- Reîmprospătarea imediată a site-ului: după salvarea unui comutator sau a unei setări, backend-ul cere site-ului (`POST /api/revalidate`, parola comună `WEB_REVALIDATE_SECRET` = `REVALIDATE_SECRET`, comparată în timp constant; doar etichetele `flags` și `config`) să-și reîmprospăteze paginile (`jungle.configuration.web`, semnale `post_save`, după commit). Fără semnal, cel târziu în 5 minute.
+- Site-ul complet, secțiunea 1 (§9.2): antetul fix (logo, meniul Padel · Liga · Tenis · Pilates · Pachete · Evenimente · Cafenea · Contact cu pagina curentă marcată, RO/EN pe aceeași pagină, contul, „Rezervă” mereu vizibil); sub 1280 px, meniul într-un panou (Escape, focusul înapoi pe buton, derularea paginii oprită cât e deschis).
+- Adresele localizate din §9.3 (`/ro/padel`, `/ro/liga`, `/ro/tenis`, `/ro/pilates`, `/ro/pachete`, `/ro/evenimente`, `/ro/cafenea`, `/ro/contact`, `/ro/rezervari`, `/ro/cont` și echivalentele EN), deocamdată „În construcție”, `noindex`; pagina principală a site-ului complet arată harta celor 19 secțiuni (previzualizare internă).
+- Teste: 6 backend (`test_web.py`), 5 unitare pe site, 7 cap-coadă pe calculator și telefon (`e2e/full/`, după pornirea comutatorului în `scripts/test-e2e`); partea `E2E_ONLY=web`.
+- `.dockerignore`: imaginile nu primesc nimic construit local (`.next`, `node_modules`) și niciun `.env` sau cheie.
+#### Reparat la revizuire
+- Panoul meniului pe telefon (limba și contul sub listă); pragul meniului întreg mutat la 1280 px (nu se mai lovește de butoane); harta secțiunilor nu mai iese din ecran la 320 px; memoria de date a unei construcții anterioare (`.next/cache/fetch-cache`) nu mai ajunge în construcția testelor.
+
 ### Reparat — 29.09.2026 (CI roșu pe `main`, Chioșcul Ligii)
 - Chioșcul Ligii, ecranul de repaus (§8.2): cerea clasamentul în fiecare secundă, nu la 30 s, și rotirea Dublu / Simplu / Perechi reîncepea mereu (nu se vedea decât Dublu). Încărcarea depinde acum doar de API (`useEffectEvent`), iar chioșcul păstrează clasamentele între sesiuni: după o ieșire ecranul revine direct cu ele, fără ecran gol și fără saltul paginii (90 px) care făcea să se piardă un clic în testele cap-coadă.
 - `packages/kiosk-kit`, `useIdle`: ceasul bate doar cât numără (sesiune deschisă sau plată în curs); un chioșc în repaus nu mai e redesenat în fiecare secundă.

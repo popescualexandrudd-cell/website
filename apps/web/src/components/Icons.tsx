@@ -26,3 +26,12 @@ export const IconCheck = ({ size = 44 }: P) => (
 export const IconLocker = ({ size = 30 }: P) => (
   <svg {...base(size)}><rect x="4" y="3" width="16" height="18" rx="2" /><path d="M12 3v18M8 8h1M15 8h1M8 12h1M15 12h1" /></svg>
 );
+export const IconUser = ({ size = 22 }: P) => (
+  <svg {...base(size)}><circle cx="12" cy="8" r="4" /><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6" /></svg>
+);
+export const IconMenu = ({ size = 22 }: P) => (
+  <svg {...base(size)}><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+);
+export const IconClose = ({ size = 22 }: P) => (
+  <svg {...base(size)}><path d="M6 6l12 12M18 6L6 18" /></svg>
+);

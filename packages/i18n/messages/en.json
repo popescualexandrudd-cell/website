@@ -442,6 +442,77 @@
       "necessary": "Necessary (always on)",
       "statistics": "Anonymous statistics",
       "policy": "Cookie policy"
+    },
+    "site": {
+      "header": {
+        "home": "Jungle Padel — home page",
+        "main": "Main menu",
+        "language": "Language",
+        "languages": {
+          "ro": "Română",
+          "en": "English"
+        },
+        "account": "My account",
+        "book": "Book",
+        "menu": "Menu",
+        "close": "Close",
+        "nav": {
+          "padel": "Padel",
+          "league": "League",
+          "tennis": "Tennis",
+          "pilates": "Pilates",
+          "packages": "Packages",
+          "events": "Events",
+          "cafe": "Café",
+          "contact": "Contact"
+        }
+      },
+      "pages": {
+        "padel": "Padel",
+        "league": "Jungle League",
+        "tennis": "Tennis",
+        "pilates": "Reformer Pilates",
+        "packages": "Packages and subscriptions",
+        "events": "Events",
+        "cafe": "The café",
+        "contact": "Contact",
+        "bookings": "Bookings",
+        "account": "My account"
+      },
+      "upcoming": {
+        "kicker": "Being built",
+        "text": "This page is being built in Stage 11, after the sections of the home page, and is published once the owner approves it.",
+        "home": "Back to the home page"
+      },
+      "home": {
+        "kicker": "Internal preview · the full site",
+        "title": "The Jungle Padel website, section by section",
+        "lead": "Each section of the home page is built and approved on its own. Done: {built} of {total}. Visitors keep seeing the pre-launch page until the full site is turned on.",
+        "built": "Done",
+        "next": "Next",
+        "later": "Later",
+        "sections": {
+          "header": "The fixed header: menu, language, account, “Book”",
+          "hero": "Hero “Step into the jungle”",
+          "tour": "The club tour on scroll",
+          "live": "“Now at the club” (live)",
+          "padel": "Padel",
+          "level": "The “What's your level?” simulator",
+          "league": "The Jungle League and the points simulator",
+          "tennis": "Tennis",
+          "pilates": "Reformer Pilates",
+          "packages": "The packages configurator",
+          "split": "“Split the hour”",
+          "events": "Events",
+          "cafe": "The specialty café",
+          "community": "The community",
+          "team": "The team",
+          "numbers": "Numbers",
+          "location": "Location and access",
+          "faq": "FAQ and rules",
+          "footer": "The footer"
+        }
+      }
     }
   },
   "kiosk": {

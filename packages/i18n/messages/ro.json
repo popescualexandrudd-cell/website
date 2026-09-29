@@ -442,6 +442,77 @@
       "necessary": "Necesare (întotdeauna active)",
       "statistics": "Statistici anonime",
       "policy": "Politica de cookies"
+    },
+    "site": {
+      "header": {
+        "home": "Jungle Padel — pagina principală",
+        "main": "Meniul principal",
+        "language": "Limba",
+        "languages": {
+          "ro": "Română",
+          "en": "English"
+        },
+        "account": "Contul meu",
+        "book": "Rezervă",
+        "menu": "Meniu",
+        "close": "Închide",
+        "nav": {
+          "padel": "Padel",
+          "league": "Liga",
+          "tennis": "Tenis",
+          "pilates": "Pilates",
+          "packages": "Pachete",
+          "events": "Evenimente",
+          "cafe": "Cafenea",
+          "contact": "Contact"
+        }
+      },
+      "pages": {
+        "padel": "Padel",
+        "league": "Liga Jungle",
+        "tennis": "Tenis",
+        "pilates": "Pilates Reformer",
+        "packages": "Pachete și abonamente",
+        "events": "Evenimente",
+        "cafe": "Cafeneaua",
+        "contact": "Contact",
+        "bookings": "Rezervări",
+        "account": "Contul meu"
+      },
+      "upcoming": {
+        "kicker": "În construcție",
+        "text": "Pagina aceasta se construiește în Etapa 11, după secțiunile paginii principale, și se publică după aprobarea proprietarului.",
+        "home": "Înapoi la pagina principală"
+      },
+      "home": {
+        "kicker": "Previzualizare internă · site-ul complet",
+        "title": "Site-ul Jungle Padel, secțiune cu secțiune",
+        "lead": "Fiecare secțiune a paginii principale se construiește și se aprobă separat. Gata: {built} din {total}. Vizitatorii văd în continuare pagina de pre-lansare, până la pornirea site-ului complet.",
+        "built": "Gata",
+        "next": "Urmează",
+        "later": "Mai târziu",
+        "sections": {
+          "header": "Antetul fix: meniul, limba, contul, „Rezervă”",
+          "hero": "Hero „Intră în junglă”",
+          "tour": "Turul clubului la scroll",
+          "live": "„Acum în club” (live)",
+          "padel": "Padel",
+          "level": "Simulatorul „Care e nivelul tău?”",
+          "league": "Liga Jungle și simulatorul de puncte",
+          "tennis": "Tenis",
+          "pilates": "Pilates Reformer",
+          "packages": "Configuratorul de pachete",
+          "split": "„Împarte ora”",
+          "events": "Evenimente",
+          "cafe": "Cafeneaua de specialitate",
+          "community": "Comunitatea",
+          "team": "Echipa",
+          "numbers": "Cifre",
+          "location": "Locație și acces",
+          "faq": "Întrebări frecvente și regulament",
+          "footer": "Subsolul"
+        }
+      }
     }
   },
   "kiosk": {

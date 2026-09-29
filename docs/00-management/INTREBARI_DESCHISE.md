@@ -77,6 +77,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q54](#q54) | Chioșcul de Plăți: modul personal (cine, PIN) | MEDIE | Etapa 8 (nu blochează) | DESCHISĂ |
 | [Q55](#q55) | Ecranele: cine apare pe nume, echipele, anunțurile | MEDIE | Etapa 9 (nu blochează) | REZOLVATĂ 29.09.2026 |
 | [Q56](#q56) | Panoul de admin: cine vede rapoartele financiare *(nouă, Etapa 10)* | SCĂZUTĂ | nimic (se schimbă ușor) | DESCHISĂ |
+| [Q57](#q57) | Site-ul complet: când înlocuiește pagina de pre-lansare *(nouă, Etapa 11)* | MEDIE | nimic (comutator în panou) | DESCHISĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -695,3 +696,13 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Varianta implicită (DE_CONFIRMAT):** rapoartele pe perioade (venituri pe categorii, reduceri, ocuparea terenurilor) și exporturile CSV (registrul pentru contabil, rezervările) le văd **doar adminul și managerul** (permisiunea nouă `reports.view`). Recepția vede, ca până acum, registrul zilei, numerarul chioșcurilor și seiful (de care are nevoie la închiderea zilei), dar nu rapoartele pe perioade.
 - **Alternative:** rapoartele doar pentru admin (proprietar); sau și pentru recepție.
 
+## Întrebări noi, apărute în Etapa 11
+
+### <a id="q57"></a>Q57 — Site-ul complet: când înlocuiește pagina de pre-lansare
+
+- **Prioritate:** MEDIE · **Blochează:** nimic (lucrez cu varianta implicită)
+- **Stare:** DESCHISĂ (din 29.09.2026)
+- **Context:** în Etapa 11 construim site-ul complet (§9.2), secțiune cu secțiune. Până la lansare, vizitatorii văd pagina de pre-lansare aprobată în Etapa 1B (lista de așteptare).
+- **Varianta implicită (DE_CONFIRMAT):** site-ul complet stă **ascuns în spatele comutatorului `full_site`**, oprit. Vizitatorii văd în continuare pagina de pre-lansare; paginile noi (Padel, Liga, Pilates, Rezervări, Cont…) nu există pentru ei (răspund „pagină negăsită” și nu apar în Google). Îl porniți dumneavoastră când hotărâți, din panoul de admin (**Setări și feature flags** → `full_site`, cu motiv) sau, tehnic, cu `manage.py set_flag full_site on --reason "..."`. Site-ul se schimbă în câteva secunde (serverul îi cere site-ului să se reîmprospăteze); dacă acel semnal se pierde, cel târziu în 5 minute.
+- **Alternative:** pornirea automată la o dată fixă (de exemplu cu o lună înainte de deschiderea din martie 2027); sau site-ul complet vizibil imediat, cu mențiunea „în construcție”.
+- **Întrebare pentru proprietar:** când vreți să apară site-ul complet: la o dată anume, după ce aprobați toate secțiunile, sau cu câteva săptămâni înainte de deschidere?

@@ -1,0 +1,25 @@
+# The images' build context (ADR-0015; builds run from the repository root). Never secrets, never
+# local builds or installed packages: a stale Next.js data cache (for example the full_site flag,
+# Q57) or a host node_modules must not reach an image.
+.git
+**/.env
+**/.env.*
+!**/.env.example
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/*.pkpass
+**/node_modules
+**/.venv
+**/__pycache__
+**/.mypy_cache
+**/.ruff_cache
+**/.pytest_cache
+**/.hypothesis
+**/.next
+apps/*/dist
+**/test-results
+**/playwright-report
+**/coverage
+**/*.tsbuildinfo

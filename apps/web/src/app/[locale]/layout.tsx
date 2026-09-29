@@ -8,6 +8,8 @@ import "../globals.css";
 import { CookieConsent } from "@/components/CookieConsent";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { SiteHeader } from "@/components/SiteHeader";
+import { siteMode } from "@/lib/flags";
 import { routing } from "@/i18n/routing";
 import { INDEXABLE, SITE_URL } from "@/lib/site";
 
@@ -55,6 +57,7 @@ export default async function LocaleLayout({
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "web.nav" });
+  const mode = await siteMode();
   return (
     <html lang={locale}>
       <head>
@@ -67,7 +70,7 @@ export default async function LocaleLayout({
           {t("skip")}
         </a>
         <NextIntlClientProvider>
-          <Header />
+          {mode === "full" ? <SiteHeader /> : <Header />}
           <main id="main">{children}</main>
           <Footer />
           {/* Statistics (Umami) load only after consent, from the consent manager. */}

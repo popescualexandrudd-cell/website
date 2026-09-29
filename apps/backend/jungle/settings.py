@@ -269,6 +269,10 @@ GOOGLE_WALLET_ISSUER_ID = env("GOOGLE_WALLET_ISSUER_ID", "") or ""
 GOOGLE_WALLET_SERVICE_ACCOUNT_FILE = env("GOOGLE_WALLET_SERVICE_ACCOUNT_FILE", "") or ""
 
 WEB_BASE_URL = (env("WEB_BASE_URL", "http://localhost:3000") or "").rstrip("/")
+# The website's cache refresh (configuration.web): its /api/revalidate address and the secret
+# shared with it. Both empty: the pages refresh on their own within 5 minutes.
+WEB_REVALIDATE_URL = env("WEB_REVALIDATE_URL", "") or ""
+WEB_REVALIDATE_SECRET = env("WEB_REVALIDATE_SECRET", "") or ""
 
 # Emergency Django admin (§8.6): Admin role + 2FA only.
 EMERGENCY_ADMIN_ENABLED = env_bool("EMERGENCY_ADMIN_ENABLED", True)

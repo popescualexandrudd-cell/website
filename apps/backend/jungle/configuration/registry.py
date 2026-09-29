@@ -330,6 +330,11 @@ FLAGS: dict[str, FlagSpec] = {
         FlagSpec("apple_wallet", False, "Apple Wallet (Q24: amânat)."),
         FlagSpec("google_wallet", False, "Google Wallet (Etapa 5)."),
         FlagSpec("ai", False, "Oprirea globală a funcțiilor AI (ADR-0019)."),
+        FlagSpec(
+            "full_site",
+            False,
+            "Site-ul complet (Etapa 11, Q57); oprit: vizitatorii văd pagina de pre-lansare.",
+        ),
     ]
 }
 

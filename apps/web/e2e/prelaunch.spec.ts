@@ -153,3 +153,9 @@ test("SEO files: sitemap with both languages and the legal pages, robots closed 
   const robots = await (await request.get("/robots.txt")).text();
   expect(robots).toMatch(/Disallow: \//);
 });
+
+test("Q57: before the launch, the full site's pages do not exist", async ({ request }) => {
+  for (const path of ["/ro/liga", "/en/league", "/ro/rezervari", "/ro/cont"]) {
+    expect((await request.get(path)).status(), path).toBe(404);
+  }
+});

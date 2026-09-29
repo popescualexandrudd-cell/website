@@ -1132,3 +1132,216 @@ ul.grid-4 {
     transform: none;
   }
 }
+
+/* ------------------------------------------------------------------ full site: header (Stage 11, §9.2.1) */
+.site-header--full .container {
+  gap: 24px;
+}
+.full-nav__list {
+  display: flex;
+  gap: 26px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.full-nav__list a,
+.menu-panel__list a {
+  color: var(--text-2);
+  text-decoration: none;
+  font-weight: 500;
+}
+.full-nav__list a {
+  display: inline-block;
+  padding: 10px 0;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  border-bottom: 2px solid transparent;
+}
+.full-nav__list a:hover,
+.menu-panel__list a:hover {
+  color: var(--accent);
+}
+.full-nav__list a[aria-current="page"] {
+  color: var(--text);
+  border-bottom-color: var(--color-brass-400);
+}
+.header-wide {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.account-link {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  color: var(--text-2);
+}
+.account-link:hover,
+.account-link[aria-current="page"] {
+  color: var(--accent);
+  border-color: var(--color-brass-400);
+}
+.book-cta {
+  min-height: 44px;
+  padding: 0 22px;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.menu-toggle {
+  display: none;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.menu-panel {
+  position: absolute;
+  inset: var(--header-h) 0 auto 0;
+  max-height: calc(100svh - var(--header-h));
+  overflow-y: auto;
+  background: var(--color-night-950);
+  border-bottom: 1px solid var(--line);
+  box-shadow: var(--shadow-lift);
+  padding: 20px 0 28px;
+}
+.menu-panel[hidden] {
+  display: none;
+}
+.site-header .menu-panel .container {
+  display: block;
+}
+.menu-panel__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 24px;
+}
+.menu-panel__list a {
+  display: block;
+  padding: 12px 0;
+  font-family: var(--font-serif);
+  font-size: 24px;
+  color: var(--text);
+}
+.menu-panel__list a[aria-current="page"] {
+  color: var(--accent);
+}
+.menu-panel__extra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.menu-panel__account {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+}
+body[data-menu-open="true"] {
+  overflow: hidden;
+}
+/* The eight menu links fit from 1280 px (a common laptop); narrower, they move into the panel. */
+@media (max-width: 1279px) {
+  .full-nav,
+  .header-wide {
+    display: none;
+  }
+  .menu-toggle {
+    display: inline-flex;
+  }
+}
+@media (min-width: 1280px) {
+  .menu-panel {
+    display: none;
+  }
+}
+@media (max-width: 520px) {
+  .site-header--full .container {
+    gap: 10px;
+  }
+  .site-header--full .logo-word {
+    display: none;
+  }
+  .book-cta {
+    padding: 0 16px;
+  }
+  .menu-toggle span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+  .menu-toggle {
+    width: 44px;
+    padding: 0;
+    justify-content: center;
+  }
+  .menu-panel__list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ------------------------------------------------------------------ full site: the build map */
+.site-preview .lead {
+  max-width: 720px;
+}
+.section-map {
+  list-style: none;
+  margin: 40px 0 0;
+  padding: 0;
+  display: grid;
+  /* A column never wider than the screen (a 320 px phone: WCAG 1.4.10). */
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
+  gap: 10px;
+}
+.section-map li {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--color-night-800);
+  border: 1px solid var(--line);
+}
+.section-map li[data-built="true"] {
+  border-color: var(--color-brass-400);
+}
+.section-map__number {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  color: var(--accent);
+}
+.section-map__state {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.section-map li[data-built="true"] .section-map__state {
+  color: var(--accent);
+}

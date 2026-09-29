@@ -1,10 +1,13 @@
 import { defineConfig, devices } from "@playwright/test";
 
-// The servers are started by scripts/test-e2e (backend + production build of this site).
+// The servers are started by scripts/test-e2e (backend + production build of this site). The
+// pre-launch page is tested first; then, with the full site turned on (E2E_SITE_MODE=full), e2e/full.
 const executablePath = process.env.PW_CHROMIUM_PATH || undefined;
+const fullSite = process.env.E2E_SITE_MODE === "full";
 
 export default defineConfig({
   testDir: "e2e",
+  ...(fullSite ? { testMatch: "full/**/*.spec.ts" } : { testIgnore: "full/**" }),
   timeout: 45_000,
   retries: 0,
   workers: 1,
