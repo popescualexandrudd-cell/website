@@ -30,6 +30,15 @@ const DURATIONS = [60, 90, 120, 150, 180];
 
 type Cell = { resource: Resource; minutes: number };
 
+/** The part of a booking within this day's opening hours, or null when none of it is (a booking
+ * past midnight, or outside the hours): such a booking is listed under the grid, never drawn over
+ * the cells of other hours. */
+export function shownSpan(booking: Booking, day: string, opens: number, closes: number): { start: number; end: number } | null {
+  const start = Math.max(clubMinutes(booking.starts_at, day), opens);
+  const end = Math.min(clubMinutes(booking.ends_at, day), closes);
+  return end > start ? { start, end } : null;
+}
+
 export function Calendar() {
   const { api, locationId, lang, can } = usePanel();
   const t = useT();
@@ -52,6 +61,7 @@ export function Calendar() {
   const live = (bookings.data ?? []).filter((b) => b.status !== "cancelled");
   const cancelled = (bookings.data ?? []).length - live.length;
   const current = (bookings.data ?? []).find((b) => b.id === selected) ?? null;
+  const outside = live.filter((b) => columns.some((r) => r.id === b.resource_id) && !shownSpan(b, day, opens, closes));
 
   const refresh = async () => {
     await bookings.reload();
@@ -131,15 +141,16 @@ export function Calendar() {
             {live
               .filter((b) => b.resource_id === r.id)
               .map((b) => {
-                const start = Math.max(clubMinutes(b.starts_at, day), opens);
-                const end = Math.min(clubMinutes(b.ends_at, day), closes);
+                const span = shownSpan(b, day, opens, closes);
+                if (!span) return null;
+                const { start, end } = span;
                 return (
                   <button
                     key={b.id}
                     type="button"
                     draggable={manage}
                     className={`calendar__booking calendar__booking--${b.session_type}${b.id === selected ? " is-selected" : ""}`}
-                    style={{ top: ((start - opens) / SLOT) * ROW_PX, height: Math.max(1, (end - start) / SLOT) * ROW_PX - 2 }}
+                    style={{ top: ((start - opens) / SLOT) * ROW_PX, height: ((end - start) / SLOT) * ROW_PX - 2 }}
                     onClick={() => {
                       setDraft(null);
                       setSelected(b.id);
@@ -161,6 +172,29 @@ export function Calendar() {
           </div>
         ))}
       </div>
+      {outside.length ? (
+        <div className="panel-box" role="region" aria-label={t("calendar.outside")}>
+          <h2>{t("calendar.outside")}</h2>
+          <p className="muted">{t("calendar.outsideHelp")}</p>
+          <ul className="plain">
+            {outside.map((b) => (
+              <li key={b.id}>
+                <button
+                  type="button"
+                  className="button button--quiet"
+                  onClick={() => {
+                    setDraft(null);
+                    setSelected(b.id);
+                  }}
+                >
+                  {columns.find((r) => r.id === b.resource_id)?.name} · {formatTime(lang, b.starts_at)}–{formatTime(lang, b.ends_at)} ·{" "}
+                  {b.organizer_name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
       {moving ? (
         <MoveConfirm
           booking={moving.booking}

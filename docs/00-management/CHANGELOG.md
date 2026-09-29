@@ -4,6 +4,10 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Reparat — 29.09.2026 (panoul de admin, calendarul)
+- O rezervare care nu intră în orele zilei afișate (de exemplu 23:00–00:30, văzută în ziua de după) era desenată peste celula de la 08:00, cu înălțime aproape zero, și o acoperea (găsit de verificarea de accesibilitate, WCAG 2.5.8, când testele au rulat seara). Acum partea din program se desenează normal, iar o rezervare fără nicio parte în program apare sub calendar, în „În afara programului zilei”, de unde se deschide ca oricare alta.
+- `manage.py payments_demo`: rezervarea demo cade în programul clubului (Q3); seara târziu, a doua zi dimineață.
+
 ### Etapa 11, secțiunea 1 — 29.09.2026 (aprobată 29.09.2026; Q57 rezolvată: site-ul complet apare doar când îl publică proprietarul)
 #### Adăugat
 - Comutatorul `full_site` (ADR-0022, Q57, DE_CONFIRMAT, oprit implicit): oprit, vizitatorii văd pagina de pre-lansare (Etapa 1B), iar paginile site-ului complet răspund 404; pornit, site-ul complet. Se schimbă din panou (Setări și feature flags) sau cu `manage.py set_flag <cheie> on|off --reason ...` (în jurnal, ca SYSTEM).

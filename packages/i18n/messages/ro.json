@@ -1179,6 +1179,8 @@
       "hours": "program {opens}–{closes}",
       "cancelledCount": "anulate: {count}",
       "help": "Apasă pe o celulă liberă pentru o rezervare nouă. Trage o rezervare pe altă celulă ca s-o muți sau deschide-o pentru mutare și anulare.",
+      "outside": "În afara programului zilei",
+      "outsideHelp": "Rezervări care nu intră în orele afișate (de exemplu, continuă după miezul nopții). Deschide una pentru detalii.",
       "freeCell": "{resource}, {time}",
       "moveTitle": "Mut rezervarea",
       "moveTo": "{name} → {resource}, ora {time}",

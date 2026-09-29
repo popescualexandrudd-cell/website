@@ -200,6 +200,12 @@ textarea:focus-visible,
   color: var(--color-brass-300);
 }
 
+.plain {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 .alerts {
   list-style: none;
   padding: 0;

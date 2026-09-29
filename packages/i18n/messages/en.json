@@ -1179,6 +1179,8 @@
       "hours": "open {opens}–{closes}",
       "cancelledCount": "cancelled: {count}",
       "help": "Click a free cell for a new booking. Drag a booking onto another cell to move it, or open it to move or cancel it.",
+      "outside": "Outside the day's hours",
+      "outsideHelp": "Bookings that do not fit the hours shown (for example, they run past midnight). Open one for its details.",
       "freeCell": "{resource}, {time}",
       "moveTitle": "Move the booking",
       "moveTo": "{name} → {resource}, at {time}",

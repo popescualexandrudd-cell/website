@@ -24,6 +24,7 @@ from jungle.accounts.models import AccountType, User, UserRole
 from jungle.audit import services as audit
 from jungle.audit.services import SYSTEM
 from jungle.bookings.models import Booking, BookingStatus, SessionType
+from jungle.bookings.services import check_opening_hours
 from jungle.cards import services as cards
 from jungle.checkout.models import KioskPin
 from jungle.core import clock
@@ -189,7 +190,8 @@ class Command(BaseCommand):
 
     def _booking(self, location: Location, customer: User) -> Booking:
         """An unpaid 90-minute booking of the customer, on the next free half-hour slot from two
-        hours from now (the club's grid)."""
+        hours from now (the club's grid), within the opening hours (Q3): late in the evening it is
+        the next morning, never past closing time."""
         existing = Booking.objects.filter(
             organizer=customer,
             status=BookingStatus.CONFIRMED,
@@ -205,6 +207,10 @@ class Command(BaseCommand):
         ).order_by("sort_order")
         for offset in range(0, 48):
             begins = start + timedelta(minutes=30 * offset)
+            try:
+                check_opening_hours(begins, begins + timedelta(minutes=90))
+            except DomainError:
+                continue  # outside the opening hours: a later slot
             for court in courts:
                 try:
                     with transaction.atomic():

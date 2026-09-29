@@ -233,6 +233,25 @@ describe("the bookings calendar", () => {
     expect(days).toEqual(expect.arrayContaining(["2027-03-16", "2027-03-17", "2027-03-15", "2027-04-02"]));
   });
 
+  it("lists a booking outside the day's hours under the grid, never over the 08:00 cells", async () => {
+    // Yesterday 23:00–00:30 (club time): only its last half hour is on this day, before opening.
+    const late = booking("b9", { starts_at: "2027-03-15T21:00:00Z", ends_at: "2027-03-15T22:30:00Z", organizer_name: "Dan Late" });
+    answers["GET /api/v1/staff/bookings"] = () => json([booking("b1"), late]);
+    mount(<Calendar />, ["bookings.view", "bookings.manage"]);
+    await settle();
+    const court = screen.getByRole("group", { name: "Teren 1" });
+    expect(within(court).queryByRole("button", { name: /Dan Late/ })).toBeNull();
+    expect(within(court).getByRole("button", { name: "Teren 1, 08:00" })).toBeTruthy();
+    const outside = screen.getByRole("region", { name: "În afara programului zilei" });
+    fireEvent.click(within(outside).getByRole("button", { name: "Teren 1 · 23:00–00:30 · Dan Late" }));
+    expect(screen.getByRole("region", { name: "Detaliile rezervării" })).toBeTruthy();
+    // Within the hours, nothing is listed apart.
+    answers["GET /api/v1/staff/bookings"] = () => json([booking("b4", { starts_at: "2027-03-17T08:00:00Z", ends_at: "2027-03-17T09:30:00Z" })]);
+    fireEvent.click(screen.getByRole("button", { name: "Ziua următoare" }));
+    await settle();
+    expect(screen.queryByRole("region", { name: "În afara programului zilei" })).toBeNull();
+  });
+
   it("books a Reformer lesson and reports a refused booking", async () => {
     answers["POST /api/v1/staff/bookings"] = () => json({ error: { code: "booking.slot_taken", params: {} } }, 409);
     const panel = mount(<Calendar />, ["bookings.view", "bookings.manage"]);

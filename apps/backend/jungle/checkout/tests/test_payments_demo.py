@@ -72,6 +72,23 @@ def test_takes_the_next_free_court(tmp_path: Path, location: Location, now: Any)
     assert Booking.objects.get(pk=demo["booking"]["id"]).starts_at >= start + timedelta(minutes=90)
 
 
+def test_late_in_the_evening_the_booking_is_the_next_morning(
+    tmp_path: Path, location: Location, time_machine: Any
+) -> None:
+    """Q3: the demo booking stays within the opening hours (08:00–23:00), never past midnight."""
+    from jungle.core import clock
+
+    time_machine.move_to("2027-04-05T21:20:00+03:00", tick=False)
+    Resource.objects.create(
+        location=location, slug="teren-1", name="Teren 1", kind=ResourceKind.PADEL_COURT
+    )
+    demo = run(tmp_path)
+    booking = Booking.objects.get(pk=demo["booking"]["id"])
+    starts, ends = clock.local(booking.starts_at), clock.local(booking.ends_at)
+    assert (starts.day, starts.hour, starts.minute) == (6, 8, 0)
+    assert (ends.hour, ends.minute) == (9, 30)
+
+
 def test_refusals(tmp_path: Path, location: Location, now: Any, capsys: Any) -> None:
     with pytest.raises(CommandError, match="no free court"):
         run(tmp_path)
