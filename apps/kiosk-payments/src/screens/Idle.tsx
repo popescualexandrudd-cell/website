@@ -1,28 +1,53 @@
 /** Idle (§8.3): "Scan your card", the café menu and the subscription offers, with indicative
  * prices marked as such (Q21); a discreet entry for the staff (card + PIN). */
-import { useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import { useKiosk, useT } from "../kiosk";
 import type { Options } from "../lib/api";
 import { INDICATIVE } from "../lib/basket";
 import { moneyIn } from "../lib/i18n";
 
-export function IdleScreen({ onStaff }: { onStaff: () => void }) {
+/**
+ * `options` (the subscription offers) is kept by the kiosk between sessions, like the menu: after
+ * a logout the screen comes back complete (no jump of the page when they arrive), then refreshes.
+ * `aria-busy` says whether the screen is still loading.
+ */
+export function IdleScreen({
+  options,
+  onOptions,
+  onStaff,
+}: {
+  options: Options | null;
+  onOptions: (options: Options) => void;
+  onStaff: () => void;
+}) {
   const { api, idle, lang, offline } = useKiosk();
   const t = useT();
   const lei = moneyIn(lang);
-  const [options, setOptions] = useState<Options | null>(null);
+  const [unanswered, setUnanswered] = useState(false);
   const slug = idle?.location_slug;
+  const keep = useEffectEvent(onOptions);
 
   useEffect(() => {
     if (!slug) return;
-    api.options(slug).then(setOptions, () => undefined);
+    let alive = true;
+    api.options(slug).then(
+      (data) => {
+        if (alive) keep(data);
+      },
+      () => {
+        if (alive) setUnanswered(true);
+      },
+    );
+    return () => {
+      alive = false;
+    };
   }, [api, slug]);
 
   const name = (item: { name_ro: string; name_en: string }) => (lang === "en" ? item.name_en : item.name_ro);
   const rates = options?.rates ?? [];
 
   return (
-    <div className="idle">
+    <div className="idle" aria-busy={!idle || (options === null && !unanswered)}>
       <section className="scan-call" aria-labelledby="scan-title">
         <p id="scan-title" className="scan-call__title">
           {t("idle.scan")}

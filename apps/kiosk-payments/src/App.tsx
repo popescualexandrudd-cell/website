@@ -15,7 +15,7 @@
  */
 import { ApiError, Offline, type Signed, SimulatorPanel, useDevice, useIdle } from "@jungle/kiosk-kit";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { type Card, type Idle, type Item, paymentsApi, type Session } from "./lib/api";
+import { type Card, type Idle, type Item, type Options, paymentsApi, type Session } from "./lib/api";
 import { type Basket, EMPTY } from "./lib/basket";
 import { errorText, type Lang, t } from "./lib/i18n";
 import { CashPayment, holds, type PaymentView } from "./lib/payment";
@@ -54,6 +54,7 @@ export function App() {
   const [lang, setLang] = useState<Lang>("ro");
   const [offline, setOffline] = useState(false);
   const [idle, setIdle] = useState<Idle | null>(null);
+  const [options, setOptions] = useState<Options | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [screen, setScreen] = useState<Screen>("home");
   const [staffMode, setStaffMode] = useState(false);
@@ -337,7 +338,7 @@ export function App() {
         ) : session ? (
           <SessionScreens screen={screen} />
         ) : (
-          <IdleScreen onStaff={() => setStaffMode(true)} />
+          <IdleScreen options={options} onOptions={setOptions} onStaff={() => setStaffMode(true)} />
         )}
         {simulator && link ? <SimulatorPanel link={link} notes={NOTES} faults={FAULTS} /> : null}
       </main>

@@ -177,4 +177,33 @@ describe("useIdle", () => {
     act(() => result.current.touch());
     expect(result.current.secondsLeft).toBe(5);
   });
+
+  it("does not re-render an idle kiosk every second; counts from the touch that opens a session", () => {
+    vi.useFakeTimers();
+    const onTimeout = vi.fn();
+    let renders = 0;
+    const { result, rerender } = renderHook(
+      ({ active }) => {
+        renders += 1;
+        return useIdle(active, 5000, onTimeout);
+      },
+      { initialProps: { active: false } },
+    );
+    act(() => {
+      vi.advanceTimersByTime(60_000);
+    });
+    expect(renders).toBe(1);
+    act(() => result.current.touch());
+    rerender({ active: true });
+    expect(result.current.secondsLeft).toBe(5);
+    act(() => {
+      vi.advanceTimersByTime(4000);
+    });
+    expect(result.current.secondsLeft).toBe(1);
+    expect(onTimeout).not.toHaveBeenCalled();
+    act(() => {
+      vi.advanceTimersByTime(1000);
+    });
+    expect(onTimeout).toHaveBeenCalledTimes(1);
+  });
 });

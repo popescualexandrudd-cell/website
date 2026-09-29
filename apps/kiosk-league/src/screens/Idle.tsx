@@ -1,6 +1,6 @@
 /** The idle screen (§8.2): live standings rotating Doubles / Singles / Pairs, the Match of the
  * day, the Kings of the Jungle, today's challenges and "Scan your card". */
-import { useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import { type Idle, Offline, type Standing } from "../lib/api";
 import { formatTime, rankName } from "../lib/i18n";
 import { useKiosk, useT } from "../kiosk";
@@ -34,12 +34,31 @@ export function StandingRows({ rows }: { rows: Standing[] }) {
   );
 }
 
-export function IdleScreen({ onBack, onOffline }: { onBack: () => void; onOffline: () => void }) {
+/**
+ * `idle` is kept by the kiosk between sessions: after a logout the screen comes back with the
+ * standings already there (no empty flash, no jump of the page when they arrive), then refreshes.
+ * `aria-busy` says whether the screen is still loading.
+ */
+export function IdleScreen({
+  idle,
+  onLoaded,
+  onBack,
+  onOffline,
+}: {
+  idle: Idle | null;
+  onLoaded: (idle: Idle) => void;
+  onBack: () => void;
+  onOffline: () => void;
+}) {
   const { api, lang } = useKiosk();
   const t = useT();
-  const [idle, setIdle] = useState<Idle | null>(null);
   const [ladder, setLadder] = useState(0);
   const [browsing, setBrowsing] = useState(false);
+  // The loading and the rotation depend only on the API, never on the parent's callbacks (a new
+  // function at each render would reload the standings and restart the rotation each time).
+  const loaded = useEffectEvent(onLoaded);
+  const back = useEffectEvent(onBack);
+  const offline = useEffectEvent(onOffline);
 
   useEffect(() => {
     let alive = true;
@@ -48,11 +67,11 @@ export function IdleScreen({ onBack, onOffline }: { onBack: () => void; onOfflin
         .idle()
         .then((data) => {
           if (!alive) return;
-          setIdle(data);
-          onBack();
+          loaded(data);
+          back();
         })
         .catch((error: unknown) => {
-          if (error instanceof Offline) onOffline();
+          if (error instanceof Offline) offline();
         });
     void load();
     const refresh = setInterval(load, REFRESH_MS);
@@ -62,7 +81,7 @@ export function IdleScreen({ onBack, onOffline }: { onBack: () => void; onOfflin
       clearInterval(refresh);
       clearInterval(rotate);
     };
-  }, [api, onBack, onOffline]);
+  }, [api]);
 
   if (browsing) {
     return <Standings onClose={() => setBrowsing(false)} />;
@@ -72,7 +91,7 @@ export function IdleScreen({ onBack, onOffline }: { onBack: () => void; onOfflin
   const motd = idle?.match_of_the_day;
 
   return (
-    <div className="idle">
+    <div className="idle" aria-busy={idle === null}>
       <section className="panel idle__standings" aria-live="polite">
         <h2>{t(`idle.${shown}`)}</h2>
         {rows.length ? <StandingRows rows={rows} /> : <p className="muted">{t("idle.empty")}</p>}

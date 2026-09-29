@@ -1,7 +1,8 @@
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { useState } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { KioskContext, type PayKiosk } from "../kiosk";
-import type { Idle, PaymentsApi, Session } from "../lib/api";
+import type { Idle, Options, PaymentsApi, Session } from "../lib/api";
 import { addPayable, changeCafe, EMPTY } from "../lib/basket";
 import type { CashPayment, PaymentView } from "../lib/payment";
 import { BasketScreen } from "./Basket";
@@ -85,18 +86,30 @@ function mount(ui: React.ReactNode, changes: Partial<PayKiosk> = {}) {
 }
 
 describe("idle (§8.3)", () => {
+  const offers: Options = {
+    intensities: { start: 4 },
+    bundle_discounts: {},
+    period_discounts: {},
+    start_rule_below_sessions: 0,
+    rates: [{ sport: "padel", sessions_per_month: 4, monthly_price: 30000, marker: "to_set" }],
+  };
+
+  /** The kiosk keeps the offers between sessions. */
+  function Kept({ onStaff }: { onStaff: () => void }) {
+    const [options, setOptions] = useState<Options | null>(null);
+    return <IdleScreen options={options} onOptions={setOptions} onStaff={onStaff} />;
+  }
+
+  const busy = () => document.querySelector(".idle")?.getAttribute("aria-busy");
+
   it("shows the call to scan, the menu with indicative prices, the staff entry", async () => {
-    const options = vi.fn(async () => ({
-      intensities: { start: 4 },
-      bundle_discounts: {},
-      period_discounts: {},
-      start_rule_below_sessions: 0,
-      rates: [{ sport: "padel", sessions_per_month: 4, monthly_price: 30000, marker: "to_set" }],
-    }));
+    let answer: (value: Options) => void = () => undefined;
+    const options = vi.fn(() => new Promise<Options>((resolve) => (answer = resolve)));
     const onStaff = vi.fn();
-    await act(async () => {
-      mount(<IdleScreen onStaff={onStaff} />, { session: null, api: { options } as unknown as PaymentsApi });
-    });
+    mount(<Kept onStaff={onStaff} />, { session: null, api: { options } as unknown as PaymentsApi });
+    expect(busy()).toBe("true"); // the offers are still on their way
+    await act(async () => answer(offers));
+    expect(busy()).toBe("false");
     expect(screen.getByText("Scanează cardul")).toBeTruthy();
     expect(screen.getByText("Espresso")).toBeTruthy();
     expect(screen.getByText(/12 lei/)).toBeTruthy();
@@ -106,15 +119,31 @@ describe("idle (§8.3)", () => {
     expect(onStaff).toHaveBeenCalled();
   });
 
-  it("says so when payments are unavailable", () => {
-    mount(<IdleScreen onStaff={vi.fn()} />, {
+  it("says so when payments are unavailable", async () => {
+    mount(<Kept onStaff={vi.fn()} />, {
       session: null,
       offline: true,
       idle: { ...idle, menu: [] },
       api: { options: vi.fn(async () => Promise.reject(new Error("x"))) } as unknown as PaymentsApi,
     });
+    await act(async () => undefined);
     expect(screen.getByText("Plățile sunt temporar indisponibile.")).toBeTruthy();
     expect(screen.getByText("Meniul apare în curând.")).toBeTruthy();
+    expect(busy()).toBe("false"); // no answer is an answer: the screen does not wait forever
+  });
+
+  it("after a logout, the offers kept by the kiosk are there at once, then refreshed", async () => {
+    const onOptions = vi.fn();
+    let answer: (value: Options) => void = () => undefined;
+    const options = vi.fn(() => new Promise<Options>((resolve) => (answer = resolve)));
+    mount(<IdleScreen options={offers} onOptions={onOptions} onStaff={vi.fn()} />, {
+      session: null,
+      api: { options } as unknown as PaymentsApi,
+    });
+    expect(screen.getByText(/300 lei \/ lună/)).toBeTruthy();
+    expect(busy()).toBe("false");
+    await act(async () => answer(offers));
+    expect(onOptions).toHaveBeenCalledWith(offers);
   });
 });
 

@@ -10,7 +10,7 @@
  */
 import { SimulatorPanel, useDevice, useIdle } from "@jungle/kiosk-kit";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ApiError, type Card, kioskApi, Offline, type Session } from "./lib/api";
+import { ApiError, type Card, type Idle, kioskApi, Offline, type Session } from "./lib/api";
 import { errorText, type Lang, t } from "./lib/i18n";
 import { KioskContext, type Kiosk, type Screen } from "./kiosk";
 import { Challenges } from "./screens/Challenges";
@@ -42,6 +42,7 @@ export function App() {
   const [session, setSession] = useState<Session | null>(null);
   const [screen, setScreen] = useState<Screen>("home");
   const [message, setMessage] = useState<Message | null>(null);
+  const [idle, setIdle] = useState<Idle | null>(null);
   const scanHandler = useRef<((card: Card) => void) | null>(null);
   // Bumped at each logout: an answer that arrives after it must not bring the session back.
   const generation = useRef(0);
@@ -57,6 +58,8 @@ export function App() {
   const notify = useCallback((text: string, kind: "ok" | "error" = "ok") => {
     setMessage({ text, kind });
   }, []);
+  const online = useCallback(() => setOffline(false), []);
+  const lost = useCallback(() => setOffline(true), []);
 
   const endSession = useCallback(
     (current: Session | null) => {
@@ -208,7 +211,7 @@ export function App() {
         {session ? (
           <SessionScreens screen={screen} />
         ) : (
-          <IdleScreen onBack={() => setOffline(false)} onOffline={() => setOffline(true)} />
+          <IdleScreen idle={idle} onLoaded={setIdle} onBack={online} onOffline={lost} />
         )}
         {simulator && link ? <SimulatorPanel link={link} /> : null}
       </main>

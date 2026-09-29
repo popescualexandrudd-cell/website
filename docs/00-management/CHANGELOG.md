@@ -4,6 +4,12 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Reparat — 29.09.2026 (CI roșu pe `main`, Chioșcul Ligii)
+- Chioșcul Ligii, ecranul de repaus (§8.2): cerea clasamentul în fiecare secundă, nu la 30 s, și rotirea Dublu / Simplu / Perechi reîncepea mereu (nu se vedea decât Dublu). Încărcarea depinde acum doar de API (`useEffectEvent`), iar chioșcul păstrează clasamentele între sesiuni: după o ieșire ecranul revine direct cu ele, fără ecran gol și fără saltul paginii (90 px) care făcea să se piardă un clic în testele cap-coadă.
+- `packages/kiosk-kit`, `useIdle`: ceasul bate doar cât numără (sesiune deschisă sau plată în curs); un chioșc în repaus nu mai e redesenat în fiecare secundă.
+- Chioșcul de Plăți, la fel: oferta de abonamente rămâne între sesiuni (după o ieșire, ecranul nu mai „sare” când sosește). Ecranele de repaus ale ambelor chioșcuri spun când încă se încarcă (`aria-busy`).
+- Testele cap-coadă ale chioșcurilor așteaptă ecranul de repaus gata înainte să apese ceva (un test al modului personal apăsa „Personal” chiar când pagina se mișca) și trimit scanarea simulată cu Enter (un clic e verificat de Playwright doar la apăsare). La un test picat al Chioșcului Ligii, jurnalul arată ce a făcut pagina (mesajele bridge-ului, fără coduri de card; cererile; erorile); `scripts/test-e2e` afișează și ce arăta pagina la final, așteaptă oprirea serverelor la ieșire și verifică pornirea Redis.
+
 ### Etapa 10 — 29.09.2026 (aprobată 29.09.2026; Q56 rămâne deschisă)
 #### Adăugat
 - `apps/admin` (React + Vite, port 5179): panoul de administrare (§8.6), pe aceeași adresă cu API-ul (proxy `/api`, cookie de sesiune + CSRF).

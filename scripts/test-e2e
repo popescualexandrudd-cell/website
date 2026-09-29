@@ -19,6 +19,10 @@ mkdir -p "$MAIL_DIR"
 PIDS=()
 cleanup() {
   for pid in "${PIDS[@]:-}"; do [ -n "$pid" ] && kill "$pid" 2>/dev/null || true; done
+  # Wait until they are gone (at most 10 s each): the next run finds its ports free.
+  for pid in "${PIDS[@]:-}"; do
+    for _ in $(seq 1 50); do [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null || break; sleep 0.2; done
+  done
   rm -rf "$WORK"
 }
 trap cleanup EXIT
@@ -26,6 +30,11 @@ trap cleanup EXIT
 # A failed Playwright run: what the servers said (the traces are in apps/*/test-results).
 failed() {
   for log in "$@"; do echo "==> $log"; cat "$log"; done
+  # What each failed page showed at the end (Playwright's snapshot, without the test source).
+  find apps/*/test-results -name error-context.md -newer "$WORK" 2>/dev/null | while read -r context; do
+    echo "==> $context"
+    sed '/^# Test source/,$d' "$context"
+  done || true
   echo "==> backend.log (last 200 lines)"
   tail -n 200 "$WORK/backend.log"
   exit 1
@@ -47,6 +56,7 @@ else
   redis-server --port 6390 --bind 127.0.0.1 --save "" --appendonly no --dir "$WORK" >"$WORK/redis.log" 2>&1 &
   PIDS+=($!)
   for _ in $(seq 1 30); do redis-cli -p 6390 ping >/dev/null 2>&1 && break; sleep 0.2; done
+  redis-cli -p 6390 ping >/dev/null 2>&1 || { echo "Redis did not start"; cat "$WORK/redis.log"; exit 1; }
   REDIS_URL=redis://127.0.0.1:6390/0
 fi
 psql "$BASE_DB_URL" -q -c "DROP DATABASE IF EXISTS jungle_e2e" -c "CREATE DATABASE jungle_e2e" >/dev/null

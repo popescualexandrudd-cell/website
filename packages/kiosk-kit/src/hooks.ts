@@ -80,20 +80,26 @@ export function useIdle(active: boolean, ms: number, onTimeout: () => void, hold
   timeout.current = onTimeout;
 
   const touch = useCallback(() => setLastTouch(Date.now()), []);
+  // `now` stops while not counting: a touch made since then is never in the future.
+  const elapsed = Math.max(0, now - lastTouch);
 
+  // The clock ticks only while it counts (or holds): an idle kiosk is not re-rendered every
+  // second for hours, and its screens are not reloaded with it.
+  const counting = active || hold;
   useEffect(() => {
+    if (!counting) return;
     const tick = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(tick);
-  }, []);
+  }, [counting]);
   useEffect(() => {
     if (hold) setLastTouch(Date.now());
   }, [hold, now]);
   useEffect(() => {
-    if (active && !hold && now - lastTouch >= ms) {
+    if (active && !hold && elapsed >= ms) {
       setLastTouch(Date.now());
       timeout.current();
     }
-  }, [active, hold, lastTouch, ms, now]);
+  }, [active, hold, elapsed, ms]);
   useEffect(() => {
     window.addEventListener("pointerdown", touch);
     window.addEventListener("keydown", touch);
@@ -103,6 +109,6 @@ export function useIdle(active: boolean, ms: number, onTimeout: () => void, hold
     };
   }, [touch]);
 
-  const secondsLeft = Math.max(0, Math.ceil((ms - (now - lastTouch)) / 1000));
+  const secondsLeft = Math.max(0, Math.ceil((ms - elapsed) / 1000));
   return { secondsLeft, touch };
 }

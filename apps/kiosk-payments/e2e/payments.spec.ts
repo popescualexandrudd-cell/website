@@ -21,8 +21,11 @@ const demo: Demo = JSON.parse(readFileSync(process.env.E2E_PAYMENTS_DATA ?? "", 
 const DISPLAY = process.env.E2E_DISPLAY_URL ?? "http://localhost:5176";
 
 async function scan(page: Page, code: string) {
-  await page.getByLabel("Card code").fill(code);
-  await page.getByRole("button", { name: "Scan", exact: true }).click();
+  // The simulator's form is sent with Enter, not a mouse click: a click is checked only where the
+  // button was when pressed, and the page may move under it before it is released (a lost scan).
+  const input = page.getByLabel("Card code");
+  await input.fill(code);
+  await input.press("Enter");
 }
 
 /** The customer's card: the session opens (the greeting shows) before the next step. */
@@ -35,9 +38,15 @@ async function insert(page: Page, ...lei: number[]) {
   for (const value of lei) await page.getByRole("button", { name: `Insert ${value} lei` }).click();
 }
 
+/** The idle screen has its data (`aria-busy` off): a click never lands while the page still moves. */
+async function ready(page: Page) {
+  await expect(page.locator(".idle")).toHaveAttribute("aria-busy", "false");
+}
+
 async function logout(page: Page) {
   await page.getByRole("button", { name: "Ieșire" }).click();
   await expect(page.getByText("Scanează cardul", { exact: true })).toBeVisible();
+  await ready(page);
 }
 
 async function shot(page: Page, name: string) {
@@ -55,6 +64,7 @@ test.describe.configure({ mode: "serial" });
 
 test("idle: the call to scan, the café menu, the subscription offers", async ({ page }) => {
   await page.goto("/");
+  await ready(page);
   await expect(page.getByText("Scanează cardul", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Meniul cafenelei" })).toBeVisible();
   await expect(page.getByText("Espresso")).toBeVisible();
@@ -65,6 +75,7 @@ test("idle: the call to scan, the café menu, the subscription offers", async ({
 
 test("R-121 + §8.3: a voucher, then the rest of the hour in cash, with change and a receipt", async ({ page }) => {
   await page.goto("/");
+  await ready(page);
   await login(page);
   await expect(page.getByText("Credit în cont: 50 lei")).toBeVisible();
   await expectAccessible(page);
@@ -97,6 +108,7 @@ test("R-121 + §8.3: a voucher, then the rest of the hour in cash, with change a
 
 test("§8.3 flow 5 + §8.7: a coffee paid from credit reaches the café display", async ({ page, context }) => {
   await page.goto("/");
+  await ready(page);
   await login(page);
   await page.getByRole("button", { name: "Cafenea" }).click();
   await page.getByRole("button", { name: "Mai mult: Espresso" }).click();
@@ -123,6 +135,7 @@ test("§8.3 flow 5 + §8.7: a coffee paid from credit reaches the café display"
 
 test("§8.3 flow 4: the subscription configurator, then cancelling before any money", async ({ page }) => {
   await page.goto("/");
+  await ready(page);
   await login(page);
   await page.getByRole("button", { name: "Cumpără abonament" }).click();
   await page.getByRole("button", { name: "Padel", exact: true }).click();
@@ -141,6 +154,7 @@ test("§8.3 flow 4: the subscription configurator, then cancelling before any mo
 
 test("staff mode (Q54): card + PIN, count the cash, close the day", async ({ page }) => {
   await page.goto("/");
+  await ready(page);
   await page.getByRole("button", { name: "Personal" }).click();
   await expect(page.getByText("Scanează cardul de angajat")).toBeVisible();
   await scan(page, demo.receptionist.card);
@@ -160,6 +174,7 @@ test("staff mode (Q54): card + PIN, count the cash, close the day", async ({ pag
 
 test("a wrong PIN is refused", async ({ page }) => {
   await page.goto("/");
+  await ready(page);
   await page.getByRole("button", { name: "Personal" }).click();
   await scan(page, demo.receptionist.card);
   for (const digit of "000000") await page.getByRole("button", { name: digit, exact: true }).click();

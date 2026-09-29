@@ -1,15 +1,20 @@
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { useEffect, useState } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { KioskApi, Session } from "../lib/api";
+import type { Idle, KioskApi, Session } from "../lib/api";
 import { KioskContext, type Kiosk } from "../kiosk";
 import { Confirm } from "./Confirm";
 import { Consent } from "./Consent";
 import { Fixtures } from "./Fixtures";
 import { Home } from "./Home";
+import { IdleScreen, REFRESH_MS, ROTATE_MS } from "./Idle";
 import { ScoreEntry } from "./ScoreEntry";
 import { Teams } from "./Teams";
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  vi.useRealTimers();
+});
 
 const person = (id: string, first: string) => ({ id, first_name: first, last_name: "Demo" });
 
@@ -246,5 +251,75 @@ describe("Q55: the players choose their teams", () => {
       fireEvent.click(screen.getByRole("button", { name: "Dana Demo" }));
     });
     expect(kiosk.fail).toHaveBeenCalledWith(refused);
+  });
+});
+
+describe("§8.2 the idle screen", () => {
+  const empty: Idle = {
+    doubles: [],
+    singles: [],
+    pairs: [],
+    kings: [],
+    challenges: [],
+    match_of_the_day: { found: false, chosen_by_admin: false, court: "", players: [], reasons: [] },
+  };
+
+  /** A parent that re-renders every second, with new callbacks each time. */
+  function Ticking() {
+    const [, setTick] = useState(0);
+    const [idle, setIdle] = useState<Idle | null>(null);
+    useEffect(() => {
+      const timer = setInterval(() => setTick((n) => n + 1), 1000);
+      return () => clearInterval(timer);
+    }, []);
+    return <IdleScreen idle={idle} onLoaded={(data) => setIdle(data)} onBack={() => undefined} onOffline={() => undefined} />;
+  }
+
+  it("loads once, refreshes every 30 s and rotates the ladders, however often the kiosk re-renders", async () => {
+    vi.useFakeTimers();
+    const idle = vi.fn(async () => empty);
+    mount(<Ticking />, session(), { idle });
+    expect(document.querySelector(".idle")?.getAttribute("aria-busy")).toBe("true");
+    await act(async () => undefined);
+    expect(document.querySelector(".idle")?.getAttribute("aria-busy")).toBe("false");
+    expect(idle).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole("heading", { name: "Clasament Dublu" })).toBeTruthy();
+    for (let second = 1; second < REFRESH_MS / 1000; second++) {
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(1000);
+      });
+      if (second === ROTATE_MS / 1000) expect(screen.getByRole("heading", { name: "Clasament Simplu" })).toBeTruthy();
+    }
+    expect(idle).toHaveBeenCalledTimes(1);
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1000);
+    });
+    expect(idle).toHaveBeenCalledTimes(2);
+  });
+
+  it("after a logout, the standings kept by the kiosk are there at once, then refreshed", async () => {
+    const kept: Idle = {
+      ...empty,
+      doubles: [
+        {
+          position: 1,
+          players: [person("p1", "Ana"), person("p2", "Bogdan")],
+          tier: "gold",
+          division: "II",
+          level: 3.2,
+          lp: 45,
+          eligible: true,
+        },
+      ],
+    };
+    const onLoaded = vi.fn();
+    let answer: (value: Idle) => void = () => undefined;
+    const idle = vi.fn(() => new Promise<Idle>((resolve) => (answer = resolve)));
+    mount(<IdleScreen idle={kept} onLoaded={onLoaded} onBack={() => undefined} onOffline={() => undefined} />, session(), { idle });
+    expect(screen.getByText("Ana Demo & Bogdan Demo")).toBeTruthy();
+    expect(document.querySelector(".idle")?.getAttribute("aria-busy")).toBe("false");
+    expect(screen.getAllByText(/Clasamentul apare după primele meciuri/)).toHaveLength(1); // the Kings only
+    await act(async () => answer(empty));
+    expect(onLoaded).toHaveBeenCalledWith(empty);
   });
 });

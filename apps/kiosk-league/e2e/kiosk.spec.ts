@@ -16,13 +16,22 @@ const demo: Demo = JSON.parse(readFileSync(process.env.E2E_KIOSK_DATA ?? "", "ut
 const card = (n: number) => demo.players[n]!.card;
 
 async function scan(page: Page, code: string) {
-  await page.getByLabel("Card code").fill(code);
-  await page.getByRole("button", { name: "Scan" }).click();
+  // The simulator's form is sent with Enter, not a mouse click: a click is checked only where the
+  // button was when pressed, and the page may move under it before it is released (a lost scan).
+  const input = page.getByLabel("Card code");
+  await input.fill(code);
+  await input.press("Enter");
+}
+
+/** The idle screen has its data (`aria-busy` off): a click never lands while the page still moves. */
+async function ready(page: Page) {
+  await expect(page.locator(".idle")).toHaveAttribute("aria-busy", "false");
 }
 
 async function logout(page: Page) {
   await page.getByRole("button", { name: "Ieșire" }).click();
   await expect(page.getByText("Scanează cardul", { exact: true })).toBeVisible();
+  await ready(page);
 }
 
 /** Screenshots for the stage report (only when E2E_SCREENSHOTS is set). */
@@ -37,10 +46,52 @@ async function expectAccessible(page: Page) {
   expect(serious.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`)).toEqual([]);
 }
 
+/**
+ * What the page did (the bridge messages by name, never a card code; the API calls; failed
+ * requests; page errors), printed only when a test fails: a lost scan shows where it was lost.
+ */
+const journal: string[] = [];
+
+function bridgeMessage(payload: string | Buffer): string {
+  try {
+    const message = JSON.parse(String(payload)) as { op?: string; event?: string; id?: number; ok?: boolean; error?: string };
+    if (message.op) return `${message.op} #${message.id}`;
+    if (message.event) return `event ${message.event}`;
+    return `reply #${message.id} ${message.ok ? "ok" : `refused: ${message.error}`}`;
+  } catch {
+    return "(not JSON)";
+  }
+}
+
+test.beforeEach(({ page }) => {
+  journal.length = 0;
+  const note = (line: string) => journal.push(`${new Date().toISOString().slice(11, 23)} ${line}`);
+  const path = (url: string) => new URL(url).pathname;
+  page.on("websocket", (socket) => {
+    note("bridge: connected");
+    socket.on("framesent", (frame) => note(`bridge ← ${bridgeMessage(frame.payload)}`));
+    socket.on("framereceived", (frame) => note(`bridge → ${bridgeMessage(frame.payload)}`));
+    socket.on("close", () => note("bridge: closed"));
+  });
+  page.on("response", (response) => {
+    if (response.url().includes("/api/")) note(`${response.status()} ${response.request().method()} ${path(response.url())}`);
+  });
+  page.on("requestfailed", (request) => note(`FAILED ${request.method()} ${path(request.url())}: ${request.failure()?.errorText}`));
+  page.on("pageerror", (error) => note(`page error: ${error.message}`));
+  page.on("console", (message) => {
+    if (message.type() === "error" || message.type() === "warning") note(`console ${message.type()}: ${message.text()}`);
+  });
+});
+
+test.afterEach(({}, info) => {
+  if (info.status !== info.expectedStatus) console.log(`What the kiosk page did:\n${journal.join("\n")}`);
+});
+
 test.describe.configure({ mode: "serial" });
 
 test("idle screen: standings, Match of the day, the call to scan", async ({ page }) => {
   await page.goto("/");
+  await ready(page);
   await expect(page.getByText("Scanează cardul", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Meciul zilei" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Regii Junglei" })).toBeVisible();
@@ -53,12 +104,14 @@ test("idle screen: standings, Match of the day, the call to scan", async ({ page
 
 test("an unknown card is refused kindly", async ({ page }) => {
   await page.goto("/");
+  await ready(page);
   await scan(page, "COD-INEXISTENT-123");
   await expect(page.getByRole("alert")).toContainText("Cardul nu este valabil");
 });
 
 test("R-010: a newcomer joins the league with the GDPR consent", async ({ page }) => {
   await page.goto("/");
+  await ready(page);
   await scan(page, demo.newcomer.card);
   await expect(page.getByRole("heading", { name: "Salut, Demo!" })).toBeVisible();
   await expect(page.getByText("Nu ești încă în ligă.")).toBeVisible();
@@ -76,6 +129,7 @@ test("R-010: a newcomer joins the league with the GDPR consent", async ({ page }
 
 test("§8.2 actions 2–3: the score is entered, then confirmed by the others", async ({ page }) => {
   await page.goto("/");
+  await ready(page);
   await scan(page, card(0));
   await expect(page.getByRole("heading", { name: "Salut, Demo!" })).toBeVisible();
   await shot(page, "3-sesiune");
@@ -103,6 +157,7 @@ test("§8.2 actions 2–3: the score is entered, then confirmed by the others", 
 
 test("§8.2 actions 5–6: check-in and the standings search", async ({ page }) => {
   await page.goto("/");
+  await ready(page);
   await scan(page, card(1));
   await page.getByRole("button", { name: "Check-in" }).click();
   await expect(page.getByRole("status")).toContainText("Check-in făcut");
@@ -116,6 +171,7 @@ test("§8.2 actions 5–6: check-in and the standings search", async ({ page }) 
 test("§8.2: logged out after 30 seconds without a touch", async ({ page }) => {
   await page.clock.install();
   await page.goto("/");
+  await ready(page);
   await scan(page, card(2));
   await expect(page.getByRole("heading", { name: "Salut, Demo!" })).toBeVisible();
   await page.clock.fastForward(22_000);

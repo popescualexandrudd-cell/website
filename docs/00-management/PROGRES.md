@@ -35,8 +35,8 @@
 | 7 | Hardware Bridge + Chioșcul de Ligă | dec. 2026–ian. 2027 | **Aprobată 28.09.2026** |
 | 8 | Chioșcul de Plăți + afișajul cafenelei | ian. 2027 | **Aprobată 29.09.2026** |
 | 9 | Ecranele | ian. 2027 | **Aprobată 29.09.2026** |
-| 10 | Panoul de admin complet | ian. 2027 | Neîncepută |
-| 11 | Website-ul „simulator” | ian.–feb. 2027 | Neîncepută |
+| 10 | Panoul de admin complet | ian. 2027 | **Aprobată 29.09.2026** |
+| 11 | Website-ul „simulator” | ian.–feb. 2027 | În lucru (secțiune cu secțiune) |
 | 12 | AI + notificări | feb. 2027 | Neîncepută |
 | 13 | SEO, marketing, branding, vânzări | în paralel, feb. 2027 | Neîncepută |
 | 14 | Deploy, securitate, backup, hardware real | feb. 2027 | Neîncepută |
@@ -130,3 +130,4 @@
 - **29.09.2026** — Q55 aplicată (toți jucătorii pe nume, insigna „Ligă”, opoziția GDPR, echipele alese la Chioșcul Ligii); în `main`.
 - **29.09.2026** — Etapa 10 livrată: panoul de administrare (`apps/admin`, §8.6) cu intrare 2FA obligatorie, meniu după permisiuni și locație, tablou de bord live, utilizatori, calendar cu mutare prin tragere, resurse, prețuri, abonamente, firme, clase, prezențe, ligă (fără câmp de scor), plăți și registru, numerar și rapoarte Z, cafenea, evenimente, rapoarte și exporturi CSV, personal și roluri, dispozitive, setări și feature flags, jurnal de audit, starea sistemului; modulele Etapelor 11–12 marcate. `jungle/panel` (100% acoperire), `manage.py panel_demo`, teste cap-coadă cu 2FA. Întrebare nouă: Q56.
 - **29.09.2026** — Etapa 10 aprobată de proprietar (merge în `main`, tag local `etapa-10`); Q56 rămâne deschisă, cu varianta implicită. Început Etapa 11.
+- **29.09.2026** — CI roșu pe `main` (3aa5a62, testul cap-coadă al Chioșcului Ligii): o scanare simulată pierdută. Cauza, măsurată: după fiecare ieșire, ecranul de repaus pornea gol și, când soseau clasamentele, pagina creștea cu 90 px chiar în clipa clicului pe „Scan”; Playwright verifică ținta doar la apăsare, iar eliberarea cădea în altă parte. Reparat: chioșcul păstrează clasamentele între sesiuni (fără salt, fără ecran gol); ecranul de repaus nu mai cere clasamentul în fiecare secundă (acum la 30 s, cum era prevăzut, iar rotirea Dublu/Simplu/Perechi funcționează); ceasul de inactivitate nu mai redesenează chioșcul în repaus; Chioșcul de Plăți păstrează la fel oferta de abonamente; ecranele de repaus spun când încă se încarcă, iar testele așteaptă ecranul gata înainte să apese și trimit scanarea simulată cu Enter; la un test picat, jurnalul CI arată ce a făcut pagina (mesajele bridge-ului, cererile, erorile) și ce afișa.
