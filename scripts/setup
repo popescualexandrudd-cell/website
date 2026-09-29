@@ -3,6 +3,8 @@
 # Needs a PostgreSQL (for example: docker compose -f deploy/compose/dev/compose.yaml up -d db redis).
 set -euo pipefail
 cd "$(cd "$(dirname "$0")/.." && pwd)"
+# Every push runs scripts/test-all first (.githooks/pre-push): nothing red reaches GitHub.
+git rev-parse --git-dir >/dev/null 2>&1 && git config core.hooksPath .githooks
 uv sync --all-packages
 pnpm install
 (cd apps/backend && uv run python manage.py migrate && uv run python manage.py seed_initial --demo)

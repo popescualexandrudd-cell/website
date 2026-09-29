@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Nothing reaches GitHub unless every check of the project passed on exactly what is pushed
+# (CLAUDE.md, work rule 1; ADR-0021). Enabled by scripts/setup: git config core.hooksPath .githooks
+#
+# - The working tree must be clean: scripts/test-all checks the files on disk, so they must be
+#   the commit being pushed (no uncommitted or untracked changes mixed in).
+# - The pushed commit must be the one checked out (HEAD).
+# - scripts/test-all runs once per commit: a commit that passed is remembered, so pushing the
+#   same commit to the working branch and then to main does not run everything twice.
+set -euo pipefail
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+GREEN="$(git rev-parse --git-path jungle-test-all-green)"
+HEAD_SHA="$(git rev-parse HEAD)"
+ZERO=0000000000000000000000000000000000000000
+
+refuse() { printf '\npre-push: PUSH REFUSED. %s\n\n' "$1" >&2; exit 1; }
+
+pushed=()
+while read -r _local_ref local_sha _remote_ref _remote_sha; do
+  [ "$local_sha" = "$ZERO" ] && continue  # deleting a remote branch: nothing to check
+  pushed+=("$local_sha")
+done
+[ "${#pushed[@]}" -eq 0 ] && exit 0
+
+for sha in "${pushed[@]}"; do
+  [ "$sha" = "$HEAD_SHA" ] || refuse "Push the commit that is checked out (HEAD $HEAD_SHA), not $sha."
+done
+if [ -n "$(git status --porcelain)" ]; then
+  git status --short >&2
+  refuse "Uncommitted or untracked changes: commit or stash them, so the checks run on exactly what is pushed."
+fi
+if [ -f "$GREEN" ] && [ "$(cat "$GREEN")" = "$HEAD_SHA" ]; then
+  echo "pre-push: scripts/test-all already passed on $HEAD_SHA."
+  exit 0
+fi
+
+echo "pre-push: running scripts/test-all on $HEAD_SHA (all checks, including end-to-end)…"
+if ! scripts/test-all </dev/null; then
+  refuse "scripts/test-all failed on $HEAD_SHA. Fix it, commit, and push again."
+fi
+[ -z "$(git status --porcelain)" ] || refuse "scripts/test-all changed files (generated files out of date?): commit them first."
+echo "$HEAD_SHA" >"$GREEN"
+echo "pre-push: all checks passed on $HEAD_SHA."

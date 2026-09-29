@@ -10,7 +10,8 @@ step() { printf '\n==> %s\n' "$1"; }
 step "Python dependencies"
 uv sync --all-packages --frozen
 
-step "Lint and formatting (ruff)"
+step "Lint and formatting (ruff); the pre-push hook"
+bash -n .githooks/pre-push
 uv run ruff check .
 uv run ruff format --check .
 

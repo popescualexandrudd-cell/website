@@ -6,6 +6,7 @@
 - [ ] Am recitit cerința din acest document și regulile R-xxx atinse de modificare.
 - [ ] Codul e complet, fără trunchieri, fără secrete, cu fișiere în folderele corecte.
 - [ ] Testele sunt scrise și verzi; lint și type-check curate.
+- [ ] (Adăugat 29.09.2026, decizia proprietarului) `scripts/test-all` a trecut pe exact commit-ul împins, cu arborele curat (hook-ul `.githooks/pre-push`); după push, CI e verde pe branch, abia apoi pe `main`.
 - [ ] Am făcut dubla revizuire logică: fluxul real al unui client, cazurile-limită, perspectiva unui atacator.
 - [ ] Am verificat banii (rotunjiri, idempotență), fusul orar, concurența și permisiunile.
 - [ ] Traducerile RO/EN sunt complete; textele publice nu afișează mai mult decât permite R-012.

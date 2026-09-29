@@ -8,6 +8,7 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 - Hardware Bridge: o scanare sau o bancnotă se trimite acum tuturor paginilor deodată, iar o pagină care nu o preia în 2 secunde (de exemplu una care tocmai se închide) e deconectată și se reconectează singură. Înainte, o pagină pe cale să se închidă putea întârzia scanarea pentru pagina vie până la 10 secunde (testul cap-coadă al abonamentului a picat o dată în CI).
 - Hardware Bridge: o încasare terminată (sau oprită de un defect) se consideră încheiată înainte ca pagina să afle, deci următoarea comandă a paginii nu mai primește „busy”.
 - CI: la un test cap-coadă picat se păstrează 7 zile urmele Playwright (capturi, trace), iar scriptul afișează ultimele 200 de rânduri din jurnalul serverului.
+- Ca emailurile „Run failed” să nu mai apară: 5 din cele 6 rulări CI picate (27–29.09) veneau din commit-uri împinse înainte ca `scripts/test-all` să fie verde (lint, un test de setări de producție, tipuri TypeScript). Hook-ul nou `.githooks/pre-push` rulează toate verificările pe exact commit-ul împins și refuză push-ul dacă pică sau dacă arborele de lucru nu e curat; `scripts/setup` îl activează. Regula e în `CLAUDE.md` (regula 9) și în `CHECKLIST_LIVRARE.md`.
 
 ### Etapa 8 — 29.09.2026 (aprobată 29.09.2026; Q53 și Q54 noi, deschise)
 #### Adăugat

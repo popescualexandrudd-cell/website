@@ -31,6 +31,7 @@ Sistem digital propriu pentru clubul **Jungle Padel** (Șoseaua Biruinței, lân
 6. **Limbă:** cod, identificatori și commit-uri în **engleză**; documentația și toate textele pentru clienți, personal și proprietar în **română** (cu traduceri; RO + EN complete la lansare).
 7. **La finalul fiecărei etape, explică proprietarului în română simplă:** ce s-a făcut, cum verifică el (click cu click), ce urmează, ce decizii are de luat.
 8. **Organizare pe foldere**, fiecare componentă cu README, `.env.example`, Dockerfile (unde e cazul) și teste proprii.
+9. **Nimic roșu pe GitHub** (decizia proprietarului, 29.09.2026, după emailurile „Run failed”): se împinge (push) doar un commit pe care `scripts/test-all` a trecut complet, cu arborele de lucru curat. Hook-ul `.githooks/pre-push` impune asta (îl activează `scripts/setup`; într-o sesiune nouă: `git config core.hooksPath .githooks`). **Niciodată `--no-verify`**, niciodată lucru neterminat (WIP) împins ca să fie „salvat”. Pe `main` ajunge un commit doar după ce CI e verde pe branch-ul de lucru pentru același commit. După fiecare push: verifici CI; dacă pică, găsești cauza reală și o repari (nu „reîncerci”).
 
 ## Invariante care nu se încalcă niciodată
 1. **Scorurile se introduc și se confirmă EXCLUSIV la Chioșcul de Ligă înregistrat**, verificat pe server (dispozitiv autentificat + rețea + rol). Orice altă sursă: refuz + jurnal (§4.1, §12.1, ADR-0012).
@@ -77,7 +78,7 @@ Monorepo: workspace pnpm (TypeScript) + workspace uv (Python) (ADR-0002). Featur
 - Ziua (limita zilnică, decay) se socotește în `Europe/Bucharest`.
 
 ## Comenzi
-- `scripts/test-all` — TOATE verificările (ruff, mypy strict, migrații, pytest cu acoperire ≥ 95%, OpenAPI și client la zi, tsc, teste JS, traduceri RO/EN). Trebuie să fie verde înainte de orice livrare.
+- `scripts/test-all` — TOATE verificările (ruff, mypy strict, migrații, pytest cu acoperire ≥ 95%, OpenAPI și client la zi, tsc, teste JS, traduceri RO/EN). Trebuie să fie verde înainte de orice livrare; `.githooks/pre-push` îl rulează automat la fiecare push (o singură dată pe commit) și refuză push-ul dacă pică. În CI, la un test cap-coadă picat, urmele Playwright se descarcă din artefactul `e2e-test-results`.
 - `scripts/setup` — dependențe, migrații, date inițiale + demo. `scripts/dev` — backend pe `http://localhost:8000` (`/api/v1/docs`, `/django-admin/`).
 - `scripts/generate-api-client` — după ORICE schimbare de API (altfel `test-all` pică).
 - `scripts/test-e2e` — backend + build de producție al site-ului + Playwright (desktop și mobil) + axe; apoi Chioșcul Ligii cu Hardware Bridge real (simulatoare, scanări semnate); apoi Chioșcul de Plăți și afișajul cafenelei, fiecare cu bridge-ul lui (porturile 8766, 8767); rulat și de `test-all` (`SKIP_E2E=1` îl sare; `E2E_ONLY=kiosk` doar Chioșcul Ligii, `E2E_ONLY=payments` doar plățile; `E2E_SCREENSHOTS=<folder>` salvează capturile).
