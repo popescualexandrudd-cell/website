@@ -130,7 +130,13 @@ class Command(BaseCommand):
         return {
             "court": screens[0],
             "lobby": screens[1],
-            "booking": {"id": str(booking.pk), "court": court.name},
+            "booking": {
+                "id": str(booking.pk),
+                "court": court.name,
+                # The screen shows the next booking of today only (§8.5): after 23:00 the
+                # training that follows the demo match starts tomorrow.
+                "next_today": clock.local(booking.ends_at).date() == clock.today_local(),
+            },
             "players": [f"{p.last_name} {p.first_name}" for p in players],
         }
 

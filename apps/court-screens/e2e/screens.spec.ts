@@ -9,7 +9,7 @@ import { expect, type Page, test } from "@playwright/test";
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 
-type Demo = { players: string[]; booking: { id: string; court: string } };
+type Demo = { players: string[]; booking: { id: string; court: string; next_today: boolean } };
 const demo: Demo = JSON.parse(readFileSync(process.env.E2E_SCREENS_DATA ?? "", "utf8"));
 const COURT = process.env.E2E_COURT_URL ?? "http://localhost:5177";
 const LOBBY = process.env.E2E_LOBBY_URL ?? "http://localhost:5178";
@@ -42,7 +42,11 @@ test("§8.5: the court screen shows the league match of the example", async ({ p
     await expect(page.getByRole("listitem").filter({ hasText: name })).toContainText(details);
   }
   await expect(page.getByText("vs", { exact: true })).toBeVisible();
-  await expect(page.getByText(/^Timp rămas: 00:\d\d · Următorul: \d\d:\d\d Antrenament$/)).toBeVisible();
+  // Up to an hour left (01:00 right after a half hour starts). The training after the match shows
+  // as "next" when it is today: the screen lists today's bookings only (after 23:00 it is tomorrow).
+  const left = "Timp rămas: (00:\\d\\d|01:00)";
+  const next = demo.booking.next_today ? " · Următorul: \\d\\d:\\d\\d Antrenament" : "";
+  await expect(page.getByText(new RegExp(`^${left}${next}$`))).toBeVisible();
   await expect(page.getByRole("img", { name: /^Cod QR spre / })).toBeVisible();
   await expect(page.getByRole("status")).toHaveClass(/connection--live/); // the live link is up
   await expectAccessible(page);

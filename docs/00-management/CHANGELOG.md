@@ -7,6 +7,7 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 ### Reparat — 29.09.2026 (panoul de admin, calendarul)
 - O rezervare care nu intră în orele zilei afișate (de exemplu 23:00–00:30, văzută în ziua de după) era desenată peste celula de la 08:00, cu înălțime aproape zero, și o acoperea (găsit de verificarea de accesibilitate, WCAG 2.5.8, când testele au rulat seara). Acum partea din program se desenează normal, iar o rezervare fără nicio parte în program apare sub calendar, în „În afara programului zilei”, de unde se deschide ca oricare alta.
 - `manage.py payments_demo`: rezervarea demo cade în programul clubului (Q3); seara târziu, a doua zi dimineață.
+- Testul cap-coadă al ecranului de teren pica între 23:00 și 24:00: antrenamentul de după meciul demo începea după miezul nopții, iar ecranul arată corect doar rezervările de azi (§8.5). `manage.py screens_demo` spune acum dacă „următorul” e azi (`next_today`), iar testul verifică varianta potrivită orei; acceptă și „Timp rămas: 01:00” (imediat după începutul unei jumătăți de oră).
 
 ### Etapa 11, secțiunea 1 — 29.09.2026 (aprobată 29.09.2026; Q57 rezolvată: site-ul complet apare doar când îl publică proprietarul)
 #### Adăugat

@@ -65,6 +65,7 @@ def test_the_court_screen_of_section_8_5(seeded: None, tmp_path: Path) -> None:
         "starts_at": "2027-04-05T12:30:00Z",
         "session_type": "training",
     }
+    assert result["booking"]["next_today"] is True
     lobby = screen(result, "lobby").state()
     assert lobby["kind"] == "lobby" and lobby["league"]["match_of_the_day_court"] == "Teren 4"
     assert result["players"][0] == "Popescu Alexandru Daniel"
@@ -78,6 +79,15 @@ def test_the_court_screen_of_section_8_5(seeded: None, tmp_path: Path) -> None:
     assert Booking.objects.filter(pk=result["booking"]["id"], status=BookingStatus.CANCELLED)
     now_on_court = screen(again, "court").state()["court"]["current"]
     assert now_on_court["booking_id"] == again["booking"]["id"]
+
+
+def test_late_in_the_evening_the_next_booking_is_tomorrow(seeded: None, time_machine: Any) -> None:
+    """§8.5: the court screen shows today's next booking only; at 23:10 the demo match ends at
+    midnight, so the training after it is tomorrow's (the end-to-end test reads `next_today`)."""
+    time_machine.move_to("2027-04-05T23:10:00+03:00", tick=False)
+    result = run()
+    assert result["booking"]["next_today"] is False
+    assert screen(result, "court").state()["court"]["next"] is None
 
 
 def test_refused_in_production_without_seed_or_on_a_taken_court(
