@@ -19,6 +19,9 @@ export const ADDRESS = {
   country: "RO",
 } as const;
 
+/** The club's location in the API (seed_initial): the live data of the home page is read for it. */
+export const LOCATION_SLUG = "jungle-padel";
+
 export const MAP_URL = "https://www.openstreetmap.org/search?query=Selgros%20Pantelimon";
 
 /** ANPC alternative dispute resolution (SAL). The EU ODR platform closed on 20.07.2025 (Reg. (EU) 2024/3228). */

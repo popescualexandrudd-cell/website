@@ -4,6 +4,11 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, secțiunea 4 — 30.09.2026 (livrată)
+#### Adăugat
+- „Acum în club” (§9.2, secțiunea 4): `NowInClub` + `LiveClub`, din API-ul public, reîmprospătat la fiecare minut. Terenurile: liber / liber până la / ocupat până la (rezervările lipite se adună) / închis, fără nume (R-012); Meciul zilei (Q49); primii 3 Regi ai Junglei (R-012); următorul turneu. Ora clubului (`src/lib/live.ts`, Europe/Bucharest); „Regii” se cer doar într-un sezon activ (fără cereri eșuate în browser înainte de primul sezon). Texte `web.site.live.*` RO + EN; `LOCATION_SLUG` în `src/lib/site.ts`.
+- Teste: 4 unitare (`src/lib/live.test.ts`), 3 cap-coadă (`e2e/full/live.spec.ts`: API-ul real, oră fixată cu date controlate și actualizare după un minut, server indisponibil). Lighthouse mobil 93 · 100 · 100 · 100, desktop 100 · 100 · 100 · 100.
+
 ### Etapa 11, secțiunea 3 — 29.09.2026 (livrată; alegerile Etapei 11 delegate de proprietar)
 #### Adăugat
 - Turul clubului la scroll (§9.2, secțiunea 3): `Tour` + `TourStops`, opt opriri în ordinea vizitatorului (parcare → alee → recepție → terenuri → mezanin → cafenea → pilates → sala de evenimente), lângă planul redesenat după schiță (`SitePlan`, fără randări inventate, Q44). Oprirea din mijlocul ecranului se luminează pe plan și primește punctul „ești aici” (`aria-current="step"`); fără JavaScript sau cu mișcare redusă, o listă simplă. Pe telefon, planul rămâne sus. Texte `web.site.tour.*` RO + EN, doar fapte confirmate. „Descoperă clubul” din Hero duce aici.

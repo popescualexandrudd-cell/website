@@ -517,6 +517,44 @@
           }
         }
       },
+      "live": {
+        "kicker": "Live",
+        "title": "Now at the club.",
+        "lead": "The courts right now, the Match of the day, the Kings of the Jungle and the next tournament. It updates itself every minute.",
+        "loading": "Loading the live data…",
+        "unavailable": "The live data is not available right now. We will try again shortly.",
+        "updated": "Updated at {time}",
+        "rank": "{tier} {division} · {lp} LP",
+        "courts": {
+          "title": "The courts now",
+          "busy": "Busy until {time}",
+          "free": "Free",
+          "freeUntil": "Free until {time}",
+          "closed": "Closed now · we open at {time}"
+        },
+        "spotlight": {
+          "title": "Match of the day",
+          "where": "{court}, at {time}",
+          "none": "The Match of the day will be announced soon."
+        },
+        "kings": {
+          "title": "Kings of the Jungle",
+          "none": "The standings appear after the first matches of the season."
+        },
+        "next": {
+          "title": "Next tournament",
+          "when": "Starts on {date}",
+          "none": "The next tournament will be announced soon."
+        },
+        "tiers": {
+          "bronze": "Bronze",
+          "silver": "Silver",
+          "gold": "Gold",
+          "platinum": "Platinum",
+          "diamond": "Diamond",
+          "master": "Master"
+        }
+      },
       "pages": {
         "padel": "Padel",
         "league": "Jungle League",

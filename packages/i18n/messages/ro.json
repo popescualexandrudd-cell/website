@@ -517,6 +517,44 @@
           }
         }
       },
+      "live": {
+        "kicker": "Live",
+        "title": "Acum în club.",
+        "lead": "Terenurile în acest moment, Meciul zilei, Regii Junglei și următorul turneu. Se actualizează singur, în fiecare minut.",
+        "loading": "Se încarcă datele live…",
+        "unavailable": "Datele live nu sunt disponibile acum. Revenim automat.",
+        "updated": "Actualizat la {time}",
+        "rank": "{tier} {division} · {lp} LP",
+        "courts": {
+          "title": "Terenurile acum",
+          "busy": "Ocupat până la {time}",
+          "free": "Liber",
+          "freeUntil": "Liber până la {time}",
+          "closed": "Închis acum · deschidem la {time}"
+        },
+        "spotlight": {
+          "title": "Meciul zilei",
+          "where": "{court}, ora {time}",
+          "none": "Meciul zilei se anunță în curând."
+        },
+        "kings": {
+          "title": "Regii Junglei",
+          "none": "Clasamentul apare după primele meciuri ale sezonului."
+        },
+        "next": {
+          "title": "Următorul turneu",
+          "when": "Începe pe {date}",
+          "none": "Următorul turneu se anunță în curând."
+        },
+        "tiers": {
+          "bronze": "Bronz",
+          "silver": "Argint",
+          "gold": "Aur",
+          "platinum": "Platină",
+          "diamond": "Diamant",
+          "master": "Maestru"
+        }
+      },
       "pages": {
         "padel": "Padel",
         "league": "Liga Jungle",

@@ -1492,6 +1492,88 @@ body[data-menu-open="true"] {
   }
 }
 
+/* ------------------------------------------------------------------ full site: now at the club (Stage 11, §9.2.4) */
+.live {
+  margin-top: 40px;
+}
+.live__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 20px;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.live__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-brass-400);
+  animation: live-pulse 2.4s ease-in-out infinite;
+}
+.live__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 16px;
+}
+.live__panel {
+  min-height: 220px;
+  padding: 22px 24px;
+  background: var(--color-night-800);
+  border: 1px solid var(--line);
+}
+.live__panel h3 {
+  margin: 0 0 16px;
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--text);
+}
+.live__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.live__list li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.live__list li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.live__name {
+  color: var(--text);
+  font-weight: 500;
+}
+.live__state {
+  color: var(--text-2);
+  font-size: 14px;
+}
+.live__courts li[data-state="free"] .live__state {
+  color: var(--accent);
+}
+.live__match {
+  margin: 0 0 8px;
+  color: var(--text);
+  font-weight: 500;
+}
+@keyframes live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
 /* ------------------------------------------------------------------ full site: the build map */
 .site-preview .lead {
   max-width: 720px;

@@ -9,7 +9,8 @@
 | Fundația site-ului complet + **1. Antetul fix** | 29.09.2026 | **aprobată 29.09.2026** |
 | 2. Hero „Intră în junglă” | 29.09.2026 | **livrată** |
 | 3. Turul clubului la scroll | 29.09.2026 | **livrată** |
-| 4–19 | — | urmează, câte una |
+| 4. „Acum în club” (live) | 29.09.2026 | **livrată** |
+| 5–19 | — | urmează, câte una |
 
 ---
 
@@ -164,3 +165,39 @@ Sub Hero, „Descoperă clubul” duce acum aici: **opt opriri, în ordinea unui
 1. **„Cu care intri pe teren”** (textul inițial la recepție) nu e sigur: scanarea la teren e încă nehotărâtă (Q23). Am corectat: cardul se scanează la chioșcuri, pentru plăți, check-in și ligă.
 2. **Contrastul:** opririle care nu sunt „aici” nu sunt estompate (textul ar fi scăzut sub contrastul cerut). Se schimbă doar marginea de alamă a opririi curente.
 3. **Din perspectiva unui atacator:** nimic nou (fără date, formulare sau resurse de la terți).
+
+---
+
+## Secțiunea 4 — „Acum în club” (live)
+
+### Ce s-a construit
+Sub tur, patru panouri care se citesc **live** de pe server și se actualizează singure în fiecare minut (§9.2, secțiunea 4):
+- **Terenurile acum:** pentru fiecare teren, „Liber”, „Liber până la 20:00”, „Ocupat până la 20:30” (rezervările una după alta se adună) sau, în afara programului, „Închis acum · deschidem la 08:00”. **Nu apare niciodată cine joacă** (R-012).
+- **Meciul zilei:** jucătorii, terenul și ora (câmpuri publice, Q49), sau „Meciul zilei se anunță în curând”.
+- **Regii Junglei:** primii 3, cu rangul și LP-ul (R-012), sau „Clasamentul apare după primele meciuri ale sezonului”.
+- **Următorul turneu:** numele și data, sau „se anunță în curând”.
+
+Deasupra scrie „Actualizat la 18:11”, cu un punct care pulsează. Dacă serverul nu răspunde: „Datele live nu sunt disponibile acum. Revenim automat.”, iar panourile își păstrează locul (pagina nu „sare”).
+
+**Ce am ales și de ce:**
+1. **„Următorul eveniment” din §9.2 e, deocamdată, următorul turneu al ligii:** e singurul tip de eveniment public pe care îl are sistemul acum. Serile cu DJ și celelalte evenimente ale clubului vin cu secțiunea „Evenimente” (12), când le vom putea publica din panou.
+2. **Orele sunt mereu ora clubului** (București), oriunde s-ar afla vizitatorul, inclusiv în ziua trecerii la ora de vară.
+3. **Înainte de primul sezon al ligii,** pagina nu mai cere „Regii Junglei” serverului (ar fi răspuns „nu există”). Astfel, browserul vizitatorului nu înregistrează nicio eroare, iar Lighthouse dă 100 la „Bune practici”.
+
+### Capturi de ecran
+8. [„Acum în club” pe calculator](ecrane/desktop-05-acum-in-club.png)
+9. [„Acum în club” pe telefon](ecrane/mobile-05-acum-in-club.png)
+
+Capturile sunt făcute după miezul nopții, cu datele de test (fără sezon de ligă). De aceea terenurile sunt „Închis acum”, iar celelalte panouri spun „în curând”.
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Teste unitare | 4 noi:<br>• ziua și ora clubului, inclusiv la trecerea la ora de vară;<br>• liber / ocupat / închis, cu rezervările una după alta adunate și fără nume;<br>• următorul turneu. |
+| Cap-coadă | 3 noi (calculator + telefon):<br>• cu serverul real, cele 4 terenuri au o stare validă, iar celelalte panouri arată exact ce spune serverul;<br>• cu o oră fixată (18:10) și date controlate: „Ocupat până la 20:30”, „Liber până la 20:00”, apoi, după un minut, un teren devenit ocupat se schimbă singur;<br>• fără server, mesajul și panourile la locul lor.<br>Toate testele site-ului trec: 28 + 27. |
+| Lighthouse, pagina principală cu Hero, tur și „Acum în club” | mobil **93 · 100 · 100 · 100** (CLS 0), calculator **100 · 100 · 100 · 100** ([mobil](lighthouse-mobil.html), [calculator](lighthouse-desktop.html)) |
+
+### Dubla revizuire: probleme găsite și reparate
+1. **Erorile din consola vizitatorului înainte de primul sezon:** găsite de Lighthouse („Bune practici” 96), reparate ca mai sus (acum 100).
+2. **Datele personale:** lista terenurilor nu primește și nu afișează nume. Serverul trimite doar intervalele ocupate, iar testul verifică că la un teren ocupat nu apare niciun nume.
+3. **Din perspectiva unui atacator:** doar citiri publice, deja existente și deja limitate la R-012; nimic nou pe server.
