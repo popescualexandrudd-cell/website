@@ -4,6 +4,11 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, secțiunea 5 — 30.09.2026 (livrată)
+#### Adăugat
+- Padel (§9.2, secțiunea 5): `Padel` + `PadelCourt` (schema unui teren standard 20 × 10 m, ilustrativă); ce e padelul, de ce e ușor de început, terenurile clubului, lecțiile (R-090, R-003), cum rezervi (R-041, Q3, ora împărțită între jucători; fără prețuri, Q21), formatele de turneu Americano / Mexicano / King of the Court (după `league.draws`), „Rezervă un teren”. Texte `web.site.padel.*` RO + EN.
+- Teste cap-coadă `e2e/full/padel.spec.ts` (inclusiv: niciun preț în secțiune). Lighthouse mobil 95 · 100 · 100 · 100, desktop 100 · 100 · 100 · 100.
+
 ### Etapa 11, secțiunea 4 — 30.09.2026 (livrată)
 #### Adăugat
 - „Acum în club” (§9.2, secțiunea 4): `NowInClub` + `LiveClub`, din API-ul public, reîmprospătat la fiecare minut. Terenurile: liber / liber până la / ocupat până la (rezervările lipite se adună) / închis, fără nume (R-012); Meciul zilei (Q49); primii 3 Regi ai Junglei (R-012); următorul turneu. Ora clubului (`src/lib/live.ts`, Europe/Bucharest); „Regii” se cer doar într-un sezon activ (fără cereri eșuate în browser înainte de primul sezon). Texte `web.site.live.*` RO + EN; `LOCATION_SLUG` în `src/lib/site.ts`.

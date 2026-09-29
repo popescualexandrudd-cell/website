@@ -10,7 +10,8 @@
 | 2. Hero „Intră în junglă” | 29.09.2026 | **livrată** |
 | 3. Turul clubului la scroll | 29.09.2026 | **livrată** |
 | 4. „Acum în club” (live) | 29.09.2026 | **livrată** |
-| 5–19 | — | urmează, câte una |
+| 5. Padel | 30.09.2026 | **livrată** |
+| 6–19 | — | urmează, câte una |
 
 ---
 
@@ -201,3 +202,33 @@ Capturile sunt făcute după miezul nopții, cu datele de test (fără sezon de 
 1. **Erorile din consola vizitatorului înainte de primul sezon:** găsite de Lighthouse („Bune practici” 96), reparate ca mai sus (acum 100).
 2. **Datele personale:** lista terenurilor nu primește și nu afișează nume. Serverul trimite doar intervalele ocupate, iar testul verifică că la un teren ocupat nu apare niciun nume.
 3. **Din perspectiva unui atacator:** doar citiri publice, deja existente și deja limitate la R-012; nimic nou pe server.
+
+---
+
+## Secțiunea 5 — Padel
+
+### Ce s-a construit
+Secțiunea despre atracția principală (§9.2, secțiunea 5), titlul „Ușor de început. Greu de lăsat.”:
+- **Ce e padelul:** doi contra doi, pe un teren de 20 × 10 m închis cu pereți de sticlă; mingea poate ricoșa din pereți, iar punctele se numără ca la tenis. Lângă text, o **schemă a unui teren standard** (sticlă, plasă, fileu, liniile de serviciu), marcată: „Ilustrativă, nu terenurile clubului”.
+- **De ce e ușor de început,** în patru puncte: racheta scurtă și fără corzi, serviciul de jos, pereții care țin mingea în joc, jocul în patru.
+- **Terenurile noastre, Lecții cu antrenori** (private, duo, de grup; chestionarul de nivel validat de antrenor) și **Cum rezervi**:
+  - grila de 30 de minute: 60–180 de minute, 08:00–23:00, vârf 17:00–22:00;
+  - ora se împarte între jucători;
+  - **prețurile se anunță înainte de deschidere** (Q21: încă de stabilit, deci nu afișăm niciun preț).
+- **Formate de turneu:** Americano, Mexicano, King of the Court, descrise exact cum le joacă sistemul ligii.
+- **Butonul „Rezervă un teren”.**
+
+### Capturi de ecran
+10. [Padel pe calculator](ecrane/desktop-06-padel.png)
+11. [Padel pe telefon](ecrane/mobile-06-padel.png)
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Cap-coadă | 2 teste noi (calculator + telefon):<br>• titlurile și formatele, în ordine;<br>• regulile de rezervare;<br>• **niciun preț în secțiune** (Q21);<br>• „Rezervă un teren” duce la pagina de rezervări;<br>• textele în engleză.<br>Toate testele site-ului trec: 28 + 31. |
+| Lighthouse, pagina principală | mobil **95 · 100 · 100 · 100** (CLS 0), calculator **100 · 100 · 100 · 100** |
+
+### Dubla revizuire
+1. **Formatele** sunt descrise după codul care le joacă (tragerea la sorți a turneelor), nu după o definiție generală.
+2. **Faptele despre sport** (dimensiunile terenului, serviciul, numărătoarea) sunt regulile standard ale padelului. Cele despre club (terenuri, lecții, program, vârf, împărțirea orei) vin din documentație (R-041, R-090, R-003, Q3).
+3. **Din perspectiva unui atacator:** doar conținut static.

@@ -555,6 +555,58 @@
           "master": "Maestru"
         }
       },
+      "padel": {
+        "kicker": "Padel",
+        "title": "Ușor de început. Greu de lăsat.",
+        "lead": "Padelul se joacă doi contra doi, pe un teren de 20 × 10 metri închis cu pereți de sticlă. Mingea poate ricoșa din pereți, iar punctele se numără ca la tenis.",
+        "court": {
+          "label": "Schema unui teren de padel standard, văzut de sus",
+          "net": "Fileu",
+          "length": "20 m",
+          "width": "10 m",
+          "glass": "Sticlă",
+          "mesh": "Plasă",
+          "caption": "Schema unui teren de padel standard: 20 × 10 m, sticlă la capete și pe primii metri ai laturilor, plasă între ele. Ilustrativă, nu terenurile clubului."
+        },
+        "easy": {
+          "title": "De ce e ușor de început",
+          "racket": "Racheta e scurtă și fără corzi: lovești sigur încă din primele minute.",
+          "serve": "Serviciul se dă de jos, cu mingea lovită cel mult la nivelul taliei.",
+          "walls": "Pereții țin mingea în joc: schimburi lungi încă de la primul meci.",
+          "social": "Se joacă în patru: un sport social, pentru orice nivel."
+        },
+        "cards": {
+          "courts": {
+            "title": "Terenurile noastre",
+            "text": "Patru terenuri indoor, cu pereți de sticlă, într-o hală încălzită iarna și răcită vara. La fiecare teren, un ecran cu jucătorii și timpul rămas."
+          },
+          "lessons": {
+            "title": "Lecții cu antrenori",
+            "text": "Ședințe private, duo și de grup. La crearea contului completezi un chestionar de nivel, pe care îl validează apoi un antrenor."
+          },
+          "booking": {
+            "title": "Cum rezervi",
+            "text": "Online sau la recepție, pe o grilă de 30 de minute: 60, 90, 120, 150 sau 180 de minute, între 08:00 și 23:00 (vârf 17:00–22:00). Ora se plătește și se împarte între jucători. Prețurile se anunță înainte de deschidere."
+          }
+        },
+        "formats": {
+          "title": "Formate de turneu",
+          "lead": "Turneele clubului se joacă eliminatoriu, pe grupe sau fiecare cu fiecare, dar și în aceste trei formate de padel:",
+          "americano": {
+            "title": "Americano",
+            "text": "Partenerul se schimbă la fiecare rundă: fiecare jucător face pereche o dată cu fiecare dintre ceilalți."
+          },
+          "mexicano": {
+            "title": "Mexicano",
+            "text": "Runda următoare se face după clasamentul de până atunci, pe grupe de patru: locul 1 cu locul 4, contra locurilor 2 și 3. Meciuri tot mai echilibrate."
+          },
+          "king": {
+            "title": "King of the Court",
+            "text": "Câștigătorii urcă un teren, cei care pierd coboară. Pe primul teren se joacă pentru „tron”."
+          }
+        },
+        "book": "Rezervă un teren"
+      },
       "pages": {
         "padel": "Padel",
         "league": "Liga Jungle",

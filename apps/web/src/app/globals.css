@@ -1574,6 +1574,92 @@ body[data-menu-open="true"] {
   }
 }
 
+/* ------------------------------------------------------------------ full site: padel (Stage 11, §9.2.5) */
+.padel__intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: center;
+  margin-top: 40px;
+}
+.padel__court {
+  margin: 0;
+}
+.padel__court svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.padel__court figcaption {
+  margin-top: 10px;
+  font-size: 13px;
+}
+.padel__h3 {
+  margin: 0 0 14px;
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--text);
+}
+.padel__points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+.padel__points li {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 12px;
+  color: var(--text-2);
+}
+.padel__points svg {
+  color: var(--accent);
+  margin-top: 2px;
+}
+.padel__cards {
+  list-style: none;
+  margin: 40px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 16px;
+}
+.padel__card {
+  padding: 22px 24px;
+  background: var(--color-night-800);
+  border: 1px solid var(--line);
+}
+.padel__card p {
+  margin: 0;
+  color: var(--text-2);
+}
+.padel__card--format {
+  border-top: 3px solid var(--color-brass-400);
+}
+.padel__card h4 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+.padel__formats-title {
+  margin-top: 56px;
+}
+.padel__formats-title + .muted {
+  margin: 0;
+}
+.padel__formats-title + .muted + .padel__cards {
+  margin-top: 20px;
+}
+@media (max-width: 900px) {
+  .padel__intro {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+}
+
 /* ------------------------------------------------------------------ full site: the build map */
 .site-preview .lead {
   max-width: 720px;

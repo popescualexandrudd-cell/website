@@ -27,7 +27,8 @@ test("§9.2.1: the full site's header on the home page, with the map of the sect
   await expect(map.nth(1)).toHaveAttribute("data-built", "true"); // the hero (section 2)
   await expect(map.nth(2)).toHaveAttribute("data-built", "true"); // the tour (section 3)
   await expect(map.nth(3)).toHaveAttribute("data-built", "true"); // now at the club (section 4)
-  await expect(map.nth(4)).toContainText("Urmează");
+  await expect(map.nth(4)).toHaveAttribute("data-built", "true"); // padel (section 5)
+  await expect(map.nth(5)).toContainText("Urmează");
   if (info.project.name === "desktop") {
     const menu = page.getByRole("navigation", { name: "Meniul principal" }).first();
     await expect(menu.getByRole("link")).toHaveText(MENU_RO);

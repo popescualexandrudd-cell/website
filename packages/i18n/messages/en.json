@@ -555,6 +555,58 @@
           "master": "Master"
         }
       },
+      "padel": {
+        "kicker": "Padel",
+        "title": "Easy to start. Hard to stop.",
+        "lead": "Padel is played two against two, on a 20 × 10 metre court enclosed by glass walls. The ball may bounce off the walls, and the points are counted as in tennis.",
+        "court": {
+          "label": "Diagram of a standard padel court, seen from above",
+          "net": "Net",
+          "length": "20 m",
+          "width": "10 m",
+          "glass": "Glass",
+          "mesh": "Mesh",
+          "caption": "Diagram of a standard padel court: 20 × 10 m, glass at both ends and along the first metres of the sides, mesh in between. Illustrative, not the club's courts."
+        },
+        "easy": {
+          "title": "Why it is easy to start",
+          "racket": "The racket is short and has no strings: you hit the ball cleanly from the first minutes.",
+          "serve": "The serve is underarm, the ball struck no higher than the waist.",
+          "walls": "The walls keep the ball in play: long rallies from your very first match.",
+          "social": "It is played in fours: a social sport, for every level."
+        },
+        "cards": {
+          "courts": {
+            "title": "Our courts",
+            "text": "Four indoor courts with glass walls, in a hall heated in winter and cooled in summer. At each court, a screen with the players and the time left."
+          },
+          "lessons": {
+            "title": "Lessons with coaches",
+            "text": "Private, duo and group sessions. When you create your account you fill in a level questionnaire, which a coach then validates."
+          },
+          "booking": {
+            "title": "How to book",
+            "text": "Online or at the reception, on a 30-minute grid: 60, 90, 120, 150 or 180 minutes, between 08:00 and 23:00 (peak 17:00–22:00). The hour is paid and shared between the players. Prices will be announced before the opening."
+          }
+        },
+        "formats": {
+          "title": "Tournament formats",
+          "lead": "The club's tournaments are played as knockouts, in groups or round robin, and also in these three padel formats:",
+          "americano": {
+            "title": "Americano",
+            "text": "Your partner changes every round: each player partners every other player exactly once."
+          },
+          "mexicano": {
+            "title": "Mexicano",
+            "text": "The next round follows the standings so far, in groups of four: 1st with 4th against 2nd and 3rd. Ever closer matches."
+          },
+          "king": {
+            "title": "King of the Court",
+            "text": "Winners move up a court, losers move down. On the first court you play for the throne."
+          }
+        },
+        "book": "Book a court"
+      },
       "pages": {
         "padel": "Padel",
         "league": "Jungle League",
