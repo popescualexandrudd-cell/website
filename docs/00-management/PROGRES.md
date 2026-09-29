@@ -3,7 +3,8 @@
 > Actualizat la fiecare sesiune de lucru. Prima secțiune spune mereu **unde suntem acum**.
 
 ## Unde suntem acum
-- **Etapa curentă:** Etapa 10 (panoul de admin): **livrată pe 29.09.2026, așteaptă aprobarea proprietarului**. Raport: [verificare/etapa-10/RAPORT.md](verificare/etapa-10/RAPORT.md). Întrebare nouă: Q56.
+- **Etapa curentă:** Etapa 11 (website-ul complet, secțiune cu secțiune, fiecare aprobată separat).
+- **Etapa 10 (panoul de admin):** aprobată de proprietar pe 29.09.2026 (merge în `main`, tag local `etapa-10`). Q56 rămâne deschisă, cu varianta implicită (rapoartele doar admin + manager). Raport: [verificare/etapa-10/RAPORT.md](verificare/etapa-10/RAPORT.md).
 - **Etapa 9 (ecranele de teren și lobby):** aprobată de proprietar pe 29.09.2026 (merge în `main`, tag local `etapa-9`). Q55 rezolvată (toți pe nume, insigna „Ligă”, echipele alese la Chioșcul Ligii). Raport: [verificare/etapa-9/RAPORT.md](verificare/etapa-9/RAPORT.md).
 - **Etapa 8 (Chioșcul de Plăți + afișajul cafenelei):** aprobată de proprietar pe 29.09.2026 (merge în `main`, tag local `etapa-8`). Q53 și Q54 rămân deschise, cu variantele implicite. Raport: [verificare/etapa-8/RAPORT.md](verificare/etapa-8/RAPORT.md).
 - **Etapa 7 (Hardware Bridge + Chioșcul Ligii):** aprobată de proprietar pe 28.09.2026 (merge în `main`, tag local `etapa-7`), cu Q51 și Q52 confirmate. Raport: [verificare/etapa-7/RAPORT.md](verificare/etapa-7/RAPORT.md).
@@ -15,7 +16,7 @@
 - **Etapa 1B (pagina de pre-lansare, revizia 3 „Noapte și alamă”):** aprobată de proprietar pe 27.09.2026 (merge în `main`). Raport: [verificare/etapa-1b/RAPORT.md](verificare/etapa-1b/RAPORT.md).
 - **Etapa 1A:** aprobată de proprietar pe 27.09.2026 (merge în `main`). Raport: [verificare/etapa-1a/RAPORT.md](verificare/etapa-1a/RAPORT.md).
 - **Etapa 0:** aprobată de proprietar pe 26.09.2026 (tag `etapa-0`, branch `main`).
-- **Următoarea etapă:** 11 (website-ul complet), după aprobarea Etapei 10.
+- **Următoarea etapă:** 12 (AI + notificări), după aprobarea tuturor secțiunilor Etapei 11.
 - **Întrebări încă deschise care contează curând:** Q26 (datele firmei: subsol și texte legale), Q39 (domeniu, marcă), Q24 (furnizor de email), Q23 (modelele de hardware), Q44 (randări sau fotografii ale spațiilor), Q45 (valorile implicite ale ligii), Q46 (un text neclar din schiță); Q21 (prețurile: tarifele rămân DEMO, `DE_STABILIT`); Q24 (conturile Apple Developer și Google Wallet ale firmei — ghid în `docs/08-deploy-si-mentenanta/02-ghid-apple-google-wallet.md`); Q1 (emblemele cardului Diamant); Q30 (rezultatele publice ale meciurilor); pentru Etapa 8: Q53 (numerar, rest, credit, fiscal), Q54 (modul personal), Q10 (plăți), Q33 (cafenea), contabilul (fiscalul) — vezi [INTREBARI_DESCHISE.md](INTREBARI_DESCHISE.md).
 - **Branch de lucru:** `claude/hopeful-euler-rguibn` (repository `popescualexandrudd-cell/website`).
 
@@ -128,3 +129,4 @@
 - **29.09.2026** — Etapa 9 aprobată de proprietar (merge în `main`, tag local `etapa-9`); răspunsul la Q55 urmează.
 - **29.09.2026** — Q55 aplicată (toți jucătorii pe nume, insigna „Ligă”, opoziția GDPR, echipele alese la Chioșcul Ligii); în `main`.
 - **29.09.2026** — Etapa 10 livrată: panoul de administrare (`apps/admin`, §8.6) cu intrare 2FA obligatorie, meniu după permisiuni și locație, tablou de bord live, utilizatori, calendar cu mutare prin tragere, resurse, prețuri, abonamente, firme, clase, prezențe, ligă (fără câmp de scor), plăți și registru, numerar și rapoarte Z, cafenea, evenimente, rapoarte și exporturi CSV, personal și roluri, dispozitive, setări și feature flags, jurnal de audit, starea sistemului; modulele Etapelor 11–12 marcate. `jungle/panel` (100% acoperire), `manage.py panel_demo`, teste cap-coadă cu 2FA. Întrebare nouă: Q56.
+- **29.09.2026** — Etapa 10 aprobată de proprietar (merge în `main`, tag local `etapa-10`); Q56 rămâne deschisă, cu varianta implicită. Început Etapa 11.

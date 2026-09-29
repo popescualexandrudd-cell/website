@@ -1,6 +1,6 @@
 # Panoul de admin (React + Vite)
 
-> **Stare:** Etapa 10 livrată pe 29.09.2026, așteaptă aprobarea (raport: `docs/00-management/verificare/etapa-10/RAPORT.md`). Gata: autentificarea cu 2FA, meniul după permisiuni și locație, tabloul de bord live, utilizatorii (R-004: detalii, roluri, activare, carduri, „fără nume pe ecrane”, ștergere GDPR), validarea nivelurilor (R-003), calendarul rezervărilor, resursele, prețurile, abonamentele, firmele, clasele de pilates și prezențele, liga, plățile și registrul, numerarul și rapoartele Z, cafeneaua, evenimentele, rapoartele și exporturile, personalul și rolurile, dispozitivele, setările și feature flags, jurnalul de audit, starea sistemului. Modulele Etapelor 11–12 apar în meniu, marcate.
+> **Stare:** Etapa 10 aprobată pe 29.09.2026 (raport: `docs/00-management/verificare/etapa-10/RAPORT.md`). Gata: autentificarea cu 2FA, meniul după permisiuni și locație, tabloul de bord live, utilizatorii (R-004: detalii, roluri, activare, carduri, „fără nume pe ecrane”, ștergere GDPR), validarea nivelurilor (R-003), calendarul rezervărilor, resursele, prețurile, abonamentele, firmele, clasele de pilates și prezențele, liga, plățile și registrul, numerarul și rapoartele Z, cafeneaua, evenimentele, rapoartele și exporturile, personalul și rolurile, dispozitivele, setările și feature flags, jurnalul de audit, starea sistemului. Modulele Etapelor 11–12 apar în meniu, marcate.
 
 ## Ce face (§8.6)
 

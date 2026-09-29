@@ -4,7 +4,7 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
-### Etapa 10 — 29.09.2026 (livrată; așteaptă aprobarea)
+### Etapa 10 — 29.09.2026 (aprobată 29.09.2026; Q56 rămâne deschisă)
 #### Adăugat
 - `apps/admin` (React + Vite, port 5179): panoul de administrare (§8.6), pe aceeași adresă cu API-ul (proxy `/api`, cookie de sesiune + CSRF).
   - Intrare cu parolă și cod TOTP (2FA obligatoriu, ADR-0011); la prima intrare, configurarea 2FA și cele 10 coduri de rezervă, arătate o singură dată.

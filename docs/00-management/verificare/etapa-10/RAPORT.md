@@ -1,6 +1,6 @@
 # Raport de verificare — Etapa 10 (panoul de administrare)
 
-> Data: 29.09.2026. Branch: `claude/hopeful-euler-rguibn`. Starea: **livrată, așteaptă aprobarea proprietarului**.
+> Data: 29.09.2026. Branch: `claude/hopeful-euler-rguibn`. Starea: **aprobată de proprietar pe 29.09.2026**. Q56 rămâne deschisă, cu varianta implicită.
 
 În Etapa 9 am construit ecranele de la terenuri și din lobby. În Etapa 10 am construit **panoul de administrare** (§8.6): locul din care personalul clubului conduce totul, dintr-un browser, pe calculator.
 
