@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # End-to-end tests across apps (§13.1): real backend + production build of the website + Playwright;
-# then the League Kiosk: the real Hardware Bridge (simulators, signed scans) + its production build.
+# then the League Kiosk: the real Hardware Bridge (simulators, signed scans) + its production build;
+# then the Payments Kiosk and the café display, each with its own real Hardware Bridge (Stage 8).
 # Needs PostgreSQL (DATABASE_URL server, default localhost) and a Chromium for Playwright
 # (PW_CHROMIUM_PATH, or `pnpm --filter @jungle/web exec playwright install chromium`).
-# E2E_ONLY=kiosk runs only the League Kiosk part.
+# E2E_ONLY=kiosk runs only the League Kiosk part; E2E_ONLY=payments only the Payments Kiosk part.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
@@ -28,13 +29,13 @@ psql "$BASE_DB_URL" -q -c "DROP DATABASE IF EXISTS jungle_e2e" -c "CREATE DATABA
 
 export DATABASE_URL="$E2E_DB_URL" JUNGLE_ENV=dev DJANGO_SETTINGS_MODULE=jungle.settings DJANGO_DEBUG=false \
   EMAIL_BACKEND=django.core.mail.backends.filebased.EmailBackend EMAIL_FILE_PATH="$MAIL_DIR" \
-  WEB_BASE_URL=http://localhost:3000 CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5174 \
+  WEB_BASE_URL=http://localhost:3000 CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5174,http://localhost:5175,http://localhost:5176 \
   KIOSK_ALLOW_LOOPBACK=true
 (cd apps/backend && uv run python manage.py migrate -v0 && uv run python manage.py seed_initial --demo >/dev/null)
 (cd apps/backend && exec uv run python manage.py runserver 127.0.0.1:8000 --noreload >"$WORK/backend.log" 2>&1) &
 PIDS+=($!)
 
-if [ "${E2E_ONLY:-}" != "kiosk" ]; then
+if [ -z "${E2E_ONLY:-}" ]; then
 echo "==> Production build of the website"
 export NEXT_PUBLIC_API_URL=http://localhost:8000 NEXT_PUBLIC_SITE_URL=http://localhost:3000 NEXT_TELEMETRY_DISABLED=1
 # A stand-in statistics script: the consent tests check that it is added only after "Accept".
@@ -44,16 +45,17 @@ pnpm --filter @jungle/web build >"$WORK/build.log" 2>&1 || { cat "$WORK/build.lo
 PIDS+=($!)
 
 fi
-for url in http://127.0.0.1:8000/api/v1/health $([ "${E2E_ONLY:-}" != "kiosk" ] && echo http://localhost:3000/ro); do
+for url in http://127.0.0.1:8000/api/v1/health $([ -z "${E2E_ONLY:-}" ] && echo http://localhost:3000/ro); do
   for _ in $(seq 1 60); do curl -fs -o /dev/null "$url" && break; sleep 1; done
   curl -fs -o /dev/null "$url" || { echo "server not ready: $url"; cat "$WORK"/*.log; exit 1; }
 done
 
-if [ "${E2E_ONLY:-}" != "kiosk" ]; then
+if [ -z "${E2E_ONLY:-}" ]; then
   echo "==> Playwright (website)"
   E2E_MAIL_DIR="$MAIL_DIR" pnpm --filter @jungle/web exec playwright test
 fi
 
+if [ "${E2E_ONLY:-}" != "payments" ]; then
 echo "==> League Kiosk: demo data, Hardware Bridge (simulators), production build"
 # The demo match ends on the last half hour and its score window lasts 30 minutes:
 # never start in the last 3 minutes of a window.
@@ -76,3 +78,40 @@ curl -fs -o /dev/null http://localhost:5174/ || { echo "kiosk not ready"; cat "$
 echo "==> Playwright (League Kiosk)"
 E2E_KIOSK_DATA="$WORK/kiosk.json" E2E_SCREENSHOTS="${E2E_SCREENSHOTS:-}" pnpm --filter @jungle/kiosk-league exec playwright test || {
   cat "$WORK/bridge.log"; exit 1; }
+fi
+
+echo "==> Payments Kiosk and café display: demo data, two Hardware Bridges (simulators), production builds"
+SERVER_KEY="$(cd apps/backend && uv run python manage.py device_command_key)"
+PAY_DIR="$WORK/bridge-payments"
+DISPLAY_DIR="$WORK/bridge-display"
+PAY_KEY="$(BRIDGE_DATA_DIR="$PAY_DIR" BRIDGE_ALLOWED_ORIGINS=http://localhost:5175 BRIDGE_DEVICE_ID=00000000-0000-0000-0000-000000000000 uv run jungle-bridge public-key)"
+DISPLAY_KEY="$(BRIDGE_DATA_DIR="$DISPLAY_DIR" BRIDGE_ALLOWED_ORIGINS=http://localhost:5176 BRIDGE_DEVICE_ID=00000000-0000-0000-0000-000000000000 uv run jungle-bridge public-key)"
+(cd apps/backend && uv run python manage.py payments_demo --public-key "$PAY_KEY" --display-key "$DISPLAY_KEY" --output "$WORK/payments.json")
+field() { python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d[sys.argv[2]][sys.argv[3]])' "$WORK/payments.json" "$1" "$2"; }
+(BRIDGE_DATA_DIR="$PAY_DIR" BRIDGE_PORT=8766 BRIDGE_ALLOWED_ORIGINS=http://localhost:5175 \
+  BRIDGE_API_URL=http://localhost:8000/api/v1 BRIDGE_SIMULATOR_CONTROL=1 BRIDGE_SERVER_PUBLIC_KEY="$SERVER_KEY" \
+  BRIDGE_DEVICE_ID="$(field kiosk device_id)" BRIDGE_DEVICE_TOKEN="$(field kiosk device_token)" \
+  exec uv run jungle-bridge run >"$WORK/bridge-payments.log" 2>&1) &
+PIDS+=($!)
+(BRIDGE_DATA_DIR="$DISPLAY_DIR" BRIDGE_PORT=8767 BRIDGE_ALLOWED_ORIGINS=http://localhost:5176 \
+  BRIDGE_API_URL=http://localhost:8000/api/v1 BRIDGE_SIMULATOR_CONTROL=0 \
+  BRIDGE_DEVICE_ID="$(field display device_id)" BRIDGE_DEVICE_TOKEN="$(field display device_token)" \
+  exec uv run jungle-bridge run >"$WORK/bridge-display.log" 2>&1) &
+PIDS+=($!)
+VITE_BRIDGE_URL=ws://127.0.0.1:8766 pnpm --filter @jungle/kiosk-payments build >"$WORK/payments-build.log" 2>&1 || {
+  cat "$WORK/payments-build.log"; exit 1; }
+VITE_BRIDGE_URL=ws://127.0.0.1:8767 pnpm --filter @jungle/cafe-display build >"$WORK/display-build.log" 2>&1 || {
+  cat "$WORK/display-build.log"; exit 1; }
+(cd apps/kiosk-payments && exec pnpm preview >"$WORK/payments.log" 2>&1) &
+PIDS+=($!)
+(cd apps/cafe-display && exec pnpm preview >"$WORK/display.log" 2>&1) &
+PIDS+=($!)
+for url in http://localhost:5175/ http://localhost:5176/; do
+  for _ in $(seq 1 60); do curl -fs -o /dev/null "$url" && break; sleep 1; done
+  curl -fs -o /dev/null "$url" || { echo "not ready: $url"; cat "$WORK"/payments*.log "$WORK"/display*.log; exit 1; }
+done
+
+echo "==> Playwright (Payments Kiosk + café display)"
+E2E_PAYMENTS_DATA="$WORK/payments.json" E2E_SCREENSHOTS="${E2E_SCREENSHOTS:-}" \
+  pnpm --filter @jungle/kiosk-payments exec playwright test || {
+  cat "$WORK/bridge-payments.log" "$WORK/bridge-display.log"; exit 1; }

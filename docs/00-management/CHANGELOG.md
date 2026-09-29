@@ -4,6 +4,23 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 8 — 29.09.2026 (livrată; în așteptarea aprobării; Q53 și Q54 noi)
+#### Adăugat
+- `jungle.checkout` (§8.3, 100% acoperire pe ramuri): plata cu numerar la Chioșcul de Plăți: coș (rezervări întregi sau o parte din oră, clase, abonamente, taxe de turneu, cafenea), întrebarea „dă rest?” înainte de bani, „doar suma exactă” sau restul ca credit cu acordul clientului, notele semnate de bridge trimise imediat, restul (parțial dacă aparatul nu poate, diferența devine credit), registrul (câte o plată pe articol, în casa chioșcului), bonul fiscal (R-066) și închiderea; anularea cu banii înapoi; reconcilierea după cădere de curent și a banilor sosiți târziu sau necunoscuți; plata din credit (R-067) și cu voucher (R-121); abonament la chioșc (configuratorul R-081) și înghețare (R-086); împărțirea orei (R-060, R-061); datoriile primele; check-in (R-030); alertele aparatului către recepție.
+- Modul personal al chioșcului (Q54): PIN de 6 cifre setat din cont cu 2FA, blocare după greșeli; alimentare rest, golire casetă, numărare comparată cu registrul (diferența la manager, R-064), raportul Z cu totalurile zilei.
+- API-ul afișajului cafenelei (`/api/v1/device/cafe`, §8.7) și `POST /kiosk/payments/events` cu confirmarea semnată `journal.ack` pentru bridge.
+- Hardware Bridge: escrow (bancnota se poate înapoia), „doar suma exactă”, rest parțial raportat exact, bon fiscal o singură dată, raport Z, alimentare/golire/numărare, alerte „rest scăzut” și „casetă plină”.
+- `packages/kiosk-kit`: ce au în comun ecranele aparatelor (legătura cu bridge-ul, `useDevice`, `useIdle`, erori API, texte RO/EN, lei, ora clubului, tastaturi, stilul și fonturile); Chioșcul Ligii mutat pe el.
+- `apps/kiosk-payments` (React + Vite): toate fluxurile din §8.3, RO/EN, ieșire după 60 s (niciodată cu bani în aparat), reconcilierea la pornire; `apps/cafe-display`: coada live pe trei coloane, semnal sonor.
+- `manage.py payments_demo` (DEMO); testele cap-coadă cu două Hardware Bridge reale (chioșcul și afișajul).
+- Q53 și Q54 (variante implicite DE_CONFIRMAT).
+#### Reparat la revizuire
+- Descrierile rezervărilor și ale claselor (pe bon, în registru, la chioșc) erau în ora UTC; acum sunt în ora clubului (ADR-0010).
+- 10 scheme OpenAPI cu același nume se suprascriau în clientul generat (inclusiv din etapele anterioare); numele sunt acum unice și un test le verifică.
+- Mesajul de blocare a PIN-ului arăta un minut în plus.
+- Abonamentul comandat la chioșc cerea email confirmat, deși clientul e identificat cu cardul clubului (Q53).
+- O plată oprită cu bani în aparat nu mai poate fi închisă de pe ecran fără a da banii înapoi.
+
 ### Etapa 7 — 28.09.2026 (aprobată 28.09.2026; Q51 și Q52 confirmate)
 #### Adăugat
 - Autentificarea aparatelor (ADR-0012): înrolare din API cu token afișat o dată (se păstrează doar amprenta SHA-256), certificat client (mTLS) obligatoriu în producție, cheia publică a Hardware Bridge; refuzurile în jurnal, limitate pe adresă; `GET /device/whoami`.

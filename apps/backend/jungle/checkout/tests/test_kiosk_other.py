@@ -285,6 +285,8 @@ def test_r081_r086_a_subscription_ordered_and_frozen_at_the_kiosk(
     SubscriptionRate.objects.create(
         location=location, sport="padel", sessions_per_month=4, monthly_price=30000
     )
+    # Q53: at the kiosk the club's card identifies the customer (no verified email needed).
+    User.objects.filter(pk=player.pk).update(email_verified_at=None)
     session = session_of(kiosk, card(player))
     ordered = kiosk.post(
         "/subscriptions",

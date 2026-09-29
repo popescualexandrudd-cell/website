@@ -22,6 +22,11 @@ def today_local() -> date:
     return now().astimezone(BUSINESS_TZ).date()
 
 
+def local(moment: datetime) -> datetime:
+    """A stored moment (UTC) as the club reads it: for anything shown to people."""
+    return moment.astimezone(BUSINESS_TZ)
+
+
 def age_on(birth_date: date, on: date) -> int:
     """Age in full years on a given day (a person born on 29 Feb turns a year older on 1 Mar)."""
     had_birthday = (on.month, on.day) >= (birth_date.month, birth_date.day)

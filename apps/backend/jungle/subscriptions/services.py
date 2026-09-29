@@ -277,9 +277,12 @@ def _create(
 
 
 def order_subscription(request: HttpRequest, order: Order) -> Subscription:
-    """The customer orders a standard package; it becomes active once paid (R-089)."""
+    """The customer orders a standard package; it becomes active once paid (R-089). Online
+    the email must be verified (R-002); at the Payments Kiosk the club's card, issued at
+    reception, identifies the customer (Q53, DE_CONFIRMAT)."""
     user = current_user(request)
-    if user.email_verified_at is None:
+    at_kiosk = getattr(request, "device", None) is not None
+    if user.email_verified_at is None and not at_kiosk:
         raise DomainError(ErrorCode.BOOKING_EMAIL_NOT_VERIFIED, status=403)
     location = _location(order.location_id)
     _check_start(order.starts_on)

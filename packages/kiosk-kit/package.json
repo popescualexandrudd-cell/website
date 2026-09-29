@@ -1,0 +1,32 @@
+{
+  "name": "@jungle/kiosk-kit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "What the club's kiosk screens share: the Hardware Bridge link, the device API errors, RO/EN texts, the touch keyboard and the base styles.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./kiosk.css": "./src/kiosk.css"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@jungle/i18n": "workspace:*",
+    "intl-messageformat": "^10.7.0"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "jsdom": "^27.0.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "typescript": "^5.9.0",
+    "vitest": "^5.0.2"
+  }
+}

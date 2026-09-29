@@ -8,11 +8,10 @@
  * development, without a bridge, `VITE_API_URL` and `VITE_DEVICE_TOKEN` are used and cards are
  * read from a keyboard-wedge scanner.
  */
+import { SimulatorPanel, useDevice, useIdle } from "@jungle/kiosk-kit";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ApiError, type Card, kioskApi, Offline, type Session } from "./lib/api";
-import { BridgeLink, type Hello } from "./lib/bridge";
 import { errorText, type Lang, t } from "./lib/i18n";
-import { createWedge } from "./lib/wedge";
 import { KioskContext, type Kiosk, type Screen } from "./kiosk";
 import { Challenges } from "./screens/Challenges";
 import { Confirm } from "./screens/Confirm";
@@ -22,15 +21,13 @@ import { Home } from "./screens/Home";
 import { IdleScreen } from "./screens/Idle";
 import { ScoreEntry } from "./screens/ScoreEntry";
 import { Standings } from "./screens/Standings";
-import { SimulatorPanel } from "./components/SimulatorPanel";
 
 export const IDLE_LOGOUT_MS = 30_000;
 const BRIDGE_URL = import.meta.env.VITE_BRIDGE_URL ?? "ws://127.0.0.1:8765";
 
-type Config = { apiUrl: string; token: string };
 type Message = { text: string; kind: "ok" | "error" };
 
-function devConfig(): Config | null {
+function devConfig() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const token = import.meta.env.VITE_DEVICE_TOKEN;
   // Only a development build may take the token from the environment: a production build is
@@ -40,19 +37,19 @@ function devConfig(): Config | null {
 
 export function App() {
   const [lang, setLang] = useState<Lang>("ro");
-  const [config, setConfig] = useState<Config | null>(devConfig);
-  const [bridgeUp, setBridgeUp] = useState<boolean | null>(null);
-  const [simulator, setSimulator] = useState(false);
   const [offline, setOffline] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
   const [screen, setScreen] = useState<Screen>("home");
   const [message, setMessage] = useState<Message | null>(null);
-  const [lastTouch, setLastTouch] = useState(Date.now());
-  const [now, setNow] = useState(Date.now());
   const scanHandler = useRef<((card: Card) => void) | null>(null);
   // Bumped at each logout: an answer that arrives after it must not bring the session back.
   const generation = useRef(0);
-  const bridge = useRef<BridgeLink | null>(null);
+  const onCardRef = useRef<(card: Card) => void>(() => undefined);
+  const { config, bridgeUp, simulator, link } = useDevice({
+    bridgeUrl: BRIDGE_URL,
+    devConfig: devConfig(),
+    onScan: (card) => onCardRef.current(card),
+  });
 
   const api = useMemo(() => (config ? kioskApi(config.apiUrl, config.token) : null), [config]);
 
@@ -71,6 +68,9 @@ export function App() {
     },
     [api],
   );
+
+  // Logged out after 30 s without a touch (§8.2).
+  const { touch, secondsLeft } = useIdle(session !== null, IDLE_LOGOUT_MS, () => endSession(session));
 
   const fail = useCallback(
     (error: unknown) => {
@@ -100,7 +100,7 @@ export function App() {
         }
         setOffline(false);
         setSession(opened);
-        setLastTouch(Date.now());
+        touch();
         if (keepScreen) return;
         setLang(opened.language === "en" ? "en" : "ro");
         setScreen("home");
@@ -109,66 +109,18 @@ export function App() {
         fail(error);
       }
     },
-    [api, fail],
+    [api, fail, touch],
   );
 
   const onCard = useCallback(
     (card: Card) => {
-      setLastTouch(Date.now());
+      touch();
       if (scanHandler.current) scanHandler.current(card);
       else void openSession(card);
     },
-    [openSession],
+    [openSession, touch],
   );
-
-  // The Hardware Bridge: configuration and signed scans.
-  useEffect(() => {
-    const link = new BridgeLink(BRIDGE_URL, {
-      onScan: (signed) => onCardRef.current({ signed }),
-      onStatus: setBridgeUp,
-      onHello: (hello: Hello) => {
-        setSimulator(hello.simulator);
-        if (hello.api_url && hello.device_token) {
-          setConfig({ apiUrl: hello.api_url, token: hello.device_token });
-        }
-      },
-    });
-    bridge.current = link;
-    link.connect();
-    return () => link.close();
-  }, []);
-  const onCardRef = useRef(onCard);
   onCardRef.current = onCard;
-
-  // Without a bridge: a keyboard-wedge scanner (development).
-  useEffect(() => {
-    if (bridgeUp) return;
-    const feed = createWedge((code) => onCardRef.current({ token: code }));
-    const listener = (event: KeyboardEvent) => {
-      if (event.target instanceof HTMLInputElement) return;
-      feed(event.key);
-    };
-    window.addEventListener("keydown", listener);
-    return () => window.removeEventListener("keydown", listener);
-  }, [bridgeUp]);
-
-  // Logged out after 30 s without a touch (§8.2).
-  useEffect(() => {
-    const tick = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(tick);
-  }, []);
-  useEffect(() => {
-    if (session && now - lastTouch >= IDLE_LOGOUT_MS) endSession(session);
-  }, [endSession, lastTouch, now, session]);
-  useEffect(() => {
-    const touched = () => setLastTouch(Date.now());
-    window.addEventListener("pointerdown", touched);
-    window.addEventListener("keydown", touched);
-    return () => {
-      window.removeEventListener("pointerdown", touched);
-      window.removeEventListener("keydown", touched);
-    };
-  }, []);
 
   // Messages fade after a while.
   useEffect(() => {
@@ -211,7 +163,6 @@ export function App() {
     takeNextScan,
     logout: () => endSession(session),
   };
-  const secondsLeft = Math.max(0, Math.ceil((IDLE_LOGOUT_MS - (now - lastTouch)) / 1000));
 
   return (
     <KioskContext.Provider value={kiosk}>
@@ -258,7 +209,7 @@ export function App() {
         ) : (
           <IdleScreen onBack={() => setOffline(false)} onOffline={() => setOffline(true)} />
         )}
-        {simulator && bridge.current ? <SimulatorPanel link={bridge.current} /> : null}
+        {simulator && link ? <SimulatorPanel link={link} /> : null}
       </main>
     </KioskContext.Provider>
   );

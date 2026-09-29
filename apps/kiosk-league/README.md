@@ -13,6 +13,8 @@ Singurul loc unde se introduc și se confirmă scorurile ligii (§4.1, §8.2, in
 - **RO / EN** (buton în colț; sesiunea pornește în limba jucătorului). Textele stau în `packages/i18n/messages/{ro,en}.json`, sub `kiosk.*`.
 - **Fără server:** banda „Serviciu temporar indisponibil” și reîncercare automată. **Fără Hardware Bridge:** avertisment pentru recepție.
 
+Partea comună cu celelalte ecrane ale aparatelor (legătura cu bridge-ul, textele, tastatura, stilul de bază, fonturile) stă în [`packages/kiosk-kit`](../../packages/kiosk-kit/) din Etapa 8.
+
 ## Cum se leagă de restul sistemului
 
 | Cu cine | Cum |

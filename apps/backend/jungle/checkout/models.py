@@ -18,6 +18,8 @@ import uuid
 from django.conf import settings
 from django.db import models
 
+from jungle.core import clock
+
 
 class CheckoutStatus(models.TextChoices):
     OPEN = "open", "Coș (fără bani)"
@@ -180,7 +182,7 @@ class CashOperation(models.Model):
         verbose_name_plural = "operațiuni de casă"
 
     def __str__(self) -> str:
-        return f"{self.get_kind_display()} {self.created_at:%Y-%m-%d %H:%M}"
+        return f"{self.get_kind_display()} {clock.local(self.created_at):%Y-%m-%d %H:%M}"
 
 
 class KioskPin(models.Model):

@@ -73,6 +73,8 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q50](#q50) | Insignele și „Meciul zilei”: praguri și ce se afișează *(nouă, Etapa 6)* | SCĂZUTĂ | nimic (se schimbă din setări) | REZOLVATĂ |
 | [Q51](#q51) | Un jucător nou care intră în ligă imediat după meci: meciul contează? *(nouă, Etapa 7)* | SCĂZUTĂ | nimic (varianta implicită e în lucru) | REZOLVATĂ |
 | [Q52](#q52) | Chioșcul Ligii: 30 de secunde până la ieșire, limbile ecranului *(nouă, Etapa 7)* | SCĂZUTĂ | nimic (se schimbă ușor) | REZOLVATĂ |
+| [Q53](#q53) | Chioșcul de Plăți: numerar, rest, credit, bon fiscal | MEDIE | Etapa 8 (nu blochează; lucrez cu varianta implicită) | DESCHISĂ |
+| [Q54](#q54) | Chioșcul de Plăți: modul personal (cine, PIN) | MEDIE | Etapa 8 (nu blochează) | DESCHISĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -636,3 +638,32 @@ Titlul și instrucțiunea din §17, preluate integral:
   2. Ecranul e în **română și engleză** (buton în colț); sesiunea pornește în limba aleasă de jucător în cont. §8.2 pomenește „și celelalte limbi”: se adaugă când le alegeți (textele sunt deja separate de cod).
   3. Clasamentul de repaus se schimbă la **10 secunde** între Dublu, Simplu și Perechi.
 - **Răspunsul proprietarului (28.09.2026):** confirmat (30 s, RO + EN, 10 s).
+
+## Întrebări noi, apărute în Etapa 8
+
+### <a id="q53"></a>Q53 — Chioșcul de Plăți: numerar, rest, credit, bon fiscal
+
+- **Prioritate:** MEDIE · **Blochează:** nimic (lucrez cu variantele implicite, configurabile în admin)
+- **Stare:** DESCHISĂ
+- **Variantele implicite (DE_CONFIRMAT, din 29.09.2026):**
+  1. **Suma maximă a unei plăți la chioșc: 5.000 lei** (`checkout.max_amount`). Peste ea, plata se face la recepție.
+  2. **Grupele de TVA pe bonul fiscal:** toate pe grupa „A” (`checkout.vat_groups`), până le confirmă contabilul (terenuri, pilates, abonamente, cafenea, taxe de turneu pot avea cote diferite).
+  3. **Restul pe care aparatul nu îl poate da** (după ce clientul a acceptat „restul în cont”, sau la un blocaj) devine **credit în contul clientului**; dacă clientul nu a bifat acordul, managerul primește și o notificare.
+  4. **Plata întreruptă** (cădere de curent, aparatul repornește): nu se cumpără nimic automat; banii rămași în aparat devin credit în cont, iar managerul e anunțat.
+  5. **Fiscal:** bonul fiscal se tipărește la plata cu numerar; plata din credit sau cu voucher **nu** scoate bon nou (creditul a trecut deja printr-o încasare). Trebuie confirmat cu contabilul, inclusiv cum se tratează creditul rămas din rest.
+  6. **Abonament la chioșc fără email confirmat:** cardul clubului (emis la recepție) îl identifică pe client, deci chioșcul primește comanda chiar dacă emailul nu e confirmat (online, emailul confirmat rămâne obligatoriu, R-002).
+- **Alternative:** altă sumă maximă; cote TVA separate de la lansare; restul nedat returnat doar la recepție (fără credit); plata din credit cu bon fiscal separat.
+- **Răspunsul proprietarului:** —
+
+### <a id="q54"></a>Q54 — Chioșcul de Plăți: modul personal (cine, PIN)
+
+- **Prioritate:** MEDIE · **Blochează:** nimic
+- **Stare:** DESCHISĂ
+- **Variantele implicite (DE_CONFIRMAT, din 29.09.2026):**
+  1. **Cine are voie la casa chioșcului** (alimentare rest, golire casetă, numărare, raport Z): **managerul și recepția**.
+  2. **PIN-ul:** 6 cifre, setat de fiecare angajat din contul lui (cu autentificare în doi pași); nu sunt permise PIN-uri ușoare (111111, 123456). După **5 greșeli** la rând, PIN-ul se blochează **15 minute** (`checkout.pin_max_failures`, `checkout.pin_lock_minutes`).
+  3. Sesiunea de personal la chioșc durează **5 minute** de la ultima acțiune și e legată de acel chioșc.
+  4. O **diferență la numărare** (bani în aparat față de registru) ajunge automat la manager.
+- **Alternative:** doar managerul; PIN de 4 cifre; alt prag de blocare.
+- **Răspunsul proprietarului:** —
+

@@ -587,5 +587,270 @@
       "diamond": "Diamant",
       "master": "Maestru"
     }
+  },
+  "payKiosk": {
+    "title": "Chioșcul de Plăți",
+    "offline": "Serviciu temporar indisponibil. Nu începem plăți noi până revine legătura.",
+    "bridgeMissing": "Aparatul de plată nu răspunde. Anunță recepția.",
+    "notConfigured": "Chioșcul nu este înrolat. Anunță recepția.",
+    "language": "English",
+    "indicative": "preț orientativ",
+    "indicativeNote": "Preț orientativ, încă de stabilit de club.",
+    "errors": {
+      "generic": "Ceva nu a mers. Încearcă din nou sau anunță recepția."
+    },
+    "keyboard": {
+      "space": "Spațiu",
+      "clear": "Șterge"
+    },
+    "session": {
+      "logout": "Ieșire",
+      "idleSoon": "Ieșire automată în {seconds} s"
+    },
+    "idle": {
+      "scan": "Scanează cardul",
+      "scanHint": "Check-in, rezervări, datorii, abonamente, cafenea, vouchere: totul cu cardul tău.",
+      "unavailable": "Plățile sunt temporar indisponibile.",
+      "menu": "Meniul cafenelei",
+      "noMenu": "Meniul apare în curând.",
+      "offers": "Abonamente",
+      "noOffers": "Ofertele apar în curând.",
+      "offersHint": "Scanează cardul ca să-ți alegi abonamentul.",
+      "perMonth": "{sessions} ședințe pe lună",
+      "monthly": "{price} / lună"
+    },
+    "sports": {
+      "padel": "Padel",
+      "tennis": "Tenis",
+      "pilates": "Pilates Reformer"
+    },
+    "home": {
+      "hello": "Salut, {name}!",
+      "credit": "Credit în cont: {amount}",
+      "basket": "Coș: {amount}",
+      "toPay": "De plătit",
+      "nothingToPay": "Nu ai nimic de plătit acum.",
+      "debt": "Datorie",
+      "left": "mai ai de plătit {amount} din {price}",
+      "pay": "Plătesc {amount}",
+      "split": "Împarte ora",
+      "shared": "Rezervările partenerilor, azi",
+      "organizer": "rezervată de {name}",
+      "payShare": "Plătesc partea mea",
+      "checkedIn": "Check-in făcut la {time}. Joc frumos, {name}!"
+    },
+    "actions": {
+      "back": "Înapoi",
+      "cafe": "Cafenea",
+      "subscription": "Cumpără abonament",
+      "freeze": "Îngheață abonamentul",
+      "voucher": "Folosește un voucher",
+      "vouchers": "{count, plural, one {# voucher} few {# vouchere} other {# de vouchere}}",
+      "checkIn": "Check-in"
+    },
+    "cafe": {
+      "title": "Cafenea",
+      "less": "Mai puțin: {name}",
+      "more": "Mai mult: {name}",
+      "total": "Cafenea: {amount}",
+      "toBasket": "Mergi la coș"
+    },
+    "basket": {
+      "title": "Coșul tău",
+      "empty": "Coșul e gol.",
+      "part": "parte: {amount} din {max}",
+      "remove": "Scoate",
+      "cafe": "Cafenea",
+      "total": "Total: {amount}",
+      "payCash": "Plătesc cu numerar",
+      "payCredit": "Plătesc din credit ({credit})",
+      "creditShort": "Creditul din cont ({credit}) nu ajunge pentru tot coșul.",
+      "addCafe": "Adaug din cafenea",
+      "paid": "Plătit din credit.",
+      "paidWithOrder": "Plătit din credit. Comanda ta: nr. {orders}."
+    },
+    "pay": {
+      "title": "Plata cu numerar",
+      "due": "De plată: {amount}",
+      "preparing": "Pregătim plata…",
+      "changeOk": "Aparatul dă rest.",
+      "insert": "Introduc bani",
+      "cancel": "Renunț",
+      "noChange": "Momentan acceptăm doar suma exactă: aparatul nu are rest suficient.",
+      "exact": "Plătesc suma exactă ({amount})",
+      "creditConsent": "Sunt de acord ca restul pe care aparatul nu îl poate da să intre ca credit în contul meu.",
+      "withCredit": "Plătesc; restul în cont",
+      "notes": "Bancnote acceptate: {notes} lei.",
+      "insertNow": "Introdu bancnotele",
+      "inserted": "Introdus: {inserted} din {due}",
+      "left": "Mai ai de introdus {amount}",
+      "exactHint": "Doar suma exactă: o bancnotă care ar cere rest îți este înapoiată.",
+      "returned": "Bancnota de {amount} ți-a fost înapoiată: ar fi cerut rest.",
+      "cancelRefund": "Anulez și primesc banii înapoi",
+      "finishing": "Calculăm restul…",
+      "printing": "Tipărim bonul fiscal…",
+      "cancelling": "Anulăm plata…",
+      "reconnecting": "Legătura cu serverul s-a întrerupt; reîncercăm. Banii tăi sunt înregistrați în aparat.",
+      "done": "Plată reușită. Mulțumim!",
+      "takeChange": "Ia-ți restul: {amount}.",
+      "credited": "{amount} au intrat în contul tău ca credit.",
+      "order": "Comanda ta: nr. {orders}. O vezi pe afișajul cafenelei.",
+      "receipt": "Ia-ți bonul fiscal.",
+      "receiptFailed": "Bonul fiscal nu s-a putut tipări. Plata e înregistrată; recepția îți dă bonul.",
+      "cancelled": "Plata a fost anulată.",
+      "refundCredited": "Aparatul nu a putut da înapoi {amount}; suma a intrat în contul tău ca credit.",
+      "bridgeProblem": "Aparatul de plată nu a răspuns. Banii tăi sunt înregistrați; anunță recepția.",
+      "moneySafe": "Ai introdus {amount}. Nu pleca: îți dăm banii înapoi.",
+      "ok": "Gata"
+    },
+    "faults": {
+      "note_jam": "Blocaj de bancnotă. Anunță recepția; banii tăi sunt înregistrați.",
+      "cassette_full": "Caseta de bancnote e aproape plină. Anunță recepția.",
+      "low_change": "Rest scăzut în aparat.",
+      "power_loss": "Aparatul de numerar a pierdut curentul.",
+      "paper_out": "Imprimanta nu mai are hârtie. Anunță recepția.",
+      "offline": "Imprimanta nu răspunde. Anunță recepția.",
+      "note_rejected": "Bancnota nu a fost acceptată. Încearcă alta.",
+      "insufficient_change": "Aparatul nu are rest suficient."
+    },
+    "split": {
+      "title": "Împarte ora",
+      "left": "Mai sunt de plătit: {amount}",
+      "paid": "Plătit {paid} din {price}",
+      "allPaid": "Ora e plătită integral.",
+      "parts": "În câte părți?",
+      "fewer": "Mai puține părți",
+      "more": "Mai multe părți",
+      "share": "O parte: {amount}",
+      "players": "Jucătorii",
+      "addPlayer": "Adaugă un jucător (scanează cardul lui)",
+      "scanNow": "Scanează acum cardul jucătorului…",
+      "payShare": "{name} plătește {amount}",
+      "payRest": "Plătesc eu tot restul ({amount})"
+    },
+    "subscription": {
+      "title": "Cumpără abonament",
+      "step": "Pasul {step} din {of}",
+      "sports": "Ce sporturi?",
+      "intensity": "Cât de des?",
+      "levels": {
+        "start": "Start: {sessions}/lună",
+        "active": "Activ: {sessions}/lună",
+        "pro": "Pro: {sessions}/lună"
+      },
+      "perMonth": "{price}/lună",
+      "period": "Pe ce perioadă?",
+      "periods": {
+        "monthly": "O lună",
+        "quarterly": "3 luni",
+        "annual": "Un an"
+      },
+      "startsOn": "De când?",
+      "total": "Total: {amount}",
+      "detail": "{monthly} pe lună × {months} luni",
+      "discounts": "reduceri: {discounts}",
+      "computing": "Calculăm prețul…",
+      "next": "Mai departe",
+      "order": "Comand și plătesc"
+    },
+    "freeze": {
+      "title": "Îngheață abonamentul",
+      "rule": "Cel mult 14 zile pe an; abonamentul se prelungește cu tot atâtea zile.",
+      "until": "valabil până la {date}",
+      "from": "Din",
+      "earlier": "Mai devreme",
+      "later": "Mai târziu",
+      "days": "Zile",
+      "fewer": "Mai puține zile",
+      "more": "Mai multe zile",
+      "submit": "Îngheț {days} zile",
+      "done": "Abonament înghețat din {from}; acum e valabil până la {until}."
+    },
+    "voucher": {
+      "title": "Folosește un voucher",
+      "for": "Pentru ce?",
+      "mine": "Voucherele tale",
+      "hour": "o oră de padel",
+      "targets": {
+        "booking": "rezervări",
+        "subscription": "abonamente",
+        "any": "orice"
+      },
+      "validUntil": "valabil până la {date}",
+      "use": "Folosesc",
+      "code": "Codul voucherului",
+      "apply": "Aplic codul",
+      "done": "Voucherul a plătit {amount}."
+    },
+    "staff": {
+      "entry": "Personal",
+      "title": "Mod personal",
+      "scanCard": "Scanează cardul de angajat",
+      "pin": "Introdu PIN-ul (6 cifre).",
+      "pinLabel": "PIN",
+      "login": "Intru",
+      "hello": "Mod personal: {name}",
+      "logout": "Ies din modul personal",
+      "machine": "Aparatul de numerar",
+      "noMachine": "Starea aparatului nu e disponibilă.",
+      "notes": "{count} bancnote",
+      "refill": "Alimentez restul (din seif)",
+      "fewerNotes": "Mai puține bancnote de {value}",
+      "moreNotes": "Mai multe bancnote de {value}",
+      "refillSubmit": "Alimentez {amount}",
+      "empty": "Golesc caseta (în seif)",
+      "count": "Număr banii din aparat",
+      "dayClose": "Închid ziua (raport Z)",
+      "recent": "Operațiuni recente",
+      "none": "Nicio operațiune încă.",
+      "waiting": "așteaptă aparatul",
+      "kinds": {
+        "refill": "Alimentare rest",
+        "empty": "Golire casetă",
+        "count": "Numărare",
+        "day_close": "Închidere de zi (Z)"
+      },
+      "done": {
+        "refill": "Restul a fost alimentat.",
+        "empty": "Caseta a fost golită.",
+        "count": "Numărarea e gata.",
+        "day_close": "Raportul Z a fost tipărit."
+      },
+      "countOk": "Numărarea se potrivește cu registrul ({ledger}).",
+      "countDifference": "Diferență față de registru: {difference} (registru: {ledger}). Managerul a fost anunțat.",
+      "day": {
+        "received": "Încasat azi",
+        "change_given": "Rest dat",
+        "moved_to_or_from_safe": "Mutat din/în seif",
+        "in_box": "În aparat, după registru"
+      },
+      "bridgeRefused": "Aparatul a refuzat operațiunea ({error})."
+    }
+  },
+  "cafeDisplay": {
+    "title": "Afișajul cafenelei",
+    "offline": "Legătura cu serverul s-a întrerupt. Reîncercăm automat.",
+    "bridgeMissing": "Afișajul nu primește configurarea. Anunță recepția.",
+    "notConfigured": "Afișajul nu este înrolat. Anunță recepția.",
+    "language": "English",
+    "errors": {
+      "generic": "Ceva nu a mers. Încearcă din nou."
+    },
+    "columns": {
+      "new": "Noi",
+      "preparing": "În preparare",
+      "ready": "Gata"
+    },
+    "order": "Comanda {number}",
+    "at": "la {time}",
+    "advance": {
+      "preparing": "Încep prepararea",
+      "ready": "E gata",
+      "picked_up": "Ridicată"
+    },
+    "empty": "Nicio comandă.",
+    "sound": "Pornește sunetul",
+    "soundOn": "Sunet pornit",
+    "newOrder": "Comandă nouă: {number}"
   }
 }

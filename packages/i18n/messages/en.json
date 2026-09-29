@@ -587,5 +587,270 @@
       "diamond": "Diamond",
       "master": "Master"
     }
+  },
+  "payKiosk": {
+    "title": "Payments Kiosk",
+    "offline": "Temporarily unavailable. No new payments until the connection is back.",
+    "bridgeMissing": "The payment machine does not respond. Please tell reception.",
+    "notConfigured": "The kiosk is not enrolled. Please tell reception.",
+    "language": "Română",
+    "indicative": "indicative price",
+    "indicativeNote": "Indicative price, still to be set by the club.",
+    "errors": {
+      "generic": "Something went wrong. Try again or tell reception."
+    },
+    "keyboard": {
+      "space": "Space",
+      "clear": "Clear"
+    },
+    "session": {
+      "logout": "Log out",
+      "idleSoon": "Logging out in {seconds} s"
+    },
+    "idle": {
+      "scan": "Scan your card",
+      "scanHint": "Check-in, bookings, debts, subscriptions, the café, vouchers: all with your card.",
+      "unavailable": "Payments are temporarily unavailable.",
+      "menu": "Café menu",
+      "noMenu": "The menu is coming soon.",
+      "offers": "Subscriptions",
+      "noOffers": "Offers are coming soon.",
+      "offersHint": "Scan your card to choose your subscription.",
+      "perMonth": "{sessions} sessions a month",
+      "monthly": "{price} / month"
+    },
+    "sports": {
+      "padel": "Padel",
+      "tennis": "Tennis",
+      "pilates": "Reformer Pilates"
+    },
+    "home": {
+      "hello": "Hi, {name}!",
+      "credit": "Credit in your account: {amount}",
+      "basket": "Basket: {amount}",
+      "toPay": "To pay",
+      "nothingToPay": "You have nothing to pay right now.",
+      "debt": "Debt",
+      "left": "{amount} left of {price}",
+      "pay": "Pay {amount}",
+      "split": "Split the hour",
+      "shared": "Your partners' bookings today",
+      "organizer": "booked by {name}",
+      "payShare": "Pay my share",
+      "checkedIn": "Checked in at {time}. Have a good game, {name}!"
+    },
+    "actions": {
+      "back": "Back",
+      "cafe": "Café",
+      "subscription": "Buy a subscription",
+      "freeze": "Freeze a subscription",
+      "voucher": "Use a voucher",
+      "vouchers": "{count, plural, one {# voucher} other {# vouchers}}",
+      "checkIn": "Check-in"
+    },
+    "cafe": {
+      "title": "Café",
+      "less": "Fewer: {name}",
+      "more": "More: {name}",
+      "total": "Café: {amount}",
+      "toBasket": "Go to the basket"
+    },
+    "basket": {
+      "title": "Your basket",
+      "empty": "The basket is empty.",
+      "part": "part: {amount} of {max}",
+      "remove": "Remove",
+      "cafe": "Café",
+      "total": "Total: {amount}",
+      "payCash": "Pay in cash",
+      "payCredit": "Pay from credit ({credit})",
+      "creditShort": "The credit in your account ({credit}) does not cover the whole basket.",
+      "addCafe": "Add from the café",
+      "paid": "Paid from credit.",
+      "paidWithOrder": "Paid from credit. Your order: no. {orders}."
+    },
+    "pay": {
+      "title": "Paying in cash",
+      "due": "To pay: {amount}",
+      "preparing": "Preparing the payment…",
+      "changeOk": "The machine gives change.",
+      "insert": "Insert money",
+      "cancel": "Cancel",
+      "noChange": "At the moment we only accept the exact amount: the machine does not have enough change.",
+      "exact": "Pay the exact amount ({amount})",
+      "creditConsent": "I agree that the change the machine cannot give goes into my account as credit.",
+      "withCredit": "Pay; change into my account",
+      "notes": "Accepted notes: {notes} lei.",
+      "insertNow": "Insert your notes",
+      "inserted": "Inserted: {inserted} of {due}",
+      "left": "{amount} still to insert",
+      "exactHint": "Exact amount only: a note that would need change is given back.",
+      "returned": "Your {amount} note was given back: it would have needed change.",
+      "cancelRefund": "Cancel and get my money back",
+      "finishing": "Working out your change…",
+      "printing": "Printing the fiscal receipt…",
+      "cancelling": "Cancelling the payment…",
+      "reconnecting": "The connection to the server dropped; retrying. Your money is recorded in the machine.",
+      "done": "Payment complete. Thank you!",
+      "takeChange": "Take your change: {amount}.",
+      "credited": "{amount} went into your account as credit.",
+      "order": "Your order: no. {orders}. Watch for it on the café display.",
+      "receipt": "Take your fiscal receipt.",
+      "receiptFailed": "The fiscal receipt could not be printed. The payment is recorded; reception will give you the receipt.",
+      "cancelled": "The payment was cancelled.",
+      "refundCredited": "The machine could not give back {amount}; it went into your account as credit.",
+      "bridgeProblem": "The payment machine did not respond. Your money is recorded; please tell reception.",
+      "moneySafe": "You inserted {amount}. Please wait: we will give your money back.",
+      "ok": "Done"
+    },
+    "faults": {
+      "note_jam": "A note is jammed. Please tell reception; your money is recorded.",
+      "cassette_full": "The note cassette is almost full. Please tell reception.",
+      "low_change": "Low change in the machine.",
+      "power_loss": "The cash machine lost power.",
+      "paper_out": "The printer is out of paper. Please tell reception.",
+      "offline": "The printer does not respond. Please tell reception.",
+      "note_rejected": "The note was not accepted. Try another one.",
+      "insufficient_change": "The machine does not have enough change."
+    },
+    "split": {
+      "title": "Split the hour",
+      "left": "Still to pay: {amount}",
+      "paid": "{paid} of {price} paid",
+      "allPaid": "The hour is fully paid.",
+      "parts": "How many shares?",
+      "fewer": "Fewer shares",
+      "more": "More shares",
+      "share": "One share: {amount}",
+      "players": "The players",
+      "addPlayer": "Add a player (scan their card)",
+      "scanNow": "Scan the player's card now…",
+      "payShare": "{name} pays {amount}",
+      "payRest": "I pay the whole rest ({amount})"
+    },
+    "subscription": {
+      "title": "Buy a subscription",
+      "step": "Step {step} of {of}",
+      "sports": "Which sports?",
+      "intensity": "How often?",
+      "levels": {
+        "start": "Start: {sessions}/month",
+        "active": "Active: {sessions}/month",
+        "pro": "Pro: {sessions}/month"
+      },
+      "perMonth": "{price}/month",
+      "period": "For how long?",
+      "periods": {
+        "monthly": "One month",
+        "quarterly": "3 months",
+        "annual": "One year"
+      },
+      "startsOn": "Starting when?",
+      "total": "Total: {amount}",
+      "detail": "{monthly} a month × {months} months",
+      "discounts": "discounts: {discounts}",
+      "computing": "Working out the price…",
+      "next": "Next",
+      "order": "Order and pay"
+    },
+    "freeze": {
+      "title": "Freeze a subscription",
+      "rule": "Up to 14 days a year; the subscription is extended by the same number of days.",
+      "until": "valid until {date}",
+      "from": "From",
+      "earlier": "Earlier",
+      "later": "Later",
+      "days": "Days",
+      "fewer": "Fewer days",
+      "more": "More days",
+      "submit": "Freeze for {days} days",
+      "done": "Subscription frozen from {from}; now valid until {until}."
+    },
+    "voucher": {
+      "title": "Use a voucher",
+      "for": "For what?",
+      "mine": "Your vouchers",
+      "hour": "one padel hour",
+      "targets": {
+        "booking": "bookings",
+        "subscription": "subscriptions",
+        "any": "anything"
+      },
+      "validUntil": "valid until {date}",
+      "use": "Use it",
+      "code": "Voucher code",
+      "apply": "Apply the code",
+      "done": "The voucher paid {amount}."
+    },
+    "staff": {
+      "entry": "Staff",
+      "title": "Staff mode",
+      "scanCard": "Scan your staff card",
+      "pin": "Enter your PIN (6 digits).",
+      "pinLabel": "PIN",
+      "login": "Log in",
+      "hello": "Staff mode: {name}",
+      "logout": "Leave staff mode",
+      "machine": "The cash machine",
+      "noMachine": "The machine's state is not available.",
+      "notes": "{count} notes",
+      "refill": "Refill the change (from the safe)",
+      "fewerNotes": "Fewer {value} notes",
+      "moreNotes": "More {value} notes",
+      "refillSubmit": "Refill {amount}",
+      "empty": "Empty the cassette (into the safe)",
+      "count": "Count the money in the machine",
+      "dayClose": "Close the day (Z report)",
+      "recent": "Recent operations",
+      "none": "No operations yet.",
+      "waiting": "waiting for the machine",
+      "kinds": {
+        "refill": "Change refilled",
+        "empty": "Cassette emptied",
+        "count": "Count",
+        "day_close": "Day close (Z)"
+      },
+      "done": {
+        "refill": "The change was refilled.",
+        "empty": "The cassette was emptied.",
+        "count": "The count is done.",
+        "day_close": "The Z report was printed."
+      },
+      "countOk": "The count matches the ledger ({ledger}).",
+      "countDifference": "Difference from the ledger: {difference} (ledger: {ledger}). The manager has been told.",
+      "day": {
+        "received": "Received today",
+        "change_given": "Change given",
+        "moved_to_or_from_safe": "Moved from/to the safe",
+        "in_box": "In the machine, per the ledger"
+      },
+      "bridgeRefused": "The machine refused the operation ({error})."
+    }
+  },
+  "cafeDisplay": {
+    "title": "Café display",
+    "offline": "The connection to the server dropped. Retrying automatically.",
+    "bridgeMissing": "The display gets no configuration. Please tell reception.",
+    "notConfigured": "The display is not enrolled. Please tell reception.",
+    "language": "Română",
+    "errors": {
+      "generic": "Something went wrong. Try again."
+    },
+    "columns": {
+      "new": "New",
+      "preparing": "Preparing",
+      "ready": "Ready"
+    },
+    "order": "Order {number}",
+    "at": "at {time}",
+    "advance": {
+      "preparing": "Start preparing",
+      "ready": "It's ready",
+      "picked_up": "Picked up"
+    },
+    "empty": "No orders.",
+    "sound": "Turn the sound on",
+    "soundOn": "Sound on",
+    "newOrder": "New order: {number}"
   }
 }

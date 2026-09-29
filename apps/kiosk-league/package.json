@@ -2,7 +2,7 @@
   "name": "@jungle/kiosk-league",
   "version": "0.1.0",
   "private": true,
-  "description": "Jungle Padel League Kiosk (\u00a78.2): the only place where league scores are entered and confirmed.",
+  "description": "Jungle Padel League Kiosk (§8.2): the only place where league scores are entered and confirmed.",
   "type": "module",
   "scripts": {
     "dev": "vite --port 5174 --strictPort",
@@ -16,6 +16,7 @@
     "@jungle/api-client": "workspace:*",
     "@jungle/design-tokens": "workspace:*",
     "@jungle/i18n": "workspace:*",
+    "@jungle/kiosk-kit": "workspace:*",
     "intl-messageformat": "^10.7.0",
     "openapi-fetch": "^0.17.0",
     "react": "^19.3.0",

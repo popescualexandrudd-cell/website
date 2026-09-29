@@ -1,8 +1,10 @@
 /**
  * The link to the Hardware Bridge on 127.0.0.1 (ADR-0013). The bridge tells the page which
- * device it is (and its API token), pushes each card scan signed with its own key, and, with
- * simulator control on (development and demos only), lets the page simulate a scan.
- * The link reconnects by itself; the page shows a warning while the bridge is missing.
+ * device it is (and its API token), pushes each card scan signed with its own key, pushes the
+ * cash machine's events (each note, signed, already on disk; faults), and carries the commands
+ * the server signed. With simulator control on (development and demos only), the page can
+ * simulate a scan, a note or a fault. The link reconnects by itself; the page shows a warning
+ * while the bridge is missing.
  */
 
 export type Signed = { payload: Record<string, unknown>; signature: string };
@@ -15,13 +17,17 @@ export type Hello = {
   simulator: boolean;
 };
 
+/** Anything the bridge pushes that is not a scan: `cash.accepted`, `cash.complete`, `fault`… */
+export type BridgeEvent = { event: string } & Record<string, unknown>;
+
 export type BridgeHandlers = {
   onScan: (signed: Signed) => void;
   onStatus: (connected: boolean) => void;
   onHello: (hello: Hello) => void;
+  onEvent?: (event: BridgeEvent) => void;
 };
 
-type Reply = { id?: number; ok: boolean; error?: string } & Record<string, unknown>;
+export type Reply = { id?: number; ok: boolean; error?: string } & Record<string, unknown>;
 
 export class BridgeLink {
   private socket: WebSocket | null = null;
@@ -77,8 +83,12 @@ export class BridgeLink {
     } catch {
       return;
     }
-    if (message.event === "scan" && message.signed) {
-      this.handlers.onScan(message.signed);
+    if (typeof message.event === "string") {
+      if (message.event === "scan") {
+        if (message.signed) this.handlers.onScan(message.signed);
+      } else {
+        this.handlers.onEvent?.(message as BridgeEvent);
+      }
       return;
     }
     if (typeof message.id === "number") {
@@ -98,9 +108,24 @@ export class BridgeLink {
     });
   }
 
+  /** A command the server signed (cash, receipt, journal): the bridge checks the signature. */
+  order(command: Signed): Promise<Reply> {
+    return this.request(String(command.payload.type), { command });
+  }
+
   /** Development and demos: as if the card had been held in front of the reader. */
   simulateScan(code: string): Promise<Reply> {
     return this.request("sim.scan", { code });
+  }
+
+  /** Development and demos: a note pushed into the acceptor (amount in bani). */
+  simulateNote(amount: number): Promise<Reply> {
+    return this.request("sim.insert", { amount });
+  }
+
+  /** Development and demos: a device fault (`null` clears it). */
+  simulateFault(device: "cash" | "fiscal" | "receipt", fault: string | null): Promise<Reply> {
+    return this.request("sim.fault", { device, fault });
   }
 
   close(): void {

@@ -180,8 +180,9 @@ CSRF_COOKIE_SECURE = IS_PRODUCTION_LIKE
 CSRF_COOKIE_DOMAIN = env("CSRF_COOKIE_DOMAIN")
 CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS")
 CORS_ALLOWED_ORIGINS = env_list(
-    "CORS_ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:5174"
-)  # the website and the League Kiosk (Stage 7)
+    "CORS_ALLOWED_ORIGINS",
+    "http://localhost:3000,http://localhost:5174,http://localhost:5175,http://localhost:5176",
+)  # the website, the League Kiosk (Stage 7), the Payments Kiosk and the café display (Stage 8)
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = (*default_cors_headers, "x-device-token")
 

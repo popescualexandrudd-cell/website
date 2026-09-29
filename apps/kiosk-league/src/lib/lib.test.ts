@@ -1,9 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
-import { ApiError, kioskApi, Offline, unwrap } from "./api";
-import { BridgeLink } from "./bridge";
+import { ApiError, kioskApi } from "./api";
 import { errorText, formatTime, t } from "./i18n";
 import { describe as describeScore, emptySet, limit, needsTiebreak, teamsValid, toScore } from "./score";
-import { createWedge, MAX_GAP_MS } from "./wedge";
 
 describe("i18n (RO/EN, club time)", () => {
   it("formats kiosk texts with ICU parameters", () => {
@@ -23,25 +21,6 @@ describe("i18n (RO/EN, club time)", () => {
     expect(errorText("ro", "league.players_not_scanned", { missing: ["Ana", "Ion"] })).toContain("Ana, Ion");
     expect(errorText("ro", "cod.necunoscut")).toBe(t("ro", "errors.generic"));
     expect(formatTime("en", "2027-03-28T10:00:00Z")).toBe("13:00"); // after the change to summer time
-  });
-});
-
-describe("keyboard-wedge scanner", () => {
-  it("collects fast keys and ends at Enter", () => {
-    let clock = 0;
-    const codes: string[] = [];
-    const feed = createWedge((c) => codes.push(c), () => clock);
-    for (const key of [..."ABCDEF12", "Enter"]) {
-      clock += 5;
-      feed(key);
-    }
-    for (const key of [..."AB", "Shift", "Enter"]) feed(key); // too short
-    clock += MAX_GAP_MS + 1;
-    feed("X");
-    clock += MAX_GAP_MS + 1; // a human typing slowly
-    feed("Y");
-    feed("Enter");
-    expect(codes).toEqual(["ABCDEF12"]);
   });
 });
 
@@ -87,97 +66,6 @@ describe("API client", () => {
     expect((error as ApiError).code).toBe("league.score_kiosk_only");
     expect(seen[0]?.url).toBe("http://club/api/v1/kiosk/league/idle");
     expect(seen[0]?.headers.get("X-Device-Token")).toBe("dev.secret");
-  });
-
-  it("network failures and server errors mean offline", async () => {
-    await expect(unwrap(Promise.reject(new TypeError("fetch failed")))).rejects.toBeInstanceOf(Offline);
-    await expect(unwrap(Promise.resolve({ response: response(502, {}) }))).rejects.toBeInstanceOf(Offline);
-    const bare = await unwrap(Promise.resolve({ error: undefined, response: response(400, {}) })).catch((e: unknown) => e);
-    expect((bare as ApiError).code).toBe("unknown");
-    expect(await unwrap(Promise.resolve({ data: 5, response: response(200, 5) }))).toBe(5);
-  });
-});
-
-class FakeSocket {
-  readyState = 0;
-  sent: string[] = [];
-  onopen: (() => void) | null = null;
-  onmessage: ((e: { data: string }) => void) | null = null;
-  onclose: (() => void) | null = null;
-  send(text: string) {
-    this.sent.push(text);
-  }
-  close() {
-    this.readyState = 3;
-    this.onclose?.();
-  }
-  open() {
-    this.readyState = 1;
-    this.onopen?.();
-  }
-  push(message: unknown) {
-    this.onmessage?.({ data: typeof message === "string" ? message : JSON.stringify(message) });
-  }
-}
-
-describe("Hardware Bridge link (ADR-0013)", () => {
-  it("says hello, forwards signed scans, reconnects", async () => {
-    vi.useFakeTimers();
-    const sockets: FakeSocket[] = [];
-    const events: string[] = [];
-    const link = new BridgeLink(
-      "ws://127.0.0.1:8765",
-      {
-        onScan: (signed) => events.push(`scan:${String(signed.payload.code)}`),
-        onStatus: (up) => events.push(up ? "up" : "down"),
-        onHello: (hello) => events.push(`hello:${hello.device}`),
-      },
-      () => {
-        const socket = new FakeSocket();
-        sockets.push(socket);
-        return socket as unknown as WebSocket;
-      },
-    );
-    expect(await link.simulateScan("X")).toEqual({ ok: false, error: "disconnected" });
-    link.connect();
-    const first = sockets[0]!;
-    first.open();
-    const hello = JSON.parse(first.sent[0]!);
-    expect(hello.op).toBe("hello");
-    first.push({ id: hello.id, ok: true, device: "d-1" });
-    await Promise.resolve();
-    first.push({ event: "scan", signed: { payload: { code: "C1" }, signature: "s" } });
-    first.push("nu e json");
-    first.push({ id: 999, ok: true });
-    const pending = link.simulateScan("C2");
-    expect(JSON.parse(first.sent[1]!)).toMatchObject({ op: "sim.scan", code: "C2" });
-    first.close();
-    expect(await pending).toEqual({ ok: false, error: "disconnected" });
-    vi.advanceTimersByTime(1000);
-    expect(sockets).toHaveLength(2);
-    link.close();
-    vi.advanceTimersByTime(60_000);
-    expect(sockets).toHaveLength(2);
-    expect(events).toEqual(["up", "hello:d-1", "scan:C1", "down", "down"]);
-    vi.useRealTimers();
-  });
-
-  it("keeps trying when the socket cannot be created", () => {
-    vi.useFakeTimers();
-    let attempts = 0;
-    const link = new BridgeLink(
-      "ws://127.0.0.1:1",
-      { onScan: () => undefined, onStatus: () => undefined, onHello: () => undefined },
-      () => {
-        attempts += 1;
-        throw new Error("refused");
-      },
-    );
-    link.connect();
-    vi.advanceTimersByTime(1000 + 2000 + 4000);
-    expect(attempts).toBe(4);
-    link.close();
-    vi.useRealTimers();
   });
 });
 
