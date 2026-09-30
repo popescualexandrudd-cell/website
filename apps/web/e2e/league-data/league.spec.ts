@@ -41,6 +41,8 @@ test("§9.3, R-012: the standings as the API gives them, then a player's public 
   await table.getByRole("link", { name: `${first?.first_name} ${first?.last_name}` }).first().click();
   await expect(page).toHaveURL(new RegExp(`/ro/liga/jucator/${first?.id}$`));
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(`${profile.player.first_name} ${profile.player.last_name}`);
+  // After an in-page navigation the title is streamed a moment later: wait for it before axe.
+  await expect(page).toHaveTitle(new RegExp(`^${profile.player.first_name} ${profile.player.last_name} · `));
   await expect(page.locator(".league-page__results > li")).toHaveCount(profile.matches.length);
   // R-012: only public data; no badges, statistics or contacts.
   await expect(page.getByText("Pe această pagină apar doar datele publice ale ligii.", { exact: false })).toBeVisible();
