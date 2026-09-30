@@ -725,3 +725,47 @@ Numele din capturi sunt ale datelor demo (sezonul se numește „Sezon DEMO 1”
 1. Deschideți capturile 38–43.
 2. Pe site (cu site-ul complet pornit): meniul **Liga** → alegeți **Perechi**, apoi un rang și **Arată**.
 3. Apăsați pe numele unui jucător: se deschide pagina lui.
+
+---
+
+## Paginile de prezentare (§9.3): Padel, Tenis, Pilates, Pachete, Evenimente, Cafenea, Contact
+
+### Ce s-a construit
+Cele șapte pagini din meniu nu mai sunt „în construcție”. Fiecare are un titlu și o scurtă introducere, apoi secțiunile deja aprobate ale paginii principale:
+
+| Pagina | Ce conține |
+|---|---|
+| Padel | Padel, simulatorul „Care e nivelul tău?”, „Împarte ora” |
+| Tenis | Tenis |
+| Pilates | Pilates Reformer, cu programul live |
+| Pachete | Configuratorul de pachete |
+| Evenimente | Evenimentele, calendarul, sala de evenimente |
+| Cafenea | Cafeneaua, cu meniul din panou |
+| Contact | Locația și accesul; telefonul și emailul clubului (din datele firmei, cu link de apel și de email; „În curs de completare” până le completați); programul; întrebările frecvente |
+
+**Ce am ales și de ce:**
+1. **Nicio informație nouă inventată:** paginile folosesc textele și datele deja aprobate.
+2. **Pagina Contact nu are formular:** un telefon sau un email nu cer vizitatorului date personale pe site (§12, minimizarea datelor).
+3. **Fiecare pagină are adresa ei în română și engleză,** pentru Google (după lansare).
+
+**De reținut:** butonul „Cere sala de evenimente” duce, deocamdată, tot la pagina Evenimente. Cererea se va face din cont, care urmează (Q34: online din cont sau telefonic).
+
+### Capturi de ecran
+44. Padel: [calculator](ecrane/desktop-40-pagina-padel.png), [telefon](ecrane/mobile-40-pagina-padel.png)
+45. Tenis: [calculator](ecrane/desktop-41-pagina-tenis.png), [telefon](ecrane/mobile-41-pagina-tenis.png)
+46. Pilates: [calculator](ecrane/desktop-42-pagina-pilates.png), [telefon](ecrane/mobile-42-pagina-pilates.png)
+47. Pachete: [calculator](ecrane/desktop-43-pagina-pachete.png), [telefon](ecrane/mobile-43-pagina-pachete.png)
+48. Evenimente: [calculator](ecrane/desktop-44-pagina-evenimente.png), [telefon](ecrane/mobile-44-pagina-evenimente.png)
+49. Cafenea: [calculator](ecrane/desktop-45-pagina-cafenea.png), [telefon](ecrane/mobile-45-pagina-cafenea.png)
+50. Contact: [calculator](ecrane/desktop-46-pagina-contact.png), [telefon](ecrane/mobile-46-pagina-contact.png)
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Cap-coadă | 20 noi (calculator + telefon): fiecare pagină are titlul, introducerea, secțiunea ei, adresa canonică și versiunea în engleză, fără probleme de accesibilitate; simulatorul „Împarte ora” merge și pe pagina Padel; pagina Contact arată telefonul și emailul exact ca în panou și nu are formular; engleza. |
+| Toate testele site-ului | 28 pre-lansare, 127 site complet, 153 cu efectele pornite. |
+
+### Cum verificați (click cu click)
+1. Deschideți capturile 44–50.
+2. Pe site: fiecare link din meniu deschide acum pagina lui.
+3. În panou, la datele firmei, completați telefonul: pe pagina Contact apare butonul de apel.

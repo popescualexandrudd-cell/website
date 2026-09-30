@@ -58,7 +58,7 @@ test("a menu page in the language chosen, marked as the current page, and back i
   await page.getByRole("link", { name: "Tenis", exact: true }).first().click();
   await expect(page).toHaveURL(/\/ro\/tenis$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Tenis");
-  await expect(page.getByText(/se construiește în Etapa 11/)).toBeVisible();
+  await expect(page.locator("#tenis")).toBeVisible();
   // After a navigation from the menu the new page's tag comes last (the old one may linger a moment).
   await expect(page.locator('meta[name="robots"]').last()).toHaveAttribute("content", /noindex/);
   if (info.project.name === "desktop") {

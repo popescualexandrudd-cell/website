@@ -1481,6 +1481,24 @@
           "back": "Înapoi la clasamente",
           "missing": "Jucătorul nu există sau nu mai e în ligă."
         }
+      },
+      "pageIntro": {
+        "padel": "Patru terenuri închise, lecții cu antrenori, ligă și turnee. Aici afli cum începi, ce nivel ai și cât plătește fiecare când împărțiți ora.",
+        "tennis": "Tenisul se joacă la Clubul Tenis Elite, clubul proprietarilor. La Jungle ai lecții, abonamente combinate și Reformer pentru jucători.",
+        "pilates": "Studioul de Reformer din clădirea de alături: clasele, programul săptămânii și lista de așteptare.",
+        "packages": "Abonamente pentru padel, tenis și pilates: alegi sporturile, intensitatea și perioada, iar prețul îl calculează clubul.",
+        "events": "Seri cu DJ, turneele ligii, padel social și sala de evenimente pentru petreceri și echipe.",
+        "cafe": "Cafea de specialitate la parter, între meciuri: comanzi la Chioșcul de Plăți și îți vezi numărul pe ecran când e gata.",
+        "contact": "Unde ne găsești, cum ajungi și cum iei legătura cu clubul."
+      },
+      "contact": {
+        "title": "Date de contact",
+        "phone": "Telefon",
+        "email": "Email",
+        "hoursTitle": "Program",
+        "hours": "În fiecare zi, 08:00–23:00",
+        "pending": "În curs de completare",
+        "note": "Telefonul și adresa de email apar aici când clubul le completează. Rezervările se fac din cont sau la recepție."
       }
     }
   },

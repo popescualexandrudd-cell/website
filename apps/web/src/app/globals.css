@@ -2887,6 +2887,20 @@ body[data-menu-open="true"] {
   }
 }
 
+/* ------------------------------------------------------------------ full site: the presentation pages (§9.3) */
+.page-intro {
+  padding: calc(var(--header-h) + 64px) 0 0;
+}
+.page-intro + .section {
+  padding-top: 48px;
+}
+.contact__facts .contact__value {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
 /* ------------------------------------------------------------------ full site: the league page (§9.3) */
 .league-page__ladders {
   display: flex;

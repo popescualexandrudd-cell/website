@@ -4,6 +4,13 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, paginile de prezentare — 30.09.2026 (livrate)
+#### Adăugat
+- Paginile Padel, Tenis, Pilates, Pachete, Evenimente, Cafenea și Contact (`SitePage`, `sitePageMetadata`): titlu, introducere (`web.site.pageIntro.*`), apoi secțiunile aprobate; fiecare cu adresa canonică și hreflang.
+- `ContactDetails`: telefonul (`tel:`) și emailul (`mailto:`) din datele firmei, programul; fără formular.
+#### Schimbat
+- Testul antetului și testul de efecte al Fazei 5 folosesc pagini cu conținut: nu mai există pagini „în construcție” în meniu.
+
 ### Etapa 11, paginile separate: Liga — 30.09.2026 (livrată)
 #### Adăugat
 - `/liga` (`LeaguePage`, randată pe server la fiecare cerere):

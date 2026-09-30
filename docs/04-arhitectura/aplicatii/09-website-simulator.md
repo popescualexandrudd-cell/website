@@ -177,3 +177,8 @@ Toate șase sunt randate pe server (fără script nou în browser), cu atributel
 
 ### Tehnic
 Ambele pagini sunt randate pe server la fiecare cerere (`dynamic = "force-dynamic"`), iar datele ligii se păstrează 60 de secunde (`src/lib/league-page.ts`). Paginile nu se indexează până la lansare (SEO în Etapa 13).
+
+### Paginile de prezentare (30.09.2026)
+Padel, Tenis, Pilates, Pachete, Evenimente, Cafenea și Contact: un titlu și o introducere, apoi secțiunile aprobate ale paginii principale (Padel: și „Care e nivelul tău?” și „Împarte ora”; Contact: locația, datele de contact și întrebările frecvente).
+- Pagina Contact arată telefonul și emailul din datele firmei, doar dacă sunt completate, și nu are formular (minimizarea datelor, §12).
+- Fiecare pagină are adresa canonică și versiunea în engleză.

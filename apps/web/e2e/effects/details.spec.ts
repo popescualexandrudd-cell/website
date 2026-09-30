@@ -113,7 +113,7 @@ test("ADR-0023, phase 5: the other pages enter discreetly, and what is on screen
   if (info.project.name === "mobile") await page.getByRole("button", { name: "Meniu" }).click();
   await page.getByRole("link", { name: "Pilates", exact: true }).first().click();
   await expect(page).toHaveURL(/\/ro\/pilates$/);
-  const panel = page.locator(".upcoming .panel");
-  await expect(panel).toHaveAttribute("data-shown", "true");
-  await expect.poll(() => panel.evaluate((el) => Number(getComputedStyle(el).opacity))).toBe(1);
+  const title = page.locator(".page-intro h1");
+  await expect(title).toHaveAttribute("data-shown", "true");
+  await expect.poll(() => title.evaluate((el) => Number(getComputedStyle(el).opacity))).toBe(1);
 });

@@ -1481,6 +1481,24 @@
           "back": "Back to the standings",
           "missing": "This player doesn't exist or is no longer in the league."
         }
+      },
+      "pageIntro": {
+        "padel": "Four indoor courts, lessons with coaches, a league and tournaments. Here you find how to start, your level and what each player pays when you share the hour.",
+        "tennis": "Tennis is played at Clubul Tenis Elite, the owners' club. At Jungle you get lessons, combined subscriptions and Reformer for players.",
+        "pilates": "The Reformer studio in the building next door: the classes, the week's schedule and the waiting list.",
+        "packages": "Subscriptions for padel, tennis and Pilates: you choose the sports, the intensity and the period, and the club works out the price.",
+        "events": "DJ nights, the league's tournaments, social padel and the event room for parties and teams.",
+        "cafe": "Specialty coffee on the ground floor, between matches: order at the Payments Kiosk and watch for your number on the screen.",
+        "contact": "Where we are, how to get here and how to reach the club."
+      },
+      "contact": {
+        "title": "Contact details",
+        "phone": "Phone",
+        "email": "Email",
+        "hoursTitle": "Opening hours",
+        "hours": "Every day, 08:00–23:00",
+        "pending": "Being completed",
+        "note": "The phone number and email address appear here once the club fills them in. Bookings are made from your account or at the reception."
       }
     }
   },
