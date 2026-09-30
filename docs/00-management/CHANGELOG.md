@@ -4,6 +4,11 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, secțiunile 9–10 — aprobate 30.09.2026
+#### Schimbat
+- Proprietarul a aprobat secțiunile 9 (Pilates Reformer) și 10 (configuratorul de pachete); intră în `main`.
+- Q12 confirmată: `subscriptions.start_rule_below_sessions` (8) e marcată confirmată.
+
 ### Etapa 11, secțiunea 10 — 30.09.2026 (livrată)
 #### Adăugat
 - Configuratorul de pachete (§9.2, secțiunea 10): `Packages` + `PackageConfigurator`, logica în `src/lib/packages.ts`.

@@ -32,7 +32,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q9](#q9) | Plata online cu card | MEDIE | Etapa 4 (plăți) | REZOLVATĂ |
 | [Q10](#q10) | Recepția | MEDIE | Etapa 4 (plăți, registru) | DESCHISĂ |
 | [Q11](#q11) | Termenul pentru plată | MEDIE | Etapa 6 (validarea scorului prin plată) | REZOLVATĂ |
-| [Q12](#q12) | Intensitățile „La cerere” | MEDIE | Etapa 4 (configuratorul de pachete) | DESCHISĂ |
+| [Q12](#q12) | Intensitățile „La cerere” | MEDIE | Etapa 4 (configuratorul de pachete) | REZOLVATĂ 30.09.2026 |
 | [Q13](#q13) | Start | MEDIE | Etapa 4 (regula Start/vârf) | REZOLVATĂ |
 | [Q14](#q14) | „Recuperare” | MEDIE | Etapa 3 (anulări), Etapa 4 (credit în cont) | DESCHISĂ |
 | [Q15](#q15) | Neprezentări | MEDIE | Etapa 3 (neprezentări și blocări) | REZOLVATĂ |
@@ -207,10 +207,10 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q12"></a>Q12 — Intensitățile „La cerere”
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 4 (configuratorul de pachete)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (30.09.2026)
 - **Varianta implicită (din MEGA_PROMPT):** cerere aprobată de admin; sub 8 sesiuni = regula Start.
 - **Folosită în Etapa 4 (27.09.2026):** Intensitățile „La cerere” le creează recepția/managerul, cu prețul lunar stabilit de club; sub 8 sesiuni se aplică regula Start (`subscriptions.start_rule_below_sessions`).
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (30.09.2026):** „aprob tot”, la raportul secțiunii 10 a site-ului, care arăta varianta implicită și întreba explicit dacă o vrea altfel. Confirmată: intensitatea „La cerere” se stabilește la recepție, cu prețul clubului; sub 8 sesiuni pe lună se aplică regula Start. Setarea `subscriptions.start_rule_below_sessions` e marcată confirmată.
 - **Textul original (§17):**
 
   > - **Q12 Intensitățile „La cerere”**: le alege clientul singur sau se aprobă și se stabilește prețul de admin? Ce regulă de vârf au? *Implicit: cerere aprobată de admin; sub 8 sesiuni = regula Start.*

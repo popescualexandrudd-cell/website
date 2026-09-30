@@ -543,8 +543,9 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "subscriptions.start_rule_below_sessions",
             8,
-            Marker.TO_CONFIRM,
-            "Sub atâtea sesiuni pe lună se aplică regula Start: fără ore de vârf (R-087, Q12).",
+            Marker.CONFIRMED,
+            "Sub atâtea sesiuni pe lună se aplică regula Start: fără ore de vârf (R-087, Q12, "
+            "confirmat de proprietar pe 30.09.2026).",
             positive_int,
             question="Q12",
         ),

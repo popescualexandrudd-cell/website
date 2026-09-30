@@ -2,6 +2,8 @@
 
 > Branch: `claude/hopeful-euler-rguibn`. Site-ul complet se livrează **secțiune cu secțiune** (§9.2). Acest raport crește cu fiecare secțiune.
 >
+> **Aprobarea proprietarului (30.09.2026, a doua):** „aprob tot, continuă”: secțiunile 9 și 10 sunt aprobate și intră în `main`; Q12 confirmată („La cerere” la recepție, cu prețul clubului; sub 8 sesiuni, regula Start).
+>
 > **Aprobarea proprietarului (30.09.2026):** „Aprob și continuă”: secțiunile 2–8 sunt aprobate și intră în `main`. La Q58: „nu avem adresa” (secțiunea Tenis rămâne fără link).
 >
 > **Decizia proprietarului (29.09.2026):** „alege ce crezi că este mai bine doar la această etapă”. În Etapa 11, alegerile de conținut și design le facem noi, după documentație și regulile proiectului, și continuăm secțiune după secțiune. Dumneavoastră vedeți totul aici și ne spuneți oricând ce vreți schimbat.
@@ -16,8 +18,8 @@
 | 6. Simulatorul „Care e nivelul tău?” | 30.09.2026 | **aprobată 30.09.2026** |
 | 7. Liga Jungle + simulatorul de puncte | 30.09.2026 | **aprobată 30.09.2026** |
 | 8. Tenis | 30.09.2026 | **aprobată 30.09.2026** |
-| 9. Pilates Reformer | 30.09.2026 | **livrată** |
-| 10. Configuratorul de pachete | 30.09.2026 | **livrată** |
+| 9. Pilates Reformer | 30.09.2026 | **aprobată 30.09.2026** |
+| 10. Configuratorul de pachete | 30.09.2026 | **aprobată 30.09.2026** |
 | 11–19 | — | urmează, câte una |
 
 ---
@@ -447,7 +449,7 @@ După Tenis urmează secțiunea „Pilates pe Reformer, în grupuri mici.” (§
 ### Cum verificați (click cu click)
 1. Deschideți capturile 22–25.
 2. Citiți descrierile claselor de mai sus. Dacă vreți alte texte (de exemplu, de la instructor), spuneți-ne.
-3. Dacă secțiunea vă place, scrieți „aprob secțiunea 9”.
+3. Secțiunea e aprobată (30.09.2026).
 
 ---
 
@@ -475,7 +477,7 @@ După Pilates urmează „Abonamentul tău, în trei pași.” (§9.2, secțiune
 **Ce am ales și de ce:**
 1. **Prețurile vin de la server,** exact cum le calculează sistemul la cumpărare: reducerile una după alta, rotunjirea la leu întreg (R-084). Site-ul nu are o copie a regulilor. Dacă schimbați un tarif sau o reducere în panou, configuratorul arată imediat noua valoare.
 2. **Afișăm prețurile orientative** pe care ați cerut să le punem (Q21), marcate clar ca orientative.
-3. **„La cerere”:** folosim varianta implicită din Q12, încă deschisă: stabilită la recepție, cu prețul clubului; sub 8 sesiuni pe lună se aplică regula Start.
+3. **„La cerere”:** stabilită la recepție, cu prețul clubului; sub 8 sesiuni pe lună se aplică regula Start. E varianta din Q12, confirmată de dumneavoastră pe 30.09.2026.
 4. **Cumpărarea** rămâne la chioșc, cu numerar (Q9). Site-ul nu vinde online.
 
 ### Capturi de ecran
@@ -507,4 +509,4 @@ Scorul de performanță pe mobil scăzuse la 90, chiar la limită, așa că am f
 ### Cum verificați (click cu click)
 1. Deschideți capturile 26 și 27.
 2. Verificați prețurile orientative (sunt cele de la Q21) și textele de sub configurator. Tarifele le schimbați oricând din panou, iar site-ul le preia singur.
-3. Dacă secțiunea vă place, scrieți „aprob secțiunea 10”.
+3. Secțiunea e aprobată (30.09.2026).

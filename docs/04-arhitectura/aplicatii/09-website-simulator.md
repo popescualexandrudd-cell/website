@@ -111,7 +111,7 @@ Fiecare pagină există în toate limbile active, cu URL-uri localizate (`/ro/..
   - ce e o sesiune (R-083);
   - fără report (R-085);
   - înghețarea (R-086);
-  - „La cerere”, cu varianta implicită din Q12, încă deschisă;
+  - „La cerere”: la recepție, cu prețul clubului; sub 8 sesiuni pe lună, regula Start (Q12, confirmat de proprietar pe 30.09.2026);
   - unde se cumpără: la Chioșcul de Plăți, cu numerar (R-089, Q9);
   - pachetul de firmă (R-088, Q35).
 - **Pe telefon,** rezultatul vine după cei trei pași. Nimic nu stă fixat peste controale.
