@@ -478,7 +478,12 @@
         "league": "See the league live",
         "scroll": "Discover the club",
         "renderAlt": "3D rendering, evening: the view from the gallery lounge 3 metres up, over the glass balustrade, towards the glass-walled padel courts lit by LED lines.",
-        "renderNote": "Illustrative 3D rendering made by us from the club's sketch. Not a photograph and not the final design."
+        "renderNote": "Illustrative 3D rendering made by us from the club's sketch. Not a photograph and not the final design.",
+        "video": {
+          "play": "Play the video",
+          "pause": "Pause the video",
+          "illustrative": "Illustrative video"
+        }
       },
       "tour": {
         "kicker": "Club tour",

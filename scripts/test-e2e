@@ -73,6 +73,16 @@ export DATABASE_URL="$E2E_DB_URL" JUNGLE_ENV=dev DJANGO_SETTINGS_MODULE=jungle.s
 PIDS+=($!)
 
 if part web; then
+echo "==> The hero video's test clip (ADR-0023): a few generated seconds, never committed"
+HERO_E2E="apps/web/public/media/hero-e2e"
+rm -rf "$HERO_E2E"
+if command -v ffmpeg >/dev/null; then
+  ffmpeg -y -v error -f lavfi -i "testsrc2=size=1280x720:rate=30" -t 4 -pix_fmt yuv420p "$WORK/hero-src.mp4"
+  HERO_VIDEO_OUT="$PWD/$HERO_E2E" node apps/web/scripts/video-hero.mjs --input "$WORK/hero-src.mp4" --base /media/hero-e2e >/dev/null
+  export HERO_VIDEO_MANIFEST="$PWD/$HERO_E2E/manifest.json" E2E_HERO_VIDEO=1
+else
+  echo "   ffmpeg is missing: the hero video test is skipped"
+fi
 echo "==> Production build of the website"
 export NEXT_PUBLIC_API_URL=http://localhost:8000 NEXT_PUBLIC_SITE_URL=http://localhost:3000 NEXT_TELEMETRY_DISABLED=1
 # A stand-in statistics script: the consent tests check that it is added only after "Accept".
@@ -99,8 +109,10 @@ if part web; then
     failed "$WORK/web.log"
   echo "==> The site's effects turned on (ADR-0023): every test again, unchanged, plus the effects' own"
   (cd apps/backend && uv run python manage.py set_flag web_effects on --reason "e2e: the effects")
+  (cd apps/backend && uv run python manage.py set_flag web_hero_video on --reason "e2e: the hero video")
   E2E_SITE_MODE=effects pnpm --filter @jungle/web exec playwright test || failed "$WORK/web.log"
   (cd apps/backend && uv run python manage.py set_flag web_effects off --reason "e2e: the effects, done")
+  (cd apps/backend && uv run python manage.py set_flag web_hero_video off --reason "e2e: the hero video, done")
 fi
 
 if part kiosk; then

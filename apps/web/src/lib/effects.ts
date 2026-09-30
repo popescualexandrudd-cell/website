@@ -23,7 +23,8 @@ export type Device = {
 export function motionLevel(device: Device): MotionLevel {
   if (device.reducedMotion) return "reduced";
   const slow = device.saveData === true || /(^|-)(2g|3g)$/.test(device.effectiveType ?? "");
-  const weak = (device.cores ?? 8) <= 4 || (device.memoryGb ?? 8) <= 4;
+  // Two cores or 2 GB: an old or low-end phone (a 4-core laptop or a mid-range phone is fine).
+  const weak = (device.cores ?? 8) <= 2 || (device.memoryGb ?? 8) <= 2;
   return slow || weak ? "lite" : "on";
 }
 

@@ -11,8 +11,9 @@ describe("the level of motion (ADR-0023)", () => {
     expect(motionLevel({ reducedMotion: false, saveData: true, cores: 8 })).toBe("lite");
     expect(motionLevel({ reducedMotion: false, effectiveType: "3g" })).toBe("lite");
     expect(motionLevel({ reducedMotion: false, effectiveType: "slow-2g" })).toBe("lite");
-    expect(motionLevel({ reducedMotion: false, cores: 4 })).toBe("lite");
+    expect(motionLevel({ reducedMotion: false, cores: 2 })).toBe("lite");
     expect(motionLevel({ reducedMotion: false, memoryGb: 2 })).toBe("lite");
+    expect(motionLevel({ reducedMotion: false, cores: 4, memoryGb: 4 })).toBe("on");
   });
 
   it("gives the full effects otherwise, also when the browser says nothing about itself", () => {

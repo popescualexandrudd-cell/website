@@ -4,6 +4,15 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Efectele site-ului, Faza 2 — 30.09.2026 (livrată)
+#### Adăugat
+- `HeroVideo`: videoul de prezentare peste randare, după încărcarea paginii, fără sunet, în buclă, cu buton de pauză (WCAG 2.2.2), estompat la derulare; cu „reducerea mișcării” sau „lite” doar la cerere; pe telefon, hala 3D așteaptă ieșirea videoului din ecran (`offScreen` în `src/lib/webgl.ts`).
+- `pnpm --filter @jungle/web video:hero` (`scripts/video-hero.mjs`, ffmpeg): variantele MP4/WebM pentru calculator și telefon, imaginea de rezervă și `manifest.json`, cu bugetul verificat și recomprimare automată; `src/lib/hero-video.ts` citește manifestul.
+- Folderul `apps/web/media-src/hero/` (originalul, cu instrucțiuni); testele cap-coadă cu un clip generat (`public/media/hero-e2e`, niciodată în git); CI instalează ffmpeg.
+- Texte `web.site.hero.video.*` RO + EN.
+#### Schimbat
+- Pragul „telefon slab” al efectelor: ≤ 2 nuclee sau ≤ 2 GB (un laptop cu 4 nuclee primește efectele complete).
+
 ### Efectele site-ului, Faza 1 — 30.09.2026 (livrată)
 #### Adăugat
 - Tokenii de mișcare (`--motion-ease-spring`, `-duration-base`, `-stagger`, `-distance`, `-tilt-max`, `-perspective`, `-pop-from`).

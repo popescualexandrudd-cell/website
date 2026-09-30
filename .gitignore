@@ -48,6 +48,14 @@ blob-report/
 *.db-wal
 *.db-shm
 media/
+# The site's hero video (ADR-0023) is served from apps/web/public/media/hero and committed; its
+# original (media-src) and the tests' generated clip (hero-e2e) never are.
+!apps/web/public/media/
+apps/web/public/media/hero-e2e/
+apps/web/media-src/*
+!apps/web/media-src/hero/
+apps/web/media-src/hero/*
+!apps/web/media-src/hero/README.md
 staticfiles/
 /tmp/
 *.log

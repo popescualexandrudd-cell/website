@@ -78,6 +78,19 @@ export function usesSoftwareRendering(renderer: WebGLRenderer): boolean {
   return SOFTWARE_RENDERER.test(name);
 }
 
+/** Resolves once `el` has been out of the screen (ADR-0023: the 3D hall after the hero video). */
+export function offScreen(el: Element): Promise<void> {
+  return new Promise((resolve) => {
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry && !entry.isIntersecting) {
+        io.disconnect();
+        resolve();
+      }
+    });
+    io.observe(el);
+  });
+}
+
 /** Runs `fn` after `load`, when the main thread is idle. Returns a cancel function. */
 export function afterLoadIdle(fn: () => void): () => void {
   let cancelled = false;

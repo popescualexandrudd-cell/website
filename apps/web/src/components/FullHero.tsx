@@ -1,5 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { siteFlags } from "@/lib/flags";
+import { heroVideo } from "@/lib/hero-video";
+import { HeroVideo } from "./HeroVideo";
 import { HeroVisual } from "./HeroVisual";
 import { IconArrowDown } from "./Icons";
 
@@ -12,9 +15,14 @@ import { IconArrowDown } from "./Icons";
  */
 export async function FullHero({ next }: { next: string }) {
   const t = await getTranslations("web.site.hero");
+  // The presentation video (ADR-0023): only with `web_hero_video` on and its files in place.
+  const video = (await siteFlags()).heroVideo ? heroVideo() : null;
   return (
     <section className="hero hero--full" aria-labelledby="hero-title">
-      <HeroVisual alt={t("renderAlt")} />
+      <HeroVisual alt={t("renderAlt")} waitForVideo={video !== null} />
+      {video && (
+        <HeroVideo manifest={video} labels={{ play: t("video.play"), pause: t("video.pause"), illustrative: t("video.illustrative") }} />
+      )}
       <div className="container">
         <div className="hero-content hero-rise">
           <p className="eyebrow">{t("eyebrow")}</p>

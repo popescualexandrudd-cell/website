@@ -72,3 +72,4 @@ Gestionar propriu (`CookieConsent`), fără servicii externe: înainte de aleger
 - Textele componentelor client pleacă doar cu pagina care le folosește (`ClientTexts`, grupurile din `src/lib/client-messages.ts`).
 - Inventarul și regresia: `pnpm --filter @jungle/web inventory --out FILE` (cu `SHOTS=<folder>` pentru capturi, `REDUCED=1` pentru „reducerea mișcării”), `--compare BEFORE AFTER`, `--compare-shots REF NEW`.
 - Cap-coadă: `scripts/test-e2e` rulează toate testele site-ului a doua oară cu `web_effects` pornit, plus `e2e/effects/`.
+- Videoul din hero: originalul în `media-src/hero/` (README acolo), apoi `pnpm --filter @jungle/web video:hero` (ffmpeg) scrie `public/media/hero/` (MP4 + WebM pentru calculator și telefon, imaginea de rezervă, `manifest.json`); site-ul îl arată doar cu `web_hero_video` pornit (`src/lib/hero-video.ts`, `HeroVideo`). Testele folosesc un clip generat (`HERO_VIDEO_MANIFEST`, `public/media/hero-e2e`, ignorat de git).

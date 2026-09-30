@@ -12,7 +12,8 @@
     "lint": "eslint .",
     "test": "vitest run",
     "e2e": "playwright test",
-    "inventory": "node scripts/inventory.mjs"
+    "inventory": "node scripts/inventory.mjs",
+    "video:hero": "node scripts/video-hero.mjs"
   },
   "dependencies": {
     "@jungle/api-client": "workspace:*",

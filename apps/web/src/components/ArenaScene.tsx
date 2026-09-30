@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as tokens from "@jungle/design-tokens/tokens";
-import { afterLoadIdle, createLoop, disposeScene, realGpu, sceneFlags, usesSoftwareRendering } from "@/lib/webgl";
+import { afterLoadIdle, offScreen, createLoop, disposeScene, realGpu, sceneFlags, usesSoftwareRendering } from "@/lib/webgl";
 
 /**
  * Hero scene, after the owner's site sketch (27.09.2026): four courts in two rows (2 × 2) and,
@@ -60,7 +60,7 @@ function meshTexture(THREE: typeof import("three")) {
   return texture;
 }
 
-export default function ArenaScene() {
+export default function ArenaScene({ waitForVideo = false }: { waitForVideo?: boolean }) {
   const host = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
 
@@ -72,6 +72,10 @@ export default function ArenaScene() {
 
     const cancelStart = afterLoadIdle(async () => {
       if (!sceneFlags().forced && !(await realGpu())) return; // the static render stays
+      // On a phone the video and the 3D hall never run together: the hall waits until the hero
+      // (and its video) has left the screen (ADR-0023).
+      if (waitForVideo && sceneFlags().small) await offScreen(container);
+      if (disposed) return;
       const [THREE, { RoomEnvironment }, { gsap }, { ScrollTrigger }] = await Promise.all([
         import("three"),
         import("three/examples/jsm/environments/RoomEnvironment.js"),
@@ -366,7 +370,7 @@ export default function ArenaScene() {
       cancelStart();
       teardown();
     };
-  }, []);
+  }, [waitForVideo]);
 
   return <div ref={host} className="scene" data-ready={ready} />;
 }

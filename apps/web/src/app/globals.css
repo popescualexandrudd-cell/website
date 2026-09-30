@@ -2823,3 +2823,99 @@ html[data-motion="on"] [data-reveal="mask"]:not([data-shown]) {
     clip-path: none !important;
   }
 }
+
+/* ------------------------------------------------------------------ the hero video (ADR-0023, Phase 2) */
+/* Over the render (and the 3D hall), under the text; invisible until it plays. As the hero scrolls
+ * away (--hero-video-out 0 → 1) it fades and shrinks a little, revealing the render underneath. */
+.hero-video {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-slow) var(--motion-ease-out);
+}
+.hero-video[data-shown="true"] {
+  opacity: calc(1 - var(--hero-video-out, 0));
+  transform: scale(calc(1 - 0.06 * var(--hero-video-out, 0)));
+  transition: opacity var(--motion-duration-fast) linear;
+}
+.hero-video video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero-video::after {
+  /* The same night scrim as over the render, from the night token: the text stays readable over
+   * the brightest frames. */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-night-900) 94%, transparent) 0%,
+      color-mix(in srgb, var(--color-night-900) 80%, transparent) 40%,
+      transparent 72%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-night-900) 50%, transparent) 0%,
+      transparent 25%,
+      transparent 60%,
+      var(--bg) 100%
+    );
+}
+@media (max-width: 720px) {
+  .hero-video::after {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-night-900) 35%, transparent) 0%,
+      color-mix(in srgb, var(--color-night-900) 20%, transparent) 22%,
+      color-mix(in srgb, var(--color-night-900) 90%, transparent) 45%,
+      var(--bg) 100%
+    );
+  }
+}
+.hero-video__note {
+  position: absolute;
+  right: var(--space-gutter);
+  top: calc(var(--header-h) + 12px);
+  font-size: 12px;
+  color: var(--text-2);
+}
+.hero-video__toggle {
+  position: absolute;
+  right: var(--space-gutter);
+  bottom: 24px;
+  z-index: 1;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-night-900) 70%, transparent);
+  color: var(--text);
+  cursor: pointer;
+}
+.hero-video__toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.hero-video__icon.is-pause {
+  width: 12px;
+  height: 14px;
+  border-left: 4px solid currentColor;
+  border-right: 4px solid currentColor;
+}
+.hero-video__icon.is-play {
+  width: 0;
+  height: 0;
+  margin-left: 3px;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 13px solid currentColor;
+}

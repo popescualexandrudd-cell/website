@@ -6,7 +6,7 @@
 |---|---|---|
 | 0. Citire, inventar, referință, plan | fără modificări vizibile | **aprobată 30.09.2026** („aprob, continuă cu tot până la capăt”) |
 | 1. Fundația | pasul de viteză, tokenii de mișcare, observatorul, CSS-ul de efecte, modul „lite”, comutatoarele `web_effects` și `web_hero_video`; butonul de apel și fraza Q34 la sala de evenimente | **livrată 30.09.2026** |
-| 2. Videoul | stratul video, scriptul, controalele, tranziția spre hală, comutatorul `web_hero_video` | urmează |
+| 2. Videoul | stratul video, scriptul, controalele, tranziția spre hală, comutatorul `web_hero_video` | **livrată 30.09.2026** (așteaptă videoul) |
 | 3. Secțiunile 14–19 | construite direct cu efecte | urmează |
 | 4. Efectele pe secțiunile 1–13 | una câte una, cu interactivitatea funcțiilor | urmează |
 | 5. Celelalte pagini | același limbaj de efecte, mai discret | urmează |
@@ -159,3 +159,50 @@ Nu s-a schimbat nimic vizibil pe site în această fază.
 1. În panou, la Setări și feature flags: `web_effects` și `web_hero_video` există, oprite.
 2. Pe site, la Evenimente → Sala de evenimente: fraza nouă. Butonul „Sună la club” apare după ce completați telefonul în datele firmei.
 3. Activați „Reducerea mișcării” din setările de accesibilitate ale telefonului: site-ul rămâne complet.
+
+---
+
+## Faza 2 — Videoul de prezentare
+
+### Ce s-a construit
+1. **Stratul video din hero** (`HeroVideo`). Randarea de acum rămâne prima imagine: videoul se încarcă abia după ce pagina e gata, când browserul e liber, și apare peste randare cu un fade doar după ce rulează efectiv.
+   - rulează fără sunet, în buclă, pe tot primul ecran;
+   - peste el rămân neschimbate titlul, textul, cele două butoane, nota „ilustrativ” și indicatorul de derulare; sub text, același strat de umbrire ca peste randare, din tokenul de culoare „night”;
+   - la derulare se estompează și se micșorează puțin, dezvăluind randarea și hala 3D (reversibil când urcați înapoi);
+   - un buton rotund, jos în dreapta, îl oprește și îl pornește („Oprește videoul” / „Pornește videoul”, din tastatură, WCAG 2.2.2); se oprește singur când iese din ecran;
+   - cu „reducerea mișcării”, „Save-Data”, conexiune lentă sau telefon slab nu pornește singur: rămâne randarea, cu butonul de redare;
+   - pe telefon, hala 3D pornește abia după ce hero-ul (cu videoul) a ieșit din ecran: niciodată amândouă deodată.
+2. **Comanda** `pnpm --filter @jungle/web video:hero` (`apps/web/scripts/video-hero.mjs`, cu `ffmpeg`). Din originalul pus în `apps/web/media-src/hero/` face:
+   - variantele pentru calculator (1920 px) și telefon (1280 px), MP4 (H.264, pornire rapidă) și WebM (VP9), fără sunet;
+   - o imagine de rezervă;
+   - fișierul `manifest.json`, pe care îl citește site-ul.
+
+   Verifică durata, rezoluția și sunetul. Dacă o variantă depășește bugetul (calculator ≤ 8 MB, telefon ≤ 3 MB), o recomprimă singură, puțin mai tare, până intră în buget. Opțiunea `--illustrative` adaugă pe site eticheta „Video ilustrativ” (Q44).
+3. **Comutatorul** `web_hero_video` (Faza 1). Oprit sau fără video încărcat, hero-ul e exact ca acum.
+4. **Folderul pentru original** `apps/web/media-src/hero/`, cu instrucțiuni (README). Originalul nu se servește pe site.
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Fără video (comutator oprit sau fără fișiere) | hero-ul identic: toate testele existente trec neschimbate, iar inventarul nu pierde nimic. |
+| Testele cap-coadă ale videoului (cu un clip de test generat la fiecare rulare, niciodată pus pe site) | calculator + telefon: randarea e prima imagine; videoul vine după, rulează fără sunet, se oprește și repornește din buton, se estompează la derulare și revine la urcare; cu „reducerea mișcării” nu pornește singur, iar butonul de redare îl pornește; engleza. |
+| Toate testele site-ului cu efectele și videoul pornite | 101 trec (87 existente neschimbate, 8 ale fundației, 6 ale videoului). |
+| Scriptul pe un clip de probă 1080p de 18 s (cel mai greu caz: imagine de test cu mult zgomot) | calculator: MP4 5,0 MB, WebM 6,6 MB; telefon: MP4 1,5 MB, WebM 2,8 MB, toate în buget, după recomprimarea automată. |
+| Teste unitare | manifestul video (doar fișiere din `/media/hero/`, formă exactă), nivelul de mișcare. |
+
+### Viteza pe telefon
+Cu efectele și videoul de test pornite (după o rulare de încălzire): **93 · 86 · 92 · 92 · 92** pe telefon (mediana 92), **100 · 100** pe calculator. Videoul pentru telefon (1,1 MB) se descarcă abia după prima afișare; singura rulare de 86 are din nou prima afișare întârziată în browserul de test.
+
+### Ce video să trimiteți
+- orizontal 16:9, minimum 1920×1080 (ideal 4K), 15–30 de secunde, care se poate relua în buclă;
+- fără text în imagine și fără sunet obligatoriu (Q59: pe site rulează fără sunet);
+- opțional, o variantă verticală 9:16 pentru telefon (Q60);
+- doar filmări reale (clubul de tenis, șantierul); dacă sunt randări sau imagini generate, spuneți-ne și îl marcăm „ilustrativ” (Q44).
+
+**Cum îl urcați:** pe GitHub, pe branch-ul de lucru, deschideți folderul `apps/web/media-src/hero` → **Add file** → **Upload files** → trageți videoul → **Commit changes**. Prin site-ul GitHub se pot urca fișiere de cel mult 25 MB; dacă videoul e mai mare, exportați-l la 1080p sau mai scurt. Apoi îl pregătim noi și pornim `web_hero_video`.
+
+### Cum verificați (click cu click)
+1. Până trimiteți videoul, hero-ul arată exact ca acum, chiar și cu `web_hero_video` pornit.
+2. După ce îl pregătim: deschideți pagina principală; după câteva secunde videoul apare peste randare. Butonul rotund din dreapta-jos îl oprește.
+3. Derulați: videoul se estompează și apare hala.
+4. Activați „Reducerea mișcării” pe telefon: videoul nu mai pornește singur, iar butonul îl pornește.

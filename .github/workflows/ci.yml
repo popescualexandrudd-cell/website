@@ -34,6 +34,8 @@ jobs:
           node-version-file: .node-version
           cache: pnpm
       - run: pnpm install --frozen-lockfile && pnpm --filter @jungle/web exec playwright install --with-deps chromium
+      # The hero video test (ADR-0023) encodes a short generated clip with ffmpeg.
+      - run: sudo apt-get install -y --no-install-recommends ffmpeg
       - run: scripts/test-all
       # An e2e failure keeps its traces and screenshots (Playwright `test-results`) for a week.
       - if: failure()

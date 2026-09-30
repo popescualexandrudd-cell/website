@@ -478,7 +478,12 @@
         "league": "Vezi liga live",
         "scroll": "Descoperă clubul",
         "renderAlt": "Randare 3D, seara: vedere de pe pasarela-lounge de la 3 metri, peste balustrada de sticlă, spre terenurile de padel cu pereți de sticlă, luminate de benzi LED.",
-        "renderNote": "Randare 3D ilustrativă, realizată de noi după schița clubului. Nu este o fotografie și nici proiectul final."
+        "renderNote": "Randare 3D ilustrativă, realizată de noi după schița clubului. Nu este o fotografie și nici proiectul final.",
+        "video": {
+          "play": "Pornește videoul",
+          "pause": "Oprește videoul",
+          "illustrative": "Video ilustrativ"
+        }
       },
       "tour": {
         "kicker": "Turul clubului",
