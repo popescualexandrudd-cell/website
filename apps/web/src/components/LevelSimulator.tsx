@@ -144,7 +144,7 @@ export function LevelSimulator() {
                 </>
               ) : (
                 <div className="level__result">
-                  <p className="level__value">
+                  <p key={guess.level} className="level__value fx-pop">
                     <span className="level__number">{number.format(Number(guess.level))}</span>
                     <span className="level__band">{t(`bands.${bandKey(guess.questionnaire.band)}.name`)}</span>
                   </p>

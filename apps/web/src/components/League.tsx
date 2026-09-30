@@ -20,16 +20,16 @@ export async function League({ id }: { id: string }) {
   return (
     <section id={id} className="section league" aria-labelledby="league-title">
       <div className="container">
-        <p className="kicker">{t("kicker")}</p>
-        <h2 id="league-title" className="h2">
+        <p className="kicker" data-reveal="fade">{t("kicker")}</p>
+        <h2 id="league-title" className="h2" data-reveal="lines">
           {t("title")}
         </h2>
-        <p className="lead">{t("lead")}</p>
+        <p className="lead" data-reveal="rise">{t("lead")}</p>
 
         <h3 className="league__h3">{t("ranks.title")}</h3>
         <ol className="ranks" aria-label={t("ranks.label")}>
           {STEPS.map((step, i) => (
-            <li key={step} className={`rank rank--${step}`} style={{ "--step": i } as CSSProperties}>
+            <li key={step} className={`rank rank--${step}`} data-reveal="rise" style={{ "--step": i, "--i": i } as CSSProperties}>
               <RankEmblem step={step} />
               <span className="rank__name">{t(`ranks.${step}`)}</span>
               <span className="rank__note">
@@ -42,8 +42,8 @@ export async function League({ id }: { id: string }) {
 
         <h3 className="league__h3">{t("earn.title")}</h3>
         <ul className="league__cards">
-          {EARN.map((key) => (
-            <li key={key} className="league__card">
+          {EARN.map((key, i) => (
+            <li key={key} className="league__card" data-reveal="tilt" data-tilt="" style={{ "--i": i } as CSSProperties}>
               <h4>{t(`earn.${key}.title`)}</h4>
               <p>{t(`earn.${key}.text`)}</p>
             </li>
@@ -58,8 +58,8 @@ export async function League({ id }: { id: string }) {
           <div>
             <h3 className="league__h3">{t("rewards.title")}</h3>
             <ul className="league__rewards">
-              {REWARDS.map((key) => (
-                <li key={key}>{t(`rewards.${key}`)}</li>
+              {REWARDS.map((key, i) => (
+                <li key={key} data-reveal="rise" style={{ "--i": i } as CSSProperties}>{t(`rewards.${key}`)}</li>
               ))}
             </ul>
           </div>

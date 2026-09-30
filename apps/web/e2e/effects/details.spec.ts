@@ -64,3 +64,56 @@ test("ADR-0023: reduced motion, no counting and no progress bar", async ({ page 
   await expect(page.locator(".site-header__progress")).toHaveCount(0);
   await expect(page.locator("#cifre .tennis__fact")).toHaveText(FIGURES);
 });
+
+test("ADR-0023: a new value from the server enters with a pop; the value itself is the server's", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/ro");
+  await expect(page.locator("html")).toHaveAttribute("data-motion", /./);
+  test.skip((await page.locator("html").getAttribute("data-motion")) !== "on", "full motion only");
+  const simulator = page.getByRole("region", { name: "Simulatorul „Împarte ora”" });
+  await simulator.scrollIntoViewIfNeeded();
+  const total = simulator.locator(".configurator__total");
+  await expect(total).toHaveClass(/fx-pop/);
+  const before = await total.textContent();
+  await total.evaluate((el) => ((el as HTMLElement & { old?: boolean }).old = true));
+  await simulator.getByRole("group", { name: "Câți plătiți" }).getByRole("button", { name: "2 jucători", exact: true }).click();
+  await expect(total).not.toHaveText(before ?? "");
+  // A new element (the price entered again), with the pop animation.
+  expect(await total.evaluate((el) => Boolean((el as HTMLElement & { old?: boolean }).old))).toBe(false);
+  expect(await total.evaluate((el) => getComputedStyle(el).animationName)).toBe("fx-pop");
+});
+
+test("ADR-0023: sections 1-13 reveal their content as it comes into view", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/ro");
+  await expect(page.locator("html")).toHaveAttribute("data-motion", /^(on|lite)$/);
+  const cards = page.locator("#padel .padel__card");
+  await expect(cards.first()).not.toHaveAttribute("data-shown");
+  await page.locator("#padel .padel__cards").first().scrollIntoViewIfNeeded();
+  await expect(cards.first()).toHaveAttribute("data-shown", "true");
+  await expect.poll(() => cards.first().evaluate((el) => Number(getComputedStyle(el).opacity))).toBe(1);
+  // Every section title waits for its turn, and none stays hidden once reached.
+  for (const id of ["tur", "acum", "padel", "nivel", "liga", "tenis", "pilates", "pachete", "imparte-ora", "evenimente", "cafenea"]) {
+    const title = page.locator(`#${id} h2`);
+    await title.scrollIntoViewIfNeeded();
+    await expect(title).toHaveAttribute("data-shown", "true");
+  }
+});
+
+test("ADR-0023, phase 5: the other pages enter discreetly, and what is on screen at load is never hidden", async ({ page }, info) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/ro/termeni-si-conditii");
+  await expect(page.locator("html")).toHaveAttribute("data-motion", /^(on|lite)$/);
+  // On screen at load: shown at once, before the effects start (no second paint of the page).
+  await expect(page.locator("article.panel")).toHaveAttribute("data-shown", "true");
+  expect(await page.locator("article.panel").evaluate((el) => Number(getComputedStyle(el).opacity))).toBe(1);
+  // A page reached from the menu enters with a rise, then stays.
+  await page.goto("/ro");
+  await expect(page.locator("html")).toHaveAttribute("data-motion", /./);
+  if (info.project.name === "mobile") await page.getByRole("button", { name: "Meniu" }).click();
+  await page.getByRole("link", { name: "Pilates", exact: true }).first().click();
+  await expect(page).toHaveURL(/\/ro\/pilates$/);
+  const panel = page.locator(".upcoming .panel");
+  await expect(panel).toHaveAttribute("data-shown", "true");
+  await expect.poll(() => panel.evaluate((el) => Number(getComputedStyle(el).opacity))).toBe(1);
+});

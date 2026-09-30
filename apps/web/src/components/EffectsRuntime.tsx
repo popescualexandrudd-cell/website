@@ -19,27 +19,44 @@ export function EffectsRuntime() {
   useEffect(() => {
     const root = document.documentElement;
     const level = motionLevel(currentDevice());
-    root.dataset.motion = level;
     const full = level === "on";
-    const show = (el: Element) => {
+    const show = (el: Element, count = full) => {
       const element = el as HTMLElement;
       if (element.dataset.shown) return;
       element.dataset.shown = "true";
       io.unobserve(el);
       // Numbers count up to their own value, once (full motion only).
-      if (full) {
+      if (count) {
         if (element.matches("[data-count]")) countUp(element);
         element.querySelectorAll<HTMLElement>("[data-count]").forEach(countUp);
       }
     };
+    // The motion level goes on <html> only after the observer's first report: what is already on
+    // screen is marked shown first and stays as painted (never hidden for a frame, never a second
+    // largest paint, no forced layout); only what comes into view later is revealed.
+    let started = false;
+    const start = () => {
+      started = true;
+      // Elements below the screen go to their "before" state at once, never with a transition
+      // (hundreds of invisible fade-outs while the page loads).
+      root.dataset.motionInit = "";
+      root.dataset.motion = level;
+      requestAnimationFrame(() => requestAnimationFrame(() => delete root.dataset.motionInit));
+    };
     const io = new IntersectionObserver(
       (entries) => {
-        for (const entry of entries) if (entry.isIntersecting) show(entry.target);
+        for (const entry of entries) {
+          const box = entry.boundingClientRect;
+          if (entry.isIntersecting) show(entry.target, started && full);
+          else if (!started && box.top < window.innerHeight && box.bottom > 0) show(entry.target, false);
+        }
+        if (!started) start();
       },
       { rootMargin: "0px 0px -8% 0px" },
     );
     const watch = (scope: ParentNode) => scope.querySelectorAll(SELECTOR).forEach((el) => io.observe(el));
     watch(document);
+    if (!document.querySelector(SELECTOR)) start();
     const added = new MutationObserver((records) => {
       for (const record of records) {
         record.addedNodes.forEach((node) => {
@@ -67,6 +84,7 @@ export function EffectsRuntime() {
       added.disconnect();
       document.removeEventListener("focusin", focused);
       delete root.dataset.motion;
+      delete root.dataset.motionInit;
     };
   }, []);
   return null;

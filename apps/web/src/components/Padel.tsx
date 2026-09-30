@@ -18,21 +18,21 @@ export async function Padel({ id }: { id: string }) {
   return (
     <section id={id} className="section padel" aria-labelledby="padel-title">
       <div className="container">
-        <p className="kicker">{t("kicker")}</p>
-        <h2 id="padel-title" className="h2">
+        <p className="kicker" data-reveal="fade">{t("kicker")}</p>
+        <h2 id="padel-title" className="h2" data-reveal="lines">
           {t("title")}
         </h2>
-        <p className="lead">{t("lead")}</p>
+        <p className="lead" data-reveal="rise">{t("lead")}</p>
         <div className="padel__intro">
-          <figure className="padel__court">
+          <figure className="padel__court" data-reveal="mask">
             <PadelCourt />
             <figcaption className="muted">{t("court.caption")}</figcaption>
           </figure>
           <div>
             <h3 className="padel__h3">{t("easy.title")}</h3>
             <ul className="padel__points">
-              {EASY.map((key) => (
-                <li key={key}>
+              {EASY.map((key, i) => (
+                <li key={key} data-reveal="rise" style={{ "--i": i } as React.CSSProperties}>
                   <IconCheck size={22} />
                   <span>{t(`easy.${key}`)}</span>
                 </li>
@@ -41,8 +41,8 @@ export async function Padel({ id }: { id: string }) {
           </div>
         </div>
         <ul className="padel__cards">
-          {CARDS.map((key) => (
-            <li key={key} className="padel__card">
+          {CARDS.map((key, i) => (
+            <li key={key} className="padel__card" data-reveal="tilt" data-tilt="" style={{ "--i": i } as React.CSSProperties}>
               <h3 className="padel__h3">{t(`cards.${key}.title`)}</h3>
               <p>{t(`cards.${key}.text`)}</p>
             </li>
@@ -51,8 +51,8 @@ export async function Padel({ id }: { id: string }) {
         <h3 className="padel__h3 padel__formats-title">{t("formats.title")}</h3>
         <p className="muted">{t("formats.lead")}</p>
         <ul className="padel__cards">
-          {FORMATS.map((key) => (
-            <li key={key} className="padel__card padel__card--format">
+          {FORMATS.map((key, i) => (
+            <li key={key} className="padel__card padel__card--format" data-reveal="pop" data-tilt="" style={{ "--i": i } as React.CSSProperties}>
               <h4>{t(`formats.${key}.title`)}</h4>
               <p>{t(`formats.${key}.text`)}</p>
             </li>

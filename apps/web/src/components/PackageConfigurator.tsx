@@ -193,7 +193,7 @@ export function PackageConfigurator() {
           ) : (
             <>
               {quote.provisional && <p className="configurator__provisional">{t("provisional")}</p>}
-              <p className="configurator__total">
+              <p key={quote.total} className="configurator__total fx-pop">
                 {t("lei", { amount: lei(quote.total, locale) })}
                 <span>{t("forMonths", { months: quote.months })}</span>
               </p>

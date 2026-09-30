@@ -8,9 +8,9 @@
 | 1. Fundația | pasul de viteză, tokenii de mișcare, observatorul, CSS-ul de efecte, modul „lite”, comutatoarele `web_effects` și `web_hero_video`; butonul de apel și fraza Q34 la sala de evenimente | **livrată 30.09.2026** |
 | 2. Videoul | stratul video, scriptul, controalele, tranziția spre hală, comutatorul `web_hero_video` | **livrată 30.09.2026** (așteaptă videoul) |
 | 3. Secțiunile 14–19 | construite direct cu efecte | **livrată 30.09.2026** |
-| 4. Efectele pe secțiunile 1–13 | una câte una, cu interactivitatea funcțiilor | urmează |
-| 5. Celelalte pagini | același limbaj de efecte, mai discret | urmează |
-| 6–7. Verificarea finală și predarea | ghid pentru proprietar | urmează |
+| 4. Efectele pe secțiunile 1–13 | una câte una, cu interactivitatea funcțiilor | **livrată 30.09.2026** |
+| 5. Celelalte pagini | același limbaj de efecte, mai discret | **livrată 30.09.2026** |
+| 6–7. Verificarea finală și predarea | ghid pentru proprietar | **livrate 30.09.2026**; așteaptă aprobarea |
 
 ---
 
@@ -265,3 +265,123 @@ Captura secțiunilor noi: [calculator](ecrane/faza3-calculator-ro.jpg), [telefon
 ### Decizii noi (nu blochează nimic)
 - **Q65:** cine face parte din echipă și ce scriem despre fiecare (până atunci: doar rolurile).
 - **Q66:** harta „secțiune cu secțiune” de la finalul paginii o scoatem în ziua lansării publice.
+
+---
+
+## Faza 4 — Efectele pe secțiunile 1–13
+
+### Ce s-a adăugat (doar atribute și o clasă; niciun text, nicio funcție schimbată)
+- **La fiecare secțiune, 3–13:** eticheta mică apare cu un fade, titlul intră pe rânduri, textul de sub el urcă ușor.
+- **Turul clubului:** cele opt opriri apar în cascadă.
+- **„Acum în club”:** când un teren se eliberează sau se ocupă, starea lui nouă intră cu un „pop”.
+- **Padel:**
+  - desenul terenului se descoperă dinspre centru;
+  - avantajele apar pe rând;
+  - cardurile se înclină la apariție și după mouse;
+  - formatele de turneu intră cu un „pop”.
+- **„Care e nivelul tău?”:** nivelul primit de la server intră cu un „pop” la fiecare rezultat nou.
+- **Liga:**
+  - scara rangurilor urcă treaptă cu treaptă;
+  - cardurile „cum câștigi LP” se înclină;
+  - premiile apar pe rând;
+  - în simulatorul de puncte, LP-ul nou intră cu un „pop”.
+- **Tenis:** 8 și 4 (terenurile) numără în sus; anul 2013 nu numără (e un an, nu o cantitate); cardurile se înclină.
+- **Pilates:**
+  - desenul studioului se descoperă;
+  - faptele apar pe rând;
+  - cele 8 clase intră cu un „pop” și se înclină;
+  - lista de așteptare urcă.
+- **Pachete și „Împarte ora”:** prețul nou intră cu un „pop” la fiecare alegere. Notele de sub simulatoare apar pe rând.
+- **Evenimente:**
+  - cardurile se înclină;
+  - evenimentele din calendar apar pe rând;
+  - sala de evenimente se înclină la apariție;
+  - numărul de persoane numără în sus.
+- **Cafeneaua:** cei trei pași intră cu un „pop”; categoriile meniului apar pe rând.
+- **Hero-ul** nu primește apariții. E primul ecran, iar imaginea lui e cea după care Lighthouse măsoară încărcarea (LCP); mișcarea lui e videoul din Faza 2.
+
+**Calculele nu se ating:** „pop”-ul e o animație pe elementul care arată valoarea primită de la server; valoarea nu trece prin nicio formulă în site.
+
+### O problemă găsită la măsurare și reparată
+Prima măsurare cu efectele pe toate secțiunile a dat pe telefon **85 · 82 · 87 · 86 · 86**, cu TBT 300–430 ms. Am comparat, pe aceeași versiune, efectele oprite și pornite: oprite 91, pornite 86.
+
+**Cauza:** la pornirea efectelor, cele aproximativ 200 de elemente de sub ecran treceau spre starea „ascuns” *cu animație*, adică sute de fade-uri invizibile în timpul încărcării paginii.
+
+**Reparația:**
+- elementele de sub ecran trec direct, fără animație, în starea de dinaintea apariției;
+- ce e deja pe ecran se marchează din primul raport al observatorului, fără să forțeze browserul să recalculeze pagina;
+- lumina de pe carduri se desenează doar cât stă mouse-ul pe card.
+
+Efectele rămân aceleași.
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Inventarul, efectele oprite și „reducerea mișcării” | **0 elemente eliminate sau schimbate** (doar adăugirile din Faza 3). |
+| Regresia vizuală, efectele oprite | **70/72 identice**; diferă doar pagina principală pe telefon (secțiunile 14–19). Secțiunile 1–13, verificate rând cu rând: identice. |
+| Regresia vizuală, efectele pornite + „reducerea mișcării” | **68/72 identice**, la fel ca în Faza 3 (doar pagina principală, cu secțiunile noi). |
+| Testele existente | toate trec neschimbate, cu efectele oprite (101) și pornite. |
+| Teste noi | „pop”-ul prețului (elementul intră din nou, cu animația, iar valoarea e cea a serverului); fiecare secțiune 3–13 își arată titlul când ajungeți la ea; cardurile apar la derulare. |
+| Toate testele site-ului | 28 pre-lansare, 101 site complet, **127 cu efectele și videoul pornite**. |
+
+### Viteza pe telefon (după reparație, aceeași versiune, după o rulare de încălzire)
+| | Telefon | TBT |
+|---|---|---|
+| Efectele oprite | 93 · 94 · 89 · 93 · 92 | 90–230 ms |
+| **Efectele pornite** | **95 · 90 · 92 · 83 · 92** (mediana 92) | 90–240 ms |
+
+Singura rulare sub 90 (83) are LCP-ul întârziat (3,9 s față de 3,2 s), ca rulările slabe din referință; TBT-ul ei e normal. Pe calculator: 100.
+
+---
+
+## Faza 5 — Celelalte pagini
+
+Același limbaj, mai discret (Q63):
+- **Paginile din meniu** („În construcție”) și **paginile legale:** când ajungeți la ele din meniu, panoul urcă ușor, iar titlul intră pe rânduri.
+- **La deschiderea directă a unei pagini** (adresa tastată, un link din afară), nimic din ce e pe ecran nu se ascunde: e afișat exact ca fără efecte.
+- **Paginile legale** sunt comune cu pagina de pre-lansare. Primesc atributele doar când `web_effects` e pornit, deci pe pagina de pre-lansare nu se schimbă nimic, nici în cod (Q64).
+
+**Test nou:** la deschiderea directă a Termenilor, pagina e afișată imediat; din meniu, pagina Pilates intră cu mișcarea discretă și rămâne afișată.
+
+---
+
+## Faza 6 — Verificarea finală
+
+| Cerință | Dovada |
+|---|---|
+| Nimic eliminat sau schimbat | inventarul: **0 elemente eliminate** pe toate cele 72 de vizite (18 pagini × RO/EN × calculator/telefon), cu efectele oprite și cu ele pornite + „reducerea mișcării”. |
+| Designul și conținutul neschimbate | regresia vizuală: toate paginile identice cu referința din Faza 0, cu excepția adăugirilor aprobate (secțiunile 14–19, rândul din subsol, fraza Q34). |
+| „Reducerea mișcării” | nimic ascuns, nimic în mișcare; videoul nu pornește singur; capturile identice cu cele cu efectele oprite. |
+| Fără JavaScript | tot conținutul vizibil (test cap-coadă). |
+| Telefoane slabe, „Economizor de date” | doar fade-uri, fără video pornit singur (nivelul „lite”). |
+| Tastatura | un element primit în focus apare imediat (test cap-coadă). |
+| Accesibilitatea | axe fără probleme serioase pe toate paginile, cu efectele oprite și pornite; Lighthouse accesibilitate 100. |
+| Testele existente | trec neschimbate. Singurele modificări: testul antetului, care numără secțiunile gata (19 din 19), și pregătirea verificării axe (așteaptă terminarea efectelor). |
+| Biblioteci noi | **niciuna.** Efectele sunt CSS plus un singur script mic; GSAP n-a fost necesar. |
+| Pagina de pre-lansare | neschimbată: niciun fișier al ei atins, cele 28 de teste ale ei trec neschimbate. |
+| Calculele | toate valorile vin de la server; „pop”-ul și numărarea se opresc exact pe textul serverului. |
+| Viteza | mediana pe telefon 92 cu efectele pornite, 93 cu ele oprite; calculatorul 100. Unele măsurători izolate coboară sub 90, cu sau fără efecte, din cauza mediului de test (Faza 0). |
+
+**Înregistrările derulării** (Playwright, pagina principală cu efectele pornite, de sus până jos):
+- [calculator](inregistrari/desktop.webm);
+- [telefon](inregistrari/mobile.webm).
+
+Se deschid în browser (Chrome, Firefox, Edge).
+
+---
+
+## Faza 7 — Predarea
+
+- **Ghidul pentru proprietar:** [docs/08-deploy-si-mentenanta/03-ghid-efecte-si-video.md](../../../08-deploy-si-mentenanta/03-ghid-efecte-si-video.md). Explică pornirea și oprirea din panou, cine vede ce, schimbarea videoului, cum cereți o schimbare și ce faceți dacă ceva nu merge.
+- **Pentru programatori:**
+  - ADR-0023, cu secțiunea „Implementarea”;
+  - `apps/web/README.md`, secțiunea „Efecte”;
+  - convenția din `CLAUDE.md`;
+  - comanda nouă `apps/web/scripts/record-scroll.mjs` (înregistrarea derulării).
+- **Actualizate:** PROGRES, CHANGELOG, INTREBARI_DESCHISE (Q65, Q66).
+
+### Ce aveți de decis
+1. **Aprobarea** efectelor (Fazele 1–5) și a secțiunilor 14–19.
+2. **Videoul:** când îl aveți, îl urcați după ghid (secțiunea 3).
+3. **Q59–Q66,** fiecare cu varianta implicită; niciuna nu blochează.
+4. **Efectele opționale** (Q62): vi le arătăm ca demonstrații, dacă vreți.

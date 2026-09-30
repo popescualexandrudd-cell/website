@@ -17,22 +17,22 @@ export async function Tennis({ id }: { id: string }) {
   return (
     <section id={id} className="section section-alt tennis" aria-labelledby="tennis-title">
       <div className="container">
-        <p className="kicker">{t("kicker")}</p>
-        <h2 id="tennis-title" className="h2">
+        <p className="kicker" data-reveal="fade">{t("kicker")}</p>
+        <h2 id="tennis-title" className="h2" data-reveal="lines">
           {t("title")}
         </h2>
-        <p className="lead">{t("lead")}</p>
+        <p className="lead" data-reveal="rise">{t("lead")}</p>
         <ul className="tennis__facts" aria-label={t("factsLabel")}>
-          {(["since", "courts", "winter", "programs"] as const).map((key) => (
-            <li key={key}>
-              <span className="tennis__fact">{t(`facts.${key}.value`)}</span>
+          {(["since", "courts", "winter", "programs"] as const).map((key, i) => (
+            <li key={key} data-reveal="rise" style={{ "--i": i } as React.CSSProperties}>
+              <span className="tennis__fact" data-count={key === "since" ? undefined : ""}>{t(`facts.${key}.value`)}</span>
               <span className="tennis__fact-label">{t(`facts.${key}.label`)}</span>
             </li>
           ))}
         </ul>
         <ul className="padel__cards">
-          {CARDS.map((key) => (
-            <li key={key} className="padel__card">
+          {CARDS.map((key, i) => (
+            <li key={key} className="padel__card" data-reveal="tilt" data-tilt="" style={{ "--i": i } as React.CSSProperties}>
               <h3 className="padel__h3">{t(`cards.${key}.title`)}</h3>
               <p>{t(`cards.${key}.text`)}</p>
             </li>

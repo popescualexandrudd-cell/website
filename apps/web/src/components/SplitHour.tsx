@@ -113,7 +113,7 @@ export function SplitHour() {
           ) : (
             <>
               {split.provisional && <p className="configurator__provisional">{t("provisional")}</p>}
-              <p className="configurator__total">
+              <p key={each} className="configurator__total fx-pop">
                 {t("lei", { amount: lei(each, locale) })}
                 <span>{choice.players === 1 ? t("allYours") : t("perPerson")}</span>
               </p>

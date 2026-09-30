@@ -4,6 +4,22 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Efectele site-ului, Fazele 4–7 — 30.09.2026 (livrate)
+#### Adăugat
+- Faza 4, secțiunile 3–13 (hero-ul rămâne neschimbat: imaginea LCP):
+  - `data-reveal` pe etichete, titluri și texte, pe listele cu cascadă (`--i`) și pe desene (`mask`);
+  - `data-tilt` pe carduri;
+  - `data-count` pe cifrele din Tenis și pe capacitatea sălii de evenimente;
+  - `fx-pop` + `key` pe valorile de la server (nivelul, LP-ul, prețul pachetului, partea fiecăruia, starea unui teren).
+- Faza 5: paginile din meniu și paginile legale intră discret la navigare; paginile legale primesc atributele doar cu `web_effects` pornit (pre-lansarea neschimbată).
+- `scripts/record-scroll.mjs` (înregistrarea derulării pentru rapoarte); înregistrările în `docs/00-management/verificare/etapa-11-efecte/inregistrari/`.
+- Ghidul proprietarului: `docs/08-deploy-si-mentenanta/03-ghid-efecte-si-video.md`; ADR-0023, secțiunea „Implementarea”.
+#### Schimbat
+- `EffectsRuntime`:
+  - pune nivelul de mișcare abia după primul raport al observatorului: ce e pe ecran rămâne afișat, fără recalcularea forțată a paginii;
+  - elementele de sub ecran trec în starea inițială fără animație (`data-motion-init`). Înainte, sute de fade-uri invizibile la încărcare: TBT +150–200 ms, mediana pe telefon 86 în loc de 92.
+- Tilt-ul: lumina se desenează doar cât stă mouse-ul pe card; fără `preserve-3d`.
+
 ### Efectele site-ului, Faza 3 — 30.09.2026 (livrată): secțiunile 14–19, cu efectele din prima zi
 #### Adăugat
 - Secțiunea 14 „Comunitatea” (`Community`): insignele ligii (§6.15, fiecare jucător își vede insignele doar în cont, R-012), Hall of Fame din `GET /api/v1/league/hall-of-fame` (`src/lib/fame.ts`; nume, rang și loc, LG-134), „Adu un prieten” (R-120).

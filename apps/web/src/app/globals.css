@@ -2933,6 +2933,9 @@ html[data-motion="on"] [data-reveal="mask"] {
 html[data-motion="on"] [data-reveal="mask"]:not([data-shown]) {
   clip-path: inset(8% 8% 8% 8%);
 }
+html[data-motion-init] [data-reveal] {
+  transition: none !important;
+}
 @media print {
   html[data-motion] [data-reveal] {
     opacity: 1 !important;
@@ -3040,31 +3043,25 @@ html[data-motion="on"] [data-reveal="mask"]:not([data-shown]) {
 /* ------------------------------------------------------------------ the site's effects: interaction (ADR-0023) */
 /* Cards that follow a fine pointer (desktop), with a brass light where the pointer is; on touch, a
  * visible press. Full motion only; the tilt starts once the card has appeared. */
-html[data-motion="on"] [data-tilt] {
-  position: relative;
-  transform-style: preserve-3d;
-}
 html[data-motion="on"] [data-tilt]:is([data-shown], :not([data-reveal])):hover {
+  position: relative;
   transform: perspective(var(--motion-perspective)) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg));
   transition: transform var(--motion-duration-fast) var(--motion-ease-out);
 }
-html[data-motion="on"] [data-tilt]::after {
+/* The brass light exists only while the pointer is on the card: nothing extra to paint at load. */
+html[data-motion="on"] [data-tilt]:is([data-shown], :not([data-reveal])):hover::after {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0;
   background: radial-gradient(
     circle at var(--glow-x, 50%) var(--glow-y, 50%),
     color-mix(in srgb, var(--color-brass-300) 16%, transparent),
     transparent 60%
   );
-  transition: opacity var(--motion-duration-fast) var(--motion-ease-out);
 }
-html[data-motion="on"] [data-tilt]:hover::after {
-  opacity: 1;
-}
-html[data-motion] [data-tilt]:active {
+html[data-motion="on"] [data-tilt]:active,
+html[data-motion="lite"] [data-tilt]:active {
   transform: scale(0.98);
 }
 /* The header: a brass progress bar under it, and the menu link of the section in view. */
@@ -3084,8 +3081,10 @@ html[data-motion="on"] .full-nav a[data-active="true"] {
   box-shadow: inset 0 -2px 0 var(--color-brass-400);
 }
 /* A value that changes (a price, LP, a level) enters again with a small elastic "pop". */
+html[data-motion="on"] span.fx-pop {
+  display: inline-block; /* a transform needs a box; paragraphs keep their own display */
+}
 html[data-motion="on"] .fx-pop {
-  display: inline-block;
   animation: fx-pop var(--motion-duration-base) var(--motion-ease-spring) both;
 }
 @keyframes fx-pop {

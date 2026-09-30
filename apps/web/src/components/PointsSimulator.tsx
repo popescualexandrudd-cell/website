@@ -172,7 +172,7 @@ export function PointsSimulator() {
             <p className="points__status">{t("sim.error")}</p>
           ) : (
             <>
-              <p className={`points__lp ${preview.lp < 0 ? "is-loss" : "is-win"}`}>
+              <p key={preview.lp} className={`points__lp fx-pop ${preview.lp < 0 ? "is-loss" : "is-win"}`}>
                 {signed.format(preview.lp)} <span>LP</span>
               </p>
               <p className="points__chance">{t("sim.chance", { chance: percent.format(preview.win_probability) })}</p>

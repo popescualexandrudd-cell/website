@@ -11,11 +11,11 @@ export async function Level({ id }: { id: string }) {
   return (
     <section id={id} className="section section-dark level" aria-labelledby="level-title">
       <div className="container">
-        <p className="kicker">{t("kicker")}</p>
-        <h2 id="level-title" className="h2">
+        <p className="kicker" data-reveal="fade">{t("kicker")}</p>
+        <h2 id="level-title" className="h2" data-reveal="lines">
           {t("title")}
         </h2>
-        <p className="lead">{t("lead")}</p>
+        <p className="lead" data-reveal="rise">{t("lead")}</p>
         <LevelSimulator />
         <noscript>
           <p className="muted">{t("noscript")}</p>

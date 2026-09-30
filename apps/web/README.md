@@ -69,6 +69,12 @@ Gestionar propriu (`CookieConsent`), fără servicii externe: înainte de aleger
 - Comutatoarele `web_effects` (efectele) și `web_hero_video` (videoul din hero), oprite implicit, doar pe site-ul complet (`src/lib/flags.ts`, `siteFlags`).
 - O secțiune primește efecte doar prin atribute pe elementele randate pe server: `data-reveal="fade|rise|tilt|pop|mask|lines"` și, pentru cascadă, `style={{ "--i": n }}`. Efectul e în CSS (`globals.css`, „the site's effects”), din tokenii `--motion-*`.
 - `EffectsRuntime` (singurul script, în layout, doar cu `web_effects` pornit) pune `html[data-motion="on|lite|reduced"]` (`src/lib/effects.ts`, `motionLevel`) și marchează `data-shown`. Fără JavaScript, cu comutatorul oprit sau cu „reducerea mișcării”, nimic nu e ascuns.
+- Ce e deja pe ecran când pornește runtime-ul rămâne afișat; se animă doar ce intră în ecran mai târziu (inclusiv la navigarea între pagini).
+- La nivelul „on” (`src/lib/effects-dom.ts`): `data-count` (un număr numără până la textul serverului), `data-tilt` (cardul urmărește cursorul, doar pe calculator), bara de progres din antet și linkul secțiunii din ecran (`data-active`).
+- O valoare nouă de la server (simulatoare, starea unui teren) intră cu `className="… fx-pop"` și `key={valoare}`: React creează elementul din nou și animația rulează; valoarea nu se schimbă.
+- Paginile comune cu pre-lansarea (cele legale) primesc atributele doar cu `web_effects` pornit (`siteFlags().effects`).
+- Testele cap-coadă verifică accesibilitatea pe pagina cu efectele terminate (`expectAccessible` din `e2e/helpers.ts`).
+- Ghidul proprietarului: `docs/08-deploy-si-mentenanta/03-ghid-efecte-si-video.md`.
 - Textele componentelor client pleacă doar cu pagina care le folosește (`ClientTexts`, grupurile din `src/lib/client-messages.ts`).
 - Inventarul și regresia: `pnpm --filter @jungle/web inventory --out FILE` (cu `SHOTS=<folder>` pentru capturi, `REDUCED=1` pentru „reducerea mișcării”), `--compare BEFORE AFTER`, `--compare-shots REF NEW`.
 - Cap-coadă: `scripts/test-e2e` rulează toate testele site-ului a doua oară cu `web_effects` pornit, plus `e2e/effects/`.

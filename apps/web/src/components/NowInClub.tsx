@@ -7,11 +7,11 @@ export async function NowInClub({ id }: { id: string }) {
   return (
     <section id={id} className="section now" aria-labelledby="now-title">
       <div className="container">
-        <p className="kicker">{t("kicker")}</p>
-        <h2 id="now-title" className="h2">
+        <p className="kicker" data-reveal="fade">{t("kicker")}</p>
+        <h2 id="now-title" className="h2" data-reveal="lines">
           {t("title")}
         </h2>
-        <p className="lead">{t("lead")}</p>
+        <p className="lead" data-reveal="rise">{t("lead")}</p>
         <LiveClub />
       </div>
     </section>

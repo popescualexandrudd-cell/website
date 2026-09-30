@@ -15,15 +15,15 @@ export async function Split({ id }: { id: string }) {
   return (
     <section id={id} className="section split-section" aria-labelledby="split-section-title">
       <div className="container">
-        <p className="kicker">{t("kicker")}</p>
-        <h2 id="split-section-title" className="h2">
+        <p className="kicker" data-reveal="fade">{t("kicker")}</p>
+        <h2 id="split-section-title" className="h2" data-reveal="lines">
           {t("title")}
         </h2>
-        <p className="lead">{t("lead")}</p>
+        <p className="lead" data-reveal="rise">{t("lead")}</p>
         <SplitHour />
         <ul className="packages__notes">
-          {NOTES.map((key) => (
-            <li key={key}>
+          {NOTES.map((key, i) => (
+            <li key={key} data-reveal="rise" style={{ "--i": i } as React.CSSProperties}>
               <strong>{t(`notes.${key}.title`)}</strong>
               <span>{t(`notes.${key}.text`)}</span>
             </li>

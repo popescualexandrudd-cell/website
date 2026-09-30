@@ -18,9 +18,9 @@ export async function Upcoming({ page }: { page: UpcomingPage }) {
   return (
     <section className="page upcoming" aria-labelledby="upcoming-title">
       <div className="container">
-        <div className="panel">
-          <p className="kicker">{t("upcoming.kicker")}</p>
-          <h1 id="upcoming-title" className="h2">
+        <div className="panel" data-reveal="rise">
+          <p className="kicker" data-reveal="fade">{t("upcoming.kicker")}</p>
+          <h1 id="upcoming-title" className="h2" data-reveal="lines">
             {t(`pages.${page}`)}
           </h1>
           <p className="lead">{t("upcoming.text")}</p>

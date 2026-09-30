@@ -66,6 +66,8 @@ export function TourStops({ plan, note, stops }: { plan: ReactNode; note: string
             }}
             data-index={i}
             className="tour__stop"
+            data-reveal="rise"
+            style={{ "--i": i } as React.CSSProperties}
             aria-current={i === active ? "step" : undefined}
           >
             <span className="tour__number" aria-hidden="true">

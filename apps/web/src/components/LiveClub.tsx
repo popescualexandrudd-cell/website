@@ -90,7 +90,9 @@ export function LiveClub() {
             {(live?.courts ?? []).map((c) => (
               <li key={c.id} data-state={c.state}>
                 <span className="live__name">{c.name}</span>
-                <span className="live__state">{court(c)}</span>
+                <span key={court(c)} className="live__state fx-pop">
+                  {court(c)}
+                </span>
               </li>
             ))}
           </ul>

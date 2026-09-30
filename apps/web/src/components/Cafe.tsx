@@ -18,14 +18,14 @@ export async function Cafe({ id }: { id: string }) {
   return (
     <section id={id} className="section cafe" aria-labelledby="cafe-title">
       <div className="container">
-        <p className="kicker">{t("kicker")}</p>
-        <h2 id="cafe-title" className="h2">
+        <p className="kicker" data-reveal="fade">{t("kicker")}</p>
+        <h2 id="cafe-title" className="h2" data-reveal="lines">
           {t("title")}
         </h2>
-        <p className="lead">{t("lead")}</p>
+        <p className="lead" data-reveal="rise">{t("lead")}</p>
         <ol className="cafe__steps" aria-label={t("stepsLabel")}>
           {STEPS.map((key, i) => (
-            <li key={key}>
+            <li key={key} data-reveal="pop" style={{ "--i": i } as React.CSSProperties}>
               <span className="cafe__step" aria-hidden="true">
                 {i + 1}
               </span>
@@ -47,8 +47,8 @@ export async function Cafe({ id }: { id: string }) {
             <>
               {hasIndicativePrices(menu) && <p className="configurator__provisional">{t("menu.provisional")}</p>}
               <ul className="cafe__categories">
-                {menu.map((category) => (
-                  <li key={category.id} className="cafe__category">
+                {menu.map((category, i) => (
+                  <li key={category.id} className="cafe__category" data-reveal="rise" style={{ "--i": i } as React.CSSProperties}>
                     <h4>{nameOf(category, locale)}</h4>
                     <ul className="cafe__products">
                       {category.products.map((product) => (

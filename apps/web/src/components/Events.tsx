@@ -25,14 +25,14 @@ export async function Events({ id }: { id: string }) {
   return (
     <section id={id} className="section section-alt events" aria-labelledby="events-section-title">
       <div className="container">
-        <p className="kicker">{t("kicker")}</p>
-        <h2 id="events-section-title" className="h2">
+        <p className="kicker" data-reveal="fade">{t("kicker")}</p>
+        <h2 id="events-section-title" className="h2" data-reveal="lines">
           {t("title")}
         </h2>
-        <p className="lead">{t("lead")}</p>
+        <p className="lead" data-reveal="rise">{t("lead")}</p>
         <ul className="padel__cards">
-          {CARDS.map((key) => (
-            <li key={key} className="padel__card">
+          {CARDS.map((key, i) => (
+            <li key={key} className="padel__card" data-reveal="tilt" data-tilt="" style={{ "--i": i } as React.CSSProperties}>
               <h3 className="padel__h3">{t(`cards.${key}.title`)}</h3>
               <p>{t(`cards.${key}.text`)}</p>
             </li>
@@ -49,15 +49,15 @@ export async function Events({ id }: { id: string }) {
             <p className="pilates__text">{t("calendar.empty")}</p>
           ) : (
             <ol className="events__list">
-              {calendar.items.map((item) => (
-                <Entry key={item.id} item={item} locale={locale} />
+              {calendar.items.map((item, i) => (
+                <Entry key={item.id} item={item} locale={locale} index={i} />
               ))}
             </ol>
           )}
           <p className="events__note">{t("calendar.clubTime")}</p>
         </div>
 
-        <div className="events__room" role="region" aria-labelledby="events-room-title">
+        <div className="events__room" data-reveal="tilt" role="region" aria-labelledby="events-room-title">
           <div>
             <h3 id="events-room-title" className="pilates__h3">
               {t("room.title")}
@@ -70,7 +70,9 @@ export async function Events({ id }: { id: string }) {
           <ul className="tennis__facts events__facts" aria-label={t("room.factsLabel")}>
             {room?.capacity ? (
               <li>
-                <span className="tennis__fact">{room.capacity}</span>
+                <span className="tennis__fact" data-count="">
+                  {room.capacity}
+                </span>
                 <span className="tennis__fact-label">{t("room.people")}</span>
               </li>
             ) : null}
@@ -101,7 +103,7 @@ export async function Events({ id }: { id: string }) {
   );
 }
 
-async function Entry({ item, locale }: { item: CalendarItem; locale: string }) {
+async function Entry({ item, locale, index }: { item: CalendarItem; locale: string; index: number }) {
   const t = await getTranslations("web.site.events.calendar");
   const { title, text } = wording(item, locale);
   const { day, from, to, endDay } = when(item);
@@ -112,7 +114,7 @@ async function Entry({ item, locale }: { item: CalendarItem; locale: string }) {
   const format = tournament && (FORMATS as readonly string[]).includes(tournament.format) ? t(`formats.${tournament.format}`) : null;
   const hours = !to ? t("from", { time: from }) : endDay ? t("untilDay", { from, to, day: date(endDay, "short") }) : `${from}–${to}`;
   return (
-    <li className={item.cancelled ? "events__item is-cancelled" : "events__item"}>
+    <li className={item.cancelled ? "events__item is-cancelled" : "events__item"} data-reveal="rise" style={{ "--i": Math.min(index, 8) } as React.CSSProperties}>
       <p className="events__date">
         <time dateTime={item.starts_at}>{date(day)}</time>
         <span className="events__time">{hours}</span>

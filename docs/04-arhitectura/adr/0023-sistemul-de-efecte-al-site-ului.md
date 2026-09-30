@@ -30,3 +30,23 @@ Inventarul înainte/după (`apps/web/scripts/inventory.mjs`, diferența doar ad�
 ## Consecințe
 - Orice secțiune nouă (14–19) folosește atributele `data-reveal`, nu propriul cod de animație.
 - `apps/web/README.md` („Efecte”) și `CLAUDE.md` descriu convenția.
+
+## Implementarea (Fazele 1–5, 30.09.2026)
+Ce s-a construit, față de decizia de mai sus:
+- **Atributele:** `data-reveal` + `style={{ "--i": n }}` pentru cascadă (în locul `data-reveal-delay` / `data-reveal-group` din plan: un singur mecanism, decalajul din tokenul `--motion-stagger`). Animațiile legate de scroll (`animation-timeline`) și GSAP n-au fost necesare: tranziția video → hală e o variabilă CSS (`--hero-video-out`) pusă de `HeroVideo`.
+- **`EffectsRuntime`** (singurul script):
+  - pune nivelul (`src/lib/effects.ts`; „lite” la ≤ 2 nuclee sau ≤ 2 GB);
+  - marchează `data-shown` (IntersectionObserver, plus MutationObserver pentru elementele adăugate mai târziu, de exemplu la navigarea între pagini);
+  - ce e deja pe ecran la pornire rămâne afișat (niciodată ascuns pentru un cadru, nicio a doua „cea mai mare afișare”);
+  - focusul din tastatură arată imediat elementul și părinții lui.
+- **La nivelul „on”** (`src/lib/effects-dom.ts`):
+  - `data-count`: numărul numără în sus și se oprește pe textul serverului; cititorul de ecran aude valoarea, nu numărătoarea;
+  - `data-tilt`: cardurile urmăresc cursorul (doar pe un indicator fin), cu o lumină de alamă;
+  - bara de progres din antet și `data-active` pe linkul secțiunii din ecran.
+- **„Pop” la valori noi:** clasa `fx-pop` și o cheie React pe valoare (nivelul, LP-ul, prețul pachetului, partea fiecăruia, starea unui teren). Elementul intră din nou, cu animația; valoarea rămâne cea primită de la server.
+- **Paginile partajate cu pre-lansarea** (cele legale) primesc atributele doar când `web_effects` e pornit; pagina de pre-lansare nu se schimbă (Q64).
+- **Testele:**
+  - `scripts/test-e2e` rulează toate testele site-ului a doua oară cu efectele și videoul pornite, plus `e2e/effects/`;
+  - `expectAccessible` verifică pagina cu efectele terminate (axe derulează la fiecare element și ar măsura altfel un text la jumătatea fade-ului);
+  - `inventory.mjs --compare` ignoră id-urile automate ale React.
+- **Hero-ul** nu primește apariții la scroll: e primul ecran și conține imaginea LCP; mișcarea lui e videoul (Faza 2).

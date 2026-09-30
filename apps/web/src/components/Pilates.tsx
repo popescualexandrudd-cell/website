@@ -16,19 +16,19 @@ export async function Pilates({ id }: { id: string }) {
   return (
     <section id={id} className="section pilates" aria-labelledby="pilates-title">
       <div className="container">
-        <p className="kicker">{t("kicker")}</p>
-        <h2 id="pilates-title" className="h2">
+        <p className="kicker" data-reveal="fade">{t("kicker")}</p>
+        <h2 id="pilates-title" className="h2" data-reveal="lines">
           {t("title")}
         </h2>
-        <p className="lead">{t("lead")}</p>
+        <p className="lead" data-reveal="rise">{t("lead")}</p>
         <div className="pilates__intro">
-          <figure className="pilates__studio">
+          <figure className="pilates__studio" data-reveal="mask">
             <ReformerRow />
             <figcaption className="muted">{t("studio.caption")}</figcaption>
           </figure>
           <ul className="pilates__facts">
-            {(["machines", "groups", "instructor", "where"] as const).map((key) => (
-              <li key={key}>
+            {(["machines", "groups", "instructor", "where"] as const).map((key, i) => (
+              <li key={key} data-reveal="rise" style={{ "--i": i } as React.CSSProperties}>
                 <strong>{t(`facts.${key}.title`)}</strong>
                 <span>{t(`facts.${key}.text`)}</span>
               </li>
@@ -38,15 +38,15 @@ export async function Pilates({ id }: { id: string }) {
 
         <h3 className="pilates__h3">{t("kindsTitle")}</h3>
         <ul className="pilates__kinds">
-          {KINDS.map((kind) => (
-            <li key={kind} className="pilates__kind">
+          {KINDS.map((kind, i) => (
+            <li key={kind} className="pilates__kind" data-reveal="pop" data-tilt="" style={{ "--i": i } as React.CSSProperties}>
               <h4>{t(`kinds.${kind}.name`)}</h4>
               <p>{t(`kinds.${kind}.text`)}</p>
             </li>
           ))}
         </ul>
 
-        <div className="pilates__waitlist">
+        <div className="pilates__waitlist" data-reveal="rise">
           <h3 className="pilates__h3">{t("waitlist.title")}</h3>
           <p className="pilates__text">{t("waitlist.text")}</p>
         </div>

@@ -16,11 +16,11 @@ export async function Tour({ id }: { id: string }) {
   return (
     <section id={id} className="section tour" aria-labelledby="tour-title">
       <div className="container">
-        <p className="kicker">{t("kicker")}</p>
-        <h2 id="tour-title" className="h2">
+        <p className="kicker" data-reveal="fade">{t("kicker")}</p>
+        <h2 id="tour-title" className="h2" data-reveal="lines">
           {t("title")}
         </h2>
-        <p className="lead">{t("lead")}</p>
+        <p className="lead" data-reveal="rise">{t("lead")}</p>
         <TourStops
           plan={<SitePlan />}
           note={t("note")}
