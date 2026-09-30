@@ -78,7 +78,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q55](#q55) | Ecranele: cine apare pe nume, echipele, anunțurile | MEDIE | Etapa 9 (nu blochează) | REZOLVATĂ 29.09.2026 |
 | [Q56](#q56) | Panoul de admin: cine vede rapoartele financiare *(nouă, Etapa 10)* | SCĂZUTĂ | nimic (se schimbă ușor) | DESCHISĂ |
 | [Q57](#q57) | Site-ul complet: când înlocuiește pagina de pre-lansare *(nouă, Etapa 11)* | MEDIE | nimic (comutator în panou) | REZOLVATĂ 29.09.2026 |
-| [Q58](#q58) | Adresa site-ului Clubului Tenis Elite *(nouă, Etapa 11)* | SCĂZUTĂ | nimic (link din panou) | DESCHISĂ |
+| [Q58](#q58) | Adresa site-ului Clubului Tenis Elite *(nouă, Etapa 11)* | SCĂZUTĂ | nimic (link din panou) | REZOLVATĂ 30.09.2026 |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -712,7 +712,8 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q58"></a>Q58 — Adresa site-ului Clubului Tenis Elite
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** nimic (secțiunea Tenis merge și fără link)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (30.09.2026)
+- **Răspunsul proprietarului (30.09.2026):** „nu avem adresa”. Secțiunea Tenis rămâne **fără link** și fără promisiunea unuia (fraza „Legătura … apare aici în curând” a fost scoasă). Dacă site-ul de tenis va avea o adresă, se completează din panou (**Setări** → `club.tennis_club_url`) și butonul „Mergi la Clubul Tenis Elite” apare singur.
 - **Context:** Q20 (26.09.2026): site-ul de tenis rămâne separat, cu legături reciproce. Secțiunea Tenis a site-ului (Etapa 11, secțiunea 8) trebuie să trimită vizitatorul acolo, dar adresa site-ului nu apare în documentație.
 - **Varianta implicită (DE_CONFIRMAT):** până primim adresa, secțiunea scrie „Legătura spre site-ul Clubului Tenis Elite apare aici în curând.”, fără link. Adresa se completează din panou (**Setări** → `club.tennis_club_url`, doar `https://…`), iar site-ul se actualizează singur în câteva secunde.
 - **Întrebare pentru proprietar:** care e adresa site-ului Clubului Tenis Elite? Și, pentru legătura inversă: puteți adăuga pe site-ul de tenis un link spre Jungle Padel, când publicați site-ul complet?

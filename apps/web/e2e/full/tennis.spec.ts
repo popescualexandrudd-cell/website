@@ -1,7 +1,7 @@
 /**
  * The full site, section 8 (§9.2.8, Stage 11): tennis, played at Clubul Tenis Elite, whose site
- * stays separate (Q20). Until the owner sets its address (Q58) there is no link, only the note; no
- * price or court time of the tennis club appears here.
+ * stays separate (Q20). The owner has no address for that site (Q58): no link and no promise of
+ * one; no price or court time of the tennis club appears here.
  */
 import { expect, type Page, test } from "@playwright/test";
 import { chooseNecessaryCookies, expectAccessible } from "../helpers";
@@ -13,7 +13,7 @@ async function shot(page: Page, name: string, project: string) {
 
 test.beforeEach(async ({ context, baseURL }) => chooseNecessaryCookies(context, baseURL));
 
-test("§9.2.8: the tennis club in facts, lessons, packages and the link to come (Q20, Q58)", async ({ page }, info) => {
+test("§9.2.8: the tennis club in facts, lessons and packages, without a link (Q20, Q58)", async ({ page }, info) => {
   await page.goto("/ro");
   const tennis = page.getByRole("region", { name: "Tenis, la Clubul Tenis Elite." });
   await tennis.scrollIntoViewIfNeeded();
@@ -24,7 +24,7 @@ test("§9.2.8: the tennis club in facts, lessons, packages and the link to come 
     "Abonamente combinate",
     "Reformer pentru jucători",
   ]);
-  await expect(tennis.getByText("Legătura spre site-ul Clubului Tenis Elite apare aici în curând.")).toBeVisible();
+  await expect(tennis).not.toContainText("în curând");
   await expect(tennis.locator('a[target="_blank"]')).toHaveCount(0);
   await expect(tennis).not.toContainText(/\d\s?(lei|RON)\b/);
   await expect(tennis.getByRole("link", { name: "Vezi pachetele" })).toHaveAttribute("href", "/ro/pachete");

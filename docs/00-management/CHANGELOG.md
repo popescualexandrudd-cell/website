@@ -4,6 +4,11 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, secțiunile 2–8 — aprobate 30.09.2026
+#### Schimbat
+- Proprietarul a aprobat secțiunile 2–8 („Aprob și continuă”); intră în `main`.
+- Q58 rezolvată („nu avem adresa”): secțiunea Tenis nu mai are fraza „Legătura spre site-ul Clubului Tenis Elite apare aici în curând.”; butonul spre site-ul de tenis apare doar dacă se completează adresa în panou (`club.tennis_club_url`, acum marcată confirmată).
+
 ### Etapa 11, secțiunea 8 — 30.09.2026 (livrată)
 #### Adăugat
 - Tenis (§9.2, secțiunea 8): `Tennis`. Clubul Tenis Elite pe scurt (§2.3), lecțiile de tenis, abonamentele combinate, Reformer pentru jucători; fără prețuri sau program de terenuri (sunt ale clubului de tenis). Texte `web.site.tennis.*` RO + EN.

@@ -375,9 +375,9 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "club.tennis_club_url",
             "",
-            Marker.TO_CONFIRM,
-            "Adresa site-ului Clubului Tenis Elite, legată din secțiunea Tenis a site-ului (Q20); "
-            "goală: numele clubului, fără link.",
+            Marker.CONFIRMED,
+            "Adresa site-ului Clubului Tenis Elite, legată din secțiunea Tenis a site-ului (Q20). "
+            "Goală: fără link (Q58, confirmat de proprietar pe 30.09.2026: nu există încă adresă).",
             optional_url,
             question="Q58",
         ),

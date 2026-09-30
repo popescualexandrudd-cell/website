@@ -2,18 +2,20 @@
 
 > Branch: `claude/hopeful-euler-rguibn`. Site-ul complet se livrează **secțiune cu secțiune** (§9.2). Acest raport crește cu fiecare secțiune.
 >
+> **Aprobarea proprietarului (30.09.2026):** „Aprob și continuă”: secțiunile 2–8 sunt aprobate și intră în `main`. La Q58: „nu avem adresa” (secțiunea Tenis rămâne fără link).
+>
 > **Decizia proprietarului (29.09.2026):** „alege ce crezi că este mai bine doar la această etapă”. În Etapa 11, alegerile de conținut și design le facem noi, după documentație și regulile proiectului, și continuăm secțiune după secțiune. Dumneavoastră vedeți totul aici și ne spuneți oricând ce vreți schimbat.
 
 | Secțiune (§9.2) | Livrată | Starea |
 |---|---|---|
 | Fundația site-ului complet + **1. Antetul fix** | 29.09.2026 | **aprobată 29.09.2026** |
-| 2. Hero „Intră în junglă” | 29.09.2026 | **livrată** |
-| 3. Turul clubului la scroll | 29.09.2026 | **livrată** |
-| 4. „Acum în club” (live) | 29.09.2026 | **livrată** |
-| 5. Padel | 30.09.2026 | **livrată** |
-| 6. Simulatorul „Care e nivelul tău?” | 30.09.2026 | **livrată** |
-| 7. Liga Jungle + simulatorul de puncte | 30.09.2026 | **livrată** |
-| 8. Tenis | 30.09.2026 | **livrată** |
+| 2. Hero „Intră în junglă” | 29.09.2026 | **aprobată 30.09.2026** |
+| 3. Turul clubului la scroll | 29.09.2026 | **aprobată 30.09.2026** |
+| 4. „Acum în club” (live) | 29.09.2026 | **aprobată 30.09.2026** |
+| 5. Padel | 30.09.2026 | **aprobată 30.09.2026** |
+| 6. Simulatorul „Care e nivelul tău?” | 30.09.2026 | **aprobată 30.09.2026** |
+| 7. Liga Jungle + simulatorul de puncte | 30.09.2026 | **aprobată 30.09.2026** |
+| 8. Tenis | 30.09.2026 | **aprobată 30.09.2026** |
 | 9–19 | — | urmează, câte una |
 
 ---
@@ -364,7 +366,8 @@ După simulatorul de nivel urmează liga (§9.2, secțiunea 7), sub titlul „Di
 Sub ligă, secțiunea „Tenis, la Clubul Tenis Elite.” (§9.2, secțiunea 8):
 - **Clubul pe scurt,** în patru cifre: din 2013, 8 terenuri de zgură, 4 acoperite iarna, programe pentru copii și adulți.
 - **Ce leagă cele două cluburi,** în trei carduri: lecții de tenis cu antrenor (R-090), abonamente combinate (padel + tenis, tenis + pilates, All-in-One, R-080), Reformer pentru jucătorii de tenis și padel (R-101).
-- **Terenurile, programul și tarifele de tenis** rămân la clubul de tenis. Butonul „Mergi la Clubul Tenis Elite” apare când completați adresa site-ului în panou. Până atunci scrie „Legătura spre site-ul Clubului Tenis Elite apare aici în curând.”
+- **Terenurile, programul și tarifele de tenis** rămân la clubul de tenis. Butonul „Mergi la Clubul Tenis Elite” apare doar dacă se completează în panou adresa site-ului de tenis.
+- **După răspunsul dumneavoastră la Q58 (30.09.2026, „nu avem adresa”):** secțiunea nu are link și nici fraza „Legătura … apare aici în curând”, ca să nu promită ceva ce nu există.
 - Butonul „Vezi pachetele”.
 
 **Ce am ales și de ce:**
@@ -393,5 +396,5 @@ Sub ligă, secțiunea „Tenis, la Clubul Tenis Elite.” (§9.2, secțiunea 8):
 
 ### Cum verificați (click cu click)
 1. Deschideți capturile 20 și 21.
-2. Răspundeți la **Q58**: adresa site-ului Clubului Tenis Elite. O puteți pune și singur, din panou: **Setări** → `club.tennis_club_url`.
-3. Dacă secțiunea vă place, scrieți „aprob secțiunea 8”.
+2. **Q58** e rezolvată: fără adresă, fără link. Dacă apare o adresă, o puneți din panou: **Setări** → `club.tennis_club_url`.
+3. Secțiunea e aprobată (30.09.2026).

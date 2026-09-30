@@ -40,13 +40,13 @@ export async function Tennis({ id }: { id: string }) {
         </ul>
         <p className="tennis__booking">{t("booking")}</p>
         <div className="hero-ctas">
-          {url ? (
+          {/* The owner has no address for the tennis club's site (Q58, 30.09.2026): no link and no
+              promise of one; it appears on its own if an address is ever set in the panel. */}
+          {url && (
             <a className="btn btn-primary" href={url} target="_blank" rel="noopener">
               {t("club")}
               <span className="sr-only"> {t("newWindow")}</span>
             </a>
-          ) : (
-            <p className="muted">{t("clubSoon")}</p>
           )}
           <Link className="btn btn-secondary" href="/packages">
             {t("packages")}
