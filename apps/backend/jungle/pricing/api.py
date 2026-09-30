@@ -8,12 +8,13 @@ from datetime import datetime
 from django.http import HttpRequest
 from ninja import Field, Router, Schema
 
+from jungle.configuration.services import get_config
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.schemas import errors
 from jungle.core.security import session_auth
 from jungle.locations.models import Location, ResourceKind
 from jungle.locations.services import get_location_by_slug
-from jungle.pricing import services
+from jungle.pricing import services, split
 from jungle.pricing.models import Band, CustomerType, Product, Season
 
 public_router = Router(tags=["pricing"])
@@ -49,6 +50,41 @@ class RateIn(Schema):
 def list_rates(request: HttpRequest, slug: str) -> list[RateOut]:
     location = get_location_by_slug(slug)
     return [RateOut.from_orm(r) for r in services.public_rates(location)]
+
+
+class CourtSplitOut(Schema):
+    """§9.2.11: the court in a band, and each player's part (R-060, R-061)."""
+
+    band: str
+    season: str
+    duration_minutes: int
+    durations_minutes: list[int] = Field(description="Duratele permise la rezervare (R-041)")
+    total: int = Field(description="bani (RON × 100)")
+    shares: list[int] = Field(
+        description="partea fiecărui jucător, în bani; primul plătește restul"
+    )
+    provisional: bool = Field(description="tariful este DE_STABILIT")
+    hours: dict[str, list[list[str]]] = Field(description="orele benzii: weekday / weekend")
+
+
+@public_router.get(
+    "/{slug}/split", response={200: CourtSplitOut, **errors(404, 409, 422)}, auth=None
+)
+def split_view(
+    request: HttpRequest, slug: str, band: Band, duration_minutes: int, players: int = 4
+) -> CourtSplitOut:
+    """The "Împarte ora" simulator of the website: nothing is booked or stored."""
+    shown = split.split(get_location_by_slug(slug), band, duration_minutes, players)
+    return CourtSplitOut(
+        band=shown.band,
+        season=shown.season,
+        duration_minutes=shown.duration_minutes,
+        durations_minutes=get_config("bookings.durations_minutes"),
+        total=shown.total,
+        shares=shown.shares,
+        provisional=shown.provisional,
+        hours={day: [list(span) for span in spans] for day, spans in shown.hours.items()},
+    )
 
 
 @staff_router.put("/pricing/rates", response={200: RateOut, **errors(401, 403, 404, 422)})

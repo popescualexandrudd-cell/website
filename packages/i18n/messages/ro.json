@@ -1029,6 +1029,48 @@
           "cta": "Scrie-ne"
         }
       },
+      "split": {
+        "kicker": "Împarte ora",
+        "title": "Terenul se plătește la oră. Și se împarte.",
+        "lead": "Padelul se joacă în patru, iar ora de teren se împarte între jucători. Alege când joci, cât joci și câți sunteți: vezi cât plătește fiecare.",
+        "simulator": "Simulatorul „Împarte ora”",
+        "band": "Când joci",
+        "bands": {
+          "peak": "Vârf",
+          "semi_peak": "Semi-vârf",
+          "off_peak": "În afara vârfului"
+        },
+        "duration": "Cât joci",
+        "minutes": "{minutes} de minute",
+        "players": "Câți plătiți",
+        "playerCount": "{count, plural, one {# jucător (plătești tot)} few {# jucători} other {# de jucători}}",
+        "busy": "Calculăm…",
+        "error": "Nu putem calcula acum. Încearcă din nou în câteva momente.",
+        "provisional": "Preț orientativ: prețurile finale se anunță înainte de deschidere.",
+        "lei": "{amount} lei",
+        "perPerson": "de persoană",
+        "allYours": "plătești tot",
+        "court": "Terenul, {minutes} de minute",
+        "player": "Jucătorul {n}",
+        "leftover": "Banii care nu se împart exact îi plătește primul jucător.",
+        "everyDay": "Programul benzii: {hours}, în fiecare zi.",
+        "weekdayWeekend": "Programul benzii: {weekday} în timpul săptămânii și {weekend} în weekend.",
+        "notes": {
+          "kiosk": {
+            "title": "La Chioșcul de Plăți",
+            "text": "Fiecare își scanează cardul și își plătește partea, în numerar. Sau organizatorul plătește tot."
+          },
+          "noCredits": {
+            "title": "Fără credite",
+            "text": "La padel nu cumperi credite: plătești ora de teren, iar jucătorii o împart."
+          },
+          "debt": {
+            "title": "Rezervi online, plătești la club",
+            "text": "O rezervare făcută online se plătește la club; până atunci, suma apare în contul tău."
+          }
+        },
+        "book": "Rezervă un teren"
+      },
       "pages": {
         "padel": "Padel",
         "league": "Liga Jungle",

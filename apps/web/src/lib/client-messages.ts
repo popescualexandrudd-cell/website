@@ -21,6 +21,7 @@ export const CLIENT_NAMESPACES = [
   "web.site.league",
   "web.site.pilates",
   "web.site.packages",
+  "web.site.split",
 ] as const;
 
 type Tree = { [key: string]: unknown };

@@ -115,3 +115,12 @@ Fiecare pagină există în toate limbile active, cu URL-uri localizate (`/ro/..
   - unde se cumpără: la Chioșcul de Plăți, cu numerar (R-089, Q9);
   - pachetul de firmă (R-088, Q35).
 - **Pe telefon,** rezultatul vine după cei trei pași. Nimic nu stă fixat peste controale.
+
+### Secțiunea 11 — „Împarte ora” (30.09.2026)
+- **Ce alege vizitatorul:** banda orară (vârf, semi-vârf, în afara vârfului), durata (duratele de rezervare permise, R-041) și câți plătesc (4, 3, 2 sau 1, adică organizatorul plătește tot).
+- **Ce calculează serverul** (`GET /api/v1/pricing/{locație}/split`, `jungle.pricing.split`):
+  - prețul terenului de padel la tariful clubului: închiriere, sezonul curent, client standard (R-051);
+  - partea fiecăruia, cu aceeași funcție ca la Chioșcul de Plăți (R-061: în bani întregi, primul jucător plătește restul);
+  - orele benzii din setări, în programul clubului (R-050, Q3).
+- **Nu rezervă, nu încasează și nu salvează nimic.** Prețul e „orientativ” cât tariful e DE_STABILIT (Q21).
+- **Sub simulator:** plata la Chioșcul de Plăți, fiecare cu cardul lui (R-060, Q9); fără credite la padel (invariantul 14); rezervarea online se plătește la club (R-063).

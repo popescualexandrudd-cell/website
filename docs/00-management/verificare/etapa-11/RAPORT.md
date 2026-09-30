@@ -20,7 +20,8 @@
 | 8. Tenis | 30.09.2026 | **aprobată 30.09.2026** |
 | 9. Pilates Reformer | 30.09.2026 | **aprobată 30.09.2026** |
 | 10. Configuratorul de pachete | 30.09.2026 | **aprobată 30.09.2026** |
-| 11–19 | — | urmează, câte una |
+| 11. „Împarte ora” | 30.09.2026 | **livrată** |
+| 12–19 | — | urmează, câte una |
 
 ---
 
@@ -510,3 +511,49 @@ Scorul de performanță pe mobil scăzuse la 90, chiar la limită, așa că am f
 1. Deschideți capturile 26 și 27.
 2. Verificați prețurile orientative (sunt cele de la Q21) și textele de sub configurator. Tarifele le schimbați oricând din panou, iar site-ul le preia singur.
 3. Secțiunea e aprobată (30.09.2026).
+
+---
+
+## Secțiunea 11 — „Împarte ora”
+
+### Ce s-a construit
+După pachete urmează „Terenul se plătește la oră. Și se împarte.” (§9.2, secțiunea 11). Vizitatorul alege:
+1. **când joacă:** vârf, semi-vârf sau în afara vârfului;
+2. **cât joacă:** 60, 90, 120, 150 sau 180 de minute (duratele permise la rezervare);
+3. **câți plătesc:** 4, 3, 2 jucători sau 1 („plătești tot”).
+
+**Alături, calculat de server:** cât plătește fiecare („50 lei de persoană”), prețul terenului pentru durata aleasă și programul benzii („08:00–12:00, 15:00–17:00, în fiecare zi”). Când suma nu se împarte exact, apare partea fiecăruia, cu nota „Banii care nu se împart exact îi plătește primul jucător.” Eticheta „Preț orientativ” rămâne cât prețurile sunt cele de la Q21.
+
+**Sub simulator:**
+- la Chioșcul de Plăți fiecare își scanează cardul și își plătește partea, în numerar, sau organizatorul plătește tot;
+- fără credite la padel;
+- o rezervare făcută online se plătește la club;
+- butonul „Rezervă un teren”.
+
+**Ce am ales și de ce:**
+1. **Împărțirea e exact cea de la chioșc,** din aceeași funcție de pe server (R-061). Ce vede vizitatorul pe site e ce plătește în club.
+2. **Prețul e tariful terenului de padel pentru banda aleasă** și sezonul curent, cum îl setați în panou. Nu calculăm pe site.
+3. **Orele benzilor** vin din setări, deci se schimbă singure dacă modificați benzile.
+
+### Capturi de ecran
+28. [„Împarte ora”, pe calculator](ecrane/desktop-15-imparte-ora.png)
+29. [„Împarte ora”, pe telefon](ecrane/mobile-15-imparte-ora.png)
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Teste pe server | 13 noi:<br>• împărțirea pe benzi, durate și număr de jucători, cu restul la primul;<br>• organizatorul plătește tot;<br>• orele benzilor în programul clubului, cu intervalele alăturate unite;<br>• tariful confirmat nu mai e „orientativ”;<br>• duratele și numărul de jucători imposibile sunt refuzate;<br>• fără tarif, prețul lipsește;<br>• adresa publică nu rezervă și nu salvează nimic.<br>Acoperire 100% pe ramuri a modulului nou. |
+| Cap-coadă | 4 noi (calculator + telefon):<br>• fiecare parte comparată cu serverul (vârf 90 de minute în 4, semi-vârf 60 de minute în 3, un singur plătitor);<br>• fără credite și plata la chioșc;<br>• serverul indisponibil;<br>• engleza.<br>Toate testele site-ului trec: 28 + 79. |
+| Lighthouse, pagina principală | mobil **90 · 100 · 100 · 100** (LCP 3,5 s, CLS 0), calculator **100 · 100 · 100 · 100** ([mobil](lighthouse-mobil.html), [calculator](lighthouse-desktop.html)). |
+
+### Dubla revizuire: probleme găsite și reparate
+1. **Două scheme cu același nume** (`SplitOut` exista deja la plăți): documentația automată a serverului le-ar fi contopit, iar site-ul ar fi primit alte câmpuri. Am observat la verificarea tipurilor, iar un test existent din Etapa 8 ar fi oprit trimiterea. Schema nouă se numește `CourtSplitOut`.
+2. **O clasă CSS cu același nume** (`split`, folosită de pagina de pre-lansare) strângea simulatorul pe o jumătate de ecran. Clasa are acum un nume propriu, iar captura arată corect.
+3. **Din perspectiva unui atacator:** adresa nouă doar calculează. Primește doar benzile, duratele și numerele de jucători permise și nu atinge rezervările sau banii.
+
+### Viteza pe telefon
+Scorul e **90**, exact la limită, iar calculatorul are 100. Secțiunile care urmează (evenimente, cafenea, comunitate, echipă, cifre, locație, întrebări, subsol) sunt în mare parte text, fără cod nou în browser. Dacă o secțiune coboară scorul sub 90, facem înaintea ei pasul pregătit la secțiunea 10: textele părților interactive vin gata traduse de pe server.
+
+### Cum verificați (click cu click)
+1. Deschideți capturile 28 și 29.
+2. Dacă secțiunea vă place, scrieți „aprob secțiunea 11”.

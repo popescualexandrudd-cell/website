@@ -1810,6 +1810,75 @@
         "title": "CourtNowOut",
         "type": "object"
       },
+      "CourtSplitOut": {
+        "description": "§9.2.11: the court in a band, and each player's part (R-060, R-061).",
+        "properties": {
+          "band": {
+            "title": "Band",
+            "type": "string"
+          },
+          "duration_minutes": {
+            "title": "Duration Minutes",
+            "type": "integer"
+          },
+          "durations_minutes": {
+            "description": "Duratele permise la rezervare (R-041)",
+            "items": {
+              "type": "integer"
+            },
+            "title": "Durations Minutes",
+            "type": "array"
+          },
+          "hours": {
+            "additionalProperties": {
+              "items": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "type": "array"
+            },
+            "description": "orele benzii: weekday / weekend",
+            "title": "Hours",
+            "type": "object"
+          },
+          "provisional": {
+            "description": "tariful este DE_STABILIT",
+            "title": "Provisional",
+            "type": "boolean"
+          },
+          "season": {
+            "title": "Season",
+            "type": "string"
+          },
+          "shares": {
+            "description": "partea fiecărui jucător, în bani; primul plătește restul",
+            "items": {
+              "type": "integer"
+            },
+            "title": "Shares",
+            "type": "array"
+          },
+          "total": {
+            "description": "bani (RON × 100)",
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "band",
+          "season",
+          "duration_minutes",
+          "durations_minutes",
+          "total",
+          "shares",
+          "provisional",
+          "hours"
+        ],
+        "title": "CourtSplitOut",
+        "type": "object"
+      },
       "CsrfOut": {
         "properties": {
           "csrf_token": {
@@ -19359,6 +19428,102 @@
           }
         },
         "summary": "List Rates",
+        "tags": [
+          "pricing"
+        ]
+      }
+    },
+    "/api/v1/pricing/{slug}/split": {
+      "get": {
+        "description": "The \"Împarte ora\" simulator of the website: nothing is booked or stored.",
+        "operationId": "jungle_pricing_api_split_view",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "band",
+            "required": true,
+            "schema": {
+              "enum": [
+                "peak",
+                "semi_peak",
+                "off_peak"
+              ],
+              "title": "Band",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "duration_minutes",
+            "required": true,
+            "schema": {
+              "title": "Duration Minutes",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "players",
+            "required": false,
+            "schema": {
+              "default": 4,
+              "title": "Players",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourtSplitOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Split View",
         "tags": [
           "pricing"
         ]

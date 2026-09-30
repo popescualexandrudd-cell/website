@@ -1029,6 +1029,48 @@
           "cta": "Write to us"
         }
       },
+      "split": {
+        "kicker": "Share the hour",
+        "title": "The court is paid by the hour. And shared.",
+        "lead": "Padel is played in fours, and the court hour is shared between the players. Choose when you play, how long and how many of you there are: see what each person pays.",
+        "simulator": "The \"Share the hour\" simulator",
+        "band": "When you play",
+        "bands": {
+          "peak": "Peak",
+          "semi_peak": "Semi-peak",
+          "off_peak": "Off-peak"
+        },
+        "duration": "How long",
+        "minutes": "{minutes} minutes",
+        "players": "How many pay",
+        "playerCount": "{count, plural, one {# player (you pay it all)} other {# players}}",
+        "busy": "Calculating…",
+        "error": "We can't calculate right now. Please try again in a few moments.",
+        "provisional": "Indicative price: the final prices are announced before the opening.",
+        "lei": "{amount} lei",
+        "perPerson": "each",
+        "allYours": "you pay it all",
+        "court": "The court, {minutes} minutes",
+        "player": "Player {n}",
+        "leftover": "The bani that don't split evenly are paid by the first player.",
+        "everyDay": "Band hours: {hours}, every day.",
+        "weekdayWeekend": "Band hours: {weekday} on weekdays and {weekend} at weekends.",
+        "notes": {
+          "kiosk": {
+            "title": "At the Payments Kiosk",
+            "text": "Each player scans their card and pays their part, in cash. Or the organiser pays it all."
+          },
+          "noCredits": {
+            "title": "No credits",
+            "text": "For padel you don't buy credits: you pay for the court hour, and the players share it."
+          },
+          "debt": {
+            "title": "Book online, pay at the club",
+            "text": "A booking made online is paid at the club; until then, the amount shows in your account."
+          }
+        },
+        "book": "Book a court"
+      },
       "pages": {
         "padel": "Padel",
         "league": "Jungle League",

@@ -79,9 +79,10 @@ def season_on(day: date) -> str:
     return Season.SUMMER if in_summer else Season.WINTER
 
 
-def _rate(
+def rate_for(
     location: Location, kind: str, product: str, season: str, band: str, customer: str
 ) -> PriceRate:
+    """R-051: this season's rate for the customer, else the all-year one, else the standard."""
     candidates = PriceRate.objects.filter(
         location=location, resource_kind=kind, product=product, band=band
     )
@@ -111,7 +112,7 @@ def quote(
     while moment < ends_at:
         band = band_at(moment)
         season = season_on(moment.astimezone(BUSINESS_TZ).date())
-        rate = _rate(location, resource_kind, product, season, band, customer_type)
+        rate = rate_for(location, resource_kind, product, season, band, customer_type)
         segments.append(Segment(moment, band, season, rate.amount_per_half_hour, rate.marker))
         moment += SEGMENT
     return Quote(

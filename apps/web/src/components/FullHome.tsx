@@ -6,6 +6,7 @@ import { NowInClub } from "./NowInClub";
 import { Packages } from "./Packages";
 import { Padel } from "./Padel";
 import { Pilates } from "./Pilates";
+import { Split } from "./Split";
 import { Tennis } from "./Tennis";
 import { Tour } from "./Tour";
 
@@ -33,7 +34,7 @@ export const SECTIONS = [
 ] as const;
 
 /** How many sections are built (delivered for approval or approved), in the order above. */
-export const BUILT = 10;
+export const BUILT = 11;
 
 /**
  * The home page of the full site while it is being built: the sections built so far (the header
@@ -53,6 +54,7 @@ export function FullHome() {
       <Tennis id="tenis" />
       <Pilates id="pilates" />
       <Packages id="pachete" />
+      <Split id="imparte-ora" />
       <SectionMap />
     </>
   );

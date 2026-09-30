@@ -2108,6 +2108,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/pricing/{slug}/split": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Split View
+         * @description The "Împarte ora" simulator of the website: nothing is booked or stored.
+         */
+        get: operations["jungle_pricing_api_split_view"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/privacy/delete-account": {
         parameters: {
             query?: never;
@@ -4711,6 +4731,45 @@ export interface components {
             session_type: string;
             /** Until */
             until: string | null;
+        };
+        /**
+         * CourtSplitOut
+         * @description §9.2.11: the court in a band, and each player's part (R-060, R-061).
+         */
+        CourtSplitOut: {
+            /** Band */
+            band: string;
+            /** Duration Minutes */
+            duration_minutes: number;
+            /**
+             * Durations Minutes
+             * @description Duratele permise la rezervare (R-041)
+             */
+            durations_minutes: number[];
+            /**
+             * Hours
+             * @description orele benzii: weekday / weekend
+             */
+            hours: {
+                [key: string]: string[][];
+            };
+            /**
+             * Provisional
+             * @description tariful este DE_STABILIT
+             */
+            provisional: boolean;
+            /** Season */
+            season: string;
+            /**
+             * Shares
+             * @description partea fiecărui jucător, în bani; primul plătește restul
+             */
+            shares: number[];
+            /**
+             * Total
+             * @description bani (RON × 100)
+             */
+            total: number;
         };
         /** CsrfOut */
         CsrfOut: {
@@ -14530,6 +14589,59 @@ export interface operations {
             };
             /** @description Not Found */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_pricing_api_split_view: {
+        parameters: {
+            query: {
+                band: "peak" | "semi_peak" | "off_peak";
+                duration_minutes: number;
+                players?: number;
+            };
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtSplitOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };

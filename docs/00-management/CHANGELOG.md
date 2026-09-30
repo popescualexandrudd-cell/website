@@ -4,6 +4,17 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, secțiunea 11 — 30.09.2026 (livrată)
+#### Adăugat
+- „Împarte ora” (§9.2, secțiunea 11): `Split` + `SplitHour`.
+  - banda, durata și câți plătesc;
+  - partea fiecăruia, calculată pe server cu tariful terenului de padel (R-051) și împărțirea chioșcului (R-061);
+  - orele benzii din setări;
+  - fără credite (invariantul 14);
+  - texte `web.site.split.*` RO + EN.
+- Server: `GET /api/v1/pricing/{locație}/split` (`jungle.pricing.split`, schema `CourtSplitOut`; nu rezervă și nu salvează nimic); `pricing.services.rate_for` (fostul `_rate`), public.
+- Teste: 13 pe server, 4 cap-coadă (`e2e/full/split.spec.ts`). Lighthouse mobil 90 · 100 · 100 · 100, desktop 100 · 100 · 100 · 100.
+
 ### Etapa 11, secțiunile 9–10 — aprobate 30.09.2026
 #### Schimbat
 - Proprietarul a aprobat secțiunile 9 (Pilates Reformer) și 10 (configuratorul de pachete); intră în `main`.
