@@ -4,6 +4,13 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, secțiunea 8 — 30.09.2026 (livrată)
+#### Adăugat
+- Tenis (§9.2, secțiunea 8): `Tennis`. Clubul Tenis Elite pe scurt (§2.3), lecțiile de tenis, abonamentele combinate, Reformer pentru jucători; fără prețuri sau program de terenuri (sunt ale clubului de tenis). Texte `web.site.tennis.*` RO + EN.
+- Setarea `club.tennis_club_url` (DE_CONFIRMAT, Q58), publică prin `GET /api/v1/config/links`; site-ul o citește cu `src/lib/links.ts` (doar `https://`).
+- Teste: 1 pe server, 2 unitare pe site, 2 cap-coadă (`e2e/full/tennis.spec.ts`). Lighthouse mobil 92 · 100 · 100 · 100, desktop 100 · 100 · 100 · 100.
+- Întrebare nouă: Q58.
+
 ### Etapa 11, secțiunea 7 — 30.09.2026 (livrată)
 #### Adăugat
 - Liga Jungle (§9.2, secțiunea 7): `League` + `PointsSimulator` + `StandingsPreview`, rangurile în `src/lib/league.ts`.

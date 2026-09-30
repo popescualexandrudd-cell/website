@@ -78,6 +78,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q55](#q55) | Ecranele: cine apare pe nume, echipele, anunțurile | MEDIE | Etapa 9 (nu blochează) | REZOLVATĂ 29.09.2026 |
 | [Q56](#q56) | Panoul de admin: cine vede rapoartele financiare *(nouă, Etapa 10)* | SCĂZUTĂ | nimic (se schimbă ușor) | DESCHISĂ |
 | [Q57](#q57) | Site-ul complet: când înlocuiește pagina de pre-lansare *(nouă, Etapa 11)* | MEDIE | nimic (comutator în panou) | REZOLVATĂ 29.09.2026 |
+| [Q58](#q58) | Adresa site-ului Clubului Tenis Elite *(nouă, Etapa 11)* | SCĂZUTĂ | nimic (link din panou) | DESCHISĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -707,3 +708,11 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Varianta implicită (DE_CONFIRMAT):** site-ul complet stă **ascuns în spatele comutatorului `full_site`**, oprit. Vizitatorii văd în continuare pagina de pre-lansare; paginile noi (Padel, Liga, Pilates, Rezervări, Cont…) nu există pentru ei (răspund „pagină negăsită” și nu apar în Google). Îl porniți dumneavoastră când hotărâți, din panoul de admin (**Setări și feature flags** → `full_site`, cu motiv) sau, tehnic, cu `manage.py set_flag full_site on --reason "..."`. Site-ul se schimbă în câteva secunde (serverul îi cere site-ului să se reîmprospăteze); dacă acel semnal se pierde, cel târziu în 5 minute.
 - **Alternative:** pornirea automată la o dată fixă (de exemplu cu o lună înainte de deschiderea din martie 2027); sau site-ul complet vizibil imediat, cu mențiunea „în construcție”.
 - **Întrebare pentru proprietar:** când vreți să apară site-ul complet: la o dată anume, după ce aprobați toate secțiunile, sau cu câteva săptămâni înainte de deschidere?
+
+### <a id="q58"></a>Q58 — Adresa site-ului Clubului Tenis Elite
+
+- **Prioritate:** SCĂZUTĂ · **Blochează:** nimic (secțiunea Tenis merge și fără link)
+- **Stare:** DESCHISĂ
+- **Context:** Q20 (26.09.2026): site-ul de tenis rămâne separat, cu legături reciproce. Secțiunea Tenis a site-ului (Etapa 11, secțiunea 8) trebuie să trimită vizitatorul acolo, dar adresa site-ului nu apare în documentație.
+- **Varianta implicită (DE_CONFIRMAT):** până primim adresa, secțiunea scrie „Legătura spre site-ul Clubului Tenis Elite apare aici în curând.”, fără link. Adresa se completează din panou (**Setări** → `club.tennis_club_url`, doar `https://…`), iar site-ul se actualizează singur în câteva secunde.
+- **Întrebare pentru proprietar:** care e adresa site-ului Clubului Tenis Elite? Și, pentru legătura inversă: puteți adăuga pe site-ul de tenis un link spre Jungle Padel, când publicați site-ul complet?

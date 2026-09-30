@@ -3724,6 +3724,28 @@
         "title": "LineupOut",
         "type": "object"
       },
+      "LinksOut": {
+        "description": "Links to the owners' other sites (Q20: the tennis club's site stays separate).",
+        "properties": {
+          "tennis_club_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Gol până îl completează proprietarul (Q58)",
+            "title": "Tennis Club Url"
+          }
+        },
+        "required": [
+          "tennis_club_url"
+        ],
+        "title": "LinksOut",
+        "type": "object"
+      },
       "LocationIn": {
         "properties": {
           "address": {
@@ -13789,6 +13811,28 @@
           }
         },
         "summary": "List Flags",
+        "tags": [
+          "configuration"
+        ]
+      }
+    },
+    "/api/v1/config/links": {
+      "get": {
+        "operationId": "jungle_configuration_api_links",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LinksOut"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Links",
         "tags": [
           "configuration"
         ]

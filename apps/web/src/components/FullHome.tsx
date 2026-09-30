@@ -4,6 +4,7 @@ import { League } from "./League";
 import { Level } from "./Level";
 import { NowInClub } from "./NowInClub";
 import { Padel } from "./Padel";
+import { Tennis } from "./Tennis";
 import { Tour } from "./Tour";
 
 /** The 19 sections of the home page (§9.2), delivered and approved one by one (Stage 11). */
@@ -30,7 +31,7 @@ export const SECTIONS = [
 ] as const;
 
 /** How many sections are built (delivered for approval or approved), in the order above. */
-export const BUILT = 7;
+export const BUILT = 8;
 
 /**
  * The home page of the full site while it is being built: the sections built so far (the header
@@ -47,6 +48,7 @@ export function FullHome() {
       <Padel id="padel" />
       <Level id="nivel" />
       <League id="liga" />
+      <Tennis id="tenis" />
       <SectionMap />
     </>
   );

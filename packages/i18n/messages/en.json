@@ -844,6 +844,49 @@
           "all": "See the full standings"
         }
       },
+      "tennis": {
+        "kicker": "Tennis",
+        "title": "Tennis, at Clubul Tenis Elite.",
+        "lead": "You play tennis at our tennis club in Pantelimon, Clubul Tenis Elite, with programmes for children and adults. The two clubs go together: the same combined subscriptions, lessons with coaches and Pilates for players.",
+        "factsLabel": "Clubul Tenis Elite at a glance",
+        "facts": {
+          "since": {
+            "value": "2013",
+            "label": "the tennis club, since"
+          },
+          "courts": {
+            "value": "8",
+            "label": "clay courts"
+          },
+          "winter": {
+            "value": "4",
+            "label": "courts covered in winter"
+          },
+          "programs": {
+            "value": "Children and adults",
+            "label": "tennis programmes"
+          }
+        },
+        "cards": {
+          "lessons": {
+            "title": "Tennis lessons",
+            "text": "Lessons with a coach, private, duo or group, for every level."
+          },
+          "packages": {
+            "title": "Combined subscriptions",
+            "text": "Jungle subscriptions cover padel, tennis and Pilates, on their own or together: padel + tennis, tennis + Pilates or All-in-One."
+          },
+          "reformer": {
+            "title": "Reformer for players",
+            "text": "In the Pilates studio, Reformer classes designed for tennis and padel players."
+          }
+        },
+        "booking": "You'll find the tennis courts, their hours and rates at Clubul Tenis Elite.",
+        "club": "Go to Clubul Tenis Elite",
+        "newWindow": "(opens in a new window)",
+        "clubSoon": "The link to Clubul Tenis Elite's website will appear here soon.",
+        "packages": "See the packages"
+      },
       "pages": {
         "padel": "Padel",
         "league": "Jungle League",

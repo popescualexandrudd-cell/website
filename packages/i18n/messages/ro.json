@@ -844,6 +844,49 @@
           "all": "Vezi clasamentul complet"
         }
       },
+      "tennis": {
+        "kicker": "Tenis",
+        "title": "Tenis, la Clubul Tenis Elite.",
+        "lead": "Tenisul îl joci la clubul nostru de tenis din Pantelimon, Clubul Tenis Elite, cu programe pentru copii și adulți. Cele două cluburi merg împreună: aceleași abonamente combinate, lecții cu antrenori și pilates pentru jucători.",
+        "factsLabel": "Clubul Tenis Elite, pe scurt",
+        "facts": {
+          "since": {
+            "value": "2013",
+            "label": "clubul de tenis, din"
+          },
+          "courts": {
+            "value": "8",
+            "label": "terenuri de zgură"
+          },
+          "winter": {
+            "value": "4",
+            "label": "terenuri acoperite iarna"
+          },
+          "programs": {
+            "value": "Copii și adulți",
+            "label": "programe de tenis"
+          }
+        },
+        "cards": {
+          "lessons": {
+            "title": "Lecții de tenis",
+            "text": "Lecții cu antrenor, private, duo sau de grup, pentru orice nivel."
+          },
+          "packages": {
+            "title": "Abonamente combinate",
+            "text": "Abonamentele Jungle se fac pentru padel, tenis și pilates, separat sau împreună: padel + tenis, tenis + pilates sau All-in-One."
+          },
+          "reformer": {
+            "title": "Reformer pentru jucători",
+            "text": "În studioul de pilates, clase de Reformer gândite pentru jucătorii de tenis și de padel."
+          }
+        },
+        "booking": "Terenurile de tenis, programul și tarifele lor le găsești la Clubul Tenis Elite.",
+        "club": "Mergi la Clubul Tenis Elite",
+        "newWindow": "(se deschide într-o fereastră nouă)",
+        "clubSoon": "Legătura spre site-ul Clubului Tenis Elite apare aici în curând.",
+        "packages": "Vezi pachetele"
+      },
       "pages": {
         "padel": "Padel",
         "league": "Liga Jungle",

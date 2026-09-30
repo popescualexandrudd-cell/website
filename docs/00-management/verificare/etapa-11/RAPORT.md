@@ -13,7 +13,8 @@
 | 5. Padel | 30.09.2026 | **livrată** |
 | 6. Simulatorul „Care e nivelul tău?” | 30.09.2026 | **livrată** |
 | 7. Liga Jungle + simulatorul de puncte | 30.09.2026 | **livrată** |
-| 8–19 | — | urmează, câte una |
+| 8. Tenis | 30.09.2026 | **livrată** |
+| 9–19 | — | urmează, câte una |
 
 ---
 
@@ -354,3 +355,43 @@ După simulatorul de nivel urmează liga (§9.2, secțiunea 7), sub titlul „Di
 1. Deschideți capturile 16–19.
 2. Citiți regulile și premiile de mai sus: sunt cele confirmate de dumneavoastră (Q6, Q27). Spuneți-ne dacă vreți alt text.
 3. Dacă secțiunea vă place, scrieți „aprob secțiunea 7”.
+
+---
+
+## Secțiunea 8 — Tenis
+
+### Ce s-a construit
+Sub ligă, secțiunea „Tenis, la Clubul Tenis Elite.” (§9.2, secțiunea 8):
+- **Clubul pe scurt,** în patru cifre: din 2013, 8 terenuri de zgură, 4 acoperite iarna, programe pentru copii și adulți.
+- **Ce leagă cele două cluburi,** în trei carduri: lecții de tenis cu antrenor (R-090), abonamente combinate (padel + tenis, tenis + pilates, All-in-One, R-080), Reformer pentru jucătorii de tenis și padel (R-101).
+- **Terenurile, programul și tarifele de tenis** rămân la clubul de tenis. Butonul „Mergi la Clubul Tenis Elite” apare când completați adresa site-ului în panou. Până atunci scrie „Legătura spre site-ul Clubului Tenis Elite apare aici în curând.”
+- Butonul „Vezi pachetele”.
+
+**Ce am ales și de ce:**
+1. **Site-ul de tenis rămâne separat, cu legături reciproce,** cum ați confirmat la Q20. Nu preluăm nimic de pe el: nici texte, nici culori, nici imagini (regula 13).
+2. **Adresa site-ului de tenis nu apare în documentație,** așa că e o setare nouă în panou (**Setări** → `club.tennis_club_url`, doar adrese `https://`). E întrebarea nouă **Q58**.
+3. **Nu afișăm prețuri de tenis.** Cel comunicat (120 lei/oră) e al clubului de tenis și se poate schimba acolo.
+4. **Nu promitem un teren de tenis la Jungle:** e încă nedecis (§2.2).
+
+### Capturi de ecran
+20. [Tenis, pe calculator](ecrane/desktop-11-tenis.png)
+21. [Tenis, pe telefon](ecrane/mobile-11-tenis.png)
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Teste pe server | 1 nou: adresa e publică, goală până o completați, doar `https://`. |
+| Teste unitare pe site | 2 noi: se leagă doar o adresă `https://` curată; fără răspuns de la server, fără link. |
+| Cap-coadă | 2 noi (calculator + telefon): faptele, cardurile, niciun link și niciun preț cât adresa lipsește, „Vezi pachetele”, engleza. Toate testele site-ului trec: 28 + 55. |
+| Lighthouse, pagina principală | mobil **92 · 100 · 100 · 100** (LCP 3,3 s, CLS 0), calculator **100 · 100 · 100 · 100** ([mobil](lighthouse-mobil.html), [calculator](lighthouse-desktop.html)). |
+
+**Atenție la viteză pe mobil:** scorul de performanță variază acum între 90 și 95 de la o rulare la alta. Ținta e cel puțin 90, iar marja scade pe măsură ce pagina principală crește. Înainte de publicarea site-ului complet facem o trecere dedicată de performanță pe toată pagina, apoi măsurăm pe serverul real (Etapa 14).
+
+### Dubla revizuire
+1. **Faptele** sunt doar cele din documentație (§2.3). Numărul de recenzii l-am lăsat deoparte: se schimbă și nu îl putem ține la zi.
+2. **Din perspectiva unui atacator:** linkul extern se afișează doar pentru o adresă `https://` fără caractere care ar putea ieși din atribut. Serverul refuză oricum altceva la salvare. Linkul se deschide într-o fereastră nouă, fără acces la pagina noastră (`noopener`).
+
+### Cum verificați (click cu click)
+1. Deschideți capturile 20 și 21.
+2. Răspundeți la **Q58**: adresa site-ului Clubului Tenis Elite. O puteți pune și singur, din panou: **Setări** → `club.tennis_club_url`.
+3. Dacă secțiunea vă place, scrieți „aprob secțiunea 8”.

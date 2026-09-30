@@ -2201,6 +2201,37 @@ body[data-menu-open="true"] {
   }
 }
 
+/* ------------------------------------------------------------------ full site: tennis (Stage 11, §9.2.8) */
+.tennis__facts {
+  list-style: none;
+  margin: 40px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+  gap: 16px;
+}
+.tennis__facts li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px 20px;
+  border-left: 3px solid var(--color-brass-400);
+  background: var(--color-night-900);
+}
+.tennis__fact {
+  font-family: var(--font-serif);
+  font-size: clamp(26px, 3vw, 36px);
+  line-height: 1.1;
+  color: var(--accent);
+}
+.tennis__fact-label {
+  color: var(--text-2);
+}
+.tennis__booking {
+  margin: 28px 0 0;
+  color: var(--text-2);
+}
+
 /* ------------------------------------------------------------------ full site: the build map */
 .site-preview .lead {
   max-width: 720px;

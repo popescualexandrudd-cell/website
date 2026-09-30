@@ -86,3 +86,9 @@ Fiecare pagină există în toate limbile active, cu URL-uri localizate (`/ro/..
   - **Ce presupune:** un meci obișnuit de dublu, între jucători cu un sezon de meciuri (σ = 5 pentru toți, cât are un jucător după minimul de meciuri al unui sezon; `docs/03-liga/simulari/CALIBRARE.md`); meci terminat, nerepetat, fără protecția de după promovare.
   - Nu citește și nu salvează nimic despre vreun jucător.
 - **Clasamentul live:** primii 5 din clasamentul de dublu al sezonului în curs, doar câmpurile publice (R-012), reîmprospătat la fiecare minut. Înainte de primul sezon, site-ul nu cere clasamentul serverului și spune când apare.
+
+### Secțiunea 8 — Tenis (30.09.2026)
+- Tenisul se joacă la **Clubul Tenis Elite**, al cărui site rămâne separat, cu legături reciproce (Q20). Adresa lui se pune din panou (`club.tennis_club_url`, public prin `GET /api/v1/config/links`, Q58); fără adresă, secțiunea nu are link.
+- Faptele despre club sunt cele din §2.3: din 2013, 8 terenuri de zgură, 4 acoperite iarna, programe pentru copii și adulți. Numărul de recenzii nu apare: se schimbă.
+- Legătura cu Jungle: lecțiile de tenis (R-090), abonamentele combinate (R-080) și Reformer pentru jucători (R-101).
+- **Fără prețuri și fără program de terenuri:** acestea sunt ale clubului de tenis, pe site-ul lui. Terenul de tenis de pe amplasamentul Jungle e încă nedecis (§2.2) și nu apare.

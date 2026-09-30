@@ -758,6 +758,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/config/links": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Links */
+        get: operations["jungle_configuration_api_links"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/device/cafe/orders/{order_id}/advance": {
         parameters: {
             query?: never;
@@ -5494,6 +5511,17 @@ export interface components {
             starts_at: string;
             /** Teams */
             teams: string[][];
+        };
+        /**
+         * LinksOut
+         * @description Links to the owners' other sites (Q20: the tennis club's site stays separate).
+         */
+        LinksOut: {
+            /**
+             * Tennis Club Url
+             * @description Gol până îl completează proprietarul (Q58)
+             */
+            tennis_club_url: string | null;
         };
         /** LocationIn */
         LocationIn: {
@@ -10577,6 +10605,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["FlagOut"][];
+                };
+            };
+        };
+    };
+    jungle_configuration_api_links: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LinksOut"];
                 };
             };
         };

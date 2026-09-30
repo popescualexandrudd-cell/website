@@ -177,3 +177,19 @@ def test_screen_settings_are_checked() -> None:
     assert registry.optional_url("") and registry.optional_url("https://junglepadel.ro/liga")
     assert not registry.optional_url("http://junglepadel.ro") and not registry.optional_url(None)
     assert not registry.optional_url("https://" + "x" * 200)
+
+
+def test_q58_the_tennis_club_link_is_public_and_empty_until_set(api: Api, staff) -> None:
+    """Q20: the tennis club's site stays separate, linked from the website; Q58: its address."""
+    assert api.get("/config/links").json() == {"tennis_club_url": None}
+    staff(Role.ADMIN)
+    refused = api.post(
+        "/staff/config/club.tennis_club_url",
+        {"value": "http://tenis.example.test", "marker": "confirmed", "reason": "Q58"},
+    )
+    assert refused.status_code == 400  # https only
+    api.post(
+        "/staff/config/club.tennis_club_url",
+        {"value": "https://tenis.example.test", "marker": "confirmed", "reason": "Q58"},
+    )
+    assert api.get("/config/links").json() == {"tennis_club_url": "https://tenis.example.test"}

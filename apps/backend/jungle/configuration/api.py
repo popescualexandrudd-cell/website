@@ -37,6 +37,12 @@ class CompanyOut(Schema):
     complete: bool
 
 
+class LinksOut(Schema):
+    """Links to the owners' other sites (Q20: the tennis club's site stays separate)."""
+
+    tennis_club_url: str | None = Field(description="Gol până îl completează proprietarul (Q58)")
+
+
 class FlagIn(Schema):
     enabled: bool
     reason: str = Field(min_length=3)
@@ -80,6 +86,11 @@ def _config_out(v: services.ConfigValue) -> ConfigOut:
 @public_router.get("/flags", response=list[FlagOut], auth=None)
 def list_flags(request: HttpRequest) -> list[FlagOut]:
     return [FlagOut(key=k, enabled=e, description=d) for k, e, d in services.list_flags()]
+
+
+@public_router.get("/links", response=LinksOut, auth=None)
+def links(request: HttpRequest) -> LinksOut:
+    return LinksOut(tennis_club_url=services.get_config("club.tennis_club_url") or None)
 
 
 @public_router.get("/company", response=CompanyOut, auth=None)
