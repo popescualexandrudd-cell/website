@@ -769,3 +769,57 @@ Cele șapte pagini din meniu nu mai sunt „în construcție”. Fiecare are un 
 1. Deschideți capturile 44–50.
 2. Pe site: fiecare link din meniu deschide acum pagina lui.
 3. În panou, la datele firmei, completați telefonul: pe pagina Contact apare butonul de apel.
+
+---
+
+## Contul și rezervările online (§9.3)
+
+### Ce s-a construit
+1. **Contul (`/cont`):**
+   - **Intrarea în cont**, cu email și parolă. Codul din aplicația de autentificare se cere doar dacă acel cont are verificarea în doi pași.
+   - **Crearea contului** (`/cont/inregistrare`): prenume, nume, email, telefon, data nașterii, parola; bifa pentru Termeni și Politica de confidențialitate, în versiunile lor curente. Doar datele de care clubul are nevoie (R-001, §12.3).
+   - Vârsta minimă o verifică serverul (14 ani, Q43). Sub 14 ani, mesajul spune că un părinte creează contul, din contul lui.
+   - **Confirmarea emailului:** linkul din email deschide `/cont/verificare-email`. Fără email confirmat, contul arată un mesaj și butonul „Trimite din nou emailul”, iar rezervarea online e refuzată de server.
+   - **Parola nouă:** `/cont/am-uitat-parola` trimite un link. Răspunsul e același, fie că adresa are cont, fie că nu, ca nimeni să nu afle cine are cont. Linkul deschide `/cont/parola-noua`.
+   - **Tabloul:**
+     - numele, emailul, telefonul;
+     - rezervările viitoare, cu anularea (o a doua confirmare; cu cel puțin 24 de ore înainte, fără cost; altfel se plătește, R-070, R-071);
+     - clasele de Pilates (înscris sau pe lista de așteptare);
+     - ieșirea din cont.
+
+     Abonamentul, plățile, cardul, liga și datele personale (export, ștergere) vin în pașii următori.
+2. **Rezervările (`/rezervari`):**
+   - ziua (următoarele 14 zile) și durata (cele permise de club, R-041);
+   - orele libere pe fiecare teren de padel, din 30 în 30 de minute, în ora clubului, inclusiv în ziua trecerii la ora de vară (28.03.2027);
+   - la alegerea unei ore apare prețul clubului, „orientativ” cât tarifele sunt DE_STABILIT (Q21);
+   - cu cont și email confirmat, **„Rezervă”**; fără cont, un link spre intrarea în cont;
+   - plata se face la club, la Chioșcul de Plăți (R-063, Q9); fără credite (invariantul 14).
+
+   Serverul verifică totul din nou: dacă între timp altcineva a luat ora, refuză (R-043), iar pagina reîncarcă orele libere.
+
+**Ce am ales și de ce:**
+1. **Contul folosește sesiunea sigură a serverului** (cookie `HttpOnly` și protecție CSRF, ADR-0011). Parola nu rămâne în browser.
+2. **Paginile contului nu apar în Google.**
+3. **Nicio regulă nu e copiată în site:** vârsta, parola, suprapunerile și prețul le decide serverul, iar site-ul arată doar răspunsul lui.
+
+### O problemă găsită și reparată (și în formularele mai vechi)
+Mesajele de eroare ale serverului (de exemplu „Emailul sau parola nu sunt corecte.”) apăreau ca un cod tehnic, de exemplu `errors.auth.invalid_credentials`. Codurile conțin un punct, pe care biblioteca de traduceri îl citește ca separator.
+
+Problema exista și în formularul listei de așteptare și în paginile din emailuri, dar nu apăruse la teste, pentru că niciun test nu ajungea la o eroare. Acum toate trei folosesc aceeași funcție, testată (`src/lib/error-text.ts`).
+
+### Capturi de ecran
+51. [Crearea contului, pe calculator](ecrane/desktop-50-cont-inregistrare.png) · [pe telefon](ecrane/mobile-50-cont-inregistrare.png)
+52. [Contul, pe calculator](ecrane/desktop-51-cont.png) · [pe telefon](ecrane/mobile-51-cont.png)
+53. [O rezervare confirmată, pe calculator](ecrane/desktop-52-rezervare.png) · [pe telefon](ecrane/mobile-52-rezervare.png)
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Teste unitare | 12 noi: răspunsurile serverului (date, cod de eroare, fără rețea), ordinea rezervărilor, textul erorilor (codurile cu punct), ora clubului (iarnă, vară, zilele de trecere, 28.03.2027), orele libere pe grila de 30 de minute (suprapuneri, ce a început deja, o rezervare poate începe când alta se termină), doar terenurile de padel. |
+| Cap-coadă, cu emailuri reale (trimise în fișiere la testare) | Pe calculator și pe telefon: crearea contului, confirmarea emailului din linkul primit, rezervarea unui teren, rezervarea văzută în cont și anulată fără cost, ieșirea din cont, parola greșită (mesajul serverului), parola nouă din linkul primit, intrarea cu ea. Apoi: sub 14 ani refuzat, linkuri incomplete, pagina de rezervări fără cont (grila, prețul, „intră în cont”, fără buton de rezervare), engleza. |
+| Toate testele site-ului | 28 pre-lansare, **138** site complet, **164** cu efectele pornite. |
+
+### Cum verificați (click cu click)
+1. Deschideți capturile 51–53.
+2. Pe site: **Contul meu** → „Nu ai cont? Creează unul” → completați → deschideți emailul primit → linkul de confirmare.
+3. **Rezervă** → alegeți ziua, durata și o oră → „Rezervă”. Rezervarea apare în **Contul meu**, unde o puteți anula.

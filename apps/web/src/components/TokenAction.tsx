@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useMessages, useTranslations } from "next-intl";
+import { useLocale, useMessages, useTranslations } from "next-intl";
 import { api, errorKey } from "@/lib/api";
+import { errorText } from "@/lib/error-text";
 import { Link } from "@/i18n/navigation";
 
 type Mode = "confirm" | "unsubscribe";
@@ -25,7 +26,7 @@ async function callApi(mode: Mode, token: string): Promise<Result> {
  */
 export function TokenAction({ mode, token }: { mode: Mode; token: string | null }) {
   const t = useTranslations(mode === "confirm" ? "web.confirm" : "web.unsubscribe");
-  const tErrors = useTranslations("errors");
+  const locale = useLocale();
   const tConfirm = useTranslations("web.confirm");
   const messages = useMessages() as { errors?: Record<string, string> };
   const [status, setStatus] = useState<Status>(!token ? "error" : mode === "confirm" ? "working" : "idle");
@@ -39,7 +40,7 @@ export function TokenAction({ mode, token }: { mode: Mode; token: string | null 
     }
     const key = result.code && messages.errors?.[result.code] ? result.code : "common.not_found";
     setStatus("error");
-    setMessage(tErrors(key));
+    setMessage(errorText(messages.errors, locale, key) ?? errorText(messages.errors, locale, "common.not_found") ?? "");
   };
 
   useEffect(() => {

@@ -23,13 +23,18 @@ export const FULL_HOME_NAMESPACES = [
   "web.site.split",
 ] as const;
 
+/** The account's pages: their forms and the translated API errors. */
+export const ACCOUNT_NAMESPACES = ["errors", "web.account"] as const;
+/** The bookings page: the court picker, its texts and the account's (sign-in state, errors). */
+export const BOOKING_NAMESPACES = ["errors", "web.account", "web.bookings"] as const;
+
 /**
  * All of them. Each page gets only its own group (`ClientTexts`): the full home page no longer
  * carries the texts of the errors and of the waitlist (~20 KB), which it never uses (§9.4, the
  * speed step of the effects work).
  */
 export const CLIENT_NAMESPACES = [
-  ...new Set([...SHELL_NAMESPACES, ...PRELAUNCH_NAMESPACES, ...TOKEN_NAMESPACES, ...FULL_HOME_NAMESPACES]),
+  ...new Set([...SHELL_NAMESPACES, ...PRELAUNCH_NAMESPACES, ...TOKEN_NAMESPACES, ...FULL_HOME_NAMESPACES, ...ACCOUNT_NAMESPACES, ...BOOKING_NAMESPACES]),
 ] as const;
 
 type Tree = { [key: string]: unknown };

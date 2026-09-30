@@ -4,6 +4,17 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, contul și rezervările online — 30.09.2026 (livrate)
+#### Adăugat
+- `/cont` (`AccountArea`): intrarea în cont (cu codul 2FA doar când contul îl are), tabloul (profil, confirmarea emailului cu retrimitere, rezervările viitoare cu anulare, clasele, ieșirea).
+- `/cont/inregistrare` (`RegisterForm`, cu versiunile curente ale Termenilor și Politicii de confidențialitate), `/cont/verificare-email`, `/cont/am-uitat-parola`, `/cont/parola-noua` (`AccountForms`); fără indexare.
+- `/rezervari` (`BookingPicker`): ziua, durata, orele libere pe fiecare teren de padel, prețul, rezervarea cu contul; `src/lib/booking.ts` (ora clubului, grila de 30 de minute).
+- `src/lib/account.ts` (sesiune + CSRF, ADR-0011), grupurile de texte `ACCOUNT_NAMESPACES`, `BOOKING_NAMESPACES`; texte `web.account.*`, `web.bookings.*`.
+- `scripts/test-e2e`: `CSRF_TRUSTED_ORIGINS` pentru site și emailurile testelor citite și de site-ul complet.
+#### Reparat
+- Mesajele de eroare ale serverului apăreau ca un cod tehnic (next-intl citește punctul din cod ca separator); `src/lib/error-text.ts`, folosit și de lista de așteptare și de paginile din emailuri.
+- Prețurile din cont și taxele turneelor, fără „lei”.
+
 ### Etapa 11, paginile de prezentare — 30.09.2026 (livrate)
 #### Adăugat
 - Paginile Padel, Tenis, Pilates, Pachete, Evenimente, Cafenea și Contact (`SitePage`, `sitePageMetadata`): titlu, introducere (`web.site.pageIntro.*`), apoi secțiunile aprobate; fiecare cu adresa canonică și hreflang.

@@ -5,6 +5,7 @@ import { useLocale, useMessages, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { components } from "@jungle/api-client";
 import { api, errorKey, errorParams } from "@/lib/api";
+import { errorText } from "@/lib/error-text";
 import { IconCheck } from "./Icons";
 
 type Level = components["schemas"]["Level"];
@@ -22,7 +23,6 @@ type State =
  */
 export function WaitlistForm() {
   const t = useTranslations("web.waitlist");
-  const tErrors = useTranslations("errors");
   const messages = useMessages() as { errors?: Record<string, string> };
   const locale = useLocale() as "ro" | "en";
   const ids = useId();
@@ -71,7 +71,7 @@ export function WaitlistForm() {
         return;
       }
       const key = errorKey(body, (code) => Boolean(messages.errors?.[code]));
-      setError(key ? tErrors(key, errorParams(body)) : t("genericError"));
+      setError(errorText(messages.errors, locale, key, errorParams(body)) ?? t("genericError"));
     } catch {
       setError(t("genericError"));
     } finally {

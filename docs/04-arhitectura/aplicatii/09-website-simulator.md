@@ -182,3 +182,8 @@ Ambele pagini sunt randate pe server la fiecare cerere (`dynamic = "force-dynami
 Padel, Tenis, Pilates, Pachete, Evenimente, Cafenea și Contact: un titlu și o introducere, apoi secțiunile aprobate ale paginii principale (Padel: și „Care e nivelul tău?” și „Împarte ora”; Contact: locația, datele de contact și întrebările frecvente).
 - Pagina Contact arată telefonul și emailul din datele firmei, doar dacă sunt completate, și nu are formular (minimizarea datelor, §12).
 - Fiecare pagină are adresa canonică și versiunea în engleză.
+
+### `/cont` și `/rezervari` (30.09.2026)
+- **Contul:** intrare (cu 2FA doar dacă e pornită pe cont), creare (R-001; Termenii și Politica acceptați în versiunea curentă; 14+, Q43), confirmarea emailului, parolă nouă (același răspuns indiferent dacă adresa are cont), tablou (profil, rezervări viitoare cu anulare R-070/R-071, clase, ieșire). Sesiunea serverului (ADR-0011): cookie `HttpOnly`, CSRF.
+- **Rezervările:** 14 zile, duratele clubului, orele libere pe fiecare teren de padel pe grila de 30 de minute, în ora clubului (Europe/Bucharest, inclusiv trecerile de oră), prețul clubului (orientativ cât e DE_STABILIT), rezervarea cu contul și emailul confirmat; plata la club (R-063); fără credite (invariantul 14). Serverul verifică din nou și refuză suprapunerile (R-043).
+- **Urmează în cont:** abonamentul, plățile și datoriile, cardul de membru (cu Wallet), liga (nivel, provocări, istoric), datele personale (export, ștergere), copiii (conturi gestionate de părinte, Q43).

@@ -1440,8 +1440,8 @@
             "other": "Programat"
           },
           "entries": "{entries} din {max} înscrieri",
-          "fee": "Taxa: {amount}",
-          "feeProvisional": "Taxa: {amount} (orientativ)",
+          "fee": "Taxa: {amount} lei",
+          "feeProvisional": "Taxa: {amount} lei (orientativ)",
           "how": "Te înscrii din cont sau la recepție; turneele sunt pentru jucătorii din ligă."
         },
         "rules": {
@@ -1500,6 +1500,147 @@
         "pending": "În curs de completare",
         "note": "Telefonul și adresa de email apar aici când clubul le completează. Rezervările se fac din cont sau la recepție."
       }
+    },
+    "account": {
+      "title": "Contul meu",
+      "lead": "Rezervările, clasele și datele tale, într-un singur loc.",
+      "loading": "Se încarcă…",
+      "offline": "Nu putem ajunge acum la club. Verifică conexiunea și încearcă din nou.",
+      "login": {
+        "title": "Intră în cont",
+        "email": "Email",
+        "password": "Parola",
+        "otp": "Codul din aplicația de autentificare",
+        "submit": "Intră",
+        "working": "Se verifică…",
+        "forgot": "Ai uitat parola?",
+        "register": "Nu ai cont? Creează unul"
+      },
+      "dashboard": {
+        "hello": "Bună, {name}!",
+        "name": "Nume",
+        "email": "Email",
+        "phone": "Telefon",
+        "verifyFirst": "Confirmă adresa de email (linkul din emailul primit) ca să poți rezerva online.",
+        "resend": "Trimite din nou emailul",
+        "resent": "Emailul a fost trimis",
+        "book": "Rezervă un teren",
+        "signOut": "Ieși din cont",
+        "loading": "Se încarcă…",
+        "bookings": "Rezervările tale",
+        "noBookings": "Nu ai rezervări viitoare.",
+        "classes": "Clasele tale de Pilates",
+        "noClasses": "Nu ești înscris la nicio clasă viitoare.",
+        "classBooked": "Înscris",
+        "classWaiting": "Pe lista de așteptare",
+        "price": "{amount} lei",
+        "priceProvisional": "{amount} lei (orientativ)",
+        "cancel": "Anulează",
+        "cancelAsk": "Sigur anulezi?",
+        "cancelYes": "Da, anulez",
+        "cancelNo": "Nu",
+        "cancelRule": "Cu cel puțin 24 de ore înainte, anularea e fără cost. Cu mai puțin de 24 de ore înainte, rezervarea se plătește.",
+        "cancelledFree": "Rezervarea e anulată, fără cost.",
+        "cancelledCharged": "Rezervarea e anulată. Fiind cu mai puțin de 24 de ore înainte, se plătește.",
+        "types": {
+          "official_match": "Meci oficial de ligă",
+          "training": "Antrenament / amical",
+          "lesson": "Lecție cu antrenor",
+          "tournament": "Turneu",
+          "challenge": "Provocare",
+          "free_rental": "Închiriere",
+          "event": "Eveniment",
+          "other": "Rezervare"
+        },
+        "more": "Abonamentul, plățile, cardul de membru, liga și datele personale apar aici în pașii următori ai site-ului."
+      },
+      "register": {
+        "title": "Creează cont",
+        "lead": "Ai nevoie de cont ca să rezervi online. Îți cerem doar datele de care clubul are nevoie.",
+        "firstName": "Prenume",
+        "lastName": "Nume",
+        "email": "Email",
+        "phone": "Telefon",
+        "phoneHint": "Pentru rezervări și anunțuri despre ele. Nu îl facem public.",
+        "birth": "Data nașterii",
+        "birthHint": "Contul propriu se face de la 14 ani; sub 14 ani, contul îl creează un părinte, din contul lui.",
+        "password": "Parola",
+        "passwordHint": "Cel puțin 10 caractere, nu doar cifre.",
+        "accept": "Am citit și accept <terms>Termenii și condițiile</terms> și <privacy>Politica de confidențialitate</privacy> (se deschid într-o fereastră nouă).",
+        "documentsMissing": "Termenii și Politica de confidențialitate nu se pot încărca acum, deci contul nu se poate crea. Revino în câteva minute.",
+        "submit": "Creează contul",
+        "working": "Se creează contul…",
+        "haveAccount": "Ai deja cont? Intră",
+        "doneTitle": "Contul e creat",
+        "done": "Ți-am trimis un email la {email}. Apasă pe linkul din el ca să confirmi adresa; după aceea poți rezerva online.",
+        "toAccount": "Mergi la cont"
+      },
+      "verify": {
+        "title": "Confirmarea emailului",
+        "working": "Se confirmă adresa…",
+        "done": "Adresa de email e confirmată. Acum poți rezerva online.",
+        "missing": "Linkul nu e complet. Deschide-l din nou din email.",
+        "toAccount": "Mergi la cont"
+      },
+      "forgot": {
+        "title": "Parolă nouă",
+        "lead": "Scrie adresa de email a contului. Dacă există un cont cu ea, îți trimitem un link pentru o parolă nouă.",
+        "email": "Email",
+        "submit": "Trimite linkul",
+        "sent": "Dacă există un cont cu această adresă, am trimis un email cu linkul. Verifică și dosarul Spam.",
+        "toAccount": "Înapoi la intrarea în cont"
+      },
+      "newPassword": {
+        "title": "Alege o parolă nouă",
+        "password": "Parola nouă",
+        "hint": "Cel puțin 10 caractere, nu doar cifre.",
+        "submit": "Salvează parola",
+        "done": "Parola e schimbată. Poți intra în cont cu ea.",
+        "missing": "Linkul nu e complet. Deschide-l din nou din email sau cere unul nou.",
+        "toAccount": "Mergi la intrarea în cont"
+      }
+    },
+    "bookings": {
+      "title": "Rezervări",
+      "lead": "Alege ziua, durata și ora pe un teren de padel. Prețul e al clubului, iar plata se face la club.",
+      "day": "Ziua",
+      "duration": "Durata",
+      "minutes": "{minutes} min",
+      "loading": "Se încarcă terenurile…",
+      "error": "Programul terenurilor nu se poate încărca acum. Încearcă din nou în câteva minute.",
+      "noCourts": "Nu există terenuri de rezervat online în această zi.",
+      "full": "Nicio oră liberă pentru durata aleasă.",
+      "timesFor": "Orele de început pe {court}",
+      "pick": "{time}, {court}",
+      "taken": "{time}, ocupat",
+      "choose": "Alege o oră liberă de pe un teren.",
+      "chosen": "{court}, {day}, de la {time}, {minutes} de minute",
+      "pricing": "Se calculează prețul…",
+      "priceError": "Prețul nu se poate calcula acum.",
+      "perCourt": "pentru teren, împărțit între jucători",
+      "provisional": "preț orientativ, pentru teren",
+      "signIn": "Ca să rezervi, intră în cont.",
+      "signInLink": "Intră sau creează cont",
+      "book": "Rezervă",
+      "booking": "Se rezervă…",
+      "doneTitle": "Rezervarea e confirmată",
+      "done": "Te așteptăm {when}. O găsești și în contul tău.",
+      "toAccount": "Vezi rezervările din cont",
+      "notes": {
+        "pay": {
+          "title": "Plata, la club",
+          "text": "Rezervarea făcută online se plătește la Chioșcul de Plăți, în numerar: fiecare jucător își plătește partea sau organizatorul plătește tot."
+        },
+        "cancel": {
+          "title": "Anularea",
+          "text": "Cu cel puțin 24 de ore înainte, din cont, fără cost. Cu mai puțin de 24 de ore înainte, rezervarea se plătește."
+        },
+        "share": {
+          "title": "Fără credite",
+          "text": "La padel plătești ora de teren, iar jucătorii o împart. Nu cumperi credite."
+        }
+      },
+      "price": "{amount} lei"
     }
   },
   "kiosk": {

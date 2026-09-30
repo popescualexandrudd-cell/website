@@ -1440,8 +1440,8 @@
             "other": "Scheduled"
           },
           "entries": "{entries} of {max} entries",
-          "fee": "Fee: {amount}",
-          "feeProvisional": "Fee: {amount} (indicative)",
+          "fee": "Fee: {amount} lei",
+          "feeProvisional": "Fee: {amount} lei (indicative)",
           "how": "You enter from your account or at the reception; tournaments are for league players."
         },
         "rules": {
@@ -1500,6 +1500,147 @@
         "pending": "Being completed",
         "note": "The phone number and email address appear here once the club fills them in. Bookings are made from your account or at the reception."
       }
+    },
+    "account": {
+      "title": "My account",
+      "lead": "Your bookings, classes and details, in one place.",
+      "loading": "Loading…",
+      "offline": "We can't reach the club right now. Check your connection and try again.",
+      "login": {
+        "title": "Sign in",
+        "email": "Email",
+        "password": "Password",
+        "otp": "The code from your authenticator app",
+        "submit": "Sign in",
+        "working": "Checking…",
+        "forgot": "Forgot your password?",
+        "register": "No account? Create one"
+      },
+      "dashboard": {
+        "hello": "Hello, {name}!",
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "verifyFirst": "Confirm your email address (the link in the email you received) to book online.",
+        "resend": "Send the email again",
+        "resent": "The email has been sent",
+        "book": "Book a court",
+        "signOut": "Sign out",
+        "loading": "Loading…",
+        "bookings": "Your bookings",
+        "noBookings": "You have no upcoming bookings.",
+        "classes": "Your Pilates classes",
+        "noClasses": "You're not enrolled in any upcoming class.",
+        "classBooked": "Enrolled",
+        "classWaiting": "On the waiting list",
+        "price": "{amount} lei",
+        "priceProvisional": "{amount} lei (indicative)",
+        "cancel": "Cancel",
+        "cancelAsk": "Cancel this booking?",
+        "cancelYes": "Yes, cancel",
+        "cancelNo": "No",
+        "cancelRule": "At least 24 hours before, cancelling costs nothing. Less than 24 hours before, the booking is paid.",
+        "cancelledFree": "The booking is cancelled, free of charge.",
+        "cancelledCharged": "The booking is cancelled. As it was less than 24 hours before, it is paid.",
+        "types": {
+          "official_match": "Official league match",
+          "training": "Training / friendly",
+          "lesson": "Lesson with a coach",
+          "tournament": "Tournament",
+          "challenge": "Challenge",
+          "free_rental": "Rental",
+          "event": "Event",
+          "other": "Booking"
+        },
+        "more": "Your subscription, payments, member card, league and personal data come here in the site's next steps."
+      },
+      "register": {
+        "title": "Create an account",
+        "lead": "You need an account to book online. We only ask for the details the club needs.",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "phone": "Phone",
+        "phoneHint": "For your bookings and notices about them. Never made public.",
+        "birth": "Date of birth",
+        "birthHint": "You can have your own account from age 14; under 14, a parent creates it from their own account.",
+        "password": "Password",
+        "passwordHint": "At least 10 characters, not only digits.",
+        "accept": "I have read and accept the <terms>Terms and conditions</terms> and the <privacy>Privacy policy</privacy> (they open in a new window).",
+        "documentsMissing": "The Terms and the Privacy policy can't be loaded right now, so the account can't be created. Please come back in a few minutes.",
+        "submit": "Create the account",
+        "working": "Creating the account…",
+        "haveAccount": "Already have an account? Sign in",
+        "doneTitle": "Your account is ready",
+        "done": "We sent an email to {email}. Open the link in it to confirm your address; then you can book online.",
+        "toAccount": "Go to your account"
+      },
+      "verify": {
+        "title": "Email confirmation",
+        "working": "Confirming your address…",
+        "done": "Your email address is confirmed. You can now book online.",
+        "missing": "The link is incomplete. Open it again from the email.",
+        "toAccount": "Go to your account"
+      },
+      "forgot": {
+        "title": "New password",
+        "lead": "Write your account's email address. If an account has it, we'll send you a link for a new password.",
+        "email": "Email",
+        "submit": "Send the link",
+        "sent": "If an account has this address, we sent an email with the link. Check your Spam folder too.",
+        "toAccount": "Back to sign in"
+      },
+      "newPassword": {
+        "title": "Choose a new password",
+        "password": "New password",
+        "hint": "At least 10 characters, not only digits.",
+        "submit": "Save the password",
+        "done": "Your password is changed. You can sign in with it.",
+        "missing": "The link is incomplete. Open it again from the email or ask for a new one.",
+        "toAccount": "Go to sign in"
+      }
+    },
+    "bookings": {
+      "title": "Bookings",
+      "lead": "Choose the day, the duration and the time on a padel court. The price is the club's, and you pay at the club.",
+      "day": "Day",
+      "duration": "Duration",
+      "minutes": "{minutes} min",
+      "loading": "Loading the courts…",
+      "error": "The courts' schedule can't be loaded right now. Please try again in a few minutes.",
+      "noCourts": "There are no courts to book online on this day.",
+      "full": "No free time for the chosen duration.",
+      "timesFor": "Start times on {court}",
+      "pick": "{time}, {court}",
+      "taken": "{time}, taken",
+      "choose": "Choose a free time on a court.",
+      "chosen": "{court}, {day}, from {time}, {minutes} minutes",
+      "pricing": "Working out the price…",
+      "priceError": "The price can't be worked out right now.",
+      "perCourt": "for the court, shared between the players",
+      "provisional": "indicative price, for the court",
+      "signIn": "To book, sign in.",
+      "signInLink": "Sign in or create an account",
+      "book": "Book",
+      "booking": "Booking…",
+      "doneTitle": "Your booking is confirmed",
+      "done": "See you on {when}. You'll also find it in your account.",
+      "toAccount": "See the bookings in your account",
+      "notes": {
+        "pay": {
+          "title": "Paid at the club",
+          "text": "A booking made online is paid at the Payments Kiosk, in cash: each player pays their part, or the organiser pays it all."
+        },
+        "cancel": {
+          "title": "Cancelling",
+          "text": "At least 24 hours before, from your account, free of charge. Less than 24 hours before, the booking is paid."
+        },
+        "share": {
+          "title": "No credits",
+          "text": "At padel you pay for the court hour and the players share it. You don't buy credits."
+        }
+      },
+      "price": "{amount} lei"
     }
   },
   "kiosk": {

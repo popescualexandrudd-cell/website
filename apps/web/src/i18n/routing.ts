@@ -28,6 +28,10 @@ export const routing = defineRouting({
     "/contact": { ro: "/contact", en: "/contact" },
     "/bookings": { ro: "/rezervari", en: "/bookings" },
     "/account": { ro: "/cont", en: "/account" },
+    "/account/register": { ro: "/cont/inregistrare", en: "/account/register" },
+    "/account/verify-email": { ro: "/cont/verificare-email", en: "/account/verify-email" },
+    "/account/forgot-password": { ro: "/cont/am-uitat-parola", en: "/account/forgot-password" },
+    "/account/new-password": { ro: "/cont/parola-noua", en: "/account/new-password" },
   },
 });
 

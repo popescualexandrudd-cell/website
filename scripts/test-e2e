@@ -67,7 +67,7 @@ export REVALIDATE_SECRET WEB_REVALIDATE_URL=http://localhost:3000/api/revalidate
 export DATABASE_URL="$E2E_DB_URL" JUNGLE_ENV=dev DJANGO_SETTINGS_MODULE=jungle.settings DJANGO_DEBUG=false \
   EMAIL_BACKEND=django.core.mail.backends.filebased.EmailBackend EMAIL_FILE_PATH="$MAIL_DIR" \
   WEB_BASE_URL=http://localhost:3000 KIOSK_ALLOW_LOOPBACK=true REDIS_URL="$REDIS_URL" \
-  CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5174,http://localhost:5175,http://localhost:5176,http://localhost:5177,http://localhost:5178
+  CSRF_TRUSTED_ORIGINS=http://localhost:3000 CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5174,http://localhost:5175,http://localhost:5176,http://localhost:5177,http://localhost:5178
 (cd apps/backend && uv run python manage.py migrate -v0 && uv run python manage.py seed_initial --demo >/dev/null)
 (cd apps/backend && exec uv run python manage.py runserver 127.0.0.1:8000 --noreload >"$WORK/backend.log" 2>&1) &
 PIDS+=($!)
@@ -105,12 +105,12 @@ if part web; then
   echo "==> The full site turned on from the server; the website refreshes at once (Q57)"
   (cd apps/backend && uv run python manage.py set_flag full_site on --reason "e2e: the full site")
   echo "==> Playwright (website: the full site, Stage 11)"
-  E2E_SITE_MODE=full E2E_SCREENSHOTS="${E2E_SCREENSHOTS:-}" pnpm --filter @jungle/web exec playwright test ||
+  E2E_SITE_MODE=full E2E_MAIL_DIR="$MAIL_DIR" E2E_SCREENSHOTS="${E2E_SCREENSHOTS:-}" pnpm --filter @jungle/web exec playwright test ||
     failed "$WORK/web.log"
   echo "==> The site's effects turned on (ADR-0023): every test again, unchanged, plus the effects' own"
   (cd apps/backend && uv run python manage.py set_flag web_effects on --reason "e2e: the effects")
   (cd apps/backend && uv run python manage.py set_flag web_hero_video on --reason "e2e: the hero video")
-  E2E_SITE_MODE=effects pnpm --filter @jungle/web exec playwright test || failed "$WORK/web.log"
+  E2E_SITE_MODE=effects E2E_MAIL_DIR="$MAIL_DIR" pnpm --filter @jungle/web exec playwright test || failed "$WORK/web.log"
   (cd apps/backend && uv run python manage.py set_flag web_effects off --reason "e2e: the effects, done")
   (cd apps/backend && uv run python manage.py set_flag web_hero_video off --reason "e2e: the hero video, done")
 fi
