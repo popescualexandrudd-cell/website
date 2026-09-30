@@ -500,6 +500,9 @@ Scorul de performanță pe mobil scăzuse la 90, chiar la limită, așa că am f
 ### Dubla revizuire
 1. **Banii:** site-ul primește sume întregi, în bani (invariantul 5), și doar le afișează în lei. Nu le adună și nu le rotunjește.
 2. **Din perspectiva unui atacator:** doar citiri și calcule publice, deja existente (Etapa 4). Configuratorul nu creează abonamente și nu cere date personale.
+3. **Prinse de verificarea completă de dinaintea trimiterii pe GitHub** (nimic nu a ajuns roșu pe GitHub):
+   - **Testul traducerilor** citea greșit textele cu plural: lua prima parte a unei forme de plural drept loc de completat, iar româna are trei forme de plural față de două în engleză. Testul recunoaște acum corect locurile de completat și prinde în continuare o diferență reală.
+   - **Pagina de dezabonare de pe lista de așteptare** (pre-lansare) rămăsese fără texte după scurtarea listei de texte trimise spre browser. Grupul ei de texte e ales printr-o condiție, pe care verificarea listei nu o citea. Textele au fost adăugate, iar testul listei citește acum și condițiile. Testul cap-coadă al listei de așteptare trece din nou.
 
 ### Cum verificați (click cu click)
 1. Deschideți capturile 26 și 27.
