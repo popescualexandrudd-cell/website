@@ -11,7 +11,10 @@ function flatten(obj, prefix = "") {
   );
 }
 
-const placeholders = (text) => [...text.matchAll(/\{(\w+)/g)].map((m) => m[1]).sort();
+// An ICU argument is "{name}" or "{name, type, …}"; the text of a plural or select branch
+// ("{Pachet cu # sporturi}") is not one. Romanian has more plural forms than English, so the
+// names are compared as a set.
+const placeholders = (text) => [...new Set([...text.matchAll(/\{\s*(\w+)\s*[,}]/g)].map((m) => m[1]))].sort();
 
 test("ro and en have exactly the same keys", () => {
   const ro = new Map(flatten(load("ro")));
