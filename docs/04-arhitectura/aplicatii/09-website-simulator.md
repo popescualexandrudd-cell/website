@@ -102,3 +102,16 @@ Fiecare pagină există în toate limbile active, cu URL-uri localizate (`/ro/..
   - Se grupează pe zilele clubului (Europe/Bucharest), inclusiv în ziua trecerii la ora de vară.
   - Fiecare clasă arată ora, tipul, prenumele instructorului și locurile libere sau „Plin · listă de așteptare”.
   - Fără prețuri, ca la Padel: prețurile orientative apar în configuratorul de pachete și la rezervare.
+
+### Secțiunea 10 — Configuratorul de pachete (30.09.2026)
+- **Cei trei pași (R-081):** sporturile (padel, tenis, pilates; cel puțin unul), intensitatea fiecăruia (Start 4, Activ 8, Pro 12 sesiuni pe lună), perioada (lunar, trimestrial, anual).
+- **Oferta și fiecare preț vin de la server:** `GET /api/v1/subscriptions/options` (intensitățile, reducerile, tarifele lunare) și `POST /api/v1/subscriptions/quote` (reducerile de pachet și de perioadă, una după alta, rotunjirea la leu întreg, R-084). Site-ul nu calculează nimic.
+- **„Preț orientativ”** cât un tarif e DE_STABILIT (Q21). Regula Start e explicată (R-087, Q13: vârful 17–22 exclus).
+- **Sub configurator:**
+  - ce e o sesiune (R-083);
+  - fără report (R-085);
+  - înghețarea (R-086);
+  - „La cerere”, cu varianta implicită din Q12, încă deschisă;
+  - unde se cumpără: la Chioșcul de Plăți, cu numerar (R-089, Q9);
+  - pachetul de firmă (R-088, Q35).
+- **Pe telefon,** rezultatul vine după cei trei pași. Nimic nu stă fixat peste controale.

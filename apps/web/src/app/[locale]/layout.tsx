@@ -3,12 +3,13 @@ import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { ColorNight900 } from "@jungle/design-tokens/tokens";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import "../globals.css";
 import { CookieConsent } from "@/components/CookieConsent";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { SiteHeader } from "@/components/SiteHeader";
+import { CLIENT_NAMESPACES, pickMessages } from "@/lib/client-messages";
 import { siteMode } from "@/lib/flags";
 import { routing } from "@/i18n/routing";
 import { INDEXABLE, SITE_URL } from "@/lib/site";
@@ -61,6 +62,8 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "web.nav" });
   const mode = await siteMode();
+  // Only the texts the client components use travel with the page (src/lib/client-messages.ts).
+  const messages = pickMessages(await getMessages(), CLIENT_NAMESPACES);
   return (
     <html lang={locale}>
       <head>
@@ -72,7 +75,7 @@ export default async function LocaleLayout({
         <a href="#main" className="skip-link">
           {t("skip")}
         </a>
-        <NextIntlClientProvider>
+        <NextIntlClientProvider messages={messages}>
           {mode === "full" ? <SiteHeader /> : <Header />}
           <main id="main">{children}</main>
           <Footer />

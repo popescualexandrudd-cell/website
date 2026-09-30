@@ -4,6 +4,18 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, secțiunea 10 — 30.09.2026 (livrată)
+#### Adăugat
+- Configuratorul de pachete (§9.2, secțiunea 10): `Packages` + `PackageConfigurator`, logica în `src/lib/packages.ts`.
+  - sporturile, intensitatea și perioada (R-081);
+  - prețul de la server, cu reducerile la vedere și rotunjirea la leu (R-084), marcat „Preț orientativ” (Q21);
+  - regula Start (R-087, Q13);
+  - notele (R-083, R-085, R-086, Q12, R-089, Q9) și pachetul de firmă (R-088, Q35);
+  - texte `web.site.packages.*` RO + EN.
+- Teste: 6 unitare pe site, 4 cap-coadă (`e2e/full/packages.spec.ts`, fiecare preț comparat cu serverul).
+#### Schimbat
+- Spre browser pleacă doar textele componentelor interactive (`src/lib/client-messages.ts`, `CLIENT_NAMESPACES`, păzite de un test), nu tot catalogul. Pagina principală a scăzut de la 75 la 58 KB pe rețea. Lighthouse mobil 91 · 100 · 100 · 100, desktop 100 · 100 · 100 · 100.
+
 ### Etapa 11, secțiunea 9 — 30.09.2026 (livrată)
 #### Adăugat
 - Pilates Reformer (§9.2, secțiunea 9): `Pilates` + `ClassSchedule`, logica în `src/lib/classes.ts`.

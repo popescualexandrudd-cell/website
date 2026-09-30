@@ -962,6 +962,73 @@
           "book": "Book a class"
         }
       },
+      "packages": {
+        "kicker": "Packages",
+        "title": "Your subscription, in three steps.",
+        "lead": "Choose the sports, the intensity and the period. The price is worked out at once, with the discounts in plain view.",
+        "configurator": "The package configurator",
+        "steps": {
+          "sports": "The sports",
+          "intensity": "The intensity",
+          "period": "The period"
+        },
+        "sports": {
+          "padel": "Padel",
+          "tennis": "Tennis",
+          "pilates": "Reformer Pilates"
+        },
+        "intensities": {
+          "start": "Start",
+          "active": "Active",
+          "pro": "Pro"
+        },
+        "periods": {
+          "monthly": "Monthly",
+          "quarterly": "Quarterly",
+          "annual": "Annual"
+        },
+        "perMonth": "{sessions} sessions a month",
+        "lei": "{amount} lei",
+        "leiPerMonth": "{amount} lei a month",
+        "off": "−{percent}%",
+        "bundleHint": "Two sports: −{two}%. All three (All-in-One): −{three}%.",
+        "startRule": "Start: any time outside peak hours (17:00–22:00). Active and Pro: any time.",
+        "startNote": "With Start, the sessions are outside peak hours (17:00–22:00).",
+        "busy": "Working out the price…",
+        "error": "We can't work out the price right now. Please try again in a few moments.",
+        "provisional": "Indicative price: the final prices are announced before the opening.",
+        "forMonths": "{months, plural, one {for one month} other {for # months}}",
+        "gross": "{months, plural, one {Total for one month} other {Total for # months}}",
+        "bundle": "{count, plural, one {Package with one sport} other {Package with # sports}}",
+        "rounding": "The discounts apply one after the other, the package one first, then the period one; the final price is rounded to a whole leu.",
+        "notes": {
+          "sessions": {
+            "title": "What a session is",
+            "text": "A training: a lesson with a coach, a group class or a Pilates class. Courts are rented separately, by the hour, and the hour is shared between the players."
+          },
+          "rollover": {
+            "title": "No carry-over",
+            "text": "Sessions not used in a month don't move to the next one."
+          },
+          "freeze": {
+            "title": "A two-week pause",
+            "text": "The subscription can be frozen for two weeks a year; it is extended by as much."
+          },
+          "custom": {
+            "title": "Another intensity, on request",
+            "text": "Want a different number of sessions a month? You set it at the reception, at the club's price; under 8 sessions a month the Start rule applies."
+          },
+          "buy": {
+            "title": "Where to buy it",
+            "text": "At the Payments Kiosk in the club, in cash. Online payment is not available at the opening."
+          }
+        },
+        "company": {
+          "title": "For companies",
+          "text": "One simple company package: the company's employees get 20% off the subscriptions in the configurator, invoiced to the company, with a monthly usage report.",
+          "cta": "Write to us"
+        }
+      },
       "pages": {
         "padel": "Padel",
         "league": "Jungle League",

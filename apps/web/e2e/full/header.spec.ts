@@ -32,7 +32,8 @@ test("§9.2.1: the full site's header on the home page, with the map of the sect
   await expect(map.nth(6)).toHaveAttribute("data-built", "true"); // the league (section 7)
   await expect(map.nth(7)).toHaveAttribute("data-built", "true"); // tennis (section 8)
   await expect(map.nth(8)).toHaveAttribute("data-built", "true"); // Pilates (section 9)
-  await expect(map.nth(9)).toContainText("Urmează");
+  await expect(map.nth(9)).toHaveAttribute("data-built", "true"); // packages (section 10)
+  await expect(map.nth(10)).toContainText("Urmează");
   if (info.project.name === "desktop") {
     const menu = page.getByRole("navigation", { name: "Meniul principal" }).first();
     await expect(menu.getByRole("link")).toHaveText(MENU_RO);

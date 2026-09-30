@@ -17,7 +17,8 @@
 | 7. Liga Jungle + simulatorul de puncte | 30.09.2026 | **aprobată 30.09.2026** |
 | 8. Tenis | 30.09.2026 | **aprobată 30.09.2026** |
 | 9. Pilates Reformer | 30.09.2026 | **livrată** |
-| 10–19 | — | urmează, câte una |
+| 10. Configuratorul de pachete | 30.09.2026 | **livrată** |
+| 11–19 | — | urmează, câte una |
 
 ---
 
@@ -447,3 +448,60 @@ După Tenis urmează secțiunea „Pilates pe Reformer, în grupuri mici.” (§
 1. Deschideți capturile 22–25.
 2. Citiți descrierile claselor de mai sus. Dacă vreți alte texte (de exemplu, de la instructor), spuneți-ne.
 3. Dacă secțiunea vă place, scrieți „aprob secțiunea 9”.
+
+---
+
+## Secțiunea 10 — Configuratorul de pachete
+
+### Ce s-a construit
+După Pilates urmează „Abonamentul tău, în trei pași.” (§9.2, secțiunea 10):
+1. **Sporturile:** Padel, Tenis, Pilates Reformer, unul, două sau toate trei. Dedesubt scrie reducerea de pachet: două sporturi −10%, toate trei −15%.
+2. **Intensitatea** pentru fiecare sport: Start, Activ sau Pro, cu numărul de sesiuni și prețul lunar. Dedesubt, regula: „Start: oricând, în afara orelor de vârf (17:00–22:00). Activ și Pro: oricând.”
+3. **Perioada:** lunar, trimestrial (−5%) sau anual (−15%).
+
+**Alături, prețul, calculat de server la fiecare schimbare:**
+- totalul („2.668 lei pentru 3 luni”);
+- rândurile lui: fiecare sport pe lună, totalul pe perioadă și reducerile aplicate;
+- eticheta **„Preț orientativ: prețurile finale se anunță înainte de deschidere.”**, cât prețurile sunt cele orientative puse la Q21.
+
+**Sub configurator:**
+- ce e o sesiune (un antrenament; terenul se închiriază separat, pe oră, și se împarte);
+- fără report;
+- pauza de două săptămâni pe an;
+- altă intensitate, la cerere;
+- unde îl cumperi: la Chioșcul de Plăți, cu numerar;
+- pachetul de firmă (20% pentru angajați, facturare pe firmă, raport lunar), cu „Scrie-ne”.
+
+**Ce am ales și de ce:**
+1. **Prețurile vin de la server,** exact cum le calculează sistemul la cumpărare: reducerile una după alta, rotunjirea la leu întreg (R-084). Site-ul nu are o copie a regulilor. Dacă schimbați un tarif sau o reducere în panou, configuratorul arată imediat noua valoare.
+2. **Afișăm prețurile orientative** pe care ați cerut să le punem (Q21), marcate clar ca orientative.
+3. **„La cerere”:** folosim varianta implicită din Q12, încă deschisă: stabilită la recepție, cu prețul clubului; sub 8 sesiuni pe lună se aplică regula Start.
+4. **Cumpărarea** rămâne la chioșc, cu numerar (Q9). Site-ul nu vinde online.
+
+### Capturi de ecran
+26. [Configuratorul, pe calculator](ecrane/desktop-14-pachete.png)
+27. [Configuratorul, pe telefon](ecrane/mobile-14-pachete.png)
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Teste unitare pe site | 3 noi (alegerea sporturilor, cel puțin unul; ce se trimite serverului; banii afișați în lei) și 3 pentru textele trimise browserului (mai jos). |
+| Cap-coadă | 4 noi (calculator + telefon):<br>• fiecare preț comparat cu serverul: padel Activ lunar; + pilates, cu reducerea de pachet; pilates Start și trimestrial, cu ambele reduceri și regula Start;<br>• ultimul sport nu se poate scoate;<br>• notele și pachetul de firmă;<br>• serverul indisponibil;<br>• engleza.<br>Toate testele site-ului trec: 28 + 71. |
+| Lighthouse, pagina principală | mobil **91 · 100 · 100 · 100** (LCP 3,2 s, CLS 0), calculator **100 · 100 · 100 · 100** ([mobil](lighthouse-mobil.html), [calculator](lighthouse-desktop.html)). |
+
+### Viteza pe telefon: ce am găsit și ce am reparat
+Scorul de performanță pe mobil scăzuse la 90, chiar la limită, așa că am făcut acum o parte din trecerea de performanță:
+1. **Reparat: fiecare pagină ducea cu ea toate textele proiectului.** Mergeau și cele ale panoului de admin, ale chioșcurilor și ale ecranelor, adică 91 KB de texte în fiecare pagină. Acum pleacă spre browser doar textele părților interactive ale site-ului. Pagina principală a scăzut de la 75 la 58 KB pe rețea. Un test verifică lista: dacă o componentă nouă folosește texte care nu sunt pe listă, testul pică.
+2. **Încercat și renunțat:** hidratarea pe secțiuni și `content-visibility`. Scorul nu s-a schimbat, iar a doua variantă a scăzut verificarea automată de accesibilitate la 97. Le-am scos.
+3. **Ce rămâne:** cea mai mare parte din timp e codul de bază al site-ului (React, Next.js și traducerile), aproximativ 140 KB, fix. Secțiunile noastre adaugă doar aproximativ 13 KB. Secțiunile 11–19 le facem cu cât mai puțin cod în browser.
+4. **Dacă scorul coboară sub 90,** următorul pas e ca textele părților interactive să vină gata traduse de pe server. Astfel s-ar scoate din browser biblioteca de traduceri (aproximativ 18 KB).
+5. **Oricum,** măsurăm pe serverul real (Etapa 14).
+
+### Dubla revizuire
+1. **Banii:** site-ul primește sume întregi, în bani (invariantul 5), și doar le afișează în lei. Nu le adună și nu le rotunjește.
+2. **Din perspectiva unui atacator:** doar citiri și calcule publice, deja existente (Etapa 4). Configuratorul nu creează abonamente și nu cere date personale.
+
+### Cum verificați (click cu click)
+1. Deschideți capturile 26 și 27.
+2. Verificați prețurile orientative (sunt cele de la Q21) și textele de sub configurator. Tarifele le schimbați oricând din panou, iar site-ul le preia singur.
+3. Dacă secțiunea vă place, scrieți „aprob secțiunea 10”.

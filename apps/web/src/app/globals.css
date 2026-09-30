@@ -2410,6 +2410,153 @@ body[data-menu-open="true"] {
   }
 }
 
+/* ------------------------------------------------------------------ full site: packages (Stage 11, §9.2.10) */
+.configurator__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+  margin-top: 40px;
+}
+.configurator__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 28px;
+}
+.configurator__step {
+  padding: 22px 24px;
+  background: var(--color-night-800);
+  border: 1px solid var(--line);
+}
+.configurator__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 16px;
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--text);
+}
+.configurator__number {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-brass-400);
+  border-radius: 50%;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent);
+}
+.configurator__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.configurator__pills .level__option {
+  border-radius: var(--radius-md);
+}
+.configurator__sport + .configurator__sport {
+  margin-top: 16px;
+}
+.configurator__label {
+  margin: 0 0 8px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+.configurator__hint {
+  margin: 14px 0 0;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.configurator__result {
+  position: sticky;
+  top: calc(var(--header-h) + 24px);
+}
+.configurator__provisional {
+  margin: 0;
+  align-self: flex-start;
+  padding: 4px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-night-900);
+  background: var(--color-brass-300);
+  border-radius: var(--radius-sm);
+}
+.configurator__total {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 12px;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(44px, 5vw, 64px);
+  line-height: 1.05;
+  color: var(--accent);
+}
+.configurator__total span {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  color: var(--text-2);
+}
+.configurator__lines {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.configurator__lines li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--text-2);
+}
+.configurator__lines li.is-discount {
+  color: var(--text);
+  font-weight: 600;
+}
+.packages__notes {
+  list-style: none;
+  margin: 40px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 18px 28px;
+}
+.packages__notes li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 16px;
+  border-left: 3px solid var(--color-brass-400);
+}
+.packages__notes strong {
+  color: var(--text);
+}
+.packages__notes span {
+  color: var(--text-2);
+}
+@media (max-width: 900px) {
+  .configurator__layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  /* On a phone the result follows the three steps: nothing pinned over the controls. */
+  .configurator__result {
+    order: 0;
+    position: static;
+  }
+  .configurator__step {
+    padding: 18px 16px;
+  }
+}
+
 /* ------------------------------------------------------------------ full site: the build map */
 .site-preview .lead {
   max-width: 720px;

@@ -962,6 +962,73 @@
           "book": "Rezervă o clasă"
         }
       },
+      "packages": {
+        "kicker": "Pachete",
+        "title": "Abonamentul tău, în trei pași.",
+        "lead": "Alegi sporturile, intensitatea și perioada. Prețul se calculează pe loc, cu reducerile la vedere.",
+        "configurator": "Configuratorul de pachete",
+        "steps": {
+          "sports": "Sporturile",
+          "intensity": "Intensitatea",
+          "period": "Perioada"
+        },
+        "sports": {
+          "padel": "Padel",
+          "tennis": "Tenis",
+          "pilates": "Pilates Reformer"
+        },
+        "intensities": {
+          "start": "Start",
+          "active": "Activ",
+          "pro": "Pro"
+        },
+        "periods": {
+          "monthly": "Lunar",
+          "quarterly": "Trimestrial",
+          "annual": "Anual"
+        },
+        "perMonth": "{sessions} sesiuni pe lună",
+        "lei": "{amount} lei",
+        "leiPerMonth": "{amount} lei pe lună",
+        "off": "−{percent}%",
+        "bundleHint": "Două sporturi: −{two}%. Toate trei (All-in-One): −{three}%.",
+        "startRule": "Start: oricând, în afara orelor de vârf (17:00–22:00). Activ și Pro: oricând.",
+        "startNote": "Cu Start, sesiunile sunt în afara orelor de vârf (17:00–22:00).",
+        "busy": "Calculăm prețul…",
+        "error": "Nu putem calcula prețul acum. Încearcă din nou în câteva momente.",
+        "provisional": "Preț orientativ: prețurile finale se anunță înainte de deschidere.",
+        "forMonths": "{months, plural, one {pentru o lună} few {pentru # luni} other {pentru # de luni}}",
+        "gross": "{months, plural, one {Total pe o lună} few {Total pe # luni} other {Total pe # de luni}}",
+        "bundle": "{count, plural, one {Pachet cu un sport} few {Pachet cu # sporturi} other {Pachet cu # de sporturi}}",
+        "rounding": "Reducerile se aplică una după alta, întâi cea de pachet, apoi cea de perioadă; prețul final se rotunjește la leu întreg.",
+        "notes": {
+          "sessions": {
+            "title": "Ce e o sesiune",
+            "text": "Un antrenament: lecție cu antrenor, clasă de grup sau clasă de pilates. Terenul se închiriază separat, pe oră, iar ora se împarte între jucători."
+          },
+          "rollover": {
+            "title": "Fără report",
+            "text": "Sesiunile nefolosite într-o lună nu trec în luna următoare."
+          },
+          "freeze": {
+            "title": "Pauză de două săptămâni",
+            "text": "Abonamentul se poate îngheța două săptămâni pe an; se prelungește cu atât."
+          },
+          "custom": {
+            "title": "Altă intensitate, la cerere",
+            "text": "Vrei alt număr de sesiuni pe lună? Îl stabilești la recepție, cu prețul clubului; sub 8 sesiuni pe lună se aplică regula Start."
+          },
+          "buy": {
+            "title": "Unde îl cumperi",
+            "text": "La Chioșcul de Plăți din club, cu numerar. Plata online nu e activă la deschidere."
+          }
+        },
+        "company": {
+          "title": "Pentru firme",
+          "text": "Un singur pachet de firmă, simplu: angajații firmei primesc 20% reducere la abonamentele din configurator, cu facturare pe firmă și un raport lunar de folosire.",
+          "cta": "Scrie-ne"
+        }
+      },
       "pages": {
         "padel": "Padel",
         "league": "Liga Jungle",
