@@ -85,6 +85,8 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q62](#q62) | Efectele opționale | SCĂZUTĂ | nimic (efectele site-ului) | DESCHISĂ |
 | [Q63](#q63) | Intensitatea efectelor | SCĂZUTĂ | nimic (efectele site-ului) | DESCHISĂ |
 | [Q64](#q64) | Pagina de pre-lansare și efectele | SCĂZUTĂ | nimic (efectele site-ului) | DESCHISĂ |
+| [Q65](#q65) | Echipa pe site | SCĂZUTĂ | nimic (site-ul complet) | DESCHISĂ |
+| [Q66](#q66) | Harta secțiunilor la lansare | SCĂZUTĂ | nimic (site-ul complet) | DESCHISĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -762,3 +764,16 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
 - **Stare:** DESCHISĂ (din 30.09.2026)
 - **Varianta implicită (DE_CONFIRMAT):** pagina de pre-lansare (publică acum) nu primește videoul și efectele; rămâne cum a fost aprobată în Etapa 1B.
+
+### <a id="q65"></a>Q65 — Echipa pe site
+
+- **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
+- **Stare:** DESCHISĂ (din 30.09.2026)
+- **Varianta implicită (DE_CONFIRMAT):** secțiunea „Echipa” arată doar rolurile (antrenorii de padel, instructorul de Reformer, recepția), fără nume și fără fotografii inventate, până ne trimiteți numele, o frază despre fiecare și fotografiile (cu acordul fiecăruia).
+- **Întrebare pentru proprietar:** cine face parte din echipă la deschidere și ce vreți să scrie despre fiecare?
+
+### <a id="q66"></a>Q66 — Harta secțiunilor la lansare
+
+- **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
+- **Stare:** DESCHISĂ (din 30.09.2026)
+- **Varianta implicită (DE_CONFIRMAT):** harta „Site-ul Jungle Padel, secțiune cu secțiune” de la finalul paginii principale e o previzualizare internă; o scoatem în ziua în care porniți site-ul complet pentru public.

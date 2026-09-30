@@ -1213,6 +1213,159 @@
           "faq": "FAQ and rules",
           "footer": "The footer"
         }
+      },
+      "community": {
+        "kicker": "Community",
+        "title": "A club, not just courts.",
+        "lead": "Players get to know each other on court, in the league and at the café. The club keeps count of their achievements and rewards those who bring friends.",
+        "badgesTitle": "The league's badges",
+        "badgesNote": "Each player's badges show only in their own account.",
+        "badges": {
+          "giantKiller": {
+            "title": "Giant killer",
+            "text": "A win against a team with a level well above yours."
+          },
+          "streak": {
+            "title": "10 wins in a row",
+            "text": "Ten official matches won one after another."
+          },
+          "earlyBird": {
+            "title": "Early Bird",
+            "text": "Matches played before 10 a.m."
+          },
+          "weeks": {
+            "title": "Weeks in a row",
+            "text": "Streaks of consecutive weeks with a match."
+          },
+          "surprise": {
+            "title": "Surprise of the week",
+            "text": "The week's biggest upset, by the players' levels."
+          },
+          "firstDiamond": {
+            "title": "First Diamond",
+            "text": "The first player to reach the Diamond rank."
+          },
+          "king": {
+            "title": "King of the Jungle",
+            "text": "The top of the standings."
+          }
+        },
+        "fame": {
+          "title": "Hall of Fame",
+          "lead": "The winners of every finished league season.",
+          "empty": "The first winners appear here at the end of the first season.",
+          "error": "The Hall of Fame can't be loaded right now. Please come back in a few minutes.",
+          "place": "Place {position}"
+        },
+        "friend": {
+          "title": "Bring a friend",
+          "text": "If the friend you bring takes a subscription, you both get a free hour of padel. The voucher comes after the subscription's first payment, once for each new person.",
+          "note": "The hours the voucher is valid in and its term show in your account."
+        }
+      },
+      "team": {
+        "kicker": "The team",
+        "title": "The people behind the club.",
+        "lead": "The padel coaches, the Reformer instructor and the reception. The team introduces itself here, by name, before the opening.",
+        "roles": {
+          "coaches": {
+            "title": "The padel coaches",
+            "text": "Individual and group lessons, their own schedule and the level check for the league."
+          },
+          "instructor": {
+            "title": "The Reformer instructor",
+            "text": "Pilates classes on the Reformer, from beginners to advanced, in small groups."
+          },
+          "reception": {
+            "title": "The reception",
+            "text": "Bookings, member cards and help at the kiosks."
+          }
+        },
+        "soon": "The team's names and photos appear here once the team is complete."
+      },
+      "numbers": {
+        "kicker": "Numbers",
+        "title": "The club in numbers.",
+        "lead": "The club's design figures. After the opening, the numbers from the game appear here too.",
+        "items": {
+          "courts": {
+            "value": "4",
+            "label": "indoor padel courts, heated in winter and cooled in summer"
+          },
+          "lounge": {
+            "value": "3 m",
+            "label": "the height of the lounge walkway between the courts"
+          },
+          "reformers": {
+            "value": "4",
+            "label": "Reformer machines at the opening, room for 6"
+          },
+          "room": {
+            "value": "20",
+            "label": "people at most in the event room"
+          },
+          "parking": {
+            "value": "28",
+            "label": "parking spaces: 18 at the back and 10 at the front"
+          },
+          "season": {
+            "value": "3",
+            "label": "months in a league season"
+          }
+        }
+      },
+      "location": {
+        "kicker": "Location and access",
+        "maps": "Open in a navigation app",
+        "waze": "Waze",
+        "google": "Google Maps",
+        "newWindow": "(new window)"
+      },
+      "faq": {
+        "kicker": "Frequently asked questions",
+        "title": "In short, before you come.",
+        "lead": "The club's basic rules. The full text is in the Terms and conditions.",
+        "terms": "Terms and conditions",
+        "items": {
+          "hours": {
+            "q": "When is the club open, and what are the peak hours?",
+            "a": "The club is open every day from 08:00 to 23:00. The peak is from 17:00 to 22:00."
+          },
+          "durations": {
+            "q": "How long can a booking be?",
+            "a": "From 60 to 180 minutes, in steps of 30: 60, 90, 120, 150 or 180. You can book as far ahead as you like."
+          },
+          "cancel": {
+            "q": "What happens if I cancel?",
+            "a": "At least 24 hours before, cancelling costs nothing: a subscription session is made up, and a paid rental becomes credit in your account. Less than 24 hours before, the booking is paid."
+          },
+          "noShow": {
+            "q": "And if I don't turn up?",
+            "a": "If no player scans their card within the first 15 minutes, the booking is paid. After a third no-show, the coach in charge decides whether you can book again."
+          },
+          "pay": {
+            "q": "How do I pay?",
+            "a": "At the Payments Kiosk in the club, in cash: each player pays their part, or the organiser pays it all. A booking made online is paid at the club."
+          },
+          "credits": {
+            "q": "Do I have to buy credits for padel?",
+            "a": "No. You pay for the court hour, and the players share it."
+          },
+          "league": {
+            "q": "Who can join the league?",
+            "a": "Anyone aged 18 or over who signs the league's GDPR form at the League Kiosk in the club."
+          },
+          "scores": {
+            "q": "Where are scores entered?",
+            "a": "Only at the League Kiosk in the club, and they count only once every player confirms them. On the website and on phones, the league is only followed."
+          }
+        }
+      },
+      "footer": {
+        "hoursTitle": "Opening hours",
+        "hours": "Every day, 08:00–23:00",
+        "menuTitle": "The club",
+        "languagesTitle": "Language"
       }
     }
   },

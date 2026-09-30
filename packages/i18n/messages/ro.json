@@ -1213,6 +1213,159 @@
           "faq": "Întrebări frecvente și regulament",
           "footer": "Subsolul"
         }
+      },
+      "community": {
+        "kicker": "Comunitatea",
+        "title": "Un club, nu doar terenuri.",
+        "lead": "Jucătorii se cunosc pe teren, în ligă și la cafenea. Clubul le ține socoteala reușitelor și îi răsplătește pe cei care aduc prieteni.",
+        "badgesTitle": "Insignele ligii",
+        "badgesNote": "Insignele fiecărui jucător se văd doar în contul lui.",
+        "badges": {
+          "giantKiller": {
+            "title": "Ucigaș de giganți",
+            "text": "O victorie contra unei echipe cu nivelul mult peste al tău."
+          },
+          "streak": {
+            "title": "10 victorii la rând",
+            "text": "Zece meciuri oficiale câștigate unul după altul."
+          },
+          "earlyBird": {
+            "title": "Early Bird",
+            "text": "Meciuri jucate înainte de ora 10."
+          },
+          "weeks": {
+            "title": "Săptămâni la rând",
+            "text": "Serii de săptămâni consecutive în care ai jucat."
+          },
+          "surprise": {
+            "title": "Surpriza săptămânii",
+            "text": "Cea mai mare surpriză a săptămânii, după nivelul jucătorilor."
+          },
+          "firstDiamond": {
+            "title": "Primul Diamant",
+            "text": "Primul jucător care ajunge la rangul Diamant."
+          },
+          "king": {
+            "title": "Regele Junglei",
+            "text": "Vârful clasamentului."
+          }
+        },
+        "fame": {
+          "title": "Hall of Fame",
+          "lead": "Câștigătorii fiecărui sezon încheiat al ligii.",
+          "empty": "Primii câștigători apar aici la finalul primului sezon.",
+          "error": "Hall of Fame nu se poate încărca acum. Revino în câteva minute.",
+          "place": "Locul {position}"
+        },
+        "friend": {
+          "title": "Adu un prieten",
+          "text": "Dacă prietenul adus de tine își face abonament, primiți amândoi câte o oră gratuită de padel. Voucherul se acordă după prima plată a abonamentului, o singură dată pentru fiecare persoană nouă.",
+          "note": "Orele în care e valabil voucherul și termenul lui apar în contul tău."
+        }
+      },
+      "team": {
+        "kicker": "Echipa",
+        "title": "Oamenii din spatele clubului.",
+        "lead": "Antrenorii de padel, instructorul de Reformer și recepția. Echipa se prezintă aici, pe nume, înainte de deschidere.",
+        "roles": {
+          "coaches": {
+            "title": "Antrenorii de padel",
+            "text": "Lecții individuale și de grup, programul lor și validarea nivelului pentru ligă."
+          },
+          "instructor": {
+            "title": "Instructorul de Reformer",
+            "text": "Clasele de pilates pe Reformer, de la începători la avansați, în grupuri mici."
+          },
+          "reception": {
+            "title": "Recepția",
+            "text": "Rezervări, carduri de membru și ajutor la chioșcuri."
+          }
+        },
+        "soon": "Numele și fotografiile echipei apar aici când echipa e completă."
+      },
+      "numbers": {
+        "kicker": "Cifre",
+        "title": "Clubul în cifre.",
+        "lead": "Cifrele de proiect ale clubului. După deschidere, aici apar și cele din joc.",
+        "items": {
+          "courts": {
+            "value": "4",
+            "label": "terenuri de padel, închise, încălzite iarna și răcite vara"
+          },
+          "lounge": {
+            "value": "3 m",
+            "label": "înălțimea pasarelei-lounge dintre terenuri"
+          },
+          "reformers": {
+            "value": "4",
+            "label": "aparate Reformer la deschidere, loc pentru 6"
+          },
+          "room": {
+            "value": "20",
+            "label": "persoane, cel mult, în sala de evenimente"
+          },
+          "parking": {
+            "value": "28",
+            "label": "locuri de parcare: 18 în spate și 10 în față"
+          },
+          "season": {
+            "value": "3",
+            "label": "luni durează un sezon al ligii"
+          }
+        }
+      },
+      "location": {
+        "kicker": "Locație și acces",
+        "maps": "Deschide în aplicația de navigație",
+        "waze": "Waze",
+        "google": "Google Maps",
+        "newWindow": "(fereastră nouă)"
+      },
+      "faq": {
+        "kicker": "Întrebări frecvente",
+        "title": "Pe scurt, înainte să vii.",
+        "lead": "Regulile de bază ale clubului. Textul complet e în Termeni și condiții.",
+        "terms": "Termeni și condiții",
+        "items": {
+          "hours": {
+            "q": "Când e deschis clubul și care sunt orele de vârf?",
+            "a": "Clubul e deschis în fiecare zi, de la 08:00 la 23:00. Vârful e între 17:00 și 22:00."
+          },
+          "durations": {
+            "q": "Cât poate dura o rezervare?",
+            "a": "Între 60 și 180 de minute, din 30 în 30: 60, 90, 120, 150 sau 180. Poți rezerva cu oricât timp înainte."
+          },
+          "cancel": {
+            "q": "Ce se întâmplă dacă anulez?",
+            "a": "Cu cel puțin 24 de ore înainte, anularea e fără cost: ședința de abonament se recuperează, iar o închiriere plătită devine credit în cont. Cu mai puțin de 24 de ore înainte, rezervarea se plătește."
+          },
+          "noShow": {
+            "q": "Și dacă nu ajung?",
+            "a": "Dacă niciun jucător nu își scanează cardul în primele 15 minute, rezervarea se plătește. După a treia neprezentare, antrenorul responsabil decide dacă mai poți rezerva."
+          },
+          "pay": {
+            "q": "Cum plătesc?",
+            "a": "La Chioșcul de Plăți din club, în numerar, fiecare își plătește partea sau organizatorul plătește tot. O rezervare făcută online se plătește la club."
+          },
+          "credits": {
+            "q": "Trebuie să cumpăr credite pentru padel?",
+            "a": "Nu. Plătești ora de teren, iar jucătorii o împart."
+          },
+          "league": {
+            "q": "Cine poate intra în ligă?",
+            "a": "Oricine are cel puțin 18 ani și semnează acordul GDPR al ligii la Chioșcul Ligii din club."
+          },
+          "scores": {
+            "q": "Unde se introduc scorurile?",
+            "a": "Doar la Chioșcul Ligii din club, și contează numai după ce toți jucătorii le confirmă. Pe site și pe telefon, liga doar se urmărește."
+          }
+        }
+      },
+      "footer": {
+        "hoursTitle": "Program",
+        "hours": "În fiecare zi, 08:00–23:00",
+        "menuTitle": "Clubul",
+        "languagesTitle": "Limba"
       }
     }
   },

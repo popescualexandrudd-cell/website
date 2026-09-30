@@ -134,7 +134,7 @@ Fiecare pagină există în toate limbile active, cu URL-uri localizate (`/ro/..
   - un eveniment anulat rămâne pe site, marcat „Anulat”, până la ora lui de sfârșit, ca să nu vină nimeni degeaba;
   - datele demo (`seed_initial --demo`) apar marcate „Exemplu (demo)” (invariantul 12).
 - **Un eveniment din calendar nu rezervă nimic:** terenurile sau sala se rezervă separat, din Calendar.
-- **Sala de evenimente:** câte persoane primește și prețul pe oră (cea mai ieftină bandă a sezonului, „orientativ” cât tariful e DE_STABILIT, Q21), din date; în clădirea de alături, cu studioul de pilates (Q46); încălzită și răcită (§1). Cererea se trimite din cont și o confirmă managerul (Q34, varianta implicită, încă deschisă).
+- **Sala de evenimente:** câte persoane primește și prețul pe oră (cea mai ieftină bandă a sezonului, „orientativ” cât tariful e DE_STABILIT, Q21), din date; în clădirea de alături, cu studioul de pilates (Q46); încălzită și răcită (§1). Cererea se face online, din cont, sau telefonic, iar pachetele, prețurile și rezervarea le confirmă un manager (Q34, confirmat de proprietar pe 30.09.2026); butonul „Sună la club” apare când telefonul e completat în datele firmei.
 - **Randată pe server:** secțiunea nu trimite niciun script în browser. Datele se păstrează 5 minute; la orice schimbare vizibilă din panou, serverul cere site-ului reîmprospătarea (eticheta de cache `events`).
 
 ### Secțiunea 13 — Cafeneaua de specialitate (30.09.2026)
@@ -142,3 +142,15 @@ Fiecare pagină există în toate limbile active, cu URL-uri localizate (`/ro/..
 - **Cum se comandă (R-111, Q9):** la Chioșcul de Plăți, cu plata în numerar; bonul are numărul comenzii, comanda ajunge pe afișajul barului, iar numărul apare pe ecranul din lobby când e gata.
 - **Meniul** (`GET /api/v1/cafe/menu?location=…`): exact cel din panou, doar produsele disponibile acum (R-112), pe categorii, cu prețul fiecăruia; „Prețuri orientative” cât un preț e DE_STABILIT (Q21).
 - **Randată pe server,** fără script în browser. Meniul se păstrează 5 minute; la orice schimbare din panou (categorie sau produs), serverul cere site-ului reîmprospătarea (eticheta de cache `cafe`).
+
+### Secțiunile 14–19 (30.09.2026, construite în Faza 3 a efectelor, ADR-0023)
+Toate șase sunt randate pe server (fără script nou în browser), cu atributele efectelor (`data-reveal`, `data-tilt`, `data-count`) din prima zi.
+- **14 — Comunitatea:**
+  - cele 7 insigne ale ligii (§6.15), explicate pe scurt; insignele fiecărui jucător se văd doar în contul lui (R-012);
+  - **Hall of Fame** din `GET /api/v1/league/hall-of-fame` (`src/lib/fame.ts`, 5 minute): câștigătorii fiecărui sezon încheiat, doar nume, rang și loc (LG-134); înainte de primul sezon încheiat: „Primii câștigători apar aici la finalul primului sezon.”;
+  - **„Adu un prieten”** (R-120): câte o oră gratuită pentru amândoi, după prima plată a abonamentului prietenului.
+- **15 — Echipa:** rolurile (antrenorii de padel cu lecțiile și validarea nivelului, R-003; instructorul de Reformer, R-101; recepția), fără nume sau fotografii inventate până le trimite proprietarul (Q65).
+- **16 — Clubul în cifre:** doar cifrele de proiect din `docs/` (4 terenuri, pasarela la 3 m, 4 aparate Reformer cu loc pentru 6, sala de 20 de persoane, 28 de locuri de parcare, sezonul de 3 luni); numără în sus la apariție și se oprește mereu pe textul serverului. Cifrele din joc (meciuri, jucători) vin după deschidere, doar din date reale.
+- **17 — Locație și acces:** adresa, accesul din două străzi, parcarea 18 + 10, planul clubului (schemă fără scară), OpenStreetMap și, opțional, Waze sau Google Maps. Doar linkuri, fără hartă încorporată și fără script de la terți.
+- **18 — Întrebări frecvente:** 8 întrebări cu regulile pe scurt (programul și vârful, Q3; duratele, R-041, R-042; anularea, R-070, R-071; neprezentarea, R-072, R-073; plata în numerar, Q9, R-063; fără credite la padel, invariantul 14; cine intră în ligă, R-006; unde se introduc scorurile, invariantele 1 și 2), în `<details>` care se deschid fără cod; linkul spre Termeni și condiții.
+- **19 — Subsolul:** pe site-ul complet, subsolul primește paginile clubului, programul (08:00–23:00) și limbile; datele firmei, paginile legale și ANPC SAL rămân neschimbate. Rețelele sociale apar când proprietarul are conturile.

@@ -125,13 +125,19 @@ async function take(out) {
   console.log(`inventory: ${Object.keys(inventory.pages).length} pages → ${out}`);
 }
 
+/**
+ * React's automatic ids (`useId`, "_R_acltaivb_") depend on the component's place in the tree and
+ * change when a section is added above it; the field itself stays. Compared without them.
+ */
+const key = (x) => JSON.stringify(x).replace(/_R_[A-Za-z0-9]+_/g, "_R_*_");
+
 /** Every item of `before` is in `after` (lists compared as multisets); returns what is missing. */
 function missing(before, after, path = "") {
   if (Array.isArray(before)) {
-    const left = [...(Array.isArray(after) ? after : [])].map((x) => JSON.stringify(x));
+    const left = [...(Array.isArray(after) ? after : [])].map(key);
     const gone = [];
     for (const item of before) {
-      const i = left.indexOf(JSON.stringify(item));
+      const i = left.indexOf(key(item));
       if (i === -1) gone.push(`${path}: ${JSON.stringify(item)}`);
       else left.splice(i, 1);
     }
@@ -145,9 +151,9 @@ function missing(before, after, path = "") {
 
 function added(before, after, path = "") {
   if (Array.isArray(after)) {
-    const left = [...(Array.isArray(before) ? before : [])].map((x) => JSON.stringify(x));
+    const left = [...(Array.isArray(before) ? before : [])].map(key);
     return after.filter((item) => {
-      const i = left.indexOf(JSON.stringify(item));
+      const i = left.indexOf(key(item));
       if (i === -1) return true;
       left.splice(i, 1);
       return false;

@@ -83,7 +83,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
           {mode === "full" ? <SiteHeader /> : <Header />}
           <main id="main">{children}</main>
-          <Footer />
+          <Footer full={mode === "full"} />
           {/* Statistics (Umami) load only after consent, from the consent manager. */}
           <CookieConsent />
         </NextIntlClientProvider>

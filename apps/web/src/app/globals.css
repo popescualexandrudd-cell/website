@@ -2731,6 +2731,123 @@ body[data-menu-open="true"] {
   color: var(--accent);
 }
 
+/* ------------------------------------------------------------------ full site: sections 14–18 (Stage 11, §9.2) */
+.community__badges {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: 14px;
+}
+.community__badge {
+  display: grid;
+  gap: 6px;
+  padding: 18px 20px;
+  background: var(--color-night-800);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--color-brass-400);
+}
+.community__badge strong {
+  color: var(--text);
+  font-weight: 600;
+}
+.community__badge span {
+  color: var(--text-2);
+}
+.community__fame,
+.community__friend {
+  margin-top: 16px;
+}
+.community__seasons,
+.community__winners {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+}
+.community__seasons > li + li {
+  margin-top: 24px;
+}
+.community__seasons h4 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.community__winners {
+  border-top: 1px solid var(--line);
+}
+.community__winners li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.community__place {
+  font-family: var(--font-serif);
+  color: var(--accent);
+}
+.community__name {
+  color: var(--text);
+  font-weight: 600;
+}
+.community__friend {
+  padding: 4px 24px 22px;
+  border-left: 3px solid var(--color-brass-400);
+  background: var(--color-night-900);
+}
+.faq__list {
+  margin-top: 32px;
+  border-top: 1px solid var(--line);
+}
+.faq__item {
+  border-bottom: 1px solid var(--line);
+}
+.faq__item summary {
+  cursor: pointer;
+  padding: 18px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+.faq__item summary:hover {
+  color: var(--accent);
+}
+.faq__item p {
+  margin: 0 0 18px;
+  max-width: 70ch;
+  color: var(--text-2);
+}
+.numbers__list {
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+}
+.footer-links--inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+}
+/* Section 19: the club's pages, hours and languages, a row under the footer's columns (full site). */
+.footer-club {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 2.6fr 1fr 1fr;
+  gap: 32px 48px;
+}
+.footer-club p {
+  margin: 0;
+}
+@media (max-width: 900px) {
+  .footer-club {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ------------------------------------------------------------------ full site: the build map */
 .site-preview .lead {
   max-width: 720px;
@@ -2918,4 +3035,66 @@ html[data-motion="on"] [data-reveal="mask"]:not([data-shown]) {
   border-top: 8px solid transparent;
   border-bottom: 8px solid transparent;
   border-left: 13px solid currentColor;
+}
+
+/* ------------------------------------------------------------------ the site's effects: interaction (ADR-0023) */
+/* Cards that follow a fine pointer (desktop), with a brass light where the pointer is; on touch, a
+ * visible press. Full motion only; the tilt starts once the card has appeared. */
+html[data-motion="on"] [data-tilt] {
+  position: relative;
+  transform-style: preserve-3d;
+}
+html[data-motion="on"] [data-tilt]:is([data-shown], :not([data-reveal])):hover {
+  transform: perspective(var(--motion-perspective)) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg));
+  transition: transform var(--motion-duration-fast) var(--motion-ease-out);
+}
+html[data-motion="on"] [data-tilt]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    circle at var(--glow-x, 50%) var(--glow-y, 50%),
+    color-mix(in srgb, var(--color-brass-300) 16%, transparent),
+    transparent 60%
+  );
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-out);
+}
+html[data-motion="on"] [data-tilt]:hover::after {
+  opacity: 1;
+}
+html[data-motion] [data-tilt]:active {
+  transform: scale(0.98);
+}
+/* The header: a brass progress bar under it, and the menu link of the section in view. */
+.site-header__progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: var(--color-brass-400);
+  transform-origin: 0 50%;
+  transform: scaleX(var(--progress, 0));
+  pointer-events: none;
+}
+html[data-motion="on"] .full-nav a[data-active="true"] {
+  color: var(--accent);
+  box-shadow: inset 0 -2px 0 var(--color-brass-400);
+}
+/* A value that changes (a price, LP, a level) enters again with a small elastic "pop". */
+html[data-motion="on"] .fx-pop {
+  display: inline-block;
+  animation: fx-pop var(--motion-duration-base) var(--motion-ease-spring) both;
+}
+@keyframes fx-pop {
+  from {
+    opacity: 0;
+    transform: scale(var(--motion-pop-from));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }

@@ -4,6 +4,20 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Efectele site-ului, Faza 3 — 30.09.2026 (livrată): secțiunile 14–19, cu efectele din prima zi
+#### Adăugat
+- Secțiunea 14 „Comunitatea” (`Community`): insignele ligii (§6.15, fiecare jucător își vede insignele doar în cont, R-012), Hall of Fame din `GET /api/v1/league/hall-of-fame` (`src/lib/fame.ts`; nume, rang și loc, LG-134), „Adu un prieten” (R-120).
+- Secțiunea 15 „Echipa” (`Team`): rolurile, fără nume inventate (Q65).
+- Secțiunea 16 „Clubul în cifre” (`Numbers`): doar cifre din `docs/`, care numără în sus la apariție (`data-count`).
+- Secțiunea 17 „Locație și acces” (`Location`): adresa, accesul, parcarea, planul clubului, OpenStreetMap și, opțional, Waze sau Google Maps (doar linkuri, fără hartă încorporată).
+- Secțiunea 18 „Întrebări frecvente” (`Faq`): regulile pe scurt (R-053, Q3, R-041, R-070–R-073, Q9, invariantul 14), `<details>` fără cod, cu link spre Termeni.
+- Secțiunea 19, subsolul site-ului complet (`Footer full`): paginile clubului, programul și limbile; partea legală neschimbată.
+- `src/lib/effects-dom.ts`: numărarea în sus (se termină mereu pe textul serverului), tilt-ul cardurilor după cursor (`data-tilt`), bara de progres din antet și linkul secțiunii din ecran (`data-active`); doar la nivelul „on”.
+- Teste: `e2e/full/community.spec.ts`, `e2e/effects/details.spec.ts`, unitare pentru `fame` și `effects-dom`; Q65, Q66.
+#### Schimbat
+- `inventory.mjs --compare` compară câmpurile fără id-urile automate ale React (`useId`), care se schimbă când o secțiune se adaugă deasupra.
+- `expectAccessible` (testele cap-coadă) verifică pagina cu efectele terminate: axe derulează la fiecare element și, altfel, măsura contrastul unui text la jumătatea fade-ului.
+
 ### Efectele site-ului, Faza 2 — 30.09.2026 (livrată)
 #### Adăugat
 - `HeroVideo`: videoul de prezentare peste randare, după încărcarea paginii, fără sunet, în buclă, cu buton de pauză (WCAG 2.2.2), estompat la derulare; cu „reducerea mișcării” sau „lite” doar la cerere; pe telefon, hala 3D așteaptă ieșirea videoului din ecran (`offScreen` în `src/lib/webgl.ts`).

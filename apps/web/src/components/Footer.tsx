@@ -5,11 +5,29 @@ import { ANPC_SAL_URL } from "@/lib/site";
 import { CookieSettingsButton } from "./CookieConsent";
 import { LogoMark, LogoWord } from "./Logo";
 
-/** Legal identification of the trader (Law 365/2002 art. 5, OG 21/1992), legal pages and ANPC. */
-export async function Footer() {
+// Section 19 of the full site (§9.2): the club's pages and the languages (full site only).
+const CLUB_PAGES = [
+  ["/padel", "padel"],
+  ["/league", "league"],
+  ["/tennis", "tennis"],
+  ["/pilates", "pilates"],
+  ["/packages", "packages"],
+  ["/events", "events"],
+  ["/cafe", "cafe"],
+  ["/contact", "contact"],
+] as const;
+
+/**
+ * Legal identification of the trader (Law 365/2002 art. 5, OG 21/1992), legal pages and ANPC. On
+ * the full site (`full`), section 19 adds the opening hours (Q3), the club's pages and the languages.
+ */
+export async function Footer({ full = false }: { full?: boolean }) {
   const t = await getTranslations("web.footer");
   const tLegal = await getTranslations("web.legal");
   const company = await companyDetails();
+  const tSite = await getTranslations("web.site.footer");
+  const tMenu = await getTranslations("web.site.header.nav");
+  const tLang = await getTranslations("web.site.header.languages");
   const value = (v: string | null | undefined) => (v && v.trim() ? v : <em>{t("pending")}</em>);
   const rows: [string, React.ReactNode][] = [
     [t("legalName"), value(company?.legal_name)],
@@ -59,6 +77,39 @@ export async function Footer() {
             </ul>
           </nav>
         </div>
+        {full && (
+          <nav className="footer-club" aria-labelledby="footer-club" data-reveal="fade">
+            <div>
+              <h2 id="footer-club">{tSite("menuTitle")}</h2>
+              <ul className="footer-links footer-links--inline">
+                {CLUB_PAGES.map(([href, key]) => (
+                  <li key={href}>
+                    <Link href={href}>{tMenu(key)}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h2>{tSite("hoursTitle")}</h2>
+              <p>{tSite("hours")}</p>
+            </div>
+            <div>
+              <h2>{tSite("languagesTitle")}</h2>
+              <ul className="footer-links footer-links--inline">
+                <li>
+                  <Link href="/" locale="ro" lang="ro" hrefLang="ro">
+                    {tLang("ro")}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/" locale="en" lang="en" hrefLang="en">
+                    {tLang("en")}
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        )}
         <div className="footer-bottom">
           <span>{t("rights", { year: new Date().getFullYear() })}</span>
         </div>

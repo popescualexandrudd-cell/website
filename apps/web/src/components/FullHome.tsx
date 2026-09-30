@@ -1,5 +1,10 @@
 import { getTranslations } from "next-intl/server";
 import { Cafe } from "./Cafe";
+import { Community } from "./Community";
+import { Faq } from "./Faq";
+import { Location } from "./Location";
+import { Numbers } from "./Numbers";
+import { Team } from "./Team";
 import { Events } from "./Events";
 import { FullHero } from "./FullHero";
 import { League } from "./League";
@@ -36,7 +41,7 @@ export const SECTIONS = [
 ] as const;
 
 /** How many sections are built (delivered for approval or approved), in the order above. */
-export const BUILT = 13;
+export const BUILT = 19;
 
 /**
  * The home page of the full site while it is being built: the sections built so far (the header
@@ -59,6 +64,11 @@ export function FullHome() {
       <Split id="imparte-ora" />
       <Events id="evenimente" />
       <Cafe id="cafenea" />
+      <Community id="comunitate" />
+      <Team id="echipa" />
+      <Numbers id="cifre" />
+      <Location id="locatie" />
+      <Faq id="intrebari" />
       <SectionMap />
     </>
   );

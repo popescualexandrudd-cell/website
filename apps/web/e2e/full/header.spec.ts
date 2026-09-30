@@ -36,7 +36,13 @@ test("§9.2.1: the full site's header on the home page, with the map of the sect
   await expect(map.nth(10)).toHaveAttribute("data-built", "true"); // share the hour (section 11)
   await expect(map.nth(11)).toHaveAttribute("data-built", "true"); // events (section 12)
   await expect(map.nth(12)).toHaveAttribute("data-built", "true"); // the café (section 13)
-  await expect(map.nth(13)).toContainText("Urmează");
+  await expect(map.nth(13)).toHaveAttribute("data-built", "true"); // the community (section 14)
+  await expect(map.nth(14)).toHaveAttribute("data-built", "true"); // the team (section 15)
+  await expect(map.nth(15)).toHaveAttribute("data-built", "true"); // numbers (section 16)
+  await expect(map.nth(16)).toHaveAttribute("data-built", "true"); // location (section 17)
+  await expect(map.nth(17)).toHaveAttribute("data-built", "true"); // questions (section 18)
+  await expect(map.nth(18)).toHaveAttribute("data-built", "true"); // the footer (section 19)
+  await expect(page.locator(".section-map")).not.toContainText("Urmează");
   if (info.project.name === "desktop") {
     const menu = page.getByRole("navigation", { name: "Meniul principal" }).first();
     await expect(menu.getByRole("link")).toHaveText(MENU_RO);

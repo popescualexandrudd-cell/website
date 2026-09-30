@@ -7,7 +7,7 @@
 | 0. Citire, inventar, referință, plan | fără modificări vizibile | **aprobată 30.09.2026** („aprob, continuă cu tot până la capăt”) |
 | 1. Fundația | pasul de viteză, tokenii de mișcare, observatorul, CSS-ul de efecte, modul „lite”, comutatoarele `web_effects` și `web_hero_video`; butonul de apel și fraza Q34 la sala de evenimente | **livrată 30.09.2026** |
 | 2. Videoul | stratul video, scriptul, controalele, tranziția spre hală, comutatorul `web_hero_video` | **livrată 30.09.2026** (așteaptă videoul) |
-| 3. Secțiunile 14–19 | construite direct cu efecte | urmează |
+| 3. Secțiunile 14–19 | construite direct cu efecte | **livrată 30.09.2026** |
 | 4. Efectele pe secțiunile 1–13 | una câte una, cu interactivitatea funcțiilor | urmează |
 | 5. Celelalte pagini | același limbaj de efecte, mai discret | urmează |
 | 6–7. Verificarea finală și predarea | ghid pentru proprietar | urmează |
@@ -206,3 +206,62 @@ Cu efectele și videoul de test pornite (după o rulare de încălzire): **93 ·
 2. După ce îl pregătim: deschideți pagina principală; după câteva secunde videoul apare peste randare. Butonul rotund din dreapta-jos îl oprește.
 3. Derulați: videoul se estompează și apare hala.
 4. Activați „Reducerea mișcării” pe telefon: videoul nu mai pornește singur, iar butonul îl pornește.
+
+---
+
+## Faza 3 — Secțiunile 14–19, construite direct cu efecte
+
+### Ce s-a construit
+Pagina principală are acum toate cele 19 secțiuni. Cele șase noi sunt randate pe server (fără cod nou în browser) și poartă efectele din prima zi.
+1. **Comunitatea** (secțiunea 14):
+   - cele 7 insigne ale ligii, fiecare într-un card care apare cu un „pop” elastic și se înclină după cursor; insignele fiecărui jucător rămân private, în contul lui (R-012);
+   - **Hall of Fame**, citit din API (câștigătorii sezoanelor încheiate: nume, rang, loc; LG-134). Până la primul sezon încheiat scrie „Primii câștigători apar aici la finalul primului sezon.”;
+   - **„Adu un prieten”** (R-120).
+2. **Echipa** (15): antrenorii de padel, instructorul de Reformer și recepția, doar ca roluri. Nume și fotografii nu inventăm: le punem când ni le trimiteți (Q65).
+3. **Clubul în cifre** (16): doar cifre de proiect din documente (4 terenuri, pasarela la 3 m, 4 aparate Reformer cu loc pentru 6, sala de 20 de persoane, 28 de locuri de parcare, sezonul de 3 luni). **Numerele numără în sus** când apar și se opresc mereu pe valoarea reală.
+4. **Locație și acces** (17): adresa, accesul, parcarea, planul clubului, OpenStreetMap și, opțional, Waze sau Google Maps. Doar linkuri: nicio hartă încorporată, niciun script de la terți.
+5. **Întrebări frecvente** (18): 8 întrebări cu regulile pe scurt (program și vârf, durate, anulare, neprezentare, plată, fără credite la padel, cine intră în ligă, unde se introduc scorurile), cu link spre Termeni. Se deschid fără cod.
+6. **Subsolul** (19): pe site-ul complet, sub coloanele de acum, un rând nou cu paginile clubului, programul (08:00–23:00) și limbile. Datele firmei, paginile legale și ANPC rămân exact unde erau.
+
+**Efecte noi, pentru tot site-ul** (doar la mișcarea completă; cu „reducerea mișcării” nu rulează):
+- cardurile cu `data-tilt` se înclină după cursor, cu o lumină de alamă în dreptul lui (doar pe calculator);
+- o bară subțire de alamă sub antet arată cât ați citit din pagină;
+- în meniu, linkul secțiunii din ecran e marcat.
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Inventarul, efectele oprite și efectele pornite + „reducerea mișcării” | **0 elemente eliminate sau schimbate**; 1196 de adăugiri: cele 5 secțiuni, rândul nou din subsol (10 linkuri pe fiecare pagină), 172 de chei de text (RO + EN). Inventarul compară acum câmpurile fără id-urile automate ale React: cele 5 glisoare ale simulatorului de puncte își schimbaseră doar id-ul generat, pentru că pagina are mai multe secțiuni. |
+| Regresia vizuală, efectele oprite | **70/72 capturi identice** cu referința. Diferă doar pagina principală (RO, EN) pe telefon: are secțiunile noi. Pe calculator, pagina principală și toate celelalte pagini sunt în limita de 0,5%, cu subsolul crescut (conținut adăugat). |
+| Regresia vizuală, efectele pornite + „reducerea mișcării” | **68/72 identice**; diferă doar pagina principală (calculator și telefon, RO și EN), din același motiv. |
+| Pagina principală, verificată rând cu rând | Secțiunile 1–13 sunt identice cu referința. Singurele diferențe: ora „Actualizat la” din „Acum în club” (e live), hala 3D din hero (pornește la un moment variabil) și fraza Q34 aprobată în Faza 1. |
+| Testele existente | toate trec neschimbate, cu efectele oprite și cu ele pornite. Harta secțiunilor arată acum 19 din 19 gata (testul antetului a fost actualizat pentru asta, ca la fiecare secțiune livrată). |
+| Teste noi | cap-coadă: cele 6 secțiuni (textele, Hall of Fame față de API, linkurile hărții în fereastră nouă, fără iframe, întrebările deschise din click, subsolul și schimbarea limbii, engleza); efectele: numerele numără și se opresc pe valoarea reală, bara de progres, linkul secțiunii din ecran, „reducerea mișcării”. Unitare: Hall of Fame, numărarea, tilt-ul, progresul. |
+| Accesibilitate | axe fără probleme serioase pe toate paginile, cu efectele pornite și oprite. Verificarea se face pe pagina cu efectele terminate: axe derulează la fiecare element și ar fi măsurat altfel contrastul unui text la jumătatea fade-ului. |
+
+Captura secțiunilor noi: [calculator](ecrane/faza3-calculator-ro.jpg), [telefon](ecrane/faza3-mobil-ro.jpg).
+
+### Viteza pe telefon
+| Măsurători (după o rulare de încălzire, efectele pornite) | Telefon | Calculator |
+|---|---|---|
+| Prima serie | 92 · 87 · 91 · 93 · 82 | 100 · 100 |
+| A doua serie (după mutarea rândului din subsol) | 92 · 87 · 92 · 89 · 90 | 100 · 100 |
+
+- **Mediana e 90–91,** ca în Fazele 0–2.
+- **Rularea de 82** are prima afișare întârziată (1,4 s), ca rulările slabe din referință. Rulările de 87 au procesorul ocupat (TBT 270–310 ms).
+- **LCP** rămâne 3,2 s: primul ecran nu s-a schimbat. **Accesibilitate, bune practici și SEO:** 100 la toate.
+
+### O corectură făcută înainte de livrare
+În prima variantă, rândul nou din subsol stătea în coloanele existente și împingea „Informații legale” pe un rând nou. Asta schimba un aspect aprobat, așa că l-am mutat într-un rând separat, sub coloane. Captura de după arată subsolul de dinainte neschimbat.
+
+### Cum verificați (click cu click)
+1. Porniți site-ul complet și `web_effects` din panou (Setări și feature flags).
+2. Derulați pe pagina principală până la „Un club, nu doar terenuri.”: insignele apar pe rând; pe calculator, cardurile se înclină după mouse.
+3. La „Clubul în cifre.”, numerele numără de la 0 până la valoarea lor.
+4. Urmăriți bara subțire de sub antet: crește cât derulați. În meniu, linkul secțiunii în care sunteți se aprinde (de exemplu „Liga”).
+5. La „Pe scurt, înainte să vii.”, deschideți o întrebare.
+6. Jos, în subsol: paginile clubului, programul și limbile, sub datele firmei.
+
+### Decizii noi (nu blochează nimic)
+- **Q65:** cine face parte din echipă și ce scriem despre fiecare (până atunci: doar rolurile).
+- **Q66:** harta „secțiune cu secțiune” de la finalul paginii o scoatem în ziua lansării publice.
