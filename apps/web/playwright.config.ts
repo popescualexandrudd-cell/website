@@ -27,6 +27,9 @@ export default defineConfig({
   use: {
     baseURL: process.env.E2E_BASE_URL ?? "http://localhost:3000",
     trace: "retain-on-failure",
+    // The service worker (§9.4) would stand between the page and `page.route`: blocked everywhere
+    // except in the test of the installable site itself (e2e/full/pwa.spec.ts).
+    serviceWorkers: "block",
     launchOptions: executablePath ? { executablePath } : {},
   },
   projects: [

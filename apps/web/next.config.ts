@@ -36,7 +36,11 @@ const nextConfig: NextConfig = {
   experimental: { inlineCss: true },
   transpilePackages: ["@jungle/api-client", "@jungle/design-tokens", "@jungle/i18n"],
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      // The service worker is checked for a new version on every visit (§9.4).
+      { source: "/sw.js", headers: [{ key: "Cache-Control", value: "no-cache" }] },
+    ];
   },
 };
 

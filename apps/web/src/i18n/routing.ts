@@ -16,6 +16,8 @@ export const routing = defineRouting({
     "/privacy": { ro: "/confidentialitate", en: "/privacy" },
     "/refunds": { ro: "/anulare-si-rambursare", en: "/refunds" },
     "/cookies": { ro: "/cookies", en: "/cookies" },
+    // The installable site (§9.4): shown by the service worker with no connection.
+    "/offline": { ro: "/offline", en: "/offline" },
     // The full site (Stage 11, §9.3): the pages of the main menu, the bookings and the account.
     "/padel": { ro: "/padel", en: "/padel" },
     "/league": { ro: "/liga", en: "/league" },

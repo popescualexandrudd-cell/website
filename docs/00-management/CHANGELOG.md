@@ -4,6 +4,13 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, site-ul instalabil (PWA) — 30.09.2026 (livrat)
+#### Adăugat
+- Manifestul (`src/app/manifest.ts`): numele, pornirea, culorile, iconițele (192, 512, maskable), scurtăturile Rezervă / Contul meu / Liga doar pe site-ul complet; iconița pentru iPhone.
+- Iconițele din `public/icons/`, desenate din emblemă cu `scripts/render-icons.mjs`.
+- Service worker-ul (`public/sw.js`, `ServiceWorker`): paginile doar din rețea, niciodată păstrate; fișierele statice ale site-ului păstrate după prima vizită; fără internet, pagina `/offline` (RO/EN, `ReloadButton`).
+- Testul `e2e/full/pwa.spec.ts`; celelalte teste rulează cu service worker-ul blocat (`page.route`).
+
 ### Etapa 11, restul contului — 30.09.2026 (livrat)
 #### Adăugat
 - Meniul contului (`AccountNav`): Rezervări, Cardul, Plăți și abonamente, Liga mea, Sala de evenimente, Profil și date; fiecare pagină cere intrarea în cont (`MemberOnly`, `useMember`).

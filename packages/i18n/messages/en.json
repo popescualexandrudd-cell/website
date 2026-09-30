@@ -1948,6 +1948,19 @@
         }
       },
       "price": "{amount} lei"
+    },
+    "pwa": {
+      "description": "Book courts, follow the league and your account at Jungle Padel, Pantelimon.",
+      "shortcuts": {
+        "book": "Book",
+        "account": "My account",
+        "league": "League"
+      },
+      "offline": {
+        "title": "You are offline",
+        "text": "This page cannot open without a connection. Bookings, your account and the league always come straight from the club, so you see them up to date. Check your connection and try again.",
+        "retry": "Try again"
+      }
     }
   },
   "kiosk": {

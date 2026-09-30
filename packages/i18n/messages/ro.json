@@ -1948,6 +1948,19 @@
         }
       },
       "price": "{amount} lei"
+    },
+    "pwa": {
+      "description": "Rezervă terenuri, urmărește liga și contul tău la Jungle Padel, Pantelimon.",
+      "shortcuts": {
+        "book": "Rezervă",
+        "account": "Contul meu",
+        "league": "Liga"
+      },
+      "offline": {
+        "title": "Nu ești conectat la internet",
+        "text": "Pagina nu se poate deschide fără conexiune. Rezervările, contul și liga vin mereu direct de la club, ca să vezi datele la zi. Verifică internetul și încearcă din nou.",
+        "retry": "Încearcă din nou"
+      }
     }
   },
   "kiosk": {

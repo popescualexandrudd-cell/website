@@ -880,3 +880,26 @@ Contul are acum un meniu propriu: **Rezervări · Cardul · Plăți și abonamen
 2. Pe site: **Contul meu** → intrați în cont → meniul de sub titlu: **Cardul**, **Plăți și abonamente**, **Liga mea**, **Sala de evenimente**, **Profil și date**.
 3. **Sala de evenimente** → alegeți ziua, ora, durata, câte persoane → „Trimite cererea”. Cererea apare în panou, la Evenimente, pentru manager.
 4. **Profil și date** → „Descarcă datele (JSON)”: primiți fișierul cu datele contului.
+
+## Site-ul instalabil pe telefon (PWA, §9.4)
+
+### Ce s-a construit
+1. **Instalarea:** pe Android (Chrome) site-ul se poate adăuga pe ecranul telefonului ca aplicație („Instalează aplicația”); pe iPhone, din Safari: Partajează → „Adaugă pe ecranul principal”. Se deschide fără bara browserului, cu iconița clubului și culorile temei.
+2. **Iconițele** (`public/icons/`), desenate din emblema site-ului: 192 și 512 px, una „maskable” (pentru formele rotunde de pe Android) și una pentru iPhone. Se refac cu `node scripts/render-icons.mjs`.
+3. **Scurtăturile** (apăsare lungă pe iconiță): Rezervă, Contul meu, Liga. Apar doar când site-ul complet e publicat; înainte de lansare nu au spre ce duce.
+4. **Fără internet:** în locul erorii browserului apare pagina „Nu ești conectat la internet” (`/ro/offline`, `/en/offline`), în limba vizitatorului, cu butonul „Încearcă din nou”.
+
+**Ce am ales și de ce:**
+1. **Datele nu se păstrează pe telefon.** Contul, rezervările, prețurile și liga vin mereu direct de la club (API-ul nu trece niciodată prin service worker), ca să fie la zi și ca datele cuiva să nu rămână pe un telefon împrumutat; paginile contului nu conțin date personale, ele le cer serverului după încărcare. Service worker-ul păstrează doar fișierele site-ului (stiluri, scripturi, fonturi, iconițe), care fac vizitele următoare mai rapide, și pagina „fără internet”.
+2. **Service worker-ul se înregistrează după ce pagina s-a încărcat**, când browserul e liber: nu încetinește prima afișare (Lighthouse).
+3. **Notificările push** sunt în Etapa 12 (notificări), împreună cu matricea de notificări din §11.
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Cap-coadă, cu service worker-ul real | Manifestul (nume, pornire, iconițele 192/512/maskable, toate cu fișierele lor, scurtăturile), iconița pentru iPhone; service worker-ul preia pagina; în cache-ul lui rămân doar pagina „fără internet” și fișierele site-ului, nicio pagină de cont; fără internet, „Nu ești conectat la internet”, cu verificarea de accesibilitate; cu internetul înapoi, „Încearcă din nou” deschide pagina cerută; pagina în engleză („You are offline”). |
+| Toate testele site-ului | 28 pre-lansare, **144** site complet, **170** cu efectele pornite. |
+
+### Cum verificați (click cu click)
+1. Pe un telefon Android, în Chrome: deschideți site-ul → meniul browserului (⋮) → „Instalează aplicația”. Pe iPhone, în Safari: Partajează → „Adaugă pe ecranul principal”.
+2. Deschideți aplicația de pe ecranul telefonului, apoi puneți telefonul în modul avion și deschideți o pagină: apare „Nu ești conectat la internet”.

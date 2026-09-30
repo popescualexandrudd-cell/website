@@ -9,6 +9,7 @@ import { EffectsRuntime } from "@/components/EffectsRuntime";
 import { CookieConsent } from "@/components/CookieConsent";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { ServiceWorker } from "@/components/ServiceWorker";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SHELL_NAMESPACES, pickMessages } from "@/lib/client-messages";
 import { siteFlags } from "@/lib/flags";
@@ -50,7 +51,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     },
     twitter: { card: "summary_large_image", title: t("title"), description: t("description") },
     robots: INDEXABLE ? { index: true, follow: true } : { index: false, follow: false },
-    icons: { icon: "/icon.svg" },
+    icons: { icon: "/icon.svg", apple: "/icons/apple-touch-icon.png" },
+    appleWebApp: { capable: true, title: "Jungle Padel", statusBarStyle: "black-translucent" },
   };
 }
 
@@ -89,6 +91,7 @@ export default async function LocaleLayout({
         </NextIntlClientProvider>
         {/* The site's effects (ADR-0023), only when the owner turned them on (`web_effects`). */}
         {effects && <EffectsRuntime />}
+        <ServiceWorker />
       </body>
     </html>
   );
