@@ -32,6 +32,11 @@ export const routing = defineRouting({
     "/account/verify-email": { ro: "/cont/verificare-email", en: "/account/verify-email" },
     "/account/forgot-password": { ro: "/cont/am-uitat-parola", en: "/account/forgot-password" },
     "/account/new-password": { ro: "/cont/parola-noua", en: "/account/new-password" },
+    "/account/card": { ro: "/cont/card", en: "/account/card" },
+    "/account/payments": { ro: "/cont/plati", en: "/account/payments" },
+    "/account/league": { ro: "/cont/liga", en: "/account/league" },
+    "/account/events": { ro: "/cont/evenimente", en: "/account/events" },
+    "/account/profile": { ro: "/cont/profil", en: "/account/profile" },
   },
 });
 

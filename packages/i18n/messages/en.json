@@ -1552,7 +1552,7 @@
           "event": "Event",
           "other": "Booking"
         },
-        "more": "Your subscription, payments, member card, league and personal data come here in the site's next steps."
+        "more": "Your card, payments and subscriptions, league and personal data are in the menu above."
       },
       "register": {
         "title": "Create an account",
@@ -1598,6 +1598,313 @@
         "done": "Your password is changed. You can sign in with it.",
         "missing": "The link is incomplete. Open it again from the email or ask for a new one.",
         "toAccount": "Go to sign in"
+      },
+      "signInFirst": "Sign in to see this page.",
+      "signIn": "Sign in",
+      "nav": {
+        "label": "My account",
+        "overview": "Bookings",
+        "card": "Card",
+        "payments": "Payments and subscriptions",
+        "league": "My league",
+        "profile": "Profile and data",
+        "events": "Event room"
+      },
+      "pages": {
+        "card": {
+          "title": "Member card",
+          "lead": "The QR code you scan at the kiosks: for check-in, payments and the league."
+        },
+        "payments": {
+          "title": "Payments and subscriptions",
+          "lead": "Your credit, debts, subscriptions and vouchers. You pay at the club's Payments Kiosk, in cash."
+        },
+        "league": {
+          "title": "My league",
+          "lead": "Your rank, LP and badges. Only you can see this page."
+        },
+        "profile": {
+          "title": "Profile and data",
+          "lead": "Your details, your password and what we do with your personal data."
+        },
+        "events": {
+          "title": "Event room",
+          "lead": "Ask for the room for a party or a private event. The manager confirms the package, the price and the booking."
+        }
+      },
+      "card": {
+        "loading": "Loading the card…",
+        "title": "Jungle Padel card",
+        "qrAlt": "QR code of member card {number}",
+        "number": "Card number",
+        "issued": "Issued on",
+        "how": "Show the code at the club's kiosks or use the physical card, which you get at reception. The code holds no personal data.",
+        "walletTitle": "On your phone",
+        "apple": "Add to Apple Wallet",
+        "google": "Add to Google Wallet",
+        "walletLater": "The card in Apple Wallet and Google Wallet is turned on once the club opens its Apple and Google accounts. Until then, use the code on this page or the physical card.",
+        "walletNote": "The Wallet card updates itself when something on it changes (for example, your league rank).",
+        "lostTitle": "Lost your card?",
+        "lostText": "We block the old code at once and make you a new card with a different code. You get the new physical card at reception.",
+        "lost": "Block the card and make a new one",
+        "lostAsk": "The old code will stop working. Continue?",
+        "lostYes": "Yes, block it",
+        "lostNo": "No",
+        "replaced": "The old card is blocked. This is your new card."
+      },
+      "money": {
+        "loading": "Loading…",
+        "lei": "{amount} lei",
+        "partial": "Some of the data cannot be loaded right now. Reload the page in a few minutes.",
+        "unavailable": "Cannot be loaded right now.",
+        "balanceTitle": "Your balance",
+        "credit": "Credit on account",
+        "debt": "To pay",
+        "howToPay": "Credit comes from cancellations made in time and is used for your next payments. What you owe you pay at the club's Payments Kiosk, in cash; online payment is not active at the opening.",
+        "subscriptionsTitle": "Your subscriptions",
+        "noSubscriptions": "You have no subscription. Choose one in the package configurator and pay for it at the Payments Kiosk.",
+        "subscriptionsNote": "A subscription can be frozen for two weeks a year and is extended by as much. One not yet paid can be cancelled here.",
+        "subscription": "Subscription",
+        "sports": {
+          "padel": "Padel",
+          "tennis": "Tennis",
+          "pilates": "Reformer Pilates"
+        },
+        "periods": {
+          "monthly": "Monthly",
+          "quarterly": "Quarterly",
+          "annual": "Annual"
+        },
+        "period": "{from} – {to}",
+        "statuses": {
+          "active": "Active",
+          "pending_payment": "Awaiting payment",
+          "cancelled": "Cancelled",
+          "ended": "Ended"
+        },
+        "priceProvisional": "{amount} (indicative)",
+        "usage": "{sport}: {used} of {total} sessions this month",
+        "cancel": "Cancel",
+        "cancelAsk": "Cancel the subscription?",
+        "cancelYes": "Yes, cancel",
+        "cancelNo": "Never mind",
+        "cancelled": "The subscription is cancelled.",
+        "freeze": "Freeze",
+        "freezeStart": "From",
+        "freezeDays": "How many days",
+        "freezeSubmit": "Freeze the subscription",
+        "frozen": "The subscription is frozen from {from} to {to} and extended by as much.",
+        "vouchersTitle": "Your vouchers",
+        "noVouchers": "You have no vouchers.",
+        "voucherKinds": {
+          "hour": "{minutes} minutes of free padel",
+          "amount": "{amount} lei off",
+          "percent": "{percent}% off"
+        },
+        "voucherCode": "Code {code}",
+        "validUntil": "valid until {date}",
+        "voucherUsed": "used",
+        "voucherExpired": "expired or cancelled",
+        "vouchersNote": "You use a voucher when paying, at the Payments Kiosk or at reception.",
+        "referralTitle": "Bring a friend",
+        "referralCode": "Your code:",
+        "referralText": "Give your friend your code. If they take a subscription, you both get a free hour of padel, after their subscription's first payment.",
+        "friendCode": "Got a code from a friend?",
+        "friendHint": "You enter it once, before your first subscription.",
+        "friendSubmit": "Use the code",
+        "friendDone": "Your friend's code is saved. The vouchers appear here after your subscription's first payment.",
+        "historyTitle": "Payment history",
+        "noHistory": "No payments or amounts due yet.",
+        "entry": "Operation",
+        "creditChange": "Credit: {amount}",
+        "debtChange": "To pay: {amount}"
+      },
+      "profile": {
+        "title": "Your details",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "phone": "Phone",
+        "language": "Language of our emails",
+        "languageHint": "The language we write to you in.",
+        "emailHint": "The account's email: {email}. For a different email, write to us or ask at reception.",
+        "save": "Save",
+        "saved": "Your details are saved."
+      },
+      "password": {
+        "title": "Password",
+        "current": "Current password",
+        "new": "New password",
+        "hint": "At least 10 characters, not only digits.",
+        "submit": "Change the password",
+        "changed": "The password is changed."
+      },
+      "children": {
+        "title": "Your children",
+        "lead": "Under 14, a child's account is made by you, from your account.",
+        "born": "born on {date}",
+        "firstName": "Child's first name",
+        "lastName": "Child's last name",
+        "birth": "Date of birth",
+        "submit": "Add the child",
+        "close": "Never mind",
+        "add": "Add a child",
+        "added": "{name}'s account is created."
+      },
+      "privacy": {
+        "title": "Personal data",
+        "exportTitle": "Download your data",
+        "exportText": "A file with everything we hold about you: the account, bookings, payments, league and consents.",
+        "export": "Download the data (JSON)",
+        "deleteTitle": "Delete the account",
+        "deleteText": "Your personal data is deleted. In other players' league history you stay as \"Retired player\"; accounting records, receipts and the proof of consents stay, without personal details, as long as the law requires. Not possible while you owe something, have future bookings or children's accounts.",
+        "delete": "I want to delete the account",
+        "password": "Your password, to confirm",
+        "forfeit": "I give up any credit left on the account.",
+        "confirm": "Delete the account for good",
+        "keep": "Never mind",
+        "deletedTitle": "The account is deleted",
+        "deleted": "Your account and personal data have been deleted. Thank you for being with us.",
+        "home": "Home page"
+      },
+      "league": {
+        "loading": "Loading the league…",
+        "unavailable": "The league data cannot be loaded right now. Come back in a few minutes.",
+        "inLeague": "You are in the Jungle League",
+        "notYet": "You are not in the league yet",
+        "joinLead": "To join the league you need three things:",
+        "noLadders": "You appear in the standings after your first match of the current season.",
+        "steps": {
+          "adult": {
+            "title": "At least 18 years old",
+            "todo": "the league is for adults only"
+          },
+          "questionnaire": {
+            "title": "A validated level",
+            "todo": "fill in the level questionnaire; a coach validates it"
+          },
+          "consent": {
+            "title": "The league's GDPR consent",
+            "todo": "signed at the League Kiosk, at the club"
+          }
+        },
+        "done": "done",
+        "pending": "waiting for a coach's validation",
+        "ladders": {
+          "doubles": "Doubles",
+          "singles": "Singles",
+          "pairs": "Pairs"
+        },
+        "tiers": {
+          "bronze": "Bronze",
+          "silver": "Silver",
+          "gold": "Gold",
+          "platinum": "Platinum",
+          "diamond": "Diamond",
+          "master": "Master"
+        },
+        "lp": "{lp} LP",
+        "level": "level {level}",
+        "placement": "{left, plural, one {one placement match left} other {# placement matches left}}",
+        "position": "place {position}",
+        "noPosition": "no place yet",
+        "played": "{count, plural, one {one match} other {# matches}}",
+        "belowMinimum": "under 12 matches",
+        "publicPage": "Your public page",
+        "standings": "The standings",
+        "kioskOnly": "On the website the league is only followed: scores are entered and confirmed only at the League Kiosk, at the club.",
+        "recentTitle": "Latest LP changes",
+        "noRecent": "LP changes appear here after your matches of the current season.",
+        "kinds": {
+          "match": "Match",
+          "bonus": "Tournament bonus",
+          "decay": "Inactivity",
+          "register": "Joined the league",
+          "cancel": "Match cancelled"
+        },
+        "badgesTitle": "Your badges",
+        "noBadges": "No badges yet.",
+        "badges": {
+          "giant_slayer": "Giant killer",
+          "promotion": "Promotion",
+          "first_diamond": "First Diamond",
+          "win_streak": "10 wins in a row",
+          "early_bird": "Early Bird",
+          "weekly_streak": "Weeks in a row",
+          "upset_of_week": "Surprise of the week",
+          "king": "King of the Jungle"
+        },
+        "badgesPrivate": "Badges are shown only in your account.",
+        "consentTitle": "The league's GDPR consent",
+        "consentSigned": "Signed on {date}, at the League Kiosk.",
+        "consentOutdated": "The consent's text has changed since: on your next visit, the League Kiosk asks you to sign the new version.",
+        "consentMissing": "You have not signed the consent. You sign it at the League Kiosk, at the club; without it you cannot join the league.",
+        "withdraw": "Withdraw the consent",
+        "withdrawAsk": "Without the consent you leave the league and play no more official matches. Continue?",
+        "withdrawYes": "Yes, withdraw",
+        "withdrawNo": "No",
+        "withdrawn": "The consent is withdrawn.",
+        "retired": "Retired player",
+        "unavailableShort": "Cannot be loaded right now.",
+        "tournamentsTitle": "Tournaments",
+        "noTournaments": "No tournament is open for entries right now.",
+        "tournamentsNote": "An entry is like a booking: it changes nothing in the league. The fee is paid at the club, at the Payments Kiosk; if you withdraw after paying, the amount comes back to your account as credit.",
+        "fee": "fee {amount} lei",
+        "feeProvisional": "fee {amount} lei (indicative)",
+        "free": "no fee",
+        "entries": "{entries} of {max} entries",
+        "youAreIn": "You are entered.",
+        "closesAt": "Entries until {date}",
+        "registrationClosed": "Entries are closed.",
+        "enter": "Enter",
+        "enterConfirm": "Confirm the entry",
+        "partner": "Your partner",
+        "partnerHint": "Paste the address of their page in the league standings (on the website). Your partner must be in the league.",
+        "partnerMissing": "Paste the address of your partner's page from the standings.",
+        "entered": "You are entered in {name}.",
+        "withdrawEntry": "Withdraw",
+        "withdrawnEntry": "You withdrew from {name}.",
+        "challengesTitle": "Your challenges",
+        "noChallenges": "You have no challenges.",
+        "challengesNote": "Challenges are issued and accepted only at the League Kiosk, at the club; here you only see them.",
+        "youChallenged": "You challenged: {names}",
+        "challengedYou": "Challenged by: {names}",
+        "challengeStatuses": {
+          "pending": "waiting for an answer",
+          "accepted": "accepted",
+          "refused": "refused",
+          "expired": "expired",
+          "played": "played",
+          "cancelled": "cancelled"
+        },
+        "respondBy": "answer by {date}",
+        "playBy": "to play by {date}"
+      },
+      "events": {
+        "loading": "Loading…",
+        "requestTitle": "Ask for the room",
+        "requestLead": "Choose the day, the time, how long and how many people come. The request does not book the room yet: the manager gets in touch and confirms the package, the price and the booking.",
+        "verifyFirst": "First confirm your email address (the link in the email you received), then you can send the request.",
+        "day": "Day",
+        "time": "Start time",
+        "duration": "Duration",
+        "hours": "{hours, plural, one {one hour} other {# hours}}",
+        "guests": "How many people",
+        "message": "About the event (optional)",
+        "messageHint": "For example: a birthday, a company event, what you would like from the café.",
+        "submit": "Send the request",
+        "sending": "Sending…",
+        "sent": "The request is sent. The manager will get in touch to confirm.",
+        "noRoom": "The event room cannot be requested online right now. Call the club.",
+        "note": "The club is open 08:00–23:00. You can also ask for the room by phone.",
+        "mineTitle": "Your requests",
+        "none": "You have not sent any request.",
+        "guestsCount": "{count, plural, one {one person} other {# people}}",
+        "statuses": {
+          "pending": "Waiting for the manager's answer",
+          "approved": "Confirmed",
+          "declined": "Declined"
+        },
+        "answer": "The club's answer: {note}"
       }
     },
     "bookings": {

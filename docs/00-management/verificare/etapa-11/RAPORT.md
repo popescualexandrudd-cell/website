@@ -823,3 +823,60 @@ Problema exista și în formularul listei de așteptare și în paginile din ema
 1. Deschideți capturile 51–53.
 2. Pe site: **Contul meu** → „Nu ai cont? Creează unul” → completați → deschideți emailul primit → linkul de confirmare.
 3. **Rezervă** → alegeți ziua, durata și o oră → „Rezervă”. Rezervarea apare în **Contul meu**, unde o puteți anula.
+
+## Restul contului: cardul, plățile, liga mea, sala de evenimente, datele personale (§9.3)
+
+### Ce s-a construit
+Contul are acum un meniu propriu: **Rezervări · Cardul · Plăți și abonamente · Liga mea · Sala de evenimente · Profil și date**. Fiecare pagină se arată doar celui intrat în cont; altfel cere intrarea în cont. Paginile nu apar în Google.
+
+1. **Cardul (`/cont/card`, R-020 … R-022):**
+   - codul QR al cardului (un cod aleatoriu, fără date personale), numărul și data emiterii;
+   - butoanele „Adaugă în Apple Wallet” și „Adaugă în Google Wallet” apar singure după ce clubul își deschide conturile la Apple și Google (ghidul `docs/08-deploy-si-mentenanta/02-ghid-apple-google-wallet.md`); până atunci, pagina spune asta;
+   - **„Ai pierdut cardul?”**: după o a doua confirmare, codul vechi se blochează imediat și apare un card nou; cardul fizic nou se ia de la recepție.
+2. **Plăți și abonamente (`/cont/plati`, R-065):**
+   - creditul din cont și ce ai de plată;
+   - abonamentele, cu sporturile, perioada, starea, prețul („orientativ” cât e DE_STABILIT) și sesiunile folosite luna aceasta; **înghețarea** (cel mult două săptămâni pe an, o verifică serverul) și **anularea** unui abonament încă neplătit;
+   - voucherele (cele valabile întâi, cu data până la care sunt bune);
+   - **„Adu un prieten” (R-120):** codul tău și locul unde scrii codul primit de la un prieten;
+   - istoricul: fiecare plată sau sumă datorată, cu data și efectul asupra creditului sau a sumei de plată.
+
+   Nimic nu se plătește de pe site: plata se face la Chioșcul de Plăți, cu numerar (Q9).
+3. **Liga mea (`/cont/liga`, §6.15):**
+   - rangul, nivelul, LP-ul, locul și meciurile jucate în fiecare clasament; linkul spre pagina ta publică;
+   - pentru cine nu e încă în ligă: cei trei pași (18 ani, nivelul validat de antrenor, acordul semnat la Chioșcul Ligii), bifați pe rând;
+   - **turneele** cu înscrieri deschise: „Înscrie-te” (la turneele în perechi, partenerul se alege lipind adresa paginii lui din clasament) și „Retrage-te” înainte de tragere;
+   - **provocările** tale: doar se văd; se lansează și se acceptă numai la Chioșcul Ligii;
+   - ultimele schimbări de LP, insignele (se văd doar aici) și acordul GDPR al ligii, cu data semnării și retragerea lui.
+
+   Pe site liga doar se urmărește: niciun scor nu se introduce de aici (invariantele 1 și 2).
+4. **Sala de evenimente (`/cont/evenimente`, R-110, Q34):** cererea (ziua, ora de început, durata, câte persoane, un mesaj) și cererile tale, cu răspunsul managerului. Cererea nu rezervă nimic: managerul confirmă pachetul, prețul și rezervarea. Butonul „Cere sala de evenimente” din secțiunea Evenimente duce acum aici (înainte ducea la pagina Evenimente, care arată aceeași secțiune).
+5. **Profil și date (`/cont/profil`):**
+   - numele, telefonul și limba emailurilor; parola;
+   - **copiii** (conturi sub 14 ani, create de părinte, Q7, Q43): apar doar când e pornit comutatorul `child_accounts` din panou (oprit implicit);
+   - **descarcă datele tale** (GDPR art. 15 și 20): un fișier cu tot ce păstrăm;
+   - **ștergerea contului** (§12.2), confirmată cu parola: datele personale se șterg, în istoricul ligii rămâi „Jucător retras”. Serverul refuză cât ai ceva de plată, rezervări viitoare sau conturi de copii și cere acordul pentru pierderea creditului rămas.
+
+**Ce am ales și de ce:**
+1. **Codul QR se arată ca imagine**, nu ca cod inserat în pagină: chiar dacă cineva ar reuși să strice răspunsul serverului, în pagină nu poate rula nimic.
+2. **Linkul Google Wallet se urmează doar dacă duce la Google** (`pay.google.com`).
+3. **Partenerul de turneu se alege după pagina lui publică**: site-ul nu are și nu primește o listă cu datele altor jucători; serverul verifică apoi că partenerul e în ligă.
+
+### Capturi de ecran
+54. [Cardul, pe calculator](ecrane/desktop-53-cont-card.png) · [pe telefon](ecrane/mobile-53-cont-card.png)
+55. [Plăți și abonamente, pe calculator](ecrane/desktop-54-cont-plati.png) · [pe telefon](ecrane/mobile-54-cont-plati.png)
+56. [Liga mea, pe calculator](ecrane/desktop-55-cont-liga.png) · [pe telefon](ecrane/mobile-55-cont-liga.png)
+57. [Sala de evenimente, pe calculator](ecrane/desktop-57-cont-evenimente.png) · [pe telefon](ecrane/mobile-57-cont-evenimente.png)
+58. [Profil și date, pe calculator](ecrane/desktop-56-cont-profil.png) · [pe telefon](ecrane/mobile-56-cont-profil.png)
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Teste unitare | 8 noi (`src/lib/member.test.ts`): semnele registrului din partea clientului (credit și de plată), ordinea voucherelor și a abonamentelor, codul QR doar ca imagine, ziua clubului (miezul nopții UTC, trecerea la ora de vară), ordinea cererilor pentru sală, partenerul de turneu din adresa paginii lui; comutatorul `child_accounts`. |
+| Cap-coadă, cu serverul real | Pe calculator și pe telefon, în continuarea contului creat în test: cardul (QR, Wallet încă neactiv, card pierdut → card nou), plățile (sold, fără abonamente și vouchere, codul tău, un cod de prieten greșit refuzat de server), liga mea (pașii de intrare, turneele, provocările, niciun buton de scor), cererea pentru sală (prea multe persoane refuzat de server, apoi cererea trimisă și văzută „Așteaptă răspunsul managerului”), profilul (telefon schimbat, parola actuală greșită refuzată, parola schimbată), exportul datelor (fișierul conține emailul contului), ștergerea contului (parola greșită refuzată, apoi contul șters și intrarea refuzată). Paginile interioare fără cont cer intrarea; engleza. Verificarea de accesibilitate (axe) pe fiecare pagină. |
+| Toate testele site-ului | 28 pre-lansare, **140** site complet, **166** cu efectele pornite. |
+
+### Cum verificați (click cu click)
+1. Deschideți capturile 54–58.
+2. Pe site: **Contul meu** → intrați în cont → meniul de sub titlu: **Cardul**, **Plăți și abonamente**, **Liga mea**, **Sala de evenimente**, **Profil și date**.
+3. **Sala de evenimente** → alegeți ziua, ora, durata, câte persoane → „Trimite cererea”. Cererea apare în panou, la Evenimente, pentru manager.
+4. **Profil și date** → „Descarcă datele (JSON)”: primiți fișierul cu datele contului.

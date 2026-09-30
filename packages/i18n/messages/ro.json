@@ -1552,7 +1552,7 @@
           "event": "Eveniment",
           "other": "Rezervare"
         },
-        "more": "Abonamentul, plățile, cardul de membru, liga și datele personale apar aici în pașii următori ai site-ului."
+        "more": "Cardul, plățile și abonamentele, liga și datele personale sunt în meniul de mai sus."
       },
       "register": {
         "title": "Creează cont",
@@ -1598,6 +1598,313 @@
         "done": "Parola e schimbată. Poți intra în cont cu ea.",
         "missing": "Linkul nu e complet. Deschide-l din nou din email sau cere unul nou.",
         "toAccount": "Mergi la intrarea în cont"
+      },
+      "signInFirst": "Intră în cont ca să vezi această pagină.",
+      "signIn": "Intră în cont",
+      "nav": {
+        "label": "Contul meu",
+        "overview": "Rezervări",
+        "card": "Cardul",
+        "payments": "Plăți și abonamente",
+        "league": "Liga mea",
+        "profile": "Profil și date",
+        "events": "Sala de evenimente"
+      },
+      "pages": {
+        "card": {
+          "title": "Cardul de membru",
+          "lead": "Codul QR pe care îl scanezi la chioșcuri: pentru check-in, plăți și ligă."
+        },
+        "payments": {
+          "title": "Plăți și abonamente",
+          "lead": "Creditul, datoriile, abonamentele și voucherele tale. Plătești la Chioșcul de Plăți din club, cu numerar."
+        },
+        "league": {
+          "title": "Liga mea",
+          "lead": "Rangul, LP-ul și insignele tale. Doar tu vezi această pagină."
+        },
+        "profile": {
+          "title": "Profil și date",
+          "lead": "Datele tale, parola și ce facem cu datele personale."
+        },
+        "events": {
+          "title": "Sala de evenimente",
+          "lead": "Cere sala pentru o petrecere sau un eveniment privat. Managerul îți confirmă pachetul, prețul și rezervarea."
+        }
+      },
+      "card": {
+        "loading": "Se încarcă cardul…",
+        "title": "Cardul Jungle Padel",
+        "qrAlt": "Codul QR al cardului de membru {number}",
+        "number": "Numărul cardului",
+        "issued": "Emis pe",
+        "how": "Arată codul la chioșcurile clubului sau folosește cardul fizic, pe care îl primești la recepție. Codul nu conține date personale.",
+        "walletTitle": "În telefon",
+        "apple": "Adaugă în Apple Wallet",
+        "google": "Adaugă în Google Wallet",
+        "walletLater": "Cardul în Apple Wallet și Google Wallet se activează după ce clubul își deschide conturile la Apple și Google. Până atunci, folosește codul de pe această pagină sau cardul fizic.",
+        "walletNote": "Cardul din Wallet se actualizează singur când se schimbă ceva pe el (de exemplu, rangul din ligă).",
+        "lostTitle": "Ai pierdut cardul?",
+        "lostText": "Blocăm imediat codul vechi și îți facem un card nou, cu alt cod. Cardul fizic nou îl primești la recepție.",
+        "lost": "Blochează cardul și fă unul nou",
+        "lostAsk": "Codul vechi nu va mai funcționa. Continui?",
+        "lostYes": "Da, blochează-l",
+        "lostNo": "Nu",
+        "replaced": "Cardul vechi e blocat. Acesta e cardul tău nou."
+      },
+      "money": {
+        "loading": "Se încarcă…",
+        "lei": "{amount} lei",
+        "partial": "O parte din date nu se poate încărca acum. Reîncarcă pagina în câteva minute.",
+        "unavailable": "Nu se poate încărca acum.",
+        "balanceTitle": "Soldul tău",
+        "credit": "Credit în cont",
+        "debt": "De plată",
+        "howToPay": "Creditul vine din anulări făcute la timp și se folosește la plățile următoare. Ce ai de plată achiți la Chioșcul de Plăți din club, cu numerar; plata online nu e activă la deschidere.",
+        "subscriptionsTitle": "Abonamentele tale",
+        "noSubscriptions": "Nu ai niciun abonament. Îl alegi în configuratorul de pachete și îl plătești la Chioșcul de Plăți.",
+        "subscriptionsNote": "Abonamentul se poate îngheța două săptămâni pe an și se prelungește cu atât. Unul neplătit încă îl poți anula de aici.",
+        "subscription": "Abonament",
+        "sports": {
+          "padel": "Padel",
+          "tennis": "Tenis",
+          "pilates": "Pilates Reformer"
+        },
+        "periods": {
+          "monthly": "Lunar",
+          "quarterly": "Trimestrial",
+          "annual": "Anual"
+        },
+        "period": "{from} – {to}",
+        "statuses": {
+          "active": "Activ",
+          "pending_payment": "Așteaptă plata",
+          "cancelled": "Anulat",
+          "ended": "Încheiat"
+        },
+        "priceProvisional": "{amount} (orientativ)",
+        "usage": "{sport}: {used} din {total} sesiuni luna aceasta",
+        "cancel": "Anulează",
+        "cancelAsk": "Sigur anulezi abonamentul?",
+        "cancelYes": "Da, anulez",
+        "cancelNo": "Renunț",
+        "cancelled": "Abonamentul e anulat.",
+        "freeze": "Îngheață",
+        "freezeStart": "De la data",
+        "freezeDays": "Câte zile",
+        "freezeSubmit": "Îngheață abonamentul",
+        "frozen": "Abonamentul e înghețat între {from} și {to} și se prelungește cu atât.",
+        "vouchersTitle": "Voucherele tale",
+        "noVouchers": "Nu ai vouchere.",
+        "voucherKinds": {
+          "hour": "{minutes} de minute de padel gratuit",
+          "amount": "{amount} lei reducere",
+          "percent": "{percent}% reducere"
+        },
+        "voucherCode": "Codul {code}",
+        "validUntil": "valabil până pe {date}",
+        "voucherUsed": "folosit",
+        "voucherExpired": "expirat sau anulat",
+        "vouchersNote": "Voucherul îl folosești la plată, la Chioșcul de Plăți sau la recepție.",
+        "referralTitle": "Adu un prieten",
+        "referralCode": "Codul tău:",
+        "referralText": "Dă-i prietenului codul tău. Dacă își face abonament, primiți amândoi câte o oră gratuită de padel, după prima plată a abonamentului lui.",
+        "friendCode": "Ai primit un cod de la un prieten?",
+        "friendHint": "Îl scrii o singură dată, înainte de primul tău abonament.",
+        "friendSubmit": "Folosește codul",
+        "friendDone": "Codul prietenului e înregistrat. Voucherele apar aici după prima plată a abonamentului tău.",
+        "historyTitle": "Istoricul plăților",
+        "noHistory": "Încă nu ai nicio plată sau sumă de plată.",
+        "entry": "Operațiune",
+        "creditChange": "Credit: {amount}",
+        "debtChange": "De plată: {amount}"
+      },
+      "profile": {
+        "title": "Datele tale",
+        "firstName": "Prenume",
+        "lastName": "Nume",
+        "phone": "Telefon",
+        "language": "Limba emailurilor",
+        "languageHint": "În ce limbă îți scriem.",
+        "emailHint": "Emailul contului: {email}. Pentru alt email, scrie-ne sau întreabă la recepție.",
+        "save": "Salvează",
+        "saved": "Datele sunt salvate."
+      },
+      "password": {
+        "title": "Parola",
+        "current": "Parola de acum",
+        "new": "Parola nouă",
+        "hint": "Cel puțin 10 caractere, nu doar cifre.",
+        "submit": "Schimbă parola",
+        "changed": "Parola e schimbată."
+      },
+      "children": {
+        "title": "Copiii tăi",
+        "lead": "Sub 14 ani, contul copilului îl faci tu, din contul tău.",
+        "born": "născut(ă) pe {date}",
+        "firstName": "Prenumele copilului",
+        "lastName": "Numele copilului",
+        "birth": "Data nașterii",
+        "submit": "Adaugă copilul",
+        "close": "Renunț",
+        "add": "Adaugă un copil",
+        "added": "Contul lui {name} e creat."
+      },
+      "privacy": {
+        "title": "Datele personale",
+        "exportTitle": "Descarcă datele tale",
+        "exportText": "Un fișier cu tot ce păstrăm despre tine: contul, rezervările, plățile, liga și acordurile.",
+        "export": "Descarcă datele (JSON)",
+        "deleteTitle": "Șterge contul",
+        "deleteText": "Datele tale personale se șterg. În istoricul ligii altor jucători rămâi ca „Jucător retras”; înregistrările contabile, bonurile și dovada acordurilor rămân, fără date personale, cât cere legea. Nu se poate cât ai ceva de plată, rezervări viitoare sau conturi de copii.",
+        "delete": "Vreau să șterg contul",
+        "password": "Parola, pentru confirmare",
+        "forfeit": "Renunț la creditul rămas în cont (dacă am).",
+        "confirm": "Șterge contul definitiv",
+        "keep": "Renunț",
+        "deletedTitle": "Contul e șters",
+        "deleted": "Contul tău și datele personale au fost șterse. Îți mulțumim că ai fost cu noi.",
+        "home": "Pagina principală"
+      },
+      "league": {
+        "loading": "Se încarcă liga…",
+        "unavailable": "Datele ligii nu se pot încărca acum. Revino în câteva minute.",
+        "inLeague": "Ești în Liga Jungle",
+        "notYet": "Nu ești încă în ligă",
+        "joinLead": "Ca să intri în ligă îți trebuie trei lucruri:",
+        "noLadders": "Apari în clasament după primul meci din sezonul în curs.",
+        "steps": {
+          "adult": {
+            "title": "Cel puțin 18 ani",
+            "todo": "liga e doar pentru adulți"
+          },
+          "questionnaire": {
+            "title": "Nivelul validat",
+            "todo": "completează chestionarul de nivel; un antrenor îl validează"
+          },
+          "consent": {
+            "title": "Acordul GDPR al ligii",
+            "todo": "se semnează la Chioșcul Ligii, în club"
+          }
+        },
+        "done": "gata",
+        "pending": "așteaptă validarea antrenorului",
+        "ladders": {
+          "doubles": "Dublu",
+          "singles": "Simplu",
+          "pairs": "Perechi"
+        },
+        "tiers": {
+          "bronze": "Bronz",
+          "silver": "Argint",
+          "gold": "Aur",
+          "platinum": "Platină",
+          "diamond": "Diamant",
+          "master": "Maestru"
+        },
+        "lp": "{lp} LP",
+        "level": "nivel {level}",
+        "placement": "{left, plural, one {încă un meci de plasare} few {încă # meciuri de plasare} other {încă # de meciuri de plasare}}",
+        "position": "locul {position}",
+        "noPosition": "fără loc încă",
+        "played": "{count, plural, one {un meci} few {# meciuri} other {# de meciuri}}",
+        "belowMinimum": "sub 12 meciuri",
+        "publicPage": "Pagina ta publică",
+        "standings": "Clasamentele",
+        "kioskOnly": "Pe site liga doar se urmărește: scorurile se introduc și se confirmă numai la Chioșcul Ligii, în club.",
+        "recentTitle": "Ultimele schimbări de LP",
+        "noRecent": "Schimbările de LP apar aici după meciurile tale din sezonul în curs.",
+        "kinds": {
+          "match": "Meci",
+          "bonus": "Bonus de turneu",
+          "decay": "Inactivitate",
+          "register": "Intrare în ligă",
+          "cancel": "Meci anulat"
+        },
+        "badgesTitle": "Insignele tale",
+        "noBadges": "Încă nu ai insigne.",
+        "badges": {
+          "giant_slayer": "Ucigaș de giganți",
+          "promotion": "Promovare",
+          "first_diamond": "Primul Diamant",
+          "win_streak": "10 victorii la rând",
+          "early_bird": "Early Bird",
+          "weekly_streak": "Săptămâni la rând",
+          "upset_of_week": "Surpriza săptămânii",
+          "king": "Regele Junglei"
+        },
+        "badgesPrivate": "Insignele se văd doar în contul tău.",
+        "consentTitle": "Acordul GDPR al ligii",
+        "consentSigned": "Semnat pe {date}, la Chioșcul Ligii.",
+        "consentOutdated": "Între timp textul acordului s-a schimbat: la următoarea vizită, Chioșcul Ligii îți cere să semnezi versiunea nouă.",
+        "consentMissing": "Nu ai semnat acordul. Îl semnezi la Chioșcul Ligii, în club; fără el nu se intră în ligă.",
+        "withdraw": "Retrage acordul",
+        "withdrawAsk": "Fără acord ieși din ligă și nu mai joci meciuri oficiale. Continui?",
+        "withdrawYes": "Da, retrag acordul",
+        "withdrawNo": "Nu",
+        "withdrawn": "Acordul e retras.",
+        "retired": "Jucător retras",
+        "unavailableShort": "Nu se poate încărca acum.",
+        "tournamentsTitle": "Turneele",
+        "noTournaments": "Nu e niciun turneu cu înscrieri deschise acum.",
+        "tournamentsNote": "Înscrierea e ca o rezervare: nu schimbă nimic în ligă. Taxa se plătește la club, la Chioșcul de Plăți; dacă te retragi după ce ai plătit, suma revine în cont ca credit.",
+        "fee": "taxa {amount} lei",
+        "feeProvisional": "taxa {amount} lei (orientativ)",
+        "free": "fără taxă",
+        "entries": "{entries} din {max} înscrieri",
+        "youAreIn": "Ești înscris.",
+        "closesAt": "Înscrieri până pe {date}",
+        "registrationClosed": "Înscrierile s-au încheiat.",
+        "enter": "Înscrie-te",
+        "enterConfirm": "Confirmă înscrierea",
+        "partner": "Partenerul tău",
+        "partnerHint": "Lipește adresa paginii lui din clasamentele ligii (de pe site). Partenerul trebuie să fie în ligă.",
+        "partnerMissing": "Lipește adresa paginii partenerului din clasament.",
+        "entered": "Ești înscris la {name}.",
+        "withdrawEntry": "Retrage-te",
+        "withdrawnEntry": "Te-ai retras de la {name}.",
+        "challengesTitle": "Provocările tale",
+        "noChallenges": "Nu ai provocări.",
+        "challengesNote": "Provocările se lansează și se acceptă doar la Chioșcul Ligii, în club; aici doar le vezi.",
+        "youChallenged": "Ai provocat: {names}",
+        "challengedYou": "Te-a provocat: {names}",
+        "challengeStatuses": {
+          "pending": "așteaptă răspunsul",
+          "accepted": "acceptată",
+          "refused": "refuzată",
+          "expired": "expirată",
+          "played": "jucată",
+          "cancelled": "anulată"
+        },
+        "respondBy": "răspuns până pe {date}",
+        "playBy": "de jucat până pe {date}"
+      },
+      "events": {
+        "loading": "Se încarcă…",
+        "requestTitle": "Cere sala",
+        "requestLead": "Alege ziua, ora, durata și câte persoane vin. Cererea nu rezervă încă sala: managerul te contactează și confirmă pachetul, prețul și rezervarea.",
+        "verifyFirst": "Confirmă mai întâi adresa de email (linkul din emailul primit), apoi poți trimite cererea.",
+        "day": "Ziua",
+        "time": "Ora de început",
+        "duration": "Durata",
+        "hours": "{hours, plural, one {o oră} few {# ore} other {# ore}}",
+        "guests": "Câte persoane",
+        "message": "Despre eveniment (opțional)",
+        "messageHint": "De exemplu: aniversare, eveniment de firmă, ce ai vrea de la cafenea.",
+        "submit": "Trimite cererea",
+        "sending": "Se trimite…",
+        "sent": "Cererea e trimisă. Managerul te contactează pentru confirmare.",
+        "noRoom": "Sala de evenimente nu se poate cere online acum. Sună la club.",
+        "note": "Programul clubului: 08:00–23:00. Poți cere sala și telefonic.",
+        "mineTitle": "Cererile tale",
+        "none": "Nu ai trimis nicio cerere.",
+        "guestsCount": "{count, plural, one {o persoană} few {# persoane} other {# de persoane}}",
+        "statuses": {
+          "pending": "Așteaptă răspunsul managerului",
+          "approved": "Confirmată",
+          "declined": "Respinsă"
+        },
+        "answer": "Răspunsul clubului: {note}"
       }
     },
     "bookings": {

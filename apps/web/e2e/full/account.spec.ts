@@ -37,8 +37,9 @@ const birthYearsAgo = (years: number) => {
 
 test.beforeEach(async ({ context, baseURL }) => chooseNecessaryCookies(context, baseURL));
 
-test("R-001, §12.3: create an account, confirm the email, sign out and in, a new password", async ({ page }, info) => {
+test("R-001, §12.3: create an account, confirm the email, sign out and in, a new password; then the rest of the account", async ({ page }, info) => {
   test.skip(!MAIL_DIR, "needs E2E_MAIL_DIR from scripts/test-e2e");
+  test.setTimeout(180_000);
   const email = `cont-${info.project.name}-${process.env.E2E_SITE_MODE ?? "x"}-${Date.now()}@example.test`;
   await page.goto("/ro/cont/inregistrare");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Creează cont");
@@ -121,7 +122,117 @@ test("R-001, §12.3: create an account, confirm the email, sign out and in, a ne
   await page.getByLabel("Parola").fill(`${PASSWORD}-2`);
   await page.getByRole("button", { name: "Intră" }).click();
   await expect(page.getByRole("heading", { level: 2, name: "Bună, Ana!" })).toBeVisible();
+
+  await memberPages(page, email, `${PASSWORD}-2`, info.project.name);
 });
+
+/**
+ * The rest of the account, for the visitor made above (one registration per device): the card and a
+ * lost card (R-020, R-022), money and the referral code (R-065, R-120), the league seen from the
+ * inside (§6.15), the profile and the password, the export of the data and deleting the account
+ * (§12.2). Every answer is the real API's.
+ */
+async function memberPages(page: Page, email: string, password: string, project: string) {
+  const menu = page.getByRole("navigation", { name: "Contul meu" });
+
+  await menu.getByRole("link", { name: "Cardul" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Cardul de membru");
+  await expect(menu.getByRole("link", { name: "Cardul" })).toHaveAttribute("aria-current", "page");
+  const qr = page.getByRole("img", { name: /^Codul QR al cardului de membru / });
+  await expect(qr).toBeVisible();
+  const number = (await page.locator(".member-card__number").textContent()) ?? "";
+  expect(number).not.toBe("");
+  await expect(page.getByText("se activează după ce clubul își deschide conturile")).toBeVisible();
+  await expectAccessible(page);
+  await shot(page, "53-cont-card", project);
+  await page.getByRole("button", { name: "Blochează cardul și fă unul nou" }).click();
+  await page.getByRole("button", { name: "Da, blochează-l" }).click();
+  await expect(page.getByText("Cardul vechi e blocat.")).toBeVisible();
+  await expect(page.locator(".member-card__number")).not.toHaveText(number);
+
+  await menu.getByRole("link", { name: "Plăți și abonamente" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Plăți și abonamente");
+  const balance = page.getByRole("region", { name: "Soldul tău" });
+  await expect(balance.getByText("Credit în cont")).toBeVisible();
+  await expect(page.getByText("Nu ai niciun abonament.")).toBeVisible();
+  await expect(page.getByText("Nu ai vouchere.")).toBeVisible();
+  await expect(page.locator(".money__code strong")).toHaveText(/^[A-Z0-9]{4,12}$/);
+  await page.getByLabel("Ai primit un cod de la un prieten?").fill("ZZZZ9999");
+  await page.getByRole("button", { name: "Folosește codul" }).click();
+  await expect(page.getByText("Codul de recomandare nu există.")).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "Istoricul plăților" })).toBeVisible();
+  await expectAccessible(page);
+  await shot(page, "54-cont-plati", project);
+
+  await menu.getByRole("link", { name: "Liga mea" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Liga mea");
+  await expect(page.getByRole("heading", { level: 2, name: "Nu ești încă în ligă" })).toBeVisible();
+  await expect(page.getByText("Acordul GDPR al ligii · se semnează la Chioșcul Ligii, în club")).toBeVisible();
+  await expect(page.getByText("Nu ai semnat acordul.")).toBeVisible();
+  await expect(page.getByRole("button", { name: /introdu|scor/i })).toHaveCount(0); // invariant 2: only viewing
+  await expect(page.getByRole("heading", { level: 2, name: "Turneele" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "Provocările tale" })).toBeVisible();
+  await expect(page.getByText("Nu ai provocări.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Înscrie-te" })).toHaveCount(0); // not in the league yet
+  await expectAccessible(page);
+  await shot(page, "55-cont-liga", project);
+
+  // R-110, Q34: a request for the event room; the manager answers, nothing is booked yet.
+  await menu.getByRole("link", { name: "Sala de evenimente" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Sala de evenimente");
+  await expect(page.getByText("Nu ai trimis nicio cerere.")).toBeVisible();
+  await page.getByLabel("Câte persoane").fill("500");
+  await page.getByRole("button", { name: "Trimite cererea" }).click();
+  await expect(page.locator("main").getByRole("alert")).toContainText("Sala primește cel mult");
+  await page.getByLabel("Câte persoane").fill("12");
+  await page.getByLabel("Despre eveniment (opțional)").fill("Aniversare");
+  await page.getByRole("button", { name: "Trimite cererea" }).click();
+  await expect(page.getByText("Cererea e trimisă.")).toBeVisible();
+  const requests = page.getByRole("region", { name: "Cererile tale" });
+  await expect(requests.locator("li")).toHaveCount(1);
+  await expect(requests).toContainText("12 persoane · Așteaptă răspunsul managerului");
+  await expectAccessible(page);
+  await shot(page, "57-cont-evenimente", project);
+
+  await menu.getByRole("link", { name: "Profil și date" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Profil și date");
+  await expect(page.getByRole("heading", { level: 2, name: "Copiii tăi" })).toHaveCount(0); // Q7: off by default
+  await page.getByLabel("Telefon").fill("0722 000 333");
+  await page.getByRole("button", { name: "Salvează" }).click();
+  await expect(page.getByText("Datele sunt salvate.")).toBeVisible();
+  await page.getByLabel("Parola de acum").fill("not-the-password");
+  await page.getByLabel("Parola nouă").fill(`${password}-3`);
+  await page.getByRole("button", { name: "Schimbă parola" }).click();
+  await expect(page.getByText("Parola actuală nu este corectă.")).toBeVisible();
+  await page.getByLabel("Parola de acum").fill(password);
+  await page.getByRole("button", { name: "Schimbă parola" }).click();
+  await expect(page.getByText("Parola e schimbată.")).toBeVisible();
+  await expectAccessible(page);
+  await shot(page, "56-cont-profil", project);
+
+  // GDPR art. 15 and 20: the file with everything the club holds, with this session only.
+  const exportUrl = await page.getByRole("link", { name: "Descarcă datele (JSON)" }).getAttribute("href");
+  expect(exportUrl).toMatch(/\/api\/v1\/privacy\/export$/);
+  const file = await page.request.get(exportUrl ?? "");
+  expect(file.status()).toBe(200);
+  expect(file.headers()["content-disposition"]).toContain("attachment");
+  expect(await file.text()).toContain(email);
+
+  // §12.2: deleting the account, confirmed with the password.
+  await page.getByRole("button", { name: "Vreau să șterg contul" }).click();
+  await page.getByLabel("Parola, pentru confirmare").fill("not-the-password");
+  await page.getByRole("button", { name: "Șterge contul definitiv" }).click();
+  await expect(page.getByText("Parola nu este corectă.")).toBeVisible();
+  await page.getByLabel("Parola, pentru confirmare").fill(`${password}-3`);
+  await page.getByRole("button", { name: "Șterge contul definitiv" }).click();
+  await expect(page.getByRole("heading", { level: 2, name: "Contul e șters" })).toBeVisible();
+  await page.goto("/ro/cont");
+  await expect(page.getByRole("heading", { level: 2, name: "Intră în cont" })).toBeVisible();
+  await page.getByLabel("Email").fill(email);
+  await page.getByLabel("Parola").fill(`${password}-3`);
+  await page.getByRole("button", { name: "Intră" }).click();
+  await expect(page.locator("main").getByRole("alert")).toContainText("Emailul sau parola nu sunt corecte");
+}
 
 test("Q43: under 14, the account is refused and says who creates it", async ({ page }, info) => {
   test.skip(info.project.name !== "desktop", "one registration attempt per run (rate limit)");
@@ -145,10 +256,23 @@ test("broken links from the emails say so, without asking anything", async ({ pa
   await expect(page.getByRole("button", { name: "Salvează parola" })).toBeDisabled();
 });
 
+test("the account's inner pages ask to sign in first", async ({ page }) => {
+  await page.goto("/ro/cont/plati");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Plăți și abonamente");
+  await expect(page.getByText("Intră în cont ca să vezi această pagină.")).toBeVisible();
+  await page.getByRole("main").getByRole("link", { name: "Intră în cont" }).click();
+  await expect(page).toHaveURL(/\/ro\/cont$/);
+  await expect(page.getByRole("heading", { level: 2, name: "Intră în cont" })).toBeVisible();
+  await expectAccessible(page);
+});
+
 test("in English", async ({ page }) => {
   await page.goto("/en/account");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("My account");
   await expect(page.getByRole("heading", { level: 2, name: "Sign in" })).toBeVisible();
   await page.goto("/en/account/register");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Create an account");
+  await page.goto("/en/account/card");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Member card");
+  await expect(page.getByRole("navigation", { name: "My account" }).getByRole("link", { name: "Card" })).toHaveAttribute("aria-current", "page");
 });

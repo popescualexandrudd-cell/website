@@ -4,6 +4,18 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, restul contului — 30.09.2026 (livrat)
+#### Adăugat
+- Meniul contului (`AccountNav`): Rezervări, Cardul, Plăți și abonamente, Liga mea, Sala de evenimente, Profil și date; fiecare pagină cere intrarea în cont (`MemberOnly`, `useMember`).
+- `/cont/card` (`AccountCard`): codul QR (ca imagine), numărul, Apple/Google Wallet când sunt active, blocarea cardului pierdut și un card nou (R-020 … R-022).
+- `/cont/plati` (`AccountMoney`): credit și datorii, abonamentele (înghețare, anularea celor neplătite), voucherele, codul „Adu un prieten” și codul primit de la un prieten (R-120), istoricul (R-065).
+- `/cont/liga` (`AccountLeague`, `LeagueCompetitions`): rang, nivel, LP, loc, pașii de intrare în ligă, turneele (înscriere, retragere, partener după pagina publică), provocările (doar vizualizare), schimbările de LP, insignele, acordul GDPR al ligii (retragere).
+- `/cont/evenimente` (`AccountEvents`): cererea pentru sala de evenimente și răspunsul managerului (R-110, Q34).
+- `/cont/profil` (`AccountProfile`): datele, parola, copiii (doar cu `child_accounts`, Q7), exportul datelor (GDPR art. 15 și 20), ștergerea contului cu parola (§12.2).
+- `src/lib/member.ts` cu teste; `siteFlags().children`; texte `web.account.*`.
+#### Schimbat
+- Butonul „Cere sala de evenimente” din secțiunea Evenimente duce la cererea din cont.
+
 ### Etapa 11, contul și rezervările online — 30.09.2026 (livrate)
 #### Adăugat
 - `/cont` (`AccountArea`): intrarea în cont (cu codul 2FA doar când contul îl are), tabloul (profil, confirmarea emailului cu retrimitere, rezervările viitoare cu anulare, clasele, ieșirea).

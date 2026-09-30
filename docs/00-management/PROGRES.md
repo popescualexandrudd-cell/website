@@ -36,7 +36,7 @@
 | 8 | Chioșcul de Plăți + afișajul cafenelei | ian. 2027 | **Aprobată 29.09.2026** |
 | 9 | Ecranele | ian. 2027 | **Aprobată 29.09.2026** |
 | 10 | Panoul de admin complet | ian. 2027 | **Aprobată 29.09.2026** |
-| 11 | Website-ul „simulator” | ian.–feb. 2027 | În lucru: secțiunea 1 aprobată 29.09.2026; secțiunile 2–8 aprobate 30.09.2026; secțiunile 9–10 aprobate 30.09.2026; secțiunile 11–13 aprobate 30.09.2026; efectele site-ului (Fazele 0–7) și secțiunile 14–19 **aprobate 30.09.2026**; toate cele 19 secțiuni ale paginii principale sunt aprobate; paginile separate (§9.3): Liga, paginile de prezentare, contul și rezervările online livrate 30.09.2026 |
+| 11 | Website-ul „simulator” | ian.–feb. 2027 | În lucru: secțiunea 1 aprobată 29.09.2026; secțiunile 2–8 aprobate 30.09.2026; secțiunile 9–10 aprobate 30.09.2026; secțiunile 11–13 aprobate 30.09.2026; efectele site-ului (Fazele 0–7) și secțiunile 14–19 **aprobate 30.09.2026**; toate cele 19 secțiuni ale paginii principale sunt aprobate; paginile separate (§9.3): Liga, paginile de prezentare, contul și rezervările online, apoi restul contului (card, plăți, liga mea, sala de evenimente, profil și date) livrate 30.09.2026 |
 | 12 | AI + notificări | feb. 2027 | Neîncepută |
 | 13 | SEO, marketing, branding, vânzări | în paralel, feb. 2027 | Neîncepută |
 | 14 | Deploy, securitate, backup, hardware real | feb. 2027 | Neîncepută |
@@ -157,3 +157,4 @@
 - **30.09.2026** — Pagina Ligii (`/liga`) și pagina publică a jucătorului (`/liga/jucator/{id}`) livrate: clasamentele, arhiva, filtrele, rezultatele, turneele, regulile; testate și cu datele reale ale Chioșcului Ligii. Urmează paginile de prezentare (Padel, Tenis, Pilates, Pachete, Evenimente, Cafenea, Contact), apoi contul și rezervările.
 - **30.09.2026** — Paginile de prezentare livrate (Padel, Tenis, Pilates, Pachete, Evenimente, Cafenea, Contact), din secțiunile aprobate; Contact cu telefonul și emailul din datele firmei, fără formular. Urmează contul (înregistrare, autentificare, tablou) și rezervările online.
 - **30.09.2026** — Contul (creare, confirmarea emailului, intrare, parolă nouă, tablou cu rezervări și clase) și rezervările online (ziua, durata, orele libere, prețul, rezervarea, anularea din cont) livrate; eroare reparată: mesajele serverului apăreau ca un cod tehnic. Toate paginile din meniu au acum conținut.
+- **30.09.2026** — Restul contului livrat: cardul (QR, Wallet, card pierdut), plăți și abonamente (credit, datorii, înghețare, vouchere, „Adu un prieten”, istoric), liga mea (rang, LP, turnee cu înscriere, provocări, insigne, acordul GDPR), cererea pentru sala de evenimente (Q34), profil și date (parolă, copii cu `child_accounts`, export, ștergerea contului). Urmează: PWA și blogul, apoi Etapa 12.

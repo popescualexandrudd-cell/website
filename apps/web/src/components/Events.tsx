@@ -89,7 +89,7 @@ export async function Events({ id }: { id: string }) {
           </ul>
         </div>
         <p className="pilates__more">
-          <Link className="btn btn-primary" href="/events">
+          <Link className="btn btn-primary" href="/account/events">
             {t("request")}
           </Link>
           {tel && (

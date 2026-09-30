@@ -3058,6 +3058,93 @@ body[data-menu-open="true"] {
   gap: 10px;
 }
 
+.account-nav {
+  margin-top: 28px;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+}
+.account-nav ul {
+  display: flex;
+  gap: 4px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  white-space: nowrap;
+}
+.account-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--text-2);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+.account-nav a:hover,
+.account-nav a[aria-current="page"] {
+  color: var(--text);
+  border-bottom-color: var(--color-brass-400);
+}
+.member-card__face {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 24px 32px;
+}
+.member-card__face > div {
+  flex: 1 1 260px;
+}
+.member-card__qr {
+  width: 220px;
+  max-width: 100%;
+  height: auto;
+  padding: 12px;
+  background: var(--color-bone-50);
+}
+.member-card__number,
+.money__code strong {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  letter-spacing: 0.08em;
+}
+.money__code {
+  margin: 0 0 12px;
+  color: var(--text);
+}
+.money__balance dd {
+  font-family: var(--font-serif);
+  font-size: 28px;
+}
+.money__balance dd[data-kind="debt"] {
+  color: var(--accent);
+}
+.money__delta {
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.money__freeze,
+.money__friend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px 16px;
+  margin-top: 16px;
+}
+.privacy__subtitle {
+  margin: 24px 0 8px;
+  font-size: 18px;
+  color: var(--text);
+}
+.league-steps {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding-left: 20px;
+  color: var(--text-2);
+}
+.league-steps li[data-done] strong {
+  color: var(--accent);
+}
+
 /* ------------------------------------------------------------------ full site: the presentation pages (§9.3) */
 .page-intro {
   padding: calc(var(--header-h) + 64px) 0 0;
