@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
+import { ClientTexts } from "@/components/ClientTexts";
 import { TokenAction } from "@/components/TokenAction";
+import { TOKEN_NAMESPACES } from "@/lib/client-messages";
 
 export const metadata: Metadata = { robots: { index: false, follow: false } };
 
@@ -17,7 +19,9 @@ export default async function UnsubscribePage({
   return (
     <section className="page">
       <div className="container">
-        <TokenAction mode="unsubscribe" token={token} />
+        <ClientTexts namespaces={TOKEN_NAMESPACES}>
+          <TokenAction mode="unsubscribe" token={token} />
+        </ClientTexts>
       </div>
     </section>
   );

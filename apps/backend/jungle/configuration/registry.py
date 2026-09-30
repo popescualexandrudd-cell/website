@@ -336,6 +336,18 @@ FLAGS: dict[str, FlagSpec] = {
             "Site-ul complet (Etapa 11); oprit: vizitatorii văd pagina de pre-lansare. Îl pornește "
             "proprietarul când îl publică (Q57, confirmat de proprietar pe 29.09.2026).",
         ),
+        FlagSpec(
+            "web_effects",
+            False,
+            "Efectele site-ului complet: apariții la derulare, 3D, „pop”-uri, funcții animate "
+            "(ADR-0023). Oprit: site-ul arată exact ca înainte de efecte.",
+        ),
+        FlagSpec(
+            "web_hero_video",
+            False,
+            "Videoul de prezentare din hero-ul site-ului complet (ADR-0023). Oprit sau fără "
+            "video încărcat: hero-ul rămâne randarea de acum.",
+        ),
     ]
 }
 

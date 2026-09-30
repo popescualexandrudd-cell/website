@@ -20,6 +20,13 @@
   "motion": {
     "ease-out": { "$type": "cubicBezier", "$value": [0.22, 1, 0.36, 1] },
     "duration-fast": { "$type": "duration", "$value": "180ms" },
-    "duration-slow": { "$type": "duration", "$value": "800ms" }
+    "duration-slow": { "$type": "duration", "$value": "800ms" },
+    "ease-spring": { "$type": "cubicBezier", "$value": [0.34, 1.56, 0.64, 1], "$description": "Effects (ADR-0023): the elastic 'pop' of badges, results and prices." },
+    "duration-base": { "$type": "duration", "$value": "520ms", "$description": "Effects (ADR-0023): an appearance (between duration-fast and duration-slow)." },
+    "stagger": { "$type": "duration", "$value": "70ms", "$description": "Effects (ADR-0023): the delay between cards appearing in a cascade." },
+    "distance": { "$type": "dimension", "$value": "24px", "$description": "Effects (ADR-0023): how far text and cards rise as they appear." },
+    "tilt-max": { "$type": "number", "$value": 8, "$description": "Effects (ADR-0023): the largest tilt of a card following the cursor, in degrees." },
+    "perspective": { "$type": "dimension", "$value": "1200px", "$description": "Effects (ADR-0023): the depth of the 3D entrances." },
+    "pop-from": { "$type": "number", "$value": 0.9, "$description": "Effects (ADR-0023): the scale a 'pop' starts from." }
   }
 }

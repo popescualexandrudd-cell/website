@@ -58,6 +58,13 @@ test("§9.2.12, R-110: the kinds of events, the calendar from the real API and t
     if (data.room.provisional) await expect(facts).toContainText("preț orientativ");
   }
   await expect(events.getByRole("link", { name: "Cere sala de evenimente" })).toHaveAttribute("href", "/ro/evenimente");
+  // Q34 (owner, 30.09.2026): online or by phone, a manager confirms; the call button only with the
+  // club's phone set in the panel.
+  await expect(room.getByText(/Cererea se face online, din cont, sau telefonic/)).toBeVisible();
+  const company = (await (await page.request.get(`${API}/api/v1/config/company`)).json()) as { phone?: string };
+  const call = events.getByRole("link", { name: "Sună la club" });
+  if (company.phone) await expect(call).toHaveAttribute("href", `tel:${company.phone.replace(/[\s().-]+/g, "")}`);
+  else await expect(call).toHaveCount(0);
   await expectAccessible(page);
   await shot(page, "16-evenimente", info.project.name);
   await room.scrollIntoViewIfNeeded();

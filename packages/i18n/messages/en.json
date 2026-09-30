@@ -1129,9 +1129,11 @@
           "perHour": "per hour, from",
           "perHourProvisional": "per hour, from (indicative price)",
           "climate": "All year",
-          "climateLabel": "heated in winter, cooled in summer"
+          "climateLabel": "heated in winter, cooled in summer",
+          "channels": "Requests are made online, from your account, or by phone. The packages, prices and booking are confirmed by one of the club's managers."
         },
-        "request": "Request the event room"
+        "request": "Request the event room",
+        "call": "Call the club"
       },
       "cafe": {
         "kicker": "The café",

@@ -4,6 +4,15 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Efectele site-ului, Faza 1 — 30.09.2026 (livrată)
+#### Adăugat
+- Tokenii de mișcare (`--motion-ease-spring`, `-duration-base`, `-stagger`, `-distance`, `-tilt-max`, `-perspective`, `-pop-from`).
+- `EffectsRuntime` + `src/lib/effects.ts` (nivelurile „on / lite / reduced”) + CSS-ul `data-reveal`; comutatoarele `web_effects` și `web_hero_video` (oprite implicit, doar pe site-ul complet).
+- Q34 pe site: fraza despre cererea online și telefonică și butonul „Sună la club” (cu telefonul din datele firmei); `src/lib/company.ts` (`companyDetails`, `telHref`), folosit și de subsol.
+- `inventory.mjs --compare-shots` (regresia vizuală) și `REDUCED=1`; etapa „efecte pornite” în `scripts/test-e2e` (toate testele site-ului din nou, plus `e2e/effects/`).
+#### Schimbat
+- Textele componentelor client pleacă doar cu pagina care le folosește (`ClientTexts`): pagina principală a site-ului complet, 56,4 KB în loc de 61,7 KB.
+
 ### Efectele site-ului, Faza 0 — 30.09.2026 (livrată)
 #### Adăugat
 - `apps/web/scripts/inventory.mjs` (`pnpm --filter @jungle/web inventory`): inventarul site-ului complet (pagini RO/EN, calculator și telefon; secțiuni, titluri, linkuri, butoane, câmpuri, imagini, regiuni, meta, apeluri API; din cod: componente client, chei `web.*`, comutatoare), capturi pe toată pagina (`SHOTS`) și `--compare` (pică dacă a dispărut ceva).

@@ -7,21 +7,29 @@
  * A client component that reads a new namespace adds it here; `client-messages.test.ts` fails
  * otherwise.
  */
-export const CLIENT_NAMESPACES = [
-  "errors",
-  "web.nav",
-  "web.cookies",
-  "web.waitlist",
-  "web.confirm",
-  "web.unsubscribe",
-  "web.league",
-  "web.site.header",
+/** Every page: the headers, the cookie choice. Given by the layout. */
+export const SHELL_NAMESPACES = ["web.nav", "web.cookies", "web.site.header"] as const;
+/** The pre-launch page (Stage 1B): the waitlist form and the league card. */
+export const PRELAUNCH_NAMESPACES = ["errors", "web.waitlist", "web.league"] as const;
+/** The waitlist confirm and unsubscribe pages. */
+export const TOKEN_NAMESPACES = ["errors", "web.confirm", "web.unsubscribe"] as const;
+/** The home page of the full site: its live data and simulators. */
+export const FULL_HOME_NAMESPACES = [
   "web.site.live",
   "web.site.level",
   "web.site.league",
   "web.site.pilates",
   "web.site.packages",
   "web.site.split",
+] as const;
+
+/**
+ * All of them. Each page gets only its own group (`ClientTexts`): the full home page no longer
+ * carries the texts of the errors and of the waitlist (~20 KB), which it never uses (§9.4, the
+ * speed step of the effects work).
+ */
+export const CLIENT_NAMESPACES = [
+  ...new Set([...SHELL_NAMESPACES, ...PRELAUNCH_NAMESPACES, ...TOKEN_NAMESPACES, ...FULL_HOME_NAMESPACES]),
 ] as const;
 
 type Tree = { [key: string]: unknown };

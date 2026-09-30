@@ -18,11 +18,28 @@ export function modeFrom(flags: unknown): SiteMode {
   return full?.enabled === true ? "full" : "prelaunch";
 }
 
-export async function siteMode(fetchImpl: typeof fetch = fetch): Promise<SiteMode> {
+/**
+ * What visitors see: the mode, and on the full site the effects (`web_effects`) and the hero video
+ * (`web_hero_video`), both off by default (ADR-0023). Only a flag that is exactly `true` counts.
+ */
+export type SiteFlags = { mode: SiteMode; effects: boolean; heroVideo: boolean };
+
+export function flagsFrom(flags: unknown): SiteFlags {
+  const mode = modeFrom(flags);
+  const on = (key: string) =>
+    mode === "full" && Array.isArray(flags) && (flags as Flag[]).some((f) => f && f.key === key && f.enabled === true);
+  return { mode, effects: on("web_effects"), heroVideo: on("web_hero_video") };
+}
+
+export async function siteFlags(fetchImpl: typeof fetch = fetch): Promise<SiteFlags> {
   try {
     const response = await fetchImpl(`${API_URL}/api/v1/config/flags`, { next: { revalidate: 300, tags: [FLAGS_TAG] } });
-    return response.ok ? modeFrom(await response.json()) : "prelaunch";
+    return flagsFrom(response.ok ? await response.json() : null);
   } catch {
-    return "prelaunch";
+    return flagsFrom(null);
   }
+}
+
+export async function siteMode(fetchImpl: typeof fetch = fetch): Promise<SiteMode> {
+  return (await siteFlags(fetchImpl)).mode;
 }

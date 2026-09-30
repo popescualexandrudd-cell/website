@@ -1,5 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { companyDetails, telHref } from "@/lib/company";
 import { type CalendarItem, eventsCalendar, FORMATS, kindOf, when, wording } from "@/lib/events";
 import { CLUB_TZ, clubClock, clubDay } from "@/lib/live";
 import { lei } from "@/lib/packages";
@@ -11,12 +12,15 @@ const CARDS = ["dj", "tournaments", "social"] as const;
  * and social padel, then the club's calendar as the panel publishes it (with the tournaments that
  * are open or under way), then the event room: 15–20 people, heated and cooled (§1), in the building
  * across the lane (Q46), requested from the account and confirmed by the manager (Q34). Rendered on
- * the server: no script is sent for it.
+ * the server: no script is sent for it. Q34 (owner, 30.09.2026): the room is requested online or by
+ * phone (the club's phone from the company details; no phone set, no call button), and a manager
+ * confirms the packages, prices and booking.
  */
 export async function Events({ id }: { id: string }) {
   const t = await getTranslations("web.site.events");
   const locale = await getLocale();
-  const calendar = await eventsCalendar();
+  const [calendar, company] = await Promise.all([eventsCalendar(), companyDetails()]);
+  const tel = telHref(company?.phone);
   const room = calendar?.room ?? null;
   return (
     <section id={id} className="section section-alt events" aria-labelledby="events-section-title">
@@ -60,6 +64,8 @@ export async function Events({ id }: { id: string }) {
             </h3>
             <p className="pilates__text">{t("room.text")}</p>
             <p className="events__how">{t("room.how")}</p>
+            {/* Q34 (owner, 30.09.2026): online or by phone; a manager confirms. */}
+            <p className="events__how">{t("room.channels")}</p>
           </div>
           <ul className="tennis__facts events__facts" aria-label={t("room.factsLabel")}>
             {room?.capacity ? (
@@ -84,6 +90,11 @@ export async function Events({ id }: { id: string }) {
           <Link className="btn btn-primary" href="/events">
             {t("request")}
           </Link>
+          {tel && (
+            <a className="btn btn-secondary" href={tel}>
+              {t("call")}
+            </a>
+          )}
         </p>
       </div>
     </section>

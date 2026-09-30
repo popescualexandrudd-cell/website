@@ -8,7 +8,9 @@ import { Reveal } from "@/components/Reveal";
 import { SitePlan } from "@/components/SitePlan";
 import { TimelineProgress } from "@/components/TimelineProgress";
 import { WaitlistForm } from "@/components/WaitlistForm";
+import { ClientTexts } from "@/components/ClientTexts";
 import { FullHome } from "@/components/FullHome";
+import { FULL_HOME_NAMESPACES, PRELAUNCH_NAMESPACES } from "@/lib/client-messages";
 import { siteMode } from "@/lib/flags";
 import { ADDRESS, FACTS, MAP_URL, SITE_URL } from "@/lib/site";
 
@@ -26,7 +28,15 @@ const FACILITIES: { key: "lockers" | "pilates" | "events" | "lounge"; icon: () =
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return (await siteMode()) === "full" ? <FullHome /> : <PrelaunchHome locale={locale} />;
+  return (await siteMode()) === "full" ? (
+    <ClientTexts namespaces={FULL_HOME_NAMESPACES}>
+      <FullHome />
+    </ClientTexts>
+  ) : (
+    <ClientTexts namespaces={PRELAUNCH_NAMESPACES}>
+      <PrelaunchHome locale={locale} />
+    </ClientTexts>
+  );
 }
 
 function PrelaunchHome({ locale }: { locale: string }) {

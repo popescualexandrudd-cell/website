@@ -97,6 +97,10 @@ if part web; then
   echo "==> Playwright (website: the full site, Stage 11)"
   E2E_SITE_MODE=full E2E_SCREENSHOTS="${E2E_SCREENSHOTS:-}" pnpm --filter @jungle/web exec playwright test ||
     failed "$WORK/web.log"
+  echo "==> The site's effects turned on (ADR-0023): every test again, unchanged, plus the effects' own"
+  (cd apps/backend && uv run python manage.py set_flag web_effects on --reason "e2e: the effects")
+  E2E_SITE_MODE=effects pnpm --filter @jungle/web exec playwright test || failed "$WORK/web.log"
+  (cd apps/backend && uv run python manage.py set_flag web_effects off --reason "e2e: the effects, done")
 fi
 
 if part kiosk; then

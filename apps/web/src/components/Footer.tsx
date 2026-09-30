@@ -1,21 +1,9 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import type { components } from "@jungle/api-client";
-import { ANPC_SAL_URL, API_URL } from "@/lib/site";
+import { companyDetails } from "@/lib/company";
+import { ANPC_SAL_URL } from "@/lib/site";
 import { CookieSettingsButton } from "./CookieConsent";
 import { LogoMark, LogoWord } from "./Logo";
-
-type Company = components["schemas"]["CompanyOut"];
-
-/** Company details from the admin configuration (Q26), refreshed every 5 minutes; placeholders until then. */
-async function companyDetails(): Promise<Company | null> {
-  try {
-    const response = await fetch(`${API_URL}/api/v1/config/company`, { next: { revalidate: 300 } });
-    return response.ok ? ((await response.json()) as Company) : null;
-  } catch {
-    return null;
-  }
-}
 
 /** Legal identification of the trader (Law 365/2002 art. 5, OG 21/1992), legal pages and ANPC. */
 export async function Footer() {

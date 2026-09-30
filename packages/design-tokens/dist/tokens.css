@@ -16,6 +16,13 @@
   --motion-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --motion-duration-fast: 180ms;
   --motion-duration-slow: 800ms;
+  --motion-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /** Effects (ADR-0023): the elastic 'pop' of badges, results and prices. */
+  --motion-duration-base: 520ms; /** Effects (ADR-0023): an appearance (between duration-fast and duration-slow). */
+  --motion-stagger: 70ms; /** Effects (ADR-0023): the delay between cards appearing in a cascade. */
+  --motion-distance: 24px; /** Effects (ADR-0023): how far text and cards rise as they appear. */
+  --motion-tilt-max: 8; /** Effects (ADR-0023): the largest tilt of a card following the cursor, in degrees. */
+  --motion-perspective: 1200px; /** Effects (ADR-0023): the depth of the 3D entrances. */
+  --motion-pop-from: 0.9; /** Effects (ADR-0023): the scale a 'pop' starts from. */
   --color-night-500: #3a5270; /** Strong borders, input outlines */
   --color-night-600: #1e3148; /** Borders, dividers */
   --color-night-700: #13253a; /** Cards, inputs, navy panels */

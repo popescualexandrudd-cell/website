@@ -1,6 +1,6 @@
 # ADR-0023: Sistemul de efecte al site-ului (video de prezentare, apariții la scroll, interactivitate)
 
-- **Stare:** Propus (30.09.2026, Faza 0; se acceptă odată cu aprobarea planului de către proprietar)
+- **Stare:** Acceptat (30.09.2026: proprietarul a aprobat planul, „aprob, continuă cu tot până la capăt”)
 - **Data:** 2026-09-30
 - **Legat de:** §9.2, §9.4, ADR-0007, ADR-0020 (tokeni), ADR-0022 (comutatoare), Q44, Q57; cererea proprietarului din 30.09.2026 („site-ul devine un simulator de efecte”)
 

@@ -3,11 +3,14 @@ import { defineConfig, devices } from "@playwright/test";
 // The servers are started by scripts/test-e2e (backend + production build of this site). The
 // pre-launch page is tested first; then, with the full site turned on (E2E_SITE_MODE=full), e2e/full.
 const executablePath = process.env.PW_CHROMIUM_PATH || undefined;
-const fullSite = process.env.E2E_SITE_MODE === "full";
+const mode = process.env.E2E_SITE_MODE;
+// "full": the full site as approved; "effects": the same tests again with the effects switched on
+// (ADR-0023: they must pass unchanged), plus the tests of the effects themselves.
+const match = mode === "full" ? { testMatch: "full/**/*.spec.ts" } : mode === "effects" ? { testMatch: ["full/**/*.spec.ts", "effects/**/*.spec.ts"] } : { testIgnore: ["full/**", "effects/**"] };
 
 export default defineConfig({
   testDir: "e2e",
-  ...(fullSite ? { testMatch: "full/**/*.spec.ts" } : { testIgnore: "full/**" }),
+  ...match,
   timeout: 45_000,
   retries: 0,
   workers: 1,

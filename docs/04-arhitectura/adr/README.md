@@ -27,4 +27,4 @@ Toate ADR-urile de mai jos au fost propuse în **Etapa 0 (26.09.2026)** și au f
 | [0020](0020-design-tokens.md) | Design tokens: identitate vizuală dintr-un singur loc | Acceptat |
 | [0021](0021-calitate-teste-ci.md) | Calitate: unelte, teste, `scripts/test-all` | Acceptat |
 | [0022](0022-feature-flags-configurare-versionata.md) | Feature flags și configurare versionată, valori `DE_CONFIRMAT` vizibile | Acceptat |
-| [0023](0023-sistemul-de-efecte-al-site-ului.md) | Sistemul de efecte al site-ului: video de prezentare, apariții la scroll, interactivitate | Propus |
+| [0023](0023-sistemul-de-efecte-al-site-ului.md) | Sistemul de efecte al site-ului: video de prezentare, apariții la scroll, interactivitate | Acceptat |

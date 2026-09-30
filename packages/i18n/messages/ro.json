@@ -1129,9 +1129,11 @@
           "perHour": "pe oră, de la",
           "perHourProvisional": "pe oră, de la (preț orientativ)",
           "climate": "Tot anul",
-          "climateLabel": "încălzită iarna, răcită vara"
+          "climateLabel": "încălzită iarna, răcită vara",
+          "channels": "Cererea se face online, din cont, sau telefonic. Pachetele, prețurile și rezervarea le confirmă un manager al clubului."
         },
-        "request": "Cere sala de evenimente"
+        "request": "Cere sala de evenimente",
+        "call": "Sună la club"
       },
       "cafe": {
         "kicker": "Cafeneaua",

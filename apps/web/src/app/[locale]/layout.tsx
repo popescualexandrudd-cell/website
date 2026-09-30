@@ -5,12 +5,13 @@ import { ColorNight900 } from "@jungle/design-tokens/tokens";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import "../globals.css";
+import { EffectsRuntime } from "@/components/EffectsRuntime";
 import { CookieConsent } from "@/components/CookieConsent";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { SiteHeader } from "@/components/SiteHeader";
-import { CLIENT_NAMESPACES, pickMessages } from "@/lib/client-messages";
-import { siteMode } from "@/lib/flags";
+import { SHELL_NAMESPACES, pickMessages } from "@/lib/client-messages";
+import { siteFlags } from "@/lib/flags";
 import { routing } from "@/i18n/routing";
 import { INDEXABLE, SITE_URL } from "@/lib/site";
 
@@ -64,9 +65,10 @@ export default async function LocaleLayout({
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "web.nav" });
-  const mode = await siteMode();
-  // Only the texts the client components use travel with the page (src/lib/client-messages.ts).
-  const messages = pickMessages(await getMessages(), CLIENT_NAMESPACES);
+  const { mode, effects } = await siteFlags();
+  // Only the texts every page's client components share travel from here; each page adds its own
+  // (`ClientTexts`, src/lib/client-messages.ts).
+  const messages = pickMessages(await getMessages(), SHELL_NAMESPACES);
   return (
     <html lang={locale}>
       <head>
@@ -85,6 +87,8 @@ export default async function LocaleLayout({
           {/* Statistics (Umami) load only after consent, from the consent manager. */}
           <CookieConsent />
         </NextIntlClientProvider>
+        {/* The site's effects (ADR-0023), only when the owner turned them on (`web_effects`). */}
+        {effects && <EffectsRuntime />}
       </body>
     </html>
   );

@@ -8,6 +8,8 @@
  *   node scripts/inventory.mjs --out INVENTAR_INAINTE.json        (servers running, full_site on)
  *   node scripts/inventory.mjs --compare INVENTAR_INAINTE.json INVENTAR_DUPA.json
  *   SHOTS=<folder> also saves a full-page capture of every page (the visual reference).
+ *   node scripts/inventory.mjs --compare-shots REFERENCE_DIR NEW_DIR [max % of different pixels, 0.5]
+ *     the visual regression: every reference capture against the new one of the same name.
  *
  * BASE_URL (default http://localhost:3000) and NEXT_PUBLIC_API_URL (default http://localhost:8000)
  * point at the running site and API; PW_CHROMIUM_PATH at a Chromium when Playwright's is absent.
@@ -107,7 +109,8 @@ async function take(out) {
     { name: "desktop", width: 1280, height: 800 },
     { name: "mobile", width: 390, height: 844 },
   ]) {
-    const context = await browser.newContext({ viewport, locale: "ro-RO" });
+    // REDUCED=1: the visitor asked for less motion (the effects' own regression, ADR-0023).
+    const context = await browser.newContext({ viewport, locale: "ro-RO", reducedMotion: process.env.REDUCED ? "reduce" : "no-preference" });
     // The necessary-cookies choice, as the tests make it (no banner over the page).
     const consent = encodeURIComponent(JSON.stringify({ v: 1, stats: false, ts: Date.now() }));
     await context.addCookies([{ name: "jp_consent", value: consent, url: BASE }]);
@@ -156,8 +159,80 @@ function added(before, after, path = "") {
   return [];
 }
 
+/** The share of pixels that differ between two captures (a different size counts as 100%). */
+async function compareShots(before, after, limit) {
+  const { chromium } = await import("@playwright/test");
+  const browser = await chromium.launch(process.env.PW_CHROMIUM_PATH ? { executablePath: process.env.PW_CHROMIUM_PATH } : {});
+  const page = await browser.newPage();
+  const names = readdirSync(before).filter((f) => f.endsWith(".png")).sort();
+  let failed = 0;
+  for (const name of names) {
+    const load = (dir) => `data:image/png;base64,${readFileSync(join(dir, name)).toString("base64")}`;
+    let share = 100;
+    let note = "";
+    try {
+      const result = await page.evaluate(
+        async ([a, b]) => {
+          const img = (src) => new Promise((resolve, reject) => Object.assign(new Image(), { onload() { resolve(this); }, onerror: reject, src }));
+          const [x, y] = await Promise.all([img(a), img(b)]);
+          const pixels = (image) => {
+            const canvas = Object.assign(document.createElement("canvas"), { width: image.width, height: image.height });
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(image, 0, 0);
+            return ctx.getImageData(0, 0, image.width, image.height).data;
+          };
+          if (x.width !== y.width) return { share: 100, firstRow: 0, heights: [x.height, y.height] };
+          const [p, q] = [pixels(x), pixels(y)];
+          const w = x.width;
+          const shift = y.height - x.height;
+          // A row of the reference counts as the same if it matches the new capture either at the
+          // same height or shifted by the added height: content added in one place (an approved
+          // addition) moves everything below it without changing it.
+          const rowDiff = (rx, ry) => {
+            if (ry < 0 || ry >= y.height) return w;
+            let n = 0;
+            for (let c = 0; c < w; c += 1) {
+              const i = (rx * w + c) * 4;
+              const j = (ry * w + c) * 4;
+              if (Math.abs(p[i] - q[j]) + Math.abs(p[i + 1] - q[j + 1]) + Math.abs(p[i + 2] - q[j + 2]) > 24) n += 1;
+            }
+            return n;
+          };
+          let differ = 0;
+          let firstRow = -1;
+          for (let r = 0; r < x.height; r += 1) {
+            const same = rowDiff(r, r);
+            const n = same === 0 || shift === 0 ? same : Math.min(same, rowDiff(r, r + shift));
+            if (n > 0) {
+              differ += n;
+              if (firstRow < 0) firstRow = r;
+            }
+          }
+          const share = (100 * differ) / (x.height * w);
+          return { share, firstRow, heights: [x.height, y.height] };
+        },
+        [load(before), load(after)],
+      );
+      share = result.share;
+      if (result.heights[0] !== result.heights[1]) {
+        note = ` (height ${result.heights[0]} → ${result.heights[1]} px: content added, the rest compared shifted)`;
+      } else if (result.firstRow >= 0 && share > limit) note = ` (first difference at y=${result.firstRow})`;
+    } catch {
+      share = 100;
+    }
+    const ok = share <= limit;
+    if (!ok) failed += 1;
+    console.log(`${ok ? "  same" : "  DIFF"} ${share.toFixed(3)}%  ${name}${note}`);
+  }
+  await browser.close();
+  console.log(`${names.length - failed}/${names.length} captures within ${limit}%`);
+  return failed;
+}
+
 const args = process.argv.slice(2);
-if (args[0] === "--compare") {
+if (args[0] === "--compare-shots") {
+  process.exit((await compareShots(args[1], args[2], Number(args[3] ?? 0.5))) ? 1 : 0);
+} else if (args[0] === "--compare") {
   const [before, after] = args.slice(1).map((f) => JSON.parse(readFileSync(f, "utf8")));
   const gone = missing(before, after);
   const plus = added(before, after);

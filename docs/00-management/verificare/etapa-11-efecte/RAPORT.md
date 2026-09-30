@@ -4,8 +4,8 @@
 
 | Fază | Ce conține | Starea |
 |---|---|---|
-| 0. Citire, inventar, referință, plan | fără modificări vizibile | **livrată, așteaptă aprobarea planului** |
-| 1. Fundația | tokenii de mișcare, observatorul, CSS-ul de efecte, modul „lite”, comutatorul `web_effects`; butonul de apel și fraza Q34 la sala de evenimente | urmează |
+| 0. Citire, inventar, referință, plan | fără modificări vizibile | **aprobată 30.09.2026** („aprob, continuă cu tot până la capăt”) |
+| 1. Fundația | pasul de viteză, tokenii de mișcare, observatorul, CSS-ul de efecte, modul „lite”, comutatoarele `web_effects` și `web_hero_video`; butonul de apel și fraza Q34 la sala de evenimente | **livrată 30.09.2026** |
 | 2. Videoul | stratul video, scriptul, controalele, tranziția spre hală, comutatorul `web_hero_video` | urmează |
 | 3. Secțiunile 14–19 | construite direct cu efecte | urmează |
 | 4. Efectele pe secțiunile 1–13 | una câte una, cu interactivitatea funcțiilor | urmează |
@@ -118,3 +118,44 @@ Q59–Q64, în `docs/00-management/INTREBARI_DESCHISE.md`:
 4. Dacă planul vă convine, inclusiv pasul de marjă de viteză de la începutul Fazei 1, scrieți „aprob planul” și începem Faza 1.
 
 Nu s-a schimbat nimic vizibil pe site în această fază.
+
+---
+
+## Faza 1 — Fundația
+
+### Ce s-a construit
+1. **Pasul de viteză.** Fiecare pagină primește doar textele componentelor ei (`ClientTexts`, grupurile din `src/lib/client-messages.ts`). Pagina principală a site-ului complet nu mai poartă textele erorilor și ale listei de așteptare: documentul a scăzut de la 61,7 la 56,4 KB.
+2. **Tokenii de mișcare** (în `packages/design-tokens`, derivați din cei existenți): easing-ul elastic pentru „pop”, durata de bază (520 ms), decalajul de cascadă (70 ms), distanța de urcare (24 px), unghiul maxim de tilt (8°), perspectiva (1200 px), scara de pornire a unui „pop” (0,9). Nicio culoare și niciun font nou.
+3. **Observatorul unic** (`EffectsRuntime`, singurul cod nou în browser, fără texte). Pune nivelul de mișcare pe pagină și marchează fiecare element cu `data-reveal` când intră în ecran. Un element primit în focus din tastatură apare imediat.
+4. **CSS-ul de efecte:** apariții `fade`, `rise`, `tilt` (3D), `pop` (elastic), `mask` și `lines` (titluri pe rânduri), cu cascadă. Se mișcă doar `transform`, `opacity` și `clip-path`.
+5. **Trei niveluri:** complet; „lite” (telefon slab, „Save-Data”, conexiune lentă): doar fade-uri; „reducerea mișcării”: nimic ascuns, nimic în mișcare.
+6. **Comutatoarele** `web_effects` și `web_hero_video`, oprite implicit, în panou (Setări și feature flags). Apar doar pe site-ul complet, niciodată pe pagina de pre-lansare (Q64).
+7. **Q34 pe site:** la sala de evenimente, fraza „Cererea se face online, din cont, sau telefonic. Pachetele, prețurile și rezervarea le confirmă un manager al clubului.” și butonul „Sună la club”. Butonul apare doar când telefonul clubului e completat în panou (Setări → datele firmei).
+
+În această fază nicio secțiune nu primește încă efecte: fundația e pregătită, iar efectele vin secțiune cu secțiune în fazele următoare.
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Inventarul după ([INVENTAR_DUPA_FAZA1.json](INVENTAR_DUPA_FAZA1.json)) | **0 elemente eliminate sau schimbate**; 7 adăugiri: componenta `EffectsRuntime`, cheile de text ale frazei și butonului Q34 (RO și EN), comutatoarele `web_effects` și `web_hero_video`. |
+| Regresia vizuală, efectele oprite | **72/72 capturi identice** cu referința (diferențe sub 0,13%). Pe telefon, pagina principală e mai lungă doar cu fraza Q34 (zona aprobată); tot ce e sub ea e identic, doar mutat mai jos. |
+| Regresia vizuală, efectele pornite + „reducerea mișcării” | **72/72 capturi identice** cu referința; inventarul, tot 0 elemente eliminate. |
+| Testele existente | toate trec neschimbate, și cu efectele oprite, și **din nou cu efectele pornite** (o etapă nouă în `scripts/test-e2e`). |
+| Teste noi | unitare: nivelul de mișcare (3), comutatoarele (1), telefonul și linkul `tel:` (2); cap-coadă: apariția la intrarea în ecran, focusul din tastatură, „reducerea mișcării”, fără JavaScript. |
+
+### Viteza pe telefon
+| Măsurători (după o rulare de încălzire) | Telefon | Calculator |
+|---|---|---|
+| Efectele oprite, după pasul de viteză | 90 · 91 · 92 · 87 · 92 | 100 · 100 |
+| Efectele pornite | 90 · 95 · 86 · 92 · 88 | 100 · 100 |
+| Referința din Faza 0 | 91 · 91 · 88 · 85 · 90 | 100 · 100 |
+
+- **Mediana e 90–91 în toate trei cazurile.** Observatorul nu costă viteză măsurabilă.
+- **Rulările de 86–87** sunt cele în care browserul de test a afișat pagina târziu (1,2–1,3 s față de 0,2 s în rest). Mediul de test variază, nu pagina.
+- **Rulările de 88:** TBT puțin peste 200 ms, tot din variația procesorului.
+- **Pragul „≥ 90 la fiecare măsurătoare”** nu se poate dovedi cu certitudine în acest mediu, nici pentru site-ul de dinainte de efecte. Îl urmărim: fiecare fază următoare se măsoară la fel, iar un efect care coboară mediana nu se livrează.
+
+### Cum verificați (click cu click)
+1. În panou, la Setări și feature flags: `web_effects` și `web_hero_video` există, oprite.
+2. Pe site, la Evenimente → Sala de evenimente: fraza nouă. Butonul „Sună la club” apare după ce completați telefonul în datele firmei.
+3. Activați „Reducerea mișcării” din setările de accesibilitate ale telefonului: site-ul rămâne complet.

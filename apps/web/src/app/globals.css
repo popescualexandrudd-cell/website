@@ -2634,6 +2634,11 @@ body[data-menu-open="true"] {
   align-items: start;
   margin-top: 56px;
 }
+.events .pilates__more {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
 .events__room .pilates__h3 {
   margin-top: 0;
 }
@@ -2765,4 +2770,56 @@ body[data-menu-open="true"] {
 }
 .section-map li[data-built="true"] .section-map__state {
   color: var(--accent);
+}
+
+/* ------------------------------------------------------------------ the site's effects (ADR-0023) */
+/*
+ * Elements carry `data-reveal="fade|rise|tilt|pop|mask|lines"` (and `--i` for a cascade); the
+ * effects runtime marks them `data-shown` as they come into view. They are hidden only under
+ * html[data-motion="on"|"lite"], which the runtime sets: without JavaScript, with `web_effects`
+ * off or under "reduced motion" nothing is ever hidden. Only transform, opacity and clip-path move.
+ */
+html[data-motion="on"] [data-reveal],
+html[data-motion="lite"] [data-reveal] {
+  transition:
+    opacity var(--motion-duration-base) var(--motion-ease-out),
+    transform var(--motion-duration-base) var(--motion-ease-out),
+    clip-path var(--motion-duration-base) var(--motion-ease-out);
+  transition-delay: calc(var(--i, 0) * var(--motion-stagger));
+}
+html[data-motion="on"] [data-reveal]:not([data-shown]),
+html[data-motion="lite"] [data-reveal]:not([data-shown]) {
+  opacity: 0;
+}
+html[data-motion="on"] [data-reveal="rise"]:not([data-shown]),
+html[data-motion="on"] [data-reveal="lines"]:not([data-shown]) {
+  transform: translateY(var(--motion-distance));
+}
+html[data-motion="on"] [data-reveal="lines"] {
+  clip-path: inset(0 0 0 0);
+}
+html[data-motion="on"] [data-reveal="lines"]:not([data-shown]) {
+  clip-path: inset(0 0 100% 0);
+}
+html[data-motion="on"] [data-reveal="tilt"]:not([data-shown]) {
+  transform: perspective(var(--motion-perspective)) rotateX(calc(var(--motion-tilt-max) * 1deg)) translateY(var(--motion-distance));
+}
+html[data-motion="on"] [data-reveal="pop"] {
+  transition-timing-function: var(--motion-ease-out), var(--motion-ease-spring), var(--motion-ease-out);
+}
+html[data-motion="on"] [data-reveal="pop"]:not([data-shown]) {
+  transform: scale(var(--motion-pop-from));
+}
+html[data-motion="on"] [data-reveal="mask"] {
+  clip-path: inset(0 0 0 0);
+}
+html[data-motion="on"] [data-reveal="mask"]:not([data-shown]) {
+  clip-path: inset(8% 8% 8% 8%);
+}
+@media print {
+  html[data-motion] [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
 }
