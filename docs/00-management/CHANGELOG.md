@@ -4,6 +4,12 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Efectele site-ului, Faza 0 — 30.09.2026 (livrată)
+#### Adăugat
+- `apps/web/scripts/inventory.mjs` (`pnpm --filter @jungle/web inventory`): inventarul site-ului complet (pagini RO/EN, calculator și telefon; secțiuni, titluri, linkuri, butoane, câmpuri, imagini, regiuni, meta, apeluri API; din cod: componente client, chei `web.*`, comutatoare), capturi pe toată pagina (`SHOTS`) și `--compare` (pică dacă a dispărut ceva).
+- Referința: `docs/00-management/verificare/etapa-11-efecte/INVENTAR_INAINTE.json` (commit `382c7f9`), capturile paginii principale, viteza de referință.
+- ADR-0023 (propus): sistemul de efecte al site-ului. Întrebările Q59–Q64.
+
 ### Etapa 11, secțiunile 11–13 — aprobate 30.09.2026
 #### Schimbat
 - Proprietarul a aprobat secțiunile 11 („Împarte ora”), 12 (Evenimente) și 13 (Cafeneaua); intră în `main`.

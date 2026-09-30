@@ -53,8 +53,8 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q30](#q30) | Afișarea publică a rezultatelor | MEDIE | Etapa 5 (textul formularului GDPR al ligii) | REZOLVATĂ |
 | [Q31](#q31) | Clasamentul pe perechi | SCĂZUTĂ | Etapa 2 (parametru al motorului; nu blochează) | DESCHISĂ |
 | [Q32](#q32) | Voucherul „Adu un prieten” | MEDIE | Etapa 4 (vouchere și recomandări) | DESCHISĂ |
-| [Q33](#q33) | Cafeneaua | MEDIE | Etapa 4 (produse de cafenea), Etapa 8 (afișajul cafenelei) | REZOLVATĂ |
-| [Q34](#q34) | Sala de evenimente | MEDIE | Etapa 3 (rezervarea sălii de evenimente) | REZOLVATĂ |
+| [Q33](#q33) | Cafeneaua | MEDIE | Etapa 4 (produse de cafenea), Etapa 8 (afișajul cafenelei) | REZOLVATĂ 30.09.2026 |
+| [Q34](#q34) | Sala de evenimente | MEDIE | Etapa 3 (rezervarea sălii de evenimente) | REZOLVATĂ 30.09.2026 |
 | [Q35](#q35) | Pachetele corporate | MEDIE | Etapa 4 (conturi corporate) | REZOLVATĂ |
 | [Q36](#q36) | Membri fondatori | ÎNALTĂ | Etapa 1B (dacă pagina de pre-lansare oferă locuri de membru fondator) | REZOLVATĂ |
 | [Q37](#q37) | Personalul | ÎNALTĂ | Etapa 1A (roluri și permisiuni), Etapa 15 (instruirea personalului) | REZOLVATĂ |
@@ -79,6 +79,12 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q56](#q56) | Panoul de admin: cine vede rapoartele financiare *(nouă, Etapa 10)* | SCĂZUTĂ | nimic (se schimbă ușor) | DESCHISĂ |
 | [Q57](#q57) | Site-ul complet: când înlocuiește pagina de pre-lansare *(nouă, Etapa 11)* | MEDIE | nimic (comutator în panou) | REZOLVATĂ 29.09.2026 |
 | [Q58](#q58) | Adresa site-ului Clubului Tenis Elite *(nouă, Etapa 11)* | SCĂZUTĂ | nimic (link din panou) | REZOLVATĂ 30.09.2026 |
+| [Q59](#q59) | Sunetul videoului | SCĂZUTĂ | nimic (efectele site-ului) | DESCHISĂ |
+| [Q60](#q60) | Videoul pe telefon | SCĂZUTĂ | nimic (efectele site-ului) | DESCHISĂ |
+| [Q61](#q61) | „Pop”-urile | SCĂZUTĂ | nimic (efectele site-ului) | DESCHISĂ |
+| [Q62](#q62) | Efectele opționale | SCĂZUTĂ | nimic (efectele site-ului) | DESCHISĂ |
+| [Q63](#q63) | Intensitatea efectelor | SCĂZUTĂ | nimic (efectele site-ului) | DESCHISĂ |
+| [Q64](#q64) | Pagina de pre-lansare și efectele | SCĂZUTĂ | nimic (efectele site-ului) | DESCHISĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -718,3 +724,41 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Context:** Q20 (26.09.2026): site-ul de tenis rămâne separat, cu legături reciproce. Secțiunea Tenis a site-ului (Etapa 11, secțiunea 8) trebuie să trimită vizitatorul acolo, dar adresa site-ului nu apare în documentație.
 - **Varianta implicită (DE_CONFIRMAT):** până primim adresa, secțiunea scrie „Legătura spre site-ul Clubului Tenis Elite apare aici în curând.”, fără link. Adresa se completează din panou (**Setări** → `club.tennis_club_url`, doar `https://…`), iar site-ul se actualizează singur în câteva secunde.
 - **Întrebare pentru proprietar:** care e adresa site-ului Clubului Tenis Elite? Și, pentru legătura inversă: puteți adăuga pe site-ul de tenis un link spre Jungle Padel, când publicați site-ul complet?
+
+## Întrebări noi, apărute la efectele site-ului (30.09.2026)
+
+### <a id="q59"></a>Q59 — Sunetul videoului de prezentare
+
+- **Prioritate:** SCĂZUTĂ · **Blochează:** nimic (lucrez cu varianta implicită)
+- **Stare:** DESCHISĂ (din 30.09.2026)
+- **Varianta implicită (DE_CONFIRMAT):** videoul rulează fără sunet; un buton de sunet apare doar dacă videoul are muzică cu drepturi de folosire.
+
+### <a id="q60"></a>Q60 — Videoul pe telefon
+
+- **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
+- **Stare:** DESCHISĂ (din 30.09.2026)
+- **Varianta implicită (DE_CONFIRMAT):** aceeași filmare ca pe calculator, încadrată pe telefon cu un punct de focalizare reglabil. Alternativa: o filmare verticală separată (9:16).
+
+### <a id="q61"></a>Q61 — „Pop”-urile
+
+- **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
+- **Stare:** DESCHISĂ (din 30.09.2026)
+- **Varianta implicită (DE_CONFIRMAT):** „pop” înseamnă elemente care apar cu un efect elastic; nicio fereastră pop-up care acoperă pagina. O fereastră pop-up reală (de exemplu pentru lista de așteptare) se face doar cu aprobarea dumneavoastră.
+
+### <a id="q62"></a>Q62 — Efectele opționale
+
+- **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
+- **Stare:** DESCHISĂ (din 30.09.2026)
+- **Varianta implicită (DE_CONFIRMAT):** intră doar efectele opționale aprobate după ce le vedeți ca demonstrații (frunze în parallax, lumina care urmărește cursorul, camera din hală la derulare, tranziții între pagini, celebrarea rezultatului la simulatoare).
+
+### <a id="q63"></a>Q63 — Intensitatea efectelor
+
+- **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
+- **Stare:** DESCHISĂ (din 30.09.2026)
+- **Varianta implicită (DE_CONFIRMAT):** spectaculoasă în hero și în tur, medie în secțiunile de prezentare, discretă în formulare, cont și paginile legale.
+
+### <a id="q64"></a>Q64 — Pagina de pre-lansare și efectele
+
+- **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
+- **Stare:** DESCHISĂ (din 30.09.2026)
+- **Varianta implicită (DE_CONFIRMAT):** pagina de pre-lansare (publică acum) nu primește videoul și efectele; rămâne cum a fost aprobată în Etapa 1B.
