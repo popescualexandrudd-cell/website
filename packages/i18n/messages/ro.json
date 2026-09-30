@@ -1133,6 +1133,34 @@
         },
         "request": "Cere sala de evenimente"
       },
+      "cafe": {
+        "kicker": "Cafeneaua",
+        "title": "Cafea de specialitate, între meciuri.",
+        "lead": "Cafeneaua e la parter, împreună cu recepția și vestiarele, cu scară spre pasarela-lounge de deasupra terenurilor: o cafea înainte de meci, o apă rece după.",
+        "stepsLabel": "Cum comanzi",
+        "steps": {
+          "order": {
+            "title": "Comanzi la Chioșcul de Plăți",
+            "text": "Alegi din meniu și plătești în numerar, la aparat."
+          },
+          "receipt": {
+            "title": "Primești bonul cu numărul comenzii",
+            "text": "Comanda ajunge direct pe ecranul barului."
+          },
+          "ready": {
+            "title": "Îți vezi numărul pe ecran",
+            "text": "Când comanda e gata, numărul tău apare pe ecranul din lobby."
+          }
+        },
+        "menu": {
+          "title": "Meniul",
+          "price": "{amount} lei",
+          "provisional": "Prețuri orientative: meniul și prețurile finale se anunță înainte de deschidere.",
+          "empty": "Meniul apare aici când îl publică clubul.",
+          "error": "Meniul nu se poate încărca acum. Revino în câteva minute.",
+          "note": "Meniul îl ține la zi clubul: aici apare doar ce se poate comanda acum."
+        }
+      },
       "pages": {
         "padel": "Padel",
         "league": "Liga Jungle",

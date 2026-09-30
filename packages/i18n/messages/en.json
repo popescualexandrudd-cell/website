@@ -1133,6 +1133,34 @@
         },
         "request": "Request the event room"
       },
+      "cafe": {
+        "kicker": "The café",
+        "title": "Specialty coffee, between matches.",
+        "lead": "The café is on the ground floor, with the reception and the changing rooms, with stairs up to the lounge walkway above the courts: a coffee before the match, a cold water after.",
+        "stepsLabel": "How to order",
+        "steps": {
+          "order": {
+            "title": "Order at the Payments Kiosk",
+            "text": "Choose from the menu and pay in cash, at the machine."
+          },
+          "receipt": {
+            "title": "Get the receipt with your order number",
+            "text": "The order goes straight to the bar's screen."
+          },
+          "ready": {
+            "title": "Watch for your number",
+            "text": "When the order is ready, your number shows on the lobby screen."
+          }
+        },
+        "menu": {
+          "title": "The menu",
+          "price": "{amount} lei",
+          "provisional": "Indicative prices: the final menu and prices are announced before the opening.",
+          "empty": "The menu appears here when the club publishes it.",
+          "error": "The menu can't be loaded right now. Please come back in a few minutes.",
+          "note": "The club keeps the menu up to date: only what can be ordered now shows here."
+        }
+      },
       "pages": {
         "padel": "Padel",
         "league": "Jungle League",

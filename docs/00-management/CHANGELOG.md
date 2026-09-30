@@ -4,6 +4,15 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, secțiunea 13 — 30.09.2026 (livrată)
+#### Adăugat
+- Cafeneaua de specialitate (§9.2, secțiunea 13): `Cafe`, randată pe server, meniul din `src/lib/cafe.ts`.
+  - cum se comandă: Chioșcul de Plăți, numerar, bonul cu numărul, ecranul din lobby (R-111, Q9);
+  - meniul exact din panou, doar ce e disponibil (R-112), marcat „Prețuri orientative” (Q21);
+  - texte `web.site.cafe.*` RO + EN.
+- Server: orice schimbare de meniu (categorie, produs) cere site-ului reîmprospătarea (eticheta nouă `cafe`, acceptată și de `POST /api/revalidate`).
+- Teste: un test pe server extins (fiecare schimbare de meniu cere reîmprospătarea), 4 unitare pe site, 4 cap-coadă (`e2e/full/cafe.spec.ts`). Lighthouse mobil 90–94 (patru măsurători), desktop 100 · 100 · 100 · 100.
+
 ### Etapa 11, secțiunea 12 — 30.09.2026 (livrată)
 #### Adăugat
 - Evenimente (§9.2, secțiunea 12, R-110): `Events`, randată pe server (niciun script nou în browser), logica în `src/lib/events.ts`.

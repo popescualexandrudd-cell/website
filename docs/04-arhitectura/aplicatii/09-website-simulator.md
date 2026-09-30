@@ -136,3 +136,9 @@ Fiecare pagină există în toate limbile active, cu URL-uri localizate (`/ro/..
 - **Un eveniment din calendar nu rezervă nimic:** terenurile sau sala se rezervă separat, din Calendar.
 - **Sala de evenimente:** câte persoane primește și prețul pe oră (cea mai ieftină bandă a sezonului, „orientativ” cât tariful e DE_STABILIT, Q21), din date; în clădirea de alături, cu studioul de pilates (Q46); încălzită și răcită (§1). Cererea se trimite din cont și o confirmă managerul (Q34, varianta implicită, încă deschisă).
 - **Randată pe server:** secțiunea nu trimite niciun script în browser. Datele se păstrează 5 minute; la orice schimbare vizibilă din panou, serverul cere site-ului reîmprospătarea (eticheta de cache `events`).
+
+### Secțiunea 13 — Cafeneaua de specialitate (30.09.2026)
+- **Unde:** la parter, împreună cu recepția și vestiarele, cu scară spre pasarela-lounge (planul proprietarului, Q46).
+- **Cum se comandă (R-111, Q9):** la Chioșcul de Plăți, cu plata în numerar; bonul are numărul comenzii, comanda ajunge pe afișajul barului, iar numărul apare pe ecranul din lobby când e gata.
+- **Meniul** (`GET /api/v1/cafe/menu?location=…`): exact cel din panou, doar produsele disponibile acum (R-112), pe categorii, cu prețul fiecăruia; „Prețuri orientative” cât un preț e DE_STABILIT (Q21).
+- **Randată pe server,** fără script în browser. Meniul se păstrează 5 minute; la orice schimbare din panou (categorie sau produs), serverul cere site-ului reîmprospătarea (eticheta de cache `cafe`).

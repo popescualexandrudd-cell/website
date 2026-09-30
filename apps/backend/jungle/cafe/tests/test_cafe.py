@@ -10,6 +10,7 @@ from django.test import Client
 from jungle.audit.services import SYSTEM
 from jungle.cafe import services
 from jungle.cafe.models import CafeCategory, CafeOrder, CafeProduct
+from jungle.configuration import web
 from jungle.conftest import Api, error_code
 from jungle.core.errors import DomainError
 from jungle.core.permissions import Role
@@ -252,7 +253,10 @@ def test_cancelling_an_order_returns_the_money(api: Api, club: Any, menu: Any, s
     assert error_code(api.post(url, {"reason": "din nou"})) == "cafe.invalid_transition"
 
 
-def test_menu_management(api: Api, club: Any, staff: Any) -> None:
+def test_menu_management(api: Api, club: Any, staff: Any, monkeypatch: pytest.MonkeyPatch) -> None:
+    """R-112; every change of the menu asks the website to show it (§9.2.13, tag "cafe")."""
+    refreshes: list[list[str]] = []
+    monkeypatch.setattr(web, "revalidate_after_commit", refreshes.append)
     staff(Role.RECEPTION, club.location)
     body = {"location_id": str(club.location.id), "name_ro": "Gustări", "name_en": "Snacks"}
     assert api.post("/staff/cafe/categories", body).status_code == 403
@@ -271,6 +275,7 @@ def test_menu_management(api: Api, club: Any, staff: Any) -> None:
     changed = api.put(url, {**product, "price": 600, "confirmed": True, "is_available": False})
     assert changed.json()["price"] == 600 and changed.json()["marker"] == "confirmed"
     assert api.get("/cafe/menu?location=jungle-padel").json() == []  # not available
+    assert refreshes == [["cafe"], ["cafe"], ["cafe"]]  # the category, the product, the change
     assert (
         api.post(
             "/staff/cafe/products", {**product, "category_id": str(club.location.id)}

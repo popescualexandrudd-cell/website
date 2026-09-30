@@ -21,6 +21,7 @@ from jungle.accounts.models import User
 from jungle.accounts.services.authz import authorize
 from jungle.audit import services as audit
 from jungle.cafe.models import CafeCategory, CafeOrder, CafeOrderLine, CafeProduct, OrderStatus
+from jungle.configuration import web
 from jungle.configuration.models import Marker
 from jungle.core import clock
 from jungle.core.errors import DomainError, ErrorCode
@@ -88,6 +89,7 @@ def create_category(
         location=location, name_ro=name_ro, name_en=name_en, sort_order=sort_order
     )
     audit.record(audit.actor_from_request(request), "cafe.category_created", target=category)
+    web.revalidate_after_commit([web.CAFE_TAG])  # the website shows the menu (§9.2.13)
     return category
 
 
@@ -126,6 +128,7 @@ def save_product(
             before=before,
             after=audit.snapshot(product),
         )
+        web.revalidate_after_commit([web.CAFE_TAG])
     return product
 
 

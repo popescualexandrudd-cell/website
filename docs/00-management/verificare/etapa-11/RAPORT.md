@@ -22,7 +22,8 @@
 | 10. Configuratorul de pachete | 30.09.2026 | **aprobată 30.09.2026** |
 | 11. „Împarte ora” | 30.09.2026 | **livrată** |
 | 12. Evenimente | 30.09.2026 | **livrată** |
-| 13–19 | — | urmează, câte una |
+| 13. Cafeneaua de specialitate | 30.09.2026 | **livrată** |
+| 14–19 | — | urmează, câte una |
 
 ---
 
@@ -624,3 +625,46 @@ După reparații: **90–92** pe telefon în măsurătorile repetate (o singură
 1. Deschideți capturile 30–33.
 2. În panou (după ce e publicat pe server): Evenimente → „Calendarul public” → adăugați un eveniment și bifați „Publică pe site acum”.
 3. Dacă secțiunea vă place, scrieți „aprob secțiunea 12”.
+
+---
+
+## Secțiunea 13 — Cafeneaua de specialitate
+
+### Ce s-a construit
+După Evenimente urmează „Cafea de specialitate, între meciuri.” (§9.2, secțiunea 13). Cafeneaua e la parter, împreună cu recepția și vestiarele, cu scară spre pasarela-lounge.
+
+**Cum comanzi, în trei pași (R-111):**
+1. la Chioșcul de Plăți: alegi din meniu și plătești în numerar (Q9);
+2. primești bonul cu numărul comenzii, iar comanda ajunge pe ecranul barului;
+3. când e gata, numărul tău apare pe ecranul din lobby.
+
+**Meniul, din date reale:** exact cel din panou (Cafenea), pe categorii, doar produsele disponibile acum (R-112), fiecare cu prețul lui. Cât un preț e încă orientativ (Q21), apare nota „Prețuri orientative: meniul și prețurile finale se anunță înainte de deschidere.” Acum vedeți meniul orientativ pus la Q21 (espresso, cappuccino, apă plată).
+
+**Ce am ales și de ce:**
+1. **Meniul nu se scrie de două ori:** îl schimbați în panou, iar site-ul se actualizează imediat (la fiecare categorie sau produs salvat, serverul îi cere site-ului reîmprospătarea).
+2. **Un produs marcat indisponibil dispare de pe site,** ca nimeni să nu vină pentru ceva ce nu se poate comanda.
+3. **Secțiunea e randată pe server,** fără cod nou în browser.
+
+### Capturi de ecran
+34. [Cafeneaua, pe calculator](ecrane/desktop-18-cafenea.png)
+35. [Cafeneaua, pe telefon](ecrane/mobile-18-cafenea.png)
+36. [Meniul, pe calculator](ecrane/desktop-19-cafenea-meniu.png)
+37. [Meniul, pe telefon](ecrane/mobile-19-cafenea-meniu.png)
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Teste pe server | testul meniului extins: fiecare schimbare (categorie, produs, modificare) cere site-ului reîmprospătarea. Acoperire 100% pe ramuri a cafenelei, ca până acum. |
+| Teste unitare pe site | 4 noi: citirea meniului (și când serverul nu răspunde), limba, nota de prețuri orientative, reîmprospătarea cu eticheta `cafe`. |
+| Cap-coadă | 4 noi (calculator + telefon): cei trei pași; meniul comparat cu serverul (categoriile, produsele, prețurile, nota); engleza. Toate testele site-ului trec: 28 + 87. |
+| Lighthouse, pagina principală | mobil **90–94** în patru măsurători (raportul salvat: 90 · 100 · 100 · 100, LCP 3,2 s, CLS 0), calculator **100 · 100 · 100 · 100** ([mobil](lighthouse-mobil.html), [calculator](lighthouse-desktop.html)). |
+
+### Dubla revizuire: probleme găsite și reparate
+1. **Nota de prețuri orientative lipită de meniu:** pe captură, banda galbenă atingea titlul primei categorii. Are acum spațiu dedesubt.
+2. **O afirmație de verificat:** în prima variantă scria „lângă recepție”. Planul spune doar că cafeneaua, recepția și vestiarele sunt la parter, deci textul spune exact atât.
+3. **Din perspectiva unui atacator:** secțiunea doar citește meniul public (nume și prețuri). Nu comandă și nu plătește nimic; comenzile rămân doar la chioșc.
+
+### Cum verificați (click cu click)
+1. Deschideți capturile 34–37.
+2. În panou (după ce e publicat pe server): Cafenea → schimbați prețul unui produs sau marcați-l indisponibil, apoi reîncărcați pagina site-ului.
+3. Dacă secțiunea vă place, scrieți „aprob secțiunea 13”.

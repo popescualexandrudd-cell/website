@@ -38,6 +38,11 @@ describe("POST /api/revalidate", () => {
     expect(revalidateTag.mock.calls).toEqual([["events", { expire: 0 }]]);
   });
 
+  it("drops the café menu when it changes (§9.2.13)", async () => {
+    expect((await call({ tags: ["cafe"] }, "s3cret-value")).status).toBe(200);
+    expect(revalidateTag.mock.calls).toEqual([["cafe", { expire: 0 }]]);
+  });
+
   it("refuses a wrong or missing secret, unknown tags and a bad body", async () => {
     expect((await call({ tags: ["flags"] }, "wrong-value!")).status).toBe(401);
     expect((await call({ tags: ["flags"] }, "short")).status).toBe(401);

@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { Cafe } from "./Cafe";
 import { Events } from "./Events";
 import { FullHero } from "./FullHero";
 import { League } from "./League";
@@ -35,7 +36,7 @@ export const SECTIONS = [
 ] as const;
 
 /** How many sections are built (delivered for approval or approved), in the order above. */
-export const BUILT = 12;
+export const BUILT = 13;
 
 /**
  * The home page of the full site while it is being built: the sections built so far (the header
@@ -57,6 +58,7 @@ export function FullHome() {
       <Packages id="pachete" />
       <Split id="imparte-ora" />
       <Events id="evenimente" />
+      <Cafe id="cafenea" />
       <SectionMap />
     </>
   );

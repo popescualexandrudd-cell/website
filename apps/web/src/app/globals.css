@@ -2657,6 +2657,75 @@ body[data-menu-open="true"] {
   }
 }
 
+/* ------------------------------------------------------------------ full site: the café (Stage 11, §9.2.13) */
+.cafe__steps {
+  list-style: none;
+  margin: 40px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 16px;
+}
+.cafe__steps li {
+  display: grid;
+  gap: 6px;
+  padding: 20px 22px;
+  background: var(--color-night-800);
+  border: 1px solid var(--line);
+}
+.cafe__steps strong {
+  color: var(--text);
+  font-weight: 600;
+}
+.cafe__steps li > span:last-child {
+  color: var(--text-2);
+}
+.cafe__step {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  line-height: 1;
+  color: var(--accent);
+}
+.cafe__menu .configurator__provisional {
+  margin: 0 0 24px;
+}
+.cafe__categories {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 16px 32px;
+}
+.cafe__category h4 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.cafe__products {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.cafe__products li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--text);
+}
+.cafe__price {
+  flex: none;
+  font-family: var(--font-serif);
+  font-size: 18px;
+  color: var(--accent);
+}
+
 /* ------------------------------------------------------------------ full site: the build map */
 .site-preview .lead {
   max-width: 720px;
