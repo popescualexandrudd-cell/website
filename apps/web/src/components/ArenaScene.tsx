@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as tokens from "@jungle/design-tokens/tokens";
-import { afterLoadIdle, createLoop, disposeScene, hasRealGpu, sceneFlags, usesSoftwareRendering } from "@/lib/webgl";
+import { afterLoadIdle, createLoop, disposeScene, realGpu, sceneFlags, usesSoftwareRendering } from "@/lib/webgl";
 
 /**
  * Hero scene, after the owner's site sketch (27.09.2026): four courts in two rows (2 × 2) and,
@@ -71,7 +71,7 @@ export default function ArenaScene() {
     let teardown = () => {};
 
     const cancelStart = afterLoadIdle(async () => {
-      if (!sceneFlags().forced && !hasRealGpu()) return; // the static render stays
+      if (!sceneFlags().forced && !(await realGpu())) return; // the static render stays
       const [THREE, { RoomEnvironment }, { gsap }, { ScrollTrigger }] = await Promise.all([
         import("three"),
         import("three/examples/jsm/environments/RoomEnvironment.js"),

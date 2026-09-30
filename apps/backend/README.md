@@ -74,6 +74,7 @@ Variabilele de mediu sunt descrise în [`.env.example`](.env.example). Imaginea 
 | `jungle/waitlist` | lista de așteptare (Etapa 1B): dublă confirmare, dezabonare cu ștergerea datelor, export CSV |
 | `jungle/pricing` | tarife pe 30 de minute (bandă, sezon, tip client, produs), oferta unei rezervări (Etapa 3) |
 | `jungle/bookings` | rezervări, anulări, lista de așteptare pe interval, clase de pilates, sala de evenimente (Etapa 3); suprapunerile sunt refuzate de PostgreSQL (btree_gist) |
+| `jungle/events` | calendarul public al clubului (Etapa 11, R-110): seri cu DJ, padel social, evenimente ale clubului, publicate din panou cu motiv și audit; `GET /api/v1/events/calendar` le arată alături de turneele ligii deschise; 100% acoperire pe ramuri |
 | `jungle/attendance` | scanări și prezențe, neprezentări, blocări și notificări pentru personal (Etapa 3) |
 | `jungle/ledger` | registrul contabil cu dublă înregistrare, plăți, împărțirea orei, credit și datorii, bon fiscal prin adaptor (Etapa 4) |
 | `jungle/subscriptions` | configuratorul, abonamente, sesiuni și recuperări, înghețare, conturi corporate (Etapa 4) |

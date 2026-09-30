@@ -32,6 +32,12 @@ describe("POST /api/revalidate", () => {
     ]);
   });
 
+  it("drops the club's calendar when an event changes (§9.2.12)", async () => {
+    const response = await call({ tags: ["events"] }, "s3cret-value");
+    expect(response.status).toBe(200);
+    expect(revalidateTag.mock.calls).toEqual([["events", { expire: 0 }]]);
+  });
+
   it("refuses a wrong or missing secret, unknown tags and a bad body", async () => {
     expect((await call({ tags: ["flags"] }, "wrong-value!")).status).toBe(401);
     expect((await call({ tags: ["flags"] }, "short")).status).toBe(401);

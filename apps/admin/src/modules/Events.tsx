@@ -1,12 +1,14 @@
 /**
  * Events (§8.6, R-120…): the requests for the event room sent from the website, answered by the
- * manager (approve: the room is booked; decline), always with a note the requester receives.
+ * manager (approve: the room is booked; decline), always with a note the requester receives; then
+ * the club's public calendar (R-110, `ClubCalendar`).
  */
 import { useState } from "react";
 import { type Schemas, unwrap } from "../api";
 import { formatDate, formatTime } from "../i18n";
 import { usePanel, useT } from "../panel";
 import { useData } from "../ui";
+import { ClubCalendar } from "./ClubCalendar";
 
 type EventRequest = Schemas["StaffEventOut"];
 
@@ -43,6 +45,7 @@ export function Events() {
           </table>
         </>
       ) : null}
+      <ClubCalendar />
     </section>
   );
 }

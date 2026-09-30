@@ -4,6 +4,27 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, secțiunea 12 — 30.09.2026 (livrată)
+#### Adăugat
+- Evenimente (§9.2, secțiunea 12, R-110): `Events`, randată pe server (niciun script nou în browser), logica în `src/lib/events.ts`.
+  - serile cu DJ, turneele ligii, padelul social;
+  - calendarul clubului: evenimentele publicate și turneele ligii deschise sau în desfășurare, în ora clubului; „Anulat” și „Exemplu (demo)” la vedere;
+  - sala de evenimente: câte persoane și prețul pe oră din date („orientativ”, Q21), cererea din cont confirmată de manager (Q34);
+  - texte `web.site.events.*` RO + EN.
+- Server: aplicația `jungle.events` (modelul `ClubEvent`).
+  - public: `GET /api/v1/events/calendar`;
+  - personal (`events.manage`, pe locație): `GET|POST /api/v1/staff/club-events`, `PUT /api/v1/staff/club-events/{id}`, `POST …/{id}/publication`, `POST …/{id}/cancel`, toate în jurnalul de audit;
+  - coduri de eroare noi: `events.event_not_found`, `events.invalid_time`, `events.already_cancelled`;
+  - după orice schimbare vizibilă, serverul cere site-ului reîmprospătarea (eticheta nouă `events`, acceptată și de `POST /api/revalidate`);
+  - `seed_initial --demo` adaugă două evenimente demo, marcate;
+  - 100% acoperire pe ramuri, impusă de `scripts/test-all`.
+- Panou: Evenimente → „Calendarul public” (`ClubCalendar`): adaugă (ciornă sau publicat), modifică, publică, retrage, anulează, cu motiv; texte `admin.events.calendar.*` RO + EN.
+- Teste: 11 pe server (+ datele demo), 3 în panou, 9 unitare pe site, 4 cap-coadă (`e2e/full/events.spec.ts`). Lighthouse mobil 92 · 100 · 100 · 100, desktop 100 · 100 · 100 · 100.
+#### Schimbat (viteza pe telefon, tot site-ul)
+- Linkurile site-ului nu mai pre-descarcă paginile (`Link` din `src/i18n/navigation.tsx`, `prefetch` oprit implicit).
+- Verificarea plăcii video pentru scenele 3D se face pe un fir separat (`public/gpu-probe.js`, `realGpu()` în `src/lib/webgl.ts`), cu verificarea veche ca rezervă.
+- Fontul Fraunces cursiv nu se mai preîncarcă (nu îl folosește niciun text).
+
 ### Etapa 11, secțiunea 11 — 30.09.2026 (livrată)
 #### Adăugat
 - „Împarte ora” (§9.2, secțiunea 11): `Split` + `SplitHour`.

@@ -449,6 +449,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** cerere de rezervare online, confirmată de manager.
 - **Folosită în Etapa 3 (27.09.2026):** Cerere online (`POST /api/v1/events`), aprobată de manager.
+- **Folosită în Etapa 11 (30.09.2026, secțiunea 12 a site-ului):** site-ul arată câte persoane primește sala și prețul pe oră din date (tariful orientativ, Q21) și spune că cererea se trimite din cont și o confirmă managerul. Dacă alegeți pachete pentru sală, le adăugăm aici.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 

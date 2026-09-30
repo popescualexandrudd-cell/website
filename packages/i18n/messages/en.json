@@ -77,6 +77,9 @@
     "events.not_found": "The request does not exist.",
     "events.too_many_guests": "The room holds at most {capacity} people.",
     "events.already_decided": "The request has already been approved or declined.",
+    "events.event_not_found": "The event does not exist.",
+    "events.invalid_time": "Check the times: the event must start in the future, end after it starts and last at most 24 hours.",
+    "events.already_cancelled": "The event was cancelled and can no longer be changed.",
     "attendance.unknown_person": "The person was not found.",
     "restrictions.not_found": "There is no active block for this person.",
     "booking.email_not_verified": "Please confirm your email address (the link in the email we sent) before booking online.",
@@ -1070,6 +1073,65 @@
           }
         },
         "book": "Book a court"
+      },
+      "events": {
+        "kicker": "Events",
+        "title": "DJ nights, tournaments and a room of your own.",
+        "lead": "Padel goes on after the match: music nights, the league's tournaments, social padel and an event room for your parties.",
+        "cards": {
+          "dj": {
+            "title": "DJ nights",
+            "text": "Music and padel into the evening. The dates appear in the calendar when the club announces them."
+          },
+          "tournaments": {
+            "title": "League tournaments",
+            "text": "Draw, schedule and results live, on the website and on the club's screens. Entries from your account or at the reception, for league players."
+          },
+          "social": {
+            "title": "Social padel",
+            "text": "Americano and Mexicano evenings: come alone or with friends, and the partners change from one round to the next."
+          }
+        },
+        "calendar": {
+          "title": "The calendar",
+          "empty": "The calendar fills up before the opening: the first nights and tournaments appear here when the club announces them.",
+          "error": "The calendar can't be loaded right now. Please come back in a few minutes.",
+          "clubTime": "Times are the club's (Romanian time).",
+          "kinds": {
+            "dj_night": "DJ night",
+            "social": "Social padel",
+            "club": "Event",
+            "tournament": "League tournament"
+          },
+          "formats": {
+            "knockout": "Knockout",
+            "groups_knockout": "Groups + knockout",
+            "round_robin": "Round robin",
+            "americano": "Americano",
+            "mexicano": "Mexicano",
+            "king_of_the_court": "King of the Court"
+          },
+          "from": "from {time}",
+          "untilDay": "{from} – {day}, {to}",
+          "cancelled": "Cancelled",
+          "demo": "Example (demo)",
+          "underWay": "Under way: the draw and the results, live on the club's screens.",
+          "entries": "Entries until {date}, {time}: {places, plural, one {# place left} other {# places left}}.",
+          "full": "The draw is full."
+        },
+        "room": {
+          "title": "The event room",
+          "text": "A separate room, about the size of a padel court, in the building next door with the Pilates studio: for birthdays, team parties or an evening after a tournament.",
+          "how": "Send the request from your account: the day, the time and how many people are coming. The club's manager confirms it and the room is booked for you; if it can't be, they write to tell you why.",
+          "factsLabel": "The room at a glance",
+          "people": "people at most",
+          "price": "{amount} lei",
+          "perHour": "per hour, from",
+          "perHourProvisional": "per hour, from (indicative price)",
+          "climate": "All year",
+          "climateLabel": "heated in winter, cooled in summer"
+        },
+        "request": "Request the event room"
       },
       "pages": {
         "padel": "Padel",
@@ -2297,6 +2359,48 @@
         "pending": "Waiting",
         "approved": "Approved",
         "declined": "Declined"
+      },
+      "calendar": {
+        "title": "The public calendar",
+        "lead": "What you publish here appears on the website, under Events, next to the league's tournaments. An event on the calendar books no courts and not the room: book them separately, from the Calendar.",
+        "add": "Add an event",
+        "editTitle": "Change the event",
+        "kind": "Kind",
+        "kinds": {
+          "dj_night": "DJ night",
+          "social": "Social padel (Americano, Mexicano)",
+          "club": "Club event"
+        },
+        "titleRo": "Title (Romanian)",
+        "titleEn": "Title (English)",
+        "textRo": "Short description in Romanian (optional)",
+        "textEn": "Short description in English (optional)",
+        "day": "Day",
+        "start": "Starts at",
+        "end": "Ends at",
+        "endHint": "An end time earlier than the start means the next day. At most 24 hours.",
+        "publishNow": "Publish on the website now",
+        "create": "Add",
+        "save": "Save the changes",
+        "created": "The event has been added.",
+        "saved": "The changes have been saved.",
+        "published": "The event appears on the website.",
+        "withdrawn": "The event has been withdrawn from the website.",
+        "cancelled": "The event has been cancelled; the website shows \"Cancelled\" until its end time.",
+        "none": "No events on the calendar.",
+        "event": "Event",
+        "state": "State",
+        "actions": "Actions",
+        "states": {
+          "draft": "Draft",
+          "published": "Published",
+          "cancelled": "Cancelled"
+        },
+        "edit": "Change",
+        "publish": "Publish on the website",
+        "withdraw": "Withdraw from the website",
+        "cancel": "Cancel the event",
+        "demo": "demo"
       }
     },
     "devices": {

@@ -31,6 +31,8 @@ from jungle.core.api import router as health_router
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.devices.api import device_router
 from jungle.devices.api import router as devices_router
+from jungle.events.api import public_router as club_events_router
+from jungle.events.api import staff_router as club_events_staff_router
 from jungle.league.api import me_router as league_me_router
 from jungle.league.api import public_router as league_public_router
 from jungle.league.api import staff_router as league_staff_router
@@ -82,8 +84,10 @@ api.add_router("/bookings", bookings_public_router)
 api.add_router("/bookings", bookings_router)
 api.add_router("/classes", classes_router)
 api.add_router("/events", events_router)
+api.add_router("/events", club_events_router)
 api.add_router("/pricing", pricing_router)
 api.add_router("/staff", bookings_staff_router)
+api.add_router("/staff", club_events_staff_router)
 api.add_router("/staff", attendance_staff_router)
 api.add_router("/staff", pricing_staff_router)
 api.add_router("/account", account_router)

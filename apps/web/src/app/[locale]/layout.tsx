@@ -14,7 +14,10 @@ import { siteMode } from "@/lib/flags";
 import { routing } from "@/i18n/routing";
 import { INDEXABLE, SITE_URL } from "@/lib/site";
 
-const FONT_FILES = ["instrument-sans-latin.woff2", "fraunces-latin.woff2", "fraunces-italic-latin.woff2"];
+// Only the faces every page draws at once. The italic serif (`.h1 em`) is no longer preloaded: no
+// text uses it today, and 22 KB fetched before the first paint slowed it on phones (Lighthouse,
+// §9.4); the browser still fetches it on its own the day a title needs it.
+const FONT_FILES = ["instrument-sans-latin.woff2", "fraunces-latin.woff2"];
 // The Romanian letters (ă, ș, ț) have their own small subsets, found by the browser only once the text
 // is laid out: on the Romanian pages they are asked for at once, so the text is drawn sooner (LCP).
 const FONT_FILES_RO = ["instrument-sans-ro.woff2", "fraunces-ro.woff2"];

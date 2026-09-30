@@ -22,6 +22,8 @@ TIMEOUT_SECONDS = 3.0
 # The cache tags the website gives the data it reads from the API (apps/web/src/lib/flags.ts).
 FLAGS_TAG = "flags"
 CONFIG_TAG = "config"
+# The club's calendar (jungle.events, apps/web/src/lib/events.ts).
+EVENTS_TAG = "events"
 
 
 def revalidate(tags: list[str]) -> bool:

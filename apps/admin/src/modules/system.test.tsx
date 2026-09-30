@@ -5,6 +5,7 @@ import { act, cleanup, fireEvent, screen, within } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { type Call, fakeApi, json, mountPanel, settle } from "../test-kit";
 import { Audit } from "./Audit";
+import { moments } from "./ClubCalendar";
 import { Devices } from "./Devices";
 import { Events } from "./Events";
 import { MODULES, allowed } from "./index";
@@ -89,6 +90,7 @@ describe("events", () => {
       "GET /api/v1/staff/events": () => json([request("e1", "pending"), request("e2", "pending"), request("e3", "declined")]),
       "POST /api/v1/staff/events/e1/decision": () => json({}),
       "POST /api/v1/staff/events/e2/decision": refused("events.room_taken", 409),
+      "GET /api/v1/staff/club-events": () => json([]),
     };
     const panel = mount(<Events />, ["events.manage"]);
     await settle();
@@ -107,6 +109,133 @@ describe("events", () => {
     mount(<Events />, ["events.manage"]);
     await settle();
     expect(screen.getByText("Nicio cerere în așteptare.")).toBeTruthy();
+    expect(screen.getByText("Niciun eveniment în calendar.")).toBeTruthy();
+  });
+
+  const clubEvent = (id: string, extra: Record<string, unknown> = {}) => ({
+    id,
+    kind: "dj_night",
+    title_ro: `Seară ${id}`,
+    title_en: `Night ${id}`,
+    text_ro: "",
+    text_en: "",
+    starts_at: "2027-03-26T18:00:00Z", // 20:00 at the club
+    ends_at: "2027-03-26T21:00:00Z",
+    published: false,
+    cancelled_at: null,
+    cancel_reason: "",
+    is_demo: false,
+    ...extra,
+  });
+
+  it("R-110: the public calendar: add, change, publish, withdraw and cancel", async () => {
+    answers = {
+      "GET /api/v1/staff/events": () => json([]),
+      "GET /api/v1/staff/club-events": () =>
+        json([
+          clubEvent("c1"),
+          clubEvent("c2", { published: true, is_demo: true }),
+          clubEvent("c3", { published: true, cancelled_at: "2027-03-16T07:00:00Z", cancel_reason: "DJ bolnav" }),
+        ]),
+      "POST /api/v1/staff/club-events": () => json(clubEvent("c4"), 201),
+      "PUT /api/v1/staff/club-events/c1": () => json(clubEvent("c1")),
+      "POST /api/v1/staff/club-events/c1/publication": () => json(clubEvent("c1", { published: true })),
+      "POST /api/v1/staff/club-events/c2/publication": () => json(clubEvent("c2")),
+      "POST /api/v1/staff/club-events/c2/cancel": () => json(clubEvent("c2")),
+    };
+    const panel = mount(<Events />, ["events.manage"]);
+    await settle();
+    const rows = () => ({
+      draft: screen.getByRole("row", { name: /Seară c1/ }),
+      live: screen.getByRole("row", { name: /Seară c2/ }),
+      gone: screen.getByRole("row", { name: /Seară c3/ }),
+    });
+    expect(within(rows().draft).getByText("Ciornă")).toBeTruthy();
+    expect(within(rows().live).getByText(/demo/)).toBeTruthy();
+    expect(within(rows().gone).getByText(/DJ bolnav/)).toBeTruthy();
+    expect(within(rows().gone).queryByRole("button")).toBeNull(); // cancelled: nothing more to do
+
+    // a new event past midnight, published at once
+    const add = screen.getByRole("form", { name: "Adaugă un eveniment" });
+    fireEvent.change(within(add).getByLabelText("Tipul"), { target: { value: "social" } });
+    fireEvent.change(within(add).getByLabelText("Titlul (română)"), { target: { value: "Americano" } });
+    fireEvent.change(within(add).getByLabelText("Titlul (engleză)"), { target: { value: "Americano" } });
+    fireEvent.change(within(add).getByLabelText("Ziua"), { target: { value: "2027-03-20" } });
+    fireEvent.change(within(add).getByLabelText("Începe la"), { target: { value: "22:00" } });
+    fireEvent.change(within(add).getByLabelText("Se termină la"), { target: { value: "01:00" } });
+    fireEvent.click(within(add).getByLabelText("Publică pe site acum"));
+    await submit("Adaugă un eveniment");
+    expect(last("POST", "/api/v1/staff/club-events")?.body).toEqual({
+      kind: "social",
+      title_ro: "Americano",
+      title_en: "Americano",
+      text_ro: "",
+      text_en: "",
+      starts_at: "2027-03-20T22:00:00+02:00",
+      ends_at: "2027-03-21T01:00:00+02:00",
+      location_id: "l1",
+      published: true,
+    });
+    expect(panel.notify).toHaveBeenCalledWith("Evenimentul a fost adăugat.");
+    expect((within(add).getByLabelText("Titlul (română)") as HTMLInputElement).value).toBe("");
+
+    // changed with a reason, the form filled in from the event
+    await click("Modifică", rows().draft);
+    const change = screen.getByRole("form", { name: "Modifică evenimentul" });
+    expect((within(change).getByLabelText("Titlul (română)") as HTMLInputElement).value).toBe("Seară c1");
+    expect((within(change).getByLabelText("Începe la") as HTMLInputElement).value).toBe("20:00");
+    fireEvent.change(within(change).getByLabelText("Titlul (română)"), { target: { value: "Seară cu DJ" } });
+    fireEvent.change(within(change).getByLabelText("Motivul"), { target: { value: "titlu corectat" } });
+    await submit("Modifică evenimentul");
+    expect(last("PUT", "/api/v1/staff/club-events/c1")?.body).toMatchObject({
+      title_ro: "Seară cu DJ",
+      starts_at: "2027-03-26T20:00:00+02:00",
+      ends_at: "2027-03-26T23:00:00+02:00",
+      reason: "titlu corectat",
+    });
+    expect(panel.notify).toHaveBeenCalledWith("Modificările au fost salvate.");
+    expect(screen.queryByRole("form", { name: "Modifică evenimentul" })).toBeNull();
+    // changing one's mind closes the form
+    await click("Modifică", rows().draft);
+    await click("Renunț", screen.getByRole("form", { name: "Modifică evenimentul" }));
+    expect(screen.getByRole("form", { name: "Adaugă un eveniment" })).toBeTruthy();
+
+    await withReason("Publică pe site", "gata de anunțat", rows().draft);
+    expect(last("POST", "/api/v1/staff/club-events/c1/publication")?.body).toEqual({ published: true, reason: "gata de anunțat" });
+    expect(panel.notify).toHaveBeenCalledWith("Evenimentul apare pe site.");
+    await withReason("Retrage de pe site", "se amână", rows().live);
+    expect(last("POST", "/api/v1/staff/club-events/c2/publication")?.body).toEqual({ published: false, reason: "se amână" });
+    expect(panel.notify).toHaveBeenCalledWith("Evenimentul a fost retras de pe site.");
+    await withReason("Anulează evenimentul", "ploaie de meciuri", rows().live);
+    expect(last("POST", "/api/v1/staff/club-events/c2/cancel")?.body).toEqual({ reason: "ploaie de meciuri" });
+    expect(panel.notify).toHaveBeenCalledWith("Evenimentul a fost anulat; pe site apare „Anulat” până la ora lui de sfârșit.");
+    expect(panel.fail).not.toHaveBeenCalled();
+  });
+
+  it("R-110: a refused change is said, the form stays filled in", async () => {
+    answers = {
+      "GET /api/v1/staff/events": () => json([]),
+      "GET /api/v1/staff/club-events": () => json([]),
+      "POST /api/v1/staff/club-events": refused("events.invalid_time", 422),
+    };
+    const panel = mount(<Events />, ["events.manage"]);
+    await settle();
+    const add = screen.getByRole("form", { name: "Adaugă un eveniment" });
+    fireEvent.change(within(add).getByLabelText("Titlul (română)"), { target: { value: "Seară" } });
+    await submit("Adaugă un eveniment");
+    expect(panel.fail).toHaveBeenCalled();
+    expect((within(add).getByLabelText("Titlul (română)") as HTMLInputElement).value).toBe("Seară");
+  });
+
+  it("R-110: the moments of a form, in club time across the clock change (ADR-0010)", () => {
+    expect(moments({ day: "2027-03-27", start: "22:00", end: "02:00" })).toEqual({
+      starts_at: "2027-03-27T22:00:00+02:00",
+      ends_at: "2027-03-28T02:00:00+02:00",
+    });
+    expect(moments({ day: "2027-03-28", start: "20:00", end: "23:00" })).toEqual({
+      starts_at: "2027-03-28T20:00:00+03:00",
+      ends_at: "2027-03-28T23:00:00+03:00",
+    });
   });
 });
 

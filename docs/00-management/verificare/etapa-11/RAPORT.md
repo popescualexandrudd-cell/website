@@ -21,7 +21,8 @@
 | 9. Pilates Reformer | 30.09.2026 | **aprobată 30.09.2026** |
 | 10. Configuratorul de pachete | 30.09.2026 | **aprobată 30.09.2026** |
 | 11. „Împarte ora” | 30.09.2026 | **livrată** |
-| 12–19 | — | urmează, câte una |
+| 12. Evenimente | 30.09.2026 | **livrată** |
+| 13–19 | — | urmează, câte una |
 
 ---
 
@@ -557,3 +558,69 @@ Scorul e **90**, exact la limită, iar calculatorul are 100. Secțiunile care ur
 ### Cum verificați (click cu click)
 1. Deschideți capturile 28 și 29.
 2. Dacă secțiunea vă place, scrieți „aprob secțiunea 11”.
+
+---
+
+## Secțiunea 12 — Evenimente
+
+### Ce s-a construit
+După „Împarte ora” urmează „Seri cu DJ, turnee și o sală doar a voastră.” (§9.2, secțiunea 12, R-110).
+
+**Trei carduri:**
+- serile cu DJ;
+- turneele ligii: tablou, program și rezultate live; înscrierea din cont sau la recepție, pentru jucătorii din ligă;
+- padelul social: Americano și Mexicano.
+
+**Calendarul clubului, din date reale:**
+- evenimentele pe care le publicați din panou (Evenimente → „Calendarul public”), cu titlul în română și engleză;
+- turneele ligii cu înscrieri deschise (cu termenul și locurile libere) sau în desfășurare, citite direct din ligă;
+- în ordinea orei, pe următoarele 4 luni, cu ora clubului;
+- un eveniment anulat rămâne pe site, marcat „Anulat”, până la ora lui de sfârșit, ca să nu vină nimeni degeaba;
+- cât nu e nimic publicat, apare: „Calendarul se completează înainte de deschidere…”.
+
+**Sala de evenimente, din date:** câte persoane primește (20, cum e setată sala) și prețul pe oră („orientativ”, cel de la Q21), încălzită și răcită, în clădirea de alături, cu studioul de pilates. Butonul „Cere sala de evenimente” duce la pagina Evenimente; cererea se trimite din cont și o confirmă managerul (Q34, varianta implicită).
+
+**În panou, la Evenimente, sub cererile pentru sală:** „Calendarul public”.
+1. Adăugați un eveniment: tipul, titlul în română și în engleză, o descriere scurtă (opțional), ziua și orele. Îl lăsați ciornă sau îl publicați direct.
+2. Îl puteți modifica, publica, retrage sau anula, de fiecare dată cu un motiv.
+3. Totul intră în jurnalul de audit, iar site-ul se actualizează imediat după fiecare schimbare vizibilă.
+
+**Ce am ales și de ce:**
+1. **Calendarul se completează din panou,** nu din cod: o seară cu DJ nouă nu mai cere un programator.
+2. **Turneele nu se scriu de două ori:** apar în calendar din ligă, cu datele lor.
+3. **Un eveniment din calendar nu rezervă terenuri sau sala.** Dacă o seară cu DJ ocupă terenurile, le rezervați din Calendar, ca până acum. Așa, un anunț nu poate bloca din greșeală rezervările clienților.
+4. **Evenimentele demo** (o seară cu DJ și un Americano) există doar în datele de probă și apar marcate „Exemplu (demo)”; pe serverul clubului nu apar.
+5. **Secțiunea e randată pe server:** nu adaugă cod în browser, deci nu încetinește pagina pe telefon.
+
+### Capturi de ecran
+30. [Evenimente și calendarul, pe calculator](ecrane/desktop-16-evenimente.png)
+31. [Evenimente și calendarul, pe telefon](ecrane/mobile-16-evenimente.png)
+32. [Sala de evenimente, pe calculator](ecrane/desktop-17-sala-evenimente.png)
+33. [Sala de evenimente, pe telefon](ecrane/mobile-17-sala-evenimente.png)
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Teste pe server | 11 noi:<br>• un eveniment ajunge pe site doar publicat;<br>• publicat direct, apoi modificat cu motiv (în jurnalul de audit, cu înainte și după);<br>• o ciornă nu cere reîmprospătarea site-ului;<br>• orele și titlurile verificate (sfârșitul după început, cel mult 24 de ore, fără ore trecute, fără ore fără fus orar, titlurile obligatorii);<br>• anularea cu motiv, vizibilă până la sfârșit;<br>• doar managerii evenimentelor clubului, cu 2FA;<br>• lista din panou;<br>• turneele ligii în ordinea orei (fără cele încheiate, anulate sau prea departe);<br>• cel mult 30, pe 4 luni;<br>• sala, cu cea mai ieftină oră;<br>• un club necunoscut.<br>Plus: datele demo marcate. Acoperire 100% pe ramuri a aplicației noi, impusă de verificarea completă. |
+| Teste în panou | 3 noi: adăugare (și peste miezul nopții), modificare, publicare, retragere și anulare cu motiv; o schimbare refuzată păstrează formularul; orele în ora clubului, și la trecerea la ora de vară. |
+| Teste unitare pe site | 9 noi: citirea calendarului, limba, tipurile, orele clubului (și la trecerea la ora de vară), reîmprospătarea cu eticheta `events`; verificarea plăcii video pe firul separat (placă reală, placă software, rezerva pe firul principal, fără răspuns). |
+| Cap-coadă | 4 noi (calculator + telefon): cardurile, calendarul comparat cu serverul (titlurile, orele, marcajul demo), sala cu datele ei, engleza. Toate testele site-ului trec: 28 + 83. |
+| Lighthouse, pagina principală | mobil **92 · 100 · 100 · 100** (LCP 3,2 s, CLS 0), calculator **100 · 100 · 100 · 100** ([mobil](lighthouse-mobil.html), [calculator](lighthouse-desktop.html)). |
+
+### Dubla revizuire: probleme găsite și reparate
+1. **Ore fără fus orar:** o oră trimisă fără fus („20:00” fără „+02:00”) ar fi dus la o eroare de server. Acum e refuzată cu un mesaj clar, ca la rezervări. Testul acoperă cazul.
+2. **Mesajul „Cererea nu există”** (al cererilor pentru sală) s-ar fi folosit și pentru evenimente. Evenimentele au acum mesajul lor: „Evenimentul nu există.”
+3. **Din perspectiva unui atacator:** calendarul public arată doar ce ați publicat și datele publice ale turneelor (nume, format, locuri), fără nicio dată despre jucători. Schimbările cer dreptul `events.manage` pe clubul respectiv și 2FA. Textele sunt limitate ca lungime și afișate doar ca text.
+
+### Viteza pe telefon: sub 90, apoi reparată
+Cu secțiunea nouă, scorul pe telefon a coborât la **84–89** în trei măsurători. Nu din cauza secțiunii (ea nu trimite cod în browser), ci pentru că pagina a crescut. Am găsit trei cauze și le-am reparat pentru tot site-ul:
+1. **Paginile se pre-descărcau la încărcare.** Fiecare link vizibil aducea din timp pagina lui; logo-ul aducea din nou toată pagina principală (~94 KB). Acum o pagină se descarcă doar când e deschisă.
+2. **Verificarea plăcii video pentru scena 3D** din hero ținea telefonul ocupat ~180 ms imediat după încărcare. Acum se face pe un fir separat (Web Worker), fără să blocheze pagina.
+3. **Un font nefolosit** (Fraunces cursiv, 22 KB) se descărca înainte de prima afișare. Nu se mai descarcă din timp.
+
+După reparații: **90–92** pe telefon în măsurătorile repetate (o singură excepție, 87, într-o rulare în care browserul de test a pornit greu), 100 pe calculator.
+
+### Cum verificați (click cu click)
+1. Deschideți capturile 30–33.
+2. În panou (după ce e publicat pe server): Evenimente → „Calendarul public” → adăugați un eveniment și bifați „Publică pe site acum”.
+3. Dacă secțiunea vă place, scrieți „aprob secțiunea 12”.

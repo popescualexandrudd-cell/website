@@ -124,3 +124,15 @@ Fiecare pagină există în toate limbile active, cu URL-uri localizate (`/ro/..
   - orele benzii din setări, în programul clubului (R-050, Q3).
 - **Nu rezervă, nu încasează și nu salvează nimic.** Prețul e „orientativ” cât tariful e DE_STABILIT (Q21).
 - **Sub simulator:** plata la Chioșcul de Plăți, fiecare cu cardul lui (R-060, Q9); fără credite la padel (invariantul 14); rezervarea online se plătește la club (R-063).
+
+### Secțiunea 12 — Evenimente (30.09.2026)
+- **Trei tipuri de evenimente (R-110):** serile cu DJ, turneele ligii (tablou, program și rezultate live, §6.14; înscrierea din cont sau la recepție, doar pentru jucătorii din ligă) și padelul social (Americano, Mexicano).
+- **Calendarul clubului** (`GET /api/v1/events/calendar?location=…`, `jungle.events`):
+  - evenimentele publicate din panou (Evenimente → „Calendarul public”): titlu și descriere scurtă în română și engleză (R-140), ziua și orele clubului, cel mult 24 de ore;
+  - turneele ligii cu înscrieri deschise sau în desfășurare, cu formatul și locurile libere; nu se copiază nimic din ligă, se citesc la cerere;
+  - în ordinea orei, cel mult 30, pe următoarele 4 luni;
+  - un eveniment anulat rămâne pe site, marcat „Anulat”, până la ora lui de sfârșit, ca să nu vină nimeni degeaba;
+  - datele demo (`seed_initial --demo`) apar marcate „Exemplu (demo)” (invariantul 12).
+- **Un eveniment din calendar nu rezervă nimic:** terenurile sau sala se rezervă separat, din Calendar.
+- **Sala de evenimente:** câte persoane primește și prețul pe oră (cea mai ieftină bandă a sezonului, „orientativ” cât tariful e DE_STABILIT, Q21), din date; în clădirea de alături, cu studioul de pilates (Q46); încălzită și răcită (§1). Cererea se trimite din cont și o confirmă managerul (Q34, varianta implicită, încă deschisă).
+- **Randată pe server:** secțiunea nu trimite niciun script în browser. Datele se păstrează 5 minute; la orice schimbare vizibilă din panou, serverul cere site-ului reîmprospătarea (eticheta de cache `events`).

@@ -40,6 +40,36 @@ export function hasRealGpu(): boolean {
   }
 }
 
+/** How long the GPU check off the main thread may take before the page gives up on the scene. */
+export const PROBE_TIMEOUT_MS = 4000;
+
+/**
+ * The same check, off the page's main thread where the browser can (a Web Worker with an
+ * OffscreenCanvas, `public/gpu-probe.js`): creating the WebGL context no longer holds up a phone
+ * right after the page loads. Where the worker cannot create a context, the check runs here.
+ */
+export function realGpu(): Promise<boolean> {
+  if (typeof Worker === "undefined" || typeof OffscreenCanvas === "undefined") return Promise.resolve(hasRealGpu());
+  return new Promise((resolve) => {
+    let worker: Worker;
+    try {
+      worker = new Worker("/gpu-probe.js");
+    } catch {
+      resolve(hasRealGpu());
+      return;
+    }
+    const done = (answer: boolean) => {
+      window.clearTimeout(timer);
+      worker.terminate();
+      resolve(answer);
+    };
+    const timer = window.setTimeout(() => done(false), PROBE_TIMEOUT_MS);
+    worker.onmessage = (event: MessageEvent<string>) => done(event.data ? !SOFTWARE_RENDERER.test(event.data) : hasRealGpu());
+    worker.onerror = () => done(hasRealGpu());
+    worker.postMessage("probe");
+  });
+}
+
 /** Same check on an existing renderer (a second guard, e.g. when the GPU process fell back to software). */
 export function usesSoftwareRendering(renderer: WebGLRenderer): boolean {
   const gl = renderer.getContext();

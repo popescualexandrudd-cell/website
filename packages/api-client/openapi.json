@@ -609,6 +609,118 @@
         "title": "CafeOrderIn",
         "type": "object"
       },
+      "CalendarItemOut": {
+        "properties": {
+          "cancelled": {
+            "title": "Cancelled",
+            "type": "boolean"
+          },
+          "demo": {
+            "description": "demo data, shown as such (invariant 12)",
+            "title": "Demo",
+            "type": "boolean"
+          },
+          "ends_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "null for a tournament: no time limit",
+            "title": "Ends At"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "description": "dj_night | social | club | tournament (the league's, §6.14)",
+            "title": "Kind",
+            "type": "string"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "text_en": {
+            "title": "Text En",
+            "type": "string"
+          },
+          "text_ro": {
+            "title": "Text Ro",
+            "type": "string"
+          },
+          "title_en": {
+            "title": "Title En",
+            "type": "string"
+          },
+          "title_ro": {
+            "title": "Title Ro",
+            "type": "string"
+          },
+          "tournament": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CalendarTournamentOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "title_ro",
+          "title_en",
+          "text_ro",
+          "text_en",
+          "starts_at",
+          "ends_at",
+          "cancelled",
+          "demo",
+          "tournament"
+        ],
+        "title": "CalendarItemOut",
+        "type": "object"
+      },
+      "CalendarTournamentOut": {
+        "properties": {
+          "format": {
+            "title": "Format",
+            "type": "string"
+          },
+          "places_left": {
+            "title": "Places Left",
+            "type": "integer"
+          },
+          "registration_closes_at": {
+            "format": "date-time",
+            "title": "Registration Closes At",
+            "type": "string"
+          },
+          "status": {
+            "description": "registration | in_progress",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "format",
+          "status",
+          "registration_closes_at",
+          "places_left"
+        ],
+        "title": "CalendarTournamentOut",
+        "type": "object"
+      },
       "CancelIn": {
         "properties": {
           "reason": {
@@ -1272,6 +1384,232 @@
           "price_provisional"
         ],
         "title": "ClassOut",
+        "type": "object"
+      },
+      "ClubEventCancelIn": {
+        "properties": {
+          "reason": {
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reason"
+        ],
+        "title": "ClubEventCancelIn",
+        "type": "object"
+      },
+      "ClubEventChangeIn": {
+        "properties": {
+          "ends_at": {
+            "format": "date-time",
+            "title": "Ends At",
+            "type": "string"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/EventKind"
+          },
+          "reason": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Reason",
+            "type": "string"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "text_en": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Text En",
+            "type": "string"
+          },
+          "text_ro": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Text Ro",
+            "type": "string"
+          },
+          "title_en": {
+            "maxLength": 120,
+            "title": "Title En",
+            "type": "string"
+          },
+          "title_ro": {
+            "maxLength": 120,
+            "title": "Title Ro",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "title_ro",
+          "title_en",
+          "starts_at",
+          "ends_at"
+        ],
+        "title": "ClubEventChangeIn",
+        "type": "object"
+      },
+      "ClubEventCreateIn": {
+        "properties": {
+          "ends_at": {
+            "format": "date-time",
+            "title": "Ends At",
+            "type": "string"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/EventKind"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "published": {
+            "default": false,
+            "title": "Published",
+            "type": "boolean"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "text_en": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Text En",
+            "type": "string"
+          },
+          "text_ro": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Text Ro",
+            "type": "string"
+          },
+          "title_en": {
+            "maxLength": 120,
+            "title": "Title En",
+            "type": "string"
+          },
+          "title_ro": {
+            "maxLength": 120,
+            "title": "Title Ro",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "title_ro",
+          "title_en",
+          "starts_at",
+          "ends_at",
+          "location_id"
+        ],
+        "title": "ClubEventCreateIn",
+        "type": "object"
+      },
+      "ClubEventOut": {
+        "properties": {
+          "cancel_reason": {
+            "title": "Cancel Reason",
+            "type": "string"
+          },
+          "cancelled_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cancelled At"
+          },
+          "ends_at": {
+            "format": "date-time",
+            "title": "Ends At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "is_demo": {
+            "title": "Is Demo",
+            "type": "boolean"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "published": {
+            "title": "Published",
+            "type": "boolean"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "text_en": {
+            "title": "Text En",
+            "type": "string"
+          },
+          "text_ro": {
+            "title": "Text Ro",
+            "type": "string"
+          },
+          "title_en": {
+            "title": "Title En",
+            "type": "string"
+          },
+          "title_ro": {
+            "title": "Title Ro",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "title_ro",
+          "title_en",
+          "text_ro",
+          "text_en",
+          "starts_at",
+          "ends_at",
+          "published",
+          "cancelled_at",
+          "cancel_reason",
+          "is_demo"
+        ],
+        "title": "ClubEventOut",
+        "type": "object"
+      },
+      "ClubEventPublicationIn": {
+        "properties": {
+          "published": {
+            "title": "Published",
+            "type": "boolean"
+          },
+          "reason": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "published"
+        ],
+        "title": "ClubEventPublicationIn",
         "type": "object"
       },
       "CodeOut": {
@@ -2560,6 +2898,15 @@
         "title": "EventIn",
         "type": "object"
       },
+      "EventKind": {
+        "enum": [
+          "dj_night",
+          "social",
+          "club"
+        ],
+        "title": "EventKind",
+        "type": "string"
+      },
       "EventOut": {
         "properties": {
           "booking_id": {
@@ -2623,6 +2970,72 @@
           "decision_note"
         ],
         "title": "EventOut",
+        "type": "object"
+      },
+      "EventRoomOut": {
+        "properties": {
+          "capacity": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Capacity"
+          },
+          "price_per_hour": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "bani (RON × 100), the cheapest band",
+            "title": "Price Per Hour"
+          },
+          "provisional": {
+            "description": "the rate is DE_STABILIT",
+            "title": "Provisional",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "capacity",
+          "price_per_hour",
+          "provisional"
+        ],
+        "title": "EventRoomOut",
+        "type": "object"
+      },
+      "EventsCalendarOut": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/CalendarItemOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "room": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EventRoomOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "items",
+          "room"
+        ],
+        "title": "EventsCalendarOut",
         "type": "object"
       },
       "EventsIn": {
@@ -14279,6 +14692,49 @@
         ]
       }
     },
+    "/api/v1/events/calendar": {
+      "get": {
+        "description": "The website's calendar: published events and the league's open tournaments, by time.",
+        "operationId": "jungle_events_api_calendar_view",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location",
+            "required": true,
+            "schema": {
+              "title": "Location",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventsCalendarOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "summary": "Calendar View",
+        "tags": [
+          "events"
+        ]
+      }
+    },
     "/api/v1/events/mine": {
       "get": {
         "operationId": "jungle_bookings_api_my_events",
@@ -21354,6 +21810,427 @@
         "summary": "Class Roster",
         "tags": [
           "staff: bookings"
+        ]
+      }
+    },
+    "/api/v1/staff/club-events": {
+      "get": {
+        "operationId": "jungle_events_api_list_club_events",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ClubEventOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "List Club Events",
+        "tags": [
+          "staff: events"
+        ]
+      },
+      "post": {
+        "operationId": "jungle_events_api_create_club_event",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClubEventCreateIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClubEventOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Create Club Event",
+        "tags": [
+          "staff: events"
+        ]
+      }
+    },
+    "/api/v1/staff/club-events/{event_id}": {
+      "put": {
+        "operationId": "jungle_events_api_change_club_event",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Event Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClubEventChangeIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClubEventOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Change Club Event",
+        "tags": [
+          "staff: events"
+        ]
+      }
+    },
+    "/api/v1/staff/club-events/{event_id}/cancel": {
+      "post": {
+        "operationId": "jungle_events_api_cancel_club_event",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Event Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClubEventCancelIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClubEventOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Cancel Club Event",
+        "tags": [
+          "staff: events"
+        ]
+      }
+    },
+    "/api/v1/staff/club-events/{event_id}/publication": {
+      "post": {
+        "operationId": "jungle_events_api_publish_club_event",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Event Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClubEventPublicationIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClubEventOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Publish Club Event",
+        "tags": [
+          "staff: events"
         ]
       }
     },

@@ -1,11 +1,13 @@
 """Initial data: the Jungle Padel location and its resources (idempotent).
 
 `--demo` also adds clearly marked demo data: placeholder legal documents (not legal
-texts) and demo people, including the names required by §8.5.
+texts), demo people, including the names required by §8.5, and two demo events on the
+calendar (§9.2.12), a few days ahead.
 """
 
 from __future__ import annotations
 
+from datetime import datetime, time, timedelta
 from typing import Any
 
 from django.conf import settings
@@ -17,7 +19,9 @@ from jungle.audit.services import SYSTEM
 from jungle.cafe.models import CafeCategory, CafeProduct
 from jungle.configuration.models import Marker
 from jungle.configuration.services import ensure_flag_rows
+from jungle.core import clock
 from jungle.core.permissions import Role
+from jungle.events.models import ClubEvent, EventKind
 from jungle.legal.management.commands.publish_legal_document import read_public_text
 from jungle.legal.models import DocumentKind, LegalDocument
 from jungle.legal.services import publish_document
@@ -34,6 +38,22 @@ LEGAL_FILES = {
     DocumentKind.WAITLIST_NOTICE: "nota-informare-lista-asteptare",
     DocumentKind.LEAGUE_GDPR: "formular-gdpr-liga",
 }
+# (kind, weekday: Monday = 0, start, end, RO title, EN title): the calendar's demo, marked as such.
+DEMO_EVENTS = [
+    (EventKind.DJ_NIGHT, 4, time(20), time(23), "Seară cu DJ (demo)", "DJ night (demo)"),
+    (
+        EventKind.SOCIAL,
+        5,
+        time(10),
+        time(13),
+        "Americano de sâmbătă (demo)",
+        "Saturday Americano (demo)",
+    ),
+]
+DEMO_EVENT_TEXT = (
+    "Exemplu: evenimentele reale le publică clubul din panou.",
+    "An example: the real events are published by the club from the panel.",
+)
 # (first name, last name, email, role) — §8.5 names first; all addresses are non-deliverable.
 DEMO_PEOPLE = [
     ("Alexandru Daniel", "Popescu", "alexandru.popescu@demo.invalid", None),
@@ -133,6 +153,29 @@ class Command(BaseCommand):
         self._indicative_prices(location)
         if options["demo"]:
             self._demo()
+            self._demo_events(location)
+
+    def _demo_events(self, location: Location) -> None:
+        """The next Friday night and Saturday morning (never today), unless some are still ahead."""
+        if ClubEvent.objects.filter(
+            location=location, is_demo=True, ends_at__gt=clock.now()
+        ).exists():
+            return
+        today = clock.today_local()
+        for kind, weekday, start, end, title_ro, title_en in DEMO_EVENTS:
+            day = today + timedelta(days=(weekday - today.weekday()) % 7 or 7)
+            ClubEvent.objects.create(
+                location=location,
+                kind=kind,
+                title_ro=title_ro,
+                title_en=title_en,
+                text_ro=DEMO_EVENT_TEXT[0],
+                text_en=DEMO_EVENT_TEXT[1],
+                starts_at=datetime.combine(day, start, tzinfo=clock.BUSINESS_TZ),
+                ends_at=datetime.combine(day, end, tzinfo=clock.BUSINESS_TZ),
+                published=True,
+                is_demo=True,
+            )
 
     def _demo(self) -> None:
         texts = settings.REPO_ROOT / "docs/07-securitate-gdpr-legal/texte"

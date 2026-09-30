@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import * as tokens from "@jungle/design-tokens/tokens";
 import { CARD_TIERS, type CardTier } from "@/lib/site";
-import { afterLoadIdle, createLoop, disposeScene, hasRealGpu, sceneFlags, usesSoftwareRendering } from "@/lib/webgl";
+import { afterLoadIdle, createLoop, disposeScene, realGpu, sceneFlags, usesSoftwareRendering } from "@/lib/webgl";
 
 /**
  * The member card as a physical object: ID-1 format (85.6 × 54 mm), rounded edges, a metal core
@@ -101,7 +101,7 @@ export default function MemberCardScene({
     let teardown = () => {};
 
     const cancelStart = afterLoadIdle(async () => {
-      if (!sceneFlags().forced && !hasRealGpu()) return; // the static render stays
+      if (!sceneFlags().forced && !(await realGpu())) return; // the static render stays
       const [THREE, { RoomEnvironment }, { gsap }, { ScrollTrigger }] = await Promise.all([
         import("three"),
         import("three/examples/jsm/environments/RoomEnvironment.js"),

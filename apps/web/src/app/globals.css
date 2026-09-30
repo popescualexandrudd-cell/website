@@ -2557,6 +2557,106 @@ body[data-menu-open="true"] {
   }
 }
 
+/* ------------------------------------------------------------------ full site: events (Stage 11, §9.2.12) */
+.events__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.events__item {
+  display: grid;
+  grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+  gap: 8px 28px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+.events__date {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: var(--text);
+  font-weight: 600;
+}
+.events__time {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--accent);
+}
+.events__body {
+  min-width: 0;
+}
+.events__tags {
+  margin: 0 0 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.events__kind {
+  color: var(--accent);
+}
+.events__flag {
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  color: var(--text);
+}
+.events__title {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.events__text {
+  margin: 6px 0 0;
+  color: var(--text-2);
+}
+.events__item.is-cancelled .events__title,
+.events__item.is-cancelled .events__time {
+  text-decoration: line-through;
+}
+.events__note {
+  margin: 14px 0 0;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.events__room {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+  margin-top: 56px;
+}
+.events__room .pilates__h3 {
+  margin-top: 0;
+}
+.events__how {
+  margin: 16px 0 0;
+  color: var(--text-2);
+}
+.events__facts {
+  margin: 0;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (max-width: 900px) {
+  .events__room {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+}
+@media (max-width: 640px) {
+  .events__item {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* ------------------------------------------------------------------ full site: the build map */
 .site-preview .lead {
   max-width: 720px;

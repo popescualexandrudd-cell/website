@@ -886,6 +886,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/calendar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Calendar View
+         * @description The website's calendar: published events and the league's open tournaments, by time.
+         */
+        get: operations["jungle_events_api_calendar_view"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events/mine": {
         parameters: {
             query?: never;
@@ -2492,6 +2512,75 @@ export interface paths {
         get: operations["jungle_bookings_api_class_roster"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/club-events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Club Events */
+        get: operations["jungle_events_api_list_club_events"];
+        put?: never;
+        /** Create Club Event */
+        post: operations["jungle_events_api_create_club_event"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/club-events/{event_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Change Club Event */
+        put: operations["jungle_events_api_change_club_event"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/club-events/{event_id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cancel Club Event */
+        post: operations["jungle_events_api_cancel_club_event"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/club-events/{event_id}/publication": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Publish Club Event */
+        post: operations["jungle_events_api_publish_club_event"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4234,6 +4323,62 @@ export interface components {
              */
             tendered: number;
         };
+        /** CalendarItemOut */
+        CalendarItemOut: {
+            /** Cancelled */
+            cancelled: boolean;
+            /**
+             * Demo
+             * @description demo data, shown as such (invariant 12)
+             */
+            demo: boolean;
+            /**
+             * Ends At
+             * @description null for a tournament: no time limit
+             */
+            ends_at: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Kind
+             * @description dj_night | social | club | tournament (the league's, §6.14)
+             */
+            kind: string;
+            /**
+             * Starts At
+             * Format: date-time
+             */
+            starts_at: string;
+            /** Text En */
+            text_en: string;
+            /** Text Ro */
+            text_ro: string;
+            /** Title En */
+            title_en: string;
+            /** Title Ro */
+            title_ro: string;
+            tournament: components["schemas"]["CalendarTournamentOut"] | null;
+        };
+        /** CalendarTournamentOut */
+        CalendarTournamentOut: {
+            /** Format */
+            format: string;
+            /** Places Left */
+            places_left: number;
+            /**
+             * Registration Closes At
+             * Format: date-time
+             */
+            registration_closes_at: string;
+            /**
+             * Status
+             * @description registration | in_progress
+             */
+            status: string;
+        };
         /** CancelIn */
         CancelIn: {
             /**
@@ -4531,6 +4676,128 @@ export interface components {
              * Format: uuid
              */
             studio_id: string;
+        };
+        /** ClubEventCancelIn */
+        ClubEventCancelIn: {
+            /** Reason */
+            reason: string;
+        };
+        /** ClubEventChangeIn */
+        ClubEventChangeIn: {
+            /**
+             * Ends At
+             * Format: date-time
+             */
+            ends_at: string;
+            kind: components["schemas"]["EventKind"];
+            /**
+             * Reason
+             * @default
+             */
+            reason: string;
+            /**
+             * Starts At
+             * Format: date-time
+             */
+            starts_at: string;
+            /**
+             * Text En
+             * @default
+             */
+            text_en: string;
+            /**
+             * Text Ro
+             * @default
+             */
+            text_ro: string;
+            /** Title En */
+            title_en: string;
+            /** Title Ro */
+            title_ro: string;
+        };
+        /** ClubEventCreateIn */
+        ClubEventCreateIn: {
+            /**
+             * Ends At
+             * Format: date-time
+             */
+            ends_at: string;
+            kind: components["schemas"]["EventKind"];
+            /**
+             * Location Id
+             * Format: uuid
+             */
+            location_id: string;
+            /**
+             * Published
+             * @default false
+             */
+            published: boolean;
+            /**
+             * Starts At
+             * Format: date-time
+             */
+            starts_at: string;
+            /**
+             * Text En
+             * @default
+             */
+            text_en: string;
+            /**
+             * Text Ro
+             * @default
+             */
+            text_ro: string;
+            /** Title En */
+            title_en: string;
+            /** Title Ro */
+            title_ro: string;
+        };
+        /** ClubEventOut */
+        ClubEventOut: {
+            /** Cancel Reason */
+            cancel_reason: string;
+            /** Cancelled At */
+            cancelled_at: string | null;
+            /**
+             * Ends At
+             * Format: date-time
+             */
+            ends_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Is Demo */
+            is_demo: boolean;
+            /** Kind */
+            kind: string;
+            /** Published */
+            published: boolean;
+            /**
+             * Starts At
+             * Format: date-time
+             */
+            starts_at: string;
+            /** Text En */
+            text_en: string;
+            /** Text Ro */
+            text_ro: string;
+            /** Title En */
+            title_en: string;
+            /** Title Ro */
+            title_ro: string;
+        };
+        /** ClubEventPublicationIn */
+        ClubEventPublicationIn: {
+            /** Published */
+            published: boolean;
+            /**
+             * Reason
+             * @default
+             */
+            reason: string;
         };
         /** CodeOut */
         CodeOut: {
@@ -5070,6 +5337,11 @@ export interface components {
              */
             starts_at: string;
         };
+        /**
+         * EventKind
+         * @enum {string}
+         */
+        EventKind: "dj_night" | "social" | "club";
         /** EventOut */
         EventOut: {
             /** Booking Id */
@@ -5102,6 +5374,27 @@ export interface components {
             starts_at: string;
             /** Status */
             status: string;
+        };
+        /** EventRoomOut */
+        EventRoomOut: {
+            /** Capacity */
+            capacity: number | null;
+            /**
+             * Price Per Hour
+             * @description bani (RON × 100), the cheapest band
+             */
+            price_per_hour: number | null;
+            /**
+             * Provisional
+             * @description the rate is DE_STABILIT
+             */
+            provisional: boolean;
+        };
+        /** EventsCalendarOut */
+        EventsCalendarOut: {
+            /** Items */
+            items: components["schemas"]["CalendarItemOut"][];
+            room: components["schemas"]["EventRoomOut"] | null;
         };
         /** EventsIn */
         EventsIn: {
@@ -10966,6 +11259,37 @@ export interface operations {
             };
         };
     };
+    jungle_events_api_calendar_view: {
+        parameters: {
+            query: {
+                location: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventsCalendarOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     jungle_bookings_api_my_events: {
         parameters: {
             query?: never;
@@ -15963,6 +16287,310 @@ export interface operations {
             };
             /** @description Not Found */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_events_api_list_club_events: {
+        parameters: {
+            query: {
+                location_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ClubEventOut"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_events_api_create_club_event: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ClubEventCreateIn"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ClubEventOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_events_api_change_club_event: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                event_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ClubEventChangeIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ClubEventOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_events_api_cancel_club_event: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                event_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ClubEventCancelIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ClubEventOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_events_api_publish_club_event: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                event_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ClubEventPublicationIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ClubEventOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };

@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     "jungle.waitlist",
     "jungle.pricing",
     "jungle.bookings",
+    "jungle.events",
     "jungle.attendance",
     "jungle.ledger",
     "jungle.subscriptions",

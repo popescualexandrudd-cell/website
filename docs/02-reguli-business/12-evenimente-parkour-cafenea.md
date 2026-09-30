@@ -6,3 +6,6 @@
 - **R-110** **Evenimentele apar pe site de la lansare** (petreceri cu DJ, turnee, sala de evenimente pentru 15–20 de persoane). **Parkourul NU apare la lansare** (feature flag, activat după deschiderea padelului).
 - **R-111** **Cafeneaua vinde prin chioșcul de plăți** („mai simplu: doar în aparat”). Toate vânzările de cafenea apar în chioșcul de plăți și în rapoarte. Comanda ajunge pe afișajul cafenelei, iar numărul comenzii apare pe ecranul din lobby când e gata.
 - **R-112** Meniu, prețuri, categorii, disponibilitate și, opțional, stoc: configurabile din admin (Q33).
+
+## Completări de implementare
+- **R-110, calendarul (30.09.2026, Etapa 11, prin delegarea proprietarului din 29.09.2026):** evenimentele (seri cu DJ, padel social, evenimente ale clubului) se publică din panou (Evenimente → „Calendarul public”, dreptul `events.manage`), cu titlul în română și engleză; fiecare adăugare, modificare, publicare, retragere și anulare intră în jurnalul de audit, iar modificarea, publicarea, retragerea și anularea cer un motiv. Pe site, calendarul le arată alături de turneele ligii deschise sau în desfășurare; un eveniment anulat rămâne marcat „Anulat” până la ora lui de sfârșit. Un eveniment din calendar nu rezervă terenuri sau sala (se rezervă separat). Detalii: `docs/04-arhitectura/aplicatii/09-website-simulator.md`, secțiunea 12.

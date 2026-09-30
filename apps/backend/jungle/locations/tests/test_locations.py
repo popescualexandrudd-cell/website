@@ -37,6 +37,17 @@ def test_seed_demo_marks_demo_data() -> None:
     assert LegalDocument.objects.count() == 12  # 6 legal texts × RO/EN (with the league form)
     for doc in LegalDocument.objects.all():
         assert doc.is_demo == ("DE_CONFIRMAT" in doc.body), doc  # placeholders are never 'final'
+    # §9.2.12: two demo events on the calendar, ahead of today, marked in both languages
+    from jungle.core import clock
+    from jungle.events.models import ClubEvent
+
+    events = list(ClubEvent.objects.order_by("starts_at"))
+    assert [(e.starts_at.astimezone(clock.BUSINESS_TZ).weekday(), e.is_demo) for e in events] in (
+        [(4, True), (5, True)],
+        [(5, True), (4, True)],
+    )
+    assert all(e.published and e.starts_at > clock.now() for e in events)
+    assert all("(demo)" in e.title_ro and "(demo)" in e.title_en for e in events)
 
 
 def test_public_listing_shows_only_active(api: Api, location: Location) -> None:

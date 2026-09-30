@@ -77,6 +77,9 @@
     "events.not_found": "Cererea nu există.",
     "events.too_many_guests": "Sala primește cel mult {capacity} persoane.",
     "events.already_decided": "Cererea a fost deja aprobată sau respinsă.",
+    "events.event_not_found": "Evenimentul nu există.",
+    "events.invalid_time": "Verifică orele: evenimentul trebuie să înceapă în viitor, să se termine după ce începe și să dureze cel mult 24 de ore.",
+    "events.already_cancelled": "Evenimentul a fost anulat și nu se mai poate schimba.",
     "attendance.unknown_person": "Persoana nu a fost găsită.",
     "restrictions.not_found": "Nu există o blocare activă pentru această persoană.",
     "booking.email_not_verified": "Confirmă adresa de email (linkul din emailul primit) înainte de a rezerva online.",
@@ -1070,6 +1073,65 @@
           }
         },
         "book": "Rezervă un teren"
+      },
+      "events": {
+        "kicker": "Evenimente",
+        "title": "Seri cu DJ, turnee și o sală doar a voastră.",
+        "lead": "Padelul continuă și după meci: seri cu muzică, turneele ligii, padel social și o sală de evenimente pentru petrecerile voastre.",
+        "cards": {
+          "dj": {
+            "title": "Seri cu DJ",
+            "text": "Muzică și padel până seara. Datele apar în calendar când le anunță clubul."
+          },
+          "tournaments": {
+            "title": "Turneele ligii",
+            "text": "Tablou, program și rezultate live, pe site și pe ecranele din club. Înscrierea se face din cont sau la recepție, pentru jucătorii din ligă."
+          },
+          "social": {
+            "title": "Padel social",
+            "text": "Seri de Americano și Mexicano: vii singur sau cu prieteni, iar partenerii se schimbă de la o rundă la alta."
+          }
+        },
+        "calendar": {
+          "title": "Calendarul",
+          "empty": "Calendarul se completează înainte de deschidere: primele seri și turnee apar aici când le anunță clubul.",
+          "error": "Calendarul nu se poate încărca acum. Revino în câteva minute.",
+          "clubTime": "Orele sunt ale clubului (ora României).",
+          "kinds": {
+            "dj_night": "Seară cu DJ",
+            "social": "Padel social",
+            "club": "Eveniment",
+            "tournament": "Turneu al ligii"
+          },
+          "formats": {
+            "knockout": "Eliminatoriu",
+            "groups_knockout": "Grupe + eliminatoriu",
+            "round_robin": "Fiecare cu fiecare",
+            "americano": "Americano",
+            "mexicano": "Mexicano",
+            "king_of_the_court": "King of the Court"
+          },
+          "from": "de la {time}",
+          "untilDay": "{from} – {day}, {to}",
+          "cancelled": "Anulat",
+          "demo": "Exemplu (demo)",
+          "underWay": "În desfășurare: tabloul și rezultatele, live pe ecranele din club.",
+          "entries": "Înscrieri până {date}, ora {time}: {places, plural, one {# loc liber} few {# locuri libere} other {# de locuri libere}}.",
+          "full": "Tabloul e complet."
+        },
+        "room": {
+          "title": "Sala de evenimente",
+          "text": "O sală separată, cam cât un teren de padel, în clădirea de alături, cu studioul de pilates: pentru zile de naștere, petreceri de echipă sau o seară după turneu.",
+          "how": "Trimiți cererea din contul tău: ziua, ora și câte persoane vin. Managerul clubului o confirmă, iar sala se rezervă pentru voi; dacă nu se poate, îți scrie de ce.",
+          "factsLabel": "Sala pe scurt",
+          "people": "persoane, cel mult",
+          "price": "{amount} lei",
+          "perHour": "pe oră, de la",
+          "perHourProvisional": "pe oră, de la (preț orientativ)",
+          "climate": "Tot anul",
+          "climateLabel": "încălzită iarna, răcită vara"
+        },
+        "request": "Cere sala de evenimente"
       },
       "pages": {
         "padel": "Padel",
@@ -2297,6 +2359,48 @@
         "pending": "În așteptare",
         "approved": "Aprobată",
         "declined": "Refuzată"
+      },
+      "calendar": {
+        "title": "Calendarul public",
+        "lead": "Ce publici aici apare pe site, la Evenimente, alături de turneele ligii. Un eveniment din calendar nu rezervă terenuri sau sala: le rezervi separat, din Calendar.",
+        "add": "Adaugă un eveniment",
+        "editTitle": "Modifică evenimentul",
+        "kind": "Tipul",
+        "kinds": {
+          "dj_night": "Seară cu DJ",
+          "social": "Padel social (Americano, Mexicano)",
+          "club": "Eveniment al clubului"
+        },
+        "titleRo": "Titlul (română)",
+        "titleEn": "Titlul (engleză)",
+        "textRo": "Descriere scurtă în română (opțional)",
+        "textEn": "Descriere scurtă în engleză (opțional)",
+        "day": "Ziua",
+        "start": "Începe la",
+        "end": "Se termină la",
+        "endHint": "O oră de sfârșit mai mică decât cea de început înseamnă a doua zi. Cel mult 24 de ore.",
+        "publishNow": "Publică pe site acum",
+        "create": "Adaugă",
+        "save": "Salvează modificările",
+        "created": "Evenimentul a fost adăugat.",
+        "saved": "Modificările au fost salvate.",
+        "published": "Evenimentul apare pe site.",
+        "withdrawn": "Evenimentul a fost retras de pe site.",
+        "cancelled": "Evenimentul a fost anulat; pe site apare „Anulat” până la ora lui de sfârșit.",
+        "none": "Niciun eveniment în calendar.",
+        "event": "Evenimentul",
+        "state": "Starea",
+        "actions": "Acțiuni",
+        "states": {
+          "draft": "Ciornă",
+          "published": "Publicat",
+          "cancelled": "Anulat"
+        },
+        "edit": "Modifică",
+        "publish": "Publică pe site",
+        "withdraw": "Retrage de pe site",
+        "cancel": "Anulează evenimentul",
+        "demo": "demo"
       }
     },
     "devices": {
