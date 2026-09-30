@@ -4,6 +4,17 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, secțiunea 9 — 30.09.2026 (livrată)
+#### Adăugat
+- Pilates Reformer (§9.2, secțiunea 9): `Pilates` + `ClassSchedule`, logica în `src/lib/classes.ts`.
+  - studioul în fapte (R-100, R-103, Q46), cu un desen ilustrativ al aparatelor;
+  - cele 8 clase din R-101 și lista de așteptare (R-102);
+  - programul săptămânii, live din `GET /api/v1/classes`, în ora clubului, cu locurile libere sau „Plin · listă de așteptare”;
+  - texte `web.site.pilates.*` RO + EN.
+- Teste: 3 unitare pe site, 4 cap-coadă (`e2e/full/pilates.spec.ts`). Lighthouse mobil 91 · 100 · 100 · 100, desktop 100 · 100 · 100 · 100.
+#### Schimbat
+- `GET /api/v1/classes` întoarce clasele în ordinea orelor, cel mult `limit` (1–200, implicit 100); test nou.
+
 ### Etapa 11, secțiunile 2–8 — aprobate 30.09.2026
 #### Schimbat
 - Proprietarul a aprobat secțiunile 2–8 („Aprob și continuă”); intră în `main`.

@@ -2232,6 +2232,184 @@ body[data-menu-open="true"] {
   color: var(--text-2);
 }
 
+/* ------------------------------------------------------------------ full site: Pilates Reformer (Stage 11, §9.2.9) */
+.pilates__intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: center;
+  margin-top: 40px;
+}
+.pilates__studio {
+  margin: 0;
+}
+.pilates__studio svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.pilates__studio figcaption {
+  margin-top: 10px;
+  font-size: 13px;
+}
+.reformer__frame {
+  fill: var(--color-night-800);
+  stroke: var(--color-brass-400);
+  stroke-width: 3;
+}
+.reformer__carriage {
+  fill: var(--color-night-600);
+  stroke: var(--color-bone-200);
+  stroke-width: 2;
+}
+.reformer__rest {
+  fill: var(--color-brass-400);
+}
+.reformer__bar,
+.reformer__springs {
+  fill: none;
+  stroke: var(--color-bone-200);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.reformer__springs {
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+}
+.reformer--room .reformer__frame,
+.reformer--room .reformer__carriage {
+  fill: none;
+  stroke: var(--color-night-500);
+  stroke-dasharray: 6 6;
+}
+.reformer--room .reformer__rest,
+.reformer--room .reformer__bar,
+.reformer--room .reformer__springs {
+  display: none;
+}
+.pilates__facts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 18px;
+}
+.pilates__facts li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 16px;
+  border-left: 3px solid var(--color-brass-400);
+}
+.pilates__facts strong {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+.pilates__facts span {
+  color: var(--text-2);
+}
+.pilates__h3 {
+  margin: 56px 0 16px;
+  font-family: var(--font-serif);
+  font-size: clamp(24px, 2.4vw, 30px);
+  font-weight: 400;
+  color: var(--text);
+}
+.pilates__text {
+  margin: 0;
+  max-width: 70ch;
+  color: var(--text-2);
+}
+.pilates__kinds {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+  gap: 14px;
+}
+.pilates__kind {
+  padding: 20px 22px;
+  background: var(--color-night-800);
+  border: 1px solid var(--line);
+}
+.pilates__kind h4 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+.pilates__kind p {
+  margin: 0;
+  color: var(--text-2);
+}
+.classes__days {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 20px;
+}
+.classes__day h4 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.classes__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.classes__slot {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1.6fr) minmax(0, 1fr) auto;
+  gap: 6px 16px;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.classes__time {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  color: var(--accent);
+}
+.classes__kind {
+  font-weight: 600;
+  color: var(--text);
+}
+.classes__who,
+.classes__places {
+  color: var(--text-2);
+}
+.classes__places.is-full {
+  color: var(--text);
+  font-weight: 600;
+}
+.pilates__more {
+  margin: 28px 0 0;
+}
+@media (max-width: 900px) {
+  .pilates__intro {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+}
+@media (max-width: 640px) {
+  .classes__slot {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 2px 14px;
+  }
+  .classes__who,
+  .classes__places {
+    grid-column: 2;
+  }
+}
+
 /* ------------------------------------------------------------------ full site: the build map */
 .site-preview .lead {
   max-width: 720px;

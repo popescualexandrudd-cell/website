@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import uuid
 from datetime import date, datetime
-from typing import Any
+from typing import Annotated, Any
 
 from django.http import HttpRequest
 from ninja import Field, Router, Schema, Status
@@ -388,10 +388,14 @@ def leave_waitlist(request: HttpRequest, entry_id: uuid.UUID) -> OkOut:
 
 
 # ---------------------------------------------------------------- classes
+ClassLimit = Annotated[int, Field(ge=1, le=200)]
+
+
 @classes_router.get("", response={200: list[ClassOut], **errors(404, 422)}, auth=None)
-def list_classes(request: HttpRequest, location: str) -> list[ClassOut]:
+def list_classes(request: HttpRequest, location: str, limit: ClassLimit = 100) -> list[ClassOut]:
+    """R-103: the next classes, in time order (at most ``limit``)."""
     place = get_location_by_slug(location)
-    return [class_out(s) for s in class_services.upcoming_classes(place.id)]
+    return [class_out(s) for s in class_services.upcoming_classes(place.id, limit)]
 
 
 @classes_router.post(

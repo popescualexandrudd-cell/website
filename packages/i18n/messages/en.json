@@ -886,6 +886,82 @@
         "newWindow": "(opens in a new window)",
         "packages": "See the packages"
       },
+      "pilates": {
+        "kicker": "Pilates Reformer",
+        "title": "Reformer Pilates, in small groups.",
+        "lead": "In the building next door, across the lane, a Pilates studio on Reformer machines: classes for every level, private sessions and programmes for players and for mothers.",
+        "studio": {
+          "label": "The Pilates studio: {active} Reformer machines now, room for {room}",
+          "caption": "An illustrative drawing of Reformer machines seen from above, not the studio's plan. Dashed: the places the studio can grow into."
+        },
+        "facts": {
+          "machines": {
+            "title": "4 Reformer machines",
+            "text": "The studio can grow to 6."
+          },
+          "groups": {
+            "title": "Small groups",
+            "text": "A class has at most as many people as there are machines."
+          },
+          "instructor": {
+            "title": "The club's instructor",
+            "text": "The schedule and attendance are in the system: you scan your card at the door, that's all."
+          },
+          "where": {
+            "title": "Across the lane",
+            "text": "In the building next door, together with the events room."
+          }
+        },
+        "kindsTitle": "The classes",
+        "kinds": {
+          "beginner": {
+            "name": "Beginners",
+            "text": "First steps on the Reformer: the machine, breathing and the basic exercises."
+          },
+          "intermediate": {
+            "name": "Intermediate",
+            "text": "For those who know the machine: more control and more complex exercises."
+          },
+          "advanced": {
+            "name": "Advanced",
+            "text": "A faster pace and harder work, for regular practitioners."
+          },
+          "private": {
+            "name": "Private session",
+            "text": "Just you and the instructor, on your own goals."
+          },
+          "duo": {
+            "name": "Duo",
+            "text": "Two people and one instructor: come with a friend or your partner."
+          },
+          "group": {
+            "name": "Group",
+            "text": "A small-group class, with a machine for everyone."
+          },
+          "racket_players": {
+            "name": "Reformer for tennis/padel players",
+            "text": "Mobility and stability, designed for people who play tennis or padel."
+          },
+          "mothers": {
+            "name": "Reformer for mothers",
+            "text": "Classes for before and after giving birth."
+          }
+        },
+        "waitlist": {
+          "title": "Class full? The waiting list",
+          "text": "Join the waiting list. When someone cancels, the first person on the list gets the place automatically, with a notification. Cancellations and no-shows follow the same rules as padel."
+        },
+        "schedule": {
+          "title": "This week's schedule",
+          "busy": "Loading the schedule…",
+          "error": "The schedule can't be loaded right now. We'll try again automatically.",
+          "empty": "The class schedule appears here once the studio publishes it.",
+          "with": "with {name}",
+          "places": "{count, plural, one {# place left} other {# places left}}",
+          "full": "Full · waiting list",
+          "book": "Book a class"
+        }
+      },
       "pages": {
         "padel": "Padel",
         "league": "Jungle League",

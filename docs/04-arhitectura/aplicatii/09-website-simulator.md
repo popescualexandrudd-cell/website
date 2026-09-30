@@ -92,3 +92,13 @@ Fiecare pagină există în toate limbile active, cu URL-uri localizate (`/ro/..
 - Faptele despre club sunt cele din §2.3: din 2013, 8 terenuri de zgură, 4 acoperite iarna, programe pentru copii și adulți. Numărul de recenzii nu apare: se schimbă.
 - Legătura cu Jungle: lecțiile de tenis (R-090), abonamentele combinate (R-080) și Reformer pentru jucători (R-101).
 - **Fără prețuri și fără program de terenuri:** acestea sunt ale clubului de tenis, pe site-ul lui. Terenul de tenis de pe amplasamentul Jungle e încă nedecis (§2.2) și nu apare.
+
+### Secțiunea 9 — Pilates Reformer (30.09.2026)
+- **Studioul în fapte:** 4 aparate Reformer, cu loc de creștere la 6 (R-100, Q46); grupuri de cel mult câte aparate sunt (R-101); instructorul clubului, cu programul și prezențele în sistem (R-103, R-032); în clădirea de alături, peste alee (schița proprietarului).
+- **Desenul aparatelor** e generic și marcat ilustrativ, nu planul studioului (Q44).
+- **Clasele:** cele 8 tipuri din R-101, fiecare cu o descriere scurtă a formatului, fără durate, prețuri sau promisiuni de rezultat.
+- **Lista de așteptare și anulările:** R-102.
+- **Programul săptămânii** vine live din `GET /api/v1/classes`: ordonat după oră, cu `limit`, reîmprospătat la 5 minute.
+  - Se grupează pe zilele clubului (Europe/Bucharest), inclusiv în ziua trecerii la ora de vară.
+  - Fiecare clasă arată ora, tipul, prenumele instructorului și locurile libere sau „Plin · listă de așteptare”.
+  - Fără prețuri, ca la Padel: prețurile orientative apar în configuratorul de pachete și la rezervare.

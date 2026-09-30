@@ -16,7 +16,8 @@
 | 6. Simulatorul „Care e nivelul tău?” | 30.09.2026 | **aprobată 30.09.2026** |
 | 7. Liga Jungle + simulatorul de puncte | 30.09.2026 | **aprobată 30.09.2026** |
 | 8. Tenis | 30.09.2026 | **aprobată 30.09.2026** |
-| 9–19 | — | urmează, câte una |
+| 9. Pilates Reformer | 30.09.2026 | **livrată** |
+| 10–19 | — | urmează, câte una |
 
 ---
 
@@ -398,3 +399,51 @@ Sub ligă, secțiunea „Tenis, la Clubul Tenis Elite.” (§9.2, secțiunea 8):
 1. Deschideți capturile 20 și 21.
 2. **Q58** e rezolvată: fără adresă, fără link. Dacă apare o adresă, o puneți din panou: **Setări** → `club.tennis_club_url`.
 3. Secțiunea e aprobată (30.09.2026).
+
+---
+
+## Secțiunea 9 — Pilates Reformer
+
+### Ce s-a construit
+După Tenis urmează secțiunea „Pilates pe Reformer, în grupuri mici.” (§9.2, secțiunea 9):
+- **Studioul,** lângă un desen al aparatelor Reformer văzute de sus: 4 aparate desenate cu alamă, iar alte 2 locuri punctate, unde studioul poate crește. Desenul e marcat „schemă ilustrativă, nu planul studioului”. Alături, patru fapte:
+  - 4 aparate Reformer, studioul poate crește la 6;
+  - grupuri mici, cel mult câte aparate sunt;
+  - instructorul clubului, cu programul și prezențele în sistem (scanezi cardul la intrare);
+  - peste alee, în clădirea de alături.
+- **Clasele:** cele 8 din regulile clubului (R-101): Începători, Intermediar, Avansat, Ședință privată, Duo, Grup, Reformer pentru jucători de tenis/padel, Reformer pentru mămici. Fiecare are o frază despre format.
+- **Lista de așteptare:** la o clasă plină te înscrii pe listă. Când cineva anulează, primul de pe listă primește locul automat și o notificare. Anulările au aceleași reguli ca la padel (R-102).
+- **Programul săptămânii, live:**
+  - pentru fiecare zi, ora, clasa, instructorul (doar prenumele) și locurile libere sau „Plin · listă de așteptare”;
+  - butonul „Rezervă o clasă”;
+  - cât studioul nu are încă clase în program, scrie „Programul claselor apare aici când îl publică studioul.”
+
+**Ce am ales și de ce:**
+1. **Programul vine direct din sistem:** clasele pe care instructorul le pune în panou apar singure pe site, în ora clubului.
+2. **Instructorul apare doar cu prenumele,** cum îl dă deja serverul.
+3. **Fără prețuri în secțiune,** ca la Padel. Prețurile orientative apar în configuratorul de pachete (secțiunea 10) și la rezervare.
+4. **Descrierile claselor** spun doar ce e fiecare format. Nu promitem durate, rezultate sau beneficii medicale.
+
+### Capturi de ecran
+22. [Pilates, pe calculator](ecrane/desktop-12-pilates.png)
+23. [Pilates, pe telefon](ecrane/mobile-12-pilates.png)
+24. [Programul, cu date de test, pe calculator](ecrane/desktop-13-pilates-program.png)
+25. [Programul, cu date de test, pe telefon](ecrane/mobile-13-pilates-program.png)
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Teste pe server | 1 nou: programul public e în ordinea orelor și are o limită (1–200). Toate cele 44 de teste de rezervări trec. |
+| Teste unitare pe site | 3 noi: cele 8 tipuri, zilele clubului peste trecerea la ora de vară, gruparea pe 7 zile (fără clasele începute sau prea îndepărtate). |
+| Cap-coadă | 4 noi (calculator + telefon):<br>• studioul, clasele și programul real (gol în datele de test);<br>• cu o oră fixată și date controlate: vineri 18:00 „3 locuri libere”, duminică (ora de vară) 19:00 „Plin · listă de așteptare”, fără clasa de peste o săptămână;<br>• programul indisponibil;<br>• engleza.<br>Toate testele site-ului trec: 28 + 63. |
+| Lighthouse, pagina principală | mobil **91 · 100 · 100 · 100** (LCP 3,3 s, CLS 0), calculator **100 · 100 · 100 · 100** ([mobil](lighthouse-mobil.html), [calculator](lighthouse-desktop.html)). Trecerea de performanță rămâne planificată înainte de publicare. |
+
+### Dubla revizuire
+1. **Programul public nu mai crește fără limită:** serverul întorcea toate clasele viitoare, în orice ordine. Acum le dă în ordinea orelor, cel mult câte cere site-ul (60).
+2. **Ora clubului:** o clasă de la 00:30 cade în ziua ei, iar ziua trecerii la ora de vară are orele corecte. Testele verifică amândouă.
+3. **Din perspectiva unui atacator:** doar citiri publice, deja existente. Serverul dă doar prenumele instructorului și numărul de locuri libere, niciodată cine s-a înscris.
+
+### Cum verificați (click cu click)
+1. Deschideți capturile 22–25.
+2. Citiți descrierile claselor de mai sus. Dacă vreți alte texte (de exemplu, de la instructor), spuneți-ne.
+3. Dacă secțiunea vă place, scrieți „aprob secțiunea 9”.

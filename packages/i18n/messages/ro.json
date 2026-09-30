@@ -886,6 +886,82 @@
         "newWindow": "(se deschide într-o fereastră nouă)",
         "packages": "Vezi pachetele"
       },
+      "pilates": {
+        "kicker": "Pilates Reformer",
+        "title": "Pilates pe Reformer, în grupuri mici.",
+        "lead": "În clădirea de alături, peste alee, un studio de pilates pe aparate Reformer: clase pentru orice nivel, ședințe private și programe pentru jucători și pentru mămici.",
+        "studio": {
+          "label": "Studioul de pilates: {active} aparate Reformer acum, loc pentru {room}",
+          "caption": "Schemă ilustrativă a aparatelor Reformer văzute de sus, nu planul studioului. Cu linie întreruptă, locurile în care studioul poate crește."
+        },
+        "facts": {
+          "machines": {
+            "title": "4 aparate Reformer",
+            "text": "Studioul poate crește la 6."
+          },
+          "groups": {
+            "title": "Grupuri mici",
+            "text": "O clasă are cel mult câte aparate sunt în studio."
+          },
+          "instructor": {
+            "title": "Instructorul clubului",
+            "text": "Programul și prezențele sunt în sistem: scanezi cardul la intrare și atât."
+          },
+          "where": {
+            "title": "Peste alee",
+            "text": "În clădirea de alături, împreună cu sala de evenimente."
+          }
+        },
+        "kindsTitle": "Clasele",
+        "kinds": {
+          "beginner": {
+            "name": "Începători",
+            "text": "Primii pași pe Reformer: aparatul, respirația și exercițiile de bază."
+          },
+          "intermediate": {
+            "name": "Intermediar",
+            "text": "Pentru cine cunoaște aparatul: mai mult control și exerciții mai complexe."
+          },
+          "advanced": {
+            "name": "Avansat",
+            "text": "Ritm și dificultate mai mari, pentru cine practică des."
+          },
+          "private": {
+            "name": "Ședință privată",
+            "text": "Doar tu și instructorul, pe obiectivele tale."
+          },
+          "duo": {
+            "name": "Duo",
+            "text": "Doi oameni și un instructor: vii cu un prieten sau cu partenerul."
+          },
+          "group": {
+            "name": "Grup",
+            "text": "Clasă în grup mic, cu un aparat pentru fiecare."
+          },
+          "racket_players": {
+            "name": "Reformer pentru jucători de tenis/padel",
+            "text": "Mobilitate și stabilitate, gândite pentru cei care joacă tenis sau padel."
+          },
+          "mothers": {
+            "name": "Reformer pentru mămici",
+            "text": "Clase pentru perioada de dinainte și de după naștere."
+          }
+        },
+        "waitlist": {
+          "title": "Clasă plină? Lista de așteptare",
+          "text": "Te înscrii pe lista de așteptare. Când cineva anulează, primul de pe listă primește locul automat și o notificare. Anulările și neprezentările au aceleași reguli ca la padel."
+        },
+        "schedule": {
+          "title": "Programul săptămânii",
+          "busy": "Se încarcă programul…",
+          "error": "Programul nu se poate încărca acum. Revenim automat.",
+          "empty": "Programul claselor apare aici când îl publică studioul.",
+          "with": "cu {name}",
+          "places": "{count, plural, one {# loc liber} few {# locuri libere} other {# de locuri libere}}",
+          "full": "Plin · listă de așteptare",
+          "book": "Rezervă o clasă"
+        }
+      },
       "pages": {
         "padel": "Padel",
         "league": "Liga Jungle",

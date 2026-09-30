@@ -663,7 +663,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List Classes */
+        /**
+         * List Classes
+         * @description R-103: the next classes, in time order (at most ``limit``).
+         */
         get: operations["jungle_bookings_api_list_classes"];
         put?: never;
         post?: never;
@@ -10388,6 +10391,7 @@ export interface operations {
         parameters: {
             query: {
                 location: string;
+                limit?: number;
             };
             header?: never;
             path?: never;

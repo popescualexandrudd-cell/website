@@ -110,10 +110,15 @@ def create_class_session(request: HttpRequest, data: ClassData) -> ClassSession:
     return session
 
 
-def upcoming_classes(location_id: uuid.UUID) -> QuerySet[ClassSession]:
-    return ClassSession.objects.filter(
-        location_id=location_id, status=ClassStatus.SCHEDULED, starts_at__gt=clock.now()
-    ).select_related("instructor")
+def upcoming_classes(location_id: uuid.UUID, limit: int = 100) -> QuerySet[ClassSession]:
+    """The next scheduled classes, in time order (the website shows the coming week, §9.2.9)."""
+    return (
+        ClassSession.objects.filter(
+            location_id=location_id, status=ClassStatus.SCHEDULED, starts_at__gt=clock.now()
+        )
+        .select_related("instructor")
+        .order_by("starts_at")[:limit]
+    )
 
 
 def enrolled_count(session: ClassSession) -> int:

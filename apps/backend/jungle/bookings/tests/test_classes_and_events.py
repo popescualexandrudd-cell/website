@@ -251,3 +251,18 @@ def test_q34_declined_and_clashing_event(
     assert clash.status_code == 409 and error_code(clash) == "booking.slot_taken"
     declined = api.post(f"/staff/events/{second}/decision", {"approve": False, "note": "Ocupat"})
     assert declined.json()["status"] == "declined" and declined.json()["booking_id"] is None
+
+
+def test_r103_the_public_schedule_is_in_time_order_and_bounded(
+    api: Api, club: Any, staff: Any
+) -> None:
+    """§9.2.9: the website shows the coming week from the next classes, earliest first."""
+    staff(Role.COACH, club.location)
+    for starts in ("2027-03-19T18:00:00+02:00", WED_18, "2027-03-18T09:00:00+02:00"):
+        assert api.post("/staff/classes", class_body(club, starts_at=starts)).status_code == 201
+    public = Api(Client())
+    listed = public.get("/classes?location=jungle-padel").json()
+    assert [c["starts_at"][:10] for c in listed] == ["2027-03-17", "2027-03-18", "2027-03-19"]
+    assert len(public.get("/classes?location=jungle-padel&limit=2").json()) == 2
+    assert public.get("/classes?location=jungle-padel&limit=0").status_code == 422
+    assert public.get("/classes?location=jungle-padel&limit=201").status_code == 422

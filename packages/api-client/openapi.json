@@ -13517,6 +13517,7 @@
     },
     "/api/v1/classes": {
       "get": {
+        "description": "R-103: the next classes, in time order (at most ``limit``).",
         "operationId": "jungle_bookings_api_list_classes",
         "parameters": [
           {
@@ -13526,6 +13527,18 @@
             "schema": {
               "title": "Location",
               "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
             }
           }
         ],
