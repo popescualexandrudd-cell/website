@@ -25,7 +25,19 @@ describe("the texts sent to the browser (§9.4)", () => {
   it("covers every namespace a client component reads, and they all exist", () => {
     const files = [...clientFiles(join(SRC, "components")), ...clientFiles(join(SRC, "app"))];
     expect(files.length).toBeGreaterThan(5);
-    const used = new Set(files.flatMap((file) => [...readFileSync(file, "utf8").matchAll(/useTranslations\("([^"]+)"\)/g)].map((m) => m[1] as string)));
+    // Every string in a useTranslations(...) call counts, also in a condition
+    // (mode === "confirm" ? "web.confirm" : "web.unsubscribe"); a call without one cannot be checked.
+    const calls = files.flatMap((file) => [...readFileSync(file, "utf8").matchAll(/useTranslations\(([^)]*)\)/g)].map((m) => m[1] as string));
+    for (const call of calls) expect(call, "a namespace written in the code").toMatch(/"[^"]+"/);
+    // Only strings that start with a section of the catalogue are namespaces ("confirm" in a
+    // comparison is not).
+    const sections = new Set(Object.keys(ro));
+    const used = new Set(
+      calls
+        .flatMap((call) => [...call.matchAll(/"([^"]+)"/g)].map((m) => m[1] as string))
+        .filter((literal) => sections.has(literal.split(".")[0] as string)),
+    );
+    expect(used).toContain("web.unsubscribe");
     for (const namespace of used) {
       expect(CLIENT_NAMESPACES.some((picked) => namespace === picked || namespace.startsWith(`${picked}.`)), namespace).toBe(true);
     }

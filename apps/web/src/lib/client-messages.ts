@@ -13,6 +13,7 @@ export const CLIENT_NAMESPACES = [
   "web.cookies",
   "web.waitlist",
   "web.confirm",
+  "web.unsubscribe",
   "web.league",
   "web.site.header",
   "web.site.live",
