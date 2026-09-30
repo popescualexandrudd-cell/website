@@ -1281,7 +1281,22 @@
             "text": "Rezervări, carduri de membru și ajutor la chioșcuri."
           }
         },
-        "soon": "Numele și fotografiile echipei apar aici când echipa e completă."
+        "soon": "Numele de mai jos sunt fictive: le folosim ca exemplu până anunțăm echipa reală. Fotografiile apar când echipa e completă.",
+        "people": {
+          "title": "Antrenorii",
+          "label": "Antrenorii clubului, pe sporturi",
+          "fictional": "Nume fictiv",
+          "sports": {
+            "padel": "Padel",
+            "tennis": "Tenis",
+            "pilates": "Pilates Reformer"
+          },
+          "roles": {
+            "padel": "Antrenor de padel",
+            "tennis": "Antrenor de tenis",
+            "pilates": "Instructor de Reformer"
+          }
+        }
       },
       "numbers": {
         "kicker": "Cifre",

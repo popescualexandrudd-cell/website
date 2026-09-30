@@ -5,12 +5,12 @@
 | Fază | Ce conține | Starea |
 |---|---|---|
 | 0. Citire, inventar, referință, plan | fără modificări vizibile | **aprobată 30.09.2026** („aprob, continuă cu tot până la capăt”) |
-| 1. Fundația | pasul de viteză, tokenii de mișcare, observatorul, CSS-ul de efecte, modul „lite”, comutatoarele `web_effects` și `web_hero_video`; butonul de apel și fraza Q34 la sala de evenimente | **livrată 30.09.2026** |
-| 2. Videoul | stratul video, scriptul, controalele, tranziția spre hală, comutatorul `web_hero_video` | **livrată 30.09.2026** (așteaptă videoul) |
-| 3. Secțiunile 14–19 | construite direct cu efecte | **livrată 30.09.2026** |
-| 4. Efectele pe secțiunile 1–13 | una câte una, cu interactivitatea funcțiilor | **livrată 30.09.2026** |
-| 5. Celelalte pagini | același limbaj de efecte, mai discret | **livrată 30.09.2026** |
-| 6–7. Verificarea finală și predarea | ghid pentru proprietar | **livrate 30.09.2026**; așteaptă aprobarea |
+| 1. Fundația | pasul de viteză, tokenii de mișcare, observatorul, CSS-ul de efecte, modul „lite”, comutatoarele `web_effects` și `web_hero_video`; butonul de apel și fraza Q34 la sala de evenimente | **aprobată 30.09.2026** |
+| 2. Videoul | stratul video, scriptul, controalele, tranziția spre hală, comutatorul `web_hero_video` | **aprobată 30.09.2026** (așteaptă videoul) |
+| 3. Secțiunile 14–19 | construite direct cu efecte | **aprobată 30.09.2026** |
+| 4. Efectele pe secțiunile 1–13 | una câte una, cu interactivitatea funcțiilor | **aprobată 30.09.2026** |
+| 5. Celelalte pagini | același limbaj de efecte, mai discret | **aprobată 30.09.2026** |
+| 6–7. Verificarea finală și predarea | ghid pentru proprietar | **aprobate 30.09.2026** |
 
 ---
 
@@ -385,3 +385,10 @@ Se deschid în browser (Chrome, Firefox, Edge).
 2. **Videoul:** când îl aveți, îl urcați după ghid (secțiunea 3).
 3. **Q59–Q66,** fiecare cu varianta implicită; niciuna nu blochează.
 4. **Efectele opționale** (Q62): vi le arătăm ca demonstrații, dacă vreți.
+
+---
+
+## Aprobarea (30.09.2026)
+Proprietarul: „Aprob și continuă cu proiectul.” Fazele 1–7 și secțiunile 14–19 sunt aprobate și intră în `main` după ce CI e verde.
+- **Q65:** „Pune nume fictive 2 antrenori pt padel tenis pilates.” Secțiunea „Echipa” arată, sub roluri, câte doi antrenori pentru padel, tenis și Pilates Reformer. Fiecare nume e marcat „Nume fictiv”, iar nota de sub listă spune că numele sunt un exemplu până la anunțarea echipei reale. Fără fotografii.
+- **Q66:** „ok.” Harta secțiunilor iese în ziua lansării publice.

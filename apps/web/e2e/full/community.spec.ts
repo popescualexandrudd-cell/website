@@ -1,6 +1,6 @@
 /**
  * The full site, sections 14–18 (§9.2, Stage 11): the community (badges, Hall of Fame from the
- * real API, "Bring a friend", R-120), the team (roles only, Q65), the club in numbers (only figures
+ * real API, "Bring a friend", R-120), the team (roles and two fictional coaches per sport, labelled, Q65), the club in numbers (only figures
  * from the docs), location and access, and the questions in short (R-053). Rendered on the server.
  */
 import { expect, type Page, test } from "@playwright/test";
@@ -55,15 +55,22 @@ test("§9.2.14, LG-134, R-120: the badges, the Hall of Fame from the real API an
   await shot(page, "20-comunitate", info.project.name);
 });
 
-test("§9.2.15, Q65: the team's roles, without invented names", async ({ page }, info) => {
+test("§9.2.15, Q65: the roles, then two coaches per sport, every fictional name labelled", async ({ page }, info) => {
   await page.goto("/ro");
   const team = page.getByRole("region", {
     name: "Oamenii din spatele clubului.",
   });
   await team.scrollIntoViewIfNeeded();
-  await expect(team.getByRole("heading", { level: 3 })).toHaveText(["Antrenorii de padel", "Instructorul de Reformer", "Recepția"]);
-  await expect(team.getByText("Numele și fotografiile echipei apar aici când echipa e completă.")).toBeVisible();
+  await expect(team.getByRole("heading", { level: 3 })).toHaveText(["Antrenorii de padel", "Instructorul de Reformer", "Recepția", "Antrenorii"]);
+  const sports = team.getByRole("list", { name: "Antrenorii clubului, pe sporturi" });
+  await expect(sports.getByRole("heading", { level: 4 })).toHaveText(["Padel", "Tenis", "Pilates Reformer"]);
+  const people = sports.locator(".team__people > li");
+  await expect(people).toHaveCount(6);
+  // Invariant 12: each placeholder name says it is fictional.
+  await expect(sports.getByText("Nume fictiv", { exact: true })).toHaveCount(6);
+  await expect(team.getByText(/Numele de mai jos sunt fictive/)).toBeVisible();
   await expect(team.locator("img")).toHaveCount(0);
+  await expectAccessible(page);
   await shot(page, "21-echipa", info.project.name);
 });
 
@@ -146,6 +153,7 @@ test("in English", async ({ page }) => {
   await page.goto("/en");
   await expect(page.getByRole("region", { name: "A club, not just courts." })).toBeVisible();
   await expect(page.getByRole("region", { name: "The people behind the club." })).toBeVisible();
+  await expect(page.getByRole("region", { name: "The people behind the club." }).getByText("Fictional name", { exact: true })).toHaveCount(6);
   await expect(page.getByRole("region", { name: "The club in numbers." })).toBeVisible();
   await expect(page.getByRole("region", { name: "In short, before you come." }).locator("summary").first()).toHaveText(
     "When is the club open, and what are the peak hours?",

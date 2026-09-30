@@ -2822,6 +2822,45 @@ body[data-menu-open="true"] {
   max-width: 70ch;
   color: var(--text-2);
 }
+.team__sports {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 16px;
+  margin: 16px 0 0;
+}
+.team__sport {
+  padding: 22px 24px;
+  background: var(--color-night-800);
+  border: 1px solid var(--line);
+}
+.team__sport h4 {
+  margin: 0 0 12px;
+  font-family: var(--font-serif);
+  font-size: 20px;
+  color: var(--text);
+}
+.team__people {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.team__people li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+}
+.team__people strong {
+  color: var(--text);
+}
+.team__people span {
+  color: var(--text-2);
+  font-size: 14px;
+}
 .numbers__list {
   grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
 }

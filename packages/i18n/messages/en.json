@@ -1281,7 +1281,22 @@
             "text": "Bookings, member cards and help at the kiosks."
           }
         },
-        "soon": "The team's names and photos appear here once the team is complete."
+        "soon": "The names below are fictional: we use them as an example until we announce the real team. Photos appear once the team is complete.",
+        "people": {
+          "title": "The coaches",
+          "label": "The club's coaches, by sport",
+          "fictional": "Fictional name",
+          "sports": {
+            "padel": "Padel",
+            "tennis": "Tennis",
+            "pilates": "Reformer Pilates"
+          },
+          "roles": {
+            "padel": "Padel coach",
+            "tennis": "Tennis coach",
+            "pilates": "Reformer instructor"
+          }
+        }
       },
       "numbers": {
         "kicker": "Numbers",

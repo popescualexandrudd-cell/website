@@ -4,6 +4,11 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Aprobare și Q65 — 30.09.2026
+#### Schimbat
+- Proprietarul aprobă efectele site-ului (Fazele 1–7) și secțiunile 14–19.
+- Q65: secțiunea „Echipa” arată, sub roluri, câte doi antrenori pentru padel, tenis și Pilates Reformer, cu nume fictive marcate „Nume fictiv” (`src/lib/team.ts`, texte `web.site.team.people.*`). Q66 confirmată.
+
 ### Efectele site-ului, Fazele 4–7 — 30.09.2026 (livrate)
 #### Adăugat
 - Faza 4, secțiunile 3–13 (hero-ul rămâne neschimbat: imaginea LCP):
