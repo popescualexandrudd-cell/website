@@ -4,6 +4,18 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, paginile separate: Liga — 30.09.2026 (livrată)
+#### Adăugat
+- `/liga` (`LeaguePage`, randată pe server la fiecare cerere):
+  - clasamentele Dublu, Simplu și Perechi;
+  - arhiva sezoanelor, filtrul de rang, căutarea după nume fără diacritice;
+  - rezultatele recente (Q49), turneele, regulile pe scurt.
+- `/liga/jucator/{id}` (`PlayerPage`): pagina publică a jucătorului (R-012, Q49), fără indexare.
+- `src/lib/league-page.ts`: citirea din API-ul public și alegerile din adresă. Texte `web.site.leaguePage.*` RO + EN.
+- Etapa nouă „league-data” la finalul `scripts/test-e2e`: pagina Ligii cu datele reale ale Chioșcului Ligii și ale ecranelor.
+#### Schimbat
+- Testul antetului folosește pagina Tenis ca exemplu de pagină în construcție (Liga are acum conținut).
+
 ### Aprobare și Q65 — 30.09.2026
 #### Schimbat
 - Proprietarul aprobă efectele site-ului (Fazele 1–7) și secțiunile 14–19.

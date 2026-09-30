@@ -2887,6 +2887,82 @@ body[data-menu-open="true"] {
   }
 }
 
+/* ------------------------------------------------------------------ full site: the league page (§9.3) */
+.league-page__ladders {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 32px 0 20px;
+}
+.league-page__ladder {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 20px;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+  background: var(--color-night-900);
+  border: 1px solid var(--color-night-500);
+  border-radius: var(--radius-pill);
+}
+.league-page__ladder:hover {
+  border-color: var(--color-brass-300);
+}
+.league-page__ladder[aria-current="page"] {
+  border-color: var(--color-brass-400);
+  background: var(--color-night-700);
+}
+.league-page__filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: 16px;
+  align-items: end;
+  margin: 0 0 32px;
+}
+.league-page__filters label {
+  display: grid;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 15px;
+}
+.league-page__filters .btn {
+  min-height: 52px;
+}
+.league-page__standings .standings__scroll:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 4px;
+}
+.league-page__standings a,
+.league-page__results a {
+  color: var(--text);
+}
+.league-page__minimum {
+  margin-left: 10px;
+  font-size: 12px;
+}
+.league-page__results {
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.league-page__team {
+  margin: 0 0 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  color: var(--text-2);
+}
+.league-page__team.is-winner {
+  color: var(--text);
+  font-weight: 600;
+}
+.league-page__lp {
+  font-size: 14px;
+  color: var(--accent);
+}
+
 /* ------------------------------------------------------------------ full site: the build map */
 .site-preview .lead {
   max-width: 720px;

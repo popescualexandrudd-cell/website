@@ -36,7 +36,7 @@
 | 8 | Chioșcul de Plăți + afișajul cafenelei | ian. 2027 | **Aprobată 29.09.2026** |
 | 9 | Ecranele | ian. 2027 | **Aprobată 29.09.2026** |
 | 10 | Panoul de admin complet | ian. 2027 | **Aprobată 29.09.2026** |
-| 11 | Website-ul „simulator” | ian.–feb. 2027 | În lucru: secțiunea 1 aprobată 29.09.2026; secțiunile 2–8 aprobate 30.09.2026; secțiunile 9–10 aprobate 30.09.2026; secțiunile 11–13 aprobate 30.09.2026; efectele site-ului (Fazele 0–7) și secțiunile 14–19 **aprobate 30.09.2026**; toate cele 19 secțiuni ale paginii principale sunt aprobate; urmează paginile separate (§9.3) |
+| 11 | Website-ul „simulator” | ian.–feb. 2027 | În lucru: secțiunea 1 aprobată 29.09.2026; secțiunile 2–8 aprobate 30.09.2026; secțiunile 9–10 aprobate 30.09.2026; secțiunile 11–13 aprobate 30.09.2026; efectele site-ului (Fazele 0–7) și secțiunile 14–19 **aprobate 30.09.2026**; toate cele 19 secțiuni ale paginii principale sunt aprobate; paginile separate (§9.3): Liga livrată 30.09.2026 |
 | 12 | AI + notificări | feb. 2027 | Neîncepută |
 | 13 | SEO, marketing, branding, vânzări | în paralel, feb. 2027 | Neîncepută |
 | 14 | Deploy, securitate, backup, hardware real | feb. 2027 | Neîncepută |
@@ -154,3 +154,4 @@
 - **30.09.2026** — Efectele site-ului, Faza 3 livrată: secțiunile 14 (Comunitatea, cu Hall of Fame din API), 15 (Echipa, doar rolurile, Q65), 16 (Clubul în cifre, cu numărarea în sus), 17 (Locație și acces), 18 (Întrebări frecvente) și 19 (subsolul site-ului complet), direct cu efectele; tilt-ul cardurilor, bara de progres din antet și linkul secțiunii din ecran. Q65, Q66.
 - **30.09.2026** — Efectele site-ului, Fazele 4–7 livrate: efectele pe secțiunile 3–13 (hero-ul neschimbat), intrarea discretă a celorlalte pagini, verificarea finală (inventar 0 eliminate, regresie vizuală, 127 de teste cu efectele pornite, mediana Lighthouse pe telefon 92), ghidul proprietarului (`docs/08-deploy-si-mentenanta/03-ghid-efecte-si-video.md`) și înregistrările derulării. Așteaptă aprobarea proprietarului.
 - **30.09.2026** — Proprietarul aprobă efectele (Fazele 1–7) și secțiunile 14–19 („Aprob și continuă cu proiectul”); Q65: câte doi antrenori cu nume fictive pentru padel, tenis și Pilates, marcați „Nume fictiv”; Q66: harta secțiunilor iese la lansarea publică. Urmează paginile separate ale site-ului (§9.3), începând cu pagina Ligii.
+- **30.09.2026** — Pagina Ligii (`/liga`) și pagina publică a jucătorului (`/liga/jucator/{id}`) livrate: clasamentele, arhiva, filtrele, rezultatele, turneele, regulile; testate și cu datele reale ale Chioșcului Ligii. Urmează paginile de prezentare (Padel, Tenis, Pilates, Pachete, Evenimente, Cafenea, Contact), apoi contul și rezervările.

@@ -19,6 +19,7 @@ export const routing = defineRouting({
     // The full site (Stage 11, §9.3): the pages of the main menu, the bookings and the account.
     "/padel": { ro: "/padel", en: "/padel" },
     "/league": { ro: "/liga", en: "/league" },
+    "/league/players/[id]": { ro: "/liga/jucator/[id]", en: "/league/players/[id]" },
     "/tennis": { ro: "/tenis", en: "/tennis" },
     "/pilates": { ro: "/pilates", en: "/pilates" },
     "/packages": { ro: "/pachete", en: "/packages" },

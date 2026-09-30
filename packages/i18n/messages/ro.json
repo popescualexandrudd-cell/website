@@ -1381,6 +1381,106 @@
         "hours": "În fiecare zi, 08:00–23:00",
         "menuTitle": "Clubul",
         "languagesTitle": "Limba"
+      },
+      "leaguePage": {
+        "kicker": "Liga Jungle",
+        "title": "Clasamentele ligii",
+        "lead": "Cele trei clasamente ale sezonului, rezultatele meciurilor și turneele, live. Pe site liga doar se urmărește: scorurile se introduc și se confirmă numai la Chioșcul Ligii, în club.",
+        "retired": "Jucător retras",
+        "ladders": {
+          "label": "Clasamentul",
+          "doubles": "Dublu",
+          "singles": "Simplu",
+          "pairs": "Perechi"
+        },
+        "filters": {
+          "label": "Alege sezonul, rangul sau caută un jucător",
+          "season": "Sezonul",
+          "current": "Sezonul în curs",
+          "rank": "Rangul",
+          "allRanks": "Toate rangurile",
+          "search": "Caută după nume",
+          "apply": "Arată"
+        },
+        "standings": {
+          "title": "{ladder} · {season}",
+          "scroll": "Clasamentul (se poate derula orizontal)",
+          "position": "Locul",
+          "player": "Jucătorul",
+          "pair": "Perechea",
+          "rank": "Rang",
+          "level": "Nivel",
+          "lp": "LP",
+          "belowMinimum": "sub 12 meciuri",
+          "noSeason": "Primul sezon al ligii începe odată cu clubul. Clasamentul apare aici după primele meciuri.",
+          "unknownSeason": "Sezonul ales nu există. Alege altul din listă.",
+          "empty": "Clasamentul apare după primele meciuri ale sezonului.",
+          "noMatch": "Niciun jucător nu se potrivește cu alegerea ta.",
+          "error": "Clasamentul nu se poate încărca acum. Revino în câteva minute.",
+          "note": "Cine a jucat mai puțin de 12 meciuri oficiale în sezon apare cu „sub 12 meciuri” și nu intră încă în clasamentul final și la premii. Jucătorii aflați în meciurile de plasare apar după ele."
+        },
+        "results": {
+          "title": "Rezultatele recente",
+          "empty": "Primele rezultate apar aici după meciurile confirmate la Chioșcul Ligii.",
+          "error": "Rezultatele nu se pot încărca acum.",
+          "official": "Meci oficial",
+          "challenge": "Provocare",
+          "tournament": "Meci de turneu",
+          "score": "Scor: {score}",
+          "lp": "{lp} LP"
+        },
+        "tournaments": {
+          "title": "Turneele",
+          "empty": "Nu e niciun turneu programat acum. Turneele noi apar aici și în calendarul clubului.",
+          "error": "Turneele nu se pot încărca acum.",
+          "status": {
+            "registration": "Înscrieri deschise",
+            "in_progress": "În desfășurare",
+            "finished": "Încheiat",
+            "other": "Programat"
+          },
+          "entries": "{entries} din {max} înscrieri",
+          "fee": "Taxa: {amount}",
+          "feeProvisional": "Taxa: {amount} (orientativ)",
+          "how": "Te înscrii din cont sau la recepție; turneele sunt pentru jucătorii din ligă."
+        },
+        "rules": {
+          "title": "Regulile, pe scurt",
+          "terms": "Termeni și condiții",
+          "join": {
+            "title": "Cine intră în ligă",
+            "text": "Oricine are cel puțin 18 ani, cu nivelul validat de un antrenor și acordul GDPR al ligii semnat la Chioșcul Ligii."
+          },
+          "scores": {
+            "title": "Scorurile",
+            "text": "Se introduc și se confirmă numai la Chioșcul Ligii din club, de toți jucătorii meciului. Site-ul și telefonul doar arată liga."
+          },
+          "ladders": {
+            "title": "Trei clasamente",
+            "text": "Dublu (fiecare jucător cu nivelul lui), simplu și perechi, fiecare cu nivel, LP și rang proprii."
+          },
+          "seasons": {
+            "title": "Sezoanele",
+            "text": "Trei luni. LP pornesc de la 0 la fiecare sezon; în clasamentul final și la premii intră cine a jucat cel puțin 12 meciuri oficiale."
+          },
+          "public": {
+            "title": "Ce e public",
+            "text": "Numele, rangul, nivelul, LP-ul, locul și rezultatele meciurilor de ligă. Insignele, statisticile și datele de contact rămân private."
+          }
+        },
+        "player": {
+          "kicker": "Jucător în Liga Jungle",
+          "ladders": "Locul în clasamentele sezonului",
+          "place": "Locul {position}",
+          "placement": "În plasare",
+          "level": "nivel {level}",
+          "noLadder": "Nu are încă meciuri în sezonul în curs.",
+          "matches": "Meciurile de ligă",
+          "noMatches": "Nu are încă meciuri de ligă confirmate.",
+          "private": "Pe această pagină apar doar datele publice ale ligii. Insignele, statisticile și datele de contact rămân private.",
+          "back": "Înapoi la clasamente",
+          "missing": "Jucătorul nu există sau nu mai e în ligă."
+        }
       }
     }
   },

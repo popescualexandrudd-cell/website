@@ -154,3 +154,26 @@ Toate șase sunt randate pe server (fără script nou în browser), cu atributel
 - **17 — Locație și acces:** adresa, accesul din două străzi, parcarea 18 + 10, planul clubului (schemă fără scară), OpenStreetMap și, opțional, Waze sau Google Maps. Doar linkuri, fără hartă încorporată și fără script de la terți.
 - **18 — Întrebări frecvente:** 8 întrebări cu regulile pe scurt (programul și vârful, Q3; duratele, R-041, R-042; anularea, R-070, R-071; neprezentarea, R-072, R-073; plata în numerar, Q9, R-063; fără credite la padel, invariantul 14; cine intră în ligă, R-006; unde se introduc scorurile, invariantele 1 și 2), în `<details>` care se deschid fără cod; linkul spre Termeni și condiții.
 - **19 — Subsolul:** pe site-ul complet, subsolul primește paginile clubului, programul (08:00–23:00) și limbile; datele firmei, paginile legale și ANPC SAL rămân neschimbate. Rețelele sociale apar când proprietarul are conturile.
+
+## Paginile separate (§9.3), din 30.09.2026
+
+### `/liga` — Clasamentele ligii
+- **Cele trei clasamente** (dublu, simplu, perechi, LG-001), ca linkuri: alegerea stă în adresă (`?ladder=`), deci o pagină se poate trimite cuiva exact cum o vedeți.
+- **Sezonul** (cel în curs sau oricare încheiat: arhiva), **rangul** și **căutarea după nume** (fără diacritice: „stefan” găsește „Ștefan”). Toate sunt un formular simplu, randat pe server, fără cod în browser. O alegere necunoscută revine la varianta implicită.
+- **Tabelul:** locul, jucătorul sau perechea (cu link spre pagina lui), rangul, nivelul, LP. Cine are sub 12 meciuri oficiale apare marcat „sub 12 meciuri” (§6.10). Jucătorii în plasare apar după meciurile de plasare. Un cont retras apare „Jucător retras”, fără link.
+- **Rezultatele recente** (Q49): data și ora clubului, terenul, echipele, scorul pe seturi, LP câștigat sau pierdut de fiecare, tipul meciului (oficial, provocare, turneu).
+- **Turneele** (§6.14): starea, data, înscrierile și taxa („orientativ” cât e DE_STABILIT, Q21). Înscrierea se face din cont sau la recepție.
+- **Regulile, pe scurt:**
+  - cine intră: 18+, nivel validat, acordul semnat la chioșc;
+  - scorurile: doar la Chioșcul Ligii (invariantele 1 și 2);
+  - cele trei clasamente;
+  - sezoanele;
+  - ce e public (R-012).
+
+### `/liga/jucator/{id}` — Pagina publică a jucătorului (Q49, R-012)
+- Numele, locul, rangul, nivelul și LP-ul pe fiecare clasament al sezonului, apoi meciurile de ligă (data, ora, terenul, scorul, LP).
+- Insignele, statisticile și datele de contact rămân private.
+- Un id necunoscut sau care nu e un id de jucător dă 404, fără să întrebe serverul.
+
+### Tehnic
+Ambele pagini sunt randate pe server la fiecare cerere (`dynamic = "force-dynamic"`), iar datele ligii se păstrează 60 de secunde (`src/lib/league-page.ts`). Paginile nu se indexează până la lansare (SEO în Etapa 13).

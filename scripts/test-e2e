@@ -217,6 +217,12 @@ E2E_SCREENS_DATA="$WORK/screens.json" E2E_SCREENSHOTS="${E2E_SCREENSHOTS:-}" \
   failed "$WORK/bridge-court.log" "$WORK/bridge-lobby.log"
 fi
 
+if part web && part kiosk && part screens; then
+  echo "==> The league page with real league data (the kiosk's confirmed matches, the screens' ranked players)"
+  E2E_SITE_MODE=league-data E2E_SCREENSHOTS="${E2E_SCREENSHOTS:-}" pnpm --filter @jungle/web exec playwright test ||
+    failed "$WORK/web.log"
+fi
+
 if part admin; then
 echo "==> Admin panel: an administrator with 2FA, demo staff and bookings, the production build"
 ADMIN_PASSWORD="e2e-$(python3 -c 'import secrets; print(secrets.token_urlsafe(18))')"

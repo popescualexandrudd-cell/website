@@ -668,3 +668,60 @@ După Evenimente urmează „Cafea de specialitate, între meciuri.” (§9.2, s
 1. Deschideți capturile 34–37.
 2. În panou (după ce e publicat pe server): Cafenea → schimbați prețul unui produs sau marcați-l indisponibil, apoi reîncărcați pagina site-ului.
 3. Dacă secțiunea vă place, scrieți „aprob secțiunea 13”.
+
+---
+
+## Paginile separate (§9.3): pagina Ligii
+
+Pagina principală e completă și aprobată (toate cele 19 secțiuni și efectele). Urmează paginile din meniu, una câte una. Prima e **Liga**, pagina cea mai cerută de jucători.
+
+### Ce s-a construit
+1. **`/liga` — Clasamentele ligii:**
+   - **cele trei clasamente** (Dublu, Simplu, Perechi), ca butoane în formă de pastilă;
+   - **sezonul** (cel în curs sau oricare încheiat: arhiva), **rangul** și **căutarea după nume**. Căutarea merge și fără diacritice: „stefan” îl găsește pe „Ștefan”;
+   - **tabelul:** locul, jucătorul sau perechea (cu link spre pagina lui), rangul, nivelul și LP-ul. Cine are sub 12 meciuri oficiale e marcat „sub 12 meciuri”; un cont retras apare „Jucător retras”, fără link;
+   - **rezultatele recente:** data și ora, terenul, echipele (câștigătoarea evidențiată), scorul pe seturi și LP-ul fiecăruia;
+   - **turneele:** starea, data, înscrierile și taxa, „orientativ” cât prețul e DE_STABILIT (Q21);
+   - **regulile, pe scurt:** cine intră, unde se introduc scorurile, cele trei clasamente, sezoanele, ce e public.
+2. **`/liga/jucator/…` — pagina publică a jucătorului** (Q49): locul, rangul, nivelul și LP-ul pe fiecare clasament, apoi meciurile lui de ligă. Insignele, statisticile și datele de contact rămân private (R-012).
+
+**Ce am ales și de ce:**
+1. **Alegerile stau în adresă** (de exemplu `/ro/liga?ladder=pairs&rank=gold`): un clasament filtrat se poate trimite cuiva exact cum îl vedeți.
+2. **Pagina e randată pe server,** fără cod nou în browser: se încarcă repede și pe un telefon slab. Datele ligii se reîmprospătează la fiecare minut.
+3. **Site-ul doar arată liga** (invariantele 1 și 2): nicio acțiune de pe pagină nu scrie ceva în ligă.
+4. **Pagina Ligii se poate găsi pe Google** (după lansare). **Pagina fiecărui jucător, nu:** datele sunt publice (Q49), dar numele cuiva nu trebuie să apară într-o căutare după el. Se ajunge la ea din clasament.
+5. **O adresă greșită** (un sezon inexistent, un clasament inventat) revine la clasamentul implicit și spune ce s-a întâmplat. Un jucător necunoscut dă „pagina nu există”, fără să întrebe serverul.
+
+### Capturi de ecran
+38. [Liga, înainte de primul sezon, pe calculator](ecrane/desktop-30-liga.png)
+39. [Liga, înainte de primul sezon, pe telefon](ecrane/mobile-30-liga.png)
+40. [Clasamentul cu date reale de test, pe calculator](ecrane/desktop-31-liga-clasament.png): sezonul demo, jucătorii clasați la testele ecranelor și un meci confirmat la Chioșcul Ligii.
+41. [Clasamentul cu date reale de test, pe telefon](ecrane/mobile-31-liga-clasament.png)
+42. [Pagina unui jucător, pe calculator](ecrane/desktop-32-liga-jucator.png)
+43. [Pagina unui jucător, pe telefon](ecrane/mobile-32-liga-jucator.png)
+
+Numele din capturi sunt ale datelor demo (sezonul se numește „Sezon DEMO 1”).
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Teste unitare | 7 noi: alegerile din adresă (și cele greșite), filtrarea după rang și nume fără diacritice, scorul, citirea din API (și când serverul nu răspunde), un id de jucător invalid nu ajunge la server. |
+| Cap-coadă, fără date de ligă | 6 noi (calculator + telefon): pagina, clasamentele, formularul, regulile, adresele greșite, jucătorul necunoscut (404), engleza. Axe fără probleme. |
+| Cap-coadă, cu date reale | o etapă nouă la finalul `scripts/test-e2e`, după Chioșcul Ligii și ecrane: clasamentul identic cu API-ul (loc și LP pentru fiecare rând), apoi pagina jucătorului cu meciurile lui, fără date de contact. |
+| Toate testele | 28 pre-lansare, 107 site complet, 133 cu efectele pornite, 6 Chioșcul Ligii, 6 plăți și cafenea, 3 ecrane, **2 liga cu date reale**, 3 panou. |
+| Lighthouse, `/ro/liga` | telefon **94–99** (5 măsurători după o încălzire, LCP 2,0–2,8 s), calculator 100; accesibilitate, bune practici și SEO **100** (după reparația de la punctul 3 de mai jos). |
+
+### Dubla revizuire: probleme găsite și reparate
+1. **Pagina dădea eroare după pornirea site-ului complet.** Se construia cât comutatorul era oprit, iar Next.js o păstra ca pagină fixă, apoi nu mai putea citi alegerile din adresă. Pagina se randează acum la fiecare cerere. Testul cap-coadă a prins problema; local nu apărea.
+2. **Titlul clasamentului înainte de primul sezon** era „Dublu · ” (cu sezonul gol). Acum e doar „Dublu”.
+3. **SEO 58:** pagina era marcată „nu indexa” și avea adresa canonică a paginii principale. Acum are adresa ei, în română și engleză, și se indexează ca restul site-ului.
+4. **Din perspectiva unui atacator:**
+   - pagina doar citește date publice;
+   - căutarea e limitată la 60 de caractere și se face pe server, pe datele deja primite;
+   - un id de jucător care nu arată ca un id nu ajunge la server;
+   - în pagina jucătorului nu apare nicio adresă de email sau număr de telefon (verificat în test).
+
+### Cum verificați (click cu click)
+1. Deschideți capturile 38–43.
+2. Pe site (cu site-ul complet pornit): meniul **Liga** → alegeți **Perechi**, apoi un rang și **Arată**.
+3. Apăsați pe numele unui jucător: se deschide pagina lui.

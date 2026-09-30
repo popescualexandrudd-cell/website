@@ -6,7 +6,16 @@ const executablePath = process.env.PW_CHROMIUM_PATH || undefined;
 const mode = process.env.E2E_SITE_MODE;
 // "full": the full site as approved; "effects": the same tests again with the effects switched on
 // (ADR-0023: they must pass unchanged), plus the tests of the effects themselves.
-const match = mode === "full" ? { testMatch: "full/**/*.spec.ts" } : mode === "effects" ? { testMatch: ["full/**/*.spec.ts", "effects/**/*.spec.ts"] } : { testIgnore: ["full/**", "effects/**"] };
+// "league-data": the league page again at the end of scripts/test-e2e, once the League Kiosk and the
+// screens stages have put real league data (a season, ranked players, confirmed matches) in the API.
+const match =
+  mode === "full"
+    ? { testMatch: "full/**/*.spec.ts" }
+    : mode === "effects"
+      ? { testMatch: ["full/**/*.spec.ts", "effects/**/*.spec.ts"] }
+      : mode === "league-data"
+        ? { testMatch: "league-data/**/*.spec.ts" }
+        : { testIgnore: ["full/**", "effects/**", "league-data/**"] };
 
 export default defineConfig({
   testDir: "e2e",

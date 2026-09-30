@@ -55,25 +55,25 @@ test("§9.2.1: the full site's header on the home page, with the map of the sect
 test("a menu page in the language chosen, marked as the current page, and back in English", async ({ page }, info) => {
   await page.goto("/ro");
   if (info.project.name === "mobile") await page.getByRole("button", { name: "Meniu" }).click();
-  await page.getByRole("link", { name: "Liga", exact: true }).first().click();
-  await expect(page).toHaveURL(/\/ro\/liga$/);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Liga Jungle");
+  await page.getByRole("link", { name: "Tenis", exact: true }).first().click();
+  await expect(page).toHaveURL(/\/ro\/tenis$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Tenis");
   await expect(page.getByText(/se construiește în Etapa 11/)).toBeVisible();
   // After a navigation from the menu the new page's tag comes last (the old one may linger a moment).
   await expect(page.locator('meta[name="robots"]').last()).toHaveAttribute("content", /noindex/);
   if (info.project.name === "desktop") {
-    await expect(page.getByRole("link", { name: "Liga", exact: true }).first()).toHaveAttribute("aria-current", "page");
+    await expect(page.getByRole("link", { name: "Tenis", exact: true }).first()).toHaveAttribute("aria-current", "page");
     await page.getByRole("link", { name: "English" }).first().click();
   } else {
     await page.getByRole("button", { name: "Meniu" }).click();
     await page.locator(".menu-panel").getByRole("link", { name: "English" }).click();
   }
-  await expect(page).toHaveURL(/\/en\/league$/);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Jungle League");
+  await expect(page).toHaveURL(/\/en\/tennis$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Tennis");
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   // After an in-page navigation the new title arrives a moment later (streamed metadata): wait for
   // it, or the accessibility check can run on a page without a title.
-  await expect(page).toHaveTitle("Jungle League · Jungle Padel");
+  await expect(page).toHaveTitle("Tennis · Jungle Padel");
   await expectAccessible(page);
 });
 

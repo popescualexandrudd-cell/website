@@ -1381,6 +1381,106 @@
         "hours": "Every day, 08:00–23:00",
         "menuTitle": "The club",
         "languagesTitle": "Language"
+      },
+      "leaguePage": {
+        "kicker": "Jungle League",
+        "title": "The league standings",
+        "lead": "The season's three standings, match results and tournaments, live. On the website the league is only followed: scores are entered and confirmed only at the League Kiosk, in the club.",
+        "retired": "Retired player",
+        "ladders": {
+          "label": "Standings",
+          "doubles": "Doubles",
+          "singles": "Singles",
+          "pairs": "Pairs"
+        },
+        "filters": {
+          "label": "Choose the season, the rank or search for a player",
+          "season": "Season",
+          "current": "The current season",
+          "rank": "Rank",
+          "allRanks": "All ranks",
+          "search": "Search by name",
+          "apply": "Show"
+        },
+        "standings": {
+          "title": "{ladder} · {season}",
+          "scroll": "The standings (can scroll sideways)",
+          "position": "Place",
+          "player": "Player",
+          "pair": "Pair",
+          "rank": "Rank",
+          "level": "Level",
+          "lp": "LP",
+          "belowMinimum": "under 12 matches",
+          "noSeason": "The league's first season starts with the club. The standings appear here after the first matches.",
+          "unknownSeason": "That season doesn't exist. Choose another one from the list.",
+          "empty": "The standings appear after the season's first matches.",
+          "noMatch": "No player matches your choice.",
+          "error": "The standings can't be loaded right now. Please come back in a few minutes.",
+          "note": "Players with fewer than 12 official matches this season are marked “under 12 matches” and don't yet count for the final standings and prizes. Players in their placement matches appear once those are done."
+        },
+        "results": {
+          "title": "Recent results",
+          "empty": "The first results appear here after matches confirmed at the League Kiosk.",
+          "error": "The results can't be loaded right now.",
+          "official": "Official match",
+          "challenge": "Challenge",
+          "tournament": "Tournament match",
+          "score": "Score: {score}",
+          "lp": "{lp} LP"
+        },
+        "tournaments": {
+          "title": "Tournaments",
+          "empty": "No tournament is scheduled right now. New tournaments appear here and in the club's calendar.",
+          "error": "The tournaments can't be loaded right now.",
+          "status": {
+            "registration": "Registration open",
+            "in_progress": "Under way",
+            "finished": "Finished",
+            "other": "Scheduled"
+          },
+          "entries": "{entries} of {max} entries",
+          "fee": "Fee: {amount}",
+          "feeProvisional": "Fee: {amount} (indicative)",
+          "how": "You enter from your account or at the reception; tournaments are for league players."
+        },
+        "rules": {
+          "title": "The rules, in short",
+          "terms": "Terms and conditions",
+          "join": {
+            "title": "Who can join",
+            "text": "Anyone aged 18 or over, with their level validated by a coach and the league's GDPR form signed at the League Kiosk."
+          },
+          "scores": {
+            "title": "Scores",
+            "text": "Entered and confirmed only at the League Kiosk in the club, by every player of the match. The website and phones only show the league."
+          },
+          "ladders": {
+            "title": "Three standings",
+            "text": "Doubles (each player with their own level), singles and pairs, each with its own level, LP and rank."
+          },
+          "seasons": {
+            "title": "Seasons",
+            "text": "Three months. LP start from 0 every season; the final standings and prizes count players with at least 12 official matches."
+          },
+          "public": {
+            "title": "What is public",
+            "text": "Names, rank, level, LP, place and the results of league matches. Badges, statistics and contact details stay private."
+          }
+        },
+        "player": {
+          "kicker": "Jungle League player",
+          "ladders": "Place in the season's standings",
+          "place": "Place {position}",
+          "placement": "In placement",
+          "level": "level {level}",
+          "noLadder": "No matches in the current season yet.",
+          "matches": "League matches",
+          "noMatches": "No confirmed league matches yet.",
+          "private": "This page shows only the league's public data. Badges, statistics and contact details stay private.",
+          "back": "Back to the standings",
+          "missing": "This player doesn't exist or is no longer in the league."
+        }
       }
     }
   },
