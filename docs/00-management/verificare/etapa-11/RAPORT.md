@@ -20,9 +20,9 @@
 | 8. Tenis | 30.09.2026 | **aprobată 30.09.2026** |
 | 9. Pilates Reformer | 30.09.2026 | **aprobată 30.09.2026** |
 | 10. Configuratorul de pachete | 30.09.2026 | **aprobată 30.09.2026** |
-| 11. „Împarte ora” | 30.09.2026 | **livrată** |
-| 12. Evenimente | 30.09.2026 | **livrată** |
-| 13. Cafeneaua de specialitate | 30.09.2026 | **livrată** |
+| 11. „Împarte ora” | 30.09.2026 | **aprobată 30.09.2026** |
+| 12. Evenimente | 30.09.2026 | **aprobată 30.09.2026** |
+| 13. Cafeneaua de specialitate | 30.09.2026 | **aprobată 30.09.2026** |
 | 14–19 | — | urmează, câte una |
 
 ---

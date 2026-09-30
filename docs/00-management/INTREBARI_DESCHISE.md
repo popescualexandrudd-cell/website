@@ -53,8 +53,8 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q30](#q30) | Afișarea publică a rezultatelor | MEDIE | Etapa 5 (textul formularului GDPR al ligii) | REZOLVATĂ |
 | [Q31](#q31) | Clasamentul pe perechi | SCĂZUTĂ | Etapa 2 (parametru al motorului; nu blochează) | DESCHISĂ |
 | [Q32](#q32) | Voucherul „Adu un prieten” | MEDIE | Etapa 4 (vouchere și recomandări) | DESCHISĂ |
-| [Q33](#q33) | Cafeneaua | MEDIE | Etapa 4 (produse de cafenea), Etapa 8 (afișajul cafenelei) | DESCHISĂ |
-| [Q34](#q34) | Sala de evenimente | MEDIE | Etapa 3 (rezervarea sălii de evenimente) | DESCHISĂ |
+| [Q33](#q33) | Cafeneaua | MEDIE | Etapa 4 (produse de cafenea), Etapa 8 (afișajul cafenelei) | REZOLVATĂ |
+| [Q34](#q34) | Sala de evenimente | MEDIE | Etapa 3 (rezervarea sălii de evenimente) | REZOLVATĂ |
 | [Q35](#q35) | Pachetele corporate | MEDIE | Etapa 4 (conturi corporate) | REZOLVATĂ |
 | [Q36](#q36) | Membri fondatori | ÎNALTĂ | Etapa 1B (dacă pagina de pre-lansare oferă locuri de membru fondator) | REZOLVATĂ |
 | [Q37](#q37) | Personalul | ÎNALTĂ | Etapa 1A (roluri și permisiuni), Etapa 15 (instruirea personalului) | REZOLVATĂ |
@@ -435,10 +435,10 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q33"></a>Q33 — Cafeneaua
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 4 (produse de cafenea), Etapa 8 (afișajul cafenelei)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (din MEGA_PROMPT):** fără stoc la lansare; afișaj la bar.
 - **Folosită în Etapa 4 (27.09.2026):** Fără stoc (doar „disponibil / indisponibil”); coada de comenzi pentru bar există în API, afișajul vine în Etapa 8.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (30.09.2026):** „Q33 fără”: fără gestiune de stoc și fără imprimantă de bonuri la bar. Se confirmă ce s-a folosit: produsul doar „disponibil / indisponibil” (Etapa 4) și comenzile pe afișajul barului (Etapa 8). Confirmat de proprietar la 30.09.2026.
 - **Textul original (§17):**
 
   > - **Q33 Cafeneaua**: gestiune de stoc? Meniu? Imprimantă de bonuri la bar? *Implicit: fără stoc la lansare; afișaj la bar.*
@@ -446,11 +446,11 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q34"></a>Q34 — Sala de evenimente
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 3 (rezervarea sălii de evenimente)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ
 - **Varianta implicită (din MEGA_PROMPT):** cerere de rezervare online, confirmată de manager.
 - **Folosită în Etapa 3 (27.09.2026):** Cerere online (`POST /api/v1/events`), aprobată de manager.
 - **Folosită în Etapa 11 (30.09.2026, secțiunea 12 a site-ului):** site-ul arată câte persoane primește sala și prețul pe oră din date (tariful orientativ, Q21) și spune că cererea se trimite din cont și o confirmă managerul. Dacă alegeți pachete pentru sală, le adăugăm aici.
-- **Răspunsul proprietarului:** —
+- **Răspunsul proprietarului (30.09.2026):** „online și telefonic și aprobă pachetele managerii”: sala se cere online (din cont, ca acum) și telefonic (recepția sau managerul o introduc în panou); pachetele, prețurile și confirmarea le aprobă un manager. Pe site: butonul de apel și fraza despre cerere (la efectele site-ului, Faza 1). Introducerea telefonică din panou se face într-o etapă ulterioară. Confirmat de proprietar la 30.09.2026.
 - **Textul original (§17):**
 
   > - **Q34 Sala de evenimente**: se rezervă online? Pachete și prețuri? *Implicit: cerere de rezervare online, confirmată de manager.*

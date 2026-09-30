@@ -4,6 +4,11 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, secțiunile 11–13 — aprobate 30.09.2026
+#### Schimbat
+- Proprietarul a aprobat secțiunile 11 („Împarte ora”), 12 (Evenimente) și 13 (Cafeneaua); intră în `main`.
+- Q33 rezolvată (fără stoc, fără imprimantă de bonuri) și Q34 rezolvată (sala se cere online și telefonic; pachetele, prețurile și confirmarea le aprobă un manager).
+
 ### Etapa 11, secțiunea 13 — 30.09.2026 (livrată)
 #### Adăugat
 - Cafeneaua de specialitate (§9.2, secțiunea 13): `Cafe`, randată pe server, meniul din `src/lib/cafe.ts`.
