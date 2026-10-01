@@ -226,7 +226,7 @@
     "notifications.not_optional": "Aceste notificări nu se pot opri (sunt despre cont, rezervări sau bani).",
     "notifications.push_unavailable": "Notificările pe telefon nu sunt încă active la club.",
     "notifications.unknown": "Notificarea nu există.",
-    "notifications.template_invalid": "Textul are o greșeală de formulare a câmpurilor (de forma '{{ nume }}'). Verifică acoladele."
+    "notifications.template_invalid": "Textul are o greșeală de formulare a câmpurilor (de forma '{{ first_name }}'). Verifică acoladele."
   },
   "web": {
     "meta": {

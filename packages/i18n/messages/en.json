@@ -226,7 +226,7 @@
     "notifications.not_optional": "These notifications cannot be turned off (they are about your account, bookings or money).",
     "notifications.push_unavailable": "Phone notifications are not active at the club yet.",
     "notifications.unknown": "The notification does not exist.",
-    "notifications.template_invalid": "The text has a mistake in its fields (written '{{ name }}'). Check the braces."
+    "notifications.template_invalid": "The text has a mistake in its fields (written '{{ first_name }}'). Check the braces."
   },
   "web": {
     "meta": {
