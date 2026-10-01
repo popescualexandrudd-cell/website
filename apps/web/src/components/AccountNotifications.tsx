@@ -88,8 +88,14 @@ function NotificationsPanel() {
   };
 
   const toggle = async (category: string, channel: string, enabled: boolean) => {
+    // The box changes at once; the server's answer confirms it or puts it back.
+    const before = choices;
+    setChoices((current) => (current ? { ...current, [category]: { ...current[category], [channel]: enabled } } : current));
     const answer = await member.saveNotificationChoices({ [category]: { [channel]: enabled } });
-    if (!answer.ok) return setNotice({ text: errorText(answer.code, answer.params), error: true });
+    if (!answer.ok) {
+      setChoices(before);
+      return setNotice({ text: errorText(answer.code, answer.params), error: true });
+    }
     setChoices(answer.data.choices);
     setNotice({ text: t("saved"), error: false });
   };
