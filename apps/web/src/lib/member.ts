@@ -196,3 +196,34 @@ export function partnerIdFrom(text: string): string | null {
   const found = text.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i);
   return found ? found[0].toLowerCase() : null;
 }
+
+// ------------------------------------------------------------------ notifications (§11, Stage 12)
+export type Choices = Record<string, Record<string, boolean>>;
+
+export const notificationChoices = () => outcome(() => api.GET("/api/v1/notifications/preferences"));
+
+export async function saveNotificationChoices(choices: Choices) {
+  await ensureCsrf();
+  return outcome(() => api.PUT("/api/v1/notifications/preferences", { body: { choices } }));
+}
+
+export const pushKey = () => outcome(() => api.GET("/api/v1/notifications/push-key"));
+
+/** The VAPID key as the bytes `pushManager.subscribe` wants. */
+export function keyBytes(base64url: string): Uint8Array<ArrayBuffer> {
+  const base64 = (base64url + "=".repeat((4 - (base64url.length % 4)) % 4)).replace(/-/g, "+").replace(/_/g, "/");
+  const raw = atob(base64);
+  const bytes = new Uint8Array(new ArrayBuffer(raw.length));
+  for (let i = 0; i < raw.length; i += 1) bytes[i] = raw.charCodeAt(i);
+  return bytes;
+}
+
+export async function savePushSubscription(subscription: { endpoint: string; p256dh: string; auth: string }) {
+  await ensureCsrf();
+  return outcome(() => api.POST("/api/v1/notifications/push-subscriptions", { body: subscription }));
+}
+
+export async function removePushSubscription(endpoint: string) {
+  await ensureCsrf();
+  return outcome(() => api.POST("/api/v1/notifications/push-subscriptions/remove", { body: { endpoint } }));
+}

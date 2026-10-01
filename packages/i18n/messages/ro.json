@@ -222,7 +222,11 @@
     "blog.not_found": "Articolul nu există.",
     "blog.slug_taken": "Adresa „{slug}” e deja folosită de alt articol. Alege alta.",
     "blog.slug_locked": "Adresa unui articol publicat nu se mai schimbă (linkurile spre el ar înceta să funcționeze).",
-    "blog.already_published": "Articolul a fost deja publicat: nu se șterge, se retrage de pe site."
+    "blog.already_published": "Articolul a fost deja publicat: nu se șterge, se retrage de pe site.",
+    "notifications.not_optional": "Aceste notificări nu se pot opri (sunt despre cont, rezervări sau bani).",
+    "notifications.push_unavailable": "Notificările pe telefon nu sunt încă active la club.",
+    "notifications.unknown": "Notificarea nu există.",
+    "notifications.template_invalid": "Textul are o greșeală de formulare a câmpurilor (de forma '{{ nume }}'). Verifică acoladele."
   },
   "web": {
     "meta": {
@@ -1645,7 +1649,8 @@
         "payments": "Plăți și abonamente",
         "league": "Liga mea",
         "profile": "Profil și date",
-        "events": "Sala de evenimente"
+        "events": "Sala de evenimente",
+        "notifications": "Notificări"
       },
       "pages": {
         "card": {
@@ -1667,6 +1672,10 @@
         "events": {
           "title": "Sala de evenimente",
           "lead": "Cere sala pentru o petrecere sau un eveniment privat. Managerul îți confirmă pachetul, prețul și rezervarea."
+        },
+        "notifications": {
+          "title": "Notificări",
+          "lead": "Ce mesaje primești de la club și unde: pe email sau pe telefon."
         }
       },
       "card": {
@@ -1942,6 +1951,60 @@
           "declined": "Respinsă"
         },
         "answer": "Răspunsul clubului: {note}"
+      },
+      "notifications": {
+        "pushTitle": "Pe acest telefon sau calculator",
+        "push": {
+          "loading": "Se verifică…",
+          "unsupported": "Browserul acesta nu poate primi notificări de la site. Pe telefon, instalează întâi site-ul ca aplicație (din meniul browserului), apoi revino aici.",
+          "off-at-club": "Notificările pe telefon nu sunt încă active la club. Până atunci, mesajele vin pe email.",
+          "denied": "Ai blocat notificările pentru acest site. Le poți permite din setările browserului.",
+          "on": "Primești notificări pe acest dispozitiv.",
+          "off": "Nu primești notificări pe acest dispozitiv."
+        },
+        "turnOn": "Primește notificări aici",
+        "turnOff": "Oprește notificările aici",
+        "pushOn": "Gata: primești notificări pe acest dispozitiv.",
+        "pushOff": "Notificările sunt oprite pe acest dispozitiv.",
+        "pushFailed": "Notificările nu s-au putut porni. Verifică permisiunea în browser.",
+        "pushNote": "Notificarea arată doar un titlu scurt; nimic nu se păstrează pe telefon în afara ei.",
+        "choicesTitle": "Ce primești",
+        "choicesLead": "Poți opri mesajele de mai jos, pe email sau pe telefon.",
+        "kind": "Mesajele",
+        "channels": {
+          "email": "Email",
+          "push": "Telefon"
+        },
+        "notSent": "nu se trimite pe acest canal",
+        "toggle": "{kind}, {channel}",
+        "categories": {
+          "reminders": {
+            "title": "Memento-uri",
+            "text": "cu o zi și cu două ore înainte de rezervare"
+          },
+          "classes": {
+            "title": "Antrenamente",
+            "text": "când lipsești de la antrenamentele abonamentului"
+          },
+          "league": {
+            "title": "Liga",
+            "text": "scoruri, ranguri, provocări, decay, finalul sezonului, Meciul zilei"
+          },
+          "subscriptions": {
+            "title": "Abonamente",
+            "text": "expirarea și sesiunile rămase"
+          },
+          "money": {
+            "title": "Vouchere",
+            "text": "când primești un voucher"
+          },
+          "club": {
+            "title": "Noutăți de la club",
+            "text": "evenimente noi în calendar"
+          }
+        },
+        "always": "Mesajele despre cont, rezervări, taxe și deciziile clubului (de exemplu o blocare a rezervărilor) vin mereu: nu se pot opri.",
+        "saved": "Alegerea e salvată."
       }
     },
     "bookings": {
@@ -3398,6 +3461,42 @@
       "create": "Salvează articolul",
       "saved": "Articolul e salvat.",
       "created": "Articolul e creat."
+    },
+    "notifications": {
+      "title": "Notificările",
+      "lead": "Textele mesajelor trimise de club, pe email și pe telefon, în română și engleză, și ultimele mesaje trimise. Un text modificat aici înlocuiește textul implicit; „Revino la textul implicit” îl aduce înapoi.",
+      "textsTitle": "Textele",
+      "search": "Caută",
+      "event": "Mesajul",
+      "channel": "Canalul",
+      "subject": "Subiectul",
+      "title_": "Titlul",
+      "body": "Textul",
+      "actions": "Acțiuni",
+      "channels": {
+        "email": "Email",
+        "push": "Telefon (push)",
+        "sms": "SMS"
+      },
+      "edited": "modificat",
+      "edit": "Modifică",
+      "editTitle": "Textul pentru {event}",
+      "fields": "Câmpurile se scriu între acolade duble, ca în textul implicit: '{{ first_name }}', '{{ when }}', '{{ url }}'.",
+      "save": "Salvează textul",
+      "saved": "Textul e salvat.",
+      "reset": "Revino la textul implicit",
+      "resetDone": "S-a revenit la textul implicit.",
+      "outboxTitle": "Ultimele mesaje",
+      "outboxEmpty": "Nu s-a trimis încă niciun mesaj.",
+      "when": "Când",
+      "to": "Cui",
+      "state": "Starea",
+      "states": {
+        "queued": "De trimis",
+        "sent": "Trimis",
+        "failed": "Netrimis",
+        "skipped": "Nu s-a trimis (oprit sau fără canal)"
+      }
     }
   }
 }

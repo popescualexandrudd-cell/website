@@ -4,6 +4,13 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 12, faza 12A: nucleul notificărilor — 01.10.2026 (livrat)
+#### Adăugat
+- `jungle.notifications`: lista de mesaje (`Notification`, o singură dată pe eveniment), canalele email și push (Web Push RFC 8291/8292 cu `cryptography`, cheile VAPID în `.env`, `manage.py vapid_keys`), SMS pregătit și oprit (Q17), catalogul celor 33 de evenimente din §11 cu categorii și „se poate opri / nu”, textele RO/EN implicite (`defaults.py`) și editabile (`Template`), preferințele (`Preference`), abonările push (`PushSubscription`), `manage.py send_notifications` (programate, reîncercări, ștergerea textelor după 90 de zile). 100% acoperire pe ramuri.
+- Acțiunea `notifications.manage` (admin, manager); API: `/api/v1/notifications/…` (preferințe, cheia push, abonare, ultimele mesaje) și `/api/v1/staff/notifications/…` (texte, listă).
+- Site: `/cont/notificari` (`AccountNotifications`): push pe dispozitiv și alegerile; service worker-ul (versiunea 3) arată notificările și deschide pagina clubului.
+- Panou: modulul **Notificări** (texte, ultimele mesaje), în locul marcajului „Etapa 12”.
+
 ### Etapa 11, blogul, Pentru firme și Despre club — 01.10.2026 (livrate)
 #### Adăugat
 - Aplicația `jungle.blog` (backend): articole pe locație, complete în RO și EN, cu adresa lor (`slug`); ciornă, publicare, corectare, retragere, ștergerea unei ciorne nepublicate; adresa unui articol publicat nu se mai schimbă; jurnal și reîmprospătarea site-ului (eticheta `blog`). Acțiunea `blog.manage` (admin, manager). API: `GET /api/v1/blog`, `GET /api/v1/blog/{slug}`, `/api/v1/staff/blog…`. 100% acoperire pe ramuri. Un articol demo în `seed_initial --demo`, marcat.

@@ -4913,6 +4913,43 @@
         "title": "MemberUsageOut",
         "type": "object"
       },
+      "MessageOut": {
+        "properties": {
+          "channel": {
+            "title": "Channel",
+            "type": "string"
+          },
+          "event": {
+            "title": "Event",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "sent_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sent At"
+          }
+        },
+        "required": [
+          "id",
+          "event",
+          "channel",
+          "sent_at"
+        ],
+        "title": "MessageOut",
+        "type": "object"
+      },
       "MfaConfirmIn": {
         "properties": {
           "code": {
@@ -5409,6 +5446,69 @@
         ],
         "title": "OrderStatus",
         "type": "string"
+      },
+      "OutboxOut": {
+        "properties": {
+          "attempts": {
+            "title": "Attempts",
+            "type": "integer"
+          },
+          "channel": {
+            "title": "Channel",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "event": {
+            "title": "Event",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "last_error": {
+            "title": "Last Error",
+            "type": "string"
+          },
+          "sent_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sent At"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "user_name": {
+            "title": "User Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "event",
+          "channel",
+          "user_name",
+          "status",
+          "attempts",
+          "last_error",
+          "created_at",
+          "sent_at"
+        ],
+        "title": "OutboxOut",
+        "type": "object"
       },
       "PaidOut": {
         "properties": {
@@ -7274,6 +7374,26 @@
         "title": "PlayerOut",
         "type": "object"
       },
+      "PreferencesIO": {
+        "properties": {
+          "choices": {
+            "additionalProperties": {
+              "additionalProperties": {
+                "type": "boolean"
+              },
+              "type": "object"
+            },
+            "description": "{category: {channel: on}}, only the categories that can be turned off",
+            "title": "Choices",
+            "type": "object"
+          }
+        },
+        "required": [
+          "choices"
+        ],
+        "title": "PreferencesIO",
+        "type": "object"
+      },
       "PreviewRankOut": {
         "properties": {
           "division": {
@@ -7634,6 +7754,65 @@
           "lp"
         ],
         "title": "PublicLadderOut",
+        "type": "object"
+      },
+      "PushEndpointIn": {
+        "properties": {
+          "endpoint": {
+            "maxLength": 1000,
+            "title": "Endpoint",
+            "type": "string"
+          }
+        },
+        "required": [
+          "endpoint"
+        ],
+        "title": "PushEndpointIn",
+        "type": "object"
+      },
+      "PushKeyOut": {
+        "properties": {
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "public_key": {
+            "description": "VAPID public key (base64url) for pushManager.subscribe",
+            "title": "Public Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "enabled",
+          "public_key"
+        ],
+        "title": "PushKeyOut",
+        "type": "object"
+      },
+      "PushSubscriptionIn": {
+        "properties": {
+          "auth": {
+            "maxLength": 100,
+            "title": "Auth",
+            "type": "string"
+          },
+          "endpoint": {
+            "maxLength": 1000,
+            "title": "Endpoint",
+            "type": "string"
+          },
+          "p256dh": {
+            "maxLength": 200,
+            "title": "P256Dh",
+            "type": "string"
+          }
+        },
+        "required": [
+          "endpoint",
+          "p256dh",
+          "auth"
+        ],
+        "title": "PushSubscriptionIn",
         "type": "object"
       },
       "QuestionnaireIn": {
@@ -10969,6 +11148,125 @@
           "marker"
         ],
         "title": "SubscriptionRateOut",
+        "type": "object"
+      },
+      "TemplateIn": {
+        "properties": {
+          "body": {
+            "maxLength": 5000,
+            "title": "Body",
+            "type": "string"
+          },
+          "channel": {
+            "maxLength": 8,
+            "title": "Channel",
+            "type": "string"
+          },
+          "event": {
+            "maxLength": 40,
+            "title": "Event",
+            "type": "string"
+          },
+          "language": {
+            "maxLength": 2,
+            "title": "Language",
+            "type": "string"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "subject": {
+            "maxLength": 160,
+            "title": "Subject",
+            "type": "string"
+          }
+        },
+        "required": [
+          "location_id",
+          "event",
+          "channel",
+          "language",
+          "subject",
+          "body"
+        ],
+        "title": "TemplateIn",
+        "type": "object"
+      },
+      "TemplateKeyIn": {
+        "properties": {
+          "channel": {
+            "maxLength": 8,
+            "title": "Channel",
+            "type": "string"
+          },
+          "event": {
+            "maxLength": 40,
+            "title": "Event",
+            "type": "string"
+          },
+          "language": {
+            "maxLength": 2,
+            "title": "Language",
+            "type": "string"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "location_id",
+          "event",
+          "channel",
+          "language"
+        ],
+        "title": "TemplateKeyIn",
+        "type": "object"
+      },
+      "TemplateOut": {
+        "properties": {
+          "body": {
+            "title": "Body",
+            "type": "string"
+          },
+          "category": {
+            "title": "Category",
+            "type": "string"
+          },
+          "channel": {
+            "title": "Channel",
+            "type": "string"
+          },
+          "edited": {
+            "title": "Edited",
+            "type": "boolean"
+          },
+          "event": {
+            "title": "Event",
+            "type": "string"
+          },
+          "language": {
+            "title": "Language",
+            "type": "string"
+          },
+          "subject": {
+            "title": "Subject",
+            "type": "string"
+          }
+        },
+        "required": [
+          "event",
+          "category",
+          "channel",
+          "language",
+          "subject",
+          "body",
+          "edited"
+        ],
+        "title": "TemplateOut",
         "type": "object"
       },
       "TokenIn": {
@@ -20283,6 +20581,276 @@
         ]
       }
     },
+    "/api/v1/notifications/mine": {
+      "get": {
+        "operationId": "jungle_notifications_api_mine",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MessageOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Mine",
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/api/v1/notifications/preferences": {
+      "get": {
+        "operationId": "jungle_notifications_api_get_preferences",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreferencesIO"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Get Preferences",
+        "tags": [
+          "notifications"
+        ]
+      },
+      "put": {
+        "operationId": "jungle_notifications_api_put_preferences",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreferencesIO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreferencesIO"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Put Preferences",
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/api/v1/notifications/push-key": {
+      "get": {
+        "description": "Whether the club sends push notifications, and the key browsers subscribe with.",
+        "operationId": "jungle_notifications_api_push_key",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PushKeyOut"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Push Key",
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/api/v1/notifications/push-subscriptions": {
+      "post": {
+        "operationId": "jungle_notifications_api_subscribe",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PushSubscriptionIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Subscribe",
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/api/v1/notifications/push-subscriptions/remove": {
+      "post": {
+        "operationId": "jungle_notifications_api_unsubscribe",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PushEndpointIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Unsubscribe",
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
     "/api/v1/pricing/{slug}/rates": {
       "get": {
         "operationId": "jungle_pricing_api_list_rates",
@@ -26087,6 +26655,262 @@
         "summary": "Read Notice",
         "tags": [
           "staff: attendance"
+        ]
+      }
+    },
+    "/api/v1/staff/notifications/outbox": {
+      "get": {
+        "operationId": "jungle_notifications_api_outbox",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/OutboxOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Outbox",
+        "tags": [
+          "staff: notifications"
+        ]
+      }
+    },
+    "/api/v1/staff/notifications/templates": {
+      "get": {
+        "operationId": "jungle_notifications_api_templates",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TemplateOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Templates",
+        "tags": [
+          "staff: notifications"
+        ]
+      },
+      "put": {
+        "operationId": "jungle_notifications_api_save_template",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TemplateIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Save Template",
+        "tags": [
+          "staff: notifications"
+        ]
+      }
+    },
+    "/api/v1/staff/notifications/templates/reset": {
+      "post": {
+        "operationId": "jungle_notifications_api_reset_template",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TemplateKeyIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Reset Template",
+        "tags": [
+          "staff: notifications"
         ]
       }
     },

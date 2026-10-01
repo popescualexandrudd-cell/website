@@ -222,7 +222,11 @@
     "blog.not_found": "The article does not exist.",
     "blog.slug_taken": "The address “{slug}” is already used by another article. Choose another one.",
     "blog.slug_locked": "A published article's address no longer changes (links to it would stop working).",
-    "blog.already_published": "The article has already been published: it is not deleted, it is withdrawn from the site."
+    "blog.already_published": "The article has already been published: it is not deleted, it is withdrawn from the site.",
+    "notifications.not_optional": "These notifications cannot be turned off (they are about your account, bookings or money).",
+    "notifications.push_unavailable": "Phone notifications are not active at the club yet.",
+    "notifications.unknown": "The notification does not exist.",
+    "notifications.template_invalid": "The text has a mistake in its fields (written '{{ name }}'). Check the braces."
   },
   "web": {
     "meta": {
@@ -1645,7 +1649,8 @@
         "payments": "Payments and subscriptions",
         "league": "My league",
         "profile": "Profile and data",
-        "events": "Event room"
+        "events": "Event room",
+        "notifications": "Notifications"
       },
       "pages": {
         "card": {
@@ -1667,6 +1672,10 @@
         "events": {
           "title": "Event room",
           "lead": "Ask for the room for a party or a private event. The manager confirms the package, the price and the booking."
+        },
+        "notifications": {
+          "title": "Notifications",
+          "lead": "Which messages you get from the club and where: by email or on your phone."
         }
       },
       "card": {
@@ -1942,6 +1951,60 @@
           "declined": "Declined"
         },
         "answer": "The club's answer: {note}"
+      },
+      "notifications": {
+        "pushTitle": "On this phone or computer",
+        "push": {
+          "loading": "Checking…",
+          "unsupported": "This browser cannot receive notifications from the site. On a phone, first install the site as an app (from the browser's menu), then come back here.",
+          "off-at-club": "Phone notifications are not active at the club yet. Until then, messages come by email.",
+          "denied": "You blocked notifications for this site. You can allow them in the browser's settings.",
+          "on": "You get notifications on this device.",
+          "off": "You do not get notifications on this device."
+        },
+        "turnOn": "Get notifications here",
+        "turnOff": "Turn notifications off here",
+        "pushOn": "Done: you get notifications on this device.",
+        "pushOff": "Notifications are off on this device.",
+        "pushFailed": "Notifications could not be turned on. Check the permission in the browser.",
+        "pushNote": "A notification shows only a short title; nothing else is kept on the phone.",
+        "choicesTitle": "What you get",
+        "choicesLead": "You can turn off the messages below, by email or on the phone.",
+        "kind": "Messages",
+        "channels": {
+          "email": "Email",
+          "push": "Phone"
+        },
+        "notSent": "not sent on this channel",
+        "toggle": "{kind}, {channel}",
+        "categories": {
+          "reminders": {
+            "title": "Reminders",
+            "text": "a day and two hours before a booking"
+          },
+          "classes": {
+            "title": "Training",
+            "text": "when you miss your subscription's sessions"
+          },
+          "league": {
+            "title": "League",
+            "text": "scores, ranks, challenges, decay, the season's end, Match of the day"
+          },
+          "subscriptions": {
+            "title": "Subscriptions",
+            "text": "the end date and the sessions left"
+          },
+          "money": {
+            "title": "Vouchers",
+            "text": "when you receive a voucher"
+          },
+          "club": {
+            "title": "News from the club",
+            "text": "new events on the calendar"
+          }
+        },
+        "always": "Messages about your account, bookings, fees and the club's decisions (for example a booking block) always arrive: they cannot be turned off.",
+        "saved": "Your choice is saved."
       }
     },
     "bookings": {
@@ -3398,6 +3461,42 @@
       "create": "Save the article",
       "saved": "The article is saved.",
       "created": "The article is created."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "lead": "The texts of the messages the club sends, by email and on the phone, in Romanian and English, and the latest messages sent. A text changed here replaces the default; \"Back to the default text\" brings it back.",
+      "textsTitle": "Texts",
+      "search": "Search",
+      "event": "Message",
+      "channel": "Channel",
+      "subject": "Subject",
+      "title_": "Title",
+      "body": "Text",
+      "actions": "Actions",
+      "channels": {
+        "email": "Email",
+        "push": "Phone (push)",
+        "sms": "SMS"
+      },
+      "edited": "changed",
+      "edit": "Edit",
+      "editTitle": "The text for {event}",
+      "fields": "Fields are written between double braces, as in the default text: '{{ first_name }}', '{{ when }}', '{{ url }}'.",
+      "save": "Save the text",
+      "saved": "The text is saved.",
+      "reset": "Back to the default text",
+      "resetDone": "Back to the default text.",
+      "outboxTitle": "Latest messages",
+      "outboxEmpty": "No message sent yet.",
+      "when": "When",
+      "to": "To",
+      "state": "State",
+      "states": {
+        "queued": "To send",
+        "sent": "Sent",
+        "failed": "Not sent",
+        "skipped": "Not sent (turned off or no channel)"
+      }
     }
   }
 }

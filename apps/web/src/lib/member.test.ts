@@ -5,6 +5,7 @@ import {
   type Voucher,
   clubToday,
   entryChange,
+  keyBytes,
   partnerIdFrom,
   qrImage,
   sortEvents,
@@ -98,5 +99,12 @@ describe("a tournament partner (§6.14)", () => {
     expect(partnerIdFrom(` ${id.toUpperCase()} `)).toBe(id);
     expect(partnerIdFrom("Andrei Mocanu")).toBeNull();
     expect(partnerIdFrom("")).toBeNull();
+  });
+});
+
+describe("push notifications (Q17)", () => {
+  it("the club's key as bytes, from base64url without padding", () => {
+    expect(Array.from(keyBytes("AQID_-8"))).toEqual([1, 2, 3, 255, 239]);
+    expect(keyBytes("BAAA").length).toBe(3);
   });
 });

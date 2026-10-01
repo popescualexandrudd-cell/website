@@ -20,3 +20,4 @@ ignore = [
 "**/conftest.py" = ["S101", "S105", "S106", "S107"]
 "**/core/errors.py" = ["S105"]  # error-code names such as ACCOUNTS_PASSWORD_WEAK are not secrets
 "**/management/commands/**" = ["S311"]
+"**/notifications/defaults.py" = ["E501"]  # one line per message text, RO and EN side by side

@@ -15,6 +15,7 @@ import { Dashboard } from "./Dashboard";
 import { League } from "./League";
 import { Levels } from "./Levels";
 import { Money } from "./Money";
+import { Notifications } from "./Notifications";
 import { Pricing } from "./Pricing";
 import { Reports } from "./Reports";
 import { Resources } from "./Resources";
@@ -51,6 +52,7 @@ export const MODULES: Module[] = [
   { route: "cafe", label: "cafe", actions: ["cafe.orders", "cafe.manage"], component: Cafe },
   { route: "events", label: "events", actions: ["events.manage"], component: Events },
   { route: "blog", label: "blog", actions: ["blog.manage"], component: Blog },
+  { route: "notifications", label: "notifications", actions: ["notifications.manage"], component: Notifications },
   { route: "reports", label: "reports", actions: ["reports.view", "waitlist.view"], component: Reports },
   { route: "staff", label: "staff", actions: ["users.view"], component: Staff },
   { route: "devices", label: "devices", actions: ["devices.manage"], component: Devices },
@@ -60,7 +62,6 @@ export const MODULES: Module[] = [
   // Later stages (§8.6): shown and marked, so the owner sees the whole panel.
   { route: "content", label: "content", actions: ["config.manage"], component: upcoming("content", 11), stage: 11 },
   { route: "translations", label: "translations", actions: ["config.manage"], component: upcoming("translations", 11), stage: 11 },
-  { route: "notifications", label: "notifications", actions: ["config.manage"], component: upcoming("notifications", 12), stage: 12 },
   { route: "community", label: "community", actions: ["config.manage"], component: upcoming("community", 12), stage: 12 },
   { route: "ai", label: "ai", actions: ["config.manage"], component: upcoming("ai", 12), stage: 12 },
 ];

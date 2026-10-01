@@ -42,6 +42,7 @@ export const routing = defineRouting({
     "/account/payments": { ro: "/cont/plati", en: "/account/payments" },
     "/account/league": { ro: "/cont/liga", en: "/account/league" },
     "/account/events": { ro: "/cont/evenimente", en: "/account/events" },
+    "/account/notifications": { ro: "/cont/notificari", en: "/account/notifications" },
     "/account/profile": { ro: "/cont/profil", en: "/account/profile" },
   },
 });

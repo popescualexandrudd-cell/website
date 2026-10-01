@@ -53,6 +53,7 @@ Din rădăcina repository-ului:
 | Neprezentări, rezervări încheiate, blocări (la 5 minute) | `uv run python apps/backend/manage.py process_no_shows` |
 | Verificarea configurării Apple/Google Wallet | `uv run python apps/backend/manage.py wallet_check` |
 | Liga: scoruri și provocări expirate (la 5 minute) | `uv run python apps/backend/manage.py expire_league_matches` |
+| Notificări: programate (memento-uri) și reîncercări (la fiecare minut) | `uv run python apps/backend/manage.py send_notifications` |
 | Liga: decay zilnic, avertizări, „Surpriza săptămânii” (zilnic, după miezul nopții) | `uv run python apps/backend/manage.py league_daily` |
 | DEMO pentru Chioșcul Ligii: chioșc înrolat, jucători demo, un meci tocmai terminat (refuzat în producție) | `uv run python apps/backend/manage.py kiosk_demo --public-key <cheia bridge-ului> --output kiosk.json` |
 | Fontul cardului tipărit (din fonturile site-ului) | `uvx --with brotli --from fonttools python apps/backend/scripts/build_card_font.py` |

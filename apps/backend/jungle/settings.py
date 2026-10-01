@@ -276,6 +276,12 @@ WEB_BASE_URL = (env("WEB_BASE_URL", "http://localhost:3000") or "").rstrip("/")
 WEB_REVALIDATE_URL = env("WEB_REVALIDATE_URL", "") or ""
 WEB_REVALIDATE_SECRET = env("WEB_REVALIDATE_SECRET", "") or ""
 
+# Push notifications of the installable site (Stage 12, Q17): VAPID keys from
+# `manage.py vapid_keys`; without them push stays off.
+VAPID_PUBLIC_KEY = env("VAPID_PUBLIC_KEY", "") or ""
+VAPID_PRIVATE_KEY = env("VAPID_PRIVATE_KEY", "") or ""
+VAPID_SUBJECT = env("VAPID_SUBJECT", "") or ""
+
 # Emergency Django admin (§8.6): Admin role + 2FA only.
 EMERGENCY_ADMIN_ENABLED = env_bool("EMERGENCY_ADMIN_ENABLED", True)
 API_DOCS_ENABLED = env_bool("API_DOCS_ENABLED", not IS_PRODUCTION_LIKE)

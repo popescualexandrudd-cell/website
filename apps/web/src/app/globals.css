@@ -3543,3 +3543,35 @@ html[data-motion="on"] .fx-pop {
 .blog-article__body p {
   margin: 0 0 1em;
 }
+
+/* ------------------------------------------------------------------ the account: notifications (§11) */
+.notify-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+.notify-table th,
+.notify-table td {
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+.notify-table td {
+  width: 80px;
+  text-align: center;
+}
+.notify-table tbody th {
+  font-weight: 600;
+  color: var(--text);
+}
+.notify-table tbody th span {
+  display: block;
+  font-weight: 400;
+  color: var(--text-2);
+}
+.notify-table input {
+  width: 24px;
+  height: 24px;
+  accent-color: var(--color-brass-400);
+}

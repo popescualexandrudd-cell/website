@@ -4,10 +4,12 @@
  *   the phone); with no connection, the "you are offline" page of the visitor's language is shown;
  * - the site's own static files (scripts and styles with a hash in the name, fonts, icons, renders)
  *   are kept after the first visit, so the offline page and the next visits draw at once;
- * - the API is never touched: every answer comes live from the server.
+ * - the API is never touched: every answer comes live from the server;
+ * - the club's push notifications (Stage 12, Q17) are shown, and a tap opens the page they are
+ *   about (only one of the club's own pages).
  * A change here (not in the pages) needs a new VERSION, so phones pick it up and drop the old cache.
  */
-const VERSION = "jungle-padel-2";
+const VERSION = "jungle-padel-3";
 const OFFLINE = { ro: "/ro/offline", en: "/en/offline" };
 const STATIC = /^\/(_next\/static|fonts|icons|renders)\//;
 const MAX_STATIC = 200;
@@ -68,4 +70,34 @@ self.addEventListener("fetch", (event) => {
     return;
   }
   if (STATIC.test(url.pathname)) event.respondWith(fromCacheOrNetwork(request));
+});
+
+self.addEventListener("push", (event) => {
+  let message = {};
+  try {
+    message = event.data ? event.data.json() : {};
+  } catch {
+    message = {};
+  }
+  event.waitUntil(
+    self.registration.showNotification(message.title || "Jungle Padel", {
+      body: message.body || "",
+      icon: "/icons/icon-192.png",
+      badge: "/icons/icon-192.png",
+      data: { url: message.url || "/" },
+    }),
+  );
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const target = new URL((event.notification.data && event.notification.data.url) || "/", self.location.origin);
+  // Only the club's own pages: a message never opens another site.
+  const url = target.origin === self.location.origin ? target.href : self.location.origin + "/";
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((windows) => {
+      const open = windows.find((client) => client.url === url && "focus" in client);
+      return open ? open.focus() : self.clients.openWindow(url);
+    }),
+  );
 });

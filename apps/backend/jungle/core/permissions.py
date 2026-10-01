@@ -43,6 +43,8 @@ class Action(StrEnum):
     EVENTS_MANAGE = "events.manage"
     # The club's blog (§9.3 `/blog`): writing, publishing, withdrawing articles.
     BLOG_MANAGE = "blog.manage"
+    # The notifications' texts and the list of sent messages (Stage 12, §11).
+    NOTIFICATIONS_MANAGE = "notifications.manage"
     PAYMENTS_VIEW = "payments.view"
     PAYMENTS_RECORD = "payments.record"
     LEDGER_CORRECT = "ledger.correct"
@@ -84,6 +86,7 @@ ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
             Action.RESTRICTIONS_MANAGE,
             Action.EVENTS_MANAGE,
             Action.BLOG_MANAGE,
+            Action.NOTIFICATIONS_MANAGE,
             # Q10: payments are taken by the kiosk; staff record exceptions, with a reason.
             Action.PAYMENTS_VIEW,
             Action.PAYMENTS_RECORD,

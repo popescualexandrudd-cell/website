@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 
-export const ACCOUNT_PAGES = ["/account", "/account/card", "/account/payments", "/account/league", "/account/events", "/account/profile"] as const;
+export const ACCOUNT_PAGES = ["/account", "/account/card", "/account/payments", "/account/league", "/account/events", "/account/notifications", "/account/profile"] as const;
 export type AccountPage = (typeof ACCOUNT_PAGES)[number];
 
 const KEYS: Record<AccountPage, string> = {
@@ -10,6 +10,7 @@ const KEYS: Record<AccountPage, string> = {
   "/account/payments": "payments",
   "/account/league": "league",
   "/account/events": "events",
+  "/account/notifications": "notifications",
   "/account/profile": "profile",
 };
 

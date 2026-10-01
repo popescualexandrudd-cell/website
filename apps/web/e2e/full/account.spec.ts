@@ -194,6 +194,20 @@ async function memberPages(page: Page, email: string, password: string, project:
   await expectAccessible(page);
   await shot(page, "57-cont-evenimente", project);
 
+  // §11: the kinds of messages; push needs the installed site (service workers are off in tests).
+  await menu.getByRole("link", { name: "Notificări" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Notificări");
+  await expect(page.getByText(/nu poate primi notificări de la site|nu sunt încă active la club/)).toBeVisible();
+  const reminders = page.getByRole("checkbox", { name: "Memento-uri, Email" });
+  await expect(reminders).toBeChecked();
+  await reminders.uncheck();
+  await expect(page.getByText("Alegerea e salvată.")).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole("checkbox", { name: "Memento-uri, Email" })).not.toBeChecked();
+  await expect(page.getByText("Mesajele despre cont, rezervări, taxe")).toBeVisible();
+  await expectAccessible(page);
+  await shot(page, "60-cont-notificari", project);
+
   await menu.getByRole("link", { name: "Profil și date" }).click();
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Profil și date");
   await expect(page.getByRole("heading", { level: 2, name: "Copiii tăi" })).toHaveCount(0); // Q7: off by default

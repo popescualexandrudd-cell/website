@@ -44,6 +44,8 @@ from jungle.ledger.api import staff_router as payments_staff_router
 from jungle.legal.api import router as legal_router
 from jungle.locations.api import public_router as locations_router
 from jungle.locations.api import staff_router as locations_staff_router
+from jungle.notifications.api import me_router as notifications_router
+from jungle.notifications.api import staff_router as notifications_staff_router
 from jungle.panel.api import router as panel_router
 from jungle.pricing.api import public_router as pricing_router
 from jungle.pricing.api import staff_router as pricing_staff_router
@@ -92,6 +94,8 @@ api.add_router("/staff", bookings_staff_router)
 api.add_router("/staff", club_events_staff_router)
 api.add_router("/blog", blog_router)
 api.add_router("/staff", blog_staff_router)
+api.add_router("/notifications", notifications_router)
+api.add_router("/staff", notifications_staff_router)
 api.add_router("/staff", attendance_staff_router)
 api.add_router("/staff", pricing_staff_router)
 api.add_router("/account", account_router)

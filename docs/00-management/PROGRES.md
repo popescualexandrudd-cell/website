@@ -37,7 +37,7 @@
 | 9 | Ecranele | ian. 2027 | **Aprobată 29.09.2026** |
 | 10 | Panoul de admin complet | ian. 2027 | **Aprobată 29.09.2026** |
 | 11 | Website-ul „simulator” | ian.–feb. 2027 | În lucru: secțiunea 1 aprobată 29.09.2026; secțiunile 2–8 aprobate 30.09.2026; secțiunile 9–10 aprobate 30.09.2026; secțiunile 11–13 aprobate 30.09.2026; efectele site-ului (Fazele 0–7) și secțiunile 14–19 **aprobate 30.09.2026**; toate cele 19 secțiuni ale paginii principale sunt aprobate; paginile separate (§9.3): Liga, paginile de prezentare, contul și rezervările online, apoi restul contului (card, plăți, liga mea, sala de evenimente, profil și date) și site-ul instalabil (PWA) livrate 30.09.2026; blogul (cu modulul din panou), Pentru firme și Despre club livrate 01.10.2026 |
-| 12 | AI + notificări | feb. 2027 | Neîncepută |
+| 12 | AI + notificări | feb. 2027 | În lucru: planul pe faze (`verificare/etapa-12/PLAN.md`); faza 12A (nucleul notificărilor) livrată 01.10.2026 |
 | 13 | SEO, marketing, branding, vânzări | în paralel, feb. 2027 | Neîncepută |
 | 14 | Deploy, securitate, backup, hardware real | feb. 2027 | Neîncepută |
 | 15 | Beta, încărcare, instruire | feb.–mar. 2027 | Neîncepută |
@@ -160,3 +160,4 @@
 - **30.09.2026** — Restul contului livrat: cardul (QR, Wallet, card pierdut), plăți și abonamente (credit, datorii, înghețare, vouchere, „Adu un prieten”, istoric), liga mea (rang, LP, turnee cu înscriere, provocări, insigne, acordul GDPR), cererea pentru sala de evenimente (Q34), profil și date (parolă, copii cu `child_accounts`, export, ștergerea contului). Urmează: PWA și blogul, apoi Etapa 12.
 - **30.09.2026** — Site-ul instalabil pe telefon (PWA) livrat: manifestul, iconițele, scurtăturile, pagina „Nu ești conectat la internet”; paginile și datele nu se păstrează pe telefon. Urmează paginile Corporate și Despre, apoi blogul.
 - **01.10.2026** — Blogul livrat (articole în RO și EN scrise din panou, modulul „Blogul”; pe site `/blog` și pagina fiecărui articol), plus paginile Pentru firme (`/corporate`, Q35) și Despre club (`/despre`). Toate paginile din §9.3 există acum. Urmează Etapa 12 (AI și notificări).
+- **01.10.2026** — Etapa 12 începută: planul pe faze; faza 12A livrată (lista de mesaje, email și push criptat, SMS pregătit și oprit, textele RO/EN editabile din panou, preferințele clientului, pagina „Notificări” din cont, modulul „Notificări” din panou). Urmează 12B: legarea fiecărui eveniment din §11.
