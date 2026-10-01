@@ -903,3 +903,51 @@ Contul are acum un meniu propriu: **Rezervări · Cardul · Plăți și abonamen
 ### Cum verificați (click cu click)
 1. Pe un telefon Android, în Chrome: deschideți site-ul → meniul browserului (⋮) → „Instalează aplicația”. Pe iPhone, în Safari: Partajează → „Adaugă pe ecranul principal”.
 2. Deschideți aplicația de pe ecranul telefonului, apoi puneți telefonul în modul avion și deschideți o pagină: apare „Nu ești conectat la internet”.
+
+## Blogul, Pentru firme și Despre club (§9.3)
+
+### Ce s-a construit
+1. **Blogul, scris din panou** (modulul nou **Blogul**, pentru admin și manager):
+   - un articol are titlul, un rezumat și textul, în română și engleză, plus adresa lui (`/blog/ce-este-padelul`), completată singură din titlu;
+   - se salvează ca ciornă sau se publică imediat; se corectează, se retrage de pe site sau se publică din nou, cu un motiv, iar fiecare schimbare intră în jurnal;
+   - o ciornă care n-a fost niciodată publicată se poate șterge; un articol publicat doar se retrage;
+   - **odată publicat, adresa nu se mai schimbă**, ca linkurile și Google să găsească articolul în continuare;
+   - textul se scrie simplu: `##` pentru subtitlu, `-` pentru listă, `**text**` pentru îngroșat, `[text](adresă)` pentru link.
+2. **Pe site:**
+   - `/blog` arată articolele publicate, cele mai noi întâi;
+   - fiecare articol are pagina lui, cu data, timpul de citit și adresa în ambele limbi;
+   - pagina are și datele pe care Google le citește pentru articole (`BlogPosting`).
+3. **Articolul demo:** „Cum funcționează Liga Jungle (articol demo)”, marcat „Articol demo”, doar cu fapte din regulile ligii. Articolele reale (ghidurile din planul SEO) se scriu în Etapa 13.
+4. **Pentru firme (`/corporate`):**
+   - pachetul de firmă confirmat (Q35): 20% reducere la abonamente, o singură factură pe firmă, raport lunar;
+   - sala de evenimente pentru echipă;
+   - configuratorul de pachete.
+5. **Despre club (`/despre`):** turul clubului, cifrele și echipa (secțiunile aprobate).
+6. Toate trei apar în subsolul site-ului complet, lângă celelalte pagini.
+
+**Ce am ales și de ce:**
+1. **Fără imagini și fără HTML în articole deocamdată:** un text scris în panou nu poate strica pagina sau aduce ceva de la terți. Imaginile vin odată cu modulul „Conținutul site-ului”, care rămâne marcat în panou.
+2. **Linkurile spre alte site-uri** se deschid separat, cu `noopener`.
+3. **`/regulament`** vine în Etapa 13, odată cu regulamentul public aprobat.
+
+### Capturi de ecran
+59. [Blogul, pe calculator](ecrane/desktop-58-blog.png) · [pe telefon](ecrane/mobile-58-blog.png)
+60. [Un articol, pe calculator](ecrane/desktop-59-blog-articol.png) · [pe telefon](ecrane/mobile-59-blog-articol.png)
+61. [Pentru firme, pe calculator](ecrane/desktop-47-pagina-corporate.png) · [pe telefon](ecrane/mobile-47-pagina-corporate.png)
+62. [Despre club, pe calculator](ecrane/desktop-48-pagina-despre.png) · [pe telefon](ecrane/mobile-48-pagina-despre.png)
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Teste backend (`jungle/blog`, 100% pe ramuri) | 6: ciornă → publicat → retras → republicat (data primei publicări rămâne), doar articolele clubului, cele mai noi întâi, corecturi cu motiv, adresa blocată după publicare, toate câmpurile în ambele limbi și o adresă curată, adresă deja folosită, ștergerea doar a ciornelor, drepturile (recepția, managerul altei locații și clientul sunt refuzați); plus articolul demo din `seed_initial`. |
+| Teste în panou | 5: adresa din titlu (fără diacritice), meniul doar cu `blog.manage`, scrierea, publicarea, retragerea și ștergerea, corectura cu motiv și adresa blocată, blogul gol. |
+| Teste unitare pe site | 4: textele în limba paginii, timpul de citit, adresele greșite nu ajung la server, lista sau „nu se poate încărca”. |
+| Cap-coadă | Lista de articole (cu marcajul demo), articolul (subtitluri, listă, îngroșat, link, timp de citit, adresa canonică și în engleză, datele structurate), înapoi la listă, engleza, adresele necunoscute sau greșite dau 404, subsolul cu paginile noi; Pentru firme și Despre club cu titlul, introducerea și secțiunile. Verificarea de accesibilitate pe fiecare pagină. |
+| Toate testele cap-coadă | Site: 28 pre-lansare, **154** site complet, **180** cu efectele pornite; apoi Chioșcul Ligii, Chioșcul de Plăți, afișajul cafenelei, ecranele și panoul, toate verzi. |
+
+### Cum verificați (click cu click)
+1. În panou: **Blogul** → „Articol nou” → scrieți titlul (adresa se completează singură), rezumatul și textul în ambele limbi → bifați „Publică imediat pe site” → „Salvează articolul”.
+2. Pe site: subsol → **Blog** → articolul apare primul. Încercați și **Pentru firme** și **Despre club**.
+
+### O problemă găsită de CI și reparată (PWA)
+Pe GitHub, testul paginii „fără internet” a picat, deși trecea local: fără conexiune, pagina avea nevoie de câteva fișiere JavaScript care nu ajunseseră încă pe telefon, iar Next.js o înlocuia cu o pagină de eroare. Pe un telefon real s-ar fi putut întâmpla la fel. Acum service worker-ul păstrează, la instalare, pagina „fără internet” **împreună cu toate fișierele de care are nevoie** (`public/sw.js`, versiunea 2), iar testul verifică explicit că pagina nu devine o pagină de eroare.

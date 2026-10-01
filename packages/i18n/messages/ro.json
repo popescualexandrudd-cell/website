@@ -218,7 +218,11 @@
     "checkout.pin_locked": "Prea multe încercări greșite. Încearcă din nou peste {minutes} minute.",
     "checkout.staff_only": "Modul personal e doar pentru personalul care se ocupă de numerar.",
     "checkout.operation_invalid": "Operațiunea de casă nu e completă sau nu e valabilă.",
-    "checkout.operation_not_found": "Operațiunea de casă nu a fost găsită."
+    "checkout.operation_not_found": "Operațiunea de casă nu a fost găsită.",
+    "blog.not_found": "Articolul nu există.",
+    "blog.slug_taken": "Adresa „{slug}” e deja folosită de alt articol. Alege alta.",
+    "blog.slug_locked": "Adresa unui articol publicat nu se mai schimbă (linkurile spre el ar înceta să funcționeze).",
+    "blog.already_published": "Articolul a fost deja publicat: nu se șterge, se retrage de pe site."
   },
   "web": {
     "meta": {
@@ -467,7 +471,10 @@
           "packages": "Pachete",
           "events": "Evenimente",
           "cafe": "Cafenea",
-          "contact": "Contact"
+          "contact": "Contact",
+          "blog": "Blog",
+          "corporate": "Pentru firme",
+          "about": "Despre club"
         }
       },
       "hero": {
@@ -1178,7 +1185,10 @@
         "cafe": "Cafeneaua",
         "contact": "Contact",
         "bookings": "Rezervări",
-        "account": "Contul meu"
+        "account": "Contul meu",
+        "blog": "Blog",
+        "corporate": "Pentru firme",
+        "about": "Despre club"
       },
       "upcoming": {
         "kicker": "În construcție",
@@ -1489,7 +1499,10 @@
         "packages": "Abonamente pentru padel, tenis și pilates: alegi sporturile, intensitatea și perioada, iar prețul îl calculează clubul.",
         "events": "Seri cu DJ, turneele ligii, padel social și sala de evenimente pentru petreceri și echipe.",
         "cafe": "Cafea de specialitate la parter, între meciuri: comanzi la Chioșcul de Plăți și îți vezi numărul pe ecran când e gata.",
-        "contact": "Unde ne găsești, cum ajungi și cum iei legătura cu clubul."
+        "contact": "Unde ne găsești, cum ajungi și cum iei legătura cu clubul.",
+        "blog": "Ghiduri, reguli și noutăți de la club: ce e padelul, cum funcționează liga, cum alegi echipamentul.",
+        "corporate": "Un singur pachet de firmă, simplu, și sala de evenimente pentru echipă.",
+        "about": "Clubul din Pantelimon, pas cu pas: terenurile, pasarela-lounge, studioul de pilates, cafeneaua și oamenii care îl țin în mișcare."
       },
       "contact": {
         "title": "Date de contact",
@@ -1499,6 +1512,30 @@
         "hours": "În fiecare zi, 08:00–23:00",
         "pending": "În curs de completare",
         "note": "Telefonul și adresa de email apar aici când clubul le completează. Rezervările se fac din cont sau la recepție."
+      },
+      "corporate": {
+        "title": "Pachetul de firmă",
+        "points": {
+          "discount": {
+            "title": "20% reducere",
+            "text": "la abonamentele din configurator, pentru fiecare angajat"
+          },
+          "billing": {
+            "title": "O singură factură",
+            "text": "facturare pe firmă, nu pe fiecare angajat"
+          },
+          "report": {
+            "title": "Raport lunar",
+            "text": "cine și cât a folosit abonamentul, lunar"
+          },
+          "room": {
+            "title": "Sala de evenimente",
+            "text": "pentru echipă: 15–20 de persoane, în clădirea de alături"
+          }
+        },
+        "how": "Pachetul îl configurează clubul, după o discuție cu firma. Sala de evenimente se cere din cont sau telefonic; managerul confirmă pachetul și prețul.",
+        "contact": "Scrie-ne sau sună",
+        "room": "Cere sala de evenimente"
       }
     },
     "account": {
@@ -1961,6 +1998,13 @@
         "text": "Pagina nu se poate deschide fără conexiune. Rezervările, contul și liga vin mereu direct de la club, ca să vezi datele la zi. Verifică internetul și încearcă din nou.",
         "retry": "Încearcă din nou"
       }
+    },
+    "blog": {
+      "unavailable": "Articolele nu se pot încărca acum. Revino în câteva minute.",
+      "empty": "Primele articole apar aici în curând.",
+      "demo": "Articol demo",
+      "back": "← Toate articolele",
+      "reading": "{minutes, plural, one {un minut de citit} few {# minute de citit} other {# de minute de citit}}"
     }
   },
   "kiosk": {
@@ -2491,7 +2535,8 @@
       "translations": "Traduceri",
       "notifications": "Notificări",
       "community": "Comunitate",
-      "ai": "Asistentul AI"
+      "ai": "Asistentul AI",
+      "blog": "Blogul"
     },
     "dashboard": {
       "title": "Tablou de bord",
@@ -3117,7 +3162,7 @@
     "upcoming": {
       "short": "Etapa {stage}",
       "stage": "Vine în Etapa {stage}. Până atunci, modulul e doar marcat în meniu.",
-      "content": "Paginile site-ului, știrile și imaginile, editate direct din panou, în română și engleză.",
+      "content": "Paginile site-ului și imaginile, editate direct din panou, în română și engleză.",
       "translations": "Textele site-ului și ale aplicațiilor, în toate limbile, cu verificarea celor lipsă.",
       "notifications": "Mesajele trimise clienților (email, eventual SMS): șabloane, programări, istoricul trimiterilor.",
       "community": "Anunțurile pentru comunitatea clubului și mesajele către grupuri de jucători.",
@@ -3315,6 +3360,44 @@
       "ok": "OK",
       "down": "Indisponibil",
       "offline": "Offline"
+    },
+    "blog": {
+      "title": "Blogul clubului",
+      "lead": "Articolele de pe site (/blog), în română și engleză. Se salvează ca ciornă sau se publică imediat; odată publicat, un articol își păstrează adresa.",
+      "none": "Nu e niciun articol încă.",
+      "article": "Articolul",
+      "state": "Starea",
+      "actions": "Acțiuni",
+      "states": {
+        "draft": "Ciornă",
+        "published": "Publicat",
+        "withdrawn": "Retras de pe site"
+      },
+      "demo": "DEMO",
+      "edit": "Modifică",
+      "publish": "Publică",
+      "withdraw": "Retrage de pe site",
+      "delete": "Șterge ciorna",
+      "published": "Articolul e pe site.",
+      "withdrawn": "Articolul a fost retras de pe site.",
+      "deleted": "Ciorna a fost ștearsă.",
+      "add": "Articol nou",
+      "editTitle": "Modifică articolul",
+      "titleRo": "Titlul (română)",
+      "titleEn": "Titlul (engleză)",
+      "slug": "Adresa (/blog/…)",
+      "slugHint": "Litere mici, cifre și cratime, fără diacritice. Se completează singură din titlu.",
+      "slugLocked": "Articolul a fost publicat: adresa nu se mai schimbă, ca linkurile spre el să funcționeze în continuare.",
+      "summaryRo": "Rezumatul (română)",
+      "summaryEn": "Rezumatul (engleză)",
+      "bodyRo": "Textul (română)",
+      "bodyEn": "Textul (engleză)",
+      "markdown": "În text: ## pentru un subtitlu, - pentru o listă, **text** pentru îngroșat, [text](adresă) pentru un link. Fără imagini deocamdată.",
+      "publishNow": "Publică imediat pe site",
+      "save": "Salvează",
+      "create": "Salvează articolul",
+      "saved": "Articolul e salvat.",
+      "created": "Articolul e creat."
     }
   }
 }

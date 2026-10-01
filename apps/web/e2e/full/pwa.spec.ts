@@ -44,6 +44,12 @@ test("§9.4: without a connection, the offline page; the account is never kept o
   await context.setOffline(true);
   await page.goto("/ro/cont/card");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nu ești conectat la internet");
+  // It comes alive from the phone alone: every script it needs was kept at install (no error page).
+  await page.waitForLoadState("load");
+  await expect(page.getByRole("button", { name: "Încearcă din nou" })).toBeEnabled();
+  await page.waitForTimeout(1000);
+  await expect(page.locator("#__next_error__")).toHaveCount(0);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nu ești conectat la internet");
   await expectAccessible(page);
   // Back online, "try again" opens the page that was asked for.
   await context.setOffline(false);

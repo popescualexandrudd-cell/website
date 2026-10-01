@@ -218,7 +218,11 @@
     "checkout.pin_locked": "Too many wrong tries. Try again in {minutes} minutes.",
     "checkout.staff_only": "Staff mode is only for staff who handle cash.",
     "checkout.operation_invalid": "The cash operation is incomplete or not valid.",
-    "checkout.operation_not_found": "The cash operation was not found."
+    "checkout.operation_not_found": "The cash operation was not found.",
+    "blog.not_found": "The article does not exist.",
+    "blog.slug_taken": "The address “{slug}” is already used by another article. Choose another one.",
+    "blog.slug_locked": "A published article's address no longer changes (links to it would stop working).",
+    "blog.already_published": "The article has already been published: it is not deleted, it is withdrawn from the site."
   },
   "web": {
     "meta": {
@@ -467,7 +471,10 @@
           "packages": "Packages",
           "events": "Events",
           "cafe": "Café",
-          "contact": "Contact"
+          "contact": "Contact",
+          "blog": "Blog",
+          "corporate": "For companies",
+          "about": "About the club"
         }
       },
       "hero": {
@@ -1178,7 +1185,10 @@
         "cafe": "The café",
         "contact": "Contact",
         "bookings": "Bookings",
-        "account": "My account"
+        "account": "My account",
+        "blog": "Blog",
+        "corporate": "For companies",
+        "about": "About the club"
       },
       "upcoming": {
         "kicker": "Being built",
@@ -1489,7 +1499,10 @@
         "packages": "Subscriptions for padel, tennis and Pilates: you choose the sports, the intensity and the period, and the club works out the price.",
         "events": "DJ nights, the league's tournaments, social padel and the event room for parties and teams.",
         "cafe": "Specialty coffee on the ground floor, between matches: order at the Payments Kiosk and watch for your number on the screen.",
-        "contact": "Where we are, how to get here and how to reach the club."
+        "contact": "Where we are, how to get here and how to reach the club.",
+        "blog": "Guides, rules and news from the club: what padel is, how the league works, how to choose your gear.",
+        "corporate": "One simple company package, and the event room for your team.",
+        "about": "The club in Pantelimon, step by step: the courts, the lounge walkway, the Pilates studio, the café and the people who keep it moving."
       },
       "contact": {
         "title": "Contact details",
@@ -1499,6 +1512,30 @@
         "hours": "Every day, 08:00–23:00",
         "pending": "Being completed",
         "note": "The phone number and email address appear here once the club fills them in. Bookings are made from your account or at the reception."
+      },
+      "corporate": {
+        "title": "The company package",
+        "points": {
+          "discount": {
+            "title": "20% off",
+            "text": "the configurator's subscriptions, for every employee"
+          },
+          "billing": {
+            "title": "One invoice",
+            "text": "billed to the company, not to each employee"
+          },
+          "report": {
+            "title": "Monthly report",
+            "text": "who used the subscription and how much, every month"
+          },
+          "room": {
+            "title": "The event room",
+            "text": "for your team: 15–20 people, in the building next door"
+          }
+        },
+        "how": "The club sets up the package after a talk with the company. The event room is requested from your account or by phone; the manager confirms the package and the price.",
+        "contact": "Write or call us",
+        "room": "Request the event room"
       }
     },
     "account": {
@@ -1961,6 +1998,13 @@
         "text": "This page cannot open without a connection. Bookings, your account and the league always come straight from the club, so you see them up to date. Check your connection and try again.",
         "retry": "Try again"
       }
+    },
+    "blog": {
+      "unavailable": "The articles cannot be loaded right now. Come back in a few minutes.",
+      "empty": "The first articles appear here soon.",
+      "demo": "Demo article",
+      "back": "← All articles",
+      "reading": "{minutes, plural, one {one minute to read} other {# minutes to read}}"
     }
   },
   "kiosk": {
@@ -2491,7 +2535,8 @@
       "translations": "Translations",
       "notifications": "Notifications",
       "community": "Community",
-      "ai": "AI assistant"
+      "ai": "AI assistant",
+      "blog": "Blog"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -3117,7 +3162,7 @@
     "upcoming": {
       "short": "Stage {stage}",
       "stage": "Comes in Stage {stage}. Until then, the module is only marked in the menu.",
-      "content": "The website's pages, news and images, edited directly from the panel, in Romanian and English.",
+      "content": "The website's pages and images, edited straight from the panel, in Romanian and English.",
       "translations": "The texts of the website and the apps, in every language, with the missing ones checked.",
       "notifications": "Messages sent to customers (email, possibly SMS): templates, schedules, the history of what was sent.",
       "community": "Announcements for the club's community and messages to groups of players.",
@@ -3315,6 +3360,44 @@
       "ok": "OK",
       "down": "Unavailable",
       "offline": "Offline"
+    },
+    "blog": {
+      "title": "The club's blog",
+      "lead": "The articles on the website (/blog), in Romanian and English. Saved as a draft or published at once; once published, an article keeps its address.",
+      "none": "No articles yet.",
+      "article": "Article",
+      "state": "State",
+      "actions": "Actions",
+      "states": {
+        "draft": "Draft",
+        "published": "Published",
+        "withdrawn": "Withdrawn from the site"
+      },
+      "demo": "DEMO",
+      "edit": "Edit",
+      "publish": "Publish",
+      "withdraw": "Withdraw from the site",
+      "delete": "Delete the draft",
+      "published": "The article is on the website.",
+      "withdrawn": "The article was withdrawn from the website.",
+      "deleted": "The draft was deleted.",
+      "add": "New article",
+      "editTitle": "Edit the article",
+      "titleRo": "Title (Romanian)",
+      "titleEn": "Title (English)",
+      "slug": "Address (/blog/…)",
+      "slugHint": "Lowercase letters, digits and dashes, no diacritics. Filled in from the title.",
+      "slugLocked": "The article has been published: its address no longer changes, so links to it keep working.",
+      "summaryRo": "Summary (Romanian)",
+      "summaryEn": "Summary (English)",
+      "bodyRo": "Text (Romanian)",
+      "bodyEn": "Text (English)",
+      "markdown": "In the text: ## for a subheading, - for a list, **text** for bold, [text](address) for a link. No images for now.",
+      "publishNow": "Publish on the website at once",
+      "save": "Save",
+      "create": "Save the article",
+      "saved": "The article is saved.",
+      "created": "The article is created."
     }
   }
 }

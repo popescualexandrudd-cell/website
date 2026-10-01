@@ -192,3 +192,9 @@ Padel, Tenis, Pilates, Pachete, Evenimente, Cafenea și Contact: un titlu și o 
 - Manifestul (nume, pornire `/ro`, iconițe 192/512/maskable, scurtături doar pe site-ul complet), iconița pentru iPhone.
 - Service worker propriu (`public/sw.js`): paginile se cer mereu din rețea și nu se păstrează (contul, prețurile și liga rămân la zi și private); se păstrează doar fișierele statice ale site-ului și pagina „fără internet” (`/offline`, RO/EN). API-ul nu trece niciodată prin cache.
 - Notificările push: Etapa 12, cu matricea din §11.
+
+### `/blog`, `/corporate`, `/despre` (01.10.2026)
+- **Blogul:** articolele scrise din panou (modulul „Blogul”, `blog.manage`), în română și engleză, fiecare cu adresa lui (`/blog/{adresă}`, neschimbată după publicare). Textul e Markdown (subtitluri, liste, linkuri, îngroșat), fără imagini sau HTML. Pagina articolului are adresa canonică, hreflang și date structurate (`BlogPosting`). Articolele reale (calendarul editorial din `docs/10-seo/02-seo-continut-si-local.md`) se scriu în Etapa 13; până atunci, un articol demo marcat.
+- **Pentru firme:** pachetul de firmă confirmat (Q35: 20% la abonamente, facturare pe firmă, raport lunar), sala de evenimente pentru echipe (Q34) și configuratorul de pachete.
+- **Despre club:** turul clubului, cifrele și echipa (secțiunile aprobate).
+- `/regulament` rămâne pentru Etapa 13 (regulamentul public, `docs/14-regulament-public/`).

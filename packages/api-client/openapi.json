@@ -113,6 +113,270 @@
         "title": "AlertIn",
         "type": "object"
       },
+      "ArticleChangeIn": {
+        "properties": {
+          "body_en": {
+            "maxLength": 40000,
+            "title": "Body En",
+            "type": "string"
+          },
+          "body_ro": {
+            "maxLength": 40000,
+            "title": "Body Ro",
+            "type": "string"
+          },
+          "reason": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Reason",
+            "type": "string"
+          },
+          "slug": {
+            "description": "lowercase letters, digits and dashes",
+            "maxLength": 80,
+            "title": "Slug",
+            "type": "string"
+          },
+          "summary_en": {
+            "maxLength": 300,
+            "title": "Summary En",
+            "type": "string"
+          },
+          "summary_ro": {
+            "maxLength": 300,
+            "title": "Summary Ro",
+            "type": "string"
+          },
+          "title_en": {
+            "maxLength": 140,
+            "title": "Title En",
+            "type": "string"
+          },
+          "title_ro": {
+            "maxLength": 140,
+            "title": "Title Ro",
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "title_ro",
+          "title_en",
+          "summary_ro",
+          "summary_en",
+          "body_ro",
+          "body_en"
+        ],
+        "title": "ArticleChangeIn",
+        "type": "object"
+      },
+      "ArticleCreateIn": {
+        "properties": {
+          "body_en": {
+            "maxLength": 40000,
+            "title": "Body En",
+            "type": "string"
+          },
+          "body_ro": {
+            "maxLength": 40000,
+            "title": "Body Ro",
+            "type": "string"
+          },
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "published": {
+            "default": false,
+            "title": "Published",
+            "type": "boolean"
+          },
+          "slug": {
+            "description": "lowercase letters, digits and dashes",
+            "maxLength": 80,
+            "title": "Slug",
+            "type": "string"
+          },
+          "summary_en": {
+            "maxLength": 300,
+            "title": "Summary En",
+            "type": "string"
+          },
+          "summary_ro": {
+            "maxLength": 300,
+            "title": "Summary Ro",
+            "type": "string"
+          },
+          "title_en": {
+            "maxLength": 140,
+            "title": "Title En",
+            "type": "string"
+          },
+          "title_ro": {
+            "maxLength": 140,
+            "title": "Title Ro",
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "title_ro",
+          "title_en",
+          "summary_ro",
+          "summary_en",
+          "body_ro",
+          "body_en",
+          "location_id"
+        ],
+        "title": "ArticleCreateIn",
+        "type": "object"
+      },
+      "ArticleDeleteIn": {
+        "properties": {
+          "reason": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "title": "ArticleDeleteIn",
+        "type": "object"
+      },
+      "ArticleOut": {
+        "properties": {
+          "body_en": {
+            "description": "Markdown",
+            "title": "Body En",
+            "type": "string"
+          },
+          "body_ro": {
+            "description": "Markdown",
+            "title": "Body Ro",
+            "type": "string"
+          },
+          "demo": {
+            "description": "demo article, shown as such (invariant 12)",
+            "title": "Demo",
+            "type": "boolean"
+          },
+          "published_at": {
+            "format": "date-time",
+            "title": "Published At",
+            "type": "string"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "summary_en": {
+            "title": "Summary En",
+            "type": "string"
+          },
+          "summary_ro": {
+            "title": "Summary Ro",
+            "type": "string"
+          },
+          "title_en": {
+            "title": "Title En",
+            "type": "string"
+          },
+          "title_ro": {
+            "title": "Title Ro",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "title_ro",
+          "title_en",
+          "summary_ro",
+          "summary_en",
+          "published_at",
+          "updated_at",
+          "demo",
+          "body_ro",
+          "body_en"
+        ],
+        "title": "ArticleOut",
+        "type": "object"
+      },
+      "ArticlePublicationIn": {
+        "properties": {
+          "published": {
+            "title": "Published",
+            "type": "boolean"
+          },
+          "reason": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "published"
+        ],
+        "title": "ArticlePublicationIn",
+        "type": "object"
+      },
+      "ArticleSummaryOut": {
+        "properties": {
+          "demo": {
+            "description": "demo article, shown as such (invariant 12)",
+            "title": "Demo",
+            "type": "boolean"
+          },
+          "published_at": {
+            "format": "date-time",
+            "title": "Published At",
+            "type": "string"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "summary_en": {
+            "title": "Summary En",
+            "type": "string"
+          },
+          "summary_ro": {
+            "title": "Summary Ro",
+            "type": "string"
+          },
+          "title_en": {
+            "title": "Title En",
+            "type": "string"
+          },
+          "title_ro": {
+            "title": "Title Ro",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "title_ro",
+          "title_en",
+          "summary_ro",
+          "summary_en",
+          "published_at",
+          "updated_at",
+          "demo"
+        ],
+        "title": "ArticleSummaryOut",
+        "type": "object"
+      },
       "AuditOut": {
         "properties": {
           "action": {
@@ -9650,6 +9914,84 @@
         "title": "SpotlightPlayerOut",
         "type": "object"
       },
+      "StaffArticleOut": {
+        "properties": {
+          "body_en": {
+            "title": "Body En",
+            "type": "string"
+          },
+          "body_ro": {
+            "title": "Body Ro",
+            "type": "string"
+          },
+          "first_published_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Published At"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "is_demo": {
+            "title": "Is Demo",
+            "type": "boolean"
+          },
+          "published": {
+            "title": "Published",
+            "type": "boolean"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "summary_en": {
+            "title": "Summary En",
+            "type": "string"
+          },
+          "summary_ro": {
+            "title": "Summary Ro",
+            "type": "string"
+          },
+          "title_en": {
+            "title": "Title En",
+            "type": "string"
+          },
+          "title_ro": {
+            "title": "Title Ro",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "title_ro",
+          "title_en",
+          "summary_ro",
+          "summary_en",
+          "body_ro",
+          "body_en",
+          "published",
+          "first_published_at",
+          "updated_at",
+          "is_demo"
+        ],
+        "title": "StaffArticleOut",
+        "type": "object"
+      },
       "StaffBookingIn": {
         "properties": {
           "coach_id": {
@@ -12879,6 +13221,104 @@
         "summary": "Resend Verification",
         "tags": [
           "auth"
+        ]
+      }
+    },
+    "/api/v1/blog": {
+      "get": {
+        "description": "The published articles, newest first.",
+        "operationId": "jungle_blog_api_list_articles",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location",
+            "required": true,
+            "schema": {
+              "title": "Location",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ArticleSummaryOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "summary": "List Articles",
+        "tags": [
+          "blog"
+        ]
+      }
+    },
+    "/api/v1/blog/{slug}": {
+      "get": {
+        "operationId": "jungle_blog_api_get_article",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "location",
+            "required": true,
+            "schema": {
+              "title": "Location",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArticleOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "summary": "Get Article",
+        "tags": [
+          "blog"
         ]
       }
     },
@@ -20296,6 +20736,417 @@
         "summary": "List Audit",
         "tags": [
           "staff: audit"
+        ]
+      }
+    },
+    "/api/v1/staff/blog": {
+      "get": {
+        "operationId": "jungle_blog_api_staff_articles",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/StaffArticleOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Staff Articles",
+        "tags": [
+          "staff: blog"
+        ]
+      },
+      "post": {
+        "operationId": "jungle_blog_api_create_article",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArticleCreateIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffArticleOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Create Article",
+        "tags": [
+          "staff: blog"
+        ]
+      }
+    },
+    "/api/v1/staff/blog/{article_id}": {
+      "put": {
+        "operationId": "jungle_blog_api_change_article",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "article_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Article Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArticleChangeIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffArticleOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Change Article",
+        "tags": [
+          "staff: blog"
+        ]
+      }
+    },
+    "/api/v1/staff/blog/{article_id}/delete": {
+      "post": {
+        "operationId": "jungle_blog_api_delete_article",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "article_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Article Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArticleDeleteIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Delete Article",
+        "tags": [
+          "staff: blog"
+        ]
+      }
+    },
+    "/api/v1/staff/blog/{article_id}/publication": {
+      "post": {
+        "operationId": "jungle_blog_api_publish_article",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "article_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Article Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArticlePublicationIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffArticleOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Publish Article",
+        "tags": [
+          "staff: blog"
         ]
       }
     },

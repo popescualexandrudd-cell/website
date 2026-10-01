@@ -48,6 +48,11 @@ def test_seed_demo_marks_demo_data() -> None:
     )
     assert all(e.published and e.starts_at > clock.now() for e in events)
     assert all("(demo)" in e.title_ro and "(demo)" in e.title_en for e in events)
+    # §9.3: one demo article on the blog, published and marked
+    from jungle.blog.models import Article
+
+    [article] = Article.objects.all()
+    assert article.published and article.is_demo and "demo" in article.title_ro
 
 
 def test_public_listing_shows_only_active(api: Api, location: Location) -> None:

@@ -7,18 +7,30 @@
  * - the API is never touched: every answer comes live from the server.
  * A change here (not in the pages) needs a new VERSION, so phones pick it up and drop the old cache.
  */
-const VERSION = "jungle-padel-1";
+const VERSION = "jungle-padel-2";
 const OFFLINE = { ro: "/ro/offline", en: "/en/offline" };
 const STATIC = /^\/(_next\/static|fonts|icons|renders)\//;
 const MAX_STATIC = 200;
 
+/**
+ * The offline pages, and every script, style and font they use: with no connection the page must
+ * draw and come alive from the phone alone (a missing script would turn it into an error page).
+ */
+async function keepOfflinePages() {
+  const cache = await caches.open(VERSION);
+  const files = new Set();
+  for (const url of Object.values(OFFLINE)) {
+    const response = await fetch(new Request(url, { cache: "reload" }));
+    if (!response.ok) throw new Error(`offline page ${url}: ${response.status}`);
+    const html = await response.clone().text();
+    for (const match of html.matchAll(/["'(](\/(?:_next\/static|fonts)\/[^"'()\s]+)/g)) files.add(match[1]);
+    await cache.put(url, response);
+  }
+  await cache.addAll([...files]);
+}
+
 self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches
-      .open(VERSION)
-      .then((cache) => cache.addAll(Object.values(OFFLINE).map((url) => new Request(url, { cache: "reload" }))))
-      .then(() => self.skipWaiting()),
-  );
+  event.waitUntil(keepOfflinePages().then(() => self.skipWaiting()));
 });
 
 self.addEventListener("activate", (event) => {

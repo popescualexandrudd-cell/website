@@ -2,6 +2,7 @@
  * member may use at the chosen location. */
 import type { ComponentType } from "react";
 import { Attendance } from "./Attendance";
+import { Blog } from "./Blog";
 import { Audit } from "./Audit";
 import { Cafe } from "./Cafe";
 import { Calendar } from "./Calendar";
@@ -49,6 +50,7 @@ export const MODULES: Module[] = [
   { route: "cash", label: "cash", actions: ["payments.view", "cash.manage"], component: Cash },
   { route: "cafe", label: "cafe", actions: ["cafe.orders", "cafe.manage"], component: Cafe },
   { route: "events", label: "events", actions: ["events.manage"], component: Events },
+  { route: "blog", label: "blog", actions: ["blog.manage"], component: Blog },
   { route: "reports", label: "reports", actions: ["reports.view", "waitlist.view"], component: Reports },
   { route: "staff", label: "staff", actions: ["users.view"], component: Staff },
   { route: "devices", label: "devices", actions: ["devices.manage"], component: Devices },

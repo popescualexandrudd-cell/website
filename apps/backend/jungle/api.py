@@ -12,6 +12,8 @@ from jungle.accounts.api import auth_router, me_router
 from jungle.accounts.api import staff_router as staff_users_router
 from jungle.attendance.api import staff_router as attendance_staff_router
 from jungle.audit.api import router as audit_router
+from jungle.blog.api import public_router as blog_router
+from jungle.blog.api import staff_router as blog_staff_router
 from jungle.bookings.api import classes_router, events_router
 from jungle.bookings.api import me_router as bookings_router
 from jungle.bookings.api import public_router as bookings_public_router
@@ -88,6 +90,8 @@ api.add_router("/events", club_events_router)
 api.add_router("/pricing", pricing_router)
 api.add_router("/staff", bookings_staff_router)
 api.add_router("/staff", club_events_staff_router)
+api.add_router("/blog", blog_router)
+api.add_router("/staff", blog_staff_router)
 api.add_router("/staff", attendance_staff_router)
 api.add_router("/staff", pricing_staff_router)
 api.add_router("/account", account_router)

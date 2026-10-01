@@ -15,6 +15,9 @@ const CLUB_PAGES = [
   ["/events", "events"],
   ["/cafe", "cafe"],
   ["/contact", "contact"],
+  ["/corporate", "corporate"],
+  ["/about", "about"],
+  ["/blog", "blog"],
 ] as const;
 
 /**

@@ -8,7 +8,7 @@ import { FULL_HOME_NAMESPACES } from "@/lib/client-messages";
 import { siteMode } from "@/lib/flags";
 
 /** The presentation pages of the full site (§9.3), built from the approved home sections. */
-export type SitePageKey = "padel" | "tennis" | "pilates" | "packages" | "events" | "cafe" | "contact";
+export type SitePageKey = "padel" | "tennis" | "pilates" | "packages" | "events" | "cafe" | "contact" | "blog" | "corporate" | "about";
 
 const HREF = {
   padel: "/padel",
@@ -18,6 +18,9 @@ const HREF = {
   events: "/events",
   cafe: "/cafe",
   contact: "/contact",
+  blog: "/blog",
+  corporate: "/corporate",
+  about: "/about",
 } as const;
 
 /** The title, the description and the page's own address in both languages (indexed like the site). */

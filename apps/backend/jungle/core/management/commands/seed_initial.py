@@ -16,6 +16,7 @@ from django.db import transaction
 
 from jungle.accounts.models import AccountType, User, UserRole
 from jungle.audit.services import SYSTEM
+from jungle.blog.models import Article
 from jungle.cafe.models import CafeCategory, CafeProduct
 from jungle.configuration.models import Marker
 from jungle.configuration.services import ensure_flag_rows
@@ -54,6 +55,34 @@ DEMO_EVENT_TEXT = (
     "Exemplu: evenimentele reale le publică clubul din panou.",
     "An example: the real events are published by the club from the panel.",
 )
+# A demo article for the blog (§9.3), marked as such (invariant 12); only facts from docs/03-liga.
+DEMO_ARTICLE = {
+    "slug": "cum-functioneaza-liga-demo",
+    "title_ro": "Cum funcționează Liga Jungle (articol demo)",
+    "title_en": "How the Jungle League works (demo article)",
+    "summary_ro": "Exemplu de articol: cum intri în ligă și unde se introduc scorurile.",
+    "summary_en": "An example article: how you join the league and where scores are entered.",
+    "body_ro": (
+        "## Cine intră în ligă\n\n"
+        "- oricine are cel puțin 18 ani;\n"
+        "- cu nivelul validat de un antrenor;\n"
+        "- cu acordul GDPR al ligii semnat la Chioșcul Ligii.\n\n"
+        "## Scorurile\n\n"
+        "Scorurile se introduc și se confirmă **numai la Chioșcul Ligii**, în club. "
+        "Pe site liga doar se urmărește: [clasamentele](/ro/liga).\n\n"
+        "*Exemplu: articolele reale le scrie clubul din panou.*"
+    ),
+    "body_en": (
+        "## Who joins the league\n\n"
+        "- anyone at least 18 years old;\n"
+        "- with a level validated by a coach;\n"
+        "- with the league's GDPR consent signed at the League Kiosk.\n\n"
+        "## Scores\n\n"
+        "Scores are entered and confirmed **only at the League Kiosk**, at the club. "
+        "On the website the league is only followed: [the standings](/en/league).\n\n"
+        "*An example: the real articles are written by the club from the panel.*"
+    ),
+}
 # (first name, last name, email, role) — §8.5 names first; all addresses are non-deliverable.
 DEMO_PEOPLE = [
     ("Alexandru Daniel", "Popescu", "alexandru.popescu@demo.invalid", None),
@@ -154,6 +183,17 @@ class Command(BaseCommand):
         if options["demo"]:
             self._demo()
             self._demo_events(location)
+            self._demo_article(location)
+
+    def _demo_article(self, location: Location) -> None:
+        if not Article.objects.filter(location=location, slug=DEMO_ARTICLE["slug"]).exists():
+            Article.objects.create(
+                location=location,
+                **DEMO_ARTICLE,
+                published=True,
+                first_published_at=clock.now(),
+                is_demo=True,
+            )
 
     def _demo_events(self, location: Location) -> None:
         """The next Friday night and Saturday morning (never today), unless some are still ahead."""

@@ -26,6 +26,8 @@ CONFIG_TAG = "config"
 EVENTS_TAG = "events"
 # The café menu (jungle.cafe, apps/web/src/lib/cafe.ts).
 CAFE_TAG = "cafe"
+# The club's blog (jungle.blog, apps/web/src/lib/blog.ts).
+BLOG_TAG = "blog"
 
 
 def revalidate(tags: list[str]) -> bool:

@@ -4,6 +4,15 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, blogul, Pentru firme și Despre club — 01.10.2026 (livrate)
+#### Adăugat
+- Aplicația `jungle.blog` (backend): articole pe locație, complete în RO și EN, cu adresa lor (`slug`); ciornă, publicare, corectare, retragere, ștergerea unei ciorne nepublicate; adresa unui articol publicat nu se mai schimbă; jurnal și reîmprospătarea site-ului (eticheta `blog`). Acțiunea `blog.manage` (admin, manager). API: `GET /api/v1/blog`, `GET /api/v1/blog/{slug}`, `/api/v1/staff/blog…`. 100% acoperire pe ramuri. Un articol demo în `seed_initial --demo`, marcat.
+- Panoul: modulul **Blogul** (`Blog`).
+- Site: `/blog` (`BlogList`) și `/blog/{adresă}` (`BlogArticle`: Markdown fără imagini sau HTML, linkurile externe cu `noopener`, date structurate `BlogPosting`, adresa canonică și hreflang); `src/lib/blog.ts`.
+- `/corporate` (Pentru firme: pachetul de firmă Q35 și configuratorul) și `/despre` (turul, cifrele, echipa); toate trei în subsolul site-ului complet.
+#### Reparat
+- PWA: fără conexiune, pagina „fără internet” putea deveni o pagină de eroare (fișierele ei nu erau încă pe telefon); service worker-ul (versiunea 2) le păstrează acum la instalare.
+
 ### Etapa 11, site-ul instalabil (PWA) — 30.09.2026 (livrat)
 #### Adăugat
 - Manifestul (`src/app/manifest.ts`): numele, pornirea, culorile, iconițele (192, 512, maskable), scurtăturile Rezervă / Contul meu / Liga doar pe site-ul complet; iconița pentru iPhone.

@@ -1,6 +1,6 @@
 /**
- * The full site's presentation pages (§9.3): Padel, Tennis, Pilates, Packages, Events, Café and
- * Contact, each with its title and introduction, then the approved home sections, from the real
+ * The full site's presentation pages (§9.3): Padel, Tennis, Pilates, Packages, Events, Café,
+ * Contact, For companies (Q35) and About, each with its title and introduction, then the approved home sections, from the real
  * API. The contact page shows the club's phone and email only as the panel has them.
  */
 import { expect, type Page, test } from "@playwright/test";
@@ -21,6 +21,8 @@ const PAGES: { path: string; title: string; section: string }[] = [
   { path: "/ro/evenimente", title: "Evenimente", section: "#evenimente" },
   { path: "/ro/cafenea", title: "Cafeneaua", section: "#cafenea" },
   { path: "/ro/contact", title: "Contact", section: "#locatie" },
+  { path: "/ro/corporate", title: "Pentru firme", section: "#firme" },
+  { path: "/ro/despre", title: "Despre club", section: "#tur" },
 ];
 
 test.beforeEach(async ({ context, baseURL }) => chooseNecessaryCookies(context, baseURL));
