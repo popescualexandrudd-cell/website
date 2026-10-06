@@ -11,6 +11,8 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 - AI: ciornele pentru personal (`AIDraft`, `jungle/ai/drafts.py`): mesaj pentru comunitate (Q19), articol, traducere, din datele publice ale clubului, fără unelte, „De revizuit” până la aprobare (cu corecturi) sau renunțare; acțiunea `ai.drafts` (admin, manager); API: `GET`/`POST /api/v1/staff/ai/drafts`, `POST /api/v1/staff/ai/drafts/{id}/review`; codurile `ai.no_draft`, `ai.draft_not_found`, `ai.draft_reviewed`. Panou: secțiunea „Ciorne scrise de AI” în modulul Asistentul AI.
 #### Schimbat
 - `league_daily` raportează și mementourile scrise; textul „n-ai mai jucat de X zile” nu mai spune „care caută parteneri” (nu există o astfel de listă): numește jucători de nivelul tău care au jucat în ultima vreme.
+#### Reparat
+- Panoul arăta „Legătura cu serverul s-a întrerupt” la orice răspuns 5xx, chiar și când serverul spunea de ce (503 `ai.unavailable`, AI-ul oprit); acum afișează motivul (`unwrap` propriu în `apps/admin/src/api.ts`). Găsit de testul cap-coadă nou al ciornelor, înainte de push.
 
 ### Etapa 12, faza 12D: asistentul clubului — 06.10.2026 (livrat)
 #### Adăugat
