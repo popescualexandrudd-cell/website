@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# deploy/scripts/install-server, run for real on a clean Ubuntu 24.04 (a container, Stage 14D),
+# with the system commands it cannot run there (apt, systemctl, ufw) replaced by recorders. Then
+# run again, as on a server where it ran before. Checked: the settings files and their rights,
+# the devices' authority, the SSH rule only with a key, the firewall, the timers, nothing
+# overwritten the second time. Run by scripts/test-deploy.
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+docker run --rm -v "$ROOT:/src:ro" ubuntu:24.04 bash -euo pipefail -c '
+  apt-get update -qq >/dev/null && apt-get install -y -qq --no-install-recommends openssl >/dev/null
+  mkdir -p /opt/jungle && cp -r /src/deploy /opt/jungle/
+  mkdir -p /fake && for tool in apt-get systemctl ufw; do
+    printf "#!/bin/sh\necho \"%s \$*\" >> /tmp/calls\n" "$tool" > /fake/$tool && chmod +x /fake/$tool
+  done
+  export PATH=/fake:$PATH
+  /opt/jungle/deploy/scripts/install-server > /tmp/first.txt 2>&1
+  fail() { echo "test-install: FAIL $1"; cat /tmp/first.txt /tmp/second.txt 2>/dev/null | tail -20; exit 1; }
+  [ "$(stat -c %a /etc/jungle)" = 700 ] || fail "/etc/jungle is not 700"
+  [ "$(stat -c %a /etc/jungle/prod.env)" = 600 ] || fail "prod.env is not 600"
+  [ "$(stat -c %a /etc/jungle/backup.env)" = 600 ] || fail "backup.env is not 600"
+  [ "$(stat -c %a /etc/jungle/devices-ca/ca.key)" = 600 ] || fail "the authority key is not 600"
+  openssl x509 -in /etc/jungle/devices-ca.pem -noout -subject | grep -q "devices CA" || fail "no devices CA"
+  [ ! -e /etc/ssh/sshd_config.d/50-jungle.conf ] || fail "SSH closed to passwords without any key"
+  grep -q "ufw --force enable" /tmp/calls || fail "the firewall was not enabled"
+  grep -q "ufw allow 443/tcp" /tmp/calls || fail "HTTPS not allowed"
+  grep -q "enable --now jungle-backup-full.timer" /tmp/calls || fail "the backup timers"
+  [ -f /etc/systemd/system/jungle-backup@.service ] || fail "the backup unit"
+  echo "SECRET=kept" >> /etc/jungle/prod.env
+  mkdir -p /root/.ssh && echo "ssh-ed25519 AAAA test" > /root/.ssh/authorized_keys
+  /opt/jungle/deploy/scripts/install-server > /tmp/second.txt 2>&1 || fail "the second run"
+  grep -q "SECRET=kept" /etc/jungle/prod.env || fail "prod.env overwritten"
+  grep -q "It exists: kept" /tmp/second.txt || fail "the authority made again"
+  grep -q "PasswordAuthentication no" /etc/ssh/sshd_config.d/50-jungle.conf || fail "SSH keys-only rule"
+  grep -q "Automatic-Reboot-Time \"05:15\"" /etc/apt/apt.conf.d/52jungle-unattended-upgrades || fail "updates"
+  echo "test-install: all checks passed"
+'

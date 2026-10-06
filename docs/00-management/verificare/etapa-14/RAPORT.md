@@ -96,3 +96,41 @@
 | Tot sistemul (`smoke-stack`) | Planificatorul rulează în producție `watch_devices` și `check_disk`. |
 | Instrumentele, pornite local | GlitchTip, Umami și Uptime Kuma pornesc și răspund. |
 
+## Fazele 14D și 14E — Serverul, aparatele, actualizarea și ghidurile, 06.10.2026
+
+### Ce s-a construit
+1. **Instalarea serverului** (`deploy/scripts/install-server`, Ubuntu 24.04), într-o singură comandă, care se poate rula din nou fără să strice nimic:
+   - instalează Docker, din pachetele Ubuntu;
+   - închide toate porturile, în afară de SSH, 80 și 443;
+   - permite SSH doar cu cheie, și doar dacă o cheie e deja pusă, ca nimeni să nu rămână pe dinafară;
+   - pornește actualizările de securitate automate;
+   - face `/etc/jungle`, cu fișierele de setări (drepturi 600);
+   - face autoritatea de certificate a aparatelor;
+   - pune programul backup-urilor.
+2. **Certificatele aparatelor** (`deploy/scripts/devices-ca init | issue <nume>`): fiecare chioșc, ecran sau afișaj primește un certificat semnat de autoritatea clubului. Scriptul arată amprenta de pus în panou la înrolare.
+3. **Actualizarea și revenirea:**
+   - `deploy/scripts/update <versiune>`: backup complet, apoi codul versiunii, imaginile, baza de date adusă la zi, repornirea și verificarea.
+   - `deploy/scripts/rollback`: întoarcerea la versiunea de dinainte. Dacă actualizarea a schimbat baza de date, cere confirmarea scrisă „DA” și readuce baza de date exact la momentul dinaintea actualizării.
+4. **`deploy/scripts/manage`**: o comandă Django pe server, de exemplu primul administrator.
+5. **Panoul → Starea sistemului → Sarcini programate și backup:** ultima rulare a fiecărei sarcini și a fiecărui backup (reușit, eșuat, rulează, încă n-a rulat), cu nume în română și engleză.
+6. **Ghidurile proprietarului:**
+   - `docs/08-deploy-si-mentenanta/06-instalarea-serverului.md`;
+   - `07-mentenanta.md`: actualizarea, revenirea, un aparat care nu merge, prețurile, sezonul nou, verificările lunare;
+   - ghidul de înrolare a aparatelor, actualizat (`device.<domeniu>`, certificatul).
+7. **Reparat, găsit de testul de actualizare:** verificarea de sănătate a imaginii backend-ului întreba `127.0.0.1` prin HTTP. În producție, Django refuză un host necunoscut și redirecționează HTTP spre HTTPS, deci containerul ar fi apărut mereu „nesănătos”. Acum `healthcheck.py` trimite numele de host permis și HTTPS.
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| ShellCheck | Toate scripturile serverului trec (nivelul „warning”). |
+| `deploy/scripts/test-install` | Instalarea rulată de două ori pe un Ubuntu 24.04 curat: drepturile fișierelor, autoritatea, regula SSH (doar cu o cheie existentă), firewall-ul, temporizatoarele; nimic suprascris la a doua rulare. |
+| `deploy/scripts/smoke-stack`, partea de actualizare | Dintr-o copie a repository-ului cu două versiuni, a doua cu o migrare nouă: actualizarea la v1, apoi la v2 (migrarea aplicată), apoi revenirea cu „DA". Migrarea dispare, ce s-a scris după actualizare dispare, ce era înainte rămâne, backend-ul răspunde. |
+| Panoul (`jungle/panel`, 100% pe ramuri; Vitest) | Lista sarcinilor în starea sistemului; fiecare sarcină are nume în ambele limbi (testul pică altfel). |
+
+### Ce așteaptă serverul și aparatele (Q22, Q23)
+- **Instalarea reală:** se face după ghid când serverul e gata.
+- **Driverele reale ale aparatelor** (acceptorul de bancnote și monede, casa de marcat fiscală, cititoarele) se scriu și se testează la club, după alegerea modelelor (Q23). Hardware Bridge are deja interfața și simulatoarele (Etapele 7–8, ADR-0013); un driver real înlocuiește doar simulatorul, prin aceeași interfață.
+
+## Etapa 14 completă
+Toate cele cinci faze sunt livrate. Ce mai rămâne de făcut pe server și la club e scris în ghiduri, pas cu pas.
+

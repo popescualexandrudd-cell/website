@@ -507,6 +507,12 @@ describe("staff, roles and the system status", () => {
             { id: "d3", name: "Afișaj", kind: "cafe_display", is_active: true, enrolled: false, online: false, last_seen_at: null },
             { id: "d4", name: "Vechi", kind: "screen", is_active: false, enrolled: true, online: false, last_seen_at: null },
           ],
+          jobs: [
+            { name: "backup.full", last_started_at: "2027-03-16T00:30:00Z", ok: true },
+            { name: "backup.restore-test", last_started_at: "2027-03-01T02:30:00Z", ok: false },
+            { name: "watch_devices", last_started_at: "2027-03-16T07:59:00Z", ok: null },
+            { name: "league_daily", last_started_at: null, ok: null },
+          ],
         }),
     };
     mount(<SystemStatus />, ["config.view"]);
@@ -518,11 +524,15 @@ describe("staff, roles and the system status", () => {
     expect(within(screen.getByRole("row", { name: /Chioșc/ })).getByText("Offline")).toBeTruthy();
     expect(within(screen.getByRole("row", { name: /Afișaj/ })).getByText("Neînrolat")).toBeTruthy();
     expect(within(screen.getByRole("row", { name: /Vechi/ })).getByText("Dezactivat")).toBeTruthy();
+    expect(within(screen.getByRole("row", { name: /Backup complet/ })).getByText("OK")).toBeTruthy();
+    expect(within(screen.getByRole("row", { name: /Testul de restaurare/ })).getByText("Eșuat")).toBeTruthy();
+    expect(within(screen.getByRole("row", { name: /Aparatele tăcute/ })).getByText("Rulează")).toBeTruthy();
+    expect(within(screen.getByRole("row", { name: /Liga, zilnic/ })).getByText("Încă n-a rulat")).toBeTruthy();
     cacheUp = true;
     await click("Reîncarc");
     expect(screen.queryByText("Indisponibil")).toBeNull();
     cleanup();
-    answers["GET /api/v1/staff/panel/system"] = () => json({ version: "dev", server_time: "2027-03-16T08:00:00Z", time_zone: "Europe/Bucharest", database: true, cache: true, pending_decisions: 0, devices: [] });
+    answers["GET /api/v1/staff/panel/system"] = () => json({ version: "dev", server_time: "2027-03-16T08:00:00Z", time_zone: "Europe/Bucharest", database: true, cache: true, pending_decisions: 0, devices: [], jobs: [] });
     mount(<SystemStatus />, ["config.view"]);
     await settle();
     expect(screen.getByText("Niciun dispozitiv la această locație.")).toBeTruthy();

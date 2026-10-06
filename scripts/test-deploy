@@ -2,8 +2,10 @@
 # The production setup (Stage 14, ADR-0015), checked before it reaches the server:
 #   1. the production compose file is valid;
 #   2. the proxy behaves as ADR-0012 asks, against a real Caddy (deploy/proxy/test-proxy);
-#   3. the whole stack starts from the compose file and answers through the proxy
-#      (deploy/scripts/smoke-stack: builds the images, needs Docker and the ports 80/443).
+#   3. the server scripts pass ShellCheck, and install-server works on a clean Ubuntu 24.04;
+#   4. the whole stack starts from the compose file and answers through the proxy, takes a
+#      backup, restores it, updates to a new version and goes back (deploy/scripts/smoke-stack:
+#      builds the images, needs Docker, uv and the ports 80/443).
 # Run by CI on every push (job `deploy`); by hand: scripts/test-deploy
 # Behind a filtering proxy, pass base images with its CA: SMOKE_BUILD_ARGS="--build-arg …".
 set -euo pipefail
@@ -28,5 +30,13 @@ if [ -z "${CADDY:-}" ]; then
 fi
 CADDY="$CADDY" deploy/proxy/test-proxy
 
-echo "==> The whole stack"
+echo "==> The server scripts (ShellCheck)"
+uvx --from shellcheck-py==0.11.0.1 shellcheck -S warning deploy/scripts/backup deploy/scripts/update \
+  deploy/scripts/rollback deploy/scripts/install-server deploy/scripts/devices-ca deploy/scripts/manage \
+  deploy/scripts/test-install deploy/backup/postgres/restore-check scripts/test-deploy
+
+echo "==> The server's installation, on a clean Ubuntu 24.04 (a container)"
+deploy/scripts/test-install
+
+echo "==> The whole stack, then an update and the way back"
 deploy/scripts/smoke-stack

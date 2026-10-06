@@ -9,7 +9,10 @@ as on the server, with throw-away secrets, a throw-away device authority and loc
 - a device site refuses a visitor without the club's certificate and accepts one with it;
 - Django's deployment checks pass inside the backend, and the scheduler has done a round;
 - a full backup is taken with pgBackRest and the restore test brings it back in a throw-away
-  container, both reported to the backend (deploy/scripts/backup, ADR-0016).
+  container, both reported to the backend (deploy/scripts/backup, ADR-0016);
+- a version update and the way back (deploy/scripts/update, deploy/scripts/rollback), from a
+  copy of the repository with two versions, the second adding a database migration: the
+  rollback brings the database back to the moment before the update (point in time).
 
 Everything is removed at the end (containers and volumes). Needs Docker with Compose, `openssl`,
 `curl`, and the ports 80 and 443 free.
@@ -29,6 +32,7 @@ import sys
 import tempfile
 import time
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 COMPOSE = ROOT / "deploy" / "compose" / "prod" / "compose.yaml"
@@ -104,6 +108,68 @@ def curl(host: str, path: str, *, cert: tuple[Path, Path] | None = None) -> tupl
     return int(code), body
 
 
+MIGRATION = """from django.db import migrations
+
+
+class Migration(migrations.Migration):
+    dependencies = [("scheduler", "{previous}")]
+    operations = [
+        migrations.RunSQL("CREATE TABLE smoke_marker (id int)", "DROP TABLE smoke_marker"),
+    ]
+"""
+
+
+def update_and_rollback(folder: Path, envf: Path, check: Any) -> None:
+    print("update and rollback", flush=True)
+    clone = folder / "clone"
+    sh("git", "clone", "-q", str(ROOT), str(clone))
+    git = ["git", "-C", str(clone), "-c", "user.name=smoke", "-c", "user.email=smoke@example.test"]
+    sh(*git, "tag", "v-smoke-1")
+    migrations = clone / "apps" / "backend" / "jungle" / "scheduler" / "migrations"
+    previous = sorted(p.stem for p in migrations.glob("0*.py"))[-1]
+    (migrations / "9999_smoke.py").write_text(MIGRATION.format(previous=previous))
+    sh(*git, "add", "-A")
+    sh(*git, "commit", "-q", "-m", "test: a release with a migration")
+    sh(*git, "tag", "v-smoke-2")
+    state = folder / "state"
+    state.mkdir()
+    run_env = {
+        **os.environ,
+        "JUNGLE_ENV_FILE": str(envf),
+        "JUNGLE_STATE_DIR": str(state),
+        "COMPOSE_PROJECT": PROJECT,
+        "JUNGLE_BUILD_ARGS": os.environ.get("SMOKE_BUILD_ARGS", ""),
+    }
+    compose = ["docker", "compose", "-p", PROJECT, "-f", str(clone / "deploy/compose/prod/compose.yaml"),
+               "--env-file", str(envf)]
+
+    def script(name: str, *args: str, answer: str = "") -> bool:
+        done = subprocess.run([str(clone / "deploy" / "scripts" / name), *args], input=answer,
+                              capture_output=True, text=True, env=run_env)
+        if done.returncode:
+            print(done.stdout[-3000:], done.stderr[-3000:], file=sys.stderr)
+        return done.returncode == 0
+
+    def sql(query: str) -> str:
+        done = subprocess.run([*compose, "exec", "-T", "db", "psql", "-U", "jungle", "-d", "jungle",
+                               "-Atc", query], capture_output=True, text=True, env=run_env)
+        return done.stdout.strip()
+
+    check(script("update", "v-smoke-1"), "update to v-smoke-1 (no database change)")
+    check(script("update", "v-smoke-2"), "update to v-smoke-2 (a new migration)")
+    check(sql("SELECT to_regclass('smoke_marker') IS NOT NULL") == "t", "the migration applied")
+    sql("INSERT INTO scheduler_jobrun (job, started_at, ok, output) VALUES ('after-update', now(), true, '')")
+    check(script("rollback", answer="DA\n"), "rollback with the database brought back")
+    check(sql("SELECT to_regclass('smoke_marker') IS NULL") == "t", "the migration undone")
+    check(sql("SELECT count(*) FROM scheduler_jobrun WHERE job = 'after-update'") == "0",
+          "what was saved after the update is gone (point in time)")
+    check(sql("SELECT count(*) FROM scheduler_jobrun WHERE job = 'backup.full' AND ok") != "0",
+          "what was saved before the update is there")
+    health = subprocess.run([*compose, "exec", "-T", "backend", "python", "healthcheck.py"],
+                            capture_output=True, text=True, env=run_env)
+    check(health.returncode == 0, "the backend answers after the rollback")
+
+
 def main() -> int:
     failures: list[str] = []
 
@@ -175,6 +241,7 @@ def main() -> int:
                 capture_output=True, text=True, env=env)
             check("['backup.full', 'backup.restore-test']" in reported.stdout,
                   "backups: both reported to the backend as done")
+            update_and_rollback(folder, envf, check)
             finished = True
         finally:
             if failures or not finished:

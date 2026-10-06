@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# The club's own certificate authority for its devices (ADR-0012, Stage 14D). Only the club's
+# kiosks, screens and café display hold a certificate it signed; the proxy refuses everything
+# else on their addresses, and the backend also compares each device's certificate fingerprint.
+#   deploy/scripts/devices-ca init                    # once: the authority (10 years)
+#   deploy/scripts/devices-ca issue "Chioșc Ligă 1"   # a device's certificate (3 years)
+# `issue` writes <name>.p12 (for the device: imported in the kiosk user's browser) and prints the
+# SHA-256 fingerprint to paste in the panel (Devices → Enrol). A lost or retired device is
+# deactivated in the panel: its token and fingerprint stop working at once (no list to keep).
+# Folder: DEVICES_CA_DIR (default /etc/jungle/devices-ca); the authority's key never leaves it.
+set -euo pipefail
+DIR="${DEVICES_CA_DIR:-/etc/jungle/devices-ca}"
+command="${1:-}"
+
+# A file name from the device's name: Romanian letters without diacritics, the rest as dashes.
+slug() {
+  printf '%s' "$1" | sed 's/ă/a/g;s/â/a/g;s/Ă/A/g;s/Â/A/g;s/î/i/g;s/Î/I/g;s/ș/s/g;s/ş/s/g;s/Ș/S/g;s/Ş/S/g;s/ț/t/g;s/ţ/t/g;s/Ț/T/g;s/Ţ/T/g' \
+    | LC_ALL=C tr -cs 'A-Za-z0-9' '-' | tr 'A-Z' 'a-z' | sed 's/^-//;s/-$//'
+}
+
+case "$command" in
+  init)
+    if [ -f "$DIR/ca.key" ]; then echo "The authority already exists in $DIR." >&2; exit 1; fi
+    mkdir -p "$DIR" && chmod 700 "$DIR"
+    openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 -nodes \
+      -keyout "$DIR/ca.key" -out "$DIR/devices-ca.pem" -days 3650 -subj "/O=Jungle Padel/CN=Jungle Padel devices CA" \
+      -addext "basicConstraints=critical,CA:TRUE,pathlen:0" -addext "keyUsage=critical,keyCertSign,cRLSign" 2>/dev/null
+    chmod 600 "$DIR/ca.key"
+    echo "Authority ready: $DIR/devices-ca.pem (give its path in DEVICES_CA_FILE). Keep $DIR/ca.key offline too."
+    ;;
+  issue)
+    name="${2:?the device name, as in the panel}"
+    [ -f "$DIR/ca.key" ] || { echo "No authority: run '$0 init' first." >&2; exit 1; }
+    file="$(slug "$name")"
+    [ -n "$file" ] || { echo "A name with letters or digits, please." >&2; exit 2; }
+    out="$DIR/devices/$file"
+    mkdir -p "$out" && chmod 700 "$out"
+    ext="$(mktemp)"; trap 'rm -f "$ext"' EXIT
+    printf 'basicConstraints=CA:FALSE\nkeyUsage=critical,digitalSignature\nextendedKeyUsage=clientAuth\n' >"$ext"
+    openssl req -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 -nodes -keyout "$out/device.key" \
+      -out "$out/device.csr" -subj "/O=Jungle Padel/CN=$name" 2>/dev/null
+    openssl x509 -req -in "$out/device.csr" -CA "$DIR/devices-ca.pem" -CAkey "$DIR/ca.key" -CAcreateserial \
+      -out "$out/device.pem" -days 1095 -extfile "$ext" 2>/dev/null
+    password="$(openssl rand -base64 18)"
+    openssl pkcs12 -export -inkey "$out/device.key" -in "$out/device.pem" -certfile "$DIR/devices-ca.pem" \
+      -name "$name" -out "$out/$file.p12" -passout "pass:$password"
+    chmod 600 "$out"/*
+    fingerprint="$(openssl x509 -in "$out/device.pem" -noout -fingerprint -sha256 | cut -d= -f2 | tr -d ':' | tr 'A-F' 'a-f')"
+    echo "Device certificate: $out/$file.p12"
+    echo "Its password (for the import on the device): $password"
+    echo "SHA-256 fingerprint (paste in the panel, Devices → Enrol): $fingerprint"
+    ;;
+  *)
+    echo "usage: $0 init | issue <device name>" >&2; exit 2 ;;
+esac

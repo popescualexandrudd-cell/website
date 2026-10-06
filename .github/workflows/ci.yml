@@ -51,4 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # the update test clones the repository
+      - uses: astral-sh/setup-uv@v6
       - run: scripts/test-deploy

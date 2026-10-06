@@ -179,3 +179,18 @@ def test_the_command_keeps_going_every_minute_until_it_is_stopped(
     monkeypatch.setattr(run_scheduler, "run_once", one_round)
     call_command("run_scheduler", stdout=StringIO())
     assert len(rounds) == 2 and all(0 < pause <= 60 for pause in waits)
+
+
+def test_every_job_has_a_name_in_the_panel() -> None:
+    """The panel's system status lists every job and backup by a name people read (RO and EN)."""
+    import json
+
+    from django.conf import settings
+
+    from jungle.scheduler.backups import KINDS
+
+    for language in ("ro", "en"):
+        catalogue = settings.REPO_ROOT / "packages" / "i18n" / "messages" / f"{language}.json"
+        names = json.loads(catalogue.read_text())["admin"]["system"]["jobNames"]
+        expected = {job.name for job in JOBS} | {f"backup_{kind}" for kind in KINDS}
+        assert set(names) == expected, language

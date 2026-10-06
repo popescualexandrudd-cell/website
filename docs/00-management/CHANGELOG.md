@@ -4,6 +4,16 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 14, fazele 14D și 14E: serverul, aparatele, actualizarea, ghidurile — 06.10.2026 (livrat)
+#### Adăugat
+- `deploy/scripts/install-server`, `devices-ca`, `update`, `rollback` (cu readucerea bazei de date la un moment), `manage`, `test-install`; ShellCheck și testul instalării în `scripts/test-deploy`; actualizarea și revenirea testate cap-coadă în `smoke-stack`.
+- Panou → Starea sistemului: ultima rulare a fiecărei sarcini programate și a fiecărui backup.
+- Ghidurile `06-instalarea-serverului.md` și `07-mentenanta.md`; ghidul de înrolare a aparatelor actualizat.
+#### Reparat
+- Verificarea de sănătate a imaginii backend-ului (`healthcheck.py`): în producție, cererea spre `127.0.0.1` prin HTTP era refuzată.
+#### Schimbat
+- Imaginile de bază din toate etapele Dockerfile-urilor se pot schimba (`RUNTIME_IMAGE`, `CADDY_IMAGE`).
+
 ### Etapa 14, faza 14C: monitorizare și alerte — 06.10.2026 (livrat)
 #### Adăugat
 - `watch_devices` (aparatele tăcute, `staff.device_offline`) și `check_disk` (evenimentul nou `staff.disk_low`), rulate de planificator.

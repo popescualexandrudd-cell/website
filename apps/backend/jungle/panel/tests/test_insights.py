@@ -29,6 +29,7 @@ from jungle.devices.models import Device, DeviceKind
 from jungle.ledger import services as ledger
 from jungle.ledger.models import AccountKind, TransactionKind
 from jungle.locations.models import Location
+from jungle.scheduler.models import JobRun
 
 pytestmark = pytest.mark.django_db
 DAY = "2027-03-16"
@@ -213,6 +214,21 @@ def test_the_system_status(
 
     def down(*args: Any, **kwargs: Any) -> None:
         raise ConnectionError("redis down")
+
+    jobs = {j["name"]: (j["ok"], j["last_started_at"]) for j in found["jobs"]}
+    assert jobs["send_notifications"] == (None, None) and jobs["backup.restore-test"] == (
+        None,
+        None,
+    )
+    JobRun.objects.create(job="backup.full", started_at=now - timedelta(days=2), ok=True)
+    JobRun.objects.create(job="backup.full", started_at=now - timedelta(hours=3), ok=False)
+    JobRun.objects.create(job="watch_devices", started_at=now)  # running
+    last_ok = {j["name"]: j["ok"] for j in api.get(url).json()["jobs"]}
+    assert (last_ok["backup.full"], last_ok["watch_devices"], last_ok["league_daily"]) == (
+        False,
+        None,
+        None,
+    )
 
     monkeypatch.setattr("jungle.panel.insights.cache.set", down)
     assert api.get(url).json()["cache"] is False

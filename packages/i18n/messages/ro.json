@@ -3482,7 +3482,25 @@
       "devices": "Dispozitivele locației",
       "ok": "OK",
       "down": "Indisponibil",
-      "offline": "Offline"
+      "offline": "Offline",
+      "jobs": "Sarcini programate și backup",
+      "jobNever": "Încă n-a rulat",
+      "jobRunning": "Rulează",
+      "jobFailed": "Eșuat",
+      "jobNames": {
+        "send_notifications": "Mesajele de trimis",
+        "process_no_shows": "Neprezentările",
+        "expire_league_matches": "Scorurile expirate",
+        "league_daily": "Liga, zilnic",
+        "purge_waitlist": "Lista de așteptare",
+        "notifications_daily": "Mesajele zilei",
+        "check_backups": "Verificarea backup-urilor",
+        "watch_devices": "Aparatele tăcute",
+        "check_disk": "Discul serverului",
+        "backup_full": "Backup complet",
+        "backup_diff": "Backup diferențial",
+        "backup_restore-test": "Testul de restaurare"
+      }
     },
     "blog": {
       "title": "Blogul clubului",

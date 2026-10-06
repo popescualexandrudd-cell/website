@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Back to the version that ran before the last deploy/scripts/update (§14, Stage 14D):
+#   deploy/scripts/rollback
+# If that update changed the database (new migrations), the code alone cannot go back: the
+# database is also brought back to the moment the update started (pgBackRest, point in time).
+# What was saved after that moment is lost, so this asks for a written confirmation first.
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+cd "$ROOT"
+ENV_FILE="${JUNGLE_ENV_FILE:-/etc/jungle/prod.env}"
+STATE="${JUNGLE_STATE_DIR:-/etc/jungle}"
+compose=(docker compose -f deploy/compose/prod/compose.yaml --env-file "$ENV_FILE")
+[ -n "${COMPOSE_PROJECT:-}" ] && compose+=(-p "$COMPOSE_PROJECT")  # only for a test
+stop() { echo "rollback: $1" >&2; exit 1; }
+
+[ -f "$STATE/previous-commit" ] || stop "no update to go back from"
+previous="$(cat "$STATE/previous-version")"
+commit="$(cat "$STATE/previous-commit")"
+started="$(cat "$STATE/update-started-at")"
+[ -n "$previous" ] || stop "the version before is not known"
+
+changed="$(git diff --name-only "$commit" HEAD -- 'apps/backend/jungle/*/migrations/*.py' | wc -l)"
+if [ "$changed" -gt 0 ]; then
+  echo "The update changed the database ($changed migration files)."
+  echo "Going back also brings the database back to $started (UTC): what was saved after it is lost."
+  read -r -p "Write DA to go on: " answer
+  [ "$answer" = "DA" ] || stop "stopped, nothing changed"
+fi
+
+git checkout -q "$commit"
+sed -i "s/^JUNGLE_VERSION=.*/JUNGLE_VERSION=$previous/" "$ENV_FILE"
+if [ "$changed" -gt 0 ]; then
+  "${compose[@]}" stop proxy web backend realtime scheduler
+  # the transaction log up to now goes to the backup first (the restore replays it to the moment)
+  "${compose[@]}" exec -T -u postgres db pgbackrest --stanza=jungle check
+  "${compose[@]}" stop db
+  "${compose[@]}" run --rm --no-deps -u postgres db \
+    pgbackrest --stanza=jungle --delta --type=time "--target=$started" --target-action=promote restore
+fi
+# shellcheck disable=SC2086
+"${compose[@]}" build ${JUNGLE_BUILD_ARGS:-}
+"${compose[@]}" up -d --remove-orphans
+rm -f "$STATE/previous-commit"
+echo "rollback: version $previous runs again."

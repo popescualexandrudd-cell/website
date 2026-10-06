@@ -3482,7 +3482,25 @@
       "devices": "The location's devices",
       "ok": "OK",
       "down": "Unavailable",
-      "offline": "Offline"
+      "offline": "Offline",
+      "jobs": "Scheduled jobs and backups",
+      "jobNever": "Has not run yet",
+      "jobRunning": "Running",
+      "jobFailed": "Failed",
+      "jobNames": {
+        "send_notifications": "Messages to send",
+        "process_no_shows": "No-shows",
+        "expire_league_matches": "Expired scores",
+        "league_daily": "League, daily",
+        "purge_waitlist": "Waiting list",
+        "notifications_daily": "The day's messages",
+        "check_backups": "Backup check",
+        "watch_devices": "Silent devices",
+        "check_disk": "Server disk",
+        "backup_full": "Full backup",
+        "backup_diff": "Differential backup",
+        "backup_restore-test": "Restore test"
+      }
     },
     "blog": {
       "title": "The club's blog",

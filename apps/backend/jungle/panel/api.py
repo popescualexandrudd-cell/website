@@ -484,6 +484,12 @@ class PanelDeviceHealthOut(Schema):
     last_seen_at: datetime | None
 
 
+class PanelJobOut(Schema):
+    name: str = Field(description="a scheduled job (ADR-0024) or backup.full|diff|restore-test")
+    last_started_at: datetime | None
+    ok: bool | None = Field(description="null: never ran, or still running")
+
+
 class PanelSystemOut(Schema):
     version: str
     server_time: datetime
@@ -492,9 +498,11 @@ class PanelSystemOut(Schema):
     cache: bool
     pending_decisions: int
     devices: list[PanelDeviceHealthOut]
+    jobs: list[PanelJobOut]
 
 
 @router.get("/system", response={200: PanelSystemOut, **errors(401, 403, 404, 422)})
 def system(request: HttpRequest, location_id: uuid.UUID) -> insights.SystemStatus:
-    """The release, the server's clock, the database and cache, the location's devices."""
+    """The release, the server's clock, the database and cache, the location's devices, the last
+    run of every scheduled job and backup."""
     return insights.system_status(request, location_id)

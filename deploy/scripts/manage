@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# A Django management command on the server, inside the running backend (§14, Stage 14D):
+#   deploy/scripts/manage bootstrap_admin --email … --first-name … --last-name …
+#   deploy/scripts/manage set_flag full_site on --reason "Lansarea"
+#   deploy/scripts/manage publish_legal_document --kind rules
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+[ "$#" -gt 0 ] || { echo "usage: $0 <command> [arguments]" >&2; exit 2; }
+exec docker compose -f "$ROOT/deploy/compose/prod/compose.yaml" --env-file "${JUNGLE_ENV_FILE:-/etc/jungle/prod.env}" \
+  exec backend python manage.py "$@"

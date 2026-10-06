@@ -115,6 +115,28 @@ export function SystemStatus() {
               ))}
             </tbody>
           </table>
+          <h2>{t("system.jobs")}</h2>
+          <table className="table">
+            <tbody>
+              {data.jobs.map((j) => (
+                <tr key={j.name}>
+                  <th scope="row">{t(`system.jobNames.${j.name.replace(".", "_")}`)}</th>
+                  <td>
+                    {j.last_started_at === null ? (
+                      t("system.jobNever")
+                    ) : j.ok === null ? (
+                      t("system.jobRunning")
+                    ) : j.ok ? (
+                      ok(true)
+                    ) : (
+                      <span className="tag tag--todo">{t("system.jobFailed")}</span>
+                    )}
+                  </td>
+                  <td className="muted">{j.last_started_at ? `${formatDate(lang, j.last_started_at)} ${formatTime(lang, j.last_started_at)}` : "—"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </>
       ) : null}
     </section>

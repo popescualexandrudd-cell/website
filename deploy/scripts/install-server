@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+# Prepares the club's server (Ubuntu Server 24.04 LTS, Q22) for the system (§14, ADR-0015,
+# Stage 14D). Run once as root from the repository cloned in /opt/jungle; safe to run again.
+#   sudo deploy/scripts/install-server            # does it
+#   sudo DRY_RUN=1 deploy/scripts/install-server  # only says what it would do
+# It installs Docker from Ubuntu's own packages; closes every port but SSH, 80 and 443;
+# allows SSH only with a key (when one is already set up, so nobody is locked out); turns on
+# the automatic security updates; makes /etc/jungle with the settings files to fill in; makes
+# the devices' certificate authority; puts the backup timers in place.
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+DRY="${DRY_RUN:-0}"
+ETC="${JUNGLE_ETC:-/etc/jungle}"
+run() { if [ "$DRY" = 1 ]; then echo "+ $*"; else "$@"; fi; }
+write() {  # write <file> <mode>: the standard input into a file
+  if [ "$DRY" = 1 ]; then echo "+ write $1 ($2)"; cat >/dev/null; else cat >"$1"; chmod "$2" "$1"; fi
+}
+say() { printf '\n== %s\n' "$1"; }
+
+[ "$DRY" = 1 ] || [ "$(id -u)" = 0 ] || { echo "Run as root: sudo $0" >&2; exit 1; }
+if [ -r /etc/os-release ]; then . /etc/os-release; fi
+[ "${ID:-}" = ubuntu ] || echo "Warning: written for Ubuntu Server 24.04; this is ${PRETTY_NAME:-unknown}." >&2
+[ "$ROOT" = /opt/jungle ] || echo "Warning: the guides expect the repository in /opt/jungle (it is in $ROOT)." >&2
+
+say "Packages: Docker (Ubuntu's), firewall, automatic security updates"
+run apt-get update
+run env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+  ca-certificates curl git openssl ufw unattended-upgrades docker.io docker-compose-v2
+run systemctl enable --now docker
+
+say "Firewall: only SSH, HTTP and HTTPS"
+run ufw default deny incoming
+run ufw default allow outgoing
+run ufw allow OpenSSH
+run ufw allow 80/tcp
+run ufw allow 443/tcp
+run ufw allow 443/udp
+run ufw --force enable
+
+say "SSH: keys only"
+keys=0
+for file in /root/.ssh/authorized_keys /home/*/.ssh/authorized_keys; do
+  [ -s "$file" ] && keys=1
+done
+if [ "$keys" = 1 ]; then
+  run install -d -m 755 /etc/ssh/sshd_config.d
+  write /etc/ssh/sshd_config.d/50-jungle.conf 644 <<'CONF'
+# Jungle Padel (deploy/scripts/install-server): SSH only with a key.
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PermitRootLogin prohibit-password
+CONF
+  run systemctl reload ssh
+else
+  echo "No SSH key is set up yet: passwords stay allowed. Add your key, then run this again." >&2
+fi
+
+say "Automatic security updates (restart at 05:15 when one needs it)"
+write /etc/apt/apt.conf.d/52jungle-unattended-upgrades 644 <<'CONF'
+// Jungle Padel (deploy/scripts/install-server): security updates only, a restart at 05:15 when
+// needed: after the night's backup (02:30) and the monthly restore test (04:30).
+Unattended-Upgrade::Allowed-Origins { "${distro_id}:${distro_codename}-security"; };
+Unattended-Upgrade::Automatic-Reboot "true";
+Unattended-Upgrade::Automatic-Reboot-Time "05:15";
+CONF
+write /etc/apt/apt.conf.d/20auto-upgrades 644 <<'CONF'
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";
+CONF
+
+say "Settings in $ETC (fill them in before the first start)"
+run install -d -m 700 "$ETC"
+for pair in "deploy/compose/prod/.env.example:prod.env" "deploy/backup/backup.env.example:backup.env"; do
+  source_file="${pair%%:*}" target="$ETC/${pair##*:}"
+  if [ -e "$target" ]; then echo "$target exists: kept."; else run install -m 600 "$ROOT/$source_file" "$target"; fi
+done
+
+say "The devices' certificate authority"
+if [ -e "$ETC/devices-ca/ca.key" ]; then
+  echo "It exists: kept."
+else
+  run env DEVICES_CA_DIR="$ETC/devices-ca" "$ROOT/deploy/scripts/devices-ca" init
+fi
+run ln -sf "$ETC/devices-ca/devices-ca.pem" "$ETC/devices-ca.pem"
+
+say "Backup timers (nightly backup, monthly restore test)"
+for unit in "$ROOT"/deploy/backup/systemd/*; do
+  run install -m 644 "$unit" "/etc/systemd/system/$(basename "$unit")"
+done
+run systemctl daemon-reload
+run systemctl enable --now jungle-backup-full.timer jungle-backup-diff.timer jungle-restore-test.timer
+
+say "Done. Next (docs/08-deploy-si-mentenanta/06-instalarea-serverului.md):"
+echo "  1. fill in $ETC/prod.env and $ETC/backup.env;"
+echo "  2. deploy/scripts/update <version>   (the first start);"
+echo "  3. the first administrator: deploy/scripts/manage bootstrap_admin …"

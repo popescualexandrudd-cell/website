@@ -4021,7 +4021,8 @@ export interface paths {
         };
         /**
          * System
-         * @description The release, the server's clock, the database and cache, the location's devices.
+         * @description The release, the server's clock, the database and cache, the location's devices, the last
+         *     run of every scheduled job and backup.
          */
         get: operations["jungle_panel_api_system"];
         put?: never;
@@ -7491,6 +7492,21 @@ export interface components {
             /** Opens */
             opens: string;
         };
+        /** PanelJobOut */
+        PanelJobOut: {
+            /** Last Started At */
+            last_started_at: string | null;
+            /**
+             * Name
+             * @description a scheduled job (ADR-0024) or backup.full|diff|restore-test
+             */
+            name: string;
+            /**
+             * Ok
+             * @description null: never ran, or still running
+             */
+            ok: boolean | null;
+        };
         /** PanelKioskCashOut */
         PanelKioskCashOut: {
             /** Change Given Today */
@@ -7728,6 +7744,8 @@ export interface components {
             database: boolean;
             /** Devices */
             devices: components["schemas"]["PanelDeviceHealthOut"][];
+            /** Jobs */
+            jobs: components["schemas"]["PanelJobOut"][];
             /** Pending Decisions */
             pending_decisions: number;
             /**

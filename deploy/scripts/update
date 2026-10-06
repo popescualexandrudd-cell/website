@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# A new version of the club's system, on the server (§14, Stage 14D), from /opt/jungle:
+#   deploy/scripts/update v1.2.0      # a version: a git tag
+#   deploy/scripts/update             # the same version again (after a change in the settings)
+# In order: a full backup; the code of that version; the images built; the database brought up
+# to date (the `migrate` service, before anything else); every service restarted; the system
+# checked through the proxy. What ran before is remembered for deploy/scripts/rollback.
+# Settings: JUNGLE_ENV_FILE (default /etc/jungle/prod.env), JUNGLE_STATE_DIR (default /etc/jungle).
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+cd "$ROOT"
+ENV_FILE="${JUNGLE_ENV_FILE:-/etc/jungle/prod.env}"
+STATE="${JUNGLE_STATE_DIR:-/etc/jungle}"
+compose=(docker compose -f deploy/compose/prod/compose.yaml --env-file "$ENV_FILE")
+[ -n "${COMPOSE_PROJECT:-}" ] && compose+=(-p "$COMPOSE_PROJECT")  # only for a test
+setting() { grep -E "^$1=" "$ENV_FILE" | tail -n 1 | cut -d= -f2-; }
+stop() { echo "update: $1" >&2; exit 1; }
+
+current="$(setting JUNGLE_VERSION)"
+version="${1:-$current}"
+[ -n "$version" ] || stop "which version? e.g. deploy/scripts/update v1.0.0"
+[ -z "$(git status --porcelain)" ] || stop "the folder has local changes; nothing was touched"
+git fetch -q --tags origin || stop "GitHub cannot be reached; nothing was touched"
+git rev-parse -q --verify "refs/tags/$version^{commit}" >/dev/null || stop "there is no version $version"
+
+if [ -n "$("${compose[@]}" ps -q db 2>/dev/null)" ]; then
+  echo "update: a full backup first…"
+  deploy/scripts/backup full || stop "the backup failed: the update stopped, nothing changed"
+fi
+date -u '+%Y-%m-%d %H:%M:%S+00' >"$STATE/update-started-at"  # pgBackRest's format
+printf '%s\n' "$current" >"$STATE/previous-version"
+git rev-parse HEAD >"$STATE/previous-commit"
+
+echo "update: $current → $version"
+git checkout -q "refs/tags/$version"
+if grep -qE '^JUNGLE_VERSION=' "$ENV_FILE"; then
+  sed -i "s/^JUNGLE_VERSION=.*/JUNGLE_VERSION=$version/" "$ENV_FILE"
+else
+  printf 'JUNGLE_VERSION=%s\n' "$version" >>"$ENV_FILE"
+fi
+# JUNGLE_BUILD_ARGS: only for a server behind a filtering proxy (base images with its CA)
+# shellcheck disable=SC2086
+"${compose[@]}" build ${JUNGLE_BUILD_ARGS:-}
+"${compose[@]}" up -d --remove-orphans
+
+healthy() { "${compose[@]}" exec -T backend python healthcheck.py >/dev/null 2>&1; }
+for _ in $(seq 1 36); do
+  if healthy; then
+    echo "update: version $version runs (https://api.$(setting DOMAIN)/api/v1/health). To go back: deploy/scripts/rollback"
+    exit 0
+  fi
+  sleep 5
+done
+echo "update: version $version does not answer after 3 minutes." >&2
+echo "        See 'docker compose -f deploy/compose/prod/compose.yaml --env-file $ENV_FILE logs --tail 50';" >&2
+echo "        go back with: deploy/scripts/rollback" >&2
+exit 1

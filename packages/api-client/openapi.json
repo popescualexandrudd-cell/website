@@ -6514,6 +6514,46 @@
         "title": "PanelHoursOut",
         "type": "object"
       },
+      "PanelJobOut": {
+        "properties": {
+          "last_started_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Started At"
+          },
+          "name": {
+            "description": "a scheduled job (ADR-0024) or backup.full|diff|restore-test",
+            "title": "Name",
+            "type": "string"
+          },
+          "ok": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "null: never ran, or still running",
+            "title": "Ok"
+          }
+        },
+        "required": [
+          "name",
+          "last_started_at",
+          "ok"
+        ],
+        "title": "PanelJobOut",
+        "type": "object"
+      },
       "PanelKioskCashOut": {
         "properties": {
           "change_given_today": {
@@ -7069,6 +7109,13 @@
             "title": "Devices",
             "type": "array"
           },
+          "jobs": {
+            "items": {
+              "$ref": "#/components/schemas/PanelJobOut"
+            },
+            "title": "Jobs",
+            "type": "array"
+          },
           "pending_decisions": {
             "title": "Pending Decisions",
             "type": "integer"
@@ -7094,7 +7141,8 @@
           "database",
           "cache",
           "pending_decisions",
-          "devices"
+          "devices",
+          "jobs"
         ],
         "title": "PanelSystemOut",
         "type": "object"
@@ -30163,7 +30211,7 @@
     },
     "/api/v1/staff/panel/system": {
       "get": {
-        "description": "The release, the server's clock, the database and cache, the location's devices.",
+        "description": "The release, the server's clock, the database and cache, the location's devices, the last\nrun of every scheduled job and backup.",
         "operationId": "jungle_panel_api_system",
         "parameters": [
           {

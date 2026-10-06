@@ -34,6 +34,9 @@ from jungle.devices.models import Device
 from jungle.ledger.models import AccountKind, LedgerEntry
 from jungle.locations.models import Location, Resource
 from jungle.panel.services import COURT_KINDS, LIVE, TAKINGS, opening_hours
+from jungle.scheduler.backups import KINDS as BACKUP_KINDS
+from jungle.scheduler.models import JobRun
+from jungle.scheduler.schedule import JOBS
 from jungle.waitlist.services import csv_safe
 
 MAX_DAYS = 366
@@ -285,6 +288,15 @@ class DeviceHealth:
 
 
 @dataclass(frozen=True)
+class JobHealth:
+    """A scheduled job or a backup (ADR-0024, ADR-0016): its last run, if any."""
+
+    name: str
+    last_started_at: datetime | None
+    ok: bool | None  # None: never ran, or still running
+
+
+@dataclass(frozen=True)
 class SystemStatus:
     version: str
     server_time: datetime
@@ -293,6 +305,7 @@ class SystemStatus:
     cache: bool
     pending_decisions: int
     devices: list[DeviceHealth] = field(default_factory=list)
+    jobs: list[JobHealth] = field(default_factory=list)
 
 
 def _database() -> bool:
@@ -331,6 +344,18 @@ def system_status(request: HttpRequest, location_id: uuid.UUID) -> SystemStatus:
         )
         for d in Device.objects.filter(location_id=location_id).order_by("kind", "name")
     ]
+    names = [job.name for job in JOBS] + [f"backup.{kind}" for kind in BACKUP_KINDS]
+    last: dict[str, JobRun] = {}
+    for run in JobRun.objects.filter(job__in=names).order_by("job", "-started_at").distinct("job"):
+        last[run.job] = run
+    jobs = [
+        JobHealth(
+            name=name,
+            last_started_at=last[name].started_at if name in last else None,
+            ok=last[name].ok if name in last else None,
+        )
+        for name in names
+    ]
     return SystemStatus(
         version=settings.APP_VERSION,
         server_time=now,
@@ -339,4 +364,5 @@ def system_status(request: HttpRequest, location_id: uuid.UUID) -> SystemStatus:
         cache=_cache(),
         pending_decisions=len(pending_decisions()),
         devices=devices,
+        jobs=jobs,
     )

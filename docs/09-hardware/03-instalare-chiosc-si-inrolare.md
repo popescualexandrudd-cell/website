@@ -14,13 +14,16 @@
 1. **Înregistrarea aparatului (admin).** *Dispozitive → Adaugă*: tipul „Chioșc Ligă”, locația, un nume („Chioșc Ligă 1”). Se notează **ID-ul aparatului**. (API: `POST /api/v1/staff/devices`.)
 2. **Instalarea pe aparat.** Pe mini-PC, ca root, dintr-o copie a repository-ului:
    ```bash
-   printf 'BRIDGE_DEVICE_ID=<ID-ul de la pasul 1>\nBRIDGE_API_URL=https://<api>/api/v1\nBRIDGE_ALLOWED_ORIGINS=https://kiosk-liga.<domeniu>\nBRIDGE_SIMULATOR_CONTROL=0\n' > /root/bridge.env
-   deploy/kiosk-os/install.sh --kiosk-url https://kiosk-liga.<domeniu>/ --api-url https://<api>/api/v1 --bridge-env /root/bridge.env
+   printf 'BRIDGE_DEVICE_ID=<ID-ul de la pasul 1>\nBRIDGE_API_URL=https://device.<domeniu>/api/v1\nBRIDGE_ALLOWED_ORIGINS=https://kiosk-liga.<domeniu>\nBRIDGE_SIMULATOR_CONTROL=0\n' > /root/bridge.env
+   deploy/kiosk-os/install.sh --kiosk-url https://kiosk-liga.<domeniu>/ --api-url https://device.<domeniu>/api/v1 --bridge-env /root/bridge.env
    ```
    La final, scriptul afișează **cheia publică a Hardware Bridge** (o linie base64). Cheia privată rămâne doar pe aparat (`/var/lib/jungle-bridge/bridge-key.pem`, drepturi 600).
 3. **Înrolarea (admin).** *Dispozitive → Chioșc Ligă 1 → Înrolează*: se lipesc cheia publică și, în producție, amprenta certificatului client. Serverul afișează **tokenul aparatului o singură dată**. (API: `POST /api/v1/staff/devices/{id}/enroll`.) Înrolarea din nou generează un token nou; cel vechi nu mai funcționează din acel moment.
 4. **Tokenul pe aparat.** Se adaugă `BRIDGE_DEVICE_TOKEN=<token>` în `/etc/jungle-bridge/bridge.env` (fișier cu drepturi 600, al lui root). Tokenul nu se trimite pe chat sau email și nu se scrie în altă parte. Apoi: `systemctl restart jungle-bridge && systemctl reboot`.
-5. **Certificatul client (producție).** Se importă în profilul utilizatorului `kiosk`: `sudo -u kiosk pk12util -d sql:/home/kiosk/.pki/nssdb -i chiosc-liga-1.p12`. Politica Chromium îl alege automat pentru site-ul chioșcului și pentru API.
+5. **Certificatul client (producție).**
+   - Se emite pe server, cu autoritatea clubului: `sudo deploy/scripts/devices-ca issue "Chioșc Ligă 1"`. Scriptul arată fișierul `.p12`, parola lui și amprenta SHA-256, care se folosește la pasul 3 (Etapa 14D).
+   - Fișierul se copiază pe aparat pe un stick și se importă în profilul utilizatorului `kiosk`: `sudo -u kiosk pk12util -d sql:/home/kiosk/.pki/nssdb -i chiosc-liga-1.p12` (cere parola).
+   - Politica Chromium îl alege automat pentru site-ul chioșcului și pentru API (`device.<domeniu>`). Fără el, proxy-ul refuză aparatul.
 6. **Verificarea.** După repornire, ecranul arată clasamentul și „Scanează cardul”. Se scanează un card de test: apare sesiunea jucătorului. În admin, aparatul are „văzut ultima dată” actualizat, iar în jurnalul de audit apare `devices.enrolled`.
 
 ## Ce face instalarea

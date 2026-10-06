@@ -3,6 +3,7 @@
 #   docker build -f deploy/proxy/Dockerfile -t jungle-proxy .
 # NODE_IMAGE: another base only for a build behind a filtering proxy (its CA inside).
 ARG NODE_IMAGE=node:22-slim
+ARG CADDY_IMAGE=caddy:2
 FROM ${NODE_IMAGE} AS build
 ENV PNPM_HOME=/pnpm PATH=/pnpm:$PATH
 RUN corepack enable
@@ -21,7 +22,7 @@ RUN for app in admin kiosk-league kiosk-payments court-screens cafe-display; do 
       pnpm --filter "@jungle/$app" build || exit 1; \
     done
 
-FROM caddy:2
+FROM ${CADDY_IMAGE}
 COPY deploy/proxy/Caddyfile /etc/caddy/Caddyfile
 COPY --from=build /repo/apps/admin/dist /srv/admin
 COPY --from=build /repo/apps/kiosk-league/dist /srv/kiosk-league
