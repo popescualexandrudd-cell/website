@@ -954,6 +954,8 @@ Pe GitHub, testul paginii „fără internet” a picat, deși trecea local: fă
 
 ## Conținutul site-ului și Traducerile, din panou (§8.6) — 06.10.2026
 
+> **Aprobate de proprietar pe 06.10.2026; Etapa 11 e încheiată.**
+
 ### Ce s-a construit
 1. **Panou → Conținutul site-ului** (acțiunea nouă `content.manage`: admin, manager):
    - **ce se poate schimba:** orice text al site-ului (peste 1.000), în română și în engleză, inclusiv titlurile și descrierile paginilor pentru Google (grupul „Titluri și descrieri (SEO)”, primul în listă);

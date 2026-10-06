@@ -4,6 +4,9 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11 — aprobată 06.10.2026
+- Proprietarul a aprobat ultimele module ale Etapei 11 („Conținutul site-ului”, „Traduceri”); Etapele 11 și 12 intră în `main` (tag-uri locale `etapa-11`, `etapa-12`).
+
 ### Etapa 11, Conținutul site-ului și Traducerile din panou — 06.10.2026 (livrate)
 #### Adăugat
 - Aplicația `jungle/content` (`TextOverride`: ciornă, publicare cu motiv, revenire la textul inițial; 100% acoperire), acțiunea `content.manage` (admin, manager); API: `GET /api/v1/content/texts`, `GET`/`POST /api/v1/staff/content/texts`, `.../publish`, `.../discard`, `.../restore`; codurile `content.not_found`, `content.no_draft`; eticheta de cache `content`.
