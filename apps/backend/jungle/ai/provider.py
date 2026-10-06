@@ -65,10 +65,11 @@ class ClaudeProvider:
             "model": self.model,
             "max_tokens": max_tokens,
             "system": [{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}],
-            "tools": tools,
             "messages": messages,
             "output_config": {"effort": effort},
         }
+        if tools:
+            params["tools"] = tools
         try:
             if self.model in FALLBACK_MODELS:
                 response: Any = self.client.beta.messages.create(

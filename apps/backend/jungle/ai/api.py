@@ -1,5 +1,5 @@
-"""The AI (ADR-0019): the club's assistant on the website (12D), and its state, spend and log in
-the panel."""
+"""The AI (ADR-0019): the club's assistant on the website (12D), its state, spend and log in the
+panel, and the drafts it writes for the staff (12E), reviewed by a person before any use."""
 
 from __future__ import annotations
 
@@ -8,9 +8,10 @@ from datetime import datetime
 from typing import Literal
 
 from django.http import HttpRequest
-from ninja import Field, Router, Schema
+from ninja import Field, Router, Schema, Status
 
-from jungle.ai import services
+from jungle.ai import drafts, services
+from jungle.ai.models import AIDraft, DraftKind, DraftStatus
 from jungle.bookings.models import SessionType
 from jungle.core.schemas import errors
 from jungle.core.security import require_csrf, session_auth
@@ -94,3 +95,69 @@ def ai_status(request: HttpRequest, location_id: uuid.UUID) -> AIStatusOut:
 @staff_router.get("/ai/interactions", response={200: list[AIInteractionOut], **errors(401, 403)})
 def ai_interactions(request: HttpRequest, location_id: uuid.UUID) -> list[AIInteractionOut]:
     return [AIInteractionOut.from_orm(row) for row in services.interactions(request, location_id)]
+
+
+class DraftIn(Schema):
+    location_id: uuid.UUID
+    kind: DraftKind
+    language: Literal["ro", "en"] = Field(description="the language of the draft")
+    text: str = Field(
+        min_length=1,
+        max_length=8000,
+        description="what to write about (community, article) or the text to translate",
+    )
+
+
+class DraftReviewIn(Schema):
+    status: Literal["approved", "discarded"]
+    body: str | None = Field(
+        default=None, max_length=20000, description="the corrected text, when approving"
+    )
+
+
+class AIDraftOut(Schema):
+    id: uuid.UUID
+    kind: DraftKind
+    language: str
+    request: str
+    body: str
+    status: DraftStatus
+    requested_by: str = Field(description="who asked for it")
+    created_at: datetime
+    reviewed_at: datetime | None
+
+
+def _draft(draft: AIDraft) -> AIDraftOut:
+    return AIDraftOut(
+        id=draft.id,
+        kind=DraftKind(draft.kind),
+        language=draft.language,
+        request=draft.request,
+        body=draft.body,
+        status=DraftStatus(draft.status),
+        requested_by=draft.requested_by.full_name,
+        created_at=draft.created_at,
+        reviewed_at=draft.reviewed_at,
+    )
+
+
+@staff_router.get("/ai/drafts", response={200: list[AIDraftOut], **errors(401, 403)})
+def ai_drafts(request: HttpRequest, location_id: uuid.UUID) -> list[AIDraftOut]:
+    return [_draft(d) for d in drafts.drafts(request, location_id)]
+
+
+@staff_router.post("/ai/drafts", response={201: AIDraftOut, **errors(401, 403, 409, 422, 503)})
+def write_draft(request: HttpRequest, payload: DraftIn) -> Status[AIDraftOut]:
+    """The AI writes a draft from the club's public facts; it is saved "de revizuit"."""
+    draft = drafts.create(
+        request, payload.location_id, payload.kind, payload.language, payload.text
+    )
+    return Status(201, _draft(draft))
+
+
+@staff_router.post(
+    "/ai/drafts/{draft_id}/review", response={200: AIDraftOut, **errors(401, 403, 404, 409, 422)}
+)
+def review_draft(request: HttpRequest, draft_id: uuid.UUID, payload: DraftReviewIn) -> AIDraftOut:
+    """Approve (with corrections) or discard a draft; once only."""
+    return _draft(drafts.review(request, draft_id, DraftStatus(payload.status), payload.body))

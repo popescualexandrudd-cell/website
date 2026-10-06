@@ -350,6 +350,10 @@ textarea:focus-visible,
   color: var(--color-brass-300);
 }
 
+.draft-text {
+  white-space: pre-wrap;
+}
+
 .amount-form {
   display: flex;
   flex-wrap: wrap;

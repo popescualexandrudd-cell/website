@@ -18,6 +18,7 @@ from jungle.ai import registry, services
 from jungle.ai.models import AIInteraction, Context, Outcome
 from jungle.ai.provider import ClaudeProvider, ProviderError, Reply
 from jungle.ai.registry import Call, Tool
+from jungle.ai.tests.conftest import Fake, says, uses
 from jungle.audit.services import SYSTEM
 from jungle.configuration.models import FeatureFlag
 from jungle.conftest import Api, error_code, set_config
@@ -27,51 +28,6 @@ from jungle.core.permissions import Role
 from jungle.ledger.models import LedgerTransaction
 
 pytestmark = pytest.mark.django_db
-
-
-class Fake:
-    """A provider that answers from a script and remembers what it was asked."""
-
-    model = "fake-model"
-
-    def __init__(self, *replies: Reply | Exception) -> None:
-        self.replies = list(replies)
-        self.calls: list[dict[str, Any]] = []
-
-    def reply(self, **kwargs: Any) -> Reply:
-        self.calls.append(json.loads(json.dumps(kwargs, default=str)))
-        answer = self.replies.pop(0)
-        if isinstance(answer, Exception):
-            raise answer
-        return answer
-
-
-def says(text: str, tokens: tuple[int, int] = (100, 20)) -> Reply:
-    return Reply([{"type": "text", "text": text}], "end_turn", *tokens, "fake-model")
-
-
-def uses(name: str, use_id: str = "t1", tool_input: dict[str, Any] | None = None) -> Reply:
-    blocks: list[dict[str, Any]] = [
-        {"type": "thinking", "thinking": "", "signature": "s"},
-        {"type": "tool_use", "id": use_id, "name": name, "input": tool_input or {}},
-    ]
-    return Reply(blocks, "tool_use", 200, 30, "fake-model")
-
-
-@pytest.fixture
-def on(db: None) -> None:
-    FeatureFlag.objects.update_or_create(key="ai", defaults={"enabled": True})
-
-
-@pytest.fixture
-def scripted() -> Iterator[Callable[..., Fake]]:
-    def use(*replies: Reply | Exception) -> Fake:
-        fake = Fake(*replies)
-        providers.use(fake)
-        return fake
-
-    yield use
-    providers.use(None)
 
 
 @pytest.fixture
@@ -378,12 +334,15 @@ def test_adr19_claude_gets_the_cached_prompt_the_effort_and_the_fallback() -> No
         {"effort": "medium"},
     )
     assert body["fallbacks"] == "default"
+    assert "tools" not in body  # a draft: no tool at all
     assert "server-side-fallback-2026-07-01" in seen[0].headers["anthropic-beta"]
     # a model without server-side fallbacks: the plain endpoint
+    tool = {"name": "club_info", "description": "d", "input_schema": {"type": "object"}}
     claude(handler, "claude-haiku-4-5").reply(
-        system="S", messages=QUESTION, tools=[], max_tokens=100, effort="low"
+        system="S", messages=QUESTION, tools=[tool], max_tokens=100, effort="low"
     )
     assert "fallbacks" not in json.loads(seen[1].content)
+    assert json.loads(seen[1].content)["tools"] == [tool]
     assert "anthropic-beta" not in seen[1].headers
 
 

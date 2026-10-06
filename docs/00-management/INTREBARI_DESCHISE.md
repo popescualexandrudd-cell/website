@@ -295,6 +295,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** SCĂZUTĂ · **Blochează:** Etapa 12 (mesaje pentru comunitate)
 - **Stare:** DESCHISĂ
 - **Varianta implicită (din MEGA_PROMPT):** generare + postare manuală.
+- **Notă (06.10.2026, 12E):** lucrez cu varianta implicită: AI-ul scrie mesajul ca ciornă în panou (Asistentul AI → Ciorne), echipa îl revizuiește și îl postează de mână, pe orice rețea.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
 
@@ -792,6 +793,8 @@ Titlul și instrucțiunea din §17, preluate integral:
   - „Abonamentul expiră” pleacă cu **7 zile** înainte de ultima zi (`notifications.subscription_expiring_days`).
   - „Mai ai X sesiuni luna aceasta” pleacă când rămân **2** sesiuni (`notifications.sessions_left_at`).
   - „Ne e dor de tine la antrenamente” pleacă după **2** antrenamente lipsă la rând, o singură dată pe șir (`notifications.absences_after`).
+  - „Hai înapoi pe teren” pleacă după **21** de zile fără meci de ligă (`notifications.inactive_days`), cu cel mult **3** jucători de nivel apropiat (cel mult ±0,75) care au jucat în ultimele **30** de zile (`league.partners`); adăugat pe 06.10.2026 (12E).
+  - „Încă N meciuri pentru clasamentul final” pleacă cu **14** zile înainte de finalul sezonului (`notifications.matches_needed_days`); adăugat pe 06.10.2026 (12E).
 - **Întrebare pentru proprietar:** vă convin aceste praguri? Vreți ca noutățile clubului să vină implicit tuturor clienților (atunci trebuie cerut acordul la crearea contului)?
 
 ### <a id="q68"></a>Q68 — Limita lunară și setările AI-ului
@@ -803,5 +806,6 @@ Titlul și instrucțiunea din §17, preluate integral:
   - modelul: **Claude Opus 5.5** (`AI_MODEL=claude-opus-5-5` în `.env`), cu prețurile lui: 4 dolari pe milion de tokeni citiți și 20 pe milion de tokeni scriși (`ai.input_usd_per_mtok`, `ai.output_usd_per_mtok`); dacă schimbați modelul, se schimbă și prețurile;
   - cât „gândește” la o întrebare: **medium** (`ai.effort`).
   - câte întrebări poate pune o persoană (sau o adresă IP) asistentului pe oră: **30** (`ai.questions_per_hour`).
-- **Întrebare pentru proprietar:** ce limită lunară vreți pentru AI? Păstrăm modelul propus?
+  - Jungle Report-ul săptămânal (12E) se scrie **din șablon, fără AI** (fără cost, fără riscul unei fraze inventate); un text personalizat de AI pentru fiecare jucător ar costa la fiecare raport.
+- **Întrebare pentru proprietar:** ce limită lunară vreți pentru AI? Păstrăm modelul propus? Jungle Report rămâne din șablon?
 

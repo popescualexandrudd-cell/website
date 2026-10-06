@@ -4,6 +4,14 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 12, faza 12E: potrivirea jucătorilor, mementourile ligii, Jungle Report, ciornele AI — 06.10.2026 (livrat)
+#### Adăugat
+- Liga: potrivirea deterministă a partenerilor (`league/matchmaking.py`, setarea `league.partners`); mementourile din jobul zilnic (`league/reminders.py`): „Hai înapoi pe teren” cu jucători de nivelul tău (`notifications.inactive_days`), „Încă N meciuri pentru clasamentul final” (`notifications.matches_needed_days`), „Meciul zilei” (și la alegerea adminului, `spotlight.announce`); Jungle Report-ul de luni (`league/weekly.py`, evenimentul `league.weekly_report`, text din șablon). Setările noi sunt DE_CONFIRMAT (Q67).
+- Rezervări: „Introduceți scorul” la finalul meciului de ligă, retras și readus odată cu tipul rezervării (`notifications.revive`).
+- AI: ciornele pentru personal (`AIDraft`, `jungle/ai/drafts.py`): mesaj pentru comunitate (Q19), articol, traducere, din datele publice ale clubului, fără unelte, „De revizuit” până la aprobare (cu corecturi) sau renunțare; acțiunea `ai.drafts` (admin, manager); API: `GET`/`POST /api/v1/staff/ai/drafts`, `POST /api/v1/staff/ai/drafts/{id}/review`; codurile `ai.no_draft`, `ai.draft_not_found`, `ai.draft_reviewed`. Panou: secțiunea „Ciorne scrise de AI” în modulul Asistentul AI.
+#### Schimbat
+- `league_daily` raportează și mementourile scrise; textul „n-ai mai jucat de X zile” nu mai spune „care caută parteneri” (nu există o astfel de listă): numește jucători de nivelul tău care au jucat în ultima vreme.
+
 ### Etapa 12, faza 12D: asistentul clubului — 06.10.2026 (livrat)
 #### Adăugat
 - Uneltele asistentului (`jungle/ai/tools.py`): `court_availability`, `court_quote`, `class_schedule` (public și client), `my_bookings` și `propose_booking` (doar clientul intrat în cont; rezervarea o face persoana, cu butonul).

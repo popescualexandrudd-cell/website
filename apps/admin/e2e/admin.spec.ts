@@ -149,6 +149,12 @@ test("the administrator signs in with the authenticator code and checks the rest
   await expect(page.getByText("fake-club", { exact: true })).toBeVisible();
   await expect(page.getByText(/Ce nu poate face niciodată/)).toBeVisible();
   await expect(page.getByRole("heading", { name: "Ultimele întrebări" })).toBeVisible();
+  // Drafts for the staff (12E): none yet; with the AI off, asking for one says so.
+  await expect(page.getByRole("heading", { name: "Ciorne scrise de AI" })).toBeVisible();
+  await expect(page.getByText("Nicio ciornă încă.")).toBeVisible();
+  await page.getByLabel("Despre ce (și ce trebuie să conțină)").fill("Seara cu DJ de sâmbătă");
+  await page.getByRole("button", { name: "Scrie ciorna" }).click();
+  await expect(page.getByText("Asistentul AI nu este disponibil acum.")).toBeVisible();
   await expectAccessible(page);
 
   await go(page, "Jurnalul de audit");

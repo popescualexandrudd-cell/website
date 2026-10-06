@@ -229,7 +229,10 @@
     "notifications.template_invalid": "The text has a mistake in its fields (written '{{ first_name }}'). Check the braces.",
     "ai.forbidden": "The AI assistant may not change scores, ranks, money, prices, vouchers, consents or the club's settings.",
     "ai.unavailable": "The AI assistant is not available right now.",
-    "ai.not_configured": "The AI can be turned on only once the key and the model are in the server's .env file."
+    "ai.not_configured": "The AI can be turned on only once the key and the model are in the server's .env file.",
+    "ai.no_draft": "The AI did not write the draft (the monthly limit, a provider error or a refusal). Try again or write the text by hand.",
+    "ai.draft_not_found": "The draft does not exist.",
+    "ai.draft_reviewed": "The draft has already been reviewed."
   },
   "web": {
     "meta": {
@@ -3557,6 +3560,40 @@
         "budget": "Monthly limit reached",
         "steps": "Too many steps",
         "failed": "Provider error"
+      },
+      "drafts": {
+        "title": "Drafts written by the AI",
+        "lead": "The AI writes a draft from the club's public data (the calendar, the public standings, the opening hours) and from what you tell it. The draft stays \"to review\" until you approve it (you can correct it first) or discard it; nothing is published or sent by itself. You post the community message in the group yourself (Q19).",
+        "kind": "What to write",
+        "kinds": {
+          "community": "Community message",
+          "article": "Blog article",
+          "translation": "Translation"
+        },
+        "language": "In",
+        "languages": {
+          "ro": "Romanian",
+          "en": "English"
+        },
+        "about": "What about (and what it must say)",
+        "source": "The text to translate",
+        "write": "Write the draft",
+        "writing": "The AI is writing…",
+        "written": "The draft is ready: review it below.",
+        "none": "No drafts yet.",
+        "asked": "Asked by {who}, {when}: \"{request}\"",
+        "states": {
+          "to_review": "To review",
+          "approved": "Approved",
+          "discarded": "Discarded"
+        },
+        "text": "The draft's text",
+        "approve": "Approve",
+        "discard": "Discard",
+        "approved": "The draft is approved.",
+        "discarded": "The draft is discarded.",
+        "copy": "Copy the text",
+        "copied": "The text is copied."
       }
     }
   }

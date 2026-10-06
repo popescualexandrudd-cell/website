@@ -229,7 +229,10 @@
     "notifications.template_invalid": "Textul are o greșeală de formulare a câmpurilor (de forma '{{ first_name }}'). Verifică acoladele.",
     "ai.forbidden": "Asistentul AI nu are voie să schimbe scoruri, ranguri, bani, prețuri, vouchere, acorduri sau setările clubului.",
     "ai.unavailable": "Asistentul AI nu este disponibil acum.",
-    "ai.not_configured": "AI-ul se pornește doar după ce cheia și modelul sunt puse în fișierul .env de pe server."
+    "ai.not_configured": "AI-ul se pornește doar după ce cheia și modelul sunt puse în fișierul .env de pe server.",
+    "ai.no_draft": "AI-ul nu a scris ciorna (limita lunară, o eroare la furnizor sau un refuz). Încearcă din nou sau scrie textul de mână.",
+    "ai.draft_not_found": "Ciorna nu există.",
+    "ai.draft_reviewed": "Ciorna a fost deja revizuită."
   },
   "web": {
     "meta": {
@@ -3557,6 +3560,40 @@
         "budget": "Limita lunară atinsă",
         "steps": "Prea mulți pași",
         "failed": "Eroare la furnizor"
+      },
+      "drafts": {
+        "title": "Ciorne scrise de AI",
+        "lead": "AI-ul scrie o ciornă din datele publice ale clubului (calendarul, clasamentul public, programul) și din ce îi spui. Ciorna rămâne „de revizuit” până o aprobi (o poți corecta înainte) sau renunți la ea; nimic nu se publică și nu se trimite singur. Mesajul pentru comunitate îl postezi tu în grup (Q19).",
+        "kind": "Ce să scrie",
+        "kinds": {
+          "community": "Mesaj pentru comunitate",
+          "article": "Articol pentru blog",
+          "translation": "Traducere"
+        },
+        "language": "În limba",
+        "languages": {
+          "ro": "română",
+          "en": "engleză"
+        },
+        "about": "Despre ce (și ce trebuie să conțină)",
+        "source": "Textul de tradus",
+        "write": "Scrie ciorna",
+        "writing": "AI-ul scrie…",
+        "written": "Ciorna e gata: revizuiește-o mai jos.",
+        "none": "Nicio ciornă încă.",
+        "asked": "Cerut de {who}, {when}: „{request}”",
+        "states": {
+          "to_review": "De revizuit",
+          "approved": "Aprobată",
+          "discarded": "Renunțat"
+        },
+        "text": "Textul ciornei",
+        "approve": "Aprobă",
+        "discard": "Renunță",
+        "approved": "Ciorna e aprobată.",
+        "discarded": "Ai renunțat la ciornă.",
+        "copy": "Copiază textul",
+        "copied": "Textul e copiat."
       }
     }
   }

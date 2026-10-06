@@ -124,3 +124,35 @@ Asistentul clubului pe site și în cont: răspunde din datele clubului, verific
 | Teste pe site | Conversația trimisă cum o acceptă API-ul (unitar). Cap-coadă, cu AI-ul pornit și furnizorul scriptat: un vizitator întreabă de program (accesibilitate, Escape și focusul înapoi pe buton); un client intrat în cont primește rezervarea pregătită și o face cu butonul; în engleză. |
 | Panou | Testul cap-coadă arată modelul scriptat al mediului de test („fake-club”). |
 
+
+## Faza 12E — Potrivirea jucătorilor, mementourile ligii, Jungle Report și ciornele AI (06.10.2026)
+
+### Ce pleacă acum de la ligă (calculat în cod, niciodată de AI)
+1. **„Hai înapoi pe teren”**: după **21 de zile** fără meci de ligă (`notifications.inactive_days`, Q67), o singură dată pe pauză, cu până la **3 jucători de nivelul tău** care au jucat în ultimele 30 de zile (`league.partners`, Q67). Potrivirea (`jungle/league/matchmaking.py`) e deterministă: cel mai apropiat nivel (cel mult ±0,75), apoi meciul cel mai recent, apoi numele. Folosește doar date publice (nume și nivel, R-012) și doar jucătorii din clasament. Fără nimeni potrivit, mesajul spune să întrebe la recepție.
+2. **„Încă N meciuri pentru clasamentul final”**: cu **14 zile** înainte de finalul sezonului (`notifications.matches_needed_days`, Q67), o dată pe sezon, celor care au jucat dar sunt sub minimul de 12 meciuri (LG-110).
+3. **„Meciul zilei”** (pe telefon): jucătorilor meciului ales după miză, după miezul nopții; și jucătorilor meciului ales de admin peste zi. O dată pe zi și persoană.
+4. **„Introduceți scorul”** (pe telefon): organizatorului unui meci oficial sau al unei provocări, la ora de final. Se retrage dacă rezervarea se anulează, se mută sau nu mai e meci de ligă (și revine dacă redevine).
+5. **Jungle Report**, în fiecare luni, pentru săptămâna încheiată, celor care au jucat: meciurile și victoriile, LP-ul câștigat sau pierdut, rangul de acum, partenerul cu care ai jucat cel mai des și un obiectiv (meciurile care lipsesc până la clasamentul final, LP-ul până la diviziunea următoare sau „păstrează ritmul”). Cifrele vin din evenimentele ligii (calculul curent), iar textul e șablonul clubului, editabil în panou. **Raportul nu e scris de AI**: așa nu poate spune nimic ce liga n-a înregistrat, și nu costă nimic. Dacă vreți un text personalizat de AI, e o decizie de cost (Q68).
+
+Toate pleacă din `manage.py league_daily` (care spune acum și câte mementouri a scris) și trec prin notificări (email/telefon, în limba clientului, o singură dată, oprite din cont la categoria „Liga”).
+
+### Ciornele scrise de AI (panou → Asistentul AI → Ciorne)
+1. **Ce scrie:** un **mesaj pentru comunitate** (cel mult 120 de cuvinte; îl postați voi în grup, varianta implicită din Q19), un **articol pentru blog** (300–600 de cuvinte) sau o **traducere** RO ↔ EN.
+2. **Din ce:** din datele publice ale clubului, adunate în cod: programul și adresa, calendarul pe 30 de zile (fără elementele demo), sezonul în curs, meciurile din ultima săptămână și primii 5 din clasamentul public. Plus ce îi scrieți. AI-ul nu primește nicio unealtă și are instrucțiunea să nu inventeze prețuri, date, oameni sau rezultate. Unde lipsește un fapt, scrie „[de completat]”.
+3. **Revizuirea:** fiecare ciornă rămâne **„De revizuit”** până când cineva o aprobă (o puteți corecta înainte) sau renunță la ea, o singură dată. Ambele se trec în jurnalul de audit, cu „corectată: da/nu”. Nimic nu se publică și nu se trimite singur. Textul aprobat se copiază cu un buton (în grup sau în modulul Blog).
+4. **Cine:** acțiunea nouă `ai.drafts` (admin, manager). Fiecare ciornă intră în jurnalul AI și în limita lunară, ca o întrebare. Cu AI-ul oprit, panoul spune că asistentul nu e disponibil.
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Teste backend | 814 în total. Noi — liga: potrivirea (nivel, meci recent, nume, fără cei șterși sau prea departe), pauza lungă o singură dată, meciurile care lipsesc în fereastra corectă și o dată pe sezon, Meciul zilei din job și la alegerea adminului, Jungle Report (luni, o dată pe săptămână, RO și EN, partenerul ascuns dacă a ieșit din ligă, meciul neterminat neluat în calcul), cuvintele pentru rang și obiectiv. Rezervări: „Introduceți scorul” la final, retras și readus odată cu tipul. AI: ciorna din fapte publice, faptele ligii doar publice, traducerea fără fapte, ciorna eșuată nesalvată, cererile greșite, aprobarea cu corecturi, renunțarea, o singură revizuire, furnizorul scriptat; Claude primește uneltele doar când există. |
+| Acoperire 100% pe ramuri | `league`, `notifications`, `ai` și restul listei: păstrată. |
+| Panou | 80 de teste (3 noi: ciornele doar cu `ai.drafts`, cererea și aprobarea corectată, renunțarea). Cap-coadă: secțiunea „Ciorne”, cu AI-ul oprit, spune că asistentul nu e disponibil (cu verificarea de accesibilitate). |
+
+### Cum verificați
+1. Panou → **Asistentul AI** → **Ciorne scrise de AI**: alegeți „Mesaj pentru comunitate”, scrieți despre ce, apăsați „Scrie ciorna”. Cu AI-ul oprit apare „Asistentul AI nu este disponibil acum.”; cu cheia pusă și AI-ul pornit, ciorna apare „De revizuit”: corectați textul, apoi „Aprobă” și „Copiază textul”.
+2. Panou → **Notificări**: textul „Jungle Report” (și „Hai înapoi pe teren”) se poate modifica, ca orice mesaj.
+3. Panou → **Configurare**: `notifications.inactive_days`, `notifications.matches_needed_days`, `league.partners` (DE_CONFIRMAT, Q67).
+
+### Ce urmează (12F)
+Copilotul pentru personal (întrebări peste date agregate, doar citire), detecția de anomalii și sugestiile de preț (doar sugestii, aplicate de om).

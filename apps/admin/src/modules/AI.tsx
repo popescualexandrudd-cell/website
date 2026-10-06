@@ -1,12 +1,14 @@
 /**
  * The AI (ADR-0019, Stage 12): whether it runs (the switch `ai`, under Configuration, and the key
  * and model in the server's `.env`), what it spent this month against the limit, the tools it has
- * in each context, and the latest questions (context, result, tools, tokens, cost; never the text).
+ * in each context, and the latest questions (context, result, tools, tokens, cost; never the text);
+ * with `ai.drafts`, the drafts it writes for the staff (`AIDrafts`).
  */
 import { type Schemas, unwrap } from "../api";
 import { formatDate, formatTime } from "../i18n";
 import { usePanel, useT } from "../panel";
 import { useData } from "../ui";
+import { AIDrafts } from "./AIDrafts";
 
 type Row = Schemas["AIInteractionOut"];
 
@@ -16,11 +18,17 @@ export function dollars(micro: number): string {
 }
 
 export function AI() {
-  const { api, locationId, lang } = usePanel();
+  const { api, locationId, lang, can } = usePanel();
   const t = useT();
   const where = { params: { query: { location_id: locationId } } };
-  const state = useData(() => unwrap(api.client.GET("/api/v1/staff/ai/status", where)), [api, locationId]);
-  const log = useData(() => unwrap(api.client.GET("/api/v1/staff/ai/interactions", where)), [api, locationId]);
+  const state = useData(
+    () => unwrap(api.client.GET("/api/v1/staff/ai/status", where)),
+    [api, locationId],
+  );
+  const log = useData(
+    () => unwrap(api.client.GET("/api/v1/staff/ai/interactions", where)),
+    [api, locationId],
+  );
   const s = state.data;
   return (
     <section aria-labelledby="ai-title">
@@ -33,13 +41,19 @@ export function AI() {
           <dt>{t("ai.provider")}</dt>
           <dd>{s.configured ? s.model : t("ai.notConfigured")}</dd>
           <dt>{t("ai.spend")}</dt>
-          <dd>{t("ai.spendOf", { spent: dollars(s.month_cost_micro_usd), budget: `$${s.budget_usd}` })}</dd>
+          <dd>
+            {t("ai.spendOf", {
+              spent: dollars(s.month_cost_micro_usd),
+              budget: `$${s.budget_usd}`,
+            })}
+          </dd>
           <dt>{t("ai.tools")}</dt>
           <dd>
             <ul>
               {Object.entries(s.tools).map(([name, contexts]) => (
                 <li key={name}>
-                  <code>{name}</code> · {contexts.map((c) => t(`ai.contexts.${c}`)).join(", ")}
+                  <code>{name}</code> ·{" "}
+                  {contexts.map((c) => t(`ai.contexts.${c}`)).join(", ")}
                 </li>
               ))}
             </ul>
@@ -64,7 +78,8 @@ export function AI() {
             {log.data.map((row: Row) => (
               <tr key={row.id}>
                 <th scope="row">
-                  {formatDate(lang, row.created_at)}, {formatTime(lang, row.created_at)}
+                  {formatDate(lang, row.created_at)},{" "}
+                  {formatTime(lang, row.created_at)}
                 </th>
                 <td>{t(`ai.contexts.${row.context}`)}</td>
                 <td>{t(`ai.outcomes.${row.outcome}`)}</td>
@@ -72,18 +87,29 @@ export function AI() {
                   {row.tools.length === 0
                     ? "—"
                     : row.tools
-                        .map((tool) => `${String(tool.name)}${tool.ok ? "" : ` (${String(tool.error)})`}`)
+                        .map(
+                          (tool) =>
+                            `${String(tool.name)}${tool.ok ? "" : ` (${String(tool.error)})`}`,
+                        )
                         .join(", ")}
                 </td>
                 <td>
                   {dollars(row.cost_micro_usd)}
-                  <span className="muted"> · {t("ai.tokens", { input: row.input_tokens, output: row.output_tokens })}</span>
+                  <span className="muted">
+                    {" "}
+                    ·{" "}
+                    {t("ai.tokens", {
+                      input: row.input_tokens,
+                      output: row.output_tokens,
+                    })}
+                  </span>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       ) : null}
+      {can("ai.drafts") ? <AIDrafts /> : null}
     </section>
   );
 }

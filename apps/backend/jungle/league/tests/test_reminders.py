@@ -174,8 +174,15 @@ def test_jungle_report_every_monday_for_the_week_that_ended(
     assert "the partner you played with most: —." in en.body  # d is no longer shown
     assert not [m for m in mail.outbox if m.to == [d.email]]
     # a match without a complete set is not counted (it becomes training): left out
-    play(season, (a, b), (c, d), at("2027-04-07 10:00"), {"sets": [{"a": 3, "b": 2}], "unfinished": True})
+    play(
+        season,
+        (a, b),
+        (c, d),
+        at("2027-04-07 10:00"),
+        {"sets": [{"a": 3, "b": 2}], "unfinished": True},
+    )
     assert weekly.summaries(season, date(2027, 4, 5), date(2027, 4, 11))[str(a.pk)].matches == 5
+
 
 def test_jungle_report_rank_and_goal_words(season: LeagueSeason) -> None:
     gold = Standing(rank_index=8, tier="gold", division="II", lp=70, matches_played=12)

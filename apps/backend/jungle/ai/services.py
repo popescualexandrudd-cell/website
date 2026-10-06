@@ -120,8 +120,11 @@ def _run_tool(call: Call, block: dict[str, Any], log: AIInteraction) -> dict[str
     return result | {"content": content}
 
 
-def ask(call: Call, messages: list[dict[str, Any]]) -> Answer:
-    """`messages`: the conversation so far, ending with the person's question."""
+def ask(
+    call: Call, messages: list[dict[str, Any]], system: str | None = None, use_tools: bool = True
+) -> Answer:
+    """`messages`: the conversation so far, ending with the person's question. `system` replaces
+    the assistant's instructions (the drafts); `use_tools=False` gives the model no tool."""
     provider = providers.current()
     if not is_enabled("ai") or provider is None:
         raise DomainError(ErrorCode.AI_UNAVAILABLE, status=503)
@@ -136,7 +139,7 @@ def ask(call: Call, messages: list[dict[str, Any]]) -> Answer:
     budget = _budget()
     text = ""
     conversation = list(messages)
-    definitions = [t.definition() for t in tools_for(call.context)]
+    definitions = [t.definition() for t in tools_for(call.context)] if use_tools else []
     try:
         while True:
             if month_cost() + log.cost_micro_usd >= budget:
@@ -147,7 +150,7 @@ def ask(call: Call, messages: list[dict[str, Any]]) -> Answer:
                 log.outcome = Outcome.STEPS
                 break
             reply = provider.reply(
-                system=system_prompt(call.context),
+                system=system or system_prompt(call.context),
                 messages=conversation,
                 tools=definitions,
                 max_tokens=MAX_TOKENS,

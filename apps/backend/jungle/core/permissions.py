@@ -64,6 +64,9 @@ class Action(StrEnum):
     REPORTS_VIEW = "reports.view"
     # The AI's state, spend and log (ADR-0019); never the questions' text.
     AI_VIEW = "ai.view"
+    # Drafts written by the AI for the staff (community message, article, translation), reviewed
+    # by a person before anything is used.
+    AI_DRAFTS = "ai.drafts"
 
 
 ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
@@ -105,6 +108,7 @@ ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
             Action.PRIVACY_REQUESTS,
             Action.REPORTS_VIEW,
             Action.AI_VIEW,
+            Action.AI_DRAFTS,
         }
     ),
     Role.RECEPTION: frozenset(

@@ -1,7 +1,8 @@
 """A scripted provider for development and the end-to-end tests (`AI_FAKE=true`; refused in
 staging and production). It is not an AI: it follows a fixed script through the club's real tools
 (the hours; the free courts tomorrow; preparing a booking), so the assistant's whole path, its
-barriers and its log run without a key and without spending anything."""
+barriers and its log run without a key and without spending anything. Asked for a draft (the
+staff's text in the message), it answers with a marked test draft that repeats that text."""
 
 from __future__ import annotations
 
@@ -14,6 +15,7 @@ from jungle.core import clock
 
 HOURS = ("program", "deschis", "adres", "open", "hours", "where")
 BOOK = ("rezerv", "book", "teren", "court")
+STAFF_TEXT = "The staff's text:\n"
 
 
 def _text(content: Any) -> str:
@@ -35,6 +37,9 @@ class FakeClubProvider:
         effort: str,
     ) -> Reply:
         last = messages[-1]["content"]
+        if STAFF_TEXT in _text(last):
+            asked = _text(last).split(STAFF_TEXT, 1)[1].strip()
+            return self._say(f"[Ciornă de test, fără AI real]\n\n{asked[:500]}")
         results = (
             [b for b in last if isinstance(b, dict) and b.get("type") == "tool_result"]
             if isinstance(last, list)
