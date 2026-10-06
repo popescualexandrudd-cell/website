@@ -4,6 +4,9 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 12 și paginile separate ale Etapei 11 — aprobate 06.10.2026
+- Proprietarul a aprobat Etapa 12 (fazele 12A–12F) și paginile separate ale site-ului (Liga, prezentare, contul și rezervările online, PWA, blogul, Pentru firme, Despre club); intră în `main` (tag local `etapa-12`).
+
 ### Etapa 12, faza 12F: semnale, cerere și copilotul pentru personal — 06.10.2026 (livrat)
 #### Adăugat
 - `jungle/panel/signals.py` (semnale: dispute, meciuri repetate, diferențe de numerar, corecturi, anulări târzii, neprezentări) și `jungle/panel/demand.py` (ocuparea pe benzi orare cu sugestii de preț, următoarele 7 zile); setările `panel.signals`, `panel.demand` (DE_CONFIRMAT, Q69); API: `GET /api/v1/staff/panel/signals`, `GET /api/v1/staff/panel/demand` (`reports.view`).

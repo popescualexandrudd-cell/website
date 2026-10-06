@@ -1,5 +1,7 @@
 # Etapa 12 — AI și notificări: raport
 
+> **Aprobată de proprietar pe 06.10.2026** („Continuă, aprob”).
+
 Planul pe faze: [PLAN.md](PLAN.md).
 
 ## Faza 12A — Nucleul notificărilor (01.10.2026)
