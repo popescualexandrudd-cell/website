@@ -4,6 +4,13 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 12, faza 12C: nucleul AI — 06.10.2026 (livrat)
+#### Adăugat
+- Aplicația `jungle.ai` (ADR-0019): adaptorul `AIProvider` cu Claude ca implicit (biblioteca oficială `anthropic`, `AI_API_KEY` și `AI_MODEL` în `.env`, instrucțiunile în cache, „fallbacks” la refuz), registrul de unelte pe context (public, client, personal) cu nume interzise, prima unealtă `club_info`, bucla de întrebare cu cel mult 6 pași, comutatorul `ai`, limita lunară de cost și jurnalul `AIInteraction` fără text. 100% acoperire pe ramuri.
+- A doua barieră: `jungle.core.ai_origin` (`acting_for_ai`, `refuse_ai`), chemată primul rând în registrul ligii, Chioșcul Ligii, rezolvarea meciurilor, registrul de bani, prețuri, vouchere și recomandări, acordul ligii, ștergerea contului, comutatoare și setări. Codurile `ai.forbidden`, `ai.unavailable`.
+- Setări noi (DE_CONFIRMAT, Q68): `ai.monthly_budget_usd`, `ai.input_usd_per_mtok`, `ai.output_usd_per_mtok`, `ai.effort`. Acțiunea `ai.view` (admin, manager); API: `GET /api/v1/staff/ai/status`, `GET /api/v1/staff/ai/interactions`.
+- Panou: modulul **Asistentul AI**, în locul marcajului „Etapa 12”.
+
 ### Etapa 12, faza 12B: evenimentele din §11, legate de fiecare modul — 06.10.2026 (livrat)
 #### Adăugat
 - Rezervări: confirmare, modificare, anulare și memento-urile la 24 h și 2 h (`send_after`), retrase la mutare sau anulare (`notifications.withdraw`); lista de așteptare la padel și la antrenamente.

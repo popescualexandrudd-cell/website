@@ -36,6 +36,7 @@ from jungle.cafe.models import CafeOrder
 from jungle.cards.models import AppleDeviceRegistration, CardStatus, MemberCard
 from jungle.cards.services import card_changed
 from jungle.core import clock
+from jungle.core.ai_origin import refuse_ai
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.permissions import Action
 from jungle.ledger.models import AccountKind, LedgerEntry, Payment
@@ -212,6 +213,7 @@ def _anonymise(obj: Model, **fields: Any) -> None:
 
 def erase(actor: audit.Actor, user: User, *, forfeit_credit: bool = False) -> User:
     """§12.2: the account becomes "Jucător retras"; nothing personal remains in use."""
+    refuse_ai("privacy")  # ADR-0019, the second barrier
     with transaction.atomic():
         user = User.objects.select_for_update().get(pk=user.pk)
         _check_can_erase(user, forfeit_credit)

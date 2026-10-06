@@ -94,6 +94,7 @@ INSTALLED_APPS = [
     "jungle.checkout",
     "jungle.screens",
     "jungle.panel",
+    "jungle.ai",
 ]
 
 MIDDLEWARE = [
@@ -281,6 +282,11 @@ WEB_REVALIDATE_SECRET = env("WEB_REVALIDATE_SECRET", "") or ""
 VAPID_PUBLIC_KEY = env("VAPID_PUBLIC_KEY", "") or ""
 VAPID_PRIVATE_KEY = env("VAPID_PRIVATE_KEY", "") or ""
 VAPID_SUBJECT = env("VAPID_SUBJECT", "") or ""
+
+# The AI (ADR-0019, Q24): the provider's key and the model, only in .env on the server; without
+# either, the AI stays off (the switch `ai` too) and everything else works as usual.
+AI_API_KEY = env("AI_API_KEY", "") or ""
+AI_MODEL = env("AI_MODEL", "") or ""
 
 # Emergency Django admin (§8.6): Admin role + 2FA only.
 EMERGENCY_ADMIN_ENABLED = env_bool("EMERGENCY_ADMIN_ENABLED", True)

@@ -226,7 +226,9 @@
     "notifications.not_optional": "Aceste notificări nu se pot opri (sunt despre cont, rezervări sau bani).",
     "notifications.push_unavailable": "Notificările pe telefon nu sunt încă active la club.",
     "notifications.unknown": "Notificarea nu există.",
-    "notifications.template_invalid": "Textul are o greșeală de formulare a câmpurilor (de forma '{{ first_name }}'). Verifică acoladele."
+    "notifications.template_invalid": "Textul are o greșeală de formulare a câmpurilor (de forma '{{ first_name }}'). Verifică acoladele.",
+    "ai.forbidden": "Asistentul AI nu are voie să schimbe scoruri, ranguri, bani, prețuri, vouchere, acorduri sau setările clubului.",
+    "ai.unavailable": "Asistentul AI nu este disponibil acum."
   },
   "web": {
     "meta": {
@@ -3496,6 +3498,39 @@
         "sent": "Trimis",
         "failed": "Netrimis",
         "skipped": "Nu s-a trimis (oprit sau fără canal)"
+      }
+    },
+    "ai": {
+      "title": "Asistentul AI",
+      "lead": "Asistentul clubului, pe site și în cont, și copilotul pentru personal. Pornirea și oprirea: la Configurare → comutatorul „ai”. Cheia și modelul stau doar în fișierul .env de pe server.",
+      "switch": "Comutatorul „ai”",
+      "on": "Pornit",
+      "off": "Oprit",
+      "provider": "Modelul",
+      "notConfigured": "Lipsește cheia sau modelul din .env (pe server)",
+      "spend": "Costul",
+      "spendOf": "{spent} din {budget} luna aceasta",
+      "tools": "Ce poate face",
+      "contexts": {
+        "public": "Site (fără cont)",
+        "member": "Contul clientului",
+        "staff": "Personal"
+      },
+      "never": "Ce nu poate face niciodată: să introducă sau să schimbe scoruri, rating, LP, ranguri și clasamente, bani, prețuri și reduceri, vouchere, acorduri GDPR sau setările clubului. Nu are unelte pentru ele, iar serviciile clubului refuză orice cerere venită de la AI.",
+      "logTitle": "Ultimele întrebări",
+      "logEmpty": "Nicio întrebare încă.",
+      "when": "Când",
+      "context": "Unde",
+      "outcome": "Rezultatul",
+      "toolsUsed": "Unelte folosite",
+      "cost": "Cost",
+      "tokens": "{input} intrare, {output} ieșire",
+      "outcomes": {
+        "answered": "Răspuns",
+        "refused": "Refuzat de model",
+        "budget": "Limita lunară atinsă",
+        "steps": "Prea mulți pași",
+        "failed": "Eroare la furnizor"
       }
     }
   }

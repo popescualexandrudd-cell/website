@@ -1,6 +1,7 @@
 /** The panel's modules (§8.6) and the action each needs; the menu shows only what the staff
  * member may use at the chosen location. */
 import type { ComponentType } from "react";
+import { AI } from "./AI";
 import { Attendance } from "./Attendance";
 import { Blog } from "./Blog";
 import { Audit } from "./Audit";
@@ -59,11 +60,11 @@ export const MODULES: Module[] = [
   { route: "settings", label: "settings", actions: ["config.view", "flags.manage"], component: Settings },
   { route: "audit", label: "audit", actions: ["audit.view"], component: Audit },
   { route: "system", label: "system", actions: ["config.view"], component: SystemStatus },
+  { route: "ai", label: "ai", actions: ["ai.view"], component: AI },
   // Later stages (§8.6): shown and marked, so the owner sees the whole panel.
   { route: "content", label: "content", actions: ["config.manage"], component: upcoming("content", 11), stage: 11 },
   { route: "translations", label: "translations", actions: ["config.manage"], component: upcoming("translations", 11), stage: 11 },
   { route: "community", label: "community", actions: ["config.manage"], component: upcoming("community", 12), stage: 12 },
-  { route: "ai", label: "ai", actions: ["config.manage"], component: upcoming("ai", 12), stage: 12 },
 ];
 
 export function allowed(modules: Module[], can: (action: string) => boolean): Module[] {

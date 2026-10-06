@@ -18,6 +18,7 @@ from jungle.accounts.services.authz import authorize
 from jungle.audit import services as audit
 from jungle.configuration.models import Marker
 from jungle.configuration.services import get_config
+from jungle.core.ai_origin import refuse_ai
 from jungle.core.clock import BUSINESS_TZ
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.permissions import Action
@@ -141,6 +142,7 @@ class RateData:
 
 def set_rate(request: HttpRequest, location: Location, data: RateData) -> PriceRate:
     """Creates or changes a rate (audited). `confirmed` = the owner decided this price."""
+    refuse_ai("prices")  # ADR-0019, the second barrier
     authorize(request, Action.PRICING_MANAGE, location.pk)
     if data.product not in Product.values or data.band not in Band.values:
         raise DomainError(ErrorCode.VALIDATION_INVALID, params={"field": "product/band"})

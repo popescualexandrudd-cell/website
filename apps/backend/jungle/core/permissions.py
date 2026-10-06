@@ -62,6 +62,8 @@ class Action(StrEnum):
     PRIVACY_REQUESTS = "privacy.requests"
     # The owner's reports and exports (revenue per category, occupancy; CSV for the accountant).
     REPORTS_VIEW = "reports.view"
+    # The AI's state, spend and log (ADR-0019); never the questions' text.
+    AI_VIEW = "ai.view"
 
 
 ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
@@ -102,6 +104,7 @@ ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
             Action.CASH_MANAGE,
             Action.PRIVACY_REQUESTS,
             Action.REPORTS_VIEW,
+            Action.AI_VIEW,
         }
     ),
     Role.RECEPTION: frozenset(

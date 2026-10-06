@@ -139,7 +139,16 @@ test("the administrator signs in with the authenticator code and checks the rest
   await page.getByRole("button", { name: "Intră" }).click();
   await expect(page.getByRole("heading", { name: "Tablou de bord" })).toBeVisible();
   const menu = page.getByRole("navigation", { name: "Modulele panoului" });
-  await expect(menu.getByRole("link", { name: /Asistentul AI · Etapa 12/ })).toBeVisible();
+  await expect(menu.getByRole("link", { name: /Comunitate · Etapa 12/ })).toBeVisible();
+
+  // The AI (ADR-0019, Stage 12C): off until the switch and the key; what it can never do.
+  await go(page, "Asistentul AI");
+  await expect(page.getByRole("heading", { level: 1, name: "Asistentul AI" })).toBeVisible();
+  await expect(page.getByText("Oprit", { exact: true })).toBeVisible();
+  await expect(page.getByText("Lipsește cheia sau modelul din .env (pe server)")).toBeVisible();
+  await expect(page.getByText(/Ce nu poate face niciodată/)).toBeVisible();
+  await expect(page.getByText("Nicio întrebare încă.")).toBeVisible();
+  await expectAccessible(page);
 
   await go(page, "Jurnalul de audit");
   await page.getByLabel("Acțiunea").fill("booking.moved");

@@ -14,6 +14,7 @@ import uuid
 from django.http import HttpRequest
 
 from jungle.audit import services as audit
+from jungle.core.ai_origin import refuse_ai
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.http import client_ip
 from jungle.devices.models import Device, DeviceKind
@@ -40,6 +41,7 @@ def check(
     request: HttpRequest, device: Device | None, location_id: uuid.UUID | None, action: str
 ) -> Device:
     """Returns the kiosk, read again from the database (a deactivation counts at once)."""
+    refuse_ai("scores")  # ADR-0019, the second barrier
     current = Device.objects.filter(pk=device.pk).first() if device is not None else None
     ip = client_ip(request) or ""
     problem = _problem(current, ip, location_id)

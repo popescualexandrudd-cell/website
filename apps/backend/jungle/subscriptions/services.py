@@ -26,6 +26,7 @@ from jungle.bookings.models import (
 from jungle.configuration.models import Marker
 from jungle.configuration.services import get_config
 from jungle.core import clock
+from jungle.core.ai_origin import refuse_ai
 from jungle.core.clock import BUSINESS_TZ
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.permissions import Action
@@ -195,6 +196,7 @@ def set_rate(
     monthly_price: int,
     confirmed: bool,
 ) -> SubscriptionRate:
+    refuse_ai("prices")  # ADR-0019, the second barrier
     authorize(request, Action.PRICING_MANAGE, location.pk)
     if sport not in Sport.values or not 1 <= sessions <= 31 or monthly_price < 0:
         raise _invalid("rate")

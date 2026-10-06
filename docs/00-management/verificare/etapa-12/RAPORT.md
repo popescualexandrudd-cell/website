@@ -79,3 +79,25 @@ Toate trec prin același loc (`notifications.notify`), deci pe email și pe tele
 3. Rezervați un teren pentru mâine: vine „Rezervarea e confirmată”; în panou → Notificări → ultimele mesaje apar și cele două memento-uri, programate.
 4. Anulați rezervarea: memento-urile apar „Nu s-a trimis”, cu motivul `withdrawn` (retrase).
 
+## Faza 12C — Nucleul AI (06.10.2026)
+
+### Ce s-a construit
+1. **Adaptorul de furnizor** (ADR-0019 §1): restul clubului vorbește doar cu o interfață (`AIProvider`). Implicit, Claude de la Anthropic, prin biblioteca oficială. Cheia (`AI_API_KEY`) și modelul (`AI_MODEL`, propus `claude-opus-5-5`) stau doar în `.env` pe server. Fără ele, AI-ul e oprit, iar restul sistemului merge normal. Textul fix trimis la fiecare întrebare (instrucțiunile și lista de unelte) e pus în cache la furnizor, deci costă mai puțin. Dacă modelul refuză o cerere din motive de siguranță, furnizorul o trece automat la alt model potrivit („fallbacks”).
+2. **Comutatorul global `ai`** (oprit implicit) și **limita lunară de cost** (`ai.monthly_budget_usd`, Q68). Limita oprește atât întrebările noi, cât și pe cea în curs, înainte de pasul următor. Costul se socotește din tokenii raportați de furnizor, la prețul întreg (și pentru textul din cache), ca limita să nu fie depășită.
+3. **Jurnalul** fiecărei întrebări (`AIInteraction`): unde (site, cont, personal), rezultatul, uneltele folosite, tokenii și costul. **Fără textul întrebării, al răspunsului sau al datelor citite** (minimizare, §10.1).
+4. **Uneltele, pe context** (registrul): asistentul public, cel din contul clientului și copilotul pentru personal primesc fiecare doar uneltele lui. Prima unealtă, `club_info` (adresa, programul, contactul public), e doar de citire. Uneltele asistentului (12D) și ale copilotului (12F) se adaugă tot aici.
+5. **Dubla barieră** (invariantul 4):
+   1. o unealtă al cărei nume vorbește despre scoruri, rating, LP, ranguri, clasamente, bani, plăți, prețuri, reduceri, vouchere, acorduri sau setări **nu poate fi înregistrată**; un test listează toate uneltele existente, deci orice unealtă nouă trece prin revizuire;
+   2. **serviciile protejate refuză orice apel venit de la AI** (`ai.forbidden`), chiar dacă o unealtă ar fi adăugată greșit: registrul ligii (rating, LP, ranguri, clasamente), Chioșcul Ligii și rezolvarea meciurilor (scoruri), registrul de bani (orice plată, rambursare, credit sau reducere), prețurile, voucherele și „Adu un prieten”, acordul ligii și ștergerea contului, comutatoarele și setările clubului.
+6. **Panoul → Asistentul AI** (înlocuiește marcajul „vine în Etapa 12”; acțiunea nouă `ai.view`, admin și manager): starea comutatorului, modelul (sau „lipsește cheia”), costul lunii față de limită, ce poate face AI-ul în fiecare context, ce nu poate face niciodată și ultimele întrebări (unde, rezultatul, uneltele, tokenii, costul).
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Teste backend (`jungle/ai` și bariera, 100% pe ramuri, impus de `test-all`) | 11. Acoperă: AI-ul oprit fără comutator sau fără cheie; un răspuns printr-o unealtă, cu blocurile modelului trimise înapoi neschimbate și jurnalul fără text; refuzul, eroarea furnizorului, prea mulți pași, răspunsul tăiat; uneltele doar din contextul lor și erorile trimise modelului; limita lunară (oprește întrebarea în curs și pe următoarele, luna nouă o ia de la zero); **bariera 1** (lista uneltelor, numele interzise refuzate); **bariera 2** (15 servicii protejate refuză un apel AI); **o unealtă adăugată greșit care încearcă să miște bani e refuzată**, iar registrul rămâne neatins; panoul (drepturi, stare, jurnal); Claude printr-un transport simulat (instrucțiunile în cache, efortul, „fallbacks”, eroarea furnizorului). |
+| Toate testele backend | 792, verzi. |
+| Teste în panou | 3 noi (modulul doar cu `ai.view`, starea și jurnalul, AI oprit și jurnal gol); 77 în total. |
+
+### Ce urmează (12D)
+Asistentul clubului pe site și în cont: răspunde din datele clubului, verifică disponibilitatea și rezervă pentru clientul intrat în cont. Plata rămâne la chioșc (R-063). Anularea rămâne în cont: o anulare mișcă bani (credit sau taxă), deci bariera 2 o refuză pentru AI.
+

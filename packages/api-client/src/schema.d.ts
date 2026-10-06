@@ -2348,6 +2348,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/staff/ai/interactions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ai Interactions */
+        get: operations["jungle_ai_api_ai_interactions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/ai/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ai Status */
+        get: operations["jungle_ai_api_ai_status"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/staff/audit": {
         parameters: {
             query?: never;
@@ -4326,6 +4360,66 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AIInteractionOut */
+        AIInteractionOut: {
+            /** Context */
+            context: string;
+            /** Cost Micro Usd */
+            cost_micro_usd: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Input Tokens */
+            input_tokens: number;
+            /** Model */
+            model: string;
+            /** Outcome */
+            outcome: string;
+            /** Output Tokens */
+            output_tokens: number;
+            /** Steps */
+            steps: number;
+            /** Tools */
+            tools: {
+                [key: string]: unknown;
+            }[];
+        };
+        /** AIStatusOut */
+        AIStatusOut: {
+            /** Budget Usd */
+            budget_usd: number;
+            /**
+             * Configured
+             * @description AI_API_KEY and AI_MODEL are set on the server
+             */
+            configured: boolean;
+            /**
+             * Enabled
+             * @description the global switch `ai`
+             */
+            enabled: boolean;
+            /** Model */
+            model: string;
+            /**
+             * Month Cost Micro Usd
+             * @description this month's spend, in millionths of a dollar
+             */
+            month_cost_micro_usd: number;
+            /**
+             * Tools
+             * @description {tool: [contexts]}
+             */
+            tools: {
+                [key: string]: string[];
+            };
+        };
         /** AcceptedDocumentIn */
         AcceptedDocumentIn: {
             /** Kind */
@@ -15939,6 +16033,86 @@ export interface operations {
             };
             /** @description Conflict */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_ai_api_ai_interactions: {
+        parameters: {
+            query: {
+                location_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AIInteractionOut"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_ai_api_ai_status: {
+        parameters: {
+            query: {
+                location_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AIStatusOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };

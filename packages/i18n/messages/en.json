@@ -226,7 +226,9 @@
     "notifications.not_optional": "These notifications cannot be turned off (they are about your account, bookings or money).",
     "notifications.push_unavailable": "Phone notifications are not active at the club yet.",
     "notifications.unknown": "The notification does not exist.",
-    "notifications.template_invalid": "The text has a mistake in its fields (written '{{ first_name }}'). Check the braces."
+    "notifications.template_invalid": "The text has a mistake in its fields (written '{{ first_name }}'). Check the braces.",
+    "ai.forbidden": "The AI assistant may not change scores, ranks, money, prices, vouchers, consents or the club's settings.",
+    "ai.unavailable": "The AI assistant is not available right now."
   },
   "web": {
     "meta": {
@@ -3496,6 +3498,39 @@
         "sent": "Sent",
         "failed": "Not sent",
         "skipped": "Not sent (turned off or no channel)"
+      }
+    },
+    "ai": {
+      "title": "The AI assistant",
+      "lead": "The club's assistant, on the website and in the account, and the copilot for staff. Turning it on and off: Configuration → the “ai” switch. The key and the model are only in the server's .env file.",
+      "switch": "The “ai” switch",
+      "on": "On",
+      "off": "Off",
+      "provider": "Model",
+      "notConfigured": "The key or the model is missing from .env (on the server)",
+      "spend": "Cost",
+      "spendOf": "{spent} of {budget} this month",
+      "tools": "What it can do",
+      "contexts": {
+        "public": "Website (no account)",
+        "member": "Client's account",
+        "staff": "Staff"
+      },
+      "never": "What it can never do: enter or change scores, rating, LP, ranks and standings, money, prices and discounts, vouchers, GDPR consents or the club's settings. It has no tools for them, and the club's services refuse any request coming from the AI.",
+      "logTitle": "Latest questions",
+      "logEmpty": "No questions yet.",
+      "when": "When",
+      "context": "Where",
+      "outcome": "Result",
+      "toolsUsed": "Tools used",
+      "cost": "Cost",
+      "tokens": "{input} in, {output} out",
+      "outcomes": {
+        "answered": "Answered",
+        "refused": "Refused by the model",
+        "budget": "Monthly limit reached",
+        "steps": "Too many steps",
+        "failed": "Provider error"
       }
     }
   }

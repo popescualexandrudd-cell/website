@@ -18,6 +18,7 @@ from jungle.accounts.models import User
 from jungle.accounts.services.authz import current_user
 from jungle.audit import services as audit
 from jungle.core import clock
+from jungle.core.ai_origin import refuse_ai
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.http import client_ip, user_agent
 from jungle.devices.models import Device, DeviceKind
@@ -61,6 +62,7 @@ def is_adult(user: User) -> bool:
 def sign(request: HttpRequest, user: User, device: Device, language: str) -> Consent:
     """R-010: the ticked consent at the League Kiosk. Signing the current version twice
     records nothing new."""
+    refuse_ai("consents")  # ADR-0019, the second barrier
     if device.kind != DeviceKind.LEAGUE_KIOSK or not device.is_active:
         raise DomainError(ErrorCode.LEAGUE_KIOSK_ONLY, status=403)
     if not is_adult(user):
@@ -122,6 +124,7 @@ def status(user: User, language: str) -> ConsentStatus:
 
 def withdraw(request: HttpRequest) -> Consent:
     """R-011: from the account, at any time. A new WITHDRAWN row (consents are append-only)."""
+    refuse_ai("consents")  # ADR-0019, the second barrier
     user = current_user(request)
     with transaction.atomic():
         last = latest(user)

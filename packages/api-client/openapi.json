@@ -1,6 +1,118 @@
 {
   "components": {
     "schemas": {
+      "AIInteractionOut": {
+        "properties": {
+          "context": {
+            "title": "Context",
+            "type": "string"
+          },
+          "cost_micro_usd": {
+            "title": "Cost Micro Usd",
+            "type": "integer"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "input_tokens": {
+            "title": "Input Tokens",
+            "type": "integer"
+          },
+          "model": {
+            "title": "Model",
+            "type": "string"
+          },
+          "outcome": {
+            "title": "Outcome",
+            "type": "string"
+          },
+          "output_tokens": {
+            "title": "Output Tokens",
+            "type": "integer"
+          },
+          "steps": {
+            "title": "Steps",
+            "type": "integer"
+          },
+          "tools": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Tools",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "context",
+          "outcome",
+          "model",
+          "tools",
+          "steps",
+          "input_tokens",
+          "output_tokens",
+          "cost_micro_usd",
+          "created_at"
+        ],
+        "title": "AIInteractionOut",
+        "type": "object"
+      },
+      "AIStatusOut": {
+        "properties": {
+          "budget_usd": {
+            "title": "Budget Usd",
+            "type": "integer"
+          },
+          "configured": {
+            "description": "AI_API_KEY and AI_MODEL are set on the server",
+            "title": "Configured",
+            "type": "boolean"
+          },
+          "enabled": {
+            "description": "the global switch `ai`",
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "model": {
+            "title": "Model",
+            "type": "string"
+          },
+          "month_cost_micro_usd": {
+            "description": "this month's spend, in millionths of a dollar",
+            "title": "Month Cost Micro Usd",
+            "type": "integer"
+          },
+          "tools": {
+            "additionalProperties": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "description": "{tool: [contexts]}",
+            "title": "Tools",
+            "type": "object"
+          }
+        },
+        "required": [
+          "enabled",
+          "configured",
+          "model",
+          "month_cost_micro_usd",
+          "budget_usd",
+          "tools"
+        ],
+        "title": "AIStatusOut",
+        "type": "object"
+      },
       "AcceptedDocumentIn": {
         "properties": {
           "kind": {
@@ -21203,6 +21315,126 @@
         "summary": "Withdraw",
         "tags": [
           "privacy"
+        ]
+      }
+    },
+    "/api/v1/staff/ai/interactions": {
+      "get": {
+        "operationId": "jungle_ai_api_ai_interactions",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AIInteractionOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Ai Interactions",
+        "tags": [
+          "staff: ai"
+        ]
+      }
+    },
+    "/api/v1/staff/ai/status": {
+      "get": {
+        "operationId": "jungle_ai_api_ai_status",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIStatusOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Ai Status",
+        "tags": [
+          "staff: ai"
         ]
       }
     },

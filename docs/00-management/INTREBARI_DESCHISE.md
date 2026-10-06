@@ -88,6 +88,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q65](#q65) | Echipa pe site | SCĂZUTĂ | nimic (site-ul complet) | **REZOLVATĂ** (30.09.2026) |
 | [Q66](#q66) | Harta secțiunilor la lansare | SCĂZUTĂ | nimic (site-ul complet) | **REZOLVATĂ** (30.09.2026) |
 | [Q67](#q67) | Noutățile clubului și pragurile memento-urilor | SCĂZUTĂ | nimic (notificări) | DESCHISĂ |
+| [Q68](#q68) | Limita lunară și setările AI-ului | MEDIE | pornirea AI-ului | DESCHISĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -792,4 +793,14 @@ Titlul și instrucțiunea din §17, preluate integral:
   - „Mai ai X sesiuni luna aceasta” pleacă când rămân **2** sesiuni (`notifications.sessions_left_at`).
   - „Ne e dor de tine la antrenamente” pleacă după **2** antrenamente lipsă la rând, o singură dată pe șir (`notifications.absences_after`).
 - **Întrebare pentru proprietar:** vă convin aceste praguri? Vreți ca noutățile clubului să vină implicit tuturor clienților (atunci trebuie cerut acordul la crearea contului)?
+
+### <a id="q68"></a>Q68 — Limita lunară și setările AI-ului
+
+- **Prioritate:** MEDIE · **Blochează:** pornirea AI-ului (comutatorul `ai` rămâne oprit până la răspuns și până la cheia clubului, Q24)
+- **Stare:** DESCHISĂ
+- **Varianta implicită (DE_CONFIRMAT, în panou, la Configurare):**
+  - limita lunară de cost: **50 de dolari** (`ai.monthly_budget_usd`); atinsă, AI-ul nu mai răspunde până luna viitoare, restul sistemului merge normal;
+  - modelul: **Claude Opus 5.5** (`AI_MODEL=claude-opus-5-5` în `.env`), cu prețurile lui: 4 dolari pe milion de tokeni citiți și 20 pe milion de tokeni scriși (`ai.input_usd_per_mtok`, `ai.output_usd_per_mtok`); dacă schimbați modelul, se schimbă și prețurile;
+  - cât „gândește” la o întrebare: **medium** (`ai.effort`).
+- **Întrebare pentru proprietar:** ce limită lunară vreți pentru AI? Păstrăm modelul propus?
 

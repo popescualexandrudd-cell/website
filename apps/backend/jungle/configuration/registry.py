@@ -34,6 +34,10 @@ def positive_int(value: Any) -> bool:
     return isinstance(value, int) and not isinstance(value, bool) and value > 0
 
 
+def ai_effort(value: Any) -> bool:
+    return value in ("low", "medium", "high", "xhigh", "max")
+
+
 def optional_str(value: Any) -> bool:
     return value is None or (isinstance(value, str) and len(value) <= 250)
 
@@ -574,6 +578,43 @@ CONFIG: dict[str, ConfigSpec] = {
             Marker.TO_CONFIRM,
             "Cu câte zile înainte de final primește clientul „abonamentul expiră” (§11).",
             positive_int,
+            question="Q67",
+        ),
+        ConfigSpec(
+            "ai.monthly_budget_usd",
+            50,
+            Marker.TO_CONFIRM,
+            "Limita lunară de cost a AI-ului, în dolari (ADR-0019): atinsă, AI-ul nu mai răspunde "
+            "până luna viitoare.",
+            positive_int,
+            question="Q68",
+        ),
+        ConfigSpec(
+            "ai.input_usd_per_mtok",
+            4,
+            Marker.TO_CONFIRM,
+            "Prețul modelului din AI_MODEL pentru textul citit, în dolari pe milion de tokeni "
+            "(claude-opus-5-5: 4). Se schimbă odată cu modelul.",
+            positive_int,
+            question="Q68",
+        ),
+        ConfigSpec(
+            "ai.output_usd_per_mtok",
+            20,
+            Marker.TO_CONFIRM,
+            "Prețul modelului din AI_MODEL pentru textul scris, în dolari pe milion de tokeni "
+            "(claude-opus-5-5: 20). Se schimbă odată cu modelul.",
+            positive_int,
+            question="Q68",
+        ),
+        ConfigSpec(
+            "ai.effort",
+            "medium",
+            Marker.TO_CONFIRM,
+            "Cât de mult „gândește” modelul la fiecare întrebare: low, medium, high, xhigh, max "
+            "(mai mult = mai bine și mai scump).",
+            ai_effort,
+            question="Q68",
         ),
         ConfigSpec(
             "notifications.absences_after",
@@ -581,6 +622,7 @@ CONFIG: dict[str, ConfigSpec] = {
             Marker.TO_CONFIRM,
             "După câte antrenamente lipsă la rând primește clientul „ne e dor de tine” (§11).",
             positive_int,
+            question="Q67",
         ),
         ConfigSpec(
             "notifications.sessions_left_at",
@@ -588,6 +630,7 @@ CONFIG: dict[str, ConfigSpec] = {
             Marker.TO_CONFIRM,
             "La câte sesiuni rămase în lună primește clientul „mai ai X sesiuni” (§11).",
             positive_int,
+            question="Q67",
         ),
         ConfigSpec(
             "corporate.discount_percent",

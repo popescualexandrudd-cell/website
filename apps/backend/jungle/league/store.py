@@ -41,6 +41,7 @@ from jungle_league.score import MatchScore, ScoreError, SetScore, Side
 
 from jungle.audit import services as audit
 from jungle.core import clock
+from jungle.core.ai_origin import refuse_ai
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.league import projection
 from jungle.league import state as state_json
@@ -227,6 +228,7 @@ def record(
 
     A match (or its cancellation) is recorded once: recording it again returns the first
     event and changes nothing (a retried request is harmless)."""
+    refuse_ai("league")  # ADR-0019, the second barrier
     config = config_for(season)
     with transaction.atomic():
         snapshot = snapshot_for_update(season)

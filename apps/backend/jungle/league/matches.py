@@ -35,6 +35,7 @@ from jungle.bookings.models import Booking, BookingStatus, SessionType
 from jungle.cards import services as cards
 from jungle.configuration.services import get_config
 from jungle.core import clock
+from jungle.core.ai_origin import refuse_ai
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.http import client_ip
 from jungle.core.permissions import Action, Role
@@ -767,6 +768,7 @@ def staff_matches(
 
 def resolve(request: HttpRequest, match_id: uuid.UUID, action: str, reason: str) -> LeagueMatch:
     """Only with a written reason, audited. Applying still needs the booking paid (LG-096)."""
+    refuse_ai("scores")  # ADR-0019, the second barrier
     found = LeagueMatch.objects.filter(pk=match_id).first()
     if found is None:
         raise DomainError(ErrorCode.LEAGUE_MATCH_NOT_FOUND, status=404)

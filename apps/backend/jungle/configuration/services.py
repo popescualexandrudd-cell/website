@@ -13,6 +13,7 @@ from jungle.audit import services as audit
 from jungle.configuration.models import ConfigVersion, FeatureFlag, Marker
 from jungle.configuration.registry import CONFIG, FLAGS
 from jungle.core import clock
+from jungle.core.ai_origin import refuse_ai
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.permissions import Action
 
@@ -45,6 +46,7 @@ def list_flags() -> list[tuple[str, bool, str]]:
 
 
 def set_flag(request: HttpRequest, key: str, enabled: bool, reason: str) -> FeatureFlag:
+    refuse_ai("configuration")  # ADR-0019, the second barrier
     from jungle.accounts.services.authz import authorize
 
     user = authorize(request, Action.FLAGS_MANAGE)
@@ -104,6 +106,7 @@ def publish_config(
     reason: str,
     effective_from: datetime | None = None,
 ) -> ConfigVersion:
+    refuse_ai("configuration")  # ADR-0019, the second barrier
     from jungle.accounts.services.authz import authorize
 
     user = authorize(request, Action.CONFIG_MANAGE)

@@ -23,6 +23,7 @@ from jungle.accounts.models import User
 from jungle.accounts.services.authz import authorize
 from jungle.audit import services as audit
 from jungle.core import clock
+from jungle.core.ai_origin import refuse_ai
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.permissions import Action
 from jungle.ledger.models import (
@@ -103,6 +104,7 @@ def post(
     subject: str = "",
 ) -> LedgerTransaction:
     """Writes one balanced transaction. Lines with the same account are merged."""
+    refuse_ai("money")  # ADR-0019, the second barrier
     merged: dict[uuid.UUID, int] = {}
     accounts: dict[uuid.UUID, LedgerAccount] = {}
     for acc, amount in lines:

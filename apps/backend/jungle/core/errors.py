@@ -97,6 +97,9 @@ class ErrorCode(StrEnum):
     NOTIFICATIONS_PUSH_UNAVAILABLE = "notifications.push_unavailable"
     NOTIFICATIONS_UNKNOWN = "notifications.unknown"
     NOTIFICATIONS_TEMPLATE_INVALID = "notifications.template_invalid"
+    # The AI (ADR-0019)
+    AI_FORBIDDEN = "ai.forbidden"
+    AI_UNAVAILABLE = "ai.unavailable"
     ATTENDANCE_UNKNOWN_PERSON = "attendance.unknown_person"
     RESTRICTIONS_NOT_FOUND = "restrictions.not_found"
     PAYMENTS_IDEMPOTENCY_REQUIRED = "payments.idempotency_required"

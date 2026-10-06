@@ -10,6 +10,7 @@ from ninja.errors import AuthenticationError, HttpError, ValidationError
 
 from jungle.accounts.api import auth_router, me_router
 from jungle.accounts.api import staff_router as staff_users_router
+from jungle.ai.api import staff_router as ai_staff_router
 from jungle.attendance.api import staff_router as attendance_staff_router
 from jungle.audit.api import router as audit_router
 from jungle.blog.api import public_router as blog_router
@@ -96,6 +97,7 @@ api.add_router("/blog", blog_router)
 api.add_router("/staff", blog_staff_router)
 api.add_router("/notifications", notifications_router)
 api.add_router("/staff", notifications_staff_router)
+api.add_router("/staff", ai_staff_router)
 api.add_router("/staff", attendance_staff_router)
 api.add_router("/staff", pricing_staff_router)
 api.add_router("/account", account_router)

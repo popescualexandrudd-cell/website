@@ -24,6 +24,7 @@ from jungle.audit import services as audit
 from jungle.bookings.models import SessionType
 from jungle.configuration.services import get_config
 from jungle.core import clock
+from jungle.core.ai_origin import refuse_ai
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.permissions import Action
 from jungle.ledger.models import AccountKind, Payment, PaymentMethod
@@ -61,6 +62,7 @@ class VoucherData:
 
 
 def issue_voucher(actor: audit.Actor, holder: User, data: VoucherData, source: str) -> Voucher:
+    refuse_ai("vouchers")  # ADR-0019, the second barrier
     if data.kind == VoucherKind.PERCENT and not 1 <= data.value <= 100:
         raise DomainError(ErrorCode.VALIDATION_INVALID, params={"field": "value"})
     if data.value < 1 or data.valid_days < 1 or not data.reason.strip():
@@ -173,6 +175,7 @@ def voucher_value(voucher: Voucher, due: Due, to_pay: int) -> int:
 def redeem(request: HttpRequest, code: str, subject: Subject) -> Payment:
     """The holder uses a voucher towards a booking or a subscription (theirs or a
     partner's booking). Used once; the discount is posted in the ledger (R-121)."""
+    refuse_ai("vouchers")  # ADR-0019, the second barrier
     user = current_user(request)
     with transaction.atomic():
         voucher = (
@@ -219,6 +222,7 @@ def redeem(request: HttpRequest, code: str, subject: Subject) -> Payment:
 def cancel_voucher(
     request: HttpRequest, voucher_id: uuid.UUID, location_id: uuid.UUID, reason: str
 ) -> Voucher:
+    refuse_ai("vouchers")  # ADR-0019, the second barrier
     authorize(request, Action.VOUCHERS_MANAGE, location_id)
     if not reason.strip():
         raise DomainError(ErrorCode.VALIDATION_INVALID, params={"field": "reason"})
@@ -272,6 +276,7 @@ def _is_new_person(user: User) -> bool:
 
 
 def claim_referral(request: HttpRequest, code: str) -> Referral:
+    refuse_ai("vouchers")  # ADR-0019, the second barrier
     user = current_user(request)
     owner = ReferralCode.objects.select_related("user").filter(code=code.strip().upper()).first()
     if owner is None:
