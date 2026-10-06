@@ -1,6 +1,7 @@
 // The club's busiest evening, simulated (§13.3, ADR-0021, Stage 15): visitors on the website
 // (pages and the API they call: the league, the free courts, the classes) and the screens and
-// kiosks that refresh what they show. Run against the whole stack started as on the server:
+// kiosks that refresh what they show. A visitor reads a page for 10–20 seconds before the next
+// one, as people do. Run against the whole stack started as on the server:
 //   k6 run tests/load/club.js                                   # 500 visitors, 2 minutes
 //   VISITORS=50 HOLD=30s k6 run tests/load/club.js              # the short run of CI
 //   DOMAIN=<domain> RESOLVE=<server IP> k6 run tests/load/club.js
@@ -59,7 +60,7 @@ export function visitor() {
   api(`/bookings/availability?location=${LOCATION}&day=${today()}`);
   if (Math.random() < 0.3) api(`/classes?location=${LOCATION}`);
   if (Math.random() < 0.3) api(`/events/calendar?location=${LOCATION}`);
-  sleep(1 + Math.random() * 2);
+  sleep(10 + Math.random() * 10); // reading the page
 }
 
 // A screen or a kiosk refreshes its data about every 10 seconds (the real ones do it on

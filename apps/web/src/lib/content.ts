@@ -6,7 +6,7 @@
  * panel, the kiosks, the error texts or the legal texts (`web.legal`, approved by the owner, Q41). Cached under the "content" tag: the backend asks for a
  * refresh when a change is published. Without the API (a build with no backend): the catalogue.
  */
-import { API_URL } from "./site";
+import { SERVER_API_URL } from "./site";
 
 export const CONTENT_TAG = "content";
 
@@ -39,7 +39,7 @@ export function mergeTexts(catalogue: Tree, changes: Record<string, unknown>): T
 
 export async function publishedTexts(locale: string, fetchImpl: typeof fetch = fetch): Promise<Record<string, unknown>> {
   try {
-    const response = await fetchImpl(`${API_URL}/api/v1/content/texts?language=${locale}`, {
+    const response = await fetchImpl(`${SERVER_API_URL}/api/v1/content/texts?language=${locale}`, {
       next: { revalidate: 300, tags: [CONTENT_TAG] },
     });
     const body: unknown = response.ok ? await response.json() : {};

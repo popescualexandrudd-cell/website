@@ -3,7 +3,7 @@
  * published articles and one article by its address. Cached under the "blog" tag: the backend asks
  * for a refresh when an article is published, corrected or withdrawn (`jungle.blog.services`).
  */
-import { API_URL, LOCATION_SLUG } from "./site";
+import { SERVER_API_URL, LOCATION_SLUG } from "./site";
 
 export const BLOG_TAG = "blog";
 
@@ -24,7 +24,7 @@ export const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 async function read<T>(path: string, fetchImpl: typeof fetch): Promise<T | null> {
   try {
-    const response = await fetchImpl(`${API_URL}/api/v1/blog${path}`, { next: { revalidate: 300, tags: [BLOG_TAG] } });
+    const response = await fetchImpl(`${SERVER_API_URL}/api/v1/blog${path}`, { next: { revalidate: 300, tags: [BLOG_TAG] } });
     return response.ok ? ((await response.json()) as T) : null;
   } catch {
     return null;

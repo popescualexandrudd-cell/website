@@ -3,7 +3,7 @@
  * server from the public API (`GET /api/v1/cafe/menu`, only what is available now). Cached under
  * the "cafe" tag: the backend asks for a refresh when the menu changes.
  */
-import { API_URL, LOCATION_SLUG } from "./site";
+import { SERVER_API_URL, LOCATION_SLUG } from "./site";
 
 export const CAFE_TAG = "cafe";
 
@@ -13,7 +13,7 @@ export type CafeCategory = { id: string; name_ro: string; name_en: string; produ
 /** The menu, or null when the API does not answer (the section says so). */
 export async function cafeMenu(fetchImpl: typeof fetch = fetch): Promise<CafeCategory[] | null> {
   try {
-    const response = await fetchImpl(`${API_URL}/api/v1/cafe/menu?location=${LOCATION_SLUG}`, {
+    const response = await fetchImpl(`${SERVER_API_URL}/api/v1/cafe/menu?location=${LOCATION_SLUG}`, {
       next: { revalidate: 300, tags: [CAFE_TAG] },
     });
     if (!response.ok) return null;

@@ -41,4 +41,13 @@ fi
 "${compose[@]}" build ${JUNGLE_BUILD_ARGS:-}
 "${compose[@]}" up -d --remove-orphans
 rm -f "$STATE/previous-commit"
-echo "rollback: version $previous runs again."
+for _ in $(seq 1 36); do
+  if "${compose[@]}" exec -T backend python healthcheck.py >/dev/null 2>&1; then
+    echo "rollback: version $previous runs again."
+    exit 0
+  fi
+  sleep 5
+done
+echo "rollback: version $previous does not answer after 3 minutes; call us (logs:" >&2
+echo "          docker compose -f deploy/compose/prod/compose.yaml --env-file $ENV_FILE logs --tail 50)" >&2
+exit 1

@@ -1,6 +1,12 @@
 /** Site-wide constants. Only facts confirmed in docs/ or by the owner (no invented prices, numbers or reviews). */
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 export const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000").replace(/\/$/, "");
+/**
+ * Where the server reads the API: inside the stack in production (`API_INTERNAL_URL`, the proxy's
+ * internal listener), so the site never depends on reaching its own public address. In the
+ * browser the variable does not exist and this is API_URL. Never put it in a link or the page.
+ */
+export const SERVER_API_URL = (process.env.API_INTERNAL_URL || API_URL).replace(/\/$/, "");
 export const INDEXABLE = process.env.SITE_INDEXABLE === "true";
 
 export const FACTS = {

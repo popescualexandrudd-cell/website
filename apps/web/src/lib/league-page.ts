@@ -4,7 +4,7 @@
  * the public fields (R-012 as changed by Q49): names, rank, level, LP, place, match results. The
  * website only shows the league (invariant 2); nothing is written from here.
  */
-import { API_URL, LOCATION_SLUG } from "./site";
+import { SERVER_API_URL, LOCATION_SLUG } from "./site";
 
 export const LADDERS = ["doubles", "singles", "pairs"] as const;
 export type Ladder = (typeof LADDERS)[number];
@@ -55,7 +55,7 @@ const REVALIDATE = 60;
 
 async function read<T>(path: string, fetchImpl: typeof fetch): Promise<T | null> {
   try {
-    const response = await fetchImpl(`${API_URL}/api/v1/league/${path}`, { next: { revalidate: REVALIDATE } });
+    const response = await fetchImpl(`${SERVER_API_URL}/api/v1/league/${path}`, { next: { revalidate: REVALIDATE } });
     if (!response.ok) return null;
     return (await response.json()) as T;
   } catch {

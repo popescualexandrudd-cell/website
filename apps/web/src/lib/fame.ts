@@ -3,7 +3,7 @@
  * from the public API (`GET /api/v1/league/hall-of-fame`): name, rank tier and place only (R-012).
  * Cached with the league's 5-minute refresh.
  */
-import { API_URL, LOCATION_SLUG } from "./site";
+import { SERVER_API_URL, LOCATION_SLUG } from "./site";
 
 export type FameEntry = {
   kind: string;
@@ -22,7 +22,7 @@ export type FameSeason = {
 /** The seasons, newest first, or null when the API does not answer. */
 export async function hallOfFame(fetchImpl: typeof fetch = fetch): Promise<FameSeason[] | null> {
   try {
-    const response = await fetchImpl(`${API_URL}/api/v1/league/hall-of-fame?location=${LOCATION_SLUG}`, { next: { revalidate: 300 } });
+    const response = await fetchImpl(`${SERVER_API_URL}/api/v1/league/hall-of-fame?location=${LOCATION_SLUG}`, { next: { revalidate: 300 } });
     if (!response.ok) return null;
     const data: unknown = await response.json();
     return Array.isArray(data) ? (data as FameSeason[]) : null;

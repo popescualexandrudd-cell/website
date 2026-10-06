@@ -5,7 +5,7 @@
  * flag changes (POST /api/revalidate), and the pages refresh on their own within 5 minutes.
  * Without the API (a build with no backend) the site stays in pre-launch mode: never half a site.
  */
-import { API_URL } from "./site";
+import { SERVER_API_URL } from "./site";
 
 export type SiteMode = "prelaunch" | "full";
 export const FLAGS_TAG = "flags";
@@ -41,7 +41,7 @@ export function flagsFrom(flags: unknown): SiteFlags {
 
 export async function siteFlags(fetchImpl: typeof fetch = fetch): Promise<SiteFlags> {
   try {
-    const response = await fetchImpl(`${API_URL}/api/v1/config/flags`, { next: { revalidate: 300, tags: [FLAGS_TAG] } });
+    const response = await fetchImpl(`${SERVER_API_URL}/api/v1/config/flags`, { next: { revalidate: 300, tags: [FLAGS_TAG] } });
     return flagsFrom(response.ok ? await response.json() : null);
   } catch {
     return flagsFrom(null);

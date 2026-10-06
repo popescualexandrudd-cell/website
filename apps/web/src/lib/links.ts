@@ -3,7 +3,7 @@
  * read from the API on the server (`GET /api/v1/config/links`, the owner sets them in the panel,
  * Q58). Cached under the "config" tag: the backend asks for a refresh when a setting changes.
  */
-import { API_URL } from "./site";
+import { SERVER_API_URL } from "./site";
 
 export const CONFIG_TAG = "config";
 
@@ -14,7 +14,7 @@ export function httpsOrNull(value: unknown): string | null {
 
 export async function tennisClubUrl(fetchImpl: typeof fetch = fetch): Promise<string | null> {
   try {
-    const response = await fetchImpl(`${API_URL}/api/v1/config/links`, { next: { revalidate: 300, tags: [CONFIG_TAG] } });
+    const response = await fetchImpl(`${SERVER_API_URL}/api/v1/config/links`, { next: { revalidate: 300, tags: [CONFIG_TAG] } });
     if (!response.ok) return null;
     return httpsOrNull(((await response.json()) as { tennis_club_url?: unknown }).tennis_club_url);
   } catch {

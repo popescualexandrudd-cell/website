@@ -67,6 +67,17 @@ api.{$DOMAIN} {
 	}
 }
 
+# Inside the stack only (the port is not published): the website's server reads the API here,
+# without a round trip through the internet that a router without hairpin NAT would refuse.
+# For the backend it is the same as https://api.<domain>.
+http://:8080 {
+	request_header -X-Client-Cert-SHA256
+	reverse_proxy backend:8000 {
+		header_up Host api.{$DOMAIN}
+		header_up X-Forwarded-Proto https
+	}
+}
+
 # The panel and its API on one origin: the session cookie and the CSRF check need nothing else.
 admin.{$DOMAIN} {
 	import common

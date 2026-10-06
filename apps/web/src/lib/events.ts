@@ -5,7 +5,7 @@
  * backend asks for a refresh when an event changes; tournaments show within five minutes.
  */
 import { clubClock, clubDay } from "./live";
-import { API_URL, LOCATION_SLUG } from "./site";
+import { SERVER_API_URL, LOCATION_SLUG } from "./site";
 
 export const EVENTS_TAG = "events";
 export const KINDS = ["dj_night", "social", "club", "tournament"] as const;
@@ -30,7 +30,7 @@ export type Calendar = { items: CalendarItem[]; room: EventRoom | null };
 /** The calendar, or null when the API does not answer (the section says so). */
 export async function eventsCalendar(fetchImpl: typeof fetch = fetch): Promise<Calendar | null> {
   try {
-    const response = await fetchImpl(`${API_URL}/api/v1/events/calendar?location=${LOCATION_SLUG}`, {
+    const response = await fetchImpl(`${SERVER_API_URL}/api/v1/events/calendar?location=${LOCATION_SLUG}`, {
       next: { revalidate: 300, tags: [EVENTS_TAG] },
     });
     if (!response.ok) return null;

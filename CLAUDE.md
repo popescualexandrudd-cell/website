@@ -57,7 +57,7 @@ Sistem digital propriu pentru clubul **Jungle Padel** (Șoseaua Biruinței, lân
 | Website + cont (PWA) | `apps/web` | Next.js (App Router), TypeScript strict | 0007 |
 | Admin, chioșcuri, ecrane, afișaj cafenea | `apps/admin`, `apps/kiosk-league`, `apps/kiosk-payments`, `apps/court-screens`, `apps/cafe-display` | React + Vite, TypeScript strict | 0007, 0014 |
 | Hardware Bridge | `services/hardware-bridge` | Python asyncio, WebSocket pe localhost, Ed25519, SQLite doar-adăugare | 0013 |
-| Partajate | `packages/design-tokens`, `packages/ui`, `packages/api-client`, `packages/i18n` | Style Dictionary, React, openapi-typescript + openapi-fetch, ICU MessageFormat | 0007, 0018, 0020 |
+| Partajate | `packages/design-tokens`, `packages/kiosk-kit`, `packages/api-client`, `packages/i18n` | Style Dictionary, React, openapi-typescript + openapi-fetch, ICU MessageFormat | 0007, 0018, 0020, 0025 |
 | Infrastructură | `deploy/` | Docker Compose, Caddy, pgBackRest, Uptime Kuma, GlitchTip, Umami | 0015–0017 |
 | Calitate | `scripts/`, `tests/` | ruff, mypy, pytest, hypothesis, ESLint, Prettier, tsc, Vitest, Playwright, k6, axe | 0021 |
 

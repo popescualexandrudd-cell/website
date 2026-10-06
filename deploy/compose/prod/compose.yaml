@@ -103,6 +103,7 @@ services:
         NEXT_PUBLIC_UMAMI_WEBSITE_ID: ${UMAMI_WEBSITE_ID:-}
     environment:
       REVALIDATE_SECRET: ${WEB_REVALIDATE_SECRET:?set WEB_REVALIDATE_SECRET}
+      API_INTERNAL_URL: http://proxy:8080  # the server's own reads of the API, inside the stack
     restart: unless-stopped
     networks: [inside]
     depends_on: [backend]

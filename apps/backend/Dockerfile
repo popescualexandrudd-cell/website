@@ -25,4 +25,4 @@ WORKDIR /app/apps/backend
 ENV PATH="/app/.venv/bin:$PATH" DJANGO_SETTINGS_MODULE=jungle.settings
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s CMD ["python", "healthcheck.py"]
-CMD ["gunicorn", "jungle.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3", "--access-logfile", "-"]
+CMD ["gunicorn", "jungle.wsgi:application", "--config", "gunicorn.conf.py"]

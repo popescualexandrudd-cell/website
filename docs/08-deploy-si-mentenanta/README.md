@@ -11,8 +11,8 @@ Cerințele de deploy, backup și monitorizare (§14) și, pe măsură ce se cons
 - [Monitorizarea: ghidul proprietarului](05-ghid-monitorizare.md) (Etapa 14C)
 - [Instalarea serverului: pas cu pas](06-instalarea-serverului.md) (Etapa 14D)
 - [Mentenanța de zi cu zi: ghidul proprietarului](07-mentenanta.md) (Etapa 14E)
+- [Versiunile: cum se face și cum se instalează o versiune nouă](08-versiuni.md) (Etapa 16)
+- Ziua lansării, pas cu pas: [etapa-16/PLAN-LANSARE.md](../00-management/verificare/etapa-16/PLAN-LANSARE.md)
 
-## Urmează
-
-- Etapa 1A: rularea locală a proiectului.
-- Etapa 14: actualizare, revenire la versiunea anterioară, ce faci dacă un chioșc nu mai merge, schimbarea prețurilor, deschiderea unui sezon nou, verificări lunare, recuperare după dezastru (RPO/RTO).
+## Testul de încărcare
+`tests/load/club.js` (k6, Etapa 15): seara cea mai aglomerată (500 de vizitatori + ecranele), rulat de `scripts/test-deploy` pe stiva de producție și, înainte de lansare, pe serverul real (`DOMAIN=<domeniu> RESOLVE=<IP> k6 run tests/load/club.js`).

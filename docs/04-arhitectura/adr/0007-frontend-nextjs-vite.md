@@ -1,6 +1,6 @@
 # ADR-0007: Frontend — Next.js pentru website, React + Vite pentru celelalte aplicații
 
-- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
+- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar); punctul 4 înlocuit de ADR-0025 (06.10.2026)
 - **Data:** 2026-09-26
 - **Legat de:** §4.3, §8, §9, §15.1
 

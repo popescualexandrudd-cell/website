@@ -1,7 +1,7 @@
 import { createApiClient } from "@jungle/api-client";
-import { API_URL } from "./site";
+import { SERVER_API_URL } from "./site";
 
-export const api = createApiClient(API_URL);
+export const api = createApiClient(SERVER_API_URL);
 
 export type ApiErrorBody = { error?: { code?: string; params?: Record<string, unknown> } };
 

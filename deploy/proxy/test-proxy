@@ -6,7 +6,9 @@
 - the devices' sites refuse a visitor without a client certificate, or with one from another
   authority, and pass the fingerprint of the club's certificate to the backend;
 - the single-page apps answer every path with their index.html, the API goes to the backend,
-  `/ws/` to the live channel, and the bare domain sends visitors to www.
+  `/ws/` to the live channel, and the bare domain sends visitors to www;
+- the internal listener (the website server's reads, inside the stack) reaches the backend as
+  https://api.<domain> would, without the forged header.
 
 Uses the repository's Caddyfile with the upstreams pointed at a local echo server, local
 certificates and high ports. Needs `caddy` (CADDY=/path/to/caddy, or in PATH), `openssl`, `curl`.
@@ -31,6 +33,7 @@ HERE = Path(__file__).resolve().parent
 DOMAIN = "club.test"
 HTTPS = 18443
 HTTP = 18080
+INTERNAL = 18081  # the internal listener, :8080 in the stack
 APPS = ("admin", "kiosk-league", "kiosk-payments", "court-screens", "cafe-display")
 
 
@@ -98,6 +101,7 @@ def caddyfile(folder: Path, ports: dict[str, int], ca: Path) -> Path:
     )
     for host, port in ports.items():
         text = text.replace(host, f"127.0.0.1:{port}")
+    text = text.replace("http://:8080", f"http://:{INTERNAL}")
     text = text.replace("/etc/caddy/devices-ca.pem", str(ca))
     text = text.replace("root * /srv/", f"root * {folder}/srv/")
     text = text.replace("{$DOMAIN}", DOMAIN)
@@ -185,6 +189,17 @@ def main() -> int:
             status, _, head = get(DOMAIN, "/contact")
             check(status == 301 and head.get("location") == f"https://www.{DOMAIN}/contact",
                   "the bare domain sends to www")
+
+            print("the internal listener")
+            done = subprocess.run(["curl", "-s", "--noproxy", "*", "--max-time", "10", "-H",
+                                   f"X-Client-Cert-SHA256: {'f' * 64}",
+                                   f"http://127.0.0.1:{INTERNAL}/api/v1/config/flags"], capture_output=True)
+            seen = json.loads(done.stdout or b'{"upstream": "", "headers": {}}')
+            inner = {k.lower(): v for k, v in seen["headers"].items()}
+            check(seen["upstream"] == "backend", "internal: goes to the backend")
+            check(inner.get("host") == f"api.{DOMAIN}", "internal: the API's own name for the backend")
+            check(inner.get("x-forwarded-proto") == "https", "internal: as over HTTPS for the backend")
+            check("x-client-cert-sha256" not in inner, "internal: the forged header is removed")
 
             print("the monitoring")
             for host, upstream in (("status", "status"), ("erori", "errors"), ("statistici", "stats")):
