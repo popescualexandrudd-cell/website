@@ -1,3 +1,9 @@
 packages:
   - "packages/*"
   - "apps/*"
+
+# Security fixes for transitive dependencies (Stage 15, pnpm audit):
+# sharp < 0.35.5 and source-map-js < 1.2.2 arrive through next.
+overrides:
+  sharp: ">=0.35.5"
+  source-map-js: ">=1.2.2"

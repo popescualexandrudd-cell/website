@@ -10,9 +10,14 @@ as on the server, with throw-away secrets, a throw-away device authority and loc
 - Django's deployment checks pass inside the backend, and the scheduler has done a round;
 - a full backup is taken with pgBackRest and the restore test brings it back in a throw-away
   container, both reported to the backend (deploy/scripts/backup, ADR-0016);
+- the club's busiest evening (tests/load/club.js, Stage 15) with the full site on and a league
+  season open, when k6 is given (`K6=<path to k6>`; `LOAD_VISITORS`, `LOAD_HOLD`, default 50
+  visitors for 30 s);
 - a version update and the way back (deploy/scripts/update, deploy/scripts/rollback), from a
   copy of the repository with two versions, the second adding a database migration: the
-  rollback brings the database back to the moment before the update (point in time).
+  rollback brings the database back to the moment before the update (point in time);
+- the database emptied before the opening (deploy/scripts/reset-before-launch, Stage 16), then
+  a new backup.
 
 Everything is removed at the end (containers and volumes). Needs Docker with Compose, `openssl`,
 `curl`, and the ports 80 and 443 free.
@@ -169,6 +174,61 @@ def update_and_rollback(folder: Path, envf: Path, check: Any) -> None:
                             capture_output=True, text=True, env=run_env)
     check(health.returncode == 0, "the backend answers after the rollback")
 
+    print("the reset before the opening", flush=True)
+    check(not script("reset-before-launch", answer="wrong.test\n"), "reset: refused without the domain")
+    check(sql("SELECT count(*) FROM scheduler_jobrun WHERE job = 'backup.full' AND ok") != "0",
+          "reset: nothing deleted when refused")
+    check(script("reset-before-launch", answer=f"{DOMAIN}\n"), "reset: done with the domain typed")
+    check(sql("SELECT count(*) FROM scheduler_jobrun WHERE job LIKE 'backup.%'") == "0",
+          "reset: the database starts empty")
+    check(sql("SELECT count(*) FROM locations_location") != "0", "reset: the initial data is there")
+    check(script("backup", "full"), "reset: a new backup after it")
+
+
+SEASON = """
+from datetime import timedelta
+from jungle.core import clock
+from jungle.league.models import LeagueSeason, SeasonStatus
+from jungle.locations.models import Location
+now = clock.now()
+LeagueSeason.objects.create(location=Location.objects.get(slug="jungle-padel"), number=0,
+    name="Sezonul 0 (test de încărcare)", starts_at=now - timedelta(days=1),
+    ends_at=now + timedelta(days=90), status=SeasonStatus.ACTIVE, is_calibration=True)
+"""
+
+
+def load(compose: list[str], env: dict[str, str], check: Any) -> None:
+    """The busiest evening (tests/load/club.js) against the stack, as on the server."""
+    k6 = os.environ.get("K6")
+    if not k6:
+        print("the load test: skipped (no K6)", flush=True)
+        return
+    print("the load test", flush=True)
+    for command in (
+        ["set_flag", "full_site", "on", "--reason", "smoke: the load test"],
+        ["shell", "-c", SEASON],
+    ):
+        done = subprocess.run([*compose, "exec", "-T", "backend", "python", "manage.py", *command],
+                              capture_output=True, text=True, env=env)
+        check(done.returncode == 0, f"load: {command[0]}")
+        if done.returncode:
+            print(done.stdout[-2000:], done.stderr[-2000:], file=sys.stderr)
+    for _ in range(30):
+        if curl(f"www.{DOMAIN}", "/ro/liga")[0] == 200:
+            break
+        time.sleep(2)
+    check(curl(f"www.{DOMAIN}", "/ro/liga")[0] == 200, "load: the full site is on")
+    run = subprocess.run(
+        [k6, "run", "--quiet", str(ROOT / "tests" / "load" / "club.js")],
+        env={**os.environ, "DOMAIN": DOMAIN, "RESOLVE": "127.0.0.1", "NO_PROXY": "*",
+             "VISITORS": os.environ.get("LOAD_VISITORS", "50"),
+             "HOLD": os.environ.get("LOAD_HOLD", "30s")},
+        capture_output=True, text=True)
+    print(run.stdout[-4000:], flush=True)
+    check(run.returncode == 0, "load: the thresholds held (tests/load/club.js)")
+    if run.returncode:
+        print(run.stderr[-3000:], file=sys.stderr)
+
 
 def main() -> int:
     failures: list[str] = []
@@ -241,6 +301,7 @@ def main() -> int:
                 capture_output=True, text=True, env=env)
             check("['backup.full', 'backup.restore-test']" in reported.stdout,
                   "backups: both reported to the backend as done")
+            load(compose, env, check)
             update_and_rollback(folder, envf, check)
             finished = True
         finally:

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Once, after the beta and before the opening (Stage 16): the database starts empty again.
+# The beta's accounts, bookings and test payments cannot be removed one by one (the money
+# register is never edited, ADR-0009), so the whole database and its backups on the server are
+# deleted, then the current version starts on an empty database (migrations, initial data).
+# The settings in /etc/jungle, the devices' authority and the devices' enrolment files stay;
+# the devices are registered and enrolled again in the panel. Asks for the domain as confirmation.
+#   sudo deploy/scripts/reset-before-launch
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+cd "$ROOT"
+ENV_FILE="${JUNGLE_ENV_FILE:-/etc/jungle/prod.env}"
+compose=(docker compose -f deploy/compose/prod/compose.yaml --env-file "$ENV_FILE")
+[ -n "${COMPOSE_PROJECT:-}" ] && compose+=(-p "$COMPOSE_PROJECT")  # only for a test
+domain="$(grep -E '^DOMAIN=' "$ENV_FILE" | tail -n 1 | cut -d= -f2-)"
+version="$(grep -E '^JUNGLE_VERSION=' "$ENV_FILE" | tail -n 1 | cut -d= -f2-)"
+
+echo "This deletes EVERYTHING in the database of $domain and its backups on the server."
+echo "Use it only once, before the opening, after the beta."
+read -r -p "Write the domain ($domain) to go on: " answer
+[ -n "$domain" ] && [ "$answer" = "$domain" ] || { echo "stopped, nothing changed" >&2; exit 1; }
+
+"${compose[@]}" down
+project="$("${compose[@]}" config --format json | python3 -c 'import json,sys; print(json.load(sys.stdin)["name"])')"
+docker volume rm "${project}_db-data" "${project}_pgbackrest-repo" "${project}_redis-data"
+deploy/scripts/update "$version"
+echo "Done: an empty database. Next: the first administrator (deploy/scripts/manage bootstrap_admin …),"
+echo "then the devices again (Devices → Add, Enrol) and a first backup: deploy/scripts/backup full"

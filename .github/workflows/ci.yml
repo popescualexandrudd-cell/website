@@ -54,4 +54,8 @@ jobs:
         with:
           fetch-depth: 0  # the update test clones the repository
       - uses: astral-sh/setup-uv@v6
+      - uses: pnpm/action-setup@v4  # the dependency audit
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
       - run: scripts/test-deploy
