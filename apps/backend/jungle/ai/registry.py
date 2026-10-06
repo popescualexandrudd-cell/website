@@ -11,8 +11,10 @@ club's settings, and a test lists every registered tool. The second barrier is i
 from __future__ import annotations
 
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
+
+from django.http import HttpRequest
 
 from jungle.accounts.models import User
 from jungle.ai.models import Context
@@ -30,11 +32,15 @@ FORBIDDEN_WORDS = frozenset(
 
 @dataclass(frozen=True)
 class Call:
-    """Who the AI works for in this question."""
+    """Who the AI works for in this question. `request` is the person's own request: a tool acts
+    through the same services, with the same checks, as when the person clicks themselves.
+    `proposals`: the bookings a tool prepared, which the person confirms with a button (12D)."""
 
     context: Context
     location: Location
     user: User | None
+    request: HttpRequest | None = None
+    proposals: list[dict[str, Any]] = field(default_factory=list)
 
 
 @dataclass(frozen=True)

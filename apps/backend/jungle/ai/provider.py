@@ -100,10 +100,18 @@ def use(provider: AIProvider | None) -> None:
     _override = provider
 
 
+def configured() -> bool:
+    return settings.AI_FAKE or bool(settings.AI_API_KEY and settings.AI_MODEL)
+
+
 def current() -> AIProvider | None:
     """The configured provider, or None when the key or the model is missing."""
     if _override is not None:
         return _override
-    if not settings.AI_API_KEY or not settings.AI_MODEL:
+    if settings.AI_FAKE:  # development and the end-to-end tests only (settings refuse it elsewhere)
+        from jungle.ai.fake import FakeClubProvider
+
+        return FakeClubProvider()
+    if not configured():
         return None
     return ClaudeProvider(settings.AI_API_KEY, settings.AI_MODEL)

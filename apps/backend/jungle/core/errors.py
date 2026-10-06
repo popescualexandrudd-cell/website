@@ -100,6 +100,7 @@ class ErrorCode(StrEnum):
     # The AI (ADR-0019)
     AI_FORBIDDEN = "ai.forbidden"
     AI_UNAVAILABLE = "ai.unavailable"
+    AI_NOT_CONFIGURED = "ai.not_configured"
     ATTENDANCE_UNKNOWN_PERSON = "attendance.unknown_person"
     RESTRICTIONS_NOT_FOUND = "restrictions.not_found"
     PAYMENTS_IDEMPOTENCY_REQUIRED = "payments.idempotency_required"

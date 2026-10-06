@@ -27,6 +27,8 @@ export const FULL_HOME_NAMESPACES = [
 export const ACCOUNT_NAMESPACES = ["errors", "web.account"] as const;
 /** The bookings page: the court picker, its texts and the account's (sign-in state, errors). */
 export const BOOKING_NAMESPACES = ["errors", "web.account", "web.bookings"] as const;
+/** The club's assistant (Stage 12D), on every page of the full site when the AI is on. */
+export const ASSISTANT_NAMESPACES = ["errors", "web.assistant"] as const;
 
 /**
  * All of them. Each page gets only its own group (`ClientTexts`): the full home page no longer
@@ -34,7 +36,7 @@ export const BOOKING_NAMESPACES = ["errors", "web.account", "web.bookings"] as c
  * speed step of the effects work).
  */
 export const CLIENT_NAMESPACES = [
-  ...new Set([...SHELL_NAMESPACES, ...PRELAUNCH_NAMESPACES, ...TOKEN_NAMESPACES, ...FULL_HOME_NAMESPACES, ...ACCOUNT_NAMESPACES, ...BOOKING_NAMESPACES]),
+  ...new Set([...SHELL_NAMESPACES, ...PRELAUNCH_NAMESPACES, ...TOKEN_NAMESPACES, ...FULL_HOME_NAMESPACES, ...ACCOUNT_NAMESPACES, ...BOOKING_NAMESPACES, ...ASSISTANT_NAMESPACES]),
 ] as const;
 
 type Tree = { [key: string]: unknown };

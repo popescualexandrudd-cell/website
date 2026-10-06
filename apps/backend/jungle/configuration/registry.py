@@ -608,6 +608,14 @@ CONFIG: dict[str, ConfigSpec] = {
             question="Q68",
         ),
         ConfigSpec(
+            "ai.questions_per_hour",
+            30,
+            Marker.TO_CONFIRM,
+            "Câte întrebări poate pune asistentului o persoană (sau o adresă IP) pe oră.",
+            positive_int,
+            question="Q68",
+        ),
+        ConfigSpec(
             "ai.effort",
             "medium",
             Marker.TO_CONFIRM,

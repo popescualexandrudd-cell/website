@@ -92,6 +92,17 @@ def public(club: Any, user: User | None = None) -> Call:
 
 
 QUESTION = [{"role": "user", "content": "Când e deschis clubul?"}]
+# Every tool the AI has, and where (ADR-0019): a new tool changes this list and is reviewed.
+TOOLS = {
+    "class_schedule": ["member", "public"],
+    "club_info": ["member", "public", "staff"],
+    "court_availability": ["member", "public", "staff"],
+    "court_quote": ["member", "public", "staff"],
+    "my_bookings": ["member"],
+    "propose_booking": ["member"],
+}
+PUBLIC_TOOLS = sorted(name for name, where in TOOLS.items() if "public" in where)
+MEMBER_TOOLS = sorted(name for name, where in TOOLS.items() if "member" in where)
 
 
 # ---------------------------------------------------------------- the switch and the provider
@@ -114,19 +125,14 @@ def test_adr19_an_answer_through_a_tool_logged_without_its_text(
     assert (answer.text, answer.outcome) == ("Între 08:00 și 23:00.", Outcome.ANSWERED)
 
     first, second = fake.calls
-    assert first["tools"] == [
-        {
-            "name": "club_info",
-            "description": registry.find("club_info", Context.MEMBER).description,  # type: ignore[union-attr]
-            "input_schema": {
-                "type": "object",
-                "properties": {},
-                "required": [],
-                "additionalProperties": False,
-            },
-            "strict": True,
-        }
-    ]
+    assert [t["name"] for t in first["tools"]] == MEMBER_TOOLS
+    info = next(t for t in first["tools"] if t["name"] == "club_info")
+    assert info["strict"] is True and info["input_schema"] == {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": False,
+    }
     assert "signed-in client" in first["system"] and first["effort"] == "medium"
     # the model's blocks go back unchanged, then the tool's result
     assert second["messages"][1] == {"role": "assistant", "content": uses("club_info").blocks}
@@ -182,7 +188,7 @@ def test_adr19_tools_only_from_the_context_and_errors_go_back_to_the_model(
     )
     answer = services.ask(public(club), QUESTION)
     assert answer.outcome == Outcome.ANSWERED
-    assert [t["name"] for t in fake.calls[0]["tools"]] == ["broken_helper", "club_info"]
+    assert [t["name"] for t in fake.calls[0]["tools"]] == sorted(["broken_helper", *PUBLIC_TOOLS])
     errors = [json.loads(m["content"][0]["content"]) for m in fake.calls[-1]["messages"][2::2]]
     assert errors == [
         {"error": "ai.unknown_tool"},  # a staff tool, asked for by the public assistant
@@ -226,7 +232,7 @@ def test_adr19_the_monthly_limit_stops_new_questions_and_the_current_one(
 # ---------------------------------------------------------------- the double barrier (invariant 4)
 def test_adr19_barrier_1_no_tool_can_change_what_the_ai_may_not_touch() -> None:
     # Every tool the AI has, by context; a new tool changes this list (and is reviewed).
-    assert registry.names() == {"club_info": ["member", "public", "staff"]}
+    assert registry.names() == TOOLS
     nothing: Callable[[Call, dict[str, Any]], dict[str, Any]] = lambda c, i: {}  # noqa: E731
     for name in ("set_score", "issue_voucher", "pay_booking", "lp_preview", "give_discount"):
         with pytest.raises(ValueError, match="may not have"):
@@ -318,7 +324,7 @@ def test_adr19_the_panel_sees_the_state_the_spend_and_the_log(
         "model": "",
         "month_cost_micro_usd": 100 * 4 + 20 * 20,
         "budget_usd": 50,
-        "tools": {"club_info": ["member", "public", "staff"]},
+        "tools": TOOLS,
     }
     [row] = api.get(f"/staff/ai/interactions?location_id={club.location.id}").json()
     assert (row["context"], row["outcome"], row["steps"]) == ("public", "answered", 1)

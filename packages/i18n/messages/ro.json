@@ -228,7 +228,8 @@
     "notifications.unknown": "Notificarea nu există.",
     "notifications.template_invalid": "Textul are o greșeală de formulare a câmpurilor (de forma '{{ first_name }}'). Verifică acoladele.",
     "ai.forbidden": "Asistentul AI nu are voie să schimbe scoruri, ranguri, bani, prețuri, vouchere, acorduri sau setările clubului.",
-    "ai.unavailable": "Asistentul AI nu este disponibil acum."
+    "ai.unavailable": "Asistentul AI nu este disponibil acum.",
+    "ai.not_configured": "AI-ul se pornește doar după ce cheia și modelul sunt puse în fișierul .env de pe server."
   },
   "web": {
     "meta": {
@@ -2070,6 +2071,31 @@
       "demo": "Articol demo",
       "back": "← Toate articolele",
       "reading": "{minutes, plural, one {un minut de citit} few {# minute de citit} other {# de minute de citit}}"
+    },
+    "assistant": {
+      "open": "Întreabă clubul",
+      "title": "Asistentul clubului",
+      "close": "Închide asistentul",
+      "notice": "Asistent AI: poate greși. Nu scrie date personale sensibile. Nu rezervă și nu încasează nimic singur: rezervarea o confirmi tu, plata se face la club.",
+      "hint": "Întreabă de program, de terenuri libere, de prețuri sau de antrenamente. Dacă ești în cont, îți pregătesc și rezervarea.",
+      "you": "Tu",
+      "club": "Asistentul",
+      "question": "Întrebarea ta",
+      "placeholder": "De exemplu: e liber un teren mâine seară?",
+      "send": "Trimite",
+      "thinking": "Caut în datele clubului…",
+      "offline": "Nu am putut ajunge la club. Încearcă din nou.",
+      "proposal": "{court}, {when}, {minutes} de minute: {total}.",
+      "provisional": "(preț orientativ, încă nestabilit)",
+      "confirm": "Rezervă",
+      "booked": "Rezervat. Îl găsești în cont; plata se face la Chioșcul de Plăți.",
+      "outcomes": {
+        "empty": "Nu am un răspuns acum. Întreabă la recepție.",
+        "refused": "La asta nu pot răspunde. Întreabă la recepție.",
+        "budget": "Asistentul nu mai răspunde luna aceasta. Întreabă la recepție.",
+        "steps": "Nu am reușit să găsesc răspunsul. Încearcă o întrebare mai scurtă.",
+        "failed": "Asistentul nu e disponibil acum. Încearcă mai târziu."
+      }
     }
   },
   "kiosk": {

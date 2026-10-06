@@ -101,3 +101,26 @@ Toate trec prin același loc (`notifications.notify`), deci pe email și pe tele
 ### Ce urmează (12D)
 Asistentul clubului pe site și în cont: răspunde din datele clubului, verifică disponibilitatea și rezervă pentru clientul intrat în cont. Plata rămâne la chioșc (R-063). Anularea rămâne în cont: o anulare mișcă bani (credit sau taxă), deci bariera 2 o refuză pentru AI.
 
+## Faza 12D — Asistentul clubului (06.10.2026)
+
+### Ce face
+1. **Pe site, un buton „Întreabă clubul”** în colțul fiecărei pagini a site-ului complet, doar când AI-ul e pornit (comutatorul `ai`). Panoul spune de la început că e un **asistent AI care poate greși** (Regulamentul european privind IA, art. 50) și că nu rezervă și nu încasează nimic singur.
+2. **Răspunde din datele clubului**, prin uneltele lui, niciodată din memorie:
+   - programul, adresa și contactul public (`club_info`);
+   - terenurile libere pe o zi, pentru o durată (`court_availability`), din rezervările reale, fără date despre cine a rezervat;
+   - prețul unui teren pentru o oră aleasă (`court_quote`), calculat exact ca la rezervare; un preț încă nestabilit (DE_STABILIT) e spus ca „orientativ”;
+   - antrenamentele din următoarele 7 zile, cu locurile rămase (`class_schedule`).
+3. **Pentru un client intrat în cont:**
+   - îi spune rezervările lui viitoare, niciodată ale altcuiva (`my_bookings`);
+   - **îi pregătește o rezervare** (`propose_booking`) după toate regulile unei rezervări: email confirmat, fără blocare, ora pe grilă, în program, terenul liber. Clientul o face apăsând **„Rezervă”** sub răspuns. Butonul cheamă aceeași rezervare ca pagina de rezervări. AI-ul nu rezervă singur, iar plata rămâne la Chioșcul de Plăți (R-063).
+4. **Limite:** cel mult 30 de întrebări pe oră de persoană (sau de adresă, fără cont; Q68), cel mult 20 de replici și 2.000 de caractere pe replică. Conversația stă doar în pagină: serverul nu păstrează textul.
+5. **Comutatorul `ai` nu mai poate fi pornit fără cheie și model** pe server (`ai.not_configured`). Astfel butonul nu apare degeaba.
+6. **Un furnizor „de test”, scriptat** (`AI_FAKE`, doar în dezvoltare și în testele cap-coadă; refuzat pe serverul de producție). Nu e un AI: urmează un script fix prin uneltele reale ale clubului. Așa se testează tot drumul, inclusiv barierele și jurnalul, fără cheie și fără cost.
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Teste backend (`jungle/ai`, 100% pe ramuri) | 19 (8 noi): terenurile libere din rezervări, fără ore trecute și fără date personale; prețul ca la rezervare și „orientativ”; antrenamentele săptămânii; rezervările proprii; rezervarea pregătită, nu făcută (email neconfirmat, teren ocupat); furnizorul scriptat pe tot drumul; pe site: vizitator, client, butonul care rezervă prin endpoint-ul obișnuit, limita pe oră, AI oprit; comutatorul care așteaptă cheia. |
+| Teste pe site | Conversația trimisă cum o acceptă API-ul (unitar). Cap-coadă, cu AI-ul pornit și furnizorul scriptat: un vizitator întreabă de program (accesibilitate, Escape și focusul înapoi pe buton); un client intrat în cont primește rezervarea pregătită și o face cu butonul; în engleză. |
+| Panou | Testul cap-coadă arată modelul scriptat al mediului de test („fake-club”). |
+

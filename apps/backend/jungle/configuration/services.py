@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
 
+from django.conf import settings
 from django.db import connection, transaction
 from django.http import HttpRequest
 
@@ -45,6 +46,10 @@ def list_flags() -> list[tuple[str, bool, str]]:
     return [(k, rows.get(k, s.default), s.description) for k, s in FLAGS.items()]
 
 
+def ai_configured() -> bool:
+    return settings.AI_FAKE or bool(settings.AI_API_KEY and settings.AI_MODEL)
+
+
 def set_flag(request: HttpRequest, key: str, enabled: bool, reason: str) -> FeatureFlag:
     refuse_ai("configuration")  # ADR-0019, the second barrier
     from jungle.accounts.services.authz import authorize
@@ -52,6 +57,9 @@ def set_flag(request: HttpRequest, key: str, enabled: bool, reason: str) -> Feat
     user = authorize(request, Action.FLAGS_MANAGE)
     if key not in FLAGS:
         raise DomainError(ErrorCode.FLAGS_UNKNOWN, status=404, params={"flag": key})
+    if key == "ai" and enabled and not ai_configured():
+        # ADR-0019: the AI is turned on only once the key and the model are on the server.
+        raise DomainError(ErrorCode.AI_NOT_CONFIGURED, status=409)
     with transaction.atomic():
         flag, _ = FeatureFlag.objects.select_for_update().get_or_create(
             key=key, defaults={"enabled": FLAGS[key].default}

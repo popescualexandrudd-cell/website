@@ -228,7 +228,8 @@
     "notifications.unknown": "The notification does not exist.",
     "notifications.template_invalid": "The text has a mistake in its fields (written '{{ first_name }}'). Check the braces.",
     "ai.forbidden": "The AI assistant may not change scores, ranks, money, prices, vouchers, consents or the club's settings.",
-    "ai.unavailable": "The AI assistant is not available right now."
+    "ai.unavailable": "The AI assistant is not available right now.",
+    "ai.not_configured": "The AI can be turned on only once the key and the model are in the server's .env file."
   },
   "web": {
     "meta": {
@@ -2070,6 +2071,31 @@
       "demo": "Demo article",
       "back": "← All articles",
       "reading": "{minutes, plural, one {one minute to read} other {# minutes to read}}"
+    },
+    "assistant": {
+      "open": "Ask the club",
+      "title": "The club's assistant",
+      "close": "Close the assistant",
+      "notice": "AI assistant: it can make mistakes. Do not write sensitive personal data. It does not book or charge anything by itself: you confirm the booking, and you pay at the club.",
+      "hint": "Ask about the hours, free courts, prices or classes. If you are signed in, I also prepare your booking.",
+      "you": "You",
+      "club": "The assistant",
+      "question": "Your question",
+      "placeholder": "For example: is a court free tomorrow evening?",
+      "send": "Send",
+      "thinking": "Looking in the club's data…",
+      "offline": "We could not reach the club. Please try again.",
+      "proposal": "{court}, {when}, {minutes} minutes: {total}.",
+      "provisional": "(indicative price, not fixed yet)",
+      "confirm": "Book",
+      "booked": "Booked. You find it in your account; you pay at the Payments Kiosk.",
+      "outcomes": {
+        "empty": "I have no answer right now. Please ask at reception.",
+        "refused": "I cannot answer that. Please ask at reception.",
+        "budget": "The assistant does not answer any more this month. Please ask at reception.",
+        "steps": "I could not find the answer. Try a shorter question.",
+        "failed": "The assistant is not available right now. Please try later."
+      }
     }
   },
   "kiosk": {

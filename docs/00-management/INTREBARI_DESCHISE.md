@@ -802,5 +802,6 @@ Titlul și instrucțiunea din §17, preluate integral:
   - limita lunară de cost: **50 de dolari** (`ai.monthly_budget_usd`); atinsă, AI-ul nu mai răspunde până luna viitoare, restul sistemului merge normal;
   - modelul: **Claude Opus 5.5** (`AI_MODEL=claude-opus-5-5` în `.env`), cu prețurile lui: 4 dolari pe milion de tokeni citiți și 20 pe milion de tokeni scriși (`ai.input_usd_per_mtok`, `ai.output_usd_per_mtok`); dacă schimbați modelul, se schimbă și prețurile;
   - cât „gândește” la o întrebare: **medium** (`ai.effort`).
+  - câte întrebări poate pune o persoană (sau o adresă IP) asistentului pe oră: **30** (`ai.questions_per_hour`).
 - **Întrebare pentru proprietar:** ce limită lunară vreți pentru AI? Păstrăm modelul propus?
 

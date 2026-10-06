@@ -149,6 +149,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/ai/ask": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Ask
+         * @description The club's assistant: for a visitor, or for the signed-in client (their own bookings, and a
+         *     booking prepared for them to confirm). It never books, pays or changes the league.
+         */
+        post: operations["jungle_ai_api_ask"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/csrf": {
         parameters: {
             query?: never;
@@ -4606,6 +4627,28 @@ export interface components {
              */
             updated_at: string;
         };
+        /** AskIn */
+        AskIn: {
+            /** Location */
+            location: string;
+            /**
+             * Messages
+             * @description the conversation, ending with the question
+             */
+            messages: components["schemas"]["TurnIn"][];
+        };
+        /** AskOut */
+        AskOut: {
+            /**
+             * Outcome
+             * @description answered, refused, budget, steps or failed
+             */
+            outcome: string;
+            /** Proposals */
+            proposals: components["schemas"]["ProposalOut"][];
+            /** Text */
+            text: string;
+        };
         /** AuditOut */
         AuditOut: {
             /** Action */
@@ -7696,6 +7739,37 @@ export interface components {
             matches: components["schemas"]["ResultOut"][];
             player: components["schemas"]["PlayerOut"];
         };
+        /**
+         * ProposalOut
+         * @description A booking prepared by the assistant: the person confirms it (POST /api/v1/bookings).
+         */
+        ProposalOut: {
+            /** Duration Minutes */
+            duration_minutes: number;
+            /**
+             * Provisional
+             * @description the club has not fixed this price yet (DE_STABILIT)
+             */
+            provisional: boolean;
+            /**
+             * Resource Id
+             * Format: uuid
+             */
+            resource_id: string;
+            /** Resource Name */
+            resource_name: string;
+            session_type: components["schemas"]["SessionType"];
+            /**
+             * Starts At
+             * Format: date-time
+             */
+            starts_at: string;
+            /**
+             * Total
+             * @description as the person reads it, e.g. "120 lei"
+             */
+            total: string;
+        };
         /** ProposeIn */
         ProposeIn: {
             /**
@@ -9417,6 +9491,16 @@ export interface components {
             /** Status */
             status: string;
         };
+        /** TurnIn */
+        TurnIn: {
+            /** Content */
+            content: string;
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "user" | "assistant";
+        };
         /** TypeIn */
         TypeIn: {
             session_type: components["schemas"]["SessionType"];
@@ -10052,6 +10136,75 @@ export interface operations {
             };
             /** @description Conflict */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_ai_api_ask: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AskIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AskOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -18766,6 +18919,15 @@ export interface operations {
             };
             /** @description Not Found */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };

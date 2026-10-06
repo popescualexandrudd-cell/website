@@ -287,6 +287,11 @@ VAPID_SUBJECT = env("VAPID_SUBJECT", "") or ""
 # either, the AI stays off (the switch `ai` too) and everything else works as usual.
 AI_API_KEY = env("AI_API_KEY", "") or ""
 AI_MODEL = env("AI_MODEL", "") or ""
+# Development and the end-to-end tests only: a scripted provider (`jungle.ai.fake`, not an AI) so
+# the assistant runs without a key. Refused in staging and production.
+AI_FAKE = env_bool("AI_FAKE", False)
+if AI_FAKE and IS_PRODUCTION_LIKE:
+    raise ImproperlyConfigured("AI_FAKE is for development only")
 
 # Emergency Django admin (§8.6): Admin role + 2FA only.
 EMERGENCY_ADMIN_ENABLED = env_bool("EMERGENCY_ADMIN_ENABLED", True)

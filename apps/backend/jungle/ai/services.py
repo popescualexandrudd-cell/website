@@ -20,6 +20,7 @@ from django.db import transaction
 from django.db.models import QuerySet, Sum
 from django.http import HttpRequest
 
+from jungle.accounts.models import User
 from jungle.accounts.services.authz import authorize
 from jungle.ai import provider as providers
 from jungle.ai.models import AIInteraction, Context, Outcome
@@ -29,7 +30,10 @@ from jungle.configuration.services import get_config, is_enabled
 from jungle.core import clock
 from jungle.core.ai_origin import acting_for_ai
 from jungle.core.errors import DomainError, ErrorCode
+from jungle.core.http import client_ip
 from jungle.core.permissions import Action
+from jungle.core.ratelimit import increment
+from jungle.locations.services import get_location_by_slug
 
 logger = logging.getLogger(__name__)
 MAX_STEPS = 6  # model turns per question (each tool round is one)
@@ -43,7 +47,11 @@ and suggest asking the club's reception. Never invent prices, times, people or r
 You cannot change scores, ratings, LP, ranks, standings, payments, prices, discounts, vouchers, \
 consents or the club's settings, and no tool does: scores are entered only at the League Kiosk \
 in the club, payments are made at the Payments Kiosk. Say so when asked.
-Never reveal anything about another person."""
+Never reveal anything about another person.
+When a price is marked provisional, say that the club has not fixed it yet. A booking is never \
+made by you: for a signed-in client you prepare it (propose_booking) after they chose the court, \
+the day, the time and the duration, and they confirm it with the button under your answer.\
+"""
 
 CONTEXT_NOTES = {
     Context.PUBLIC: "You talk with a visitor of the website who is not signed in.",
@@ -170,6 +178,30 @@ def ask(call: Call, messages: list[dict[str, Any]]) -> Answer:
     return Answer(text=text.strip(), outcome=Outcome(log.outcome), interaction_id=log.pk)
 
 
+# ---------------------------------------------------------------- the website (12D)
+@dataclass(frozen=True)
+class WebAnswer:
+    answer: Answer
+    proposals: list[dict[str, Any]]
+
+
+def ask_from_web(
+    request: HttpRequest, location_slug: str, messages: list[dict[str, Any]]
+) -> WebAnswer:
+    """The assistant on the website: the public one, or the client's own when signed in. A limited
+    number of questions per hour, per person (or per address when not signed in)."""
+    location = get_location_by_slug(location_slug)
+    if not messages or messages[-1]["role"] != "user":
+        raise DomainError(ErrorCode.VALIDATION_INVALID, params={"field": "messages"})
+    user = request.user if isinstance(request.user, User) and request.user.is_active else None
+    who = f"user:{user.pk}" if user is not None else f"ip:{client_ip(request) or 'unknown'}"
+    if increment(f"ai:ask:{who}", 3600) > int(get_config("ai.questions_per_hour")):
+        raise DomainError(ErrorCode.AUTH_RATE_LIMITED, status=429)
+    call = Call(Context.MEMBER if user else Context.PUBLIC, location, user, request)
+    answer = ask(call, [{"role": m["role"], "content": m["content"]} for m in messages])
+    return WebAnswer(answer, list(call.proposals))
+
+
 # ---------------------------------------------------------------- for the panel
 @dataclass(frozen=True)
 class Status:
@@ -185,8 +217,8 @@ def status(request: HttpRequest, location_id: uuid.UUID) -> Status:
     authorize(request, Action.AI_VIEW, location_id)
     return Status(
         enabled=is_enabled("ai"),
-        configured=bool(settings.AI_API_KEY and settings.AI_MODEL),
-        model=settings.AI_MODEL,
+        configured=providers.configured(),
+        model="fake-club" if settings.AI_FAKE else settings.AI_MODEL,
         month_cost_micro_usd=month_cost(),
         budget_usd=int(get_config("ai.monthly_budget_usd")),
         tools=names(),

@@ -3575,3 +3575,117 @@ html[data-motion="on"] .fx-pop {
   height: 24px;
   accent-color: var(--color-brass-400);
 }
+
+/* The club's assistant (Stage 12D): a button at the corner, a panel above it; only with `ai` on. */
+.assistant {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 40;
+  display: grid;
+  justify-items: end;
+  gap: 12px;
+  max-width: calc(100vw - 32px);
+}
+.assistant__open {
+  box-shadow: var(--shadow-soft);
+  background: var(--color-night-800);
+}
+.assistant__panel {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: 12px;
+  width: min(420px, calc(100vw - 32px));
+  max-height: min(640px, calc(100vh - 120px));
+  padding: 16px;
+  background: var(--color-night-800);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lift);
+}
+.assistant__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.assistant__title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+}
+.assistant__close {
+  min-width: 44px;
+  min-height: 44px;
+  font-size: 1.5rem;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+.assistant__close:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+.assistant__notice {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-3);
+}
+.assistant__log {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+}
+.assistant__hint {
+  color: var(--text-2);
+}
+.assistant__turn {
+  padding: 10px 12px;
+  white-space: pre-wrap;
+  border-radius: var(--radius-md);
+}
+.assistant__turn--user {
+  justify-self: end;
+  max-width: 85%;
+  background: var(--color-night-700);
+}
+.assistant__turn--assistant {
+  justify-self: start;
+  max-width: 95%;
+  border: 1px solid var(--line);
+}
+.assistant__proposal {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.assistant__proposal p {
+  margin: 0;
+}
+.assistant__provisional {
+  color: var(--text-3);
+}
+.assistant__done {
+  color: var(--color-forest-400);
+}
+.assistant__error {
+  color: var(--color-danger);
+}
+.assistant__form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: end;
+}
+.assistant__input {
+  resize: vertical;
+  min-height: 48px;
+}

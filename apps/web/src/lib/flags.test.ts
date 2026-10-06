@@ -30,14 +30,16 @@ describe("site mode", () => {
       { key: "web_effects", enabled: true },
       { key: "web_hero_video", enabled: true },
     ];
-    expect(flagsFrom(all)).toEqual({ mode: "full", effects: true, heroVideo: true, children: false });
-    expect(flagsFrom(all.slice(0, 2))).toEqual({ mode: "full", effects: true, heroVideo: false, children: false });
+    expect(flagsFrom(all)).toEqual({ mode: "full", effects: true, heroVideo: true, children: false, assistant: false });
+    expect(flagsFrom(all.slice(0, 2))).toEqual({ mode: "full", effects: true, heroVideo: false, children: false, assistant: false });
     expect(flagsFrom([{ key: "full_site", enabled: true }, { key: "web_effects", enabled: "true" }]).effects).toBe(false);
     // The pre-launch page never gets them (Q64).
-    expect(flagsFrom([{ key: "full_site", enabled: false }, ...all.slice(1)])).toEqual({ mode: "prelaunch", effects: false, heroVideo: false, children: false });
-    expect(flagsFrom(null)).toEqual({ mode: "prelaunch", effects: false, heroVideo: false, children: false });
+    expect(flagsFrom([{ key: "full_site", enabled: false }, ...all.slice(1)])).toEqual({ mode: "prelaunch", effects: false, heroVideo: false, children: false, assistant: false });
+    expect(flagsFrom(null)).toEqual({ mode: "prelaunch", effects: false, heroVideo: false, children: false, assistant: false });
     expect(flagsFrom([...all, { key: "child_accounts", enabled: true }]).children).toBe(true); // Q7
+    expect(flagsFrom([...all, { key: "ai", enabled: true }]).assistant).toBe(true); // ADR-0019
+    expect(flagsFrom([{ key: "full_site", enabled: false }, { key: "ai", enabled: true }]).assistant).toBe(false);
     expect(flagsFrom([{ key: "full_site", enabled: false }, { key: "child_accounts", enabled: true }]).children).toBe(false);
-    expect(await siteFlags(answer(all) as unknown as typeof fetch)).toEqual({ mode: "full", effects: true, heroVideo: true, children: false });
+    expect(await siteFlags(answer(all) as unknown as typeof fetch)).toEqual({ mode: "full", effects: true, heroVideo: true, children: false, assistant: false });
   });
 });

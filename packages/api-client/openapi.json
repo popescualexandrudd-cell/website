@@ -489,6 +489,58 @@
         "title": "ArticleSummaryOut",
         "type": "object"
       },
+      "AskIn": {
+        "properties": {
+          "location": {
+            "maxLength": 60,
+            "title": "Location",
+            "type": "string"
+          },
+          "messages": {
+            "description": "the conversation, ending with the question",
+            "items": {
+              "$ref": "#/components/schemas/TurnIn"
+            },
+            "maxItems": 20,
+            "minItems": 1,
+            "title": "Messages",
+            "type": "array"
+          }
+        },
+        "required": [
+          "location",
+          "messages"
+        ],
+        "title": "AskIn",
+        "type": "object"
+      },
+      "AskOut": {
+        "properties": {
+          "outcome": {
+            "description": "answered, refused, budget, steps or failed",
+            "title": "Outcome",
+            "type": "string"
+          },
+          "proposals": {
+            "items": {
+              "$ref": "#/components/schemas/ProposalOut"
+            },
+            "title": "Proposals",
+            "type": "array"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "outcome",
+          "proposals"
+        ],
+        "title": "AskOut",
+        "type": "object"
+      },
       "AuditOut": {
         "properties": {
           "action": {
@@ -7777,6 +7829,53 @@
         "title": "ProfileOut",
         "type": "object"
       },
+      "ProposalOut": {
+        "description": "A booking prepared by the assistant: the person confirms it (POST /api/v1/bookings).",
+        "properties": {
+          "duration_minutes": {
+            "title": "Duration Minutes",
+            "type": "integer"
+          },
+          "provisional": {
+            "description": "the club has not fixed this price yet (DE_STABILIT)",
+            "title": "Provisional",
+            "type": "boolean"
+          },
+          "resource_id": {
+            "format": "uuid",
+            "title": "Resource Id",
+            "type": "string"
+          },
+          "resource_name": {
+            "title": "Resource Name",
+            "type": "string"
+          },
+          "session_type": {
+            "$ref": "#/components/schemas/SessionType"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "total": {
+            "description": "as the person reads it, e.g. \"120 lei\"",
+            "title": "Total",
+            "type": "string"
+          }
+        },
+        "required": [
+          "resource_id",
+          "resource_name",
+          "starts_at",
+          "duration_minutes",
+          "session_type",
+          "total",
+          "provisional"
+        ],
+        "title": "ProposalOut",
+        "type": "object"
+      },
       "ProposeIn": {
         "properties": {
           "booking_id": {
@@ -11758,6 +11857,30 @@
         "title": "TransitionOut",
         "type": "object"
       },
+      "TurnIn": {
+        "properties": {
+          "content": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Content",
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "user",
+              "assistant"
+            ],
+            "title": "Role",
+            "type": "string"
+          }
+        },
+        "required": [
+          "role",
+          "content"
+        ],
+        "title": "TurnIn",
+        "type": "object"
+      },
       "TypeIn": {
         "properties": {
           "session_type": {
@@ -13007,6 +13130,89 @@
         "summary": "Redeem",
         "tags": [
           "account"
+        ]
+      }
+    },
+    "/api/v1/ai/ask": {
+      "post": {
+        "description": "The club's assistant: for a visitor, or for the signed-in client (their own bookings, and a\nbooking prepared for them to confirm). It never books, pays or changes the league.",
+        "operationId": "jungle_ai_api_ask",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AskIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AskOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Ask",
+        "tags": [
+          "ai"
         ]
       }
     },
@@ -25129,6 +25335,16 @@
               }
             },
             "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
           },
           "422": {
             "content": {

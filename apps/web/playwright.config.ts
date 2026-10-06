@@ -8,6 +8,7 @@ const mode = process.env.E2E_SITE_MODE;
 // (ADR-0023: they must pass unchanged), plus the tests of the effects themselves.
 // "league-data": the league page again at the end of scripts/test-e2e, once the League Kiosk and the
 // screens stages have put real league data (a season, ranked players, confirmed matches) in the API.
+// "assistant": the club's assistant (12D) with the AI switched on and the scripted provider.
 const match =
   mode === "full"
     ? { testMatch: "full/**/*.spec.ts" }
@@ -15,7 +16,9 @@ const match =
       ? { testMatch: ["full/**/*.spec.ts", "effects/**/*.spec.ts"] }
       : mode === "league-data"
         ? { testMatch: "league-data/**/*.spec.ts" }
-        : { testIgnore: ["full/**", "effects/**", "league-data/**"] };
+        : mode === "assistant"
+          ? { testMatch: "assistant/**/*.spec.ts" }
+          : { testIgnore: ["full/**", "effects/**", "league-data/**", "assistant/**"] };
 
 export default defineConfig({
   testDir: "e2e",

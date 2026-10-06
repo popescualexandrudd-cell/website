@@ -118,7 +118,7 @@ def company(request: HttpRequest) -> CompanyOut:
     return out
 
 
-@staff_router.put("/flags/{key}", response={200: FlagOut, **errors(401, 403, 404, 422)})
+@staff_router.put("/flags/{key}", response={200: FlagOut, **errors(401, 403, 404, 409, 422)})
 def set_flag(request: HttpRequest, key: str, payload: FlagIn) -> FlagOut:
     flag = services.set_flag(request, key, payload.enabled, payload.reason)
     return FlagOut(key=flag.key, enabled=flag.enabled, description=services.FLAGS[key].description)

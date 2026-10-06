@@ -20,16 +20,23 @@ export function modeFrom(flags: unknown): SiteMode {
 
 /**
  * What visitors see: the mode, and on the full site the effects (`web_effects`) and the hero video
- * (`web_hero_video`), both off by default (ADR-0023), and the children's accounts in the account
- * (`child_accounts`, Q7, off by default). Only a flag that is exactly `true` counts.
+ * (`web_hero_video`), both off by default (ADR-0023), the children's accounts in the account
+ * (`child_accounts`, Q7, off by default) and the club's assistant (`ai`, ADR-0019, off until the
+ * owner puts the key on the server and turns it on). Only a flag that is exactly `true` counts.
  */
-export type SiteFlags = { mode: SiteMode; effects: boolean; heroVideo: boolean; children: boolean };
+export type SiteFlags = { mode: SiteMode; effects: boolean; heroVideo: boolean; children: boolean; assistant: boolean };
 
 export function flagsFrom(flags: unknown): SiteFlags {
   const mode = modeFrom(flags);
   const on = (key: string) =>
     mode === "full" && Array.isArray(flags) && (flags as Flag[]).some((f) => f && f.key === key && f.enabled === true);
-  return { mode, effects: on("web_effects"), heroVideo: on("web_hero_video"), children: on("child_accounts") };
+  return {
+    mode,
+    effects: on("web_effects"),
+    heroVideo: on("web_hero_video"),
+    children: on("child_accounts"),
+    assistant: on("ai"),
+  };
 }
 
 export async function siteFlags(fetchImpl: typeof fetch = fetch): Promise<SiteFlags> {

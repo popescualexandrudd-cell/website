@@ -4,6 +4,14 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 12, faza 12D: asistentul clubului — 06.10.2026 (livrat)
+#### Adăugat
+- Uneltele asistentului (`jungle/ai/tools.py`): `court_availability`, `court_quote`, `class_schedule` (public și client), `my_bookings` și `propose_booking` (doar clientul intrat în cont; rezervarea o face persoana, cu butonul).
+- `POST /api/v1/ai/ask` (vizitator sau client, CSRF, limită pe oră `ai.questions_per_hour`, Q68), cu răspunsul și rezervările pregătite.
+- Furnizorul scriptat `jungle/ai/fake.py` (`AI_FAKE`, doar dezvoltare și teste cap-coadă; refuzat în staging și producție).
+- Comutatorul `ai` refuză pornirea fără cheie și model (`ai.not_configured`).
+- Site: butonul „Întreabă clubul” și panoul asistentului (`Assistant`, `src/lib/assistant.ts`), doar cu `ai` pornit; textele `web.assistant`; o etapă nouă în `scripts/test-e2e` (`E2E_SITE_MODE=assistant`).
+
 ### Etapa 12, faza 12C: nucleul AI — 06.10.2026 (livrat)
 #### Adăugat
 - Aplicația `jungle.ai` (ADR-0019): adaptorul `AIProvider` cu Claude ca implicit (biblioteca oficială `anthropic`, `AI_API_KEY` și `AI_MODEL` în `.env`, instrucțiunile în cache, „fallbacks” la refuz), registrul de unelte pe context (public, client, personal) cu nume interzise, prima unealtă `club_info`, bucla de întrebare cu cel mult 6 pași, comutatorul `ai`, limita lunară de cost și jurnalul `AIInteraction` fără text. 100% acoperire pe ramuri.
