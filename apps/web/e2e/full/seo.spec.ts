@@ -42,3 +42,14 @@ test("§15.1: a useful 404 page", async ({ page }) => {
   await expect(page.getByRole("main").getByRole("link", { name: "Rezervări" })).toBeVisible();
   await expectAccessible(page);
 });
+
+test("R-053: the club's rules, linked from the footer", async ({ page }) => {
+  await page.goto("/ro");
+  await page.getByRole("contentinfo").getByRole("link", { name: "Regulamentul clubului" }).click();
+  await expect(page).toHaveURL(/\/ro\/regulament$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Regulamentul clubului" })).toBeVisible();
+  await expect(page.getByText(/Anularea cu cel puțin 24 de ore înainte/)).toBeVisible();
+  await expectAccessible(page);
+  await page.goto("/en/rules");
+  await expect(page.getByRole("heading", { level: 1, name: "The club's rules" })).toBeVisible();
+});

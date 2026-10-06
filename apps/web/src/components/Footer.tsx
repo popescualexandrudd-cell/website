@@ -69,6 +69,7 @@ export async function Footer({ full = false }: { full?: boolean }) {
               <li><Link href="/terms">{tLegal("terms")}</Link></li>
               <li><Link href="/privacy">{tLegal("privacy")}</Link></li>
               <li><Link href="/refunds">{tLegal("refunds")}</Link></li>
+              <li><Link href="/rules">{tLegal("rules")}</Link></li>
               <li><Link href="/cookies">{tLegal("cookies")}</Link></li>
               <li><Link href="/privacy-notice">{tLegal("notice")}</Link></li>
               <li><CookieSettingsButton label={t("cookieSettings")} /></li>

@@ -5935,7 +5935,7 @@ export interface components {
          * DocumentKind
          * @enum {string}
          */
-        DocumentKind: "terms" | "privacy" | "league_gdpr" | "waitlist_notice" | "refunds" | "cookies";
+        DocumentKind: "terms" | "privacy" | "league_gdpr" | "waitlist_notice" | "refunds" | "cookies" | "rules";
         /** DraftIn */
         DraftIn: {
             kind: components["schemas"]["DraftKind"];
@@ -15913,7 +15913,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                kind: "terms" | "privacy" | "league_gdpr" | "waitlist_notice" | "refunds" | "cookies";
+                kind: "terms" | "privacy" | "league_gdpr" | "waitlist_notice" | "refunds" | "cookies" | "rules";
             };
             cookie?: never;
         };

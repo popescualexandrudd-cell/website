@@ -17,6 +17,7 @@ class DocumentKind(models.TextChoices):
     WAITLIST_NOTICE = "waitlist_notice", "Nota de informare pentru lista de așteptare"
     REFUNDS = "refunds", "Politica de anulare și rambursare"
     COOKIES = "cookies", "Politica de cookies"
+    RULES = "rules", "Regulamentul clubului"
 
 
 # Documents a person must accept to create an account.

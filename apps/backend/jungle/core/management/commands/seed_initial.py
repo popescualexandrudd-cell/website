@@ -39,6 +39,8 @@ LEGAL_FILES = {
     DocumentKind.WAITLIST_NOTICE: "nota-informare-lista-asteptare",
     DocumentKind.LEAGUE_GDPR: "formular-gdpr-liga",
 }
+# The club's public rules (§15, R-053; Stage 13C), drafted in docs/14-regulament-public.
+RULES_FILE = "docs/14-regulament-public/regulament"
 # (kind, weekday: Monday = 0, start, end, RO title, EN title): the calendar's demo, marked as such.
 DEMO_EVENTS = [
     (EventKind.DJ_NIGHT, 4, time(20), time(23), "Seară cu DJ (demo)", "DJ night (demo)"),
@@ -225,6 +227,14 @@ class Command(BaseCommand):
                     title, body = read_public_text(texts / f"{stem}.{language}.md")
                     is_demo = "DE_CONFIRMAT" in body
                     publish_document(SYSTEM, kind, language, title, body, is_demo=is_demo)
+        for language in ("ro", "en"):
+            kind = DocumentKind.RULES
+            if not LegalDocument.objects.filter(kind=kind, language=language).exists():
+                path = settings.REPO_ROOT / f"{RULES_FILE}.{language}.md"
+                title, body = read_public_text(path)
+                publish_document(
+                    SYSTEM, kind, language, title, body, is_demo="DE_CONFIRMAT" in body
+                )
         for first, last, email, role in DEMO_PEOPLE:
             user = User.objects.filter(email=email).first()
             if user is None:

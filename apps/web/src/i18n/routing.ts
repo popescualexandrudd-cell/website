@@ -16,6 +16,8 @@ export const routing = defineRouting({
     "/privacy": { ro: "/confidentialitate", en: "/privacy" },
     "/refunds": { ro: "/anulare-si-rambursare", en: "/refunds" },
     "/cookies": { ro: "/cookies", en: "/cookies" },
+    // The club's public rules (Stage 13C, R-053).
+    "/rules": { ro: "/regulament", en: "/rules" },
     // The installable site (§9.4): shown by the service worker with no connection.
     "/offline": { ro: "/offline", en: "/offline" },
     // The full site (Stage 11, §9.3): the pages of the main menu, the bookings and the account.

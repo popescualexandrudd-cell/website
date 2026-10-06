@@ -4,6 +4,28 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 13, faza 13E: Branding și vânzări — 06.10.2026 (livrat)
+#### Adăugat
+- Platforma de brand propusă (`docs/12-branding/06-platforma-de-brand-propunere.md`): ton, valori, verificarea mărcii și a domeniului, 3 brief-uri de logo, aplicații.
+- `docs/13-vanzari/02`–`05`: scripturile pentru recepție și telefon, prezentarea pentru firme, secvențele de email, variantele de ofertă de lansare.
+
+### Etapa 13, faza 13D: Planul de marketing — 06.10.2026 (livrat)
+#### Adăugat
+- `docs/11-marketing/02-plan-pre-lansare.md`, `03-formate-saptamanale.md`, `04-kpi.md`; Q71 deschisă (chestionarul NPS).
+
+### Etapa 13, faza 13C: Regulamentul clubului — 06.10.2026 (livrat)
+#### Adăugat
+- Regulamentul public RO/EN (`docs/14-regulament-public/`), din regulile confirmate, cu mențiunea Q41; Q70 deschisă.
+- Documentul `rules` în `jungle.legal` (migrare), publicat de `seed_initial --demo`; pagina `/ro/regulament` · `/en/rules`, în subsol și în sitemap.
+
+### Etapa 13, faza 13B: SEO de conținut și local — 06.10.2026 (livrat)
+#### Adăugat
+- Cinci ghiduri RO/EN pentru blog (`jungle/blog/guide_texts/`), adăugate ca ciorne nepublicate cu `manage.py blog_guides`.
+- `docs/10-seo/03-harta-cuvintelor-cheie.md`, `04-calendar-editorial.md`, `05-google-business-profile-si-nap.md`.
+#### Reparat
+- Datele schema.org ale clubului nu mai spun „Tennis” (terenul de tenis e încă nedecis, §2.2).
+- O adresă inexistentă arată pagina 404 a site-ului, în limba ei (`app/[locale]/[...rest]`).
+
 ### Etapa 13, faza 13A: SEO tehnic — 06.10.2026 (livrat)
 #### Adăugat
 - Sitemap-ul cu paginile site-ului complet și articolele reale (fără cont, „offline” și articole demo), cu hreflang (`app/sitemap.ts`).

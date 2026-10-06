@@ -90,6 +90,8 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q67](#q67) | Noutățile clubului și pragurile memento-urilor | SCĂZUTĂ | nimic (notificări) | DESCHISĂ |
 | [Q68](#q68) | Limita lunară și setările AI-ului | MEDIE | pornirea AI-ului | DESCHISĂ |
 | [Q69](#q69) | Pragurile semnalelor și ale sugestiilor de preț | SCĂZUTĂ | nimic (panoul) | DESCHISĂ |
+| [Q70](#q70) | Regulamentul clubului | MEDIE | publicarea definitivă a regulamentului | DESCHISĂ |
+| [Q71](#q71) | Chestionarul NPS după primul meci | SCĂZUTĂ | măsurarea NPS (KPI) | DESCHISĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -827,3 +829,18 @@ Titlul și instrucțiunea din §17, preluate integral:
   - Prețul îl schimbă tot un om, din modulul Prețuri.
 - **Întrebare pentru proprietar:** vă convin pragurile? Vreți ca semnalele să vină și ca notificare (email) la manager, nu doar în panou?
 
+### <a id="q70"></a>Q70 — Regulamentul clubului
+
+- **Prioritate:** MEDIE · **Blochează:** publicarea definitivă a regulamentului (până atunci apare pe site marcat ca demo)
+- **Stare:** DESCHISĂ (06.10.2026, faza 13C)
+- **Varianta implicită:** textul din `docs/14-regulament-public/regulament.ro.md` (și `.en.md`), scris doar din regulile confirmate. Două puncte rămân DE_CONFIRMAT:
+  - **semi-vârful** 08:00–12:00 și 15:00–17:00 (vârful 17–22 și programul 08–23 sunt confirmate, Q3);
+  - **regulile de folosire a spațiilor** (vestiare, cafenea, sala de evenimente).
+- **Întrebare pentru proprietar:** aprobați textul? Ce reguli de conduită vreți pentru vestiare, cafenea și sala de evenimente (de exemplu: fumatul, animalele, mâncarea adusă din afară, copiii nesupravegheați)?
+
+### <a id="q71"></a>Q71 — Chestionarul NPS după primul meci
+
+- **Prioritate:** SCĂZUTĂ · **Blochează:** doar indicatorul NPS din `docs/11-marketing/04-kpi.md`
+- **Stare:** DESCHISĂ (06.10.2026, faza 13D)
+- **Varianta implicită:** DE_CONFIRMAT. O singură întrebare („Ne-ai recomanda unui prieten?”, 0–10), trimisă o dată, prin notificări, a doua zi după prima rezervare jucată, doar clienților care au acceptat mesajele de noutăți (opt-in). Până la răspuns nu se construiește nimic: NPS nu se măsoară.
+- **Întrebare pentru proprietar:** vreți chestionarul? Dacă da, după primul meci sau și periodic (de exemplu, o dată la 6 luni)?

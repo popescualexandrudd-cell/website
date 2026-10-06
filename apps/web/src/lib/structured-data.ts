@@ -35,7 +35,7 @@ export function clubData(locale: string, description: string, hours: [string, st
     url: pageUrl(locale),
     description,
     address: PLACE.address,
-    sport: ["Padel", "Pilates", "Tennis"],
+    sport: ["Padel", "Pilates"],
     openingHoursSpecification: {
       "@type": "OpeningHoursSpecification",
       dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],

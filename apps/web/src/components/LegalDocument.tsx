@@ -8,12 +8,13 @@ import { siteFlags } from "@/lib/flags";
 export type LegalKind = Exclude<components["schemas"]["DocumentKind"], "league_gdpr">;
 
 /** Title keys in `web.legal` for each published document. */
-const TITLE_KEY: Record<LegalKind, "terms" | "privacy" | "refunds" | "cookies" | "notice"> = {
+const TITLE_KEY: Record<LegalKind, "terms" | "privacy" | "refunds" | "cookies" | "notice" | "rules"> = {
   terms: "terms",
   privacy: "privacy",
   refunds: "refunds",
   cookies: "cookies",
   waitlist_notice: "notice",
+  rules: "rules",
 };
 
 export async function legalMetadata(locale: string, kind: LegalKind): Promise<Metadata> {

@@ -3054,7 +3054,8 @@
           "league_gdpr",
           "waitlist_notice",
           "refunds",
-          "cookies"
+          "cookies",
+          "rules"
         ],
         "title": "DocumentKind",
         "type": "string"
@@ -21024,7 +21025,8 @@
                 "league_gdpr",
                 "waitlist_notice",
                 "refunds",
-                "cookies"
+                "cookies",
+                "rules"
               ],
               "title": "DocumentKind",
               "type": "string"

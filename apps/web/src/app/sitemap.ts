@@ -7,7 +7,7 @@ import { SITE_URL } from "@/lib/site";
 type Page = Exclude<keyof typeof routing.pathnames, `${string}[${string}`>;
 
 /** The pre-launch site: the home page and the legal texts (the waitlist confirmation pages are noindex). */
-const PRELAUNCH: Page[] = ["/", "/terms", "/privacy", "/refunds", "/cookies", "/privacy-notice"];
+const PRELAUNCH: Page[] = ["/", "/terms", "/privacy", "/refunds", "/cookies", "/privacy-notice", "/rules"];
 /** The full site (Stage 11, §9.3): its pages too (the account and the offline page are not for search engines). */
 const FULL: Page[] = [
   "/padel",
@@ -23,7 +23,7 @@ const FULL: Page[] = [
   "/blog",
   "/bookings",
 ];
-const LEGAL = new Set<Page>(["/terms", "/privacy", "/refunds", "/cookies", "/privacy-notice"]);
+const LEGAL = new Set<Page>(["/terms", "/privacy", "/refunds", "/cookies", "/privacy-notice", "/rules"]);
 
 function localized(path: string, locale: "ro" | "en"): string {
   return `${SITE_URL}/${locale}${path === "/" ? "" : path}`;

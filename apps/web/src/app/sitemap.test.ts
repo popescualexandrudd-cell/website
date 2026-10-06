@@ -16,9 +16,10 @@ describe("the sitemap (§15.1)", () => {
     mode.value = "prelaunch";
   });
 
-  it("before the launch: the home page and the legal texts, each with its other language", async () => {
+  it("before the launch: the home page, the legal texts and the rules, each with its other language", async () => {
     const urls = (await sitemap()).map((e) => e.url);
-    expect(urls).toHaveLength(12);
+    expect(urls).toHaveLength(14);
+    expect(urls.some((u) => u.endsWith("/ro/regulament"))).toBe(true);
     expect(urls.some((u) => u.endsWith("/ro/termeni-si-conditii"))).toBe(true);
     expect(urls.some((u) => u.includes("/padel"))).toBe(false);
     const home = (await sitemap())[0];
