@@ -1,5 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { faqData } from "@/lib/structured-data";
+import { JsonLd } from "./JsonLd";
 
 const ITEMS = ["hours", "durations", "cancel", "noShow", "pay", "credits", "league", "scores"] as const;
 
@@ -13,6 +15,7 @@ export async function Faq({ id }: { id: string }) {
   const t = await getTranslations("web.site.faq");
   return (
     <section id={id} className="section faq" aria-labelledby="faq-title">
+      <JsonLd data={faqData(ITEMS.map((key) => ({ q: t(`items.${key}.q`), a: t(`items.${key}.a`) })))} />
       <div className="container">
         <p className="kicker" data-reveal="fade">
           {t("kicker")}

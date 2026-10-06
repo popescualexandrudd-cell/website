@@ -1,4 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import { eventsData } from "@/lib/structured-data";
+import { JsonLd } from "./JsonLd";
 import { Link } from "@/i18n/navigation";
 import { companyDetails, telHref } from "@/lib/company";
 import { type CalendarItem, eventsCalendar, FORMATS, kindOf, when, wording } from "@/lib/events";
@@ -24,6 +26,7 @@ export async function Events({ id }: { id: string }) {
   const room = calendar?.room ?? null;
   return (
     <section id={id} className="section section-alt events" aria-labelledby="events-section-title">
+      {calendar && calendar.items.some((item) => !item.demo) ? <JsonLd data={eventsData(calendar.items, locale)} /> : null}
       <div className="container">
         <p className="kicker" data-reveal="fade">{t("kicker")}</p>
         <h2 id="events-section-title" className="h2" data-reveal="lines">

@@ -4,6 +4,14 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 13, faza 13A: SEO tehnic — 06.10.2026 (livrat)
+#### Adăugat
+- Sitemap-ul cu paginile site-ului complet și articolele reale (fără cont, „offline” și articole demo), cu hreflang (`app/sitemap.ts`).
+- Date schema.org (`lib/structured-data.ts`, `JsonLd`): clubul (`SportsActivityLocation`, program Q3, telefonul din panou), `FAQPage`, `Event` (fără demo; anulate marcate), `BreadcrumbList` pe paginile de prezentare.
+- Titlul și descrierea proprii ale site-ului complet (`web.meta.siteTitle`, `web.meta.siteDescription`).
+- Pagina 404 utilă și pagina de eroare a serverului (`web.problem`).
+- Planul Etapei 13 (`docs/00-management/verificare/etapa-13/PLAN.md`).
+
 ### Etapa 11 — aprobată 06.10.2026
 - Proprietarul a aprobat ultimele module ale Etapei 11 („Conținutul site-ului”, „Traduceri”); Etapele 11 și 12 intră în `main` (tag-uri locale `etapa-11`, `etapa-12`).
 

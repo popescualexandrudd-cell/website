@@ -239,7 +239,9 @@
   "web": {
     "meta": {
       "title": "Jungle Padel — club de padel indoor în Pantelimon · Deschidere martie 2027",
-      "description": "Patru terenuri de padel indoor, un lounge suspendat la 3 metri între ele, pilates Reformer și o ligă cu clasament live. Facilități proiectate la cele mai înalte standarde europene. Înscrie-te pe lista de așteptare."
+      "description": "Patru terenuri de padel indoor, un lounge suspendat la 3 metri între ele, pilates Reformer și o ligă cu clasament live. Facilități proiectate la cele mai înalte standarde europene. Înscrie-te pe lista de așteptare.",
+      "siteTitle": "Jungle Padel · Padel, Pilates Reformer și liga clubului, Pantelimon",
+      "siteDescription": "Patru terenuri de padel indoor, Pilates Reformer, o ligă cu clasament live și rezervări online, pe Șoseaua Biruinței, lângă Selgros Pantelimon."
     },
     "nav": {
       "arena": "Arena",
@@ -2101,6 +2103,17 @@
         "steps": "Nu am reușit să găsesc răspunsul. Încearcă o întrebare mai scurtă.",
         "failed": "Asistentul nu e disponibil acum. Încearcă mai târziu."
       }
+    },
+    "problem": {
+      "notFoundTitle": "Pagina nu există",
+      "notFoundText": "Adresa a fost scrisă greșit sau pagina a fost mutată. De aici ajungeți în orice colț al clubului:",
+      "errorTitle": "Ceva n-a mers",
+      "errorText": "Pagina nu s-a putut încărca acum. Încercați din nou peste câteva secunde; dacă tot nu merge, sunați la recepție.",
+      "retry": "Încearcă din nou",
+      "home": "Pagina principală",
+      "bookings": "Rezervări",
+      "league": "Liga Jungle",
+      "contact": "Contact"
     }
   },
   "kiosk": {

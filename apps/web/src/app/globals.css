@@ -926,6 +926,18 @@ ul.grid-4 {
   min-height: 70svh;
   padding: calc(var(--header-h) + 64px) 0 96px;
 }
+.problem__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  padding: 0;
+  list-style: none;
+}
+
+.problem__actions {
+  margin-top: 16px;
+}
+
 .panel {
   max-width: 820px;
   margin-inline: auto;

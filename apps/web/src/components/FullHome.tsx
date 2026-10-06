@@ -1,4 +1,8 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { companyDetails } from "@/lib/company";
+import { OPENING_HOURS } from "@/lib/site";
+import { clubData } from "@/lib/structured-data";
+import { JsonLd } from "./JsonLd";
 import { Cafe } from "./Cafe";
 import { Community } from "./Community";
 import { Faq } from "./Faq";
@@ -49,9 +53,11 @@ export const BUILT = 19;
  * as a preview; visitors keep seeing the pre-launch page until the owner publishes the full site
  * (Q57). Each new section takes its place above the map.
  */
-export function FullHome() {
+export async function FullHome() {
+  const [t, locale, company] = await Promise.all([getTranslations("web.meta"), getLocale(), companyDetails()]);
   return (
     <>
+      <JsonLd data={clubData(locale, t("siteDescription"), OPENING_HOURS, company)} />
       <FullHero next="tur" />
       <Tour id="tur" />
       <NowInClub id="acum" />

@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
@@ -6,6 +6,8 @@ import { ClientTexts } from "./ClientTexts";
 import { getPathname } from "@/i18n/navigation";
 import { FULL_HOME_NAMESPACES } from "@/lib/client-messages";
 import { siteMode } from "@/lib/flags";
+import { breadcrumbData, pageUrl } from "@/lib/structured-data";
+import { JsonLd } from "./JsonLd";
 
 /** The presentation pages of the full site (§9.3), built from the approved home sections. */
 export type SitePageKey = "padel" | "tennis" | "pilates" | "packages" | "events" | "cafe" | "contact" | "blog" | "corporate" | "about";
@@ -41,8 +43,14 @@ export async function sitePageMetadata(locale: string, page: SitePageKey): Promi
 export async function SitePage({ page, children }: { page: SitePageKey; children: ReactNode }) {
   if ((await siteMode()) !== "full") notFound();
   const t = await getTranslations("web.site");
+  const locale = await getLocale();
+  const trail = [
+    { name: "Jungle Padel", url: pageUrl(locale) },
+    { name: t(`pages.${page}`), url: pageUrl(locale, getPathname({ href: HREF[page], locale: locale === "en" ? "en" : "ro" }).replace(/^\/(ro|en)/, "")) },
+  ];
   return (
     <ClientTexts namespaces={FULL_HOME_NAMESPACES}>
+      <JsonLd data={breadcrumbData(trail)} />
       <section className="section page-intro" aria-labelledby="page-title">
         <div className="container">
           <p className="kicker" data-reveal="fade">

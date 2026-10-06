@@ -14,7 +14,7 @@ import { Header } from "@/components/Header";
 import { ServiceWorker } from "@/components/ServiceWorker";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ASSISTANT_NAMESPACES, SHELL_NAMESPACES, pickMessages } from "@/lib/client-messages";
-import { siteFlags } from "@/lib/flags";
+import { siteFlags, siteMode } from "@/lib/flags";
 import { routing } from "@/i18n/routing";
 import { INDEXABLE, SITE_URL } from "@/lib/site";
 
@@ -35,10 +35,14 @@ export const viewport: Viewport = { themeColor: ColorNight900, colorScheme: "dar
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "web.meta" });
+  // The full site describes the club; the pre-launch page invites to the waitlist (§15.1).
+  const full = (await siteMode()) === "full";
+  const title = full ? t("siteTitle") : t("title");
+  const description = full ? t("siteDescription") : t("description");
   return {
     metadataBase: new URL(SITE_URL),
-    title: t("title"),
-    description: t("description"),
+    title,
+    description,
     alternates: {
       canonical: `/${locale}`,
       languages: { ro: "/ro", en: "/en", "x-default": "/ro" },
@@ -46,12 +50,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     openGraph: {
       type: "website",
       siteName: "Jungle Padel",
-      title: t("title"),
-      description: t("description"),
+      title,
+      description,
       locale: locale === "ro" ? "ro_RO" : "en_GB",
       url: `/${locale}`,
     },
-    twitter: { card: "summary_large_image", title: t("title"), description: t("description") },
+    twitter: { card: "summary_large_image", title, description },
     robots: INDEXABLE ? { index: true, follow: true } : { index: false, follow: false },
     icons: { icon: "/icon.svg", apple: "/icons/apple-touch-icon.png" },
     appleWebApp: { capable: true, title: "Jungle Padel", statusBarStyle: "black-translucent" },

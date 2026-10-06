@@ -12,6 +12,9 @@ export const FACTS = {
   seasonMonths: 3, // §6.13
 } as const;
 
+/** The opening hours, every day (Q3, confirmed by the owner on 27.09.2026). */
+export const OPENING_HOURS: [string, string] = ["08:00", "23:00"];
+
 export const ADDRESS = {
   street: "Șoseaua Biruinței",
   locality: "Pantelimon",

@@ -8,7 +8,7 @@
  * otherwise.
  */
 /** Every page: the headers, the cookie choice. Given by the layout. */
-export const SHELL_NAMESPACES = ["web.nav", "web.cookies", "web.site.header"] as const;
+export const SHELL_NAMESPACES = ["web.nav", "web.cookies", "web.site.header", "web.problem"] as const;
 /** The pre-launch page (Stage 1B): the waitlist form and the league card. */
 export const PRELAUNCH_NAMESPACES = ["errors", "web.waitlist", "web.league"] as const;
 /** The waitlist confirm and unsubscribe pages. */
