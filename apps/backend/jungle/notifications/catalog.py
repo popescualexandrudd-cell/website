@@ -84,6 +84,7 @@ EVENTS: dict[str, Event] = {
         Event("voucher.received", Category.MONEY),
         # the club
         Event("club.new_event", Category.CLUB),
+        Event("club.feedback", Category.CLUB, (Channel.EMAIL,)),  # Q71, once after the 1st game
         # staff (sent to the managers and admins of the location)
         Event("staff.cash_low", Category.STAFF, mandatory=True),
         Event("staff.device_offline", Category.STAFF, mandatory=True),

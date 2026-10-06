@@ -120,3 +120,20 @@ Toate cele cinci faze sunt livrate. Etapa așteaptă aprobarea. Deciziile deschi
 4. **Planul de marketing și formatele săptămânale:** ce păstrați, ce date alegeți.
 5. **Branding:** misiunea, valorile, tonul și o direcție de logo (A, B sau C) pentru designer. Verificarea mărcii și a domeniului o faceți dumneavoastră (Q39).
 6. **Vânzări:** scripturile și prezentarea pentru firme; ce oferte de lansare vreți; dacă vreți cele trei mesaje noi propuse.
+
+## Aprobarea, 06.10.2026
+Proprietarul: „Q70 fă tu și modific după, Q71 da, aprob, continuă.” Etapa 13 e aprobată. Am făcut, după răspuns:
+1. **Q70, regulamentul:**
+   - semi-vârful rămâne 08:00–12:00 și 15:00–17:00;
+   - am scris regulile pentru vestiare, cafenea și sala de evenimente: fumatul, copiii, animalele, fotografiile, dulapurile, lucrurile uitate, mâncarea adusă din afară, sticla pe teren, sala doar cu rezervare confirmată;
+   - textul nu mai e demo; schimbările se fac cu o versiune nouă.
+2. **Q71, chestionarul „Ne-ai recomanda?”** (aplicația `jungle/feedback`, 100% acoperire pe ramuri):
+   - a doua zi după prima intrare pe teren, o singură dată, pe email, doar celor cu noutățile clubului pornite;
+   - răspunsul se dă din cont: un card cu notele 0–10, care apare doar cât e de răspuns;
+   - NPS-ul apare în panou → „Semnale și cerere”, pe ultimele 90 de zile;
+   - nota intră în exportul de date al persoanei (GDPR); se păstrează doar nota, fără text.
+
+### Cum verificați
+1. Subsol → „Regulamentul clubului”: secțiunile 9 și 10 au regulile noi; nu mai apare marcajul demo.
+2. Panou → „Semnale și cerere”: secțiunea „Ne-ai recomanda? NPS” (fără răspunsuri, scrie câți au fost întrebați).
+

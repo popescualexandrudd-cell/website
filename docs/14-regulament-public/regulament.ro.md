@@ -1,4 +1,4 @@
-> **Notă internă (nu se publică):** redactat de Claude pe 06.10.2026, din regulile confirmate (`docs/02-reguli-business/`, `docs/03-liga/`), conform deciziei proprietarului (Q41). **Redactat fără revizuire juridică. Recomandăm verificarea de către un avocat/DPO.** Câmpurile `DE_CONFIRMAT` se completează înainte de publicarea definitivă; până atunci textul apare pe site marcat ca demo.
+> **Notă internă (nu se publică):** redactat de Claude pe 06.10.2026, din regulile confirmate (`docs/02-reguli-business/`, `docs/03-liga/`), conform deciziei proprietarului (Q41). **Redactat fără revizuire juridică. Recomandăm verificarea de către un avocat/DPO.** Q70 (06.10.2026): proprietarul ne-a lăsat pe noi să completăm punctele deschise (semi-vârful și regulile spațiilor); le poate schimba oricând, cu o versiune nouă (`manage.py publish_legal_document --kind rules`).
 
 <!-- PUBLIC TEXT BELOW -->
 # Regulamentul clubului
@@ -7,7 +7,7 @@ Acest regulament se aplică tuturor celor care rezervă, joacă, se antrenează 
 
 ## 1. Programul și benzile orare
 - Clubul e deschis **zilnic, între 08:00 și 23:00**.
-- Prețul unei rezervări depinde de banda orară în care se joacă: **vârf 17:00–22:00**, **semi-vârf 08:00–12:00 și 15:00–17:00**, **în afara vârfului 12:00–15:00 și după 22:00** (semi-vârful: DE_CONFIRMAT). O rezervare care trece prin mai multe benzi se plătește proporțional, pe fiecare jumătate de oră.
+- Prețul unei rezervări depinde de banda orară în care se joacă: **vârf 17:00–22:00**, **semi-vârf 08:00–12:00 și 15:00–17:00**, **în afara vârfului 12:00–15:00 și după 22:00**. O rezervare care trece prin mai multe benzi se plătește proporțional, pe fiecare jumătate de oră.
 - Prețurile în vigoare se văd la rezervare, pe site și la chioșc.
 
 ## 2. Contul și cardul
@@ -51,7 +51,15 @@ Aceleași reguli de anulare și neprezentare ca la terenuri, cu listă de aștep
 ## 9. Comportamentul în club
 - Respect față de ceilalți jucători, de personal și de echipamentele clubului.
 - Pe terenuri se intră cu încălțăminte sport curată, potrivită pentru gazon sintetic.
-- Alte reguli de folosire a spațiilor (vestiare, cafenea, sala de evenimente): DE_CONFIRMAT.
+- **Fumatul**, inclusiv țigările electronice și produsele încălzite, e interzis în tot clubul.
+- **Copiii sub 14 ani** stau în club doar însoțiți de un adult care răspunde de ei.
+- **Animalele** nu au acces, cu excepția câinilor-ghid și a câinilor de asistență.
+- Fotografiați sau filmați alte persoane doar cu acordul lor.
 
-## 10. Schimbări
+## 10. Vestiarele, cafeneaua și sala de evenimente
+- **Vestiarele:** dulapurile se folosesc doar cât stați în club și se golesc la plecare. Nu lăsați lucruri de valoare nesupravegheate: clubul nu răspunde pentru ele. Lucrurile uitate se predau la recepție și se păstrează 30 de zile.
+- **Cafeneaua:** mâncarea și băuturile aduse din afară nu se consumă în cafenea. Pe terenuri se intră doar cu apă sau băuturi în recipiente închise, niciodată din sticlă.
+- **Sala de evenimente** se folosește doar cu o rezervare confirmată de manager, în intervalul confirmat și în programul clubului. Se predă în starea în care a fost primită; pagubele se plătesc de cel care a rezervat sala.
+
+## 11. Schimbări
 Regulamentul se poate schimba; versiunea în vigoare e întotdeauna cea de pe această pagină, cu data publicării.

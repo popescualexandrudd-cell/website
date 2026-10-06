@@ -1,4 +1,4 @@
-> **Internal note (not published):** drafted by Claude on 06.10.2026 from the confirmed rules (`docs/02-reguli-business/`, `docs/03-liga/`), following the owner's decision (Q41). **Drafted without legal review. We recommend review by a lawyer/DPO.** The `DE_CONFIRMAT` fields are completed before the final publication; until then the text appears on the site marked as a demo.
+> **Internal note (not published):** drafted by Claude on 06.10.2026 from the confirmed rules (`docs/02-reguli-business/`, `docs/03-liga/`), following the owner's decision (Q41). **Drafted without legal review. We recommend review by a lawyer/DPO.** Q70 (06.10.2026): the owner left the open points (semi-peak and the rules for the spaces) to us; they can change them at any time, with a new version (`manage.py publish_legal_document --kind rules`).
 
 <!-- PUBLIC TEXT BELOW -->
 # The club's rules
@@ -7,7 +7,7 @@ These rules apply to everyone who books, plays, trains or attends events at Jung
 
 ## 1. Opening hours and time bands
 - The club is open **every day, from 08:00 to 23:00**.
-- The price of a booking depends on its time band: **peak 17:00–22:00**, **semi-peak 08:00–12:00 and 15:00–17:00**, **off-peak 12:00–15:00 and after 22:00** (semi-peak: DE_CONFIRMAT). A booking across several bands is paid in proportion, per half hour.
+- The price of a booking depends on its time band: **peak 17:00–22:00**, **semi-peak 08:00–12:00 and 15:00–17:00**, **off-peak 12:00–15:00 and after 22:00**. A booking across several bands is paid in proportion, per half hour.
 - The current prices are shown when booking, on the site and at the kiosk.
 
 ## 2. The account and the card
@@ -51,7 +51,15 @@ The same cancellation and no-show rules as for the courts, with an automatic wai
 ## 9. Behaviour at the club
 - Respect for the other players, the staff and the club's equipment.
 - Courts are entered with clean sports shoes suited to synthetic grass.
-- Other rules for the spaces (changing rooms, café, event room): DE_CONFIRMAT.
+- **Smoking**, including e-cigarettes and heated tobacco, is forbidden throughout the club.
+- **Children under 14** stay at the club only with an adult responsible for them.
+- **Animals** are not allowed, except guide dogs and assistance dogs.
+- Photograph or film other people only with their consent.
 
-## 10. Changes
+## 10. The changing rooms, the café and the event room
+- **Changing rooms:** lockers are used only while you are at the club and emptied when you leave. Do not leave valuables unattended: the club is not responsible for them. Forgotten items are handed in at reception and kept for 30 days.
+- **Café:** food and drinks brought from outside are not consumed in the café. On the courts, only water or drinks in closed containers, never glass.
+- **The event room** is used only with a booking confirmed by the manager, within the confirmed time and the club's hours. It is handed back as it was received; damage is paid by whoever booked the room.
+
+## 11. Changes
 These rules may change; the version in force is always the one on this page, with its publication date.

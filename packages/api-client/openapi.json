@@ -3693,6 +3693,102 @@
         "title": "FameSeasonOut",
         "type": "object"
       },
+      "FeedbackIn": {
+        "properties": {
+          "score": {
+            "description": "would you recommend us to a friend? 0–10",
+            "maximum": 10,
+            "minimum": 0,
+            "title": "Score",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "score"
+        ],
+        "title": "FeedbackIn",
+        "type": "object"
+      },
+      "FeedbackStateOut": {
+        "properties": {
+          "answered": {
+            "title": "Answered",
+            "type": "boolean"
+          },
+          "asked": {
+            "description": "the club asked this person (once, after the first game)",
+            "title": "Asked",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "asked",
+          "answered"
+        ],
+        "title": "FeedbackStateOut",
+        "type": "object"
+      },
+      "FeedbackSummaryOut": {
+        "properties": {
+          "answers": {
+            "title": "Answers",
+            "type": "integer"
+          },
+          "asked": {
+            "title": "Asked",
+            "type": "integer"
+          },
+          "detractors": {
+            "description": "0–6",
+            "title": "Detractors",
+            "type": "integer"
+          },
+          "first": {
+            "format": "date",
+            "title": "First",
+            "type": "string"
+          },
+          "last": {
+            "format": "date",
+            "title": "Last",
+            "type": "string"
+          },
+          "nps": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "promoters % − detractors %; null without answers",
+            "title": "Nps"
+          },
+          "passives": {
+            "description": "7–8",
+            "title": "Passives",
+            "type": "integer"
+          },
+          "promoters": {
+            "description": "9–10",
+            "title": "Promoters",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "first",
+          "last",
+          "asked",
+          "answers",
+          "promoters",
+          "passives",
+          "detractors",
+          "nps"
+        ],
+        "title": "FeedbackSummaryOut",
+        "type": "object"
+      },
       "FinishOut": {
         "properties": {
           "dispense": {
@@ -16371,6 +16467,118 @@
         ]
       }
     },
+    "/api/v1/feedback": {
+      "get": {
+        "operationId": "jungle_feedback_api_feedback_state",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackStateOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Feedback State",
+        "tags": [
+          "feedback"
+        ]
+      },
+      "post": {
+        "operationId": "jungle_feedback_api_feedback_answer",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackStateOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Feedback Answer",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
     "/api/v1/health": {
       "get": {
         "operationId": "jungle_core_api_health",
@@ -26533,6 +26741,84 @@
         "summary": "Decide Event",
         "tags": [
           "staff: bookings"
+        ]
+      }
+    },
+    "/api/v1/staff/feedback/summary": {
+      "get": {
+        "operationId": "jungle_feedback_api_feedback_summary",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "days",
+            "required": false,
+            "schema": {
+              "default": 90,
+              "title": "Days",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackSummaryOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Feedback Summary",
+        "tags": [
+          "staff: feedback"
         ]
       }
     },

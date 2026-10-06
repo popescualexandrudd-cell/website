@@ -28,7 +28,7 @@ step "Backend tests (pytest, branch coverage)"
 
 step "Money, league, screen, admin-panel and events-calendar modules: 100% branch coverage (ADR-0009, ADR-0008, R-012)"
 (cd apps/backend && uv run coverage report --fail-under=100 --skip-covered \
-  --include="jungle/ledger/*,jungle/subscriptions/*,jungle/rewards/*,jungle/cafe/*,jungle/league/*,jungle/checkout/*,jungle/screens/*,jungle/panel/*,jungle/events/*,jungle/blog/*,jungle/content/*,jungle/notifications/*,jungle/ai/*,jungle/core/ai_origin.py")
+  --include="jungle/ledger/*,jungle/subscriptions/*,jungle/rewards/*,jungle/cafe/*,jungle/league/*,jungle/checkout/*,jungle/screens/*,jungle/panel/*,jungle/events/*,jungle/blog/*,jungle/content/*,jungle/feedback/*,jungle/notifications/*,jungle/ai/*,jungle/core/ai_origin.py")
 
 step "League engine tests (pytest + hypothesis, 100% branch coverage, openskill comparison)"
 (cd packages/league-engine && uv run pytest --cov)

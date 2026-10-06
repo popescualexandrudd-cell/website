@@ -90,8 +90,8 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q67](#q67) | Noutățile clubului și pragurile memento-urilor | SCĂZUTĂ | nimic (notificări) | DESCHISĂ |
 | [Q68](#q68) | Limita lunară și setările AI-ului | MEDIE | pornirea AI-ului | DESCHISĂ |
 | [Q69](#q69) | Pragurile semnalelor și ale sugestiilor de preț | SCĂZUTĂ | nimic (panoul) | DESCHISĂ |
-| [Q70](#q70) | Regulamentul clubului | MEDIE | publicarea definitivă a regulamentului | DESCHISĂ |
-| [Q71](#q71) | Chestionarul NPS după primul meci | SCĂZUTĂ | măsurarea NPS (KPI) | DESCHISĂ |
+| [Q70](#q70) | Regulamentul clubului | MEDIE | publicarea definitivă a regulamentului | REZOLVATĂ |
+| [Q71](#q71) | Chestionarul NPS după primul meci | SCĂZUTĂ | măsurarea NPS (KPI) | REZOLVATĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -832,15 +832,25 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q70"></a>Q70 — Regulamentul clubului
 
 - **Prioritate:** MEDIE · **Blochează:** publicarea definitivă a regulamentului (până atunci apare pe site marcat ca demo)
-- **Stare:** DESCHISĂ (06.10.2026, faza 13C)
+- **Stare:** REZOLVATĂ (06.10.2026)
 - **Varianta implicită:** textul din `docs/14-regulament-public/regulament.ro.md` (și `.en.md`), scris doar din regulile confirmate. Două puncte rămân DE_CONFIRMAT:
   - **semi-vârful** 08:00–12:00 și 15:00–17:00 (vârful 17–22 și programul 08–23 sunt confirmate, Q3);
   - **regulile de folosire a spațiilor** (vestiare, cafenea, sala de evenimente).
 - **Întrebare pentru proprietar:** aprobați textul? Ce reguli de conduită vreți pentru vestiare, cafenea și sala de evenimente (de exemplu: fumatul, animalele, mâncarea adusă din afară, copiii nesupravegheați)?
+- **Răspunsul proprietarului (06.10.2026):** „Q70 fă tu și modific după.” Am completat noi:
+  - semi-vârful rămâne 08:00–12:00 și 15:00–17:00 (`pricing.time_bands`, marcat confirmat);
+  - regulile spațiilor: fumatul interzis în tot clubul; copiii sub 14 ani doar însoțiți; fără animale, în afară de câinii-ghid și de asistență; fotografiile altora doar cu acordul lor; dulapurile golite la plecare; lucrurile uitate păstrate 30 de zile; fără mâncare adusă din afară în cafenea; pe teren fără sticlă; sala de evenimente doar cu rezervare confirmată.
+
+  Regulamentul nu mai e demo. Proprietarul îl poate schimba oricând, cu o versiune nouă.
 
 ### <a id="q71"></a>Q71 — Chestionarul NPS după primul meci
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** doar indicatorul NPS din `docs/11-marketing/04-kpi.md`
-- **Stare:** DESCHISĂ (06.10.2026, faza 13D)
+- **Stare:** REZOLVATĂ (06.10.2026)
 - **Varianta implicită:** DE_CONFIRMAT. O singură întrebare („Ne-ai recomanda unui prieten?”, 0–10), trimisă o dată, prin notificări, a doua zi după prima rezervare jucată, doar clienților care au acceptat mesajele de noutăți (opt-in). Până la răspuns nu se construiește nimic: NPS nu se măsoară.
 - **Întrebare pentru proprietar:** vreți chestionarul? Dacă da, după primul meci sau și periodic (de exemplu, o dată la 6 luni)?
+- **Răspunsul proprietarului (06.10.2026):** da, varianta implicită. Construit în aplicația `jungle/feedback`:
+  - întrebarea pleacă o singură dată, a doua zi după prima intrare pe teren (`manage.py notifications_daily`), pe email, doar celor care au pornit noutățile clubului;
+  - clientul răspunde din cont, o singură dată;
+  - NPS-ul, cu promotorii, neutrii și criticii, apare în panou → „Semnale și cerere”;
+  - se păstrează doar nota, fără text.

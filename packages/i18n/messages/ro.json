@@ -234,7 +234,9 @@
     "ai.draft_not_found": "Ciorna nu există.",
     "ai.draft_reviewed": "Ciorna a fost deja revizuită.",
     "content.not_found": "Textul nu a fost schimbat din panou.",
-    "content.no_draft": "Nu există o ciornă pentru acest text."
+    "content.no_draft": "Nu există o ciornă pentru acest text.",
+    "feedback.not_asked": "Nu avem nicio întrebare pentru tine acum.",
+    "feedback.answered": "Ai răspuns deja. Mulțumim!"
   },
   "web": {
     "meta": {
@@ -2016,6 +2018,16 @@
         },
         "always": "Mesajele despre cont, rezervări, taxe și deciziile clubului (de exemplu o blocare a rezervărilor) vin mereu: nu se pot opri.",
         "saved": "Alegerea e salvată."
+      },
+      "feedback": {
+        "title": "Ne-ai recomanda unui prieten?",
+        "lead": "Alege o notă de la 0 (deloc) la 10 (sigur). Răspunzi o singură dată.",
+        "scale": "Nota ta, de la 0 la 10",
+        "low": "0 · deloc",
+        "high": "10 · sigur",
+        "score": "Nota {score}",
+        "sending": "Se trimite…",
+        "thanks": "Mulțumim! Răspunsul tău ne ajută să facem clubul mai bun."
       }
     },
     "bookings": {
@@ -3659,7 +3671,11 @@
       },
       "proposal": "Sugestiile sunt doar propuneri: prețurile le schimbă un om, în modulul Prețuri.",
       "outlookTitle": "Următoarele 7 zile, rezervat până acum",
-      "day": "Ziua"
+      "day": "Ziua",
+      "npsTitle": "Ne-ai recomanda? NPS ({first} – {last})",
+      "npsNone": "Încă niciun răspuns ({asked} întrebați după primul meci).",
+      "npsScore": "NPS: {nps}",
+      "npsCounts": "{answers} răspunsuri din {asked} întrebați: {promoters} promotori (9–10), {passives} neutri (7–8), {detractors} critici (0–6). NPS = procentul promotorilor minus procentul criticilor."
     },
     "content": {
       "title": "Conținutul site-ului",

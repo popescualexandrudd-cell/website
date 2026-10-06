@@ -11,7 +11,7 @@
 | Jucători activi în ligă | jucători cu cel puțin un meci aplicat în ultimele 30 de zile | Panou → Liga |
 | Retenția și abandonul | abonați care reînnoiesc / abonați cu abonament încheiat; jucători „Hai înapoi pe teren” care revin | Panou → Abonamente, Liga |
 | Venit pe teren | venitul din închirieri pe fiecare teren, pe perioadă | Panou → Rapoarte (venituri pe categorii, ocuparea fiecărui teren) |
-| NPS | scorul la întrebarea „Ne-ai recomanda?” (0–10) | DE_CONFIRMAT: chestionarul, după primul meci (Q71) |
+| NPS | procentul promotorilor (9–10) minus procentul criticilor (0–6), la întrebarea „Ne-ai recomanda?”, pusă o dată după primul meci (Q71) | Panou → Semnale și cerere (ultimele 90 de zile) |
 
 ## Propunere: tabloul KPI într-un singur ecran
-Toate cifrele de mai sus, mai puțin NPS, există deja în panou, în module diferite. Un ecran „KPI” care le adună pe o perioadă se poate construi în Etapa 15 (beta), după primele date reale; până atunci, Rapoartele și „Semnale și cerere” acoperă cifrele.
+Toate cifrele de mai sus există deja în panou, în module diferite. Un ecran „KPI” care le adună pe o perioadă se poate construi în Etapa 15 (beta), după primele date reale; până atunci, Rapoartele și „Semnale și cerere” acoperă cifrele.

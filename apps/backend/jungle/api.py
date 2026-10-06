@@ -39,6 +39,8 @@ from jungle.devices.api import device_router
 from jungle.devices.api import router as devices_router
 from jungle.events.api import public_router as club_events_router
 from jungle.events.api import staff_router as club_events_staff_router
+from jungle.feedback.api import me_router as feedback_router
+from jungle.feedback.api import staff_router as feedback_staff_router
 from jungle.league.api import me_router as league_me_router
 from jungle.league.api import public_router as league_public_router
 from jungle.league.api import staff_router as league_staff_router
@@ -100,6 +102,8 @@ api.add_router("/blog", blog_router)
 api.add_router("/staff", blog_staff_router)
 api.add_router("/content", content_router)
 api.add_router("/staff", content_staff_router)
+api.add_router("/feedback", feedback_router)
+api.add_router("/staff", feedback_staff_router)
 api.add_router("/notifications", notifications_router)
 api.add_router("/staff", notifications_staff_router)
 api.add_router("/ai", ai_router)

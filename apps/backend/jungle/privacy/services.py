@@ -39,6 +39,7 @@ from jungle.core import clock
 from jungle.core.ai_origin import refuse_ai
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.permissions import Action
+from jungle.feedback.models import Feedback
 from jungle.ledger.models import AccountKind, LedgerEntry, Payment
 from jungle.ledger.services import customer_credit, customer_debt
 from jungle.legal.models import Consent
@@ -173,6 +174,7 @@ def export_data(user: User) -> dict[str, Any]:
         "company_memberships": _rows(
             CorporateMember.objects.filter(user=user), ["account__name", "added_at", "removed_at"]
         ),
+        "feedback": _rows(Feedback.objects.filter(user=user), ["asked_at", "score", "answered_at"]),
         "balance": {"credit": customer_credit(user), "debt": customer_debt(user)},
     }
     return data

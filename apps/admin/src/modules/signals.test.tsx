@@ -42,8 +42,20 @@ const demand = {
   ],
 };
 
-function mount(signals: unknown[]) {
+const answered = {
+  first: "2026-12-16",
+  last: "2027-03-15",
+  asked: 5,
+  answers: 4,
+  promoters: 2,
+  passives: 1,
+  detractors: 1,
+  nps: 25,
+};
+
+function mount(signals: unknown[], opinion: unknown = answered) {
   const api = fakeApi({
+    "GET /api/v1/staff/feedback/summary": () => json(opinion),
     "GET /api/v1/staff/panel/signals": () => json(signals),
     "GET /api/v1/staff/panel/demand": () => json(demand),
   });
@@ -81,7 +93,12 @@ describe("signals and demand (§10)", () => {
     expect(calls.map((c) => c.query)).toEqual([
       "?location_id=l1",
       "?location_id=l1",
+      "?location_id=l1",
     ]);
+    expect(screen.getByText("NPS: 25")).toBeTruthy();
+    expect(
+      screen.getByText(/4 răspunsuri din 5 întrebați: 2 promotori \(9–10\), 1 neutri/),
+    ).toBeTruthy();
     expect(
       screen.getByText(
         /Aceiași patru jucători, 4 meciuri de ligă în 7 zile: Ana Pop, Bia Pop\./,
@@ -106,8 +123,9 @@ describe("signals and demand (§10)", () => {
   });
 
   it("no signals", async () => {
-    mount([]);
+    mount([], { ...answered, asked: 2, answers: 0, promoters: 0, passives: 0, detractors: 0, nps: null });
     await settle();
     expect(screen.getByText("Niciun semnal acum.")).toBeTruthy();
+    expect(screen.getByText("Încă niciun răspuns (2 întrebați după primul meci).")).toBeTruthy();
   });
 });

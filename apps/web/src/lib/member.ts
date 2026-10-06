@@ -227,3 +227,14 @@ export async function removePushSubscription(endpoint: string) {
   await ensureCsrf();
   return outcome(() => api.POST("/api/v1/notifications/push-subscriptions/remove", { body: { endpoint } }));
 }
+
+// ------------------------------------------------------------------ the question after the first game (Q71)
+export const feedbackState = () => outcome(() => api.GET("/api/v1/feedback"));
+
+export async function answerFeedback(score: number) {
+  await ensureCsrf();
+  return outcome(() => api.POST("/api/v1/feedback", { body: { score } }));
+}
+
+/** The eleven answers, 0 … 10, in the order they are shown. */
+export const FEEDBACK_SCORES: readonly number[] = Array.from({ length: 11 }, (_, n) => n);

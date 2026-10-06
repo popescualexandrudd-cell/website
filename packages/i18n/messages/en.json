@@ -234,7 +234,9 @@
     "ai.draft_not_found": "The draft does not exist.",
     "ai.draft_reviewed": "The draft has already been reviewed.",
     "content.not_found": "This text was not changed from the panel.",
-    "content.no_draft": "There is no draft for this text."
+    "content.no_draft": "There is no draft for this text.",
+    "feedback.not_asked": "We have no question for you right now.",
+    "feedback.answered": "You have already answered. Thank you!"
   },
   "web": {
     "meta": {
@@ -2016,6 +2018,16 @@
         },
         "always": "Messages about your account, bookings, fees and the club's decisions (for example a booking block) always arrive: they cannot be turned off.",
         "saved": "Your choice is saved."
+      },
+      "feedback": {
+        "title": "Would you recommend us to a friend?",
+        "lead": "Choose a score from 0 (not at all) to 10 (definitely). You answer only once.",
+        "scale": "Your score, from 0 to 10",
+        "low": "0 · not at all",
+        "high": "10 · definitely",
+        "score": "Score {score}",
+        "sending": "Sending…",
+        "thanks": "Thank you! Your answer helps us make the club better."
       }
     },
     "bookings": {
@@ -3659,7 +3671,11 @@
       },
       "proposal": "Suggestions are only proposals: a person changes prices, in the Pricing module.",
       "outlookTitle": "The next 7 days, booked so far",
-      "day": "Day"
+      "day": "Day",
+      "npsTitle": "Would you recommend us? NPS ({first} – {last})",
+      "npsNone": "No answers yet ({asked} asked after their first game).",
+      "npsScore": "NPS: {nps}",
+      "npsCounts": "{answers} answers from {asked} asked: {promoters} promoters (9–10), {passives} passives (7–8), {detractors} detractors (0–6). NPS = the promoters' share minus the detractors' share."
     },
     "content": {
       "title": "Website content",

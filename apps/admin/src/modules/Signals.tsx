@@ -3,7 +3,8 @@
  * look, computed by the server from the club's records (repeated league matches, disputed scores,
  * cash differences, many corrections, clients who often cancel late or do not come), and how full
  * the padel courts were in each price band, with a suggestion that stays a proposal (prices change
- * only in the Pricing module), plus the next seven days. Nothing here changes anything.
+ * only in the Pricing module), plus the next seven days, and the clients' answer to "would you
+ * recommend us?" after their first game (NPS, Q71). Nothing here changes anything.
  */
 import { type Schemas, unwrap } from "../api";
 import { formatDate, formatTime } from "../i18n";
@@ -30,7 +31,12 @@ export function Signals() {
     () => unwrap(api.client.GET("/api/v1/staff/panel/demand", where)),
     [api, locationId],
   );
+  const opinion = useData(
+    () => unwrap(api.client.GET("/api/v1/staff/feedback/summary", where)),
+    [api, locationId],
+  );
   const d = demand.data;
+  const o = opinion.data;
   return (
     <section aria-labelledby="signals-title">
       <h1 id="signals-title">{t("signals.title")}</h1>
@@ -53,6 +59,32 @@ export function Signals() {
             </li>
           ))}
         </ul>
+      ) : null}
+      {o ? (
+        <>
+          <h2>
+            {t("signals.npsTitle", {
+              first: formatDate(lang, o.first),
+              last: formatDate(lang, o.last),
+            })}
+          </h2>
+          {o.nps === null ? (
+            <p>{t("signals.npsNone", { asked: o.asked })}</p>
+          ) : (
+            <>
+              <p className="stat">{t("signals.npsScore", { nps: o.nps })}</p>
+              <p>
+                {t("signals.npsCounts", {
+                  answers: o.answers,
+                  asked: o.asked,
+                  promoters: o.promoters,
+                  passives: o.passives,
+                  detractors: o.detractors,
+                })}
+              </p>
+            </>
+          )}
+        </>
       ) : null}
       {d ? (
         <>

@@ -782,4 +782,7 @@ def test_s11_the_daily_command_sends_the_expiring_reminders(time_machine: Any) -
     time_machine.move_to("2027-04-17T07:00:00+03:00", tick=False)
     out = StringIO()
     call_command("notifications_daily", stdout=out)
-    assert out.getvalue().strip() == "Abonamente care expiră curând: 0."
+    assert out.getvalue().splitlines() == [
+        "Abonamente care expiră curând: 0.",
+        "Întrebați după primul meci (NPS): 0.",
+    ]

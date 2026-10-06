@@ -34,7 +34,7 @@ def test_seed_demo_marks_demo_data() -> None:
     assert ("Popescu", "Alexandru Daniel") in names  # §8.5 demo names
     assert ("Moșteanu", "Rareș") in names
     assert all(User.objects.values_list("is_demo", flat=True))
-    assert LegalDocument.objects.count() == 12  # 6 legal texts × RO/EN (with the league form)
+    assert LegalDocument.objects.count() == 14  # 7 texts × RO/EN (the league form, the rules)
     for doc in LegalDocument.objects.all():
         assert doc.is_demo == ("DE_CONFIRMAT" in doc.body), doc  # placeholders are never 'final'
     # §9.2.12: two demo events on the calendar, ahead of today, marked in both languages

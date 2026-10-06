@@ -106,6 +106,8 @@ class ErrorCode(StrEnum):
     AI_DRAFT_REVIEWED = "ai.draft_reviewed"
     CONTENT_NOT_FOUND = "content.not_found"
     CONTENT_NO_DRAFT = "content.no_draft"
+    FEEDBACK_NOT_ASKED = "feedback.not_asked"
+    FEEDBACK_ANSWERED = "feedback.answered"
     ATTENDANCE_UNKNOWN_PERSON = "attendance.unknown_person"
     RESTRICTIONS_NOT_FOUND = "restrictions.not_found"
     PAYMENTS_IDEMPOTENCY_REQUIRED = "payments.idempotency_required"

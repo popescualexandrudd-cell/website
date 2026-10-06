@@ -4,6 +4,12 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 13 aprobată — 06.10.2026
+#### Adăugat
+- Q71: întrebarea „Ne-ai recomanda?” după primul meci (`jungle/feedback`, evenimentul `club.feedback`, `GET/POST /api/v1/feedback`, `GET /api/v1/staff/feedback/summary`); cardul din cont (`FeedbackAsk`); NPS în panou → Semnale și cerere; nota în exportul GDPR.
+#### Schimbat
+- Q70: regulamentul completat (semi-vârful, regulile spațiilor), nu mai e demo; `pricing.time_bands` marcat confirmat.
+
 ### Etapa 13, faza 13E: Branding și vânzări — 06.10.2026 (livrat)
 #### Adăugat
 - Platforma de brand propusă (`docs/12-branding/06-platforma-de-brand-propunere.md`): ton, valori, verificarea mărcii și a domeniului, 3 brief-uri de logo, aplicații.

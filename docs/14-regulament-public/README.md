@@ -10,4 +10,4 @@ Regulamentul afișat pe site (`/ro/regulament`, `/en/rules`) și la recepție: p
 - Textul public e sub marcajul `<!-- PUBLIC TEXT BELOW -->`, ca la celelalte texte juridice.
 - Se publică versionat (documentul `rules` din `jungle.legal`): `seed_initial --demo` îl adaugă, iar o versiune nouă se publică cu `manage.py publish_legal_document --kind rules`.
 - Cât conține `DE_CONFIRMAT`, apare marcat ca demo.
-- **Aprobarea finală o dă proprietarul** (Q70).
+- **Aprobarea finală o dă proprietarul** (Q70). Pe 06.10.2026 proprietarul ne-a lăsat pe noi să completăm punctele deschise („fă tu și modific după”): textul nu mai e demo, iar o schimbare ulterioară se publică ca versiune nouă (`manage.py publish_legal_document --kind rules`).

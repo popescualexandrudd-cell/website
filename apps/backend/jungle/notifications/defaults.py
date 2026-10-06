@@ -378,6 +378,21 @@ DEFAULTS: dict[str, dict[str, Texts]] = {
             "{{ title }}, {{ when }}.",
         ),
     },
+    "club.feedback": {
+        "ro": Texts(
+            "Cum a fost primul tău meci la Jungle Padel?",
+            "Bună, {{ first_name }}!\n\nMulțumim că ai jucat la noi. O singură întrebare: "
+            "ne-ai recomanda unui prieten? Răspunzi cu o notă de la 0 la 10, din cont.\n\n{{ url }}",
+            "Ne-ai recomanda unui prieten? Răspunde din cont.",
+        ),
+        "en": Texts(
+            "How was your first game at Jungle Padel?",
+            "Hi {{ first_name }},\n\nThank you for playing with us. Just one question: would "
+            "you recommend us to a friend? Answer with a score from 0 to 10, in your account.\n\n"
+            "{{ url }}",
+            "Would you recommend us to a friend? Answer in your account.",
+        ),
+    },
     "staff.cash_low": {
         "ro": Texts(
             "Rest scăzut: {{ device }}",

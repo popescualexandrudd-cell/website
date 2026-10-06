@@ -1,6 +1,6 @@
 # Secvențele de email (§15.5)
 
-> Etapa 13E, 06.10.2026. Cele patru secvențe din §15.5 (bun venit, după primul meci, reactivare, reînnoirea abonamentului), legate de notificările construite în Etapa 12 (`jungle/notifications`). Textele mesajelor existente se schimbă din panou, în modulul **Notificări** (șabloanele, RO și EN), fără cod. Ce lipsește e marcat și **nu e construit** până la decizia proprietarului (Q71, Q67). Toate sunt **DE_CONFIRMAT**.
+> Etapa 13E, 06.10.2026. Cele patru secvențe din §15.5 (bun venit, după primul meci, reactivare, reînnoirea abonamentului), legate de notificările construite în Etapa 12 (`jungle/notifications`). Textele mesajelor existente se schimbă din panou, în modulul **Notificări** (șabloanele, RO și EN), fără cod. Ce lipsește e marcat și **nu e construit** până la decizia proprietarului (Q67); mesajul de după primul meci e construit (Q71, 06.10.2026). Toate sunt **DE_CONFIRMAT**.
 
 ## Regulile comune
 - **Mesajele de serviciu** (confirmări, expirări, mementouri despre contul clientului) pleacă fără acord separat, pentru că țin de serviciul cumpărat.
@@ -19,7 +19,7 @@
 ## 2. După primul meci
 | Pasul | Când | Mesajul | Starea |
 |---|---|---|---|
-| 1 | a doua zi după prima rezervare jucată | „Cum a fost?”: chestionarul NPS (Q71), simulatorul „Care e nivelul tău?”, cum intri în ligă (18+, la Chioșcul Ligii) | **propus**, neconstruit (Q71) |
+| 1 | a doua zi după prima intrare pe teren | „Cum a fost primul tău meci?” (`club.feedback`): „Ne-ai recomanda unui prieten?”, 0–10, cu răspunsul din cont; doar cu noutățile clubului pornite | construit (Q71, 06.10.2026) |
 | 2 | după primul meci de ligă confirmat | „Scor validat” (`league.score_validated`) și, dacă e cazul, „Rang nou” (`league.rank_changed`) | construit |
 
 ## 3. Reactivare
@@ -38,4 +38,4 @@
 
 ## Ce decide proprietarul
 1. Textele: le citește în panou, în modulul Notificări, și le schimbă unde vrea.
-2. Cele trei mesaje propuse (bun venit, pasul 3; după primul meci; reactivarea fără ligă): le construim doar dacă le vrea, ca evenimente noi în catalogul notificărilor, cu același mecanism.
+2. Cele două mesaje propuse încă neconstruite (bun venit, pasul 3; reactivarea fără ligă): le construim doar dacă le vrea, ca evenimente noi în catalogul notificărilor, cu același mecanism.

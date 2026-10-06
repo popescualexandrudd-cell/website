@@ -11,6 +11,7 @@ import { Link } from "@/i18n/navigation";
 import * as account from "@/lib/account";
 import { CLUB_TZ } from "@/lib/live";
 import { lei } from "@/lib/packages";
+import { FeedbackAsk } from "./FeedbackAsk";
 import { useErrorText } from "./useErrorText";
 
 type State = { kind: "loading" } | { kind: "anonymous" } | { kind: "offline" } | { kind: "user"; me: account.Me };
@@ -204,6 +205,8 @@ function Dashboard({ me, locale, onSignedOut }: { me: account.Me; locale: string
           </button>
         </p>
       </section>
+
+      <FeedbackAsk />
 
       {(notice || loadError) && (
         <p className="status" role="status">

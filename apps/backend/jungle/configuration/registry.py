@@ -532,9 +532,9 @@ CONFIG: dict[str, ConfigSpec] = {
                     ["22:00", "24:00", "off_peak"],
                 ],
             },
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Benzile orare de preț (R-050). Vârful 17–22 e confirmat (Q3, 27.09.2026); "
-            "semi-vârful 08–12 și 15–17 e implicit.",
+            "semi-vârful 08–12 și 15–17, ales de noi la cererea proprietarului (Q70, 06.10.2026).",
             time_bands,
             question="Q3",
         ),

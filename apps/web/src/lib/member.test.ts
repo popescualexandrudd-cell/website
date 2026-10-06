@@ -5,6 +5,7 @@ import {
   type Voucher,
   clubToday,
   entryChange,
+  FEEDBACK_SCORES,
   keyBytes,
   partnerIdFrom,
   qrImage,
@@ -106,5 +107,11 @@ describe("push notifications (Q17)", () => {
   it("the club's key as bytes, from base64url without padding", () => {
     expect(Array.from(keyBytes("AQID_-8"))).toEqual([1, 2, 3, 255, 239]);
     expect(keyBytes("BAAA").length).toBe(3);
+  });
+});
+
+describe("the question after the first game (Q71)", () => {
+  it("offers the eleven scores, 0 to 10, in order", () => {
+    expect(FEEDBACK_SCORES).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
   });
 });
