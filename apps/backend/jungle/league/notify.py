@@ -39,10 +39,11 @@ TIER_WORDS = {
 
 def send(
     event: str, user: User, context: dict[str, Any], subject: str, page: str = "league"
-) -> None:
-    """`event` from the catalog (`league.*`); `subject` makes it once per thing and person."""
+) -> bool:
+    """`event` from the catalog (`league.*`); `subject` makes it once per thing and person.
+    True when a message was written now (not already, and a channel the person can get)."""
     url = account_path(user.preferred_language, page)
-    notifications.notify(user, event, {**context, "url": url}, subject=subject)
+    return bool(notifications.notify(user, event, {**context, "url": url}, subject=subject))
 
 
 def language_of(user: User) -> str:

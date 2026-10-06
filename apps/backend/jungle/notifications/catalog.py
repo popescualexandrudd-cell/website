@@ -75,6 +75,7 @@ EVENTS: dict[str, Event] = {
         Event("league.season_end", Category.LEAGUE),
         Event("league.match_of_the_day", Category.LEAGUE, PUSH_ONLY),
         Event("league.inactive", Category.LEAGUE),
+        Event("league.weekly_report", Category.LEAGUE),
         # subscriptions and money
         Event("subscription.bought", Category.SUBSCRIPTIONS, mandatory=True),
         Event("subscription.expiring", Category.SUBSCRIPTIONS),

@@ -94,7 +94,7 @@ def test_lg107_english_and_departed_players(
 def test_the_daily_command(season: LeagueSeason, now: Any) -> None:
     out = StringIO()
     call_command("league_daily", stdout=out)
-    assert out.getvalue().strip() == "Decay: 4 zile, 0 LP scăzute; avertizări: 0."
+    assert out.getvalue().strip() == "Decay: 4 zile, 0 LP scăzute; avertizări: 0; mementouri: 0."
 
 
 def test_r140_league_emails_skip_accounts_without_email() -> None:

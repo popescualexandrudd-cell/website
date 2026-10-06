@@ -285,13 +285,25 @@ DEFAULTS: dict[str, dict[str, Texts]] = {
     "league.inactive": {
         "ro": Texts(
             "Hai înapoi pe teren",
-            "Bună, {{ first_name }}!\n\nN-ai mai jucat de {{ days }} zile. Jucători de nivelul tău care caută parteneri: {{ partners }}.\n\n{{ url }}",
+            "Bună, {{ first_name }}!\n\nN-ai mai jucat de {{ days }} zile. {{ partners }}\n\n{{ url }}",
             "N-ai mai jucat de {{ days }} zile. Hai înapoi pe teren!",
         ),
         "en": Texts(
             "Back on court",
-            "Hi {{ first_name }},\n\nYou have not played for {{ days }} days. Players of your level looking for partners: {{ partners }}.\n\n{{ url }}",
+            "Hi {{ first_name }},\n\nYou have not played for {{ days }} days. {{ partners }}\n\n{{ url }}",
             "You have not played for {{ days }} days. Back on court!",
+        ),
+    },
+    "league.weekly_report": {
+        "ro": Texts(
+            "Jungle Report: săptămâna {{ week }}",
+            "Bună, {{ first_name }}!\n\nSăptămâna ta în Liga Jungle ({{ week }}):\n- meciuri de ligă: {{ matches }}, câștigate: {{ wins }};\n- LP: {{ lp }};\n- rangul tău acum: {{ rank }};\n- partenerul cu care ai jucat cel mai des: {{ partner }}.\n\n{{ goal }}\n\nClasamentul și istoricul tău: {{ url }}",
+            "Săptămâna ta: {{ matches }} meciuri, {{ wins }} câștigate, {{ lp }} LP.",
+        ),
+        "en": Texts(
+            "Jungle Report: the week of {{ week }}",
+            "Hi {{ first_name }},\n\nYour week in the Jungle League ({{ week }}):\n- league matches: {{ matches }}, won: {{ wins }};\n- LP: {{ lp }};\n- your rank now: {{ rank }};\n- the partner you played with most: {{ partner }}.\n\n{{ goal }}\n\nYour standings and history: {{ url }}",
+            "Your week: {{ matches }} matches, {{ wins }} won, {{ lp }} LP.",
         ),
     },
     "subscription.bought": {

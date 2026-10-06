@@ -2,7 +2,9 @@
 
 - LG-106: the inactivity decay of Diamond and Master, one event per day, for every day since
   the last one recorded (a missed night is caught up; the engine applies a day only once);
-- LG-107: the warning three days before the decay starts, sent once per player and day.
+- LG-107: the warning three days before the decay starts, sent once per player and day;
+- §11 reminders: a pause too long, matches still needed, the Match of the day (`reminders`);
+- on Mondays, the personal Jungle Report of the week that ended (`weekly`).
 """
 
 from __future__ import annotations
@@ -17,7 +19,7 @@ from jungle_league.engine import decay_warnings
 from jungle.accounts.models import User
 from jungle.audit.services import SYSTEM
 from jungle.core import clock
-from jungle.league import badges, notify, services, store
+from jungle.league import badges, notify, reminders, services, store, weekly
 from jungle.league.models import (
     DecayWarning,
     EventKind,
@@ -94,11 +96,12 @@ class DailyReport:
     lp_removed: int
     warnings: int
     badges: int = 0
+    reminders: int = 0
 
 
 def run_daily(today: date | None = None) -> DailyReport:
     today = today or clock.today_local()
-    days = lp = warnings = given = 0
+    days = lp = warnings = given = told = 0
     for season in LeagueSeason.objects.filter(status=SeasonStatus.ACTIVE):
         for day in decay_days(season, today):
             event = store.record(
@@ -113,6 +116,10 @@ def run_daily(today: date | None = None) -> DailyReport:
             record = event.records.order_by("-computation").first()
             lp -= sum(u["lp_delta"] for u in (record.payload.get("decay", []) if record else []))
         warnings += warn(season, today)
-        if today.weekday() == 0:  # Monday: the upset of the week that ended
+        told += reminders.run(season, today)
+        if today.weekday() == 0:  # Monday: the upset and the Jungle Report of the week that ended
             given += badges.upset_of_week(season, today - timedelta(days=7))
-    return DailyReport(days_decayed=days, lp_removed=lp, warnings=warnings, badges=given)
+            told += weekly.send(season, today)
+    return DailyReport(
+        days_decayed=days, lp_removed=lp, warnings=warnings, badges=given, reminders=told
+    )

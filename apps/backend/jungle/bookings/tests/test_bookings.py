@@ -506,3 +506,37 @@ def test_s11_a_booking_confirmed_reminded_and_a_cancellation_withdraws_the_remin
     withdrawn = Notification.objects.get(event="booking.reminder_24h", key__contains=second["id"])
     assert withdrawn.status == Status.SKIPPED and withdrawn.last_error == "withdrawn"
     assert booking["id"] != second["id"]
+
+
+def test_s11_a_league_match_gets_enter_the_score_at_its_end(
+    api: Api, club: Any, player: Any, settings: Any
+) -> None:
+    """A push to the organizer when the match ends (the score goes in at the League Kiosk);
+    withdrawn when the booking stops being a league match, back when it is one again."""
+    from jungle.notifications.models import Notification, PushSubscription, Status
+
+    settings.VAPID_PUBLIC_KEY, settings.VAPID_PRIVATE_KEY = "public", "private"
+    settings.VAPID_SUBJECT = "mailto:club@example.test"
+    PushSubscription.objects.create(
+        user=player,
+        endpoint="https://push.example.test/a",
+        p256dh="B",
+        auth="A",
+        created_at=clock.now(),
+    )
+    booking = book(api, club.court1, TUE_10, session_type="official_match").json()
+    [window] = Notification.objects.filter(event="league.score_window")
+    assert window.send_after.isoformat() == "2027-03-16T09:00:00+00:00"  # 11:00, its end
+    assert window.status == Status.QUEUED and window.context["url"] == "/ro/cont/liga"
+    path = f"/bookings/{booking['id']}/session-type"
+    assert api.post(path, {"session_type": "training"}).status_code == 200
+    window.refresh_from_db()
+    assert window.status == Status.SKIPPED
+    assert api.post(path, {"session_type": "challenge"}).status_code == 200
+    window.refresh_from_db()
+    assert window.status == Status.QUEUED and window.last_error == ""
+    assert Notification.objects.filter(event="league.score_window").count() == 1
+    training = book(api, club.court1, "2027-03-17T10:00:00+02:00").json()
+    assert not Notification.objects.filter(
+        event="league.score_window", key__contains=training["id"]
+    ).exists()

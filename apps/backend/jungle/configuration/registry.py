@@ -213,6 +213,7 @@ BADGE_KEYS = (
     "early_bird_matches",
     "weekly_streak_weeks",
 )
+PARTNER_KEYS = ("level_gap_levels", "recent_days", "suggestions")
 SPOTLIGHT_KEYS = (
     "promotion",
     "promotion_margin_lp",
@@ -625,6 +626,24 @@ CONFIG: dict[str, ConfigSpec] = {
             question="Q68",
         ),
         ConfigSpec(
+            "notifications.inactive_days",
+            21,
+            Marker.TO_CONFIRM,
+            "După câte zile fără meci de ligă primește jucătorul „n-ai mai jucat de X zile”, cu "
+            "jucători de nivelul lui (§11).",
+            positive_int,
+            question="Q67",
+        ),
+        ConfigSpec(
+            "notifications.matches_needed_days",
+            14,
+            Marker.TO_CONFIRM,
+            "Cu câte zile înainte de finalul sezonului primește jucătorul „îți mai trebuie N "
+            "meciuri pentru clasamentul final” (§11).",
+            positive_int,
+            question="Q67",
+        ),
+        ConfigSpec(
             "notifications.absences_after",
             2,
             Marker.TO_CONFIRM,
@@ -776,6 +795,15 @@ CONFIG: dict[str, ConfigSpec] = {
             Marker.TO_CONFIRM,
             "Pragurile insignelor (§6.15).",
             number_map(BADGE_KEYS),
+        ),
+        ConfigSpec(
+            "league.partners",
+            {"level_gap_levels": 0.75, "recent_days": 30, "suggestions": 3},
+            Marker.TO_CONFIRM,
+            "Potrivirea jucătorilor (§10, ADR-0019): diferența maximă de nivel, în câte zile "
+            "trebuie să fi jucat cei propuși și câți sunt propuși.",
+            number_map(PARTNER_KEYS),
+            question="Q67",
         ),
         ConfigSpec(
             "league.match_of_the_day",

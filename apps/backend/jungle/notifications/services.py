@@ -149,6 +149,15 @@ def withdraw(events: tuple[str, ...], subject: str) -> int:
     return queued.update(status=Status.SKIPPED, last_error="withdrawn")
 
 
+def revive(event_key: str, subject: str) -> int:
+    """A withdrawn message that is true again (a booking that is a league match once more):
+    queued again, for the time it had."""
+    withdrawn = Notification.objects.filter(
+        status=Status.SKIPPED, last_error="withdrawn", event=event_key
+    ).filter(key__contains=f":{subject}:")
+    return withdrawn.update(status=Status.QUEUED, last_error="")
+
+
 def notify_staff(location_id: Any, key: str, context: dict[str, Any], subject: str = "") -> None:
     """To the managers and admins of the location (and the admins of every location)."""
     roles = UserRole.objects.filter(role__in=STAFF_ROLES).filter(

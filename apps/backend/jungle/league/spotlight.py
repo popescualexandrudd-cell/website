@@ -6,6 +6,9 @@ players met often lately), a big level gap. Points and thresholds are configurab
 (`league.match_of_the_day`). The admin can pick another match, with a reason. The AI's
 presentation text and the summary after the match come with Stage 12.
 
+The players of the chosen match get a push "Meciul zilei" (§11): after midnight from the daily
+job, and again (once a day per person) when the admin picks another match.
+
 Shown publicly with R-012 data only (names, rank, level, LP, place): no court, no time.
 Players are the ones who scanned in on the court; before that, the players of the accepted
 challenge, or the booking's organiser.
@@ -23,6 +26,7 @@ from django.db import transaction
 from django.db.models import Q
 from django.http import HttpRequest
 
+from jungle.accounts.models import User
 from jungle.accounts.services.authz import authorize
 from jungle.attendance.models import Scan, ScanKind
 from jungle.audit import services as audit
@@ -31,7 +35,7 @@ from jungle.configuration.services import get_config
 from jungle.core import clock
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.permissions import Action
-from jungle.league import projection, store
+from jungle.league import notify, projection, store
 from jungle.league.models import (
     Challenge,
     ChallengeStatus,
@@ -199,4 +203,25 @@ def choose(
             target=row,
             reason=reason,
         )
+        announce(location, day)
     return row
+
+
+def announce(location: Location, day: date) -> int:
+    """§11 "Meciul zilei (pentru cei implicați)": a push to the players known so far, once a day
+    per person. Returns how many messages were written now."""
+    found = match_of_the_day(location, day)
+    if found is None:
+        return 0
+    booking = found.booking
+    season = LeagueSeason.objects.get(location=location, status=SeasonStatus.ACTIVE)
+    ids = known_players(booking, season)
+    context = {
+        "when": booking.starts_at.astimezone(clock.BUSINESS_TZ).strftime("%H:%M"),
+        "court": booking.resource.name,
+    }
+    people = User.objects.filter(pk__in=ids, is_active=True, deleted_at__isnull=True)
+    return sum(
+        notify.send("league.match_of_the_day", user, context, subject=day.isoformat())
+        for user in people
+    )

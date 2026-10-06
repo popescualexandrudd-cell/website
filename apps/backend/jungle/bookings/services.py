@@ -304,6 +304,8 @@ REMINDERS = (
     ("booking.reminder_24h", timedelta(hours=24)),
     ("booking.reminder_2h", timedelta(hours=2)),
 )
+SCORE_WINDOW = "league.score_window"
+LEAGUE_SESSIONS = (SessionType.OFFICIAL_MATCH, SessionType.CHALLENGE)
 CANCELLED_CHARGED = {
     "ro": "Fiind cu mai puțin de 24 de ore înainte, rezervarea se plătește.",
     "en": "As it was less than 24 hours before, the booking is paid.",
@@ -311,8 +313,9 @@ CANCELLED_CHARGED = {
 
 
 def _messages(booking: Booking, event: str, extra: dict[str, str] | None = None) -> None:
-    """§11: the confirmation, change or cancellation, and the reminders at 24 h and 2 h before
-    (only those still ahead; a change or a cancellation withdraws the old ones)."""
+    """§11: the confirmation, change or cancellation, the reminders at 24 h and 2 h before (only
+    those still ahead; a change or a cancellation withdraws the old ones) and, for a league match,
+    "enter the score" at its end (a push: the score goes in only at the League Kiosk)."""
     user = booking.organizer
     context = {
         "resource": booking.resource.name,
@@ -321,7 +324,7 @@ def _messages(booking: Booking, event: str, extra: dict[str, str] | None = None)
         **(extra or {}),
     }
     when = booking.starts_at.astimezone(UTC).isoformat()
-    notifications.withdraw(tuple(key for key, _ in REMINDERS), str(booking.pk))
+    notifications.withdraw((*(key for key, _ in REMINDERS), SCORE_WINDOW), str(booking.pk))
     notifications.notify(user, event, context, subject=f"{booking.pk}@{when}")
     if event == "booking.cancelled":
         return
@@ -335,6 +338,24 @@ def _messages(booking: Booking, event: str, extra: dict[str, str] | None = None)
                 subject=f"{booking.pk}@{when}",
                 send_after=booking.starts_at - before,
             )
+    _score_window(booking)
+
+
+def _score_window(booking: Booking) -> None:
+    """§11 "fereastra de scor deschisă": a push to the organizer of a league match at its end;
+    withdrawn when the booking stops being one (and brought back when it is one again)."""
+    when = booking.starts_at.astimezone(UTC).isoformat()
+    notifications.withdraw((SCORE_WINDOW,), str(booking.pk))
+    if booking.session_type not in LEAGUE_SESSIONS or booking.ends_at <= clock.now():
+        return
+    user = booking.organizer
+    subject = f"{booking.pk}@{when}"
+    context = {
+        "resource": booking.resource.name,
+        "url": account_path(user.preferred_language, "league"),
+    }
+    notifications.notify(user, SCORE_WINDOW, context, subject=subject, send_after=booking.ends_at)
+    notifications.revive(SCORE_WINDOW, subject)
 
 
 def _brief(booking: Booking) -> dict[str, object]:
@@ -504,6 +525,7 @@ def change_session_type(request: HttpRequest, booking_id: uuid.UUID, session_typ
         before = booking.session_type
         booking.session_type = session_type
         booking.save(update_fields=["session_type"])
+        _score_window(booking)
         audit.record(
             audit.actor_from_request(request),
             "booking.type_changed",
