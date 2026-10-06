@@ -92,8 +92,8 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q69](#q69) | Pragurile semnalelor și ale sugestiilor de preț | SCĂZUTĂ | nimic (panoul) | DESCHISĂ |
 | [Q70](#q70) | Regulamentul clubului | MEDIE | publicarea definitivă a regulamentului | REZOLVATĂ |
 | [Q71](#q71) | Chestionarul NPS după primul meci | SCĂZUTĂ | măsurarea NPS (KPI) | REZOLVATĂ |
-| [Q72](#q72) | Cât timp și câte date poate pierde clubul la o avarie (RPO / RTO) | MEDIE | Etapa 14B (backup) | DESCHISĂ |
-| [Q73](#q73) | Stocarea backup-ului în afara clubului | MEDIE | Etapa 14B (copia off-site) | DESCHISĂ |
+| [Q72](#q72) | Cât timp și câte date poate pierde clubul la o avarie (RPO / RTO) | MEDIE | Etapa 14B (backup) | REZOLVATĂ |
+| [Q73](#q73) | Stocarea backup-ului în afara clubului | MEDIE | Etapa 14B (copia off-site) | REZOLVATĂ (contul de deschis) |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -863,6 +863,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Stare:** DESCHISĂ (06.10.2026, Etapa 14)
 - **Varianta implicită (ADR-0016, DE_CONFIRMAT):** se pierd cel mult datele din ultima oră (RPO ≤ 1 oră); sistemul e refăcut în cel mult 4 ore (RTO ≤ 4 ore). În practică, cu jurnalul continuu al bazei de date, pierderea e de câteva minute.
 - **Întrebare pentru proprietar:** vă convin aceste limite? O limită mai strictă cere un al doilea server, gata să preia.
+- **Decizia (06.10.2026, delegată de proprietar: „orice întrebare mai ai alege răspunsul cel mai relevant”):** varianta implicită. Jurnalul tranzacțiilor pleacă în backup cel puțin o dată la 5 minute, deci pierderea reală e de minute (RPO ≤ 1 oră); RTO ≤ 4 ore. Construit în Etapa 14B; ghidul: `docs/08-deploy-si-mentenanta/04-runbook-backup-si-recuperare.md`.
 
 ### <a id="q73"></a>Q73 — Stocarea backup-ului în afara clubului
 
@@ -870,4 +871,5 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Stare:** DESCHISĂ (06.10.2026, Etapa 14)
 - **Varianta implicită (ADR-0016, DE_CONFIRMAT):** un spațiu de stocare compatibil S3, într-un centru de date din UE, plătit lunar de club (de ordinul câtorva euro pe lună, pentru câțiva zeci de GB). Datele pleacă de pe server deja criptate. Cheia de criptare se păstrează în două locuri sigure, cunoscute de proprietar.
 - **Întrebare pentru proprietar:** aveți deja un astfel de spațiu (de exemplu la firma care vă găzduiește serverele, Q40)? Dacă nu, alegem noi unul din UE și vă spunem costul înainte.
+- **Decizia (06.10.2026, delegată de proprietar):** varianta implicită, un spațiu compatibil S3 într-un centru de date din UE, cu datele criptate înainte de plecare. Sistemul e gata: copia se pornește completând `PGBACKREST_REPO2_*` în `/etc/jungle/backup.env`. Rămâne de deschis contul pe firma clubului, la instalarea serverului (Etapa 14D); până atunci există doar copia de pe server.
 

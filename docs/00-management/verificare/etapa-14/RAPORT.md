@@ -38,3 +38,35 @@
 ### Cum verificați
 1. Citiți `deploy/proxy/README.md` (tabelul subdomeniilor) și ADR-0024.
 2. Pe GitHub → Actions: jobul `deploy` e verde.
+
+## Faza 14B — Backup și restaurare, 06.10.2026
+
+### Ce s-a construit
+1. **Imaginea bazei de date** (`deploy/backup/postgres`): PostgreSQL 17 cu pgBackRest.
+   - Jurnalul tranzacțiilor pleacă în backup continuu, cel puțin o dată la 5 minute.
+   - Copiile sunt criptate (AES-256). Una stă pe server; a doua, în afara clubului (S3 în UE, Q73), se pornește din setări.
+2. **Programul** (temporizatoare systemd, `deploy/scripts/backup`):
+   - backup complet duminica;
+   - backup diferențial în celelalte nopți, la 02:30;
+   - testul de restaurare lunar: ultimul backup e readus într-un container separat și comparat cu baza de date vie.
+3. **Alertele:**
+   - fiecare rulare se raportează backend-ului;
+   - un eșec ajunge imediat la manageri (email și push);
+   - zilnic, un backup sau un test de restaurare care lipsește dă alarma (`check_backups`);
+   - după fiecare backup reușit pleacă un semnal de viață spre monitorizare.
+4. **Ghidul proprietarului** (`docs/08-deploy-si-mentenanta/04-runbook-backup-si-recuperare.md`):
+   - ce păstrați offline;
+   - verificările rapide;
+   - refacerea bazei de date, inclusiv la un moment ales;
+   - recuperarea după pierderea serverului.
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Backend (`jungle/scheduler`, 100% pe ramuri) | 13 teste. Cele 4 noi: eșecul ajunge la manageri, o singură dată; semnalul de viață după un backup reușit; alarma zilnică pentru ce lipsește, o dată pe zi; comenzile `backup_report` și `check_backups`. |
+| Tot sistemul (`deploy/scripts/smoke-stack`) | Pe sistemul pornit: backup complet cu pgBackRest, apoi testul de restaurare. Amândouă trec și apar în backend ca reușite. |
+
+### Decizii (delegate de proprietar, 06.10.2026)
+- **Q72:** cel mult o oră de date pierdute (în practică, minute) și refacere în cel mult 4 ore.
+- **Q73:** spațiu S3 în UE, criptat. Contul se deschide la instalarea serverului.
+

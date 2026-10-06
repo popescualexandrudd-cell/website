@@ -13,6 +13,7 @@ CADDY_VERSION=2.10.2
 echo "==> The production compose file"
 JUNGLE_VERSION=check POSTGRES_PASSWORD=check DOMAIN=example.test ACME_EMAIL=check@example.test \
   WEB_REVALIDATE_SECRET=check JUNGLE_ENV_FILE="$PWD/deploy/compose/prod/.env.example" \
+  BACKUP_ENV_FILE="$PWD/deploy/backup/backup.env.example" \
   docker compose -f deploy/compose/prod/compose.yaml config -q
 
 echo "==> The proxy (Caddy $CADDY_VERSION)"

@@ -1,0 +1,11 @@
+# One backup run (ADR-0016). Installed by deploy/scripts/install-server; the repository is in /opt/jungle.
+[Unit]
+Description=Jungle Padel backup (%i)
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/jungle
+ExecStart=/opt/jungle/deploy/scripts/backup %i
+TimeoutStartSec=6h

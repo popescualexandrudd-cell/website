@@ -1,0 +1,11 @@
+# The changes since the last full backup, Monday to Saturday at 02:30.
+[Unit]
+Description=Jungle Padel: differential backup, daily
+
+[Timer]
+OnCalendar=Mon..Sat *-*-* 02:30:00 Europe/Bucharest
+Persistent=true
+Unit=jungle-backup@diff.service
+
+[Install]
+WantedBy=timers.target

@@ -21,13 +21,21 @@ x-backend: &backend
     redis: {condition: service_healthy}
 
 services:
+  # PostgreSQL with pgBackRest (ADR-0016): the transaction log is archived continuously; the
+  # backups and the restore test: deploy/scripts/backup (systemd timers, deploy/backup/README.md).
   db:
-    image: postgres:17
+    image: jungle-db:${JUNGLE_VERSION:?set JUNGLE_VERSION}
+    build:
+      context: ../../..
+      dockerfile: deploy/backup/postgres/Dockerfile
+    env_file: ${BACKUP_ENV_FILE:-/etc/jungle/backup.env}
     environment:
       POSTGRES_DB: jungle
       POSTGRES_USER: jungle
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
-    volumes: [db-data:/var/lib/postgresql/data]
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - pgbackrest-repo:/var/lib/pgbackrest
     restart: unless-stopped
     networks: [inside]
     healthcheck:
@@ -117,6 +125,7 @@ networks:
 
 volumes:
   db-data: {}
+  pgbackrest-repo: {}
   redis-data: {}
   static: {}
   caddy-data: {}

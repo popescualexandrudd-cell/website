@@ -1,0 +1,11 @@
+# A complete backup every Sunday at 02:30 (never between 03:00 and 04:00, ADR-0010).
+[Unit]
+Description=Jungle Padel: full backup, weekly
+
+[Timer]
+OnCalendar=Sun *-*-* 02:30:00 Europe/Bucharest
+Persistent=true
+Unit=jungle-backup@full.service
+
+[Install]
+WantedBy=timers.target

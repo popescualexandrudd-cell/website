@@ -1,0 +1,11 @@
+# The monthly restore test: the 1st of the month at 04:30, after the night's backup.
+[Unit]
+Description=Jungle Padel: restore test, monthly
+
+[Timer]
+OnCalendar=*-*-01 04:30:00 Europe/Bucharest
+Persistent=true
+Unit=jungle-backup@restore-test.service
+
+[Install]
+WantedBy=timers.target

@@ -54,6 +54,7 @@ JOBS: tuple[Job, ...] = (
     Job("league_daily", at=time(0, 5)),  # decay, its warnings, the Match of the day
     Job("purge_waitlist", at=time(2, 30)),  # unconfirmed sign-ups
     Job("notifications_daily", at=time(8, 0)),  # expiring subscriptions, the NPS question
+    Job("check_backups", at=time(9, 0)),  # a backup or a restore test missing (ADR-0016)
 )
 
 

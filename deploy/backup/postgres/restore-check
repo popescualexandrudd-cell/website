@@ -1,0 +1,17 @@
+#!/bin/bash
+# The monthly restore test (ADR-0016), inside a throw-away container of the database image, as
+# the `postgres` user, without network: restores the latest backup of a repository into an empty
+# folder, replays the transaction log to its end, starts PostgreSQL on it and prints what the
+# restored database holds, as one JSON line, for deploy/scripts/backup to compare with the live one.
+#   restore-check [repo]     # 1 = on the server (default), 2 = off-site
+set -euo pipefail
+repo="${1:-1}"
+target=/tmp/restore
+rm -rf "$target" && mkdir -m 700 "$target"
+pgbackrest --stanza=jungle --repo="$repo" --pg1-path="$target" --archive-mode=off restore >&2
+pg_ctl -D "$target" -w -t 900 \
+  -o "-c listen_addresses='' -c unix_socket_directories=/tmp -c archive_mode=off" start >&2
+count() { psql -h /tmp -U "${POSTGRES_USER:-jungle}" -d "${POSTGRES_DB:-jungle}" -Atc "SELECT count(*) FROM $1"; }
+printf '{"migrations": %s, "users": %s, "ledger_entries": %s}\n' \
+  "$(count django_migrations)" "$(count accounts_user)" "$(count ledger_ledgerentry)"
+pg_ctl -D "$target" -m fast stop >&2

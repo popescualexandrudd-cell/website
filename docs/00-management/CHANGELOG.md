@@ -4,6 +4,12 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 14, faza 14B: backup și restaurare — 06.10.2026 (livrat)
+#### Adăugat
+- Imaginea bazei de date cu pgBackRest (`deploy/backup/postgres`), arhivarea continuă a jurnalului, copii criptate (pe server și, opțional, S3 în UE); `deploy/scripts/backup full|diff|restore-test`, temporizatoarele systemd, testul de restaurare.
+- `manage.py backup_report` și sarcina zilnică `check_backups` (alerta `staff.backup_failed`, semnalul de viață `BACKUP_HEARTBEAT_URL`).
+- Ghidul `docs/08-deploy-si-mentenanta/04-runbook-backup-si-recuperare.md`; Q72 și Q73 rezolvate (delegate).
+
 ### Etapa 14, faza 14A: producția în Docker, proxy-ul, planificatorul — 06.10.2026 (livrat)
 #### Adăugat
 - `deploy/compose/prod` (Compose de producție + `.env.example`), `deploy/proxy` (Caddyfile, imaginea cu aplicațiile statice, `test-proxy`), `deploy/scripts/smoke-stack`, `scripts/test-deploy`, jobul CI `deploy`.

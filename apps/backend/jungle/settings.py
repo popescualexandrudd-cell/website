@@ -283,6 +283,10 @@ WEB_BASE_URL = (env("WEB_BASE_URL", "http://localhost:3000") or "").rstrip("/")
 WEB_REVALIDATE_URL = env("WEB_REVALIDATE_URL", "") or ""
 # The scheduler's heartbeat to the monitoring (Uptime Kuma push URL, ADR-0017, ADR-0024).
 SCHEDULER_HEARTBEAT_URL = env("SCHEDULER_HEARTBEAT_URL", "") or ""
+# The backups (ADR-0016): whether this server takes them (the daily check raises the alarm when
+# one is missing) and the monitoring's heartbeat after each one that worked.
+BACKUPS_EXPECTED = env_bool("BACKUPS_EXPECTED", False)
+BACKUP_HEARTBEAT_URL = env("BACKUP_HEARTBEAT_URL", "") or ""
 WEB_REVALIDATE_SECRET = env("WEB_REVALIDATE_SECRET", "") or ""
 
 # Push notifications of the installable site (Stage 12, Q17): VAPID keys from

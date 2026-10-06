@@ -7,7 +7,9 @@ as on the server, with throw-away secrets, a throw-away device authority and loc
   scheduler, the website and the proxy run;
 - www answers with the website, api with the API (health), admin with the panel;
 - a device site refuses a visitor without the club's certificate and accepts one with it;
-- Django's deployment checks pass inside the backend, and the scheduler has done a round.
+- Django's deployment checks pass inside the backend, and the scheduler has done a round;
+- a full backup is taken with pgBackRest and the restore test brings it back in a throw-away
+  container, both reported to the backend (deploy/scripts/backup, ADR-0016).
 
 Everything is removed at the end (containers and volumes). Needs Docker with Compose, `openssl`,
 `curl`, and the ports 80 and 443 free.
@@ -83,6 +85,10 @@ def env_file(folder: Path, ca_pem: Path) -> Path:
     }
     path = folder / "smoke.env"
     path.write_text("".join(f"{k}={v}\n" for k, v in values.items()))
+    backup = folder / "backup.env"
+    backup.write_text(f"PGBACKREST_REPO1_CIPHER_PASS={secret()}\n")
+    with path.open("a") as more:
+        more.write(f"BACKUP_ENV_FILE={backup}\n")
     return path
 
 
@@ -114,9 +120,10 @@ def main() -> int:
                "JUNGLE_ENV_FILE": str(envf)}
         compose = ["docker", "compose", "-p", PROJECT, "-f", str(COMPOSE), "--env-file", str(envf)]
         build_args = shlex.split(os.environ.get("SMOKE_BUILD_ARGS", ""))
+        finished = False
         try:
             print("building and starting the stack…", flush=True)
-            for service in ("migrate", "web", "proxy"):
+            for service in ("db", "migrate", "web", "proxy"):
                 subprocess.run([*compose, "build", *build_args, service], check=True, env=env)
             subprocess.run([*compose, "up", "-d"], check=True, env=env)
             for _ in range(90):
@@ -151,8 +158,26 @@ def main() -> int:
                 capture_output=True, text=True, env=env)
             done = json.loads(rounds.stdout.strip().splitlines()[-1]) if rounds.returncode == 0 else []
             check("send_notifications" in done, f"scheduler: a round done ({', '.join(done) or 'none'})")
+            print("the backups", flush=True)
+            for kind in ("full", "restore-test"):
+                done = subprocess.run(
+                    [str(ROOT / "deploy" / "scripts" / "backup"), kind],
+                    capture_output=True, text=True,
+                    env={**env, "JUNGLE_ENV_FILE": str(envf), "COMPOSE_PROJECT": PROJECT},
+                )
+                check(done.returncode == 0, f"backup {kind}")
+                if done.returncode:
+                    print(done.stdout[-3000:], done.stderr[-3000:], file=sys.stderr)
+            reported = subprocess.run(
+                [*compose, "exec", "-T", "backend", "python", "manage.py", "shell", "-c",
+                 "from jungle.scheduler.models import JobRun; "
+                 "print(sorted(r.job for r in JobRun.objects.filter(job__startswith='backup.', ok=True)))"],
+                capture_output=True, text=True, env=env)
+            check("['backup.full', 'backup.restore-test']" in reported.stdout,
+                  "backups: both reported to the backend as done")
+            finished = True
         finally:
-            if failures:
+            if failures or not finished:
                 logs = subprocess.run([*compose, "logs", "--tail", "40"], capture_output=True, text=True, env=env)
                 print(logs.stdout[-6000:], file=sys.stderr)
             subprocess.run([*compose, "down", "-v", "--remove-orphans"], capture_output=True, env=env)
