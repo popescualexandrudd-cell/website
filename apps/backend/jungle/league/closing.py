@@ -138,16 +138,19 @@ def _email(user: User, season: LeagueSeason, kind: str, tier: str, position: int
             _option_line(name, vouchers, language) for name, vouchers in rule["options"].items()
         )
         lines.append(f"{heading}: {options}")
-    notify.send(
-        "league_season_reward",
+    extras = rule["extras"][language]
+    at_reception = "La recepție te așteaptă și" if language == "ro" else "Waiting at reception"
+    notify.send(  # §11 "finalul sezonului și recompense"
+        "league.season_end",
         user,
         {
             "season": season.name,
             "award": _label(kind, tier, position, language),
-            "rewards": lines,
-            "extras": rule["extras"][language],
+            "rewards": "\n".join(f"- {line}" for line in lines),
+            "extras": f"{at_reception}: {extras}." if extras else "",
         },
-        notify.ACCOUNT_VOUCHERS_PATH,
+        subject=f"{season.pk}:{kind}",
+        page="payments",
     )
 
 

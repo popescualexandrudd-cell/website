@@ -29,14 +29,16 @@ from jungle.bookings.models import (
     EnrollmentStatus,
     SessionType,
 )
+from jungle.bookings.services import local_text
 from jungle.cards import services as cards
 from jungle.configuration.services import get_config
 from jungle.core import clock
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.permissions import Action, Role
 from jungle.devices.models import Device
-from jungle.ledger.payments import due_for_booking, due_for_enrollment, settle
+from jungle.ledger.payments import Due, due_for_booking, due_for_enrollment, money_status, settle
 from jungle.locations.models import Location, Resource
+from jungle.notifications import services as notifications
 
 NOTICE_NO_SHOW_BLOCK = "no_show_block"
 
@@ -177,7 +179,11 @@ def process_no_shows(now: datetime | None = None) -> NoShowReport:
             booking.status = BookingStatus.NO_SHOW
             booking.save(update_fields=["status"])
             audit.record(audit.SYSTEM, "booking.no_show", target=booking)
-            settle(due_for_booking(booking))  # R-072: a no-show is paid
+            due = due_for_booking(booking)
+            settle(due)  # R-072: a no-show is paid
+            _tell_fee(
+                booking.organizer, due, booking.starts_at, booking.ends_at, booking.resource.name
+            )
             report.bookings_no_show += 1
             responsible = booking.coach if booking.session_type == SessionType.LESSON else None
             if _check_block(booking.organizer, booking.location_id, responsible, now):
@@ -196,16 +202,74 @@ def process_no_shows(now: datetime | None = None) -> NoShowReport:
             session__status=ClassStatus.SCHEDULED,
             session__starts_at__lte=cutoff,
         )
-        for enrollment in absent.select_related("session", "user", "session__instructor"):
+        for enrollment in absent.select_related(
+            "session", "user", "session__instructor", "session__studio"
+        ):
             enrollment.status = EnrollmentStatus.NO_SHOW
             enrollment.save(update_fields=["status"])
             audit.record(audit.SYSTEM, "classes.no_show", target=enrollment)
-            settle(due_for_enrollment(enrollment))
+            due = due_for_enrollment(enrollment)
+            settle(due)
             report.enrollments_no_show += 1
             session: ClassSession = enrollment.session
+            _tell_fee(enrollment.user, due, session.starts_at, session.ends_at, session.studio.name)
+            _tell_absences(enrollment.user, enrollment)
             if _check_block(enrollment.user, session.location_id, session.instructor, now):
                 report.restrictions += 1
     return report
+
+
+NO_SHOW_WORDS = {"ro": "neprezentare", "en": "no-show"}
+
+
+def _tell_fee(user: User, due: Due, starts_at: datetime, ends_at: datetime, place: str) -> None:
+    """§11 "taxă de neprezentare": only when something is left to pay (not if it was paid ahead
+    or covered by a subscription)."""
+    to_pay = money_status(due).to_pay
+    if to_pay <= 0:
+        return
+    language = "en" if user.preferred_language == "en" else "ro"
+    notifications.notify(
+        user,
+        "booking.fee",
+        {
+            "when": f"{local_text(starts_at)} – {local_text(ends_at)[-5:]}",
+            "resource": place,
+            "amount": notifications.lei(to_pay),
+            "reason": NO_SHOW_WORDS[language],
+            "url": notifications.account_path(language, "payments"),
+        },
+        subject=f"{due.key}:no_show",
+    )
+
+
+def _tell_absences(user: User, enrollment: ClassEnrollment) -> None:
+    """§11 "absențe repetate la antrenamente": once per streak, when exactly the last N classes
+    were missed (not again at N + 1)."""
+    needed = int(get_config("notifications.absences_after"))
+    last = list(
+        ClassEnrollment.objects.filter(
+            user=user,
+            status__in=(EnrollmentStatus.ATTENDED, EnrollmentStatus.NO_SHOW),
+            session__starts_at__lte=enrollment.session.starts_at,
+        )
+        .order_by("-session__starts_at")
+        .values_list("status", flat=True)[: needed + 1]
+    )
+    streak = last[:needed]
+    before = last[needed:]
+    if (
+        len(streak) == needed
+        and all(s == EnrollmentStatus.NO_SHOW for s in streak)
+        and EnrollmentStatus.NO_SHOW not in before
+    ):
+        language = "en" if user.preferred_language == "en" else "ro"
+        notifications.notify(
+            user,
+            "classes.absences",
+            {"count": str(needed), "url": notifications.account_path(language)},
+            subject=str(enrollment.pk),
+        )
 
 
 def no_show_count(user: User, now: datetime) -> int:
@@ -257,6 +321,9 @@ def _check_block(
         "restriction.created",
         target=restriction,
         after={"user": str(user.pk), "no_shows": count},
+    )
+    notifications.notify(  # §11 "blocare rezervări"
+        user, "booking.blocked", {"count": str(count)}, subject=str(restriction.pk)
     )
     return True
 

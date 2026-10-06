@@ -2000,7 +2000,7 @@
           },
           "club": {
             "title": "News from the club",
-            "text": "new events on the calendar"
+            "text": "new events on the calendar (off until you turn them on)"
           }
         },
         "always": "Messages about your account, bookings, fees and the club's decisions (for example a booking block) always arrive: they cannot be turned off.",

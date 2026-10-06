@@ -28,6 +28,8 @@ from jungle.core.permissions import Action
 from jungle.events.models import ClubEvent
 from jungle.league.models import EntryStatus, Tournament, TournamentStatus
 from jungle.locations.models import Location, Resource, ResourceKind
+from jungle.notifications import services as notifications
+from jungle.notifications.catalog import Category
 from jungle.pricing.models import Band, CustomerType, Product
 from jungle.pricing.services import rate_for, season_on
 
@@ -120,6 +122,26 @@ def _refresh_site(event: ClubEvent, was_public: bool) -> None:
         web.revalidate_after_commit([web.EVENTS_TAG])
 
 
+def _announce(event: ClubEvent) -> None:
+    """§11 "eveniment nou": once per event, to the clients who asked for the club's news (an
+    opt-in category); not for demo events or ones already over."""
+    if event.is_demo or event.ends_at <= clock.now():
+        return
+    for user in notifications.opted_in(Category.CLUB):
+        en = user.preferred_language == "en"
+        notifications.notify(
+            user,
+            "club.new_event",
+            {
+                "title": event.title_en if en else event.title_ro,
+                "text": event.text_en if en else event.text_ro,
+                "when": clock.local(event.starts_at).strftime("%d.%m.%Y %H:%M"),
+                "url": notifications.account_path("en" if en else "ro", "calendar"),
+            },
+            subject=str(event.pk),
+        )
+
+
 def _locked(request: HttpRequest, event_id: uuid.UUID) -> ClubEvent:
     event = ClubEvent.objects.select_for_update().filter(pk=event_id).first()
     if event is None:
@@ -160,6 +182,8 @@ def create(
             after=_snapshot(event),
         )
         _refresh_site(event, was_public=False)
+        if published:
+            _announce(event)
     return event
 
 
@@ -203,6 +227,8 @@ def set_published(
             reason=reason,
         )
         _refresh_site(event, was_public=was_public)
+        if published and not was_public:
+            _announce(event)
     return event
 
 

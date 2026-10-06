@@ -144,6 +144,26 @@ def test_lg110_lg113_a_challenge_from_the_kiosk_to_the_court(
     assert challenge.status == ChallengeStatus.PLAYED
 
 
+def test_s11_the_challengers_hear_the_answer(
+    club: Club, kiosk: Device, django_capture_on_commit_callbacks: Any
+) -> None:
+    """§11 "provocare acceptată / refuzată": the side that challenged gets the answer."""
+    accepted = club.challenge((club.e, club.f), (club.a, club.b), kiosk)
+    refused_one = club.challenge((club.g, club.h), (club.c, club.d), kiosk)
+    mail.outbox.clear()
+    with django_capture_on_commit_callbacks(execute=True):
+        challenges.answer(kiosk_call(), kiosk, accepted.pk, club.cards[club.b.pk], True)
+    assert sorted(m.to[0] for m in mail.outbox) == sorted(str(p.email) for p in (club.e, club.f))
+    assert "provocarea e acceptată" in mail.outbox[0].body
+    assert "Meciul se joacă până pe" in mail.outbox[0].body
+    mail.outbox.clear()
+    with django_capture_on_commit_callbacks(execute=True):
+        challenges.answer(kiosk_call(), kiosk, refused_one.pk, club.cards[club.c.pk], False)
+    assert sorted(m.to[0] for m in mail.outbox) == sorted(str(p.email) for p in (club.g, club.h))
+    assert "provocarea e refuzată" in mail.outbox[0].body
+    assert "Meciul se joacă" not in mail.outbox[0].body
+
+
 def test_lg110_only_the_same_division_or_one_above(club: Club, kiosk: Device) -> None:
     for by, of in (
         ((club.c, club.d), (club.a, club.b)),  # two divisions above

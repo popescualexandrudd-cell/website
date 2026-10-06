@@ -718,3 +718,68 @@ def test_service_level_guards_and_readable_rows(
         created_at=subscription.created_at,
     )
     assert str(makeup)
+
+
+def test_s11_bought_sessions_left_frozen_and_expiring(
+    api: Api,
+    club: Any,
+    rates: None,
+    customer: Any,
+    staff: Any,
+    client: Client,
+    django_capture_on_commit_callbacks: Any,
+) -> None:
+    from django.core import mail
+
+    def subjects() -> list[str]:
+        return [
+            str(m.subject)
+            for m in mail.outbox
+            if m.to == [customer.email] and not m.subject.startswith("Rezervarea")
+        ]
+
+    def body(subject: str) -> str:
+        return next(str(m.body) for m in reversed(mail.outbox) if m.subject == subject)
+
+    with django_capture_on_commit_callbacks(execute=True):
+        subscription = active_subscription(
+            api, club, customer, staff, client, [{"sport": "padel", "intensity": "start"}]
+        )
+    assert subjects() == ["Abonamentul e activ"]
+    assert "Abonamentul lunar e activ între 15.03.2027 și 14.04.2027" in body(subjects()[-1])
+    assert "https://www.example.test/ro/cont/plati" in body(subjects()[-1])
+
+    with django_capture_on_commit_callbacks(execute=True):
+        lesson(api, club, "2027-03-16T10:00:00+02:00")  # 3 left: nothing yet
+    assert len(subjects()) == 1
+    with django_capture_on_commit_callbacks(execute=True):
+        lesson(api, club, "2027-03-17T10:00:00+02:00")  # 2 left (the default threshold)
+    assert subjects()[-1] == "Mai ai 2 sesiuni luna aceasta"
+    assert "Mai ai 2 sesiuni de padel luna aceasta" in body(subjects()[-1])
+
+    with django_capture_on_commit_callbacks(execute=True):
+        frozen = api.post(
+            f"/subscriptions/{subscription.pk}/freeze", {"starts_on": "2027-03-19", "days": 10}
+        )
+    assert frozen.status_code == 201
+    assert subjects()[-1] == "Abonamentul e înghețat"
+    assert "între 19.03.2027 și 28.03.2027" in body(subjects()[-1])
+
+    subscription.refresh_from_db()  # ends on 25.04 (exclusive): the last day is 24.04
+    assert services.remind_expiring(date(2027, 4, 16)) == 0
+    with django_capture_on_commit_callbacks(execute=True):
+        assert services.remind_expiring(date(2027, 4, 17)) == 1
+        assert services.remind_expiring(date(2027, 4, 17)) == 1  # the same day again
+    assert subjects()[-1] == "Abonamentul expiră pe 24.04.2027"
+    assert subjects().count("Abonamentul expiră pe 24.04.2027") == 1
+
+
+def test_s11_the_daily_command_sends_the_expiring_reminders(time_machine: Any) -> None:
+    from io import StringIO
+
+    from django.core.management import call_command
+
+    time_machine.move_to("2027-04-17T07:00:00+03:00", tick=False)
+    out = StringIO()
+    call_command("notifications_daily", stdout=out)
+    assert out.getvalue().strip() == "Abonamente care expiră curând: 0."

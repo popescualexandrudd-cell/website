@@ -68,7 +68,8 @@ EVENTS: dict[str, Event] = {
         Event("league.score_validated", Category.LEAGUE),
         Event("league.rank_changed", Category.LEAGUE),
         Event("league.diamond", Category.LEAGUE),
-        Event("league.challenge", Category.LEAGUE),
+        Event("league.challenge_received", Category.LEAGUE),
+        Event("league.challenge_answered", Category.LEAGUE),
         Event("league.decay_risk", Category.LEAGUE),
         Event("league.matches_needed", Category.LEAGUE),
         Event("league.season_end", Category.LEAGUE),
@@ -89,6 +90,10 @@ EVENTS: dict[str, Event] = {
         Event("staff.backup_failed", Category.STAFF, mandatory=True),
     )
 }
+
+# Off until the client turns them on (news about the club is marketing: it needs consent,
+# Law 506/2004 art. 12 and GDPR art. 6(1)(a)).
+OPT_IN_CATEGORIES = (Category.CLUB,)
 
 # What a client can turn off, by category (the account page lists these).
 OPTIONAL_CATEGORIES = tuple(

@@ -19,6 +19,7 @@ from jungle.conftest import Api, error_code, login_as
 from jungle.core import clock
 from jungle.core.permissions import Role
 from jungle.notifications import catalog, services, webpush
+from jungle.notifications.catalog import Category
 from jungle.notifications.models import Notification, Preference, PushSubscription, Status, Template
 
 pytestmark = pytest.mark.django_db
@@ -126,6 +127,13 @@ def test_s11_the_client_turns_off_what_may_be_turned_off(
     assert "account" not in choices and "staff" not in choices  # never optional
     assert choices["reminders"] == {"email": True, "push": True}
     assert choices["league"] == {"email": True, "push": True}
+    # The club's news is marketing: off until the client turns it on (opt-in).
+    assert choices["club"] == {"email": False, "push": False}
+    assert services.notify(ana, "club.new_event", {"title": "x"}, subject="e1") == []
+    assert list(services.opted_in(Category.CLUB)) == []
+    turned_on = api.put("/notifications/preferences", {"choices": {"club": {"email": True}}})
+    assert turned_on.json()["choices"]["club"] == {"email": True, "push": False}
+    assert list(services.opted_in(Category.CLUB)) == [ana]
     response = api.put("/notifications/preferences", {"choices": {"reminders": {"email": False}}})
     assert response.status_code == 200 and response.json()["choices"]["reminders"]["email"] is False
     refused = api.put("/notifications/preferences", {"choices": {"bookings": {"email": False}}})

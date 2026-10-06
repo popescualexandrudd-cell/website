@@ -4,6 +4,19 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 12, faza 12B: evenimentele din §11, legate de fiecare modul — 06.10.2026 (livrat)
+#### Adăugat
+- Rezervări: confirmare, modificare, anulare și memento-urile la 24 h și 2 h (`send_after`), retrase la mutare sau anulare (`notifications.withdraw`); lista de așteptare la padel și la antrenamente.
+- Prezențe: taxa de neprezentare (doar dacă rămâne ceva de plătit), blocarea rezervărilor, absențele repetate la antrenamente (`notifications.absences_after`).
+- Abonamente: activ, înghețat, „mai ai X sesiuni” (`notifications.sessions_left_at`), „expiră pe …” (`notifications.subscription_expiring_days`, `manage.py notifications_daily`). Vouchere: „ai primit un voucher”.
+- Liga: provocare primită / acceptată / refuzată, scor propus, meci validat cu LP, rang nou, Diamant (`league.notify.after_applied`, ascultător `store.on_applied`), decay și finalul sezonului prin notificări.
+- Personal: scorul contestat și restul scăzut, la managerii și adminii locației (`notify_staff`).
+- Evenimente: „eveniment nou”, doar la clienții care au pornit noutățile clubului (categoria `club` e opt-in, `OPT_IN_CATEGORIES`, Q67).
+#### Schimbat
+- Textul confirmării rezervării (corect și pentru lecțiile din abonament); textul blocării (fără dată de final: deblocarea o face antrenorul sau managerul).
+#### Reparat
+- Testele listei de așteptare nu mai pică după 01.10.2026 (nota de informare se publică la o dată fixă în test).
+
 ### Etapa 12, faza 12A: nucleul notificărilor — 01.10.2026 (livrat)
 #### Adăugat
 - `jungle.notifications`: lista de mesaje (`Notification`, o singură dată pe eveniment), canalele email și push (Web Push RFC 8291/8292 cu `cryptography`, cheile VAPID în `.env`, `manage.py vapid_keys`), SMS pregătit și oprit (Q17), catalogul celor 33 de evenimente din §11 cu categorii și „se poate opri / nu”, textele RO/EN implicite (`defaults.py`) și editabile (`Template`), preferințele (`Preference`), abonările push (`PushSubscription`), `manage.py send_notifications` (programate, reîncercări, ștergerea textelor după 90 de zile). 100% acoperire pe ramuri.

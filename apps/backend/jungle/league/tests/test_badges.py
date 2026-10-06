@@ -7,6 +7,7 @@ from datetime import date
 from typing import Any
 
 import pytest
+from django.core import mail
 from django.test import Client
 
 from jungle.accounts.models import User
@@ -117,6 +118,8 @@ def test_r024_first_diamond_offers_the_card_and_promotions_count(
     diamonds = Badge.objects.filter(code="first_diamond", key="")
     assert diamonds.count() == 4
     assert PhysicalCardRequest.objects.filter(reason=PrintReason.DIAMOND).count() == 4
+    welcomed = [m.to[0] for m in mail.outbox if m.subject == "Bine ai venit în Diamant"]
+    assert sorted(welcomed) == sorted(str(p.email) for p in players)  # §11, once in a lifetime
 
     event = play(season, players[:2], players[2:], at("2027-04-07 10:00"))
     outcome = dict(event.records.get().payload)

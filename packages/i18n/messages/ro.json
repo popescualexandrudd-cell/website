@@ -2000,7 +2000,7 @@
           },
           "club": {
             "title": "Noutăți de la club",
-            "text": "evenimente noi în calendar"
+            "text": "evenimente noi în calendar (oprite până le pornești tu)"
           }
         },
         "always": "Mesajele despre cont, rezervări, taxe și deciziile clubului (de exemplu o blocare a rezervărilor) vin mereu: nu se pot opri.",

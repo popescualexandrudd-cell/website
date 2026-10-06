@@ -569,6 +569,27 @@ CONFIG: dict[str, ConfigSpec] = {
             positive_int,
         ),
         ConfigSpec(
+            "notifications.subscription_expiring_days",
+            7,
+            Marker.TO_CONFIRM,
+            "Cu câte zile înainte de final primește clientul „abonamentul expiră” (§11).",
+            positive_int,
+        ),
+        ConfigSpec(
+            "notifications.absences_after",
+            2,
+            Marker.TO_CONFIRM,
+            "După câte antrenamente lipsă la rând primește clientul „ne e dor de tine” (§11).",
+            positive_int,
+        ),
+        ConfigSpec(
+            "notifications.sessions_left_at",
+            2,
+            Marker.TO_CONFIRM,
+            "La câte sesiuni rămase în lună primește clientul „mai ai X sesiuni” (§11).",
+            positive_int,
+        ),
+        ConfigSpec(
             "corporate.discount_percent",
             20,
             Marker.CONFIRMED,

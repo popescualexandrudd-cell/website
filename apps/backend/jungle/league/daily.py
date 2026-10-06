@@ -21,12 +21,9 @@ from jungle.league import badges, notify, services, store
 from jungle.league.models import (
     DecayWarning,
     EventKind,
-    Ladder,
     LeagueSeason,
     SeasonStatus,
 )
-
-LADDER_EN = {"doubles": "doubles", "singles": "singles", "pairs": "pairs"}
 
 
 def _midnight_after(day: date) -> datetime:
@@ -48,16 +45,16 @@ def decay_days(season: LeagueSeason, today: date) -> list[date]:
 
 
 def _warn_email(user: User, ladder: str, starts: date, lp_per_day: int) -> None:
-    ro = user.preferred_language == "ro"
+    """§11 "risc de decay"."""
     notify.send(
-        "league_decay_warning",
+        "league.decay_risk",
         user,
         {
-            "ladder": Ladder(ladder).label.lower() if ro else LADDER_EN[ladder],
-            "starts": starts,
+            "ladder": notify.LADDER_WORDS[notify.language_of(user)][ladder],
+            "starts": starts.strftime("%d.%m.%Y"),
             "lp_per_day": lp_per_day,
         },
-        notify.ACCOUNT_LEAGUE_PATH,
+        subject=f"{ladder}:{starts.isoformat()}",
     )
 
 

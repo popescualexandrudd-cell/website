@@ -15,7 +15,7 @@ from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from typing import Any
 
 from django.conf import settings
@@ -33,7 +33,14 @@ from jungle.core import clock
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.permissions import Action, Role
 from jungle.notifications import webpush
-from jungle.notifications.catalog import EVENTS, OPTIONAL_CATEGORIES, Channel, event
+from jungle.notifications.catalog import (
+    EVENTS,
+    OPT_IN_CATEGORIES,
+    OPTIONAL_CATEGORIES,
+    Category,
+    Channel,
+    event,
+)
 from jungle.notifications.defaults import DEFAULTS, SIGNATURE, Texts
 from jungle.notifications.models import (
     Notification,
@@ -50,6 +57,32 @@ LANGUAGES = ("ro", "en")
 STAFF_ROLES = (Role.ADMIN, Role.MANAGER)
 
 
+# The account's pages a message links to (apps/web, §9.3), by language.
+ACCOUNT_PAGES: dict[str, dict[str, str]] = {
+    "": {"ro": "/ro/cont", "en": "/en/account"},
+    "card": {"ro": "/ro/cont/card", "en": "/en/account/card"},
+    "payments": {"ro": "/ro/cont/plati", "en": "/en/account/payments"},
+    "league": {"ro": "/ro/cont/liga", "en": "/en/account/league"},
+    "events": {"ro": "/ro/cont/evenimente", "en": "/en/account/events"},
+    "calendar": {"ro": "/ro/evenimente", "en": "/en/events"},  # the public calendar
+}
+
+
+def account_path(language: str, page: str = "") -> str:
+    """The path of an account page in the person's language (the message's `url`)."""
+    return ACCOUNT_PAGES[page]["en" if language == "en" else "ro"]
+
+
+def lei(bani: int) -> str:
+    """An amount as a person reads it: "120 lei", "12,50 lei" (money is kept in bani)."""
+    whole, cents = divmod(bani, 100)
+    return f"{whole} lei" if not cents else f"{whole},{cents:02d} lei"
+
+
+def day(value: date) -> str:
+    return value.strftime("%d.%m.%Y")
+
+
 # ---------------------------------------------------------------- writing to the outbox
 def _channel_available(user: User, channel: Channel) -> bool:
     if channel == Channel.PUSH:
@@ -63,7 +96,13 @@ def wants(user: User, key: str, channel: Channel) -> bool:
     if spec.mandatory:
         return True
     choice = Preference.objects.filter(user=user, category=spec.category, channel=channel).first()
-    return choice is None or choice.enabled
+    return choice.enabled if choice is not None else spec.category not in OPT_IN_CATEGORIES
+
+
+def opted_in(category: Category) -> QuerySet[User]:
+    """The active people who turned on an opt-in category (on at least one channel)."""
+    chosen = Preference.objects.filter(category=category, enabled=True).values("user_id")
+    return User.objects.filter(pk__in=chosen, is_active=True, deleted_at__isnull=True)
 
 
 def notify(
@@ -99,6 +138,15 @@ def notify(
     if due:
         transaction.on_commit(lambda: _send_ids(due))
     return written
+
+
+def withdraw(events: tuple[str, ...], subject: str) -> int:
+    """Messages not sent yet that are no longer true (a cancelled booking's reminders): those whose
+    subject begins with `subject` (a booking's id, whatever time it was for)."""
+    queued = Notification.objects.filter(status=Status.QUEUED, event__in=events).filter(
+        key__contains=f":{subject}"
+    )
+    return queued.update(status=Status.SKIPPED, last_error="withdrawn")
 
 
 def notify_staff(location_id: Any, key: str, context: dict[str, Any], subject: str = "") -> None:
@@ -221,7 +269,7 @@ def preferences(request: HttpRequest) -> dict[str, dict[str, bool]]:
     chosen = {(p.category, p.channel): p.enabled for p in Preference.objects.filter(user=user)}
     return {
         category: {
-            channel: chosen.get((category, channel), True)
+            channel: chosen.get((category, channel), category not in OPT_IN_CATEGORIES)
             for channel in (Channel.EMAIL, Channel.PUSH)
             if any(e.category == category and channel in e.channels for e in EVENTS.values())
         }

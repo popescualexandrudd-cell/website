@@ -87,6 +87,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q64](#q64) | Pagina de pre-lansare și efectele | SCĂZUTĂ | nimic (efectele site-ului) | DESCHISĂ |
 | [Q65](#q65) | Echipa pe site | SCĂZUTĂ | nimic (site-ul complet) | **REZOLVATĂ** (30.09.2026) |
 | [Q66](#q66) | Harta secțiunilor la lansare | SCĂZUTĂ | nimic (site-ul complet) | **REZOLVATĂ** (30.09.2026) |
+| [Q67](#q67) | Noutățile clubului și pragurile memento-urilor | SCĂZUTĂ | nimic (notificări) | DESCHISĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -778,3 +779,17 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
 - **Stare:** **REZOLVATĂ** (30.09.2026, confirmată de proprietar: „ok”)
 - **Decizia:** harta „Site-ul Jungle Padel, secțiune cu secțiune” de la finalul paginii principale e o previzualizare internă; o scoatem în ziua în care porniți site-ul complet pentru public.
+
+## Întrebări noi, apărute la notificări (06.10.2026)
+
+### <a id="q67"></a>Q67 — Noutățile clubului și pragurile memento-urilor
+
+- **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
+- **Stare:** DESCHISĂ
+- **Varianta implicită (DE_CONFIRMAT, vizibilă și modificabilă în panou, la Configurare):**
+  - „Eveniment nou în calendar” e un mesaj de promovare: pleacă **doar la clienții care l-au pornit** din cont (Legea 506/2004, art. 12, și GDPR). Implicit e oprit.
+  - „Abonamentul expiră” pleacă cu **7 zile** înainte de ultima zi (`notifications.subscription_expiring_days`).
+  - „Mai ai X sesiuni luna aceasta” pleacă când rămân **2** sesiuni (`notifications.sessions_left_at`).
+  - „Ne e dor de tine la antrenamente” pleacă după **2** antrenamente lipsă la rând, o singură dată pe șir (`notifications.absences_after`).
+- **Întrebare pentru proprietar:** vă convin aceste praguri? Vreți ca noutățile clubului să vină implicit tuturor clienților (atunci trebuie cerut acordul la crearea contului)?
+

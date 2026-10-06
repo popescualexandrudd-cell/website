@@ -32,3 +32,50 @@ Planul pe faze: [PLAN.md](PLAN.md).
 
 ### Ce urmează (12B)
 Legarea fiecărui eveniment din §11 de modulul lui. De exemplu: confirmarea și memento-urile rezervărilor, lista de așteptare, validarea nivelului, cardul, liga (scoruri, ranguri, Diamant, provocări, decay, meciurile necesare, finalul sezonului, Meciul zilei), absențele, taxele, blocările, abonamentele, voucherele, evenimentele noi și alertele pentru personal.
+
+## Faza 12B — Fiecare eveniment din §11, legat de modulul lui (06.10.2026)
+
+### Ce pleacă acum, și când
+| Mesaj | Cui | Când |
+|---|---|---|
+| Rezervare confirmată / modificată / anulată | clientul | imediat; anularea spune dacă se plătește (sub 24 de ore) |
+| Memento la 24 h și la 2 h | clientul | la ora lor; o mutare sau o anulare le retrage pe cele vechi |
+| Locul de pe lista de așteptare | clientul promovat | imediat, cu ora până la care poate anula gratuit |
+| Nivelul validat, cardul emis | clientul | imediat |
+| Taxa de neprezentare | clientul | doar dacă rămâne ceva de plătit (nu dacă era plătit sau intra în abonament) |
+| Rezervările blocate | clientul | la a 3-a neprezentare (Q15); deblocarea o face antrenorul sau managerul |
+| Absențe la antrenamente | clientul | după 2 lipsuri la rând, o singură dată pe șir (Q67) |
+| Abonament activ, înghețat, „mai ai 2 sesiuni”, „expiră pe …” | clientul | la plată, la înghețare, la a 2-a sesiune rămasă, cu 7 zile înainte (Q67) |
+| Voucher primit | clientul | imediat (ce valorează și până când) |
+| Eveniment nou în calendar | doar cine a cerut noutățile (Q67) | la prima publicare, nu pentru evenimentele demo sau trecute |
+| Scor propus | ceilalți jucători din meci | imediat, cu ora până la care confirmă la Chioșcul Ligii |
+| Meci validat, cu LP-ul fiecăruia | jucătorii | după validare (nu în meciurile de plasare) |
+| Rang nou (promovare, retrogradare, primul rang după plasare) | jucătorii | după validare, pe fiecare clasament |
+| Diamant | jucătorul | o singură dată în viață, cu cardul fizic de la recepție |
+| Provocare primită / acceptată / refuzată | cei provocați / cei care au provocat | la Chioșcul Ligii |
+| Risc de decay, finalul sezonului | jucătorii | ca până acum, acum și pe telefon |
+| Scor contestat | managerii și adminii locației | imediat (rezolvarea, în panou) |
+| Rest scăzut la Chioșcul de Plăți | managerii și adminii locației | cel mult o dată la 30 de minute pe chioșc |
+
+Toate trec prin același loc (`notifications.notify`), deci pe email și pe telefon, în limba clientului, o singură dată și editabile din panou. Comanda nouă `manage.py notifications_daily` (dimineața) trimite „abonamentul expiră”.
+
+### Corecturi pe drum
+1. Confirmarea rezervării spunea „plata se face la club” și pentru lecțiile din abonament; acum spune că ce rămâne de plătit (dacă rămâne ceva) se vede în cont.
+2. **Un test care pica de la sine după 01.10.2026** (lista de așteptare): nota de informare se publica la ora reală, iar testul se muta înapoi în timp, înaintea ei. Acum se publică la o dată fixă.
+
+### Ce rămâne pentru fazele următoare (cu motiv)
+- „Introduceți scorul” (la finalul meciului), „Meciul zilei”, „îți mai trebuie N meciuri”, „n-ai mai jucat de X zile” (cu jucători de nivelul tău): în **12E**, împreună cu potrivirea jucătorilor.
+- „Aparat offline” și „backup eșuat”: în **Etapa 14** (monitorizare). Un chioșc liniștit noaptea nu trimite nimic serverului, deci alerta are nevoie întâi de un semnal regulat de la aparate, altfel ar suna degeaba.
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Teste backend | 781, toate verzi; noi: confirmări și memento-uri, retragerea memento-urilor la anulare, taxa, blocarea, absențele, abonamentele (activ, sesiuni, înghețat, expiră, comanda zilnică), voucherele (cu textul valorii în RO și EN), noutățile doar cu acord, provocările acceptate și refuzate, scorul propus, scorul contestat, primul rang și LP-ul după plasare, Diamantul, restul scăzut. |
+| Acoperire 100% pe ramuri | `ledger`, `subscriptions`, `rewards`, `cafe`, `league`, `checkout`, `screens`, `panel`, `events`, `blog`, `notifications`: păstrată. |
+
+### Cum verificați (după ce porniți serverul demo)
+1. În cont → Notificări: „Noutăți de la club” e oprit; porniți-l pe email.
+2. În panou → Evenimente: publicați un eveniment viitor. Emailul „Nou la Jungle Padel: …” ajunge doar la contul de la pasul 1.
+3. Rezervați un teren pentru mâine: vine „Rezervarea e confirmată”; în panou → Notificări → ultimele mesaje apar și cele două memento-uri, programate.
+4. Anulați rezervarea: memento-urile apar „Nu s-a trimis”, cu motivul `withdrawn` (retrase).
+

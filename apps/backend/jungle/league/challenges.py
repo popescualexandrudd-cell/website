@@ -67,16 +67,48 @@ def _names(ids: list[uuid.UUID]) -> str:
 
 
 def _email_targets(challenge: Challenge) -> None:
+    """§11 "provocare primită": to the challenged side, answer at the League Kiosk."""
     challengers = _names(challenge.challengers)
+    respond_by = challenge.respond_by.astimezone(clock.BUSINESS_TZ).strftime("%d.%m.%Y %H:%M")
     for person in User.objects.filter(pk__in=challenge.targets):
         notify.send(
-            "league_challenge",
+            "league.challenge_received",
+            person,
+            {"challengers": challengers, "respond_by": respond_by},
+            subject=str(challenge.pk),
+        )
+
+
+ANSWER = {
+    "ro": {"accepted": "provocarea e acceptată", "refused": "provocarea e refuzată"},
+    "en": {"accepted": "the challenge is accepted", "refused": "the challenge is refused"},
+}
+NEXT = {
+    "ro": "Meciul se joacă până pe {play_by}, pe o rezervare de tip „Provocare”.",
+    "en": 'The match is played by {play_by}, on a booking of the "Challenge" kind.',
+}
+
+
+def _tell_challengers(challenge: Challenge) -> None:
+    """§11 "provocare acceptată / refuzată": to the side that challenged."""
+    targets = _names(challenge.targets)
+    accepted = challenge.status == ChallengeStatus.ACCEPTED
+    for person in User.objects.filter(pk__in=challenge.challengers):
+        language = notify.language_of(person)
+        play_by = (
+            challenge.play_by.astimezone(clock.BUSINESS_TZ).strftime("%d.%m.%Y")
+            if challenge.play_by
+            else ""
+        )
+        notify.send(
+            "league.challenge_answered",
             person,
             {
-                "challengers": challengers,
-                "respond_by": challenge.respond_by.astimezone(clock.BUSINESS_TZ),
+                "targets": targets,
+                "answer": ANSWER[language]["accepted" if accepted else "refused"],
+                "next": NEXT[language].format(play_by=play_by) if accepted else "",
             },
-            notify.ACCOUNT_LEAGUE_PATH,
+            subject=f"{challenge.pk}:{challenge.status}",
         )
 
 
@@ -222,6 +254,7 @@ def answer(
             )
         else:
             _record_refusal(challenge, ChallengeStatus.REFUSED, actor)
+        transaction.on_commit(partial(_tell_challengers, challenge))
     return challenge
 
 

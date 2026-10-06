@@ -345,3 +345,55 @@ def test_r110_the_event_room_with_its_cheapest_hour(api: Api, club: Any) -> None
 def test_r110_an_unknown_club_has_no_calendar(api: Api, club: Any) -> None:
     response = api.get("/events/calendar?location=nu-exista")
     assert response.status_code == 404 and error_code(response) == "locations.not_found"
+
+
+def test_s11_a_new_event_reaches_only_those_who_asked_for_the_clubs_news(
+    api: Api,
+    club: Any,
+    manager: User,
+    make_user: Callable[..., User],
+    refreshes: list[list[str]],
+    time_machine: Any,
+    django_capture_on_commit_callbacks: Any,
+) -> None:
+    from django.core import mail
+
+    from jungle.notifications.models import Preference
+
+    fan_ro, fan_en, quiet = make_user(), make_user(preferred_language="en"), make_user()
+    for fan in (fan_ro, fan_en):
+        Preference.objects.create(user=fan, category="club", channel="email", enabled=True)
+    Preference.objects.create(user=quiet, category="club", channel="email", enabled=False)
+
+    def sent() -> list[tuple[str, str]]:
+        return [
+            (m.to[0], str(m.subject)) for m in mail.outbox if m.subject.startswith(("Nou", "New"))
+        ]
+
+    with django_capture_on_commit_callbacks(execute=True):
+        draft = create(api, club.location)
+    assert sent() == []  # a draft is not news
+    url = f"{STAFF}/{draft['id']}/publication"
+    with django_capture_on_commit_callbacks(execute=True):
+        api.post(url, {"published": True, "reason": "gata"})
+        api.post(url, {"published": False, "reason": "amânat"})
+        api.post(url, {"published": True, "reason": "din nou"})  # once per event
+    assert sorted(sent()) == sorted(
+        [
+            (str(fan_ro.email), "Nou la Jungle Padel: Seară cu DJ"),
+            (str(fan_en.email), "New at Jungle Padel: DJ night"),
+        ]
+    )
+    ro = next(m.body for m in mail.outbox if m.to == [fan_ro.email])
+    assert "Seară cu DJ, 19.03.2027 20:00. Muzică pe terenuri." in ro
+    assert "https://www.example.test/ro/evenimente" in ro
+
+    # demo events and events already over are not announced
+    with django_capture_on_commit_callbacks(execute=True):
+        demo = create(api, club.location, title_ro="Demo", title_en="Demo")
+        ClubEvent.objects.filter(pk=demo["id"]).update(is_demo=True)
+        api.post(f"{STAFF}/{demo['id']}/publication", {"published": True, "reason": "demo"})
+        late = create(api, club.location, title_ro="Târziu", title_en="Late")
+        time_machine.move_to("2027-03-20T09:00:00+02:00")
+        api.post(f"{STAFF}/{late['id']}/publication", {"published": True, "reason": "târziu"})
+    assert len(sent()) == 2

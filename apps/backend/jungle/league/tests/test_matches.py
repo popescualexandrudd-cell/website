@@ -25,7 +25,7 @@ from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.permissions import Role
 from jungle.devices.models import Device, DeviceKind
 from jungle.league import kiosk as kiosk_guard
-from jungle.league import matches, store
+from jungle.league import matches, notify, store
 from jungle.league.models import (
     EventKind,
     LeagueEvent,
@@ -37,6 +37,7 @@ from jungle.league.models import (
     Standing,
 )
 from jungle.league.tests.conftest import WIN_A, at, play, staff_request
+from jungle.league.tests.test_messages import body, inbox
 from jungle.ledger import payments
 from jungle.ledger.models import PaymentMethod
 from jungle.locations.models import Location, Resource, ResourceKind
@@ -740,3 +741,32 @@ def test_lg099_a_player_who_joined_after_the_match_cannot_make_it_count(
         matches.propose(kiosk_call(), Device.objects.get(), proposal)
     assert refused(exc) == ("league.joined_after_match", 409)
     assert exc.value.params == {"name": f"{d.first_name} {d.last_name}"}
+
+
+# ---------------------------------------------------------------- messages (§11)
+def test_s11_the_score_waits_for_the_others_at_the_kiosk(
+    game: Game, kiosk: Device, after_game: Any, django_capture_on_commit_callbacks: Any
+) -> None:
+    with django_capture_on_commit_callbacks(execute=True):
+        matches.propose(kiosk_call(), kiosk, game.proposal())
+    assert inbox(game.a) == []  # the one who entered it has confirmed it
+    for player in (game.b, game.c, game.d):
+        assert inbox(player) == ["Un scor așteaptă confirmarea ta"]
+    text = body(game.b, "Un scor așteaptă confirmarea ta")
+    assert f"S-a propus scorul {notify.score_text(WIN_A)} pentru meciul de 05.04.2027 11:30" in text
+    assert "până la 05.04.2027 12:00" in text
+
+
+def test_s11_a_disputed_score_reaches_the_managers(
+    game: Game,
+    kiosk: Device,
+    after_game: Any,
+    manager: User,
+    django_capture_on_commit_callbacks: Any,
+) -> None:
+    game.pay()
+    match = matches.propose(kiosk_call(), kiosk, game.proposal())
+    with django_capture_on_commit_callbacks(execute=True):
+        matches.respond(kiosk_call(), kiosk, match.pk, game.token(game.c), False)
+    assert inbox(manager) == ["Scor contestat"]
+    assert "(05.04.2027 11:30, Teren 1)" in body(manager, "Scor contestat")

@@ -59,6 +59,7 @@ from jungle.ledger import payments
 from jungle.ledger.models import AccountKind, LedgerAccount, PaymentMethod, TransactionKind
 from jungle.ledger.services import account, post
 from jungle.locations.models import Location
+from jungle.notifications import services as notifications
 
 # Events that belong to a checkout; the others belong to a staff operation (`cashbox`).
 CHECKOUT_EVENTS = (
@@ -828,6 +829,10 @@ FAULTS = frozenset(
     }
 )
 FAULT_REPEAT = timedelta(minutes=30)
+CHANGE_FAULTS = {  # the staff's language is Romanian (the panel)
+    "low_change": "rest scăzut în casete",
+    "insufficient_change": "nu a putut da restul complet",
+}
 
 
 def report_fault(request: HttpRequest, code: str) -> None:
@@ -851,3 +856,10 @@ def report_fault(request: HttpRequest, code: str) -> None:
             payload={"device": str(device.pk), "device_name": device.name, "code": code},
             created_at=clock.now(),
         )
+        if code in CHANGE_FAULTS:  # §11 "rest scăzut": also by email and push to the managers
+            notifications.notify_staff(
+                device.location_id,
+                "staff.cash_low",
+                {"device": device.name, "detail": CHANGE_FAULTS[code]},
+                subject=f"{device.pk}:{code}:{clock.now().isoformat()}",
+            )

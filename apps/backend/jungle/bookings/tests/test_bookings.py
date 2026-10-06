@@ -392,8 +392,11 @@ def test_r074_waitlist_promotes_automatically(
     assert promoted.source == "waitlist" and promoted.promoted_at == clock.now()
     assert not Booking.objects.filter(organizer=blocked).exists()  # R-073: skipped
     assert SlotWaitlistEntry.objects.get(user=waiting).status == WaitStatus.PROMOTED
-    assert len(mail.outbox) == 1 and mail.outbox[0].to == [waiting.email]
-    assert "15.03.2027 22:00" in mail.outbox[0].body  # free cancellation until (Q16)
+    # §11: the player hears of the (paid) cancellation, the next one of the place.
+    [cancelled] = [m for m in mail.outbox if m.to == [player.email]]
+    assert "se plătește" in cancelled.body or "is paid" in cancelled.body
+    [promotion] = [m for m in mail.outbox if m.to == [waiting.email]]
+    assert "15.03.2027 22:00" in promotion.body  # free cancellation until (Q16)
 
     time_machine.move_to("2027-03-15T21:30:00+02:00", tick=False)
     login_as(client, waiting, mfa=False)
@@ -474,3 +477,32 @@ def test_r002_unverified_email_cannot_book_online(
     staff(Role.RECEPTION, club.location)
     body = {**booking_body(club.court1, TUE_10), "for_user_id": str(person.id)}
     assert api.post("/staff/bookings", body).status_code == 201
+
+
+# ---------------------------------------------------------------- §11 notifications
+def test_s11_a_booking_confirmed_reminded_and_a_cancellation_withdraws_the_reminders(
+    api: Api, club: Any, player: Any, time_machine: Any, django_capture_on_commit_callbacks: Any
+) -> None:
+    from jungle.notifications import services as notifications
+    from jungle.notifications.models import Notification, Status
+
+    with django_capture_on_commit_callbacks(execute=True):
+        booking = book(api, club.court1, TUE_10).json()  # Tuesday 10:00, now Monday 09:00
+    assert [m.subject for m in mail.outbox] == ["Rezervarea e confirmată"]
+    assert "teren-1, 16.03.2027 10:00 – 11:00" in mail.outbox[0].body
+    reminders = Notification.objects.filter(event="booking.reminder_24h")
+    assert [n.send_after.isoformat() for n in reminders] == ["2027-03-15T08:00:00+00:00"]
+    assert not Notification.objects.filter(event="booking.reminder_2h").exists()  # push only
+    # the reminder goes at its time
+    time_machine.move_to("2027-03-15T10:01:00+02:00", tick=False)
+    assert notifications.send_due().sent == 1
+    assert mail.outbox[-1].subject == "Mâine la Jungle Padel"
+
+    # a second booking, cancelled before its reminder: the reminder never goes
+    with django_capture_on_commit_callbacks(execute=True):
+        second = book(api, club.court1, "2027-03-18T10:00:00+02:00").json()
+        api.post(f"/bookings/{second['id']}/cancel", {})
+    assert mail.outbox[-1].subject == "Rezervarea e anulată"
+    withdrawn = Notification.objects.get(event="booking.reminder_24h", key__contains=second["id"])
+    assert withdrawn.status == Status.SKIPPED and withdrawn.last_error == "withdrawn"
+    assert booking["id"] != second["id"]

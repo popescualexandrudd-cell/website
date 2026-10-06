@@ -39,7 +39,7 @@ from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.http import client_ip
 from jungle.core.permissions import Action, Role
 from jungle.devices.models import Device
-from jungle.league import challenges, kiosk, services, store, tournaments
+from jungle.league import challenges, kiosk, notify, services, store, tournaments
 from jungle.league.models import (
     OPEN_STATUSES,
     Challenge,
@@ -60,6 +60,7 @@ from jungle.league.models import (
 )
 from jungle.ledger import payments
 from jungle.locations.models import ResourceKind
+from jungle.notifications import services as notifications
 
 # The bookings whose score may count (§6.14); tournament matches come with their draw (§6.14).
 LEAGUE_SESSIONS = {
@@ -481,6 +482,16 @@ def _start(
             "team_b": [str(p.pk) for p in team_b],
         },
     )
+    when = finished_at.astimezone(clock.BUSINESS_TZ).strftime("%d.%m.%Y %H:%M")
+    until = closes.astimezone(clock.BUSINESS_TZ).strftime("%d.%m.%Y %H:%M")
+    for player in team_a + team_b:
+        if player not in confirmed:  # §11 "scor propus": the others confirm it at the kiosk
+            notify.send(
+                "league.score_proposed",
+                player,
+                {"score": notify.score_text(score), "when": when, "until": until},
+                subject=str(match.pk),
+            )
     return match
 
 
@@ -546,6 +557,14 @@ def _dispute(match: LeagueMatch, actor: audit.Actor, device: Device, person: Use
             "finished_at": match.finished_at.isoformat(),
         },
         created_at=clock.now(),
+    )
+    court = _court(match)
+    when = match.finished_at.astimezone(clock.BUSINESS_TZ).strftime("%d.%m.%Y %H:%M")
+    notifications.notify_staff(  # §11: the manager resolves it from the panel
+        match.location_id,
+        "staff.dispute",
+        {"when": f"{when}, {court}" if court else when},
+        subject=str(match.pk),
     )
 
 

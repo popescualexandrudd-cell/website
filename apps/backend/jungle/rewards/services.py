@@ -30,6 +30,7 @@ from jungle.ledger.models import AccountKind, Payment, PaymentMethod
 from jungle.ledger.payments import Due, PaymentData, Subject, money_status, pay_for, resolve_due
 from jungle.ledger.services import account
 from jungle.locations.models import ResourceKind
+from jungle.notifications import services as notifications
 from jungle.rewards.models import (
     Referral,
     ReferralCode,
@@ -91,7 +92,30 @@ def issue_voucher(actor: audit.Actor, holder: User, data: VoucherData, source: s
         after={"holder": str(holder.pk), "kind": data.kind, "value": data.value, "source": source},
         reason=data.reason,
     )
+    language = "en" if holder.preferred_language == "en" else "ro"
+    notifications.notify(  # §11 "voucher primit"
+        holder,
+        "voucher.received",
+        {
+            "what": voucher_words(voucher, language),
+            "until": notifications.day(voucher.valid_until),
+            "url": notifications.account_path(language, "payments"),
+        },
+        subject=str(voucher.pk),
+    )
     return voucher
+
+
+def voucher_words(voucher: Voucher, language: str) -> str:
+    """What the voucher is worth, as the holder reads it."""
+    if voucher.kind == VoucherKind.HOUR:  # the value is in minutes
+        if language == "en":
+            return f"{voucher.value} free minutes of padel"
+        of = " de" if voucher.value % 100 >= 20 or voucher.value % 100 == 0 else ""
+        return f"{voucher.value}{of} minute gratuite de padel"
+    if voucher.kind == VoucherKind.AMOUNT:
+        return notifications.lei(voucher.value)
+    return f"{voucher.value}% reducere" if language == "ro" else f"{voucher.value}% off"
 
 
 def issue_manual(

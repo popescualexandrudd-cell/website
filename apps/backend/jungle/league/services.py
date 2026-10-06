@@ -39,6 +39,8 @@ from jungle.league.models import (
     SeasonStatus,
 )
 from jungle.locations.models import Location
+from jungle.notifications import services as notifications
+from jungle.notifications.services import account_path
 from jungle.privacy import league_consent
 
 # ---------------------------------------------------------------- questionnaire (R-003, Q47)
@@ -143,7 +145,14 @@ def validate_questionnaire(
             target=questionnaire,
             after={"estimated": str(questionnaire.estimated_level), "validated": str(level)},
         )
-        try_join(questionnaire.user)
+        player = questionnaire.user
+        notifications.notify(  # §11 "validarea nivelului"
+            player,
+            "account.level_validated",
+            {"level": f"{level:.1f}", "url": account_path(player.preferred_language, "league")},
+            subject=str(questionnaire.pk),
+        )
+        try_join(player)
     return questionnaire
 
 

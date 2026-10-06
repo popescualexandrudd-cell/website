@@ -26,7 +26,6 @@ from jungle.bookings.models import (
     EnrollmentStatus,
 )
 from jungle.bookings.services import (
-    bookings_link,
     cancellation_outcome,
     check_can_book_online,
     check_coach_free,
@@ -41,7 +40,8 @@ from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.permissions import Action, Role
 from jungle.ledger.payments import due_for_enrollment, settle
 from jungle.locations.models import Resource, ResourceKind
-from jungle.notifications.email import send_templated_email
+from jungle.notifications import services as notifications
+from jungle.notifications.services import account_path
 from jungle.pricing.models import Product
 from jungle.pricing.services import quote
 from jungle.subscriptions import services as subscriptions
@@ -213,24 +213,21 @@ def promote_class_waitlist(session: ClassSession, now: datetime) -> ClassEnrollm
         candidate.save(update_fields=["status", "promoted_at"])
         subscriptions.cover_enrollment(candidate)
         audit.record(audit.SYSTEM, "classes.promoted_from_waitlist", target=candidate)
-        _notify(candidate.user, session, now)
+        _notify(candidate.user, session, now, str(candidate.pk))
         return candidate
     return None
 
 
-def _notify(user: User, session: ClassSession, now: datetime) -> None:
-    if not user.email:
-        return
+def _notify(user: User, session: ClassSession, now: datetime, subject: str) -> None:
+    """§11 "promovare din lista de așteptare" (Q18: email and push, never WhatsApp)."""
     grace = int(get_config("bookings.promotion_free_cancel_hours"))
     context = {
-        "name": user.first_name,
         "what": "Pilates Reformer",
         "when": f"{local_text(session.starts_at)} – {local_text(session.ends_at)[-5:]}",
         "free_cancel_until": local_text(now + timedelta(hours=grace)),
-        "link": bookings_link(user.preferred_language),
+        "url": account_path(user.preferred_language),
     }
-    email, language = user.email, user.preferred_language
-    transaction.on_commit(lambda: send_templated_email("spot_promoted", email, language, context))
+    notifications.notify(user, "waitlist.promoted", context, subject=subject)
 
 
 def roster(

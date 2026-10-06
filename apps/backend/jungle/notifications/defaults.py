@@ -59,12 +59,12 @@ DEFAULTS: dict[str, dict[str, Texts]] = {
     "booking.confirmed": {
         "ro": Texts(
             "Rezervarea e confirmată",
-            "Bună, {{ first_name }}!\n\n{{ resource }}, {{ when }}. Plata se face la club, la Chioșcul de Plăți.\n\nRezervările tale: {{ url }}",
+            "Bună, {{ first_name }}!\n\n{{ resource }}, {{ when }}. Ce rămâne de plătit (dacă rămâne ceva, de exemplu când nu intră în abonament) vezi în cont; se plătește la club, la Chioșcul de Plăți.\n\nRezervările tale: {{ url }}",
             "{{ resource }}, {{ when }}: rezervarea e confirmată.",
         ),
         "en": Texts(
             "Your booking is confirmed",
-            "Hi {{ first_name }},\n\n{{ resource }}, {{ when }}. You pay at the club, at the Payments Kiosk.\n\nYour bookings: {{ url }}",
+            "Hi {{ first_name }},\n\n{{ resource }}, {{ when }}. What is left to pay (if anything, for example when it is not part of a subscription) is in your account; you pay at the club, at the Payments Kiosk.\n\nYour bookings: {{ url }}",
             "{{ resource }}, {{ when }}: your booking is confirmed.",
         ),
     },
@@ -111,12 +111,12 @@ DEFAULTS: dict[str, dict[str, Texts]] = {
     "waitlist.promoted": {
         "ro": Texts(
             "S-a eliberat un loc",
-            "Bună, {{ first_name }}!\n\nS-a eliberat un loc și ești înscris: {{ what }}, {{ when }}.\n\n{{ url }}",
+            "Bună, {{ first_name }}!\n\nS-a eliberat un loc și, pentru că erai pe lista de așteptare, te-am înscris: {{ what }}, {{ when }}. Dacă nu mai poți veni, anulezi gratuit până la {{ free_cancel_until }}.\n\n{{ url }}",
             "Ai primit un loc: {{ what }}, {{ when }}.",
         ),
         "en": Texts(
             "A place opened up",
-            "Hi {{ first_name }},\n\nA place opened up and you are in: {{ what }}, {{ when }}.\n\n{{ url }}",
+            "Hi {{ first_name }},\n\nA place opened up and, as you were on the waiting list, you are in: {{ what }}, {{ when }}. If you can no longer come, cancel for free until {{ free_cancel_until }}.\n\n{{ url }}",
             "You got a place: {{ what }}, {{ when }}.",
         ),
     },
@@ -147,13 +147,13 @@ DEFAULTS: dict[str, dict[str, Texts]] = {
     "booking.blocked": {
         "ro": Texts(
             "Rezervările online sunt blocate",
-            "Bună, {{ first_name }}!\n\nDupă neprezentări repetate, rezervările online sunt blocate până pe {{ until }}. Pentru detalii, întreabă la recepție.",
-            "Rezervările online sunt blocate până pe {{ until }}.",
+            "Bună, {{ first_name }}!\n\nDupă {{ count }} neprezentări, rezervările online sunt blocate. Le deblochează antrenorul sau managerul clubului: întreabă la recepție.",
+            "Rezervările online sunt blocate după {{ count }} neprezentări. Întreabă la recepție.",
         ),
         "en": Texts(
             "Online bookings are blocked",
-            "Hi {{ first_name }},\n\nAfter repeated no-shows, online bookings are blocked until {{ until }}. Ask at reception for details.",
-            "Online bookings are blocked until {{ until }}.",
+            "Hi {{ first_name }},\n\nAfter {{ count }} no-shows, online bookings are blocked. The coach or the club manager unblocks them: ask at reception.",
+            "Online bookings are blocked after {{ count }} no-shows. Ask at reception.",
         ),
     },
     "league.score_window": {
@@ -216,28 +216,40 @@ DEFAULTS: dict[str, dict[str, Texts]] = {
             "Diamond! Your physical card is waiting at reception.",
         ),
     },
-    "league.challenge": {
+    "league.challenge_received": {
         "ro": Texts(
-            "Provocare: {{ status }}",
-            "Bună, {{ first_name }}!\n\nProvocarea {{ who }}: {{ status }}. Detaliile sunt în cont; răspunsul se dă la Chioșcul Ligii.\n\n{{ url }}",
-            "Provocare {{ who }}: {{ status }}.",
+            "Ai fost provocat",
+            "Salut, {{ first_name }}!\n\n{{ challengers }} te-au provocat la un meci de ligă.\n\nPoți accepta sau refuza la Chioșcul Ligii din club, până la {{ respond_by }}. Dacă accepți, meciul se joacă în cel mult 7 zile, pe o rezervare obișnuită de tip „Provocare”. Dacă provocatorii câștigă, primesc 5 LP în plus.\n\nProvocarea apare și în contul tău: {{ url }}",
+            "{{ challengers }} te-au provocat. Răspunzi la Chioșcul Ligii până la {{ respond_by }}.",
         ),
         "en": Texts(
-            "Challenge: {{ status }}",
-            "Hi {{ first_name }},\n\nThe challenge {{ who }}: {{ status }}. The details are in your account; the answer is given at the League Kiosk.\n\n{{ url }}",
-            "Challenge {{ who }}: {{ status }}.",
+            "You have been challenged",
+            'Hi {{ first_name }},\n\n{{ challengers }} challenged you to a league match.\n\nYou can accept or refuse at the League Kiosk at the club, until {{ respond_by }}. If you accept, the match is played within 7 days, on an ordinary booking of the "Challenge" kind. If the challengers win, they get 5 extra LP.\n\nThe challenge is also in your account: {{ url }}',
+            "{{ challengers }} challenged you. Answer at the League Kiosk by {{ respond_by }}.",
+        ),
+    },
+    "league.challenge_answered": {
+        "ro": Texts(
+            "Provocarea ta: {{ answer }}",
+            "Salut, {{ first_name }}!\n\n{{ targets }}: {{ answer }}. {{ next }}\n\n{{ url }}",
+            "{{ targets }}: {{ answer }}.",
+        ),
+        "en": Texts(
+            "Your challenge: {{ answer }}",
+            "Hi {{ first_name }},\n\n{{ targets }}: {{ answer }}. {{ next }}\n\n{{ url }}",
+            "{{ targets }}: {{ answer }}.",
         ),
     },
     "league.decay_risk": {
         "ro": Texts(
-            "Nu ai mai jucat de {{ days }} zile",
-            "Bună, {{ first_name }}!\n\nDin {{ starts }}, fără un meci oficial, începi să pierzi LP în clasamentul {{ ladder }}. Un meci e de ajuns.\n\n{{ url }}",
-            "Din {{ starts }} începi să pierzi LP. Un meci e de ajuns.",
+            "Nu ai mai jucat de ceva vreme",
+            "Salut, {{ first_name }}!\n\nNu ai mai jucat un meci oficial de ligă de ceva vreme. Din {{ starts }}, în clasamentul {{ ladder }} pierzi câte {{ lp_per_day }} LP pe zi până joci din nou (niciodată sub Diamant IV).\n\nUn singur meci oficial oprește scăderea.\n\nRangul și LP-ul tău: {{ url }}",
+            "Din {{ starts }} pierzi {{ lp_per_day }} LP pe zi ({{ ladder }}). Un meci e de ajuns.",
         ),
         "en": Texts(
-            "No match for {{ days }} days",
-            "Hi {{ first_name }},\n\nFrom {{ starts }}, without an official match, you start losing LP in the {{ ladder }} ladder. One match is enough.\n\n{{ url }}",
-            "From {{ starts }} you start losing LP. One match is enough.",
+            "No match for a while",
+            "Hi {{ first_name }},\n\nYou have not played an official league match for a while. From {{ starts }}, in the {{ ladder }} ladder, you lose {{ lp_per_day }} LP a day until you play again (never below Diamond IV).\n\nA single official match stops it.\n\nYour rank and LP: {{ url }}",
+            "From {{ starts }} you lose {{ lp_per_day }} LP a day ({{ ladder }}). One match is enough.",
         ),
     },
     "league.matches_needed": {
@@ -254,14 +266,14 @@ DEFAULTS: dict[str, dict[str, Texts]] = {
     },
     "league.season_end": {
         "ro": Texts(
-            "Sezonul s-a încheiat",
-            "Bună, {{ first_name }}!\n\nSezonul {{ season }} s-a încheiat: ai terminat pe locul {{ position }}. {{ reward }}\n\n{{ url }}",
-            "Sezonul s-a încheiat: locul {{ position }}.",
+            "Recompensa ta din {{ season }}",
+            "Salut, {{ first_name }}!\n\n{{ season }} s-a încheiat. Felicitări: {{ award }}!\n\nRecompensele tale sunt în cont, la „Vouchere”:\n{{ rewards }}\n{{ extras }}\n\nVoucherele tale: {{ url }}",
+            "{{ season }}: {{ award }}! Recompensele sunt în cont.",
         ),
         "en": Texts(
-            "The season is over",
-            "Hi {{ first_name }},\n\nSeason {{ season }} is over: you finished in place {{ position }}. {{ reward }}\n\n{{ url }}",
-            "The season is over: place {{ position }}.",
+            "Your reward from {{ season }}",
+            'Hi {{ first_name }},\n\n{{ season }} is over. Congratulations: {{ award }}!\n\nYour rewards are in your account, under "Vouchers":\n{{ rewards }}\n{{ extras }}\n\nYour vouchers: {{ url }}',
+            "{{ season }}: {{ award }}! Your rewards are in your account.",
         ),
     },
     "league.match_of_the_day": {

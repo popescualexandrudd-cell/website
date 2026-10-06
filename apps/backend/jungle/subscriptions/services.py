@@ -32,6 +32,7 @@ from jungle.core.permissions import Action
 from jungle.ledger.models import RevenueCategory
 from jungle.ledger.payments import Due, charge, money_status
 from jungle.locations.models import Location, ResourceKind
+from jungle.notifications import services as notifications
 from jungle.pricing.models import Band
 from jungle.pricing.services import band_at
 from jungle.rewards import services as rewards
@@ -377,6 +378,35 @@ def _activate(subscription: Subscription) -> None:
     subscription.status = SubscriptionStatus.ACTIVE
     subscription.activated_at = clock.now()
     subscription.save()
+    _tell(
+        subscription,
+        "subscription.bought",
+        {"starts": notifications.day(subscription.starts_on)},
+        subject=str(subscription.pk),
+    )
+
+
+PERIOD_WORDS = {
+    "ro": {Period.MONTHLY: "lunar", Period.QUARTERLY: "trimestrial", Period.ANNUAL: "anual"},
+    "en": {Period.MONTHLY: "monthly", Period.QUARTERLY: "quarterly", Period.ANNUAL: "annual"},
+}
+
+
+def _tell(subscription: Subscription, key: str, context: dict[str, str], subject: str) -> None:
+    """§11: bought, frozen, about to end. `ends` is the last day covered (ends_on is exclusive)."""
+    user = subscription.user
+    language = "en" if user.preferred_language == "en" else "ro"
+    notifications.notify(
+        user,
+        key,
+        {
+            "what": PERIOD_WORDS[language][Period(subscription.period)],
+            "ends": notifications.day(subscription.ends_on - timedelta(days=1)),
+            "url": notifications.account_path(language, "payments"),
+            **context,
+        },
+        subject=subject,
+    )
 
 
 def activate_if_paid(subscription_id: uuid.UUID) -> Subscription:
@@ -470,6 +500,15 @@ def freeze(
             target=subscription,
             after={"from": starts_on, "days": days, "ends_on": subscription.ends_on},
         )
+        _tell(
+            subscription,
+            "subscription.frozen",
+            {
+                "starts": notifications.day(starts_on),
+                "ends": notifications.day(ends_on - timedelta(days=1)),
+            },
+            subject=str(record.pk),
+        )
     return record
 
 
@@ -530,7 +569,7 @@ def cover(
             makeup = component.makeups.filter(expires_on__gt=day, use__isnull=True).first()
             if makeup is None:
                 continue
-        return SubscriptionUse.objects.create(
+        use = SubscriptionUse.objects.create(
             component=component,
             cycle=cycle,
             booking=booking,
@@ -538,7 +577,41 @@ def cover(
             makeup=makeup,
             created_at=clock.now(),
         )
+        left = component.sessions_per_month - used - 1
+        if makeup is None and left == int(get_config("notifications.sessions_left_at")):
+            language = "en" if user.preferred_language == "en" else "ro"
+            _tell(
+                subscription,
+                "subscription.sessions_left",
+                {"count": str(left), "sport": SPORT_WORDS[language][Sport(sport)]},
+                subject=f"{component.pk}:{cycle}",
+            )
+        return use
     return None
+
+
+SPORT_WORDS = {
+    "ro": {Sport.PADEL: "padel", Sport.TENNIS: "tenis", Sport.PILATES: "pilates"},
+    "en": {Sport.PADEL: "padel", Sport.TENNIS: "tennis", Sport.PILATES: "Pilates"},
+}
+
+
+def remind_expiring(today: date | None = None) -> int:
+    """§11 "abonamentul expiră": once, N days before its last day (`manage.py
+    notifications_daily`). A subscription extended by a freeze is reminded again for its new end."""
+    today = today or _today()
+    days = int(get_config("notifications.subscription_expiring_days"))
+    ending = Subscription.objects.filter(
+        status=SubscriptionStatus.ACTIVE, ends_on=today + timedelta(days=days + 1)
+    ).select_related("user")
+    for subscription in ending:
+        _tell(
+            subscription,
+            "subscription.expiring",
+            {},
+            subject=f"{subscription.pk}:{subscription.ends_on.isoformat()}",
+        )
+    return len(ending)
 
 
 def cover_booking(booking: Booking) -> SubscriptionUse | None:

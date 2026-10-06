@@ -38,7 +38,8 @@ from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.permissions import Action, Role
 from jungle.ledger.payments import due_for_booking, settle
 from jungle.locations.models import Resource, ResourceKind
-from jungle.notifications.email import send_templated_email
+from jungle.notifications import services as notifications
+from jungle.notifications.services import account_path
 from jungle.pricing.models import CustomerType, Product
 from jungle.pricing.services import day_bounds, quote
 from jungle.subscriptions import services as subscriptions
@@ -292,10 +293,48 @@ def create_booking(
             )
         )
         subscriptions.cover_booking(booking)  # R-083: a lesson may be a subscription session
+        _messages(booking, "booking.confirmed")
     audit.record(
         audit.actor_from_request(request), "booking.created", target=booking, after=_brief(booking)
     )
     return booking
+
+
+REMINDERS = (
+    ("booking.reminder_24h", timedelta(hours=24)),
+    ("booking.reminder_2h", timedelta(hours=2)),
+)
+CANCELLED_CHARGED = {
+    "ro": "Fiind cu mai puțin de 24 de ore înainte, rezervarea se plătește.",
+    "en": "As it was less than 24 hours before, the booking is paid.",
+}
+
+
+def _messages(booking: Booking, event: str, extra: dict[str, str] | None = None) -> None:
+    """§11: the confirmation, change or cancellation, and the reminders at 24 h and 2 h before
+    (only those still ahead; a change or a cancellation withdraws the old ones)."""
+    user = booking.organizer
+    context = {
+        "resource": booking.resource.name,
+        "when": f"{local_text(booking.starts_at)} – {local_text(booking.ends_at)[-5:]}",
+        "url": account_path(user.preferred_language),
+        **(extra or {}),
+    }
+    when = booking.starts_at.astimezone(UTC).isoformat()
+    notifications.withdraw(tuple(key for key, _ in REMINDERS), str(booking.pk))
+    notifications.notify(user, event, context, subject=f"{booking.pk}@{when}")
+    if event == "booking.cancelled":
+        return
+    now = clock.now()
+    for key, before in REMINDERS:
+        if booking.starts_at - before > now:
+            notifications.notify(
+                user,
+                key,
+                context,
+                subject=f"{booking.pk}@{when}",
+                send_after=booking.starts_at - before,
+            )
 
 
 def _brief(booking: Booking) -> dict[str, object]:
@@ -371,6 +410,13 @@ def cancel_booking(
             reason=reason,
         )
         subscriptions.on_cancelled(booking.cancellation_outcome, booking=booking)  # Q14
+        language = "en" if booking.organizer.preferred_language == "en" else "ro"
+        charged = booking.cancellation_outcome == CancellationOutcome.CHARGED
+        _messages(
+            booking,
+            "booking.cancelled",
+            {"outcome": CANCELLED_CHARGED[language] if charged else ""},
+        )
         settle(due_for_booking(booking))  # R-070, R-071: debt or credit in the account
         promote_waiting(booking.resource, booking.starts_at, booking.ends_at)
     return booking
@@ -429,6 +475,7 @@ def move_booking(
             after=_brief(booking),
             reason=reason,
         )
+        _messages(booking, "booking.changed")
         promote_waiting(*old)
     return booking
 
@@ -561,26 +608,25 @@ def promote_waiting(resource: Resource, starts_at: datetime, ends_at: datetime) 
         audit.record(
             audit.SYSTEM, "booking.promoted_from_waitlist", target=booking, after=_brief(booking)
         )
-        _notify_promotion(entry.user, f"{resource.name}", entry.starts_at, entry.ends_at, now)
+        _notify_promotion(
+            entry.user, f"{resource.name}", entry.starts_at, entry.ends_at, now, str(booking.pk)
+        )
         promoted.append(booking)
     return promoted
 
 
 def _notify_promotion(
-    user: User, what: str, starts_at: datetime, ends_at: datetime, now: datetime
+    user: User, what: str, starts_at: datetime, ends_at: datetime, now: datetime, subject: str
 ) -> None:
-    if not user.email:
-        return
+    """§11 "promovare din lista de așteptare": by email and push (Q18), once per booking."""
     grace = int(get_config("bookings.promotion_free_cancel_hours"))
     context = {
-        "name": user.first_name,
         "what": what,
         "when": f"{local_text(starts_at)} – {ends_at.astimezone(BUSINESS_TZ):%H:%M}",
         "free_cancel_until": local_text(now + timedelta(hours=grace)),
-        "link": bookings_link(user.preferred_language),
+        "url": account_path(user.preferred_language),
     }
-    email, language = user.email, user.preferred_language
-    transaction.on_commit(lambda: send_templated_email("spot_promoted", email, language, context))
+    notifications.notify(user, "waitlist.promoted", context, subject=subject)
 
 
 # ---------------------------------------------------------------- reading

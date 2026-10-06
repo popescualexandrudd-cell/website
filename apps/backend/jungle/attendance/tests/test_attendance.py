@@ -259,3 +259,47 @@ def test_coach_sees_only_own_notices(
     process_no_shows()
     assert other_coach != club.coach
     assert api.get(f"/staff/notices?location_id={club.location.id}").json() == []
+
+
+def test_s11_a_no_show_fee_the_block_and_missed_classes_reach_the_client(
+    club: Any, make_user: Any, time_machine: Any, django_capture_on_commit_callbacks: Any
+) -> None:
+    from django.core import mail
+
+    player = make_user()
+
+    def subjects() -> list[str]:
+        return [str(m.subject) for m in mail.outbox if m.to == [player.email]]
+
+    make_booking(club, player, "2027-03-15T10:00:00+02:00", price_total=12050)
+    make_booking(club, player, "2027-03-16T10:00:00+02:00")  # nothing to pay: no fee message
+    make_booking(club, player, "2027-03-17T10:00:00+02:00")
+    time_machine.move_to("2027-03-16T12:00:00+02:00", tick=False)
+    with django_capture_on_commit_callbacks(execute=True):
+        process_no_shows()
+    assert subjects() == ["Taxă de neprezentare sau anulare târzie"]
+    fee = mail.outbox[-1].body
+    assert "Pentru 15.03.2027 10:00 – 11:00 (teren-1) se datorează 120,50 lei: neprezentare" in fee
+    assert "https://www.example.test/ro/cont/plati" in fee
+    time_machine.move_to("2027-03-17T12:00:00+02:00", tick=False)
+    with django_capture_on_commit_callbacks(execute=True):
+        process_no_shows()  # the third: blocked
+    assert subjects()[-1] == "Rezervările online sunt blocate"
+    assert "După 3 neprezentări" in mail.outbox[-1].body
+
+    # classes: the message comes once, when exactly the last two were missed
+    BookingRestriction.objects.update(lifted_at=datetime.fromisoformat("2027-03-17T12:00:00+02:00"))
+    for day, show in ((18, True), (19, False), (20, False), (21, False)):
+        start = datetime.fromisoformat(f"2027-03-{day}T18:00:00+02:00")
+        session = ClassSession.objects.create(
+            location=club.location, studio=club.studio, instructor=club.coach, kind="group",
+            starts_at=start, ends_at=start + timedelta(hours=1), capacity=4, price_total=0,
+        )  # fmt: skip
+        status = EnrollmentStatus.ATTENDED if show else EnrollmentStatus.ENROLLED
+        ClassEnrollment.objects.create(session=session, user=player, status=status)
+        time_machine.move_to(f"2027-03-{day}T18:30:00+02:00", tick=False)
+        with django_capture_on_commit_callbacks(execute=True):
+            process_no_shows()
+    assert subjects().count("Ne e dor de tine la antrenamente") == 1
+    missed = next(m.body for m in mail.outbox if m.subject.startswith("Ne e dor"))
+    assert "Ai lipsit de la ultimele 2 antrenamente" in missed

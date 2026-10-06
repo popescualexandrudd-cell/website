@@ -100,5 +100,5 @@ def test_the_daily_command(season: LeagueSeason, now: Any) -> None:
 def test_r140_league_emails_skip_accounts_without_email() -> None:
     from jungle.league import notify
 
-    notify.send("league_decay_warning", User(first_name="Copil"), {}, notify.ACCOUNT_LEAGUE_PATH)
+    notify.send("league.decay_risk", User(first_name="Copil"), {}, subject="x")
     assert mail.outbox == []

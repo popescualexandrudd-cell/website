@@ -386,10 +386,25 @@ def test_debts_first_and_the_share_of_a_partners_booking(
     assert error_code(kiosk.get(f"/bookings/{booking.pk}/split", parts=9)) == "validation.invalid"
 
 
-def test_device_faults_reach_the_staff_once(kiosk: Kiosk) -> None:
-    assert kiosk.post("/alerts", {"code": "note_jam"}).json() == {"ok": True}
-    kiosk.post("/alerts", {"code": "note_jam"})
-    kiosk.post("/alerts", {"code": "low_change"})
+def test_device_faults_reach_the_staff_once(
+    kiosk: Kiosk, make_user: Any, django_capture_on_commit_callbacks: Any
+) -> None:
+    from django.core import mail
+
+    from jungle.conftest import grant
+    from jungle.core.permissions import Role
+
+    manager = make_user()
+    grant(manager, Role.MANAGER, kiosk.device.location)
+    with django_capture_on_commit_callbacks(execute=True):
+        assert kiosk.post("/alerts", {"code": "note_jam"}).json() == {"ok": True}
+        kiosk.post("/alerts", {"code": "note_jam"})
+        kiosk.post("/alerts", {"code": "low_change"})
+        kiosk.post("/alerts", {"code": "low_change"})  # within the half hour: once
+    # §11: low change also by email to the managers (a jam is for reception, on the panel)
+    sent = [(m.to[0], m.subject) for m in mail.outbox]
+    assert sent == [(manager.email, f"Rest scăzut: {kiosk.device.name}")]
+    assert "rest scăzut în casete" in mail.outbox[0].body
     assert error_code(kiosk.post("/alerts", {"code": "format_disk"})) == "validation.invalid"
     kinds = sorted(
         n.payload["code"] for n in StaffNotice.objects.filter(kind="checkout.device_fault")

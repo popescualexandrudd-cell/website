@@ -9,7 +9,6 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from functools import partial
 
-from django.conf import settings
 from django.db import IntegrityError, transaction
 from django.db.models import QuerySet
 from django.http import HttpRequest
@@ -30,10 +29,10 @@ from jungle.core import clock
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.permissions import Action
 from jungle.locations.models import Location
-from jungle.notifications.email import send_templated_email
+from jungle.notifications import services as notifications
+from jungle.notifications.services import account_path
 
 NUMBER_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
-_ACCOUNT_CARD_PATH = {"ro": "/ro/cont/card", "en": "/en/account/card"}
 
 # Called after a card changes, so Wallet passes refresh (R-023). Set by jungle.cards.wallet.
 _listeners: list[Callable[[MemberCard], None]] = []
@@ -100,16 +99,9 @@ def issue_card(actor: audit.Actor, user: User, reason: str = "Card nou") -> Memb
 
 
 def _send_card_email(user: User, card: MemberCard) -> None:
-    if not user.email:
-        return
-    language = user.preferred_language if user.preferred_language in _ACCOUNT_CARD_PATH else "ro"
-    context = {
-        "name": user.first_name,
-        "number": card.number,
-        "link": f"{settings.WEB_BASE_URL}{_ACCOUNT_CARD_PATH[language]}",
-    }
-    email = user.email
-    transaction.on_commit(lambda: send_templated_email("card_issued", email, language, context))
+    """§11 "card emis (cu linkuri Wallet)": email and push, once per card."""
+    context = {"number": card.number, "url": account_path(user.preferred_language, "card")}
+    notifications.notify(user, "account.card_issued", context, subject=str(card.pk))
 
 
 def active_card(user: User) -> MemberCard | None:

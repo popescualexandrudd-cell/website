@@ -358,3 +358,39 @@ def test_booking_voucher_is_not_for_subscriptions(api: Api, club: Any, player: A
     assert error_code(response) == "vouchers.wrong_target"
     api.get("/account/referral-code")
     assert str(ReferralCode.objects.get())
+
+
+def test_s11_the_holder_hears_about_a_new_voucher(
+    make_user: Any, django_capture_on_commit_callbacks: Any
+) -> None:
+    from django.core import mail
+
+    holder = make_user()
+    with django_capture_on_commit_callbacks(execute=True):
+        voucher = voucher_for(holder, days=30)
+    assert len(mail.outbox) == 1
+    body = mail.outbox[0].body
+    assert mail.outbox[0].subject == "Ai primit un voucher"
+    assert "60 de minute gratuite de padel" in body
+    assert f"valabil până pe {voucher.valid_until:%d.%m.%Y}" in body
+    assert "https://www.example.test/ro/cont/plati" in body
+
+
+@pytest.mark.parametrize(
+    ("kind", "value", "language", "words"),
+    [
+        (VoucherKind.HOUR, 60, "ro", "60 de minute gratuite de padel"),
+        (VoucherKind.HOUR, 100, "ro", "100 de minute gratuite de padel"),
+        (VoucherKind.HOUR, 15, "ro", "15 minute gratuite de padel"),
+        (VoucherKind.HOUR, 90, "en", "90 free minutes of padel"),
+        (VoucherKind.AMOUNT, 5000, "ro", "50 lei"),
+        (VoucherKind.AMOUNT, 1250, "en", "12,50 lei"),
+        (VoucherKind.PERCENT, 20, "ro", "20% reducere"),
+        (VoucherKind.PERCENT, 15, "en", "15% off"),
+    ],
+)
+def test_s11_what_a_voucher_is_worth_in_words(
+    kind: str, value: int, language: str, words: str
+) -> None:
+    voucher = Voucher(kind=kind, value=value)
+    assert services.voucher_words(voucher, language) == words

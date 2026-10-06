@@ -22,7 +22,7 @@ from jungle.accounts.models import User
 from jungle.cards import services as cards
 from jungle.configuration.services import get_config
 from jungle.core import clock
-from jungle.league import store
+from jungle.league import notify, store
 from jungle.league.models import (
     Badge,
     EventKind,
@@ -138,6 +138,7 @@ def after_match(season: LeagueSeason, event: LeagueEvent, outcome: dict[str, Any
             was = rank_before is not None and rank_before[0] >= DIAMOND_IV_INDEX
             if reached and not was and grant(user, "first_diamond", "", None, {}):
                 cards.offer_diamond_card(user, season.location)  # R-024, Q1: once in a lifetime
+                notify.send("league.diamond", user, {}, subject="first")  # §11, once too
     for player_id in team_a + team_b:
         _streaks(season, users[player_id], limits)
     if outcome["winner"] is None:

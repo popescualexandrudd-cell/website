@@ -1,4 +1,5 @@
 import re
+from typing import Any
 from urllib.parse import unquote
 
 import pytest
@@ -19,7 +20,10 @@ pytestmark = pytest.mark.django_db
 
 
 @pytest.fixture
-def notice(db: None) -> None:
+def notice(db: None, time_machine: Any) -> None:
+    # Published at a fixed moment before every time the tests move to (not the real clock,
+    # which would put the notice after the tests' own dates once that day has passed).
+    time_machine.move_to("2026-09-01T10:00:00+03:00", tick=False)
     for lang in ("ro", "en"):
         publish_document(SYSTEM, DocumentKind.WAITLIST_NOTICE, lang, f"Nota {lang}", f"text {lang}")
 
