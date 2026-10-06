@@ -6,7 +6,7 @@
  * device makes one.
  */
 import { expect, type Page, test } from "@playwright/test";
-import { readdirSync, readFileSync } from "node:fs";
+import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { chooseNecessaryCookies, expectAccessible } from "../helpers";
 
@@ -18,15 +18,22 @@ async function shot(page: Page, name: string, project: string) {
   if (dir) await page.screenshot({ path: `${dir}/${project}-${name}.png` });
 }
 
-/** The newest link to `path` in the emails sent to `to` (quoted-printable soft breaks undone). */
+/** The newest link to `path` in the emails sent to `to` (quoted-printable soft breaks undone).
+ * The emails are taken newest first by the time they were written (a directory lists files in no
+ * set order), and the person may have other messages too (the card, a booking…): the newest one
+ * that holds such a link wins. */
 function latestLink(to: string, path: string): string {
-  const bodies = readdirSync(MAIL_DIR)
-    .map((f) => readFileSync(join(MAIL_DIR, f), "utf8"))
+  const pattern = new RegExp(`(https?://[^\\s"<]*${path.replace(/\//g, "\\/")}\\?[^\\s"<]+)`);
+  const links = readdirSync(MAIL_DIR)
+    .map((f) => join(MAIL_DIR, f))
+    .sort((a, b) => statSync(a).mtimeMs - statSync(b).mtimeMs || a.localeCompare(b))
+    .map((f) => readFileSync(f, "utf8"))
     .filter((b) => b.includes(`To: ${to}`))
-    .map((b) => b.replace(/=\r?\n/g, "").replace(/=3D/g, "="));
-  const match = (bodies.at(-1) ?? "").match(new RegExp(`(https?://[^\\s"<]*${path.replace(/\//g, "\\/")}\\?[^\\s"<]+)`));
-  if (!match?.[1]) throw new Error(`no ${path} link for ${to}`);
-  return match[1].replace(/&amp;/g, "&");
+    .map((b) => b.replace(/=\r?\n/g, "").replace(/=3D/g, "=").match(pattern)?.[1])
+    .filter((link): link is string => Boolean(link));
+  const link = links.at(-1);
+  if (!link) throw new Error(`no ${path} link for ${to}`);
+  return link.replace(/&amp;/g, "&");
 }
 
 const birthYearsAgo = (years: number) => {

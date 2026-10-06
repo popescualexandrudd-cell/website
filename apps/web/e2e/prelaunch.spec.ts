@@ -1,17 +1,24 @@
 import { expect, test } from "@playwright/test";
-import { readdirSync, readFileSync } from "node:fs";
+import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { chooseNecessaryCookies, expectAccessible } from "./helpers";
 
 const MAIL_DIR = process.env.E2E_MAIL_DIR ?? "";
 
+/** The newest link to `path` in the emails sent to `to`: newest first by the time they were written
+ * (a directory lists files in no set order), the newest email that holds such a link. */
 function latestLink(to: string, path: string): string {
-  const files = readdirSync(MAIL_DIR).map((f) => join(MAIL_DIR, f));
-  const bodies = files.map((f) => readFileSync(f, "utf8")).filter((b) => b.includes(`To: ${to}`));
-  const body = bodies.at(-1) ?? "";
-  const match = body.match(new RegExp(`(https?://[^\\s]*${path.replace(/\//g, "\\/")}\\?token=[^\\s]+)`));
-  if (!match?.[1]) throw new Error(`no ${path} link for ${to}`);
-  return match[1];
+  const pattern = new RegExp(`(https?://[^\\s]*${path.replace(/\//g, "\\/")}\\?token=[^\\s]+)`);
+  const links = readdirSync(MAIL_DIR)
+    .map((f) => join(MAIL_DIR, f))
+    .sort((a, b) => statSync(a).mtimeMs - statSync(b).mtimeMs || a.localeCompare(b))
+    .map((f) => readFileSync(f, "utf8"))
+    .filter((b) => b.includes(`To: ${to}`))
+    .map((b) => b.match(pattern)?.[1])
+    .filter((link): link is string => Boolean(link));
+  const link = links.at(-1);
+  if (!link) throw new Error(`no ${path} link for ${to}`);
+  return link;
 }
 
 test.beforeEach(async ({ context, baseURL }) => chooseNecessaryCookies(context, baseURL));

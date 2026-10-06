@@ -10,6 +10,8 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 - A doua barieră: `jungle.core.ai_origin` (`acting_for_ai`, `refuse_ai`), chemată primul rând în registrul ligii, Chioșcul Ligii, rezolvarea meciurilor, registrul de bani, prețuri, vouchere și recomandări, acordul ligii, ștergerea contului, comutatoare și setări. Codurile `ai.forbidden`, `ai.unavailable`.
 - Setări noi (DE_CONFIRMAT, Q68): `ai.monthly_budget_usd`, `ai.input_usd_per_mtok`, `ai.output_usd_per_mtok`, `ai.effort`. Acțiunea `ai.view` (admin, manager); API: `GET /api/v1/staff/ai/status`, `GET /api/v1/staff/ai/interactions`.
 - Panou: modulul **Asistentul AI**, în locul marcajului „Etapa 12”.
+#### Reparat
+- Testele cap-coadă găsesc linkul din email (confirmare, parolă nouă, lista de așteptare) în cel mai nou email care îl conține, după ora scrierii: de la 12B, un cont nou primește și alte mesaje (cardul), iar CI-ul pentru 80cf36f a picat pe telefon când „ultimul” email, în ordinea din dosar, era altul.
 
 ### Etapa 12, faza 12B: evenimentele din §11, legate de fiecare modul — 06.10.2026 (livrat)
 #### Adăugat
