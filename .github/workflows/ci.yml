@@ -45,3 +45,10 @@ jobs:
           path: apps/*/test-results/
           retention-days: 7
           if-no-files-found: ignore
+  # The production setup (Stage 14): the compose file, the proxy against a real Caddy, and the
+  # whole stack built from the Dockerfiles and started as on the server.
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: scripts/test-deploy

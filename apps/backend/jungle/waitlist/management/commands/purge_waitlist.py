@@ -1,4 +1,4 @@
-"""Delete waitlist sign-ups never confirmed in time (run daily; Celery Beat later, ADR-0006)."""
+"""Delete waitlist sign-ups never confirmed in time (daily, by the scheduler, ADR-0024)."""
 
 from __future__ import annotations
 

@@ -85,6 +85,7 @@ INSTALLED_APPS = [
     "jungle.blog",
     "jungle.content",
     "jungle.feedback",
+    "jungle.scheduler",
     "jungle.attendance",
     "jungle.ledger",
     "jungle.subscriptions",
@@ -216,6 +217,9 @@ if IS_PRODUCTION_LIKE:
     SECURE_SSL_REDIRECT = env_bool("SECURE_SSL_REDIRECT", True)
     SECURE_HSTS_SECONDS = env_int("SECURE_HSTS_SECONDS", 31536000)
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# HSTS preload (the browsers' built-in list) is not asked for: once listed, a domain cannot leave
+# quickly, and the club's domain is not chosen yet (Q39). Django's reminder about it is silenced.
+SILENCED_SYSTEM_CHECKS = ["security.W021"]
 # Number of trusted reverse proxies in front of the app (for the client IP in audit logs).
 TRUSTED_PROXY_COUNT = env_int("TRUSTED_PROXY_COUNT", 1 if IS_PRODUCTION_LIKE else 0)
 # ADR-0012: the proxy (Caddy) verifies the device's client certificate and passes its SHA-256
@@ -277,6 +281,8 @@ WEB_BASE_URL = (env("WEB_BASE_URL", "http://localhost:3000") or "").rstrip("/")
 # The website's cache refresh (configuration.web): its /api/revalidate address and the secret
 # shared with it. Both empty: the pages refresh on their own within 5 minutes.
 WEB_REVALIDATE_URL = env("WEB_REVALIDATE_URL", "") or ""
+# The scheduler's heartbeat to the monitoring (Uptime Kuma push URL, ADR-0017, ADR-0024).
+SCHEDULER_HEARTBEAT_URL = env("SCHEDULER_HEARTBEAT_URL", "") or ""
 WEB_REVALIDATE_SECRET = env("WEB_REVALIDATE_SECRET", "") or ""
 
 # Push notifications of the installable site (Stage 12, Q17): VAPID keys from

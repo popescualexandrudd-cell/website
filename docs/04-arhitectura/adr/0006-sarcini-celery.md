@@ -1,6 +1,6 @@
 # ADR-0006: Sarcini programate cu Celery și Celery Beat
 
-- **Stare:** Acceptat (26.09.2026, odată cu aprobarea Etapei 0 de către proprietar)
+- **Stare:** Acceptat (26.09.2026); **punctele 1 și 5 înlocuite de [ADR-0024](0024-planificator-propriu.md) pe 06.10.2026** (un planificator propriu, fără Celery); punctele 2–4 rămân
 - **Data:** 2026-09-26
 - **Legat de:** §4.3, §8.1 (sarcini programate), §6.9
 

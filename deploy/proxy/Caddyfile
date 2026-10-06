@@ -1,0 +1,124 @@
+# The club's front door (ADR-0015, §4.6, §12.1). Every name comes from the server's .env:
+#   DOMAIN (the club's domain), ACME_EMAIL (for the certificates), CADDY_OPTIONS (usually empty).
+# The devices' subdomains ask for a client certificate signed by the club's own authority
+# (ADR-0012, /etc/caddy/devices-ca.pem); the proxy passes the certificate's fingerprint to the
+# backend, which compares it with the device's. Everywhere else that header is removed, so no
+# one can send it from outside.
+{
+	email {$ACME_EMAIL}
+	# Extra global options from .env (CADDY_OPTIONS), e.g. the Let's Encrypt staging server for
+	# the staging environment, or `local_certs` for a test on one machine. Usually empty.
+	{$CADDY_OPTIONS}
+}
+
+(common) {
+	encode zstd gzip
+	request_header -X-Client-Cert-SHA256
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+		-Server
+	}
+	log {
+		output stdout
+		format json
+	}
+}
+
+# A single-page app from /srv/<name>: the files, else its index.html.
+(spa) {
+	root * /srv/{args[0]}
+	@assets path /assets/*
+	header @assets Cache-Control "public, max-age=31536000, immutable"
+	header /index.html Cache-Control "no-cache"
+	try_files {path} /index.html
+	file_server
+}
+
+# The devices: a client certificate from the club's authority, never without one.
+(device) {
+	tls {
+		client_auth {
+			mode require_and_verify
+			trust_pool file /etc/caddy/devices-ca.pem
+		}
+	}
+}
+
+{$DOMAIN} {
+	import common
+	redir https://www.{$DOMAIN}{uri} permanent
+}
+
+www.{$DOMAIN} {
+	import common
+	reverse_proxy web:3000
+}
+
+api.{$DOMAIN} {
+	import common
+	handle /ws/* {
+		reverse_proxy realtime:8001
+	}
+	handle {
+		reverse_proxy backend:8000
+	}
+}
+
+# The panel and its API on one origin: the session cookie and the CSRF check need nothing else.
+admin.{$DOMAIN} {
+	import common
+	header X-Frame-Options "DENY"
+	handle /api/* {
+		reverse_proxy backend:8000
+	}
+	handle /django-admin/* {
+		reverse_proxy backend:8000
+	}
+	handle /static/* {
+		reverse_proxy backend:8000
+	}
+	handle {
+		header Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+		import spa admin
+	}
+}
+
+# The devices' API (the bridge gives each device this address, ADR-0013).
+device.{$DOMAIN} {
+	import common
+	import device
+	request_header X-Client-Cert-SHA256 {http.request.tls.client.fingerprint}
+	handle /ws/* {
+		reverse_proxy realtime:8001
+	}
+	handle {
+		reverse_proxy backend:8000
+	}
+}
+
+(device_app) {
+	import common
+	import device
+	header X-Frame-Options "DENY"
+	header Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' https://device.{$DOMAIN} wss://device.{$DOMAIN} ws://127.0.0.1:*; frame-ancestors 'none'; base-uri 'self'"
+	import spa {args[0]}
+}
+
+kiosk-liga.{$DOMAIN} {
+	import device_app kiosk-league
+}
+
+kiosk-plati.{$DOMAIN} {
+	import device_app kiosk-payments
+}
+
+ecrane.{$DOMAIN} {
+	import device_app court-screens
+}
+
+cafe.{$DOMAIN} {
+	import device_app cafe-display
+}

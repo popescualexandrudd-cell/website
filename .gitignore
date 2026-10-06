@@ -67,3 +67,6 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 *.swp
+
+# Tools downloaded by the scripts (scripts/test-deploy)
+.cache/

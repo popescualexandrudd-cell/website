@@ -1,6 +1,6 @@
 """Closes the scores not confirmed by everyone in their window and the ones not paid in time
 (LG-095, LG-096), and the challenges not answered or not played in time (LG-111, LG-112).
-Run every 5 minutes, with `process_no_shows` (Celery beat from Stage 14)."""
+Run every 5 minutes, with `process_no_shows`, by the scheduler (ADR-0024)."""
 
 from __future__ import annotations
 

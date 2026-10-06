@@ -1,8 +1,10 @@
 # Backend image (ADR-0015). Build from the repository root:
 #   docker build -f apps/backend/Dockerfile -t jungle-backend .
-FROM python:3.13-slim AS base
+# PYTHON_IMAGE: another base only for a build behind a filtering proxy (its CA inside).
+ARG PYTHON_IMAGE=python:3.13-slim
+FROM ${PYTHON_IMAGE} AS base
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
-COPY --from=ghcr.io/astral-sh/uv:0.8 /uv /usr/local/bin/uv
+RUN pip install --no-cache-dir uv==0.8.17
 WORKDIR /app
 
 # Dependencies first (cached layer)

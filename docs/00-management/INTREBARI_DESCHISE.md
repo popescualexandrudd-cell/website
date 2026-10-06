@@ -92,6 +92,8 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q69](#q69) | Pragurile semnalelor și ale sugestiilor de preț | SCĂZUTĂ | nimic (panoul) | DESCHISĂ |
 | [Q70](#q70) | Regulamentul clubului | MEDIE | publicarea definitivă a regulamentului | REZOLVATĂ |
 | [Q71](#q71) | Chestionarul NPS după primul meci | SCĂZUTĂ | măsurarea NPS (KPI) | REZOLVATĂ |
+| [Q72](#q72) | Cât timp și câte date poate pierde clubul la o avarie (RPO / RTO) | MEDIE | Etapa 14B (backup) | DESCHISĂ |
+| [Q73](#q73) | Stocarea backup-ului în afara clubului | MEDIE | Etapa 14B (copia off-site) | DESCHISĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -854,3 +856,18 @@ Titlul și instrucțiunea din §17, preluate integral:
   - clientul răspunde din cont, o singură dată;
   - NPS-ul, cu promotorii, neutrii și criticii, apare în panou → „Semnale și cerere”;
   - se păstrează doar nota, fără text.
+
+### <a id="q72"></a>Q72 — Cât timp și câte date poate pierde clubul la o avarie (RPO / RTO)
+
+- **Prioritate:** MEDIE · **Blochează:** Etapa 14B (programul backup-ului și runbook-ul de recuperare)
+- **Stare:** DESCHISĂ (06.10.2026, Etapa 14)
+- **Varianta implicită (ADR-0016, DE_CONFIRMAT):** se pierd cel mult datele din ultima oră (RPO ≤ 1 oră); sistemul e refăcut în cel mult 4 ore (RTO ≤ 4 ore). În practică, cu jurnalul continuu al bazei de date, pierderea e de câteva minute.
+- **Întrebare pentru proprietar:** vă convin aceste limite? O limită mai strictă cere un al doilea server, gata să preia.
+
+### <a id="q73"></a>Q73 — Stocarea backup-ului în afara clubului
+
+- **Prioritate:** MEDIE · **Blochează:** Etapa 14B (copia off-site)
+- **Stare:** DESCHISĂ (06.10.2026, Etapa 14)
+- **Varianta implicită (ADR-0016, DE_CONFIRMAT):** un spațiu de stocare compatibil S3, într-un centru de date din UE, plătit lunar de club (de ordinul câtorva euro pe lună, pentru câțiva zeci de GB). Datele pleacă de pe server deja criptate. Cheia de criptare se păstrează în două locuri sigure, cunoscute de proprietar.
+- **Întrebare pentru proprietar:** aveți deja un astfel de spațiu (de exemplu la firma care vă găzduiește serverele, Q40)? Dacă nu, alegem noi unul din UE și vă spunem costul înainte.
+

@@ -1,4 +1,5 @@
-"""Sends the notifications that are due and retries the failed ones (every minute, Stage 14)."""
+"""Sends the notifications that are due and retries the failed ones (every minute, by the
+scheduler, ADR-0024)."""
 
 from __future__ import annotations
 

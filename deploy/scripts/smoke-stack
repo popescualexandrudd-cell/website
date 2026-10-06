@@ -1,0 +1,164 @@
+#!/usr/bin/env python3
+"""The whole production stack on one machine (ADR-0015), started from deploy/compose/prod exactly
+as on the server, with throw-away secrets, a throw-away device authority and local certificates
+(`CADDY_OPTIONS=local_certs`), then checked from outside through the proxy:
+
+- the database is migrated and seeded by `migrate`, then the backend, the live channel, the
+  scheduler, the website and the proxy run;
+- www answers with the website, api with the API (health), admin with the panel;
+- a device site refuses a visitor without the club's certificate and accepts one with it;
+- Django's deployment checks pass inside the backend, and the scheduler has done a round.
+
+Everything is removed at the end (containers and volumes). Needs Docker with Compose, `openssl`,
+`curl`, and the ports 80 and 443 free.
+    deploy/scripts/smoke-stack                # builds the images (tag `smoke`)
+    SMOKE_BUILD_ARGS="--build-arg PYTHON_IMAGE=… --build-arg NODE_IMAGE=…" deploy/scripts/smoke-stack
+"""
+
+from __future__ import annotations
+
+import base64
+import json
+import os
+import secrets
+import shlex
+import subprocess
+import sys
+import tempfile
+import time
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+COMPOSE = ROOT / "deploy" / "compose" / "prod" / "compose.yaml"
+DOMAIN = "club.test"
+PROJECT = "jungle-smoke"
+
+
+def sh(*cmd: str, check: bool = True, env: dict[str, str] | None = None) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(cmd, check=check, capture_output=True, text=True, env=env)
+
+
+def ca(folder: Path) -> tuple[Path, Path, Path]:
+    """The club's authority and one device certificate signed by it."""
+    ca_key, ca_pem = folder / "ca.key", folder / "devices-ca.pem"
+    sh("openssl", "req", "-x509", "-newkey", "ec", "-pkeyopt", "ec_paramgen_curve:prime256v1",
+       "-nodes", "-keyout", str(ca_key), "-out", str(ca_pem), "-days", "2", "-subj", "/CN=smoke CA")
+    key, csr, pem = folder / "device.key", folder / "device.csr", folder / "device.pem"
+    sh("openssl", "req", "-newkey", "ec", "-pkeyopt", "ec_paramgen_curve:prime256v1", "-nodes",
+       "-keyout", str(key), "-out", str(csr), "-subj", "/CN=smoke device")
+    ext = folder / "device.ext"
+    ext.write_text("extendedKeyUsage=clientAuth\n")
+    sh("openssl", "x509", "-req", "-in", str(csr), "-CA", str(ca_pem), "-CAkey", str(ca_key),
+       "-CAcreateserial", "-out", str(pem), "-days", "2", "-extfile", str(ext))
+    return ca_pem, key, pem
+
+
+def env_file(folder: Path, ca_pem: Path) -> Path:
+    def secret() -> str:
+        return secrets.token_urlsafe(48)
+
+    values = {
+        "JUNGLE_ENV": "prod",
+        "JUNGLE_VERSION": "smoke",
+        "DOMAIN": DOMAIN,
+        "ACME_EMAIL": "smoke@example.test",
+        "CADDY_OPTIONS": "local_certs",
+        "DEVICES_CA_FILE": str(ca_pem),
+        "POSTGRES_PASSWORD": secret(),
+        "DJANGO_SECRET_KEY": secret(),
+        "FIELD_ENCRYPTION_KEY": secret(),
+        "DEVICE_COMMAND_KEY": base64.b64encode(os.urandom(32)).decode(),
+        "DJANGO_ALLOWED_HOSTS": f"api.{DOMAIN},admin.{DOMAIN},device.{DOMAIN}",
+        "SESSION_COOKIE_DOMAIN": f".{DOMAIN}",
+        "CSRF_COOKIE_DOMAIN": f".{DOMAIN}",
+        "CSRF_TRUSTED_ORIGINS": f"https://www.{DOMAIN},https://admin.{DOMAIN}",
+        "CORS_ALLOWED_ORIGINS": f"https://www.{DOMAIN},https://admin.{DOMAIN}",
+        "WEB_BASE_URL": f"https://www.{DOMAIN}",
+        "WEB_REVALIDATE_URL": "http://web:3000/api/revalidate",
+        "WEB_REVALIDATE_SECRET": secret(),
+        "TRUSTED_PROXY_COUNT": "1",
+        "EMAIL_BACKEND": "django.core.mail.backends.locmem.EmailBackend",
+        "DEVICE_MTLS_REQUIRED": "true",
+        "FISCAL_PRINTER": "simulator",
+    }
+    path = folder / "smoke.env"
+    path.write_text("".join(f"{k}={v}\n" for k, v in values.items()))
+    return path
+
+
+def curl(host: str, path: str, *, cert: tuple[Path, Path] | None = None) -> tuple[int, str]:
+    cmd = ["curl", "-sk", "--noproxy", "*", "--max-time", "15", "-o", "-", "-w", "\n%{http_code}",
+           "--resolve", f"{host}:443:127.0.0.1", f"https://{host}{path}"]
+    if cert:
+        cmd += ["--key", str(cert[0]), "--cert", str(cert[1])]
+    done = sh(*cmd, check=False)
+    if done.returncode != 0:
+        return 0, ""
+    body, _, code = done.stdout.rpartition("\n")
+    return int(code), body
+
+
+def main() -> int:
+    failures: list[str] = []
+
+    def check(ok: bool, what: str) -> None:
+        print(("  ok   " if ok else "  FAIL ") + what, flush=True)
+        if not ok:
+            failures.append(what)
+
+    with tempfile.TemporaryDirectory() as tmp:
+        folder = Path(tmp)
+        ca_pem, device_key, device_pem = ca(folder)
+        envf = env_file(folder, ca_pem)
+        env = {**os.environ, **dict(line.split("=", 1) for line in envf.read_text().splitlines()),
+               "JUNGLE_ENV_FILE": str(envf)}
+        compose = ["docker", "compose", "-p", PROJECT, "-f", str(COMPOSE), "--env-file", str(envf)]
+        build_args = shlex.split(os.environ.get("SMOKE_BUILD_ARGS", ""))
+        try:
+            print("building and starting the stack…", flush=True)
+            for service in ("migrate", "web", "proxy"):
+                subprocess.run([*compose, "build", *build_args, service], check=True, env=env)
+            subprocess.run([*compose, "up", "-d"], check=True, env=env)
+            for _ in range(90):
+                if curl(f"api.{DOMAIN}", "/api/v1/health")[0] == 200:
+                    break
+                time.sleep(2)
+            print("through the proxy", flush=True)
+            code, body = curl(f"api.{DOMAIN}", "/api/v1/health")
+            check(code == 200, f"api: health ({code})")
+            code, body = curl(f"www.{DOMAIN}", "/ro")
+            check(code == 200 and "<html" in body.lower(), f"www: the website ({code})")
+            code, body = curl(f"admin.{DOMAIN}", "/")
+            check(code == 200 and '<div id="root">' in body, f"admin: the panel ({code})")
+            code, body = curl(f"admin.{DOMAIN}", "/api/v1/auth/session")
+            check(code in (200, 401), f"admin: the API on the same origin ({code})")
+            check(curl(f"kiosk-liga.{DOMAIN}", "/")[0] == 0, "kiosk-liga: refused without a certificate")
+            code, body = curl(f"kiosk-liga.{DOMAIN}", "/", cert=(device_key, device_pem))
+            check(code == 200, f"kiosk-liga: the app with the club's certificate ({code})")
+            code, body = curl(f"device.{DOMAIN}", "/api/v1/health", cert=(device_key, device_pem))
+            check(code == 200, f"device: the API with the club's certificate ({code})")
+            print("inside", flush=True)
+            deploy_check = subprocess.run(
+                [*compose, "exec", "-T", "backend", "python", "manage.py", "check", "--deploy",
+                 "--fail-level", "WARNING"], capture_output=True, text=True, env=env)
+            check(deploy_check.returncode == 0, "backend: manage.py check --deploy")
+            if deploy_check.returncode:
+                print(deploy_check.stdout[-2000:], deploy_check.stderr[-2000:], file=sys.stderr)
+            rounds = subprocess.run(
+                [*compose, "exec", "-T", "backend", "python", "manage.py", "shell", "-c",
+                 "from jungle.scheduler.models import JobRun; import json; "
+                 "print(json.dumps(sorted({r.job for r in JobRun.objects.filter(ok=True)})))"],
+                capture_output=True, text=True, env=env)
+            done = json.loads(rounds.stdout.strip().splitlines()[-1]) if rounds.returncode == 0 else []
+            check("send_notifications" in done, f"scheduler: a round done ({', '.join(done) or 'none'})")
+        finally:
+            if failures:
+                logs = subprocess.run([*compose, "logs", "--tail", "40"], capture_output=True, text=True, env=env)
+                print(logs.stdout[-6000:], file=sys.stderr)
+            subprocess.run([*compose, "down", "-v", "--remove-orphans"], capture_output=True, env=env)
+    print(f"smoke-stack: {'all checks passed' if not failures else f'{len(failures)} failed'}")
+    return 1 if failures else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

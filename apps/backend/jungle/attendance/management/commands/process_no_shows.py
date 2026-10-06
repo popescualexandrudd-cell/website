@@ -1,6 +1,6 @@
 """Marks no-shows and completed bookings, and raises blocks (R-072, R-073).
 
-Run every 5 minutes (Celery beat from Stage 14; cron or by hand until then).
+Run every 5 minutes by the scheduler (ADR-0024, `jungle/scheduler/schedule.py`).
 """
 
 from __future__ import annotations

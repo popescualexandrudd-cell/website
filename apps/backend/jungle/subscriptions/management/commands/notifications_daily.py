@@ -1,5 +1,5 @@
 """The day's reminders (§11): "abonamentul expiră" and the question after the first game (Q71);
-every morning (Stage 14 schedules it)."""
+every morning (the scheduler, ADR-0024)."""
 
 from __future__ import annotations
 

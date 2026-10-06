@@ -1,0 +1,213 @@
+#!/usr/bin/env python3
+"""The proxy's behaviour (ADR-0012, ADR-0015), checked against a real Caddy:
+
+- on the public sites (www, api, admin) a header `X-Client-Cert-SHA256` sent from outside never
+  reaches the backend (it would let anyone pretend to be a device);
+- the devices' sites refuse a visitor without a client certificate, or with one from another
+  authority, and pass the fingerprint of the club's certificate to the backend;
+- the single-page apps answer every path with their index.html, the API goes to the backend,
+  `/ws/` to the live channel, and the bare domain sends visitors to www.
+
+Uses the repository's Caddyfile with the upstreams pointed at a local echo server, local
+certificates and high ports. Needs `caddy` (CADDY=/path/to/caddy, or in PATH), `openssl`, `curl`.
+    deploy/proxy/test-proxy
+"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+import threading
+import time
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+DOMAIN = "club.test"
+HTTPS = 18443
+HTTP = 18080
+APPS = ("admin", "kiosk-league", "kiosk-payments", "court-screens", "cafe-display")
+
+
+class Echo(BaseHTTPRequestHandler):
+    """Answers with what it received: which upstream, the path and the headers."""
+
+    upstream = "?"
+
+    def do_GET(self) -> None:  # noqa: N802 (the http.server name)
+        body = json.dumps(
+            {"upstream": self.server.name, "path": self.path, "headers": dict(self.headers)}  # type: ignore[attr-defined]
+        ).encode()
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def log_message(self, *args: object) -> None:
+        return None
+
+
+def echo(name: str) -> int:
+    server = ThreadingHTTPServer(("127.0.0.1", 0), Echo)
+    server.name = name  # type: ignore[attr-defined]
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    return server.server_address[1]
+
+
+def run(*cmd: str, cwd: Path | None = None) -> None:
+    subprocess.run(cmd, check=True, cwd=cwd, capture_output=True)
+
+
+def make_ca(folder: Path, name: str) -> tuple[Path, Path]:
+    key, cert = folder / f"{name}.key", folder / f"{name}.pem"
+    run("openssl", "req", "-x509", "-newkey", "ec", "-pkeyopt", "ec_paramgen_curve:prime256v1",
+        "-nodes", "-keyout", str(key), "-out", str(cert), "-days", "2", "-subj", f"/CN={name}")
+    return key, cert
+
+
+def make_client(folder: Path, name: str, ca: tuple[Path, Path]) -> tuple[Path, Path]:
+    key, csr, cert = folder / f"{name}.key", folder / f"{name}.csr", folder / f"{name}.pem"
+    run("openssl", "req", "-newkey", "ec", "-pkeyopt", "ec_paramgen_curve:prime256v1", "-nodes",
+        "-keyout", str(key), "-out", str(csr), "-subj", f"/CN={name}")
+    ext = folder / f"{name}.ext"
+    ext.write_text("extendedKeyUsage=clientAuth\n")
+    run("openssl", "x509", "-req", "-in", str(csr), "-CA", str(ca[1]), "-CAkey", str(ca[0]),
+        "-CAcreateserial", "-out", str(cert), "-days", "2", "-extfile", str(ext))
+    return key, cert
+
+
+def fingerprint(cert: Path) -> str:
+    der = subprocess.run(
+        ["openssl", "x509", "-in", str(cert), "-outform", "DER"], check=True, capture_output=True
+    ).stdout
+    return hashlib.sha256(der).hexdigest()
+
+
+def caddyfile(folder: Path, ports: dict[str, int], ca: Path) -> Path:
+    text = (HERE / "Caddyfile").read_text()
+    text = text.replace(
+        "\temail {$ACME_EMAIL}\n",
+        f"\tlocal_certs\n\tskip_install_trust\n\thttp_port {HTTP}\n\thttps_port {HTTPS}\n\tadmin off\n"
+        f"\tstorage file_system {folder / 'caddy-data'}\n",
+    )
+    for host, port in ports.items():
+        text = text.replace(host, f"127.0.0.1:{port}")
+    text = text.replace("/etc/caddy/devices-ca.pem", str(ca))
+    text = text.replace("root * /srv/", f"root * {folder}/srv/")
+    text = text.replace("{$DOMAIN}", DOMAIN)
+    path = folder / "Caddyfile"
+    path.write_text(text)
+    return path
+
+
+def get(host: str, path: str, *, headers: dict[str, str] | None = None,
+        cert: tuple[Path, Path] | None = None, timeout: int = 10) -> tuple[int, str, dict[str, str]]:
+    """(status, body, response headers) — status 0 when the TLS handshake was refused."""
+    cmd = ["curl", "-sk", "--noproxy", "*", "-D", "-", "--max-time", str(timeout), "--resolve", f"{host}:{HTTPS}:127.0.0.1",
+           f"https://{host}:{HTTPS}{path}"]
+    for name, value in (headers or {}).items():
+        cmd += ["-H", f"{name}: {value}"]
+    if cert:
+        cmd += ["--key", str(cert[0]), "--cert", str(cert[1])]
+    done = subprocess.run(cmd, capture_output=True)  # bytes: the headers end in \r\n
+    if done.returncode != 0 or not done.stdout:
+        return 0, "", {}
+    head, _, body = done.stdout.decode().partition("\r\n\r\n")
+    lines = head.split("\r\n")
+    status = int(lines[0].split()[1])
+    found = {k.strip().lower(): v.strip() for k, v in (l.split(":", 1) for l in lines[1:] if ":" in l)}
+    return status, body, found
+
+
+def upstream_headers(body: str) -> dict[str, str]:
+    return {k.lower(): v for k, v in json.loads(body)["headers"].items()}
+
+
+def main() -> int:
+    caddy = os.environ.get("CADDY") or shutil.which("caddy")
+    if not caddy:
+        print("test-proxy: caddy not found (set CADDY=/path/to/caddy)", file=sys.stderr)
+        return 2
+    failures: list[str] = []
+
+    def check(ok: bool, what: str) -> None:
+        print(("  ok   " if ok else "  FAIL ") + what)
+        if not ok:
+            failures.append(what)
+
+    with tempfile.TemporaryDirectory() as tmp:
+        folder = Path(tmp)
+        for app in APPS:
+            (folder / "srv" / app).mkdir(parents=True)
+            (folder / "srv" / app / "index.html").write_text(f"<!doctype html><title>{app}</title>")
+        club = make_ca(folder, "club-ca")
+        stranger = make_ca(folder, "other-ca")
+        device = make_client(folder, "kiosk-1", club)
+        impostor = make_client(folder, "impostor", stranger)
+        ports = {"backend:8000": echo("backend"), "realtime:8001": echo("realtime"),
+                 "web:3000": echo("web")}
+        config = caddyfile(folder, ports, club[1])
+        log = (folder / "caddy.log").open("w")  # a file: a full pipe would stop Caddy
+        proc = subprocess.Popen([caddy, "run", "--config", str(config), "--adapter", "caddyfile"],
+                                stdout=log, stderr=log)
+        try:
+            for _ in range(50):
+                if get(f"www.{DOMAIN}", "/", timeout=2)[0]:
+                    break
+                time.sleep(0.2)
+            forged = {"X-Client-Cert-SHA256": "f" * 64}
+
+            print("the public sites")
+            status, body, head = get(f"www.{DOMAIN}", "/ro", headers=forged)
+            check(status == 200 and json.loads(body)["upstream"] == "web", "www goes to the website")
+            check("x-client-cert-sha256" not in upstream_headers(body), "www: the forged header is removed")
+            check(head.get("strict-transport-security", "").startswith("max-age="), "www: HSTS")
+            check("server" not in head, "www: no Server header")
+            status, body, _ = get(f"api.{DOMAIN}", "/api/v1/health", headers=forged)
+            check(json.loads(body)["upstream"] == "backend", "api goes to the backend")
+            check("x-client-cert-sha256" not in upstream_headers(body), "api: the forged header is removed")
+            _, body, _ = get(f"api.{DOMAIN}", "/ws/screens/", headers=forged)
+            check(json.loads(body)["upstream"] == "realtime", "api /ws/ goes to the live channel")
+            status, body, head = get(f"admin.{DOMAIN}", "/modules/users")
+            check(status == 200 and "<title>admin</title>" in body, "admin: any path is the panel's index")
+            check("default-src 'self'" in head.get("content-security-policy", ""), "admin: CSP")
+            check(head.get("x-frame-options") == "DENY", "admin: no framing")
+            _, body, _ = get(f"admin.{DOMAIN}", "/api/v1/auth/session", headers=forged)
+            check(json.loads(body)["upstream"] == "backend", "admin /api goes to the backend")
+            check("x-client-cert-sha256" not in upstream_headers(body), "admin: the forged header is removed")
+            status, _, head = get(DOMAIN, "/contact")
+            check(status == 301 and head.get("location") == f"https://www.{DOMAIN}/contact",
+                  "the bare domain sends to www")
+
+            print("the devices")
+            check(get(f"device.{DOMAIN}", "/api/v1/device/me")[0] == 0, "device: no certificate, refused")
+            check(get(f"device.{DOMAIN}", "/api/v1/device/me", cert=impostor)[0] == 0,
+                  "device: another authority's certificate, refused")
+            status, body, _ = get(f"device.{DOMAIN}", "/api/v1/device/me", headers=forged, cert=device)
+            passed = upstream_headers(body).get("x-client-cert-sha256", "")
+            check(status == 200 and json.loads(body)["upstream"] == "backend", "device: the club's certificate, accepted")
+            check(passed == fingerprint(device[1]), "device: the backend gets the real fingerprint, not the forged one")
+            for host, app in (("kiosk-liga", "kiosk-league"), ("kiosk-plati", "kiosk-payments"),
+                              ("ecrane", "court-screens"), ("cafe", "cafe-display")):
+                check(get(f"{host}.{DOMAIN}", "/")[0] == 0, f"{host}: no certificate, refused")
+                status, body, head = get(f"{host}.{DOMAIN}", "/court/1", cert=device)
+                check(status == 200 and f"<title>{app}</title>" in body, f"{host}: the app, with the club's certificate")
+                check(f"wss://device.{DOMAIN}" in head.get("content-security-policy", ""), f"{host}: CSP allows the devices' API")
+        finally:
+            proc.terminate()
+            proc.wait(timeout=10)
+            log.close()
+            if failures:
+                print((folder / "caddy.log").read_text()[-3000:], file=sys.stderr)
+    print(f"test-proxy: {'all checks passed' if not failures else f'{len(failures)} failed'}")
+    return 1 if failures else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

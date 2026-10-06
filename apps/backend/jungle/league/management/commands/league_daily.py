@@ -1,7 +1,7 @@
 """The league's daily job: inactivity decay and its warnings (LG-106, LG-107), and the §11
 reminders (a long pause, matches still needed, the Match of the day).
 
-Run once a day, shortly after midnight club time (Celery beat from Stage 14; cron until then).
+Run once a day, shortly after midnight club time, by the scheduler (ADR-0024).
 """
 
 from __future__ import annotations

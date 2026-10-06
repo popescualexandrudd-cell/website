@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# The production setup (Stage 14, ADR-0015), checked before it reaches the server:
+#   1. the production compose file is valid;
+#   2. the proxy behaves as ADR-0012 asks, against a real Caddy (deploy/proxy/test-proxy);
+#   3. the whole stack starts from the compose file and answers through the proxy
+#      (deploy/scripts/smoke-stack: builds the images, needs Docker and the ports 80/443).
+# Run by CI on every push (job `deploy`); by hand: scripts/test-deploy
+# Behind a filtering proxy, pass base images with its CA: SMOKE_BUILD_ARGS="--build-arg …".
+set -euo pipefail
+cd "$(dirname "$0")/.."
+CADDY_VERSION=2.10.2
+
+echo "==> The production compose file"
+JUNGLE_VERSION=check POSTGRES_PASSWORD=check DOMAIN=example.test ACME_EMAIL=check@example.test \
+  WEB_REVALIDATE_SECRET=check JUNGLE_ENV_FILE="$PWD/deploy/compose/prod/.env.example" \
+  docker compose -f deploy/compose/prod/compose.yaml config -q
+
+echo "==> The proxy (Caddy $CADDY_VERSION)"
+if [ -z "${CADDY:-}" ]; then
+  dir=".cache/caddy-$CADDY_VERSION"
+  if [ ! -x "$dir/caddy" ]; then
+    mkdir -p "$dir"
+    curl -fsSL "https://github.com/caddyserver/caddy/releases/download/v$CADDY_VERSION/caddy_${CADDY_VERSION}_linux_amd64.tar.gz" \
+      | tar xz -C "$dir" caddy
+  fi
+  CADDY="$dir/caddy"
+fi
+CADDY="$CADDY" deploy/proxy/test-proxy
+
+echo "==> The whole stack"
+deploy/scripts/smoke-stack

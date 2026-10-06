@@ -10,7 +10,7 @@ Toate ADR-urile de mai jos au fost propuse în **Etapa 0 (26.09.2026)** și au f
 | [0003](0003-backend-django-ninja.md) | Backend Django 5.2 LTS + Django Ninja (justificare față de DRF) | Acceptat |
 | [0004](0004-postgresql-integritate.md) | PostgreSQL, integritatea garantată în baza de date | Acceptat |
 | [0005](0005-timp-real-channels.md) | Timp real cu Django Channels și Redis | Acceptat |
-| [0006](0006-sarcini-celery.md) | Sarcini programate cu Celery și Celery Beat | Acceptat |
+| [0006](0006-sarcini-celery.md) | Sarcini programate cu Celery și Celery Beat | Înlocuit parțial de 0024 |
 | [0007](0007-frontend-nextjs-vite.md) | Next.js pentru website, React + Vite pentru restul, client API generat | Acceptat |
 | [0008](0008-motorul-ligii.md) | Motorul ligii: Python pur, Weng-Lin (Thurstone–Mosteller) propriu | Acceptat |
 | [0009](0009-bani-registru-contabil.md) | Bani în bani întregi, registru cu dublă înregistrare, idempotență | Acceptat |
@@ -28,3 +28,4 @@ Toate ADR-urile de mai jos au fost propuse în **Etapa 0 (26.09.2026)** și au f
 | [0021](0021-calitate-teste-ci.md) | Calitate: unelte, teste, `scripts/test-all` | Acceptat |
 | [0022](0022-feature-flags-configurare-versionata.md) | Feature flags și configurare versionată, valori `DE_CONFIRMAT` vizibile | Acceptat |
 | [0023](0023-sistemul-de-efecte-al-site-ului.md) | Sistemul de efecte al site-ului: video de prezentare, apariții la scroll, interactivitate | Acceptat |
+| [0024](0024-planificator-propriu.md) | Sarcinile programate cu un planificator propriu, fără Celery | Acceptat |

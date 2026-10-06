@@ -1,0 +1,123 @@
+# The club's production (ADR-0015, §14). On the server, from the repository root:
+#   cp deploy/compose/prod/.env.example /etc/jungle/prod.env   # then fill in every value
+#   docker compose -f deploy/compose/prod/compose.yaml --env-file /etc/jungle/prod.env up -d --build
+# Updating and going back to the previous version: deploy/scripts/update, deploy/scripts/rollback
+# (docs/08-deploy-si-mentenanta/). Only Caddy is reachable from outside (ports 80 and 443).
+name: jungle-${JUNGLE_ENV:-prod}
+
+x-backend: &backend
+  image: jungle-backend:${JUNGLE_VERSION:?set JUNGLE_VERSION}
+  build:
+    context: ../../..
+    dockerfile: apps/backend/Dockerfile
+  env_file: ${JUNGLE_ENV_FILE:-/etc/jungle/prod.env}
+  environment:
+    DATABASE_URL: postgres://jungle:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@db:5432/jungle
+    REDIS_URL: redis://redis:6379/0
+  restart: unless-stopped
+  networks: [inside]
+  depends_on:
+    db: {condition: service_healthy}
+    redis: {condition: service_healthy}
+
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: jungle
+      POSTGRES_USER: jungle
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+    volumes: [db-data:/var/lib/postgresql/data]
+    restart: unless-stopped
+    networks: [inside]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jungle"]
+      interval: 10s
+      retries: 10
+
+  redis:
+    image: redis:7
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: [redis-data:/data]
+    restart: unless-stopped
+    networks: [inside]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      retries: 10
+
+  # The database is brought up to date before anything else starts (reversible migrations, §14).
+  migrate:
+    <<: *backend
+    command: ["sh", "-c", "python manage.py migrate --noinput && python manage.py seed_initial && python manage.py collectstatic --noinput"]
+    restart: "no"
+    volumes: [static:/app/apps/backend/staticfiles]
+
+  backend:
+    <<: *backend
+    volumes: [static:/app/apps/backend/staticfiles:ro]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+
+  # The screens' live channel (/ws/, ADR-0005), from the same image.
+  realtime:
+    <<: *backend
+    command: ["daphne", "-b", "0.0.0.0", "-p", "8001", "jungle.asgi:application"]
+    healthcheck:
+      disable: true
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+
+  # The scheduled jobs (ADR-0024): one process, every minute.
+  scheduler:
+    <<: *backend
+    command: ["python", "manage.py", "run_scheduler"]
+    healthcheck:
+      disable: true
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+
+  web:
+    image: jungle-web:${JUNGLE_VERSION:?set JUNGLE_VERSION}
+    build:
+      context: ../../..
+      dockerfile: apps/web/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: https://api.${DOMAIN:?set DOMAIN}
+        NEXT_PUBLIC_SITE_URL: https://www.${DOMAIN:?set DOMAIN}
+        SITE_INDEXABLE: ${SITE_INDEXABLE:-false}
+        NEXT_PUBLIC_UMAMI_SRC: ${UMAMI_SRC:-}
+        NEXT_PUBLIC_UMAMI_WEBSITE_ID: ${UMAMI_WEBSITE_ID:-}
+    environment:
+      REVALIDATE_SECRET: ${WEB_REVALIDATE_SECRET:?set WEB_REVALIDATE_SECRET}
+    restart: unless-stopped
+    networks: [inside]
+    depends_on: [backend]
+
+  proxy:
+    image: jungle-proxy:${JUNGLE_VERSION:?set JUNGLE_VERSION}
+    build:
+      context: ../../..
+      dockerfile: deploy/proxy/Dockerfile
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL:?set ACME_EMAIL}
+      CADDY_OPTIONS: ${CADDY_OPTIONS:-}
+    ports: ["80:80", "443:443", "443:443/udp"]
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+      - ${DEVICES_CA_FILE:-/etc/jungle/devices-ca.pem}:/etc/caddy/devices-ca.pem:ro
+    restart: unless-stopped
+    networks: [inside]
+    depends_on: [backend, realtime, web]
+
+networks:
+  inside: {}
+
+volumes:
+  db-data: {}
+  redis-data: {}
+  static: {}
+  caddy-data: {}
+  caddy-config: {}

@@ -1,7 +1,9 @@
 # Website image (ADR-0015). Build from the repository root:
 #   docker build -f apps/web/Dockerfile -t jungle-web --build-arg NEXT_PUBLIC_API_URL=https://api.<domain> \
 #     --build-arg NEXT_PUBLIC_SITE_URL=https://www.<domain> --build-arg SITE_INDEXABLE=true .
-FROM node:22-slim AS build
+# NODE_IMAGE: another base only for a build behind a filtering proxy (its CA inside).
+ARG NODE_IMAGE=node:22-slim
+FROM ${NODE_IMAGE} AS build
 ENV PNPM_HOME=/pnpm PATH=/pnpm:$PATH NEXT_TELEMETRY_DISABLED=1
 RUN corepack enable
 WORKDIR /repo

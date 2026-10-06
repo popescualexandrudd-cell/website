@@ -4,6 +4,14 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 14, faza 14A: producția în Docker, proxy-ul, planificatorul — 06.10.2026 (livrat)
+#### Adăugat
+- `deploy/compose/prod` (Compose de producție + `.env.example`), `deploy/proxy` (Caddyfile, imaginea cu aplicațiile statice, `test-proxy`), `deploy/scripts/smoke-stack`, `scripts/test-deploy`, jobul CI `deploy`.
+- `jungle/scheduler`: planificatorul propriu (`run_scheduler`, `JobRun`, semnal de viață), ADR-0024 (înlocuiește Celery din ADR-0006).
+- Q72 (RPO/RTO) și Q73 (stocarea off-site) deschise.
+#### Schimbat
+- Imaginea backend-ului instalează uv din PyPI; imaginile de bază se pot schimba (`PYTHON_IMAGE`, `NODE_IMAGE`).
+
 ### Etapa 13 aprobată — 06.10.2026
 #### Adăugat
 - Q71: întrebarea „Ne-ai recomanda?” după primul meci (`jungle/feedback`, evenimentul `club.feedback`, `GET/POST /api/v1/feedback`, `GET /api/v1/staff/feedback/summary`); cardul din cont (`FeedbackAsk`); NPS în panou → Semnale și cerere; nota în exportul GDPR.
