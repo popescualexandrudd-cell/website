@@ -13,3 +13,4 @@ export {
   type Translator,
 } from "./i18n";
 export { createWedge, MAX_GAP_MS, MIN_LENGTH } from "./wedge";
+export { type ClientApp, watchErrors } from "./report-errors";

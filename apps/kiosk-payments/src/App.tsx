@@ -72,6 +72,7 @@ export function App() {
   paymentRef.current = payment;
 
   const { config, bridgeUp, simulator, link } = useDevice({
+    app: "kiosk-payments",
     bridgeUrl: BRIDGE_URL,
     devConfig: devConfig(),
     onScan: (card) => onCardRef.current(card),

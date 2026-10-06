@@ -6,7 +6,9 @@
  * - `useIdle`: the session ends after a while without a touch.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
+import { apiOrigin } from "./api";
 import { type BridgeEvent, BridgeLink, type Hello, type Signed } from "./bridge";
+import { type ClientApp, watchErrors } from "./report-errors";
 import { createWedge } from "./wedge";
 
 export type DeviceConfig = { apiUrl: string; token: string };
@@ -19,6 +21,8 @@ export type DeviceOptions = {
   onEvent?: (event: BridgeEvent) => void;
   /** Whether a keyboard-wedge scanner may be used while the bridge is missing. */
   wedge?: boolean;
+  /** The app's name for its error reports to the backend (ADR-0017); none: not reported. */
+  app?: ClientApp;
 };
 
 export type Device = {
@@ -65,6 +69,13 @@ export function useDevice(options: DeviceOptions): Device {
     window.addEventListener("keydown", listener);
     return () => window.removeEventListener("keydown", listener);
   }, [bridgeUp, wedge]);
+
+  const app = options.app;
+  const apiUrl = config?.apiUrl;
+  useEffect(() => {
+    if (!app || !apiUrl) return;
+    return watchErrors(app, `${apiOrigin(apiUrl)}/api/v1/client-errors`);
+  }, [app, apiUrl]);
 
   return { config, bridgeUp, simulator, link };
 }

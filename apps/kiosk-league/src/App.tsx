@@ -48,6 +48,7 @@ export function App() {
   const generation = useRef(0);
   const onCardRef = useRef<(card: Card) => void>(() => undefined);
   const { config, bridgeUp, simulator, link } = useDevice({
+    app: "kiosk-league",
     bridgeUrl: BRIDGE_URL,
     devConfig: devConfig(),
     onScan: (card) => onCardRef.current(card),

@@ -55,6 +55,8 @@ JOBS: tuple[Job, ...] = (
     Job("purge_waitlist", at=time(2, 30)),  # unconfirmed sign-ups
     Job("notifications_daily", at=time(8, 0)),  # expiring subscriptions, the NPS question
     Job("check_backups", at=time(9, 0)),  # a backup or a restore test missing (ADR-0016)
+    Job("watch_devices", every_minutes=5),  # a kiosk or a screen silent (ADR-0017)
+    Job("check_disk", every_minutes=60),  # the server's disk (ADR-0017)
 )
 
 

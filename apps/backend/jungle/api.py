@@ -35,6 +35,7 @@ from jungle.content.api import public_router as content_router
 from jungle.content.api import staff_router as content_staff_router
 from jungle.core.api import router as health_router
 from jungle.core.errors import DomainError, ErrorCode
+from jungle.core.observability import router as client_errors_router
 from jungle.devices.api import device_router
 from jungle.devices.api import router as devices_router
 from jungle.events.api import public_router as club_events_router
@@ -76,6 +77,7 @@ api = NinjaAPI(
 )
 
 api.add_router("/health", health_router)
+api.add_router("/client-errors", client_errors_router)
 api.add_router("/auth", auth_router)
 api.add_router("/me", me_router)
 api.add_router("/locations", locations_router)

@@ -23,6 +23,7 @@ dependencies = [
     "channels-redis>=4.2",
     "daphne>=4.1",
     "anthropic>=1.11,<2",
+    "sentry-sdk>=2.20,<3",
 ]
 
 [dependency-groups]

@@ -38,6 +38,7 @@ function languageOf(search: string): Lang {
 export function App() {
   const lang = languageOf(window.location.search);
   const { config, bridgeUp } = useDevice({
+    app: "court-screens",
     bridgeUrl: BRIDGE_URL,
     devConfig: devConfig(),
     onScan: () => undefined,

@@ -90,6 +90,7 @@ EVENTS: dict[str, Event] = {
         Event("staff.device_offline", Category.STAFF, mandatory=True),
         Event("staff.dispute", Category.STAFF, mandatory=True),
         Event("staff.backup_failed", Category.STAFF, mandatory=True),
+        Event("staff.disk_low", Category.STAFF, mandatory=True),
     )
 }
 

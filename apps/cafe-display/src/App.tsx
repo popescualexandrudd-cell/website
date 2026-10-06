@@ -28,6 +28,7 @@ function devConfig() {
 export function App() {
   const [lang, setLang] = useState<Lang>("ro");
   const { config, bridgeUp } = useDevice({
+    app: "cafe-display",
     bridgeUrl: BRIDGE_URL,
     devConfig: devConfig(),
     onScan: () => undefined,

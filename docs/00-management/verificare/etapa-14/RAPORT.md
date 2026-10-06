@@ -70,3 +70,29 @@
 - **Q72:** cel mult o oră de date pierdute (în practică, minute) și refacere în cel mult 4 ore.
 - **Q73:** spațiu S3 în UE, criptat. Contul se deschide la instalarea serverului.
 
+## Faza 14C — Monitorizare și alerte, 06.10.2026
+
+### Ce s-a construit
+1. **Aparatele care nu mai răspund:** la 5 minute, planificatorul verifică chioșcurile, ecranele și afișajul cafenelei. Un aparat care tace de 10 minute, cât clubul e deschis, înseamnă un mesaj pentru managerii locației (email și push), o singură dată pe pauză. Evenimentul `staff.device_offline` exista din Etapa 12, dar nu pleca de nicăieri.
+2. **Discul serverului:** peste 85% ocupat, managerii primesc mesaj, o dată pe zi (evenimentul nou `staff.disk_low`, RO și EN).
+3. **Erorile:**
+   - backend-ul le trimite în GlitchTip-ul clubului, fără date personale;
+   - site-ul (pe server și în browser), panoul și aparatele își raportează erorile backend-ului, fără scripturi de la terți în pagină, cel mult 30 pe oră de la o adresă.
+4. **Jurnalele:** în producție, fiecare linie e în JSON și poartă ID-ul cererii.
+5. **Instrumentele** (`--profile monitoring`), cu baza lor de date separată:
+   - Uptime Kuma (`status.<domeniu>`);
+   - GlitchTip (`erori.<domeniu>`);
+   - Umami (`statistici.<domeniu>`).
+
+   Ghidul de pornire: `docs/08-deploy-si-mentenanta/05-ghid-monitorizare.md`.
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Planificatorul și supravegherea (`jungle/scheduler`, 100% pe ramuri) | 4 teste noi: aparatul tăcut, o dată pe pauză; nimic cât clubul e închis; discul, o dată pe zi; comenzile. |
+| Jurnalele și erorile (`core/observability.py`, 100% pe ramuri) | 4 teste: linia JSON cu ID-ul cererii; middleware-ul; GlitchTip doar cu DSN; raportarea din browsere, cu limită. |
+| Site, panou, aparate (Vitest) | Raportarea nu strică niciodată pagina; un mesaj care se repetă pleacă cel mult o dată pe minut. |
+| Proxy-ul (`test-proxy`) | Rutele `status`, `erori` și `statistici` merg, iar headerul falsificat e șters și pe ele. |
+| Tot sistemul (`smoke-stack`) | Planificatorul rulează în producție `watch_devices` și `check_disk`. |
+| Instrumentele, pornite local | GlitchTip, Umami și Uptime Kuma pornesc și răspund. |
+

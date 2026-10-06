@@ -151,7 +151,8 @@ def main() -> int:
         device = make_client(folder, "kiosk-1", club)
         impostor = make_client(folder, "impostor", stranger)
         ports = {"backend:8000": echo("backend"), "realtime:8001": echo("realtime"),
-                 "web:3000": echo("web")}
+                 "web:3000": echo("web"), "status:3001": echo("status"),
+                 "errors:8000": echo("errors"), "stats:3000": echo("stats")}
         config = caddyfile(folder, ports, club[1])
         log = (folder / "caddy.log").open("w")  # a file: a full pipe would stop Caddy
         proc = subprocess.Popen([caddy, "run", "--config", str(config), "--adapter", "caddyfile"],
@@ -184,6 +185,12 @@ def main() -> int:
             status, _, head = get(DOMAIN, "/contact")
             check(status == 301 and head.get("location") == f"https://www.{DOMAIN}/contact",
                   "the bare domain sends to www")
+
+            print("the monitoring")
+            for host, upstream in (("status", "status"), ("erori", "errors"), ("statistici", "stats")):
+                status, body, _ = get(f"{host}.{DOMAIN}", "/", headers=forged)
+                check(status == 200 and json.loads(body)["upstream"] == upstream, f"{host}: the {upstream} tool")
+                check("x-client-cert-sha256" not in upstream_headers(body), f"{host}: the forged header is removed")
 
             print("the devices")
             check(get(f"device.{DOMAIN}", "/api/v1/device/me")[0] == 0, "device: no certificate, refused")

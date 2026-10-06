@@ -122,3 +122,19 @@ ecrane.{$DOMAIN} {
 cafe.{$DOMAIN} {
 	import device_app cafe-display
 }
+
+# ---- the monitoring (ADR-0017, `--profile monitoring`): each tool has its own login
+status.{$DOMAIN} {
+	import common
+	reverse_proxy status:3001
+}
+
+erori.{$DOMAIN} {
+	import common
+	reverse_proxy errors:8000
+}
+
+statistici.{$DOMAIN} {
+	import common
+	reverse_proxy stats:3000
+}

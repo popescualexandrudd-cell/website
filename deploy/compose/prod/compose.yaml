@@ -80,6 +80,11 @@ services:
   scheduler:
     <<: *backend
     command: ["python", "manage.py", "run_scheduler"]
+    volumes: [pgbackrest-repo:/var/lib/pgbackrest:ro]  # its disk is watched (ADR-0017)
+    environment:
+      DATABASE_URL: postgres://jungle:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@db:5432/jungle
+      REDIS_URL: redis://redis:6379/0
+      DISK_WATCH_PATH: /var/lib/pgbackrest
     healthcheck:
       disable: true
     depends_on:
@@ -120,6 +125,64 @@ services:
     networks: [inside]
     depends_on: [backend, realtime, web]
 
+  # ---- monitoring (ADR-0017), with `--profile monitoring`: the club's own, nothing at a third party
+  # Uptime Kuma: is every address up; the heartbeats of the scheduler and of the backups.
+  status:
+    image: louislam/uptime-kuma:1
+    profiles: [monitoring]
+    volumes: [status-data:/app/data]
+    restart: unless-stopped
+    networks: [inside]
+
+  # GlitchTip: the errors of the backend, the website, the panel and the devices.
+  errors:
+    image: glitchtip/glitchtip:v5
+    profiles: [monitoring]
+    command: ["./bin/run-all-in-one.sh"]
+    environment:
+      DATABASE_URL: postgres://monitoring:${MONITORING_DB_PASSWORD:-}@monitoring-db:5432/glitchtip
+      VALKEY_URL: redis://redis:6379/2
+      SECRET_KEY: ${GLITCHTIP_SECRET_KEY:-}
+      GLITCHTIP_DOMAIN: https://erori.${DOMAIN:?set DOMAIN}
+      PORT: "8000"
+      ENABLE_USER_REGISTRATION: "false"
+      ENABLE_ORGANIZATION_CREATION: "false"
+    restart: unless-stopped
+    networks: [inside]
+    depends_on:
+      monitoring-db: {condition: service_healthy}
+      redis: {condition: service_healthy}
+
+  # Umami: visits without cookies, only after the visitor's consent on the site.
+  stats:
+    image: umamisoftware/umami:postgresql-v2
+    profiles: [monitoring]
+    environment:
+      DATABASE_URL: postgres://monitoring:${MONITORING_DB_PASSWORD:-}@monitoring-db:5432/umami
+      APP_SECRET: ${UMAMI_APP_SECRET:-}
+    restart: unless-stopped
+    networks: [inside]
+    depends_on:
+      monitoring-db: {condition: service_healthy}
+
+  # The monitoring's own database (GlitchTip and Umami), apart from the club's data.
+  monitoring-db:
+    image: postgres:17
+    profiles: [monitoring]
+    environment:
+      POSTGRES_USER: monitoring
+      POSTGRES_PASSWORD: ${MONITORING_DB_PASSWORD:-}
+      POSTGRES_DB: glitchtip
+    volumes:
+      - monitoring-db-data:/var/lib/postgresql/data
+      - ../../monitoring/initdb:/docker-entrypoint-initdb.d:ro
+    restart: unless-stopped
+    networks: [inside]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U monitoring"]
+      interval: 10s
+      retries: 10
+
 networks:
   inside: {}
 
@@ -128,5 +191,7 @@ volumes:
   pgbackrest-repo: {}
   redis-data: {}
   static: {}
+  status-data: {}
+  monitoring-db-data: {}
   caddy-data: {}
   caddy-config: {}

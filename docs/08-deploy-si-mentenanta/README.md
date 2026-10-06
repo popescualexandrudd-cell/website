@@ -8,6 +8,7 @@ Cerințele de deploy, backup și monitorizare (§14) și, pe măsură ce se cons
 - [Ghid: activarea Apple Wallet și Google Wallet](02-ghid-apple-google-wallet.md) (Etapa 5)
 - [Ghid: videoul de prezentare și efectele site-ului](03-ghid-efecte-si-video.md) (Etapa 11, ADR-0023): pornire și oprire din panou, schimbarea videoului, cererea unei schimbări
 - [Backup și recuperare după dezastru: ghidul proprietarului](04-runbook-backup-si-recuperare.md) (Etapa 14B)
+- [Monitorizarea: ghidul proprietarului](05-ghid-monitorizare.md) (Etapa 14C)
 
 ## Urmează
 

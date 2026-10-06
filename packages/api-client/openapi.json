@@ -1876,6 +1876,47 @@
         "title": "ClassOut",
         "type": "object"
       },
+      "ClientErrorIn": {
+        "properties": {
+          "app": {
+            "enum": [
+              "web",
+              "admin",
+              "kiosk-league",
+              "kiosk-payments",
+              "court-screens",
+              "cafe-display"
+            ],
+            "title": "App",
+            "type": "string"
+          },
+          "digest": {
+            "default": "",
+            "description": "Next.js error digest",
+            "maxLength": 64,
+            "title": "Digest",
+            "type": "string"
+          },
+          "message": {
+            "maxLength": 500,
+            "title": "Message",
+            "type": "string"
+          },
+          "where": {
+            "default": "",
+            "description": "the page or screen",
+            "maxLength": 300,
+            "title": "Where",
+            "type": "string"
+          }
+        },
+        "required": [
+          "app",
+          "message"
+        ],
+        "title": "ClientErrorIn",
+        "type": "object"
+      },
       "ClubEventCancelIn": {
         "properties": {
           "reason": {
@@ -15900,6 +15941,32 @@
         "summary": "Enroll",
         "tags": [
           "classes"
+        ]
+      }
+    },
+    "/api/v1/client-errors": {
+      "post": {
+        "description": "An error seen by a person's browser or by a club device; logged, then sent to GlitchTip.",
+        "operationId": "jungle_core_observability_client_error",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientErrorIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Client Error",
+        "tags": [
+          "monitoring"
         ]
       }
     },

@@ -429,6 +429,20 @@ DEFAULTS: dict[str, dict[str, Texts]] = {
             "Score disputed: {{ when }}.",
         ),
     },
+    "staff.disk_low": {
+        "ro": Texts(
+            "Discul serverului e aproape plin",
+            "Discul serverului e ocupat {{ percent }}% (mai sunt {{ free }}). Fără loc, backup-ul "
+            "și baza de date se opresc: ghidul de mentenanță spune ce se poate șterge.",
+            "Disc ocupat {{ percent }}%.",
+        ),
+        "en": Texts(
+            "The server's disk is almost full",
+            "The server's disk is {{ percent }}% full ({{ free }} left). Without space the backup "
+            "and the database stop: the maintenance guide says what can be removed.",
+            "Disk {{ percent }}% full.",
+        ),
+    },
     "staff.backup_failed": {
         "ro": Texts(
             "Backup eșuat",

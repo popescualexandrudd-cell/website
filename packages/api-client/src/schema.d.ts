@@ -785,6 +785,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/client-errors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Client Error
+         * @description An error seen by a person's browser or by a club device; logged, then sent to GlitchTip.
+         */
+        post: operations["jungle_core_observability_client_error"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/config/company": {
         parameters: {
             query?: never;
@@ -5459,6 +5479,28 @@ export interface components {
              * Format: uuid
              */
             studio_id: string;
+        };
+        /** ClientErrorIn */
+        ClientErrorIn: {
+            /**
+             * App
+             * @enum {string}
+             */
+            app: "web" | "admin" | "kiosk-league" | "kiosk-payments" | "court-screens" | "cafe-display";
+            /**
+             * Digest
+             * @description Next.js error digest
+             * @default
+             */
+            digest: string;
+            /** Message */
+            message: string;
+            /**
+             * Where
+             * @description the page or screen
+             * @default
+             */
+            where: string;
         };
         /** ClubEventCancelIn */
         ClubEventCancelIn: {
@@ -12307,6 +12349,28 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
+            };
+        };
+    };
+    jungle_core_observability_client_error: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ClientErrorIn"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

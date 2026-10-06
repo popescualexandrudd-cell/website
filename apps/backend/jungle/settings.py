@@ -309,12 +309,34 @@ if AI_FAKE and IS_PRODUCTION_LIKE:
 EMERGENCY_ADMIN_ENABLED = env_bool("EMERGENCY_ADMIN_ENABLED", True)
 API_DOCS_ENABLED = env_bool("API_DOCS_ENABLED", not IS_PRODUCTION_LIKE)
 
+# Logs (ADR-0017): every line names its request; JSON in production (LOG_FORMAT=json).
+LOG_FORMAT = env("LOG_FORMAT", "json" if IS_PRODUCTION_LIKE else "plain") or "plain"
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "filters": {"request_id": {"()": "jungle.core.observability.RequestIdFilter"}},
     "formatters": {
-        "plain": {"format": "%(asctime)s %(levelname)s %(name)s %(message)s"},
+        "plain": {"format": "%(asctime)s %(levelname)s %(name)s [%(request_id)s] %(message)s"},
+        "json": {"()": "jungle.core.observability.JsonFormatter"},
     },
-    "handlers": {"console": {"class": "logging.StreamHandler", "formatter": "plain"}},
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "json" if LOG_FORMAT == "json" else "plain",
+            "filters": ["request_id"],
+        }
+    },
     "root": {"handlers": ["console"], "level": env("LOG_LEVEL", "INFO")},
 }
+
+# Errors to the club's GlitchTip (ADR-0017), only with a DSN; never personal data.
+SENTRY_DSN = env("SENTRY_DSN", "") or ""
+if SENTRY_DSN:  # pragma: no cover - started only on a server with GlitchTip
+    from jungle.core.observability import init_error_tracking
+
+    init_error_tracking(SENTRY_DSN, JUNGLE_ENV, APP_VERSION)
+
+# What the scheduler watches (ADR-0017): the server's disk, through the backups' volume mounted
+# read-only in the scheduler; empty: not watched (development, tests).
+DISK_WATCH_PATH = env("DISK_WATCH_PATH", "") or ""
+DISK_ALERT_PERCENT = env_int("DISK_ALERT_PERCENT", 85)

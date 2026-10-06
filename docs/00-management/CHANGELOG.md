@@ -4,6 +4,12 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 14, faza 14C: monitorizare și alerte — 06.10.2026 (livrat)
+#### Adăugat
+- `watch_devices` (aparatele tăcute, `staff.device_offline`) și `check_disk` (evenimentul nou `staff.disk_low`), rulate de planificator.
+- `core/observability.py`: jurnale JSON cu ID-ul cererii, erorile backend-ului în GlitchTip (`SENTRY_DSN`, `sentry-sdk`), `POST /api/v1/client-errors` pentru site (`lib/report-error.ts`, `instrumentation.ts`, pagina de eroare), panou și aparate (`watchErrors` în `@jungle/kiosk-kit`, opțiunea `app` din `useDevice`).
+- Instrumentele de monitorizare în Compose (`--profile monitoring`), rutele lor în Caddy, ghidul `docs/08-deploy-si-mentenanta/05-ghid-monitorizare.md`.
+
 ### Etapa 14, faza 14B: backup și restaurare — 06.10.2026 (livrat)
 #### Adăugat
 - Imaginea bazei de date cu pgBackRest (`deploy/backup/postgres`), arhivarea continuă a jurnalului, copii criptate (pe server și, opțional, S3 în UE); `deploy/scripts/backup full|diff|restore-test`, temporizatoarele systemd, testul de restaurare.

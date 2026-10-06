@@ -8,6 +8,8 @@ from collections.abc import Callable
 
 from django.http import HttpRequest, HttpResponse
 
+from jungle.core.observability import request_id as current_request_id
+
 _VALID_ID = re.compile(r"^[A-Za-z0-9._-]{8,64}$")
 
 
@@ -19,6 +21,10 @@ class RequestIdMiddleware:
         incoming = request.META.get("HTTP_X_REQUEST_ID", "")
         request_id = incoming if _VALID_ID.match(incoming) else uuid.uuid4().hex
         request.request_id = request_id  # type: ignore[attr-defined]
-        response = self.get_response(request)
+        token = current_request_id.set(request_id)  # every log line of this request names it
+        try:
+            response = self.get_response(request)
+        finally:
+            current_request_id.reset(token)
         response["X-Request-ID"] = request_id
         return response
