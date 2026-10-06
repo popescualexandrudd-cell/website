@@ -31,6 +31,8 @@ from jungle.checkout.api import router as payments_kiosk_router
 from jungle.checkout.api import staff_router as checkout_staff_router
 from jungle.configuration.api import public_router as config_public_router
 from jungle.configuration.api import staff_router as config_staff_router
+from jungle.content.api import public_router as content_router
+from jungle.content.api import staff_router as content_staff_router
 from jungle.core.api import router as health_router
 from jungle.core.errors import DomainError, ErrorCode
 from jungle.devices.api import device_router
@@ -96,6 +98,8 @@ api.add_router("/staff", bookings_staff_router)
 api.add_router("/staff", club_events_staff_router)
 api.add_router("/blog", blog_router)
 api.add_router("/staff", blog_staff_router)
+api.add_router("/content", content_router)
+api.add_router("/staff", content_staff_router)
 api.add_router("/notifications", notifications_router)
 api.add_router("/staff", notifications_staff_router)
 api.add_router("/ai", ai_router)

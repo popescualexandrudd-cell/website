@@ -28,6 +28,8 @@ EVENTS_TAG = "events"
 CAFE_TAG = "cafe"
 # The club's blog (jungle.blog, apps/web/src/lib/blog.ts).
 BLOG_TAG = "blog"
+# The website's texts changed from the panel (jungle.content, apps/web/src/i18n/request.ts).
+CONTENT_TAG = "content"
 
 
 def revalidate(tags: list[str]) -> bool:

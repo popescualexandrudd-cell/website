@@ -951,3 +951,46 @@ Contul are acum un meniu propriu: **Rezervări · Cardul · Plăți și abonamen
 
 ### O problemă găsită de CI și reparată (PWA)
 Pe GitHub, testul paginii „fără internet” a picat, deși trecea local: fără conexiune, pagina avea nevoie de câteva fișiere JavaScript care nu ajunseseră încă pe telefon, iar Next.js o înlocuia cu o pagină de eroare. Pe un telefon real s-ar fi putut întâmpla la fel. Acum service worker-ul păstrează, la instalare, pagina „fără internet” **împreună cu toate fișierele de care are nevoie** (`public/sw.js`, versiunea 2), iar testul verifică explicit că pagina nu devine o pagină de eroare.
+
+## Conținutul site-ului și Traducerile, din panou (§8.6) — 06.10.2026
+
+### Ce s-a construit
+1. **Panou → Conținutul site-ului** (acțiunea nouă `content.manage`: admin, manager):
+   - **ce se poate schimba:** orice text al site-ului (peste 1.000), în română și în engleză, inclusiv titlurile și descrierile paginilor pentru Google (grupul „Titluri și descrieri (SEO)”, primul în listă);
+   - **cum găsiți un text:** alegeți partea site-ului sau căutați după text;
+   - **cum se schimbă:**
+     - schimbarea se salvează întâi **ca ciornă** și nu apare pe site;
+     - ajunge pe site când e **publicată, cu un motiv**, iar site-ul se actualizează imediat;
+     - **textul inițial revine** oricând, tot cu un motiv;
+     - totul intră în jurnalul de audit.
+2. **Panou → Traduceri:** aceleași texte, după ce au nevoie:
+   - **„De aprobat”:** ciorne care așteaptă publicarea, în oricare limbă. Aprobarea înseamnă publicarea.
+   - **„Româna schimbată după engleză”:** un text românesc schimbat după ce engleza lui a fost publicată.
+   - **„Identice cu româna”:** probabil netraduse, sau nume ca „Jungle Padel”.
+3. **Siguranța paginilor:**
+   - O schimbare trebuie să păstreze câmpurile textului (de exemplu `{name}`). Panoul nu o salvează altfel, iar site-ul o ignoră (`apps/web/src/lib/content.ts`), deci o greșeală de scriere nu poate strica o pagină.
+   - Se pot schimba doar textele site-ului (`web.…`). Panoul, chioșcurile, mesajele de eroare și **textele juridice** (aprobate de proprietar, Q41) nu se schimbă de aici.
+4. **Tehnic:**
+   - aplicația `jungle/content` (100% acoperire pe ramuri);
+   - `GET /api/v1/content/texts` pentru site;
+   - `/api/v1/staff/content/texts…` (ciornă, publicare, renunțare, revenire) pentru panou;
+   - eticheta de cache `content`;
+   - catalogul din `packages/i18n` rămâne sursa; schimbările stau deasupra lui.
+5. **Meniul panoului:** cele două module erau ultimele marcate „Etapa 11”. Acum toate modulele din §8.6 sunt construite.
+
+### Ce nu e aici (cu motiv)
+- **Imaginile site-ului:** se schimbă odată cu fotografiile reale ale clubului (Etapa 13, Q44). Până atunci, site-ul are doar randări aprobate și marcate „ilustrativ”.
+- **Pagina `/regulament`:** vine în Etapa 13, odată cu regulamentul public aprobat.
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Teste backend | 826 în total; `jungle/content` 100% pe ramuri: ciornă → publicare cu motiv → reîmprospătarea site-ului → o ciornă nouă peste textul publicat, ștearsă → revenirea la textul inițial; o ciornă nepublicată dispare; doar `web.…`, fără `web.legal.…`; doar cu `content.manage`; limba și lungimea verificate. |
+| Teste pe site | Schimbările folosite doar unde se potrivesc (cheie existentă, aceleași câmpuri, nu juridice); fără API, textele catalogului; eticheta `content` acceptată la reîmprospătare. |
+| Panou | 94 de teste (7 noi). Cap-coadă: o ciornă salvată în „Conținutul site-ului”, aprobată (publicată cu motiv) în „Traduceri”, cu verificarea de accesibilitate. |
+
+### Cum verificați
+1. Panou → **Conținutul site-ului** → grupul „Titluri și descrieri (SEO)” → apăsați pe un text → schimbați textul în română → „Salvează ciorna”.
+2. Apăsați „Publică pe site”, scrieți motivul și confirmați. Pagina respectivă de pe site arată noul text.
+3. „Revino la textul inițial” (cu motiv) aduce textul de dinainte.
+4. Panou → **Traduceri**: „De aprobat”, „Româna schimbată după engleză”, „Identice cu româna”.

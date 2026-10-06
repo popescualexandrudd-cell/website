@@ -166,6 +166,27 @@ test("the administrator signs in with the authenticator code and checks the rest
   await expect(page.getByText("Asistentul AI nu este disponibil acum.")).toBeVisible();
   await expectAccessible(page);
 
+  // The website's texts (Stage 11, §8.6): a draft, published with a reason; the original back.
+  await go(page, "Conținutul site-ului");
+  await expect(page.getByRole("heading", { level: 1, name: "Conținutul site-ului" })).toBeVisible();
+  await page.getByLabel("Caută (text sau cheie)").fill("web.meta.description");
+  await page.getByRole("list").getByRole("button").first().click();
+  const editor = page.getByRole("group", { name: "web.meta.description" });
+  await editor.getByRole("textbox", { name: "Română" }).fill("Jungle Padel: padel, Pilates Reformer și liga clubului, în București.");
+  await editor.getByRole("group", { name: "Română" }).getByRole("button", { name: "Salvează ciorna" }).click();
+  await expect(page.getByText("Ciorna e salvată.")).toBeVisible();
+  await expectAccessible(page);
+  await go(page, "Traduceri");
+  await expect(page.getByRole("button", { name: "De aprobat (1)" })).toBeVisible();
+  await page.getByRole("list").getByRole("button").first().click();
+  const pending = page.getByRole("group", { name: "web.meta.description" }).getByRole("group", { name: "Română" });
+  await pending.getByRole("button", { name: "Publică pe site" }).click();
+  await pending.getByLabel("Motivul").fill("Descrierea pentru Google");
+  await pending.getByRole("form", { name: "Publică pe site" }).getByRole("button", { name: "Publică pe site" }).click();
+  await expect(page.getByText("Textul e pe site.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "De aprobat (0)" })).toBeVisible();
+  await expectAccessible(page);
+
   // Signals and demand (12F): computed from the demo data; suggestions stay proposals.
   await go(page, "Semnale și cerere");
   await expect(page.getByRole("heading", { level: 1, name: "Semnale și cerere" })).toBeVisible();

@@ -232,7 +232,9 @@
     "ai.not_configured": "The AI can be turned on only once the key and the model are in the server's .env file.",
     "ai.no_draft": "The AI did not write the draft (the monthly limit, a provider error or a refusal). Try again or write the text by hand.",
     "ai.draft_not_found": "The draft does not exist.",
-    "ai.draft_reviewed": "The draft has already been reviewed."
+    "ai.draft_reviewed": "The draft has already been reviewed.",
+    "content.not_found": "This text was not changed from the panel.",
+    "content.no_draft": "There is no draft for this text."
   },
   "web": {
     "meta": {
@@ -3644,6 +3646,49 @@
       "proposal": "Suggestions are only proposals: a person changes prices, in the Pricing module.",
       "outlookTitle": "The next 7 days, booked so far",
       "day": "Day"
+    },
+    "content": {
+      "title": "Website content",
+      "lead": "The website's texts, including the pages' titles and descriptions for Google (SEO), in Romanian and English. A change is saved as a draft first; it reaches the website when you publish it, with a reason, and the website refreshes at once. The original text can come back at any time. The legal texts are not changed here.",
+      "group": "Part of the website",
+      "all": "All",
+      "seo": "Titles and descriptions (SEO)",
+      "search": "Search (text or key)",
+      "found": "{count, plural, one {# text found} other {# texts found}}; the first {shown} are shown.",
+      "none": "No text found.",
+      "languages": {
+        "ro": "Romanian",
+        "en": "English"
+      },
+      "default": "Original text: \"{text}\"",
+      "live": "changed on the website",
+      "hasDraft": "has a draft",
+      "fields": "The text must keep the original text's fields ({fields}), or the website could not use it.",
+      "saveDraft": "Save the draft",
+      "publish": "Publish on the website",
+      "discard": "Discard the draft",
+      "restore": "Back to the original text",
+      "saved": "The draft is saved.",
+      "published": "The text is on the website.",
+      "discarded": "The draft is deleted.",
+      "restored": "The original text is back on the website.",
+      "changed": "changed",
+      "draft": "draft"
+    },
+    "translations": {
+      "title": "Translations",
+      "lead": "The state of the translations of the website's {total} texts (Romanian and English) and their approval: a translation is written as a draft and approved by publishing it.",
+      "filter": "What to show",
+      "states": {
+        "drafts": "To approve ({count})",
+        "roNewer": "Romanian changed after English ({count})",
+        "same": "Same as Romanian ({count})"
+      },
+      "explain": {
+        "drafts": "Drafts waiting to be published, in either language.",
+        "roNewer": "The Romanian text changed after the English one: check whether the English needs the same change.",
+        "same": "The English text is the same as the Romanian one: probably not translated (or a name, like \"Jungle Padel\")."
+      }
     }
   }
 }

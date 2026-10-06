@@ -57,7 +57,7 @@ afterEach(() => {
 describe("the menu of the whole panel (§8.6)", () => {
   it("marks the modules of the later stages", () => {
     const later = MODULES.filter((m) => m.stage).map((m) => [m.route, m.stage]);
-    expect(later).toEqual([["content", 11], ["translations", 11]]);
+    expect(later).toEqual([]); // every module of §8.6 is built (Stage 11 closed the last two)
     expect(allowed(MODULES, (a) => a === "users.view").map((m) => m.route)).toEqual(["users", "staff"]);
   });
 

@@ -4,6 +4,12 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 11, Conținutul site-ului și Traducerile din panou — 06.10.2026 (livrate)
+#### Adăugat
+- Aplicația `jungle/content` (`TextOverride`: ciornă, publicare cu motiv, revenire la textul inițial; 100% acoperire), acțiunea `content.manage` (admin, manager); API: `GET /api/v1/content/texts`, `GET`/`POST /api/v1/staff/content/texts`, `.../publish`, `.../discard`, `.../restore`; codurile `content.not_found`, `content.no_draft`; eticheta de cache `content`.
+- Site: textele publicate din panou peste catalog (`src/lib/content.ts`, `src/i18n/request.ts`), doar unde cheia există, cu aceleași câmpuri, niciodată texte juridice.
+- Panou: modulele **Conținutul site-ului** (texte și SEO) și **Traduceri** (de aprobat, româna schimbată după engleză, identice cu româna), în locul marcajelor „Etapa 11”.
+
 ### Etapa 12 și paginile separate ale Etapei 11 — aprobate 06.10.2026
 - Proprietarul a aprobat Etapa 12 (fazele 12A–12F) și paginile separate ale site-ului (Liga, prezentare, contul și rezervările online, PWA, blogul, Pentru firme, Despre club); intră în `main` (tag local `etapa-12`).
 

@@ -232,7 +232,9 @@
     "ai.not_configured": "AI-ul se pornește doar după ce cheia și modelul sunt puse în fișierul .env de pe server.",
     "ai.no_draft": "AI-ul nu a scris ciorna (limita lunară, o eroare la furnizor sau un refuz). Încearcă din nou sau scrie textul de mână.",
     "ai.draft_not_found": "Ciorna nu există.",
-    "ai.draft_reviewed": "Ciorna a fost deja revizuită."
+    "ai.draft_reviewed": "Ciorna a fost deja revizuită.",
+    "content.not_found": "Textul nu a fost schimbat din panou.",
+    "content.no_draft": "Nu există o ciornă pentru acest text."
   },
   "web": {
     "meta": {
@@ -3644,6 +3646,49 @@
       "proposal": "Sugestiile sunt doar propuneri: prețurile le schimbă un om, în modulul Prețuri.",
       "outlookTitle": "Următoarele 7 zile, rezervat până acum",
       "day": "Ziua"
+    },
+    "content": {
+      "title": "Conținutul site-ului",
+      "lead": "Textele site-ului, inclusiv titlurile și descrierile paginilor pentru Google (SEO), în română și engleză. Schimbarea se salvează întâi ca ciornă; ajunge pe site când o publicați, cu un motiv, iar site-ul se actualizează imediat. Textul inițial revine oricând. Textele juridice nu se schimbă de aici.",
+      "group": "Partea site-ului",
+      "all": "Toate",
+      "seo": "Titluri și descrieri (SEO)",
+      "search": "Caută (text sau cheie)",
+      "found": "{count, plural, one {# text găsit} other {# texte găsite}}; se văd primele {shown}.",
+      "none": "Niciun text găsit.",
+      "languages": {
+        "ro": "Română",
+        "en": "Engleză"
+      },
+      "default": "Textul inițial: „{text}”",
+      "live": "schimbat pe site",
+      "hasDraft": "are o ciornă",
+      "fields": "Textul trebuie să păstreze câmpurile textului inițial ({fields}), altfel site-ul nu l-ar putea folosi.",
+      "saveDraft": "Salvează ciorna",
+      "publish": "Publică pe site",
+      "discard": "Renunță la ciornă",
+      "restore": "Revino la textul inițial",
+      "saved": "Ciorna e salvată.",
+      "published": "Textul e pe site.",
+      "discarded": "Ciorna e ștearsă.",
+      "restored": "Textul inițial e din nou pe site.",
+      "changed": "schimbat",
+      "draft": "ciornă"
+    },
+    "translations": {
+      "title": "Traduceri",
+      "lead": "Starea traducerilor celor {total} de texte ale site-ului (română și engleză) și aprobarea lor: o traducere se scrie ca ciornă și se aprobă publicând-o.",
+      "filter": "Ce să arate",
+      "states": {
+        "drafts": "De aprobat ({count})",
+        "roNewer": "Româna schimbată după engleză ({count})",
+        "same": "Identice cu româna ({count})"
+      },
+      "explain": {
+        "drafts": "Ciorne care așteaptă publicarea, în oricare limbă.",
+        "roNewer": "Textul românesc a fost schimbat după cel englezesc: verificați dacă engleza trebuie schimbată la fel.",
+        "same": "Textul englezesc e identic cu cel românesc: probabil netradus (sau un nume, ca „Jungle Padel”)."
+      }
     }
   }
 }

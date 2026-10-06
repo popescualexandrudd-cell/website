@@ -23,8 +23,9 @@ import { Reports } from "./Reports";
 import { Resources } from "./Resources";
 import { Settings } from "./Settings";
 import { Signals } from "./Signals";
+import { SiteContent, Translations } from "./SiteContent";
 import { Subscriptions } from "./Subscriptions";
-import { Staff, SystemStatus, upcoming } from "./System";
+import { Staff, SystemStatus } from "./System";
 import { Users } from "./Users";
 
 export type Module = {
@@ -55,6 +56,8 @@ export const MODULES: Module[] = [
   { route: "cafe", label: "cafe", actions: ["cafe.orders", "cafe.manage"], component: Cafe },
   { route: "events", label: "events", actions: ["events.manage"], component: Events },
   { route: "blog", label: "blog", actions: ["blog.manage"], component: Blog },
+  { route: "content", label: "content", actions: ["content.manage"], component: SiteContent },
+  { route: "translations", label: "translations", actions: ["content.manage"], component: Translations },
   { route: "notifications", label: "notifications", actions: ["notifications.manage"], component: Notifications },
   { route: "reports", label: "reports", actions: ["reports.view", "waitlist.view"], component: Reports },
   { route: "signals", label: "signals", actions: ["reports.view"], component: Signals },
@@ -65,9 +68,6 @@ export const MODULES: Module[] = [
   { route: "system", label: "system", actions: ["config.view"], component: SystemStatus },
   { route: "ai", label: "ai", actions: ["ai.view"], component: AI },
   { route: "community", label: "community", actions: ["ai.drafts"], component: AIDrafts },
-  // Later stages (§8.6): shown and marked, so the owner sees the whole panel.
-  { route: "content", label: "content", actions: ["config.manage"], component: upcoming("content", 11), stage: 11 },
-  { route: "translations", label: "translations", actions: ["config.manage"], component: upcoming("translations", 11), stage: 11 },
 ];
 
 export function allowed(modules: Module[], can: (action: string) => boolean): Module[] {

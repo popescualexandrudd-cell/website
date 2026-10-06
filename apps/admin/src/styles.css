@@ -350,6 +350,15 @@ textarea:focus-visible,
   color: var(--color-brass-300);
 }
 
+.text-list {
+  list-style: none;
+  padding: 0;
+}
+
+.text-list > li {
+  margin-bottom: 12px;
+}
+
 .signal-list li,
 .copilot-turn {
   margin-bottom: 8px;
