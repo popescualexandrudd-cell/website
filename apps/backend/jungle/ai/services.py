@@ -33,6 +33,7 @@ from jungle.core.errors import DomainError, ErrorCode
 from jungle.core.http import client_ip
 from jungle.core.permissions import Action
 from jungle.core.ratelimit import increment
+from jungle.locations.models import Location
 from jungle.locations.services import get_location_by_slug
 
 logger = logging.getLogger(__name__)
@@ -56,7 +57,9 @@ the day, the time and the duration, and they confirm it with the button under yo
 CONTEXT_NOTES = {
     Context.PUBLIC: "You talk with a visitor of the website who is not signed in.",
     Context.MEMBER: "You talk with a signed-in client; your tools act only for that client.",
-    Context.STAFF: "You help the club's staff; your tools only read.",
+    Context.STAFF: "You help the club's staff; your tools only read. Say which figures you "
+    "used and for which period. A signal or a suggestion is not a fact about anyone's intent: "
+    "present it as something to look at, never as an accusation or a decision.",
 }
 
 
@@ -114,6 +117,7 @@ def _run_tool(call: Call, block: dict[str, Any], log: AIInteraction) -> dict[str
             logger.exception("AI tool %s failed", name)
             error = "ai.tool_failed"
     log.tools.append({"name": name, "ok": not error} | ({"error": error} if error else {}))
+    call.reads.append({"name": name, "input": dict(block.get("input") or {}), "ok": not error})
     result: dict[str, Any] = {"type": "tool_result", "tool_use_id": block.get("id", "")}
     if error:
         return result | {"content": json.dumps({"error": error}), "is_error": True}
@@ -203,6 +207,29 @@ def ask_from_web(
     call = Call(Context.MEMBER if user else Context.PUBLIC, location, user, request)
     answer = ask(call, [{"role": m["role"], "content": m["content"]} for m in messages])
     return WebAnswer(answer, list(call.proposals))
+
+
+# ---------------------------------------------------------------- the staff's copilot (12F)
+@dataclass(frozen=True)
+class StaffAnswer:
+    answer: Answer
+    reads: list[dict[str, Any]]
+
+
+def ask_from_panel(
+    request: HttpRequest, location_id: uuid.UUID, messages: list[dict[str, Any]]
+) -> StaffAnswer:
+    """The copilot: read-only tools over the panel's figures, signals and demand, each with the
+    staff member's own permissions; the answer shows what it read."""
+    user = authorize(request, Action.AI_COPILOT, location_id)
+    location = Location.objects.get(pk=location_id)
+    if not messages or messages[-1]["role"] != "user":
+        raise DomainError(ErrorCode.VALIDATION_INVALID, params={"field": "messages"})
+    if increment(f"ai:ask:user:{user.pk}", 3600) > int(get_config("ai.questions_per_hour")):
+        raise DomainError(ErrorCode.AUTH_RATE_LIMITED, status=429)
+    call = Call(Context.STAFF, location, user, request)
+    answer = ask(call, [{"role": m["role"], "content": m["content"]} for m in messages])
+    return StaffAnswer(answer, list(call.reads))
 
 
 # ---------------------------------------------------------------- for the panel

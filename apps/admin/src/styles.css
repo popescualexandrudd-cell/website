@@ -350,6 +350,20 @@ textarea:focus-visible,
   color: var(--color-brass-300);
 }
 
+.signal-list li,
+.copilot-turn {
+  margin-bottom: 8px;
+}
+
+.copilot-log {
+  list-style: none;
+  padding: 0;
+}
+
+.copilot-turn--user {
+  color: var(--color-brass-300);
+}
+
 .draft-text {
   white-space: pre-wrap;
 }

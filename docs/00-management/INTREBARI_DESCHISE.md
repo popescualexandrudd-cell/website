@@ -89,6 +89,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q66](#q66) | Harta secțiunilor la lansare | SCĂZUTĂ | nimic (site-ul complet) | **REZOLVATĂ** (30.09.2026) |
 | [Q67](#q67) | Noutățile clubului și pragurile memento-urilor | SCĂZUTĂ | nimic (notificări) | DESCHISĂ |
 | [Q68](#q68) | Limita lunară și setările AI-ului | MEDIE | pornirea AI-ului | DESCHISĂ |
+| [Q69](#q69) | Pragurile semnalelor și ale sugestiilor de preț | SCĂZUTĂ | nimic (panoul) | DESCHISĂ |
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 
@@ -808,4 +809,21 @@ Titlul și instrucțiunea din §17, preluate integral:
   - câte întrebări poate pune o persoană (sau o adresă IP) asistentului pe oră: **30** (`ai.questions_per_hour`).
   - Jungle Report-ul săptămânal (12E) se scrie **din șablon, fără AI** (fără cost, fără riscul unei fraze inventate); un text personalizat de AI pentru fiecare jucător ar costa la fiecare raport.
 - **Întrebare pentru proprietar:** ce limită lunară vreți pentru AI? Păstrăm modelul propus? Jungle Report rămâne din șablon?
+
+### <a id="q69"></a>Q69 — Pragurile semnalelor și ale sugestiilor de preț
+
+- **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
+- **Stare:** DESCHISĂ (06.10.2026, faza 12F)
+- **Varianta implicită (DE_CONFIRMAT, în panou, la Configurare):**
+  - semnalele (`panel.signals`) privesc ultimele **30** de zile. Apare un semnal pentru:
+    - aceiași 4 jucători în cel puțin **4** meciuri de ligă în **7** zile;
+    - cel puțin **3** corecturi de bani făcute de aceeași persoană;
+    - o diferență de cel puțin **5 lei** la o numărare a casei;
+    - un client cu cel puțin **3** anulări târzii sau **2** neprezentări.
+  - Disputele deschise apar mereu.
+  - sugestiile de preț (`panel.demand`) privesc ultimele **4** săptămâni de pe terenurile de padel:
+    - peste **85%** ocupare într-o bandă orară, se propune o creștere cu **10%**;
+    - sub **30%** ocupare, se propune o scădere cu **10%**.
+  - Prețul îl schimbă tot un om, din modulul Prețuri.
+- **Întrebare pentru proprietar:** vă convin pragurile? Vreți ca semnalele să vină și ca notificare (email) la manager, nu doar în panou?
 

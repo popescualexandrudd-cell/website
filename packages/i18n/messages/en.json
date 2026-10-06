@@ -2630,7 +2630,8 @@
       "notifications": "Notifications",
       "community": "Community",
       "ai": "AI assistant",
-      "blog": "Blog"
+      "blog": "Blog",
+      "signals": "Signals and demand"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -3562,7 +3563,7 @@
         "failed": "Provider error"
       },
       "drafts": {
-        "title": "Drafts written by the AI",
+        "title": "Community: drafts written by the AI",
         "lead": "The AI writes a draft from the club's public data (the calendar, the public standings, the opening hours) and from what you tell it. The draft stays \"to review\" until you approve it (you can correct it first) or discard it; nothing is published or sent by itself. You post the community message in the group yourself (Q19).",
         "kind": "What to write",
         "kinds": {
@@ -3594,7 +3595,55 @@
         "discarded": "The draft is discarded.",
         "copy": "Copy the text",
         "copied": "The text is copied."
+      },
+      "copilot": {
+        "title": "Copilot",
+        "lead": "Ask about the club's figures, signals or occupancy. The copilot only reads, with your permissions, and shows under the answer what it read.",
+        "question": "Question",
+        "placeholder": "For example: how did last week go?",
+        "ask": "Ask",
+        "thinking": "The copilot is reading…",
+        "read": "What it read",
+        "readFailed": "could not read",
+        "outcomes": {
+          "refused": "The model refused the question.",
+          "budget": "The AI's monthly limit is reached.",
+          "steps": "The question needed too many steps; try a simpler one.",
+          "failed": "The AI provider did not answer. Try again.",
+          "empty": "I have no answer."
+        }
       }
+    },
+    "signals": {
+      "title": "Signals and demand",
+      "lead": "What may be worth a look and how full the courts were, computed from the club's data. Signals only point; they accuse no one and decide nothing. The thresholds change in Configuration (panel.signals, panel.demand, Q69).",
+      "signalsTitle": "Signals",
+      "none": "No signals now.",
+      "kinds": {
+        "league_repeated": "The same four players, {count} league matches in {days} days: {names}.",
+        "league_disputed": "Disputed score, waiting for the league director: {names}.",
+        "money_corrections": "{count} money corrections by {who} in {days} days.",
+        "cash_difference": "Difference at the count of {device}: {amount} (counted by {who}).",
+        "bookings_late_cancellations": "{name}: {count} late cancellations in {days} days.",
+        "bookings_no_shows": "{name}: {count} no-shows in {days} days."
+      },
+      "demandTitle": "How full the padel courts were ({first} – {last})",
+      "band": "Time band",
+      "bands": {
+        "peak": "Peak",
+        "semi_peak": "Semi-peak",
+        "off_peak": "Off-peak"
+      },
+      "use": "Occupancy",
+      "useOf": "{percent}% ({booked} of {open} hours)",
+      "suggestion": "Suggestion",
+      "suggestions": {
+        "raise": "The price could rise by {step}%",
+        "lower": "The price could fall by {step}%"
+      },
+      "proposal": "Suggestions are only proposals: a person changes prices, in the Pricing module.",
+      "outlookTitle": "The next 7 days, booked so far",
+      "day": "Day"
     }
   }
 }

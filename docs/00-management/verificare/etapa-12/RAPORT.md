@@ -156,3 +156,47 @@ Toate pleacă din `manage.py league_daily` (care spune acum și câte mementouri
 
 ### Ce urmează (12F)
 Copilotul pentru personal (întrebări peste date agregate, doar citire), detecția de anomalii și sugestiile de preț (doar sugestii, aplicate de om).
+
+## Faza 12F — Pentru personal: semnale, cerere, copilotul (06.10.2026)
+
+### Ce s-a construit
+1. **Panou → Semnale și cerere** (pentru cine are `reports.view`: admin, manager). Totul e calculat în cod, din datele clubului, cu praguri DE_CONFIRMAT (Q69). Semnalele **doar arată**: nu acuză pe nimeni, nu blochează și nu schimbă nimic.
+   - **Semnale:**
+     - un scor contestat care așteaptă directorul ligii;
+     - aceiași 4 jucători în prea multe meciuri de ligă în câteva zile (posibilă „fabricare” de LP);
+     - o diferență între casa unui chioșc și registru la numărare, golire sau închiderea zilei;
+     - multe corecturi de bani făcute de aceeași persoană;
+     - un client cu multe anulări târzii sau neprezentări.
+   - **Cererea:** cât de pline au fost terenurile de padel pe fiecare bandă orară (vârf, semi-vârf, în afara vârfului) în ultimele 4 săptămâni. Peste 85% se propune o creștere de preț, sub 30% o scădere. E **doar o propunere**: prețul îl schimbă un om, în modulul Prețuri. Se vede și cât e deja rezervat în următoarele 7 zile.
+2. **Copilotul** (Panou → Asistentul AI, acțiunea nouă `ai.copilot`: admin, manager):
+   - întrebări în limbaj obișnuit („cum a mers săptămâna trecută?”, „sunt semnale?”);
+   - citește prin trei unelte noi, doar pentru personal: `club_numbers` (cifrele unei perioade de cel mult 92 de zile), `club_signals` și `court_demand`;
+   - fiecare unealtă trece prin serviciile panoului, **cu drepturile persoanei care întreabă**: o recepționeră nu poate citi rapoartele nici prin copilot;
+   - sub răspuns apare **ce a citit** (unealta și perioada), ca să poată fi verificat;
+   - nu are nicio unealtă care să schimbe ceva, iar cele două bariere din 12C rămân;
+   - intră în limita lunară și în limita de întrebări pe oră.
+3. **Panou → Comunitate** (marcajul „Etapa 12” din meniu devine modul): ciornele scrise de AI din 12E (mesaj pentru comunitate, articol, traducere) s-au mutat aici, așa cum cere §8.6 („mesaje generate de AI, gata de copiat”).
+
+### Rezultate
+| Verificare | Rezultat |
+|---|---|
+| Teste backend | 822 în total. Noi: semnalele din date reale de test (dispută, meciuri repetate, două diferențe de numerar peste prag, corecturi, anulări târzii, neprezentări; pragurile schimbate le opresc; recepția nu are acces); cererea pe benzi (vârful plin: „crește”, restul gol: „scade”, o bandă între praguri fără sugestie), ziua de mâine, fără terenuri; copilotul (citește cifrele, semnalele și cererea și arată ce a citit; o recepționeră nu citește nimic prin el; perioadă greșită sau prea lungă; limita pe oră; furnizorul scriptat). |
+| Acoperire 100% pe ramuri | `panel`, `ai` și restul listei: păstrată. |
+| Panou | 87 de teste (7 noi: modulul Semnale cu benzile și propunerile, orele scrise ca în română, copilotul cu „ce a citit” și cu limita atinsă, Comunitatea cu `ai.drafts`). Cap-coadă: copilotul cu AI-ul oprit spune că asistentul nu e disponibil; Comunitate; Semnale și cerere (cu verificarea de accesibilitate). |
+
+### Cum verificați
+1. Panou → **Semnale și cerere**: lista de semnale (sau „Niciun semnal acum.”), tabelul cu benzile orare și sugestiile, apoi următoarele 7 zile.
+2. Panou → **Asistentul AI** → **Copilotul**: cu AI-ul pornit (după cheie, Q24/Q68), întrebați „cum a mers săptămâna trecută?” și deschideți „Ce a citit”.
+3. Panou → **Comunitate**: ciornele, ca în 12E.
+4. Panou → **Configurare**: `panel.signals` și `panel.demand` (Q69).
+
+## Încheierea Etapei 12
+Toate fazele planului sunt livrate:
+- **12A:** nucleul notificărilor;
+- **12B:** evenimentele din §11, legate de fiecare modul;
+- **12C:** nucleul AI cu dubla barieră;
+- **12D:** asistentul clubului;
+- **12E:** potrivirea jucătorilor, mementourile ligii, Jungle Report și ciornele;
+- **12F:** semnalele, cererea și copilotul.
+
+Rămân deschise, fără să blocheze nimic: Q67 (pragurile memento-urilor), Q68 (limita lunară a AI-ului și modelul; AI-ul pornește doar cu cheia clubului) și Q69 (pragurile semnalelor). „Aparat offline” și „backup eșuat” vin în Etapa 14, odată cu monitorizarea.

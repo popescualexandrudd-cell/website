@@ -2,13 +2,13 @@
  * The AI (ADR-0019, Stage 12): whether it runs (the switch `ai`, under Configuration, and the key
  * and model in the server's `.env`), what it spent this month against the limit, the tools it has
  * in each context, and the latest questions (context, result, tools, tokens, cost; never the text);
- * with `ai.drafts`, the drafts it writes for the staff (`AIDrafts`).
+ * with `ai.copilot`, the staff's copilot (`AICopilot`). The drafts are in the Community module.
  */
 import { type Schemas, unwrap } from "../api";
 import { formatDate, formatTime } from "../i18n";
 import { usePanel, useT } from "../panel";
 import { useData } from "../ui";
-import { AIDrafts } from "./AIDrafts";
+import { AICopilot } from "./AICopilot";
 
 type Row = Schemas["AIInteractionOut"];
 
@@ -109,7 +109,7 @@ export function AI() {
           </tbody>
         </table>
       ) : null}
-      {can("ai.drafts") ? <AIDrafts /> : null}
+      {can("ai.copilot") ? <AICopilot /> : null}
     </section>
   );
 }

@@ -2,6 +2,7 @@
  * member may use at the chosen location. */
 import type { ComponentType } from "react";
 import { AI } from "./AI";
+import { AIDrafts } from "./AIDrafts";
 import { Attendance } from "./Attendance";
 import { Blog } from "./Blog";
 import { Audit } from "./Audit";
@@ -21,6 +22,7 @@ import { Pricing } from "./Pricing";
 import { Reports } from "./Reports";
 import { Resources } from "./Resources";
 import { Settings } from "./Settings";
+import { Signals } from "./Signals";
 import { Subscriptions } from "./Subscriptions";
 import { Staff, SystemStatus, upcoming } from "./System";
 import { Users } from "./Users";
@@ -55,16 +57,17 @@ export const MODULES: Module[] = [
   { route: "blog", label: "blog", actions: ["blog.manage"], component: Blog },
   { route: "notifications", label: "notifications", actions: ["notifications.manage"], component: Notifications },
   { route: "reports", label: "reports", actions: ["reports.view", "waitlist.view"], component: Reports },
+  { route: "signals", label: "signals", actions: ["reports.view"], component: Signals },
   { route: "staff", label: "staff", actions: ["users.view"], component: Staff },
   { route: "devices", label: "devices", actions: ["devices.manage"], component: Devices },
   { route: "settings", label: "settings", actions: ["config.view", "flags.manage"], component: Settings },
   { route: "audit", label: "audit", actions: ["audit.view"], component: Audit },
   { route: "system", label: "system", actions: ["config.view"], component: SystemStatus },
   { route: "ai", label: "ai", actions: ["ai.view"], component: AI },
+  { route: "community", label: "community", actions: ["ai.drafts"], component: AIDrafts },
   // Later stages (§8.6): shown and marked, so the owner sees the whole panel.
   { route: "content", label: "content", actions: ["config.manage"], component: upcoming("content", 11), stage: 11 },
   { route: "translations", label: "translations", actions: ["config.manage"], component: upcoming("translations", 11), stage: 11 },
-  { route: "community", label: "community", actions: ["config.manage"], component: upcoming("community", 12), stage: 12 },
 ];
 
 export function allowed(modules: Module[], can: (action: string) => boolean): Module[] {

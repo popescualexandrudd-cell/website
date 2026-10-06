@@ -57,15 +57,15 @@ afterEach(() => {
 describe("the menu of the whole panel (§8.6)", () => {
   it("marks the modules of the later stages", () => {
     const later = MODULES.filter((m) => m.stage).map((m) => [m.route, m.stage]);
-    expect(later).toEqual([["content", 11], ["translations", 11], ["community", 12]]);
+    expect(later).toEqual([["content", 11], ["translations", 11]]);
     expect(allowed(MODULES, (a) => a === "users.view").map((m) => m.route)).toEqual(["users", "staff"]);
   });
 
   it("explains a later module", () => {
-    const Later = upcoming("community", 12);
+    const Later = upcoming("translations", 11);
     mount(<Later />, []);
-    expect(screen.getByRole("heading", { name: "Comunitate" })).toBeTruthy();
-    expect(screen.getByText("Vine în Etapa 12. Până atunci, modulul e doar marcat în meniu.")).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Traduceri" })).toBeTruthy();
+    expect(screen.getByText("Vine în Etapa 11. Până atunci, modulul e doar marcat în meniu.")).toBeTruthy();
   });
 });
 

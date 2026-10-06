@@ -8,15 +8,18 @@ import {
 } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { fakeApi, json, mountPanel, settle } from "../test-kit";
+import type { ReactNode } from "react";
 import { AI, dollars } from "./AI";
+import { AIDrafts } from "./AIDrafts";
 import { MODULES, allowed } from "./index";
 
 function mount(
   answers: Record<string, (body: unknown, url: URL) => Response>,
   actions = ["ai.view"],
+  ui: ReactNode = <AI />,
 ) {
   const api = fakeApi(answers);
-  mountPanel(<AI />, api.fetchStub, actions);
+  mountPanel(ui, api.fetchStub, actions);
   return api.calls;
 }
 
@@ -132,10 +135,75 @@ describe("AI (ADR-0019)", () => {
     expect(screen.getByText("Nicio întrebare încă.")).toBeTruthy();
   });
 
-  it("drafts only with ai.drafts", async () => {
+  it("the copilot only with ai.copilot; the drafts in the Community module", async () => {
     mount(OFF);
     await settle();
-    expect(screen.queryByText("Ciorne scrise de AI")).toBeNull();
+    expect(screen.queryByRole("heading", { name: "Copilotul" })).toBeNull();
+    expect(
+      allowed(MODULES, (a) => a === "ai.drafts").map((m) => m.route),
+    ).toEqual(["community"]);
+  });
+
+  it("the copilot answers and shows what it read", async () => {
+    const calls = mount(
+      {
+        ...OFF,
+        "POST /api/v1/staff/ai/ask": () =>
+          json({
+            text: "Săptămâna trecută: 12 rezervări.",
+            outcome: "answered",
+            reads: [
+              {
+                name: "club_numbers",
+                input: { first: "2027-03-08", last: "2027-03-14" },
+                ok: true,
+              },
+              { name: "club_signals", input: {}, ok: false },
+            ],
+          }),
+      },
+      ["ai.view", "ai.copilot"],
+    );
+    await settle();
+    expect(screen.getByRole("heading", { name: "Copilotul" })).toBeTruthy();
+    fireEvent.change(screen.getByLabelText("Întrebarea"), {
+      target: { value: " Cum a mers săptămâna? " },
+    });
+    await act(async () => {
+      fireEvent.submit(screen.getByRole("form", { name: "Copilotul" }));
+    });
+    await settle();
+    const asked = calls.find((c) => c.path === "/api/v1/staff/ai/ask");
+    expect(asked?.body).toEqual({
+      location_id: "l1",
+      messages: [{ role: "user", content: "Cum a mers săptămâna?" }],
+    });
+    expect(screen.getByText("Săptămâna trecută: 12 rezervări.")).toBeTruthy();
+    expect(screen.getByText("club_numbers")).toBeTruthy();
+    expect(
+      screen.getByText('{"first":"2027-03-08","last":"2027-03-14"}'),
+    ).toBeTruthy();
+    expect(screen.getByText(/nu a putut citi/)).toBeTruthy();
+  });
+
+  it("the copilot says why there is no answer", async () => {
+    mount(
+      {
+        ...OFF,
+        "POST /api/v1/staff/ai/ask": () =>
+          json({ text: "", outcome: "budget", reads: [] }),
+      },
+      ["ai.view", "ai.copilot"],
+    );
+    await settle();
+    fireEvent.change(screen.getByLabelText("Întrebarea"), {
+      target: { value: "Cifrele?" },
+    });
+    await act(async () => {
+      fireEvent.submit(screen.getByRole("form", { name: "Copilotul" }));
+    });
+    await settle();
+    expect(screen.getByText("Limita lunară a AI-ului e atinsă.")).toBeTruthy();
   });
 
   it("asks for a draft, then approves it corrected or discards it", async () => {
@@ -155,10 +223,13 @@ describe("AI (ADR-0019)", () => {
         "POST /api/v1/staff/ai/drafts/d1/review": () =>
           json(draft("d1", { status: "approved" })),
       },
-      ["ai.view", "ai.drafts"],
+      ["ai.drafts"],
+      <AIDrafts />,
     );
     await settle();
-    expect(screen.getByText("Ciorne scrise de AI")).toBeTruthy();
+    expect(
+      screen.getByRole("heading", { name: "Comunitate: ciorne scrise de AI" }),
+    ).toBeTruthy();
     expect(screen.getByText("De revizuit")).toBeTruthy();
     expect(screen.getByText("Articol aprobat")).toBeTruthy();
     expect(screen.getAllByText(/Cerut de Ana Pop/)[0]?.textContent).toContain(
@@ -213,7 +284,8 @@ describe("AI (ADR-0019)", () => {
         "POST /api/v1/staff/ai/drafts/d1/review": () =>
           json(draft("d1", { status: "discarded" })),
       },
-      ["ai.view", "ai.drafts"],
+      ["ai.drafts"],
+      <AIDrafts />,
     );
     await settle();
     await act(async () => {

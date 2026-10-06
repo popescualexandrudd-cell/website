@@ -4,12 +4,16 @@ people use, with the same checks.
 - for everyone: the club's facts, free courts, the price of a court hour, the week's classes;
 - for a signed-in client: their bookings, and *preparing* a booking that the person confirms with a
   button under the answer (POST /api/v1/bookings, as on the booking page). The AI never books by
-  itself and never touches money: the payment stays at the Payments Kiosk (R-063).
+  itself and never touches money: the payment stays at the Payments Kiosk (R-063);
+- for the staff (the copilot, 12F): the period's figures, the signals and the demand by price
+  band, read through the panel's own read-only services with the person's `reports.view`
+  permission; a suggestion stays a suggestion, set (or not) by a person in the Pricing module.
 """
 
 from __future__ import annotations
 
 import uuid
+from dataclasses import asdict
 from datetime import date, datetime, time, timedelta
 from typing import Any
 
@@ -32,11 +36,13 @@ from jungle.core.errors import DomainError, ErrorCode
 from jungle.locations.models import Resource, ResourceKind
 from jungle.locations.services import active_resources
 from jungle.notifications import services as notifications
+from jungle.panel import demand, insights, signals
 from jungle.pricing.services import day_bounds, quote
 
 ALL = frozenset(Context)
 CLIENTS = frozenset({Context.PUBLIC, Context.MEMBER})
 MEMBER = frozenset({Context.MEMBER})
+STAFF = frozenset({Context.STAFF})
 NO_INPUT: dict[str, Any] = {
     "type": "object",
     "properties": {},
@@ -248,6 +254,36 @@ def propose_booking(call: Call, data: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+# The copilot (12F): read-only, through the panel's services, as the staff member.
+PERIOD_DAYS = 92
+
+
+def _staff(call: Call) -> Any:
+    if call.request is None:  # the staff tools are registered for the staff context only
+        raise DomainError(ErrorCode.AUTH_REQUIRED, status=401)
+    return call.request
+
+
+def club_numbers(call: Call, data: dict[str, Any]) -> dict[str, Any]:
+    """The period's revenue per category (bani), bookings, occupancy, classes, new accounts."""
+    try:
+        first, last = date.fromisoformat(str(data["first"])), date.fromisoformat(str(data["last"]))
+    except ValueError as exc:
+        raise DomainError(ErrorCode.VALIDATION_INVALID, params={"field": "period"}) from exc
+    if (last - first).days >= PERIOD_DAYS:
+        raise DomainError(ErrorCode.VALIDATION_INVALID, params={"field": "period"})
+    report = insights.report(_staff(call), call.location.pk, first, last)
+    return asdict(report) | {"amounts": "bani (lei × 100)"}
+
+
+def club_signals(call: Call, _: dict[str, Any]) -> dict[str, Any]:
+    return {"signals": [asdict(s) for s in signals.signals(_staff(call), call.location.pk)]}
+
+
+def court_demand(call: Call, _: dict[str, Any]) -> dict[str, Any]:
+    return asdict(demand.demand(_staff(call), call.location.pk))
+
+
 DATE = {
     "type": "string",
     "description": "The day, YYYY-MM-DD (club time), today up to 30 days ahead.",
@@ -316,6 +352,40 @@ for tool in (
         SLOT,
         MEMBER,
         propose_booking,
+    ),
+    Tool(
+        "club_numbers",
+        "The club's figures for a period of club days (at most 92): revenue per category in "
+        "bani (lei × 100), discounts, cash taken, bookings by type, cancellations, no-shows, "
+        "each court's occupancy, class places and attendance, new accounts.",
+        {
+            "type": "object",
+            "properties": {
+                "first": {"type": "string", "description": "The first day, YYYY-MM-DD."},
+                "last": {"type": "string", "description": "The last day, YYYY-MM-DD."},
+            },
+            "required": ["first", "last"],
+            "additionalProperties": False,
+        },
+        STAFF,
+        club_numbers,
+    ),
+    Tool(
+        "club_signals",
+        "What may be worth a look: repeated league matches, disputed scores, cash differences, "
+        "many corrections by one person, clients who often cancel late or do not come. They only "
+        "point; say so, and never accuse anyone.",
+        NO_INPUT,
+        STAFF,
+        club_signals,
+    ),
+    Tool(
+        "court_demand",
+        "How full each price band of the padel courts was in the last weeks, with the suggested "
+        "change (only a proposal: a person decides in the Pricing module), and the next 7 days.",
+        NO_INPUT,
+        STAFF,
+        court_demand,
     ),
 ):
     register(tool)

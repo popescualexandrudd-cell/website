@@ -5833,6 +5833,45 @@
         "title": "PaidOut",
         "type": "object"
       },
+      "PanelBandUseOut": {
+        "properties": {
+          "band": {
+            "title": "Band",
+            "type": "string"
+          },
+          "booked_minutes": {
+            "title": "Booked Minutes",
+            "type": "integer"
+          },
+          "open_minutes": {
+            "title": "Open Minutes",
+            "type": "integer"
+          },
+          "percent": {
+            "title": "Percent",
+            "type": "integer"
+          },
+          "step_percent": {
+            "title": "Step Percent",
+            "type": "integer"
+          },
+          "suggestion": {
+            "description": "\"raise\", \"lower\" or \"\" (none); only a proposal",
+            "title": "Suggestion",
+            "type": "string"
+          }
+        },
+        "required": [
+          "band",
+          "booked_minutes",
+          "open_minutes",
+          "percent",
+          "suggestion",
+          "step_percent"
+        ],
+        "title": "PanelBandUseOut",
+        "type": "object"
+      },
       "PanelBookingOut": {
         "properties": {
           "ends_at": {
@@ -6139,6 +6178,71 @@
           "percent"
         ],
         "title": "PanelCourtUseOut",
+        "type": "object"
+      },
+      "PanelDayOutlookOut": {
+        "properties": {
+          "booked_minutes": {
+            "title": "Booked Minutes",
+            "type": "integer"
+          },
+          "day": {
+            "format": "date",
+            "title": "Day",
+            "type": "string"
+          },
+          "open_minutes": {
+            "title": "Open Minutes",
+            "type": "integer"
+          },
+          "percent": {
+            "title": "Percent",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "day",
+          "booked_minutes",
+          "open_minutes",
+          "percent"
+        ],
+        "title": "PanelDayOutlookOut",
+        "type": "object"
+      },
+      "PanelDemandOut": {
+        "properties": {
+          "bands": {
+            "items": {
+              "$ref": "#/components/schemas/PanelBandUseOut"
+            },
+            "title": "Bands",
+            "type": "array"
+          },
+          "first": {
+            "format": "date",
+            "title": "First",
+            "type": "string"
+          },
+          "last": {
+            "format": "date",
+            "title": "Last",
+            "type": "string"
+          },
+          "outlook": {
+            "items": {
+              "$ref": "#/components/schemas/PanelDayOutlookOut"
+            },
+            "title": "Outlook",
+            "type": "array"
+          }
+        },
+        "required": [
+          "first",
+          "last",
+          "bands",
+          "outlook"
+        ],
+        "title": "PanelDemandOut",
         "type": "object"
       },
       "PanelDeviceHealthOut": {
@@ -6602,6 +6706,40 @@
           "new_accounts"
         ],
         "title": "PanelReportOut",
+        "type": "object"
+      },
+      "PanelSignalOut": {
+        "properties": {
+          "at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "At"
+          },
+          "kind": {
+            "description": "league.repeated, league.disputed, money.corrections, cash.difference, bookings.late_cancellations or bookings.no_shows",
+            "title": "Kind",
+            "type": "string"
+          },
+          "params": {
+            "additionalProperties": true,
+            "description": "the facts shown with the kind's text",
+            "title": "Params",
+            "type": "object"
+          }
+        },
+        "required": [
+          "kind",
+          "params",
+          "at"
+        ],
+        "title": "PanelSignalOut",
         "type": "object"
       },
       "PanelStaffMemberOut": {
@@ -8513,6 +8651,31 @@
           "ladder"
         ],
         "title": "RatingChangeOut",
+        "type": "object"
+      },
+      "ReadOut": {
+        "properties": {
+          "input": {
+            "additionalProperties": true,
+            "title": "Input",
+            "type": "object"
+          },
+          "name": {
+            "description": "the tool the copilot used",
+            "title": "Name",
+            "type": "string"
+          },
+          "ok": {
+            "title": "Ok",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "input",
+          "ok"
+        ],
+        "title": "ReadOut",
         "type": "object"
       },
       "ReadyOut": {
@@ -10526,6 +10689,59 @@
           "is_demo"
         ],
         "title": "StaffArticleOut",
+        "type": "object"
+      },
+      "StaffAskIn": {
+        "properties": {
+          "location_id": {
+            "format": "uuid",
+            "title": "Location Id",
+            "type": "string"
+          },
+          "messages": {
+            "description": "the conversation, ending with the question",
+            "items": {
+              "$ref": "#/components/schemas/TurnIn"
+            },
+            "maxItems": 20,
+            "minItems": 1,
+            "title": "Messages",
+            "type": "array"
+          }
+        },
+        "required": [
+          "location_id",
+          "messages"
+        ],
+        "title": "StaffAskIn",
+        "type": "object"
+      },
+      "StaffAskOut": {
+        "properties": {
+          "outcome": {
+            "description": "answered, refused, budget, steps or failed",
+            "title": "Outcome",
+            "type": "string"
+          },
+          "reads": {
+            "description": "what it read, in order (the query shown, §10)",
+            "items": {
+              "$ref": "#/components/schemas/ReadOut"
+            },
+            "title": "Reads",
+            "type": "array"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "outcome",
+          "reads"
+        ],
+        "title": "StaffAskOut",
         "type": "object"
       },
       "StaffBookingIn": {
@@ -21670,6 +21886,104 @@
         ]
       }
     },
+    "/api/v1/staff/ai/ask": {
+      "post": {
+        "description": "The staff's copilot: read-only questions over the club's figures, signals and demand.",
+        "operationId": "jungle_ai_api_copilot",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StaffAskIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffAskOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Copilot",
+        "tags": [
+          "staff: ai"
+        ]
+      }
+    },
     "/api/v1/staff/ai/drafts": {
       "get": {
         "operationId": "jungle_ai_api_ai_drafts",
@@ -28202,6 +28516,65 @@
         ]
       }
     },
+    "/api/v1/staff/panel/demand": {
+      "get": {
+        "description": "How full each price band of the padel courts was, with suggestions, and the next 7 days.",
+        "operationId": "jungle_panel_api_club_demand",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PanelDemandOut"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Club Demand",
+        "tags": [
+          "staff: panel"
+        ]
+      }
+    },
     "/api/v1/staff/panel/hours": {
       "get": {
         "description": "The day's opening hours in club time (Q3), for the calendar's rows.",
@@ -28657,6 +29030,69 @@
           }
         ],
         "summary": "Resources",
+        "tags": [
+          "staff: panel"
+        ]
+      }
+    },
+    "/api/v1/staff/panel/signals": {
+      "get": {
+        "description": "What may be worth a look (§10): it points, it never decides or changes anything.",
+        "operationId": "jungle_panel_api_club_signals",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Location Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PanelSignalOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "SessionUserAuth": []
+          }
+        ],
+        "summary": "Club Signals",
         "tags": [
           "staff: panel"
         ]

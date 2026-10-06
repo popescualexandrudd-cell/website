@@ -17,7 +17,7 @@ from jungle.core.schemas import errors
 from jungle.core.security import session_auth
 from jungle.league.api import SeasonOut
 from jungle.locations.api import ResourceOut
-from jungle.panel import catalog, insights, money, people, services
+from jungle.panel import catalog, demand, insights, money, people, services, signals
 
 router = Router(tags=["staff: panel"], auth=session_auth)
 
@@ -390,6 +390,50 @@ def report(
 ) -> insights.Report:
     """The period's revenue per category, bookings, occupancy and classes (club days)."""
     return insights.report(request, location_id, first, last)
+
+
+class PanelSignalOut(Schema):
+    kind: str = Field(
+        description="league.repeated, league.disputed, money.corrections, cash.difference, "
+        "bookings.late_cancellations or bookings.no_shows"
+    )
+    params: dict[str, Any] = Field(description="the facts shown with the kind's text")
+    at: datetime | None
+
+
+@router.get("/signals", response={200: list[PanelSignalOut], **errors(401, 403)})
+def club_signals(request: HttpRequest, location_id: uuid.UUID) -> list[signals.Signal]:
+    """What may be worth a look (§10): it points, it never decides or changes anything."""
+    return signals.signals(request, location_id)
+
+
+class PanelBandUseOut(Schema):
+    band: str
+    booked_minutes: int
+    open_minutes: int
+    percent: int
+    suggestion: str = Field(description='"raise", "lower" or "" (none); only a proposal')
+    step_percent: int
+
+
+class PanelDayOutlookOut(Schema):
+    day: date
+    booked_minutes: int
+    open_minutes: int
+    percent: int
+
+
+class PanelDemandOut(Schema):
+    first: date
+    last: date
+    bands: list[PanelBandUseOut]
+    outlook: list[PanelDayOutlookOut]
+
+
+@router.get("/demand", response={200: PanelDemandOut, **errors(401, 403)})
+def club_demand(request: HttpRequest, location_id: uuid.UUID) -> demand.Demand:
+    """How full each price band of the padel courts was, with suggestions, and the next 7 days."""
+    return demand.demand(request, location_id)
 
 
 @router.get("/reports/export.csv", response={200: str, **errors(401, 403, 422)})

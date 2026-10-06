@@ -52,7 +52,10 @@ QUESTION = [{"role": "user", "content": "Când e deschis clubul?"}]
 TOOLS = {
     "class_schedule": ["member", "public"],
     "club_info": ["member", "public", "staff"],
+    "club_numbers": ["staff"],
+    "club_signals": ["staff"],
     "court_availability": ["member", "public", "staff"],
+    "court_demand": ["staff"],
     "court_quote": ["member", "public", "staff"],
     "my_bookings": ["member"],
     "propose_booking": ["member"],

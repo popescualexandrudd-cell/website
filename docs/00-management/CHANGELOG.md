@@ -4,6 +4,12 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Etapa 12, faza 12F: semnale, cerere și copilotul pentru personal — 06.10.2026 (livrat)
+#### Adăugat
+- `jungle/panel/signals.py` (semnale: dispute, meciuri repetate, diferențe de numerar, corecturi, anulări târzii, neprezentări) și `jungle/panel/demand.py` (ocuparea pe benzi orare cu sugestii de preț, următoarele 7 zile); setările `panel.signals`, `panel.demand` (DE_CONFIRMAT, Q69); API: `GET /api/v1/staff/panel/signals`, `GET /api/v1/staff/panel/demand` (`reports.view`).
+- Copilotul: uneltele de personal `club_numbers`, `club_signals`, `court_demand` (doar citire, cu drepturile persoanei); `POST /api/v1/staff/ai/ask` cu lista „ce a citit”; acțiunea `ai.copilot` (admin, manager).
+- Panou: modulul **Semnale și cerere**; secțiunea **Copilotul** în Asistentul AI; modulul **Comunitate** (ciornele AI), în locul marcajului „Etapa 12”.
+
 ### Etapa 12, faza 12E: potrivirea jucătorilor, mementourile ligii, Jungle Report, ciornele AI — 06.10.2026 (livrat)
 #### Adăugat
 - Liga: potrivirea deterministă a partenerilor (`league/matchmaking.py`, setarea `league.partners`); mementourile din jobul zilnic (`league/reminders.py`): „Hai înapoi pe teren” cu jucători de nivelul tău (`notifications.inactive_days`), „Încă N meciuri pentru clasamentul final” (`notifications.matches_needed_days`), „Meciul zilei” (și la alegerea adminului, `spotlight.announce`); Jungle Report-ul de luni (`league/weekly.py`, evenimentul `league.weekly_report`, text din șablon). Setările noi sunt DE_CONFIRMAT (Q67).

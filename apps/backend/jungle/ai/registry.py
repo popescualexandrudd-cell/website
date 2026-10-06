@@ -34,13 +34,15 @@ FORBIDDEN_WORDS = frozenset(
 class Call:
     """Who the AI works for in this question. `request` is the person's own request: a tool acts
     through the same services, with the same checks, as when the person clicks themselves.
-    `proposals`: the bookings a tool prepared, which the person confirms with a button (12D)."""
+    `proposals`: the bookings a tool prepared, which the person confirms with a button (12D).
+    `reads`: each tool used and its input, shown to the staff under the copilot's answer (12F)."""
 
     context: Context
     location: Location
     user: User | None
     request: HttpRequest | None = None
     proposals: list[dict[str, Any]] = field(default_factory=list)
+    reads: list[dict[str, Any]] = field(default_factory=list)
 
 
 @dataclass(frozen=True)

@@ -2369,6 +2369,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/staff/ai/ask": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Copilot
+         * @description The staff's copilot: read-only questions over the club's figures, signals and demand.
+         */
+        post: operations["jungle_ai_api_copilot"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/staff/ai/drafts": {
         parameters: {
             query?: never;
@@ -3644,6 +3664,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/staff/panel/demand": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Club Demand
+         * @description How full each price band of the padel courts was, with suggestions, and the next 7 days.
+         */
+        get: operations["jungle_panel_api_club_demand"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/staff/panel/hours": {
         parameters: {
             query?: never;
@@ -3753,6 +3793,26 @@ export interface paths {
          * @description Every resource of the location, the inactive ones included.
          */
         get: operations["jungle_panel_api_resources"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/staff/panel/signals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Club Signals
+         * @description What may be worth a look (§10): it points, it never decides or changes anything.
+         */
+        get: operations["jungle_panel_api_club_signals"];
         put?: never;
         post?: never;
         delete?: never;
@@ -6953,6 +7013,24 @@ export interface components {
             /** Amount */
             amount: number;
         };
+        /** PanelBandUseOut */
+        PanelBandUseOut: {
+            /** Band */
+            band: string;
+            /** Booked Minutes */
+            booked_minutes: number;
+            /** Open Minutes */
+            open_minutes: number;
+            /** Percent */
+            percent: number;
+            /** Step Percent */
+            step_percent: number;
+            /**
+             * Suggestion
+             * @description "raise", "lower" or "" (none); only a proposal
+             */
+            suggestion: string;
+        };
         /** PanelBookingOut */
         PanelBookingOut: {
             /**
@@ -7097,6 +7175,37 @@ export interface components {
             open_minutes: number;
             /** Percent */
             percent: number;
+        };
+        /** PanelDayOutlookOut */
+        PanelDayOutlookOut: {
+            /** Booked Minutes */
+            booked_minutes: number;
+            /**
+             * Day
+             * Format: date
+             */
+            day: string;
+            /** Open Minutes */
+            open_minutes: number;
+            /** Percent */
+            percent: number;
+        };
+        /** PanelDemandOut */
+        PanelDemandOut: {
+            /** Bands */
+            bands: components["schemas"]["PanelBandUseOut"][];
+            /**
+             * First
+             * Format: date
+             */
+            first: string;
+            /**
+             * Last
+             * Format: date
+             */
+            last: string;
+            /** Outlook */
+            outlook: components["schemas"]["PanelDayOutlookOut"][];
         };
         /** PanelDeviceHealthOut */
         PanelDeviceHealthOut: {
@@ -7288,6 +7397,23 @@ export interface components {
             };
             /** Revenue Total */
             revenue_total: number;
+        };
+        /** PanelSignalOut */
+        PanelSignalOut: {
+            /** At */
+            at: string | null;
+            /**
+             * Kind
+             * @description league.repeated, league.disputed, money.corrections, cash.difference, bookings.late_cancellations or bookings.no_shows
+             */
+            kind: string;
+            /**
+             * Params
+             * @description the facts shown with the kind's text
+             */
+            params: {
+                [key: string]: unknown;
+            };
         };
         /** PanelStaffMemberOut */
         PanelStaffMemberOut: {
@@ -8093,6 +8219,20 @@ export interface components {
             ladder: string;
             /** Lp Delta */
             lp_delta: number;
+        };
+        /** ReadOut */
+        ReadOut: {
+            /** Input */
+            input: {
+                [key: string]: unknown;
+            };
+            /**
+             * Name
+             * @description the tool the copilot used
+             */
+            name: string;
+            /** Ok */
+            ok: boolean;
         };
         /** ReadyOut */
         ReadyOut: {
@@ -8942,6 +9082,34 @@ export interface components {
              * Format: date-time
              */
             updated_at: string;
+        };
+        /** StaffAskIn */
+        StaffAskIn: {
+            /**
+             * Location Id
+             * Format: uuid
+             */
+            location_id: string;
+            /**
+             * Messages
+             * @description the conversation, ending with the question
+             */
+            messages: components["schemas"]["TurnIn"][];
+        };
+        /** StaffAskOut */
+        StaffAskOut: {
+            /**
+             * Outcome
+             * @description answered, refused, budget, steps or failed
+             */
+            outcome: string;
+            /**
+             * Reads
+             * @description what it read, in order (the query shown, §10)
+             */
+            reads: components["schemas"]["ReadOut"][];
+            /** Text */
+            text: string;
         };
         /** StaffBookingIn */
         StaffBookingIn: {
@@ -16307,6 +16475,84 @@ export interface operations {
             };
         };
     };
+    jungle_ai_api_copilot: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StaffAskIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffAskOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     jungle_ai_api_ai_drafts: {
         parameters: {
             query: {
@@ -21000,6 +21246,46 @@ export interface operations {
             };
         };
     };
+    jungle_panel_api_club_demand: {
+        parameters: {
+            query: {
+                location_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PanelDemandOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
     jungle_panel_api_hours: {
         parameters: {
             query: {
@@ -21280,6 +21566,46 @@ export interface operations {
             };
             /** @description Unprocessable Content */
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    jungle_panel_api_club_signals: {
+        parameters: {
+            query: {
+                location_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PanelSignalOut"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };

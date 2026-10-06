@@ -1,5 +1,6 @@
 /**
- * Drafts written by the AI for the staff (ADR-0019, Q19, Stage 12E): a community message, a blog
+ * The Community module (§8.6 "mesaje generate de AI, gata de copiat"; ADR-0019, Q19, Stage 12E):
+ * drafts written by the AI for the staff, a community message, a blog
  * article, a translation. Each one stays "to review" until a person approves it (corrected here,
  * if needed) or discards it; nothing is published or sent by itself. The community message is
  * posted in the group by hand; an article is copied into the Blog module.
@@ -52,7 +53,7 @@ export function AIDrafts() {
 
   return (
     <section aria-labelledby="ai-drafts-title">
-      <h2 id="ai-drafts-title">{t("ai.drafts.title")}</h2>
+      <h1 id="ai-drafts-title">{t("ai.drafts.title")}</h1>
       <p className="muted">{t("ai.drafts.lead")}</p>
       <form
         className="panel-box form"

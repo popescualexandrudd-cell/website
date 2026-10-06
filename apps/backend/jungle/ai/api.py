@@ -161,3 +161,35 @@ def write_draft(request: HttpRequest, payload: DraftIn) -> Status[AIDraftOut]:
 def review_draft(request: HttpRequest, draft_id: uuid.UUID, payload: DraftReviewIn) -> AIDraftOut:
     """Approve (with corrections) or discard a draft; once only."""
     return _draft(drafts.review(request, draft_id, DraftStatus(payload.status), payload.body))
+
+
+class StaffAskIn(Schema):
+    location_id: uuid.UUID
+    messages: list[TurnIn] = Field(
+        min_length=1, max_length=20, description="the conversation, ending with the question"
+    )
+
+
+class ReadOut(Schema):
+    name: str = Field(description="the tool the copilot used")
+    input: dict[str, object]
+    ok: bool
+
+
+class StaffAskOut(Schema):
+    text: str
+    outcome: str = Field(description="answered, refused, budget, steps or failed")
+    reads: list[ReadOut] = Field(description="what it read, in order (the query shown, §10)")
+
+
+@staff_router.post("/ai/ask", response={200: StaffAskOut, **errors(401, 403, 404, 422, 429, 503)})
+def copilot(request: HttpRequest, payload: StaffAskIn) -> StaffAskOut:
+    """The staff's copilot: read-only questions over the club's figures, signals and demand."""
+    result = services.ask_from_panel(
+        request, payload.location_id, [turn.dict() for turn in payload.messages]
+    )
+    return StaffAskOut(
+        text=result.answer.text,
+        outcome=result.answer.outcome,
+        reads=[ReadOut(**r) for r in result.reads],
+    )

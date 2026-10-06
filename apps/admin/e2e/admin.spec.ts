@@ -139,7 +139,7 @@ test("the administrator signs in with the authenticator code and checks the rest
   await page.getByRole("button", { name: "Intră" }).click();
   await expect(page.getByRole("heading", { name: "Tablou de bord" })).toBeVisible();
   const menu = page.getByRole("navigation", { name: "Modulele panoului" });
-  await expect(menu.getByRole("link", { name: /Comunitate · Etapa 12/ })).toBeVisible();
+  await expect(menu.getByRole("link", { name: "Comunitate", exact: true })).toBeVisible();
 
   // The AI (ADR-0019, Stage 12C): off after the website's assistant stage; what it can never do.
   await go(page, "Asistentul AI");
@@ -149,12 +149,28 @@ test("the administrator signs in with the authenticator code and checks the rest
   await expect(page.getByText("fake-club", { exact: true })).toBeVisible();
   await expect(page.getByText(/Ce nu poate face niciodată/)).toBeVisible();
   await expect(page.getByRole("heading", { name: "Ultimele întrebări" })).toBeVisible();
-  // Drafts for the staff (12E): none yet; with the AI off, asking for one says so.
-  await expect(page.getByRole("heading", { name: "Ciorne scrise de AI" })).toBeVisible();
+  // The copilot (12F): with the AI off, a question says so (not "connection lost").
+  await expect(page.getByRole("heading", { name: "Copilotul" })).toBeVisible();
+  await page.getByLabel("Întrebarea").fill("Cum a mers săptămâna trecută?");
+  await page.getByRole("button", { name: "Întreabă" }).click();
+  await expect(page.getByText("Asistentul AI nu este disponibil acum.")).toBeVisible();
+  await expectAccessible(page);
+
+  // Community (12E): the drafts written by the AI, none yet; with the AI off, asking says so.
+  await page.getByRole("button", { name: "Închide" }).click();
+  await go(page, "Comunitate");
+  await expect(page.getByRole("heading", { level: 1, name: "Comunitate: ciorne scrise de AI" })).toBeVisible();
   await expect(page.getByText("Nicio ciornă încă.")).toBeVisible();
   await page.getByLabel("Despre ce (și ce trebuie să conțină)").fill("Seara cu DJ de sâmbătă");
   await page.getByRole("button", { name: "Scrie ciorna" }).click();
   await expect(page.getByText("Asistentul AI nu este disponibil acum.")).toBeVisible();
+  await expectAccessible(page);
+
+  // Signals and demand (12F): computed from the demo data; suggestions stay proposals.
+  await go(page, "Semnale și cerere");
+  await expect(page.getByRole("heading", { level: 1, name: "Semnale și cerere" })).toBeVisible();
+  await expect(page.getByRole("row", { name: /Vârf/ })).toBeVisible();
+  await expect(page.getByText(/doar propuneri/)).toBeVisible();
   await expectAccessible(page);
 
   await go(page, "Jurnalul de audit");

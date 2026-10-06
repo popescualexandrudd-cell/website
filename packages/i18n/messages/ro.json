@@ -2630,7 +2630,8 @@
       "notifications": "Notificări",
       "community": "Comunitate",
       "ai": "Asistentul AI",
-      "blog": "Blogul"
+      "blog": "Blogul",
+      "signals": "Semnale și cerere"
     },
     "dashboard": {
       "title": "Tablou de bord",
@@ -3562,7 +3563,7 @@
         "failed": "Eroare la furnizor"
       },
       "drafts": {
-        "title": "Ciorne scrise de AI",
+        "title": "Comunitate: ciorne scrise de AI",
         "lead": "AI-ul scrie o ciornă din datele publice ale clubului (calendarul, clasamentul public, programul) și din ce îi spui. Ciorna rămâne „de revizuit” până o aprobi (o poți corecta înainte) sau renunți la ea; nimic nu se publică și nu se trimite singur. Mesajul pentru comunitate îl postezi tu în grup (Q19).",
         "kind": "Ce să scrie",
         "kinds": {
@@ -3594,7 +3595,55 @@
         "discarded": "Ai renunțat la ciornă.",
         "copy": "Copiază textul",
         "copied": "Textul e copiat."
+      },
+      "copilot": {
+        "title": "Copilotul",
+        "lead": "Întrebați despre cifrele clubului, semnale sau ocupare. Copilotul doar citește, cu drepturile dumneavoastră, și arată sub răspuns ce a citit.",
+        "question": "Întrebarea",
+        "placeholder": "De exemplu: cum a mers săptămâna trecută?",
+        "ask": "Întreabă",
+        "thinking": "Copilotul citește…",
+        "read": "Ce a citit",
+        "readFailed": "nu a putut citi",
+        "outcomes": {
+          "refused": "Modelul a refuzat întrebarea.",
+          "budget": "Limita lunară a AI-ului e atinsă.",
+          "steps": "Întrebarea a cerut prea mulți pași; încercați una mai simplă.",
+          "failed": "Furnizorul AI nu a răspuns. Încercați din nou.",
+          "empty": "Nu am un răspuns."
+        }
       }
+    },
+    "signals": {
+      "title": "Semnale și cerere",
+      "lead": "Ce ar merita o privire și cât de pline au fost terenurile, calculat din datele clubului. Semnalele doar arată, nu acuză și nu decid nimic; pragurile se schimbă la Configurare (panel.signals, panel.demand, Q69).",
+      "signalsTitle": "Semnale",
+      "none": "Niciun semnal acum.",
+      "kinds": {
+        "league_repeated": "Aceiași patru jucători, {count} meciuri de ligă în {days} zile: {names}.",
+        "league_disputed": "Scor contestat, așteaptă directorul ligii: {names}.",
+        "money_corrections": "{count} corecturi de bani făcute de {who} în {days} zile.",
+        "cash_difference": "Diferență la numărarea casei {device}: {amount} (numărat de {who}).",
+        "bookings_late_cancellations": "{name}: {count} anulări târzii în {days} zile.",
+        "bookings_no_shows": "{name}: {count} neprezentări în {days} zile."
+      },
+      "demandTitle": "Cât de pline au fost terenurile de padel ({first} – {last})",
+      "band": "Banda orară",
+      "bands": {
+        "peak": "Vârf",
+        "semi_peak": "Semi-vârf",
+        "off_peak": "În afara vârfului"
+      },
+      "use": "Ocupare",
+      "useOf": "{percent}% ({booked} din {open} ore)",
+      "suggestion": "Sugestie",
+      "suggestions": {
+        "raise": "Prețul ar putea crește cu {step}%",
+        "lower": "Prețul ar putea scădea cu {step}%"
+      },
+      "proposal": "Sugestiile sunt doar propuneri: prețurile le schimbă un om, în modulul Prețuri.",
+      "outlookTitle": "Următoarele 7 zile, rezervat până acum",
+      "day": "Ziua"
     }
   }
 }

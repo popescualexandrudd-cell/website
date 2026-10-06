@@ -67,6 +67,8 @@ class Action(StrEnum):
     # Drafts written by the AI for the staff (community message, article, translation), reviewed
     # by a person before anything is used.
     AI_DRAFTS = "ai.drafts"
+    # The staff's copilot (12F): questions over the panel's figures, read-only.
+    AI_COPILOT = "ai.copilot"
 
 
 ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
@@ -109,6 +111,7 @@ ROLE_ACTIONS: dict[Role, frozenset[Action]] = {
             Action.REPORTS_VIEW,
             Action.AI_VIEW,
             Action.AI_DRAFTS,
+            Action.AI_COPILOT,
         }
     ),
     Role.RECEPTION: frozenset(

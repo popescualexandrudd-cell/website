@@ -16,6 +16,8 @@ from jungle.core import clock
 HOURS = ("program", "deschis", "adres", "open", "hours", "where")
 BOOK = ("rezerv", "book", "teren", "court")
 STAFF_TEXT = "The staff's text:\n"
+SIGNALS = ("semnal", "anomal", "signal")
+DEMAND = ("ocupare", "cerere", "demand", "occupancy")
 
 
 def _text(content: Any) -> str:
@@ -49,6 +51,11 @@ class FakeClubProvider:
             used = [b for b in messages[-2]["content"] if b.get("type") == "tool_use"][-1]
             return self._after(used["name"], results[-1], {t["name"] for t in tools})
         question = _text(last).lower()
+        names = {t["name"] for t in tools}
+        if "club_signals" in names and any(word in question for word in SIGNALS):
+            return self._use("club_signals", {})
+        if "court_demand" in names and any(word in question for word in DEMAND):
+            return self._use("court_demand", {})
         if any(word in question for word in HOURS):
             return self._use("club_info", {})
         if any(word in question for word in BOOK):
@@ -63,6 +70,14 @@ class FakeClubProvider:
         data = json.loads(result["content"])
         if result.get("is_error"):
             return self._say(f"Nu am putut: {data['error']}.")
+        if name == "club_signals":
+            return self._say(
+                f"Am găsit {len(data['signals'])} semnale de verificat. Ele doar arată unde să "
+                "vă uitați; decide un om."
+            )
+        if name == "court_demand":
+            peak = next(b for b in data["bands"] if b["band"] == "peak")
+            return self._say(f"La vârf, terenurile au fost ocupate {peak['percent']}%.")
         if name == "club_info":
             hours = data["opening_hours"]
             return self._say(

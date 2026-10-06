@@ -213,6 +213,16 @@ BADGE_KEYS = (
     "early_bird_matches",
     "weekly_streak_weeks",
 )
+SIGNAL_KEYS = (
+    "window_days",
+    "repeat_matches",
+    "repeat_days",
+    "corrections",
+    "cash_difference_bani",
+    "late_cancellations",
+    "no_shows",
+)
+DEMAND_KEYS = ("weeks", "high_percent", "low_percent", "step_percent")
 PARTNER_KEYS = ("level_gap_levels", "recent_days", "suggestions")
 SPOTLIGHT_KEYS = (
     "promotion",
@@ -795,6 +805,35 @@ CONFIG: dict[str, ConfigSpec] = {
             Marker.TO_CONFIRM,
             "Pragurile insignelor (§6.15).",
             number_map(BADGE_KEYS),
+        ),
+        ConfigSpec(
+            "panel.signals",
+            {
+                "window_days": 30,
+                "repeat_matches": 4,
+                "repeat_days": 7,
+                "corrections": 3,
+                "cash_difference_bani": 500,
+                "late_cancellations": 3,
+                "no_shows": 2,
+            },
+            Marker.TO_CONFIRM,
+            "Pragurile semnalelor din panou (§10, detecția de anomalii; semnalează, nu decide): "
+            "perioada în zile, meciuri cu aceiași 4 jucători în câteva zile, corecturi de bani ale "
+            "aceleiași persoane, diferența de numerar la o numărare (bani), anulări târzii și "
+            "neprezentări ale aceluiași client.",
+            number_map(SIGNAL_KEYS),
+            question="Q69",
+        ),
+        ConfigSpec(
+            "panel.demand",
+            {"weeks": 4, "high_percent": 85, "low_percent": 30, "step_percent": 10},
+            Marker.TO_CONFIRM,
+            "Sugestiile de preț după ocupare (§10; doar propuneri, prețul îl schimbă un om): "
+            "câte săptămâni se privesc, peste ce ocupare se propune o creștere, sub ce ocupare o "
+            "scădere și cu cât la sută.",
+            number_map(DEMAND_KEYS),
+            question="Q69",
         ),
         ConfigSpec(
             "league.partners",
