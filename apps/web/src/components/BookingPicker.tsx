@@ -30,7 +30,9 @@ export function BookingPicker({ locale }: { locale: string }) {
   const days = useMemo(() => nextDays(new Date(), DAYS), []);
   const [day, setDay] = useState(days[0] as string);
   const [duration, setDuration] = useState(90);
-  const [availability, setAvailability] = useState<DayAvailability | null | "error">(null);
+  // Kept with the day it is for: while another day loads, the old day's times are not shown, so a
+  // quick click can never book the day before (found by the mobile end-to-end test, 06.10.2026).
+  const [loaded, setLoaded] = useState<{ day: string; data: DayAvailability | "error" } | null>(null);
   const [durations, setDurations] = useState<number[]>([60, 90, 120]);
   const [choice, setChoice] = useState<Choice | null>(null);
   const [quote, setQuote] = useState<Quote | null | "error">(null);
@@ -54,11 +56,11 @@ export function BookingPicker({ locale }: { locale: string }) {
       .GET("/api/v1/bookings/availability", { params: { query: { location: LOCATION_SLUG, day } } })
       .then(({ data }) => {
         if (!alive) return;
-        if (!data) return setAvailability("error");
-        setAvailability(data as DayAvailability);
+        if (!data) return setLoaded({ day, data: "error" });
+        setLoaded({ day, data: data as DayAvailability });
         if (Array.isArray(data.durations_minutes) && data.durations_minutes.length) setDurations(data.durations_minutes);
       })
-      .catch(() => alive && setAvailability("error"));
+      .catch(() => alive && setLoaded({ day, data: "error" }));
     return () => {
       alive = false;
     };
@@ -104,6 +106,7 @@ export function BookingPicker({ locale }: { locale: string }) {
   };
 
   const dayLabel = (d: string) => format.dateTime(new Date(`${d}T12:00:00Z`), { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" });
+  const availability = loaded && loaded.day === day ? loaded.data : null;
   const courts = availability && availability !== "error" ? onlineCourts(availability) : [];
   const now = new Date();
 

@@ -81,7 +81,9 @@ test("R-001, §12.3: create an account, confirm the email, sign out and in, a ne
   // R-040–R-043: book a court (the last day offered, the first free time), see it, cancel it.
   await page.getByRole("link", { name: "Rezervă un teren" }).click();
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Rezervări");
-  await page.locator(".booking__days button").last().click();
+  const lastDay = page.locator(".booking__days button").last();
+  await lastDay.click();
+  await expect(lastDay).toHaveAttribute("aria-pressed", "true"); // only that day's times are shown now
   const free = page.locator(".booking__time:not([disabled])").first();
   await free.click();
   await expect(page.locator(".booking__summary .configurator__total")).toContainText("lei");
