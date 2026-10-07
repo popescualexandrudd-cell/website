@@ -1,6 +1,7 @@
 # The whole system on a laptop, with demo data (ADR-0015). From the repository root:
 #   docker compose -f deploy/compose/dev/compose.yaml up --build      # everything
-#   docker compose -f deploy/compose/dev/compose.yaml up -d db redis  # only the databases (scripts/setup)
+#   docker compose -f deploy/compose/dev/compose.yaml -f deploy/compose/dev/databases.yaml up -d db redis
+#                                         # only the databases, on the laptop's ports 5432 and 6379 (scripts/setup)
 # Then: the website http://localhost:3000, the admin panel http://localhost:5179 (demo staff:
 # manager@demo.invalid / receptie@demo.invalid, password JUNGLE_DEMO_PASSWORD below), the API
 # http://localhost:8000/api/v1/docs. Development only: the passwords here are not secrets.
@@ -13,15 +14,15 @@ services:
       POSTGRES_DB: jungle
       POSTGRES_USER: jungle
       POSTGRES_PASSWORD: jungle  # development only
-    ports: ["5432:5432"]
     volumes: [db-data:/var/lib/postgresql/data]
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U jungle"]
       interval: 5s
       retries: 10
+  # The databases are reached only inside the stack: a PostgreSQL or Redis already on the laptop
+  # never blocks the demo (their ports for scripts/setup: databases.yaml).
   redis:
     image: redis:7
-    ports: ["6379:6379"]
   backend:
     build:
       context: ../../..

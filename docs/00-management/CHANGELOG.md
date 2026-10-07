@@ -8,6 +8,7 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 #### Adăugat
 - Tot sistemul pe laptop, cu o singură comandă (`docker compose -f deploy/compose/dev/compose.yaml up --build`): site-ul complet, panoul de admin cu personalul demo, API-ul; pașii pentru proprietar în README; verificat în `scripts/test-deploy` (și CI).
 #### Reparat
+- Demonstrația de pe laptop nu mai ocupă porturile 5432 și 6379: un PostgreSQL sau Redis deja instalat pe laptop nu o mai blochează (bazele de date se văd doar în interior; pentru programatori, `deploy/compose/dev/databases.yaml`).
 - Panoul de admin: la schimbarea zilei (sau a oricărui filtru), un răspuns mai vechi și mai lent putea înlocui datele noi, iar calendarul arăta rezervările zilei de dinainte sub data nouă. Acum contează doar ultimul răspuns, iar datele vechi dispar la schimbare (`useData`, testat).
 
 ### Deciziile confirmate — 07.10.2026

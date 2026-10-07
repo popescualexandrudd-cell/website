@@ -59,7 +59,7 @@ Din rădăcina repository-ului:
 | DEMO pentru Chioșcul Ligii: chioșc înrolat, jucători demo, un meci tocmai terminat (refuzat în producție) | `uv run python apps/backend/manage.py kiosk_demo --public-key <cheia bridge-ului> --output kiosk.json` |
 | Fontul cardului tipărit (din fonturile site-ului) | `uvx --with brotli --from fonttools python apps/backend/scripts/build_card_font.py` |
 
-Baza de date: PostgreSQL (`DATABASE_URL`; implicit `postgres://jungle:jungle@localhost:5432/jungle`), de exemplu cu `docker compose -f deploy/compose/dev/compose.yaml up -d db redis`.
+Baza de date: PostgreSQL (`DATABASE_URL`; implicit `postgres://jungle:jungle@localhost:5432/jungle`), de exemplu cu `docker compose -f deploy/compose/dev/compose.yaml -f deploy/compose/dev/databases.yaml up -d db redis`.
 Variabilele de mediu sunt descrise în [`.env.example`](.env.example). Imaginea Docker: [`Dockerfile`](Dockerfile) (se construiește din rădăcina repository-ului).
 
 ### Structura codului
