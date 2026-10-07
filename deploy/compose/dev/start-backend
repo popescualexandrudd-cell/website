@@ -1,0 +1,13 @@
+#!/bin/sh
+# The backend of the laptop demo (deploy/compose/dev/compose.yaml): the database, the demo data,
+# the demo staff's passwords once (they keep their 2FA after a restart), the full site turned on,
+# then the API and the screens' WebSocket on one port (daphne; in production the proxy sends /ws/
+# to a separate process).
+set -eu
+python manage.py migrate
+python manage.py seed_initial --demo
+if ! python manage.py shell -c "import sys; from jungle.accounts.models import User; sys.exit(0 if User.objects.filter(email='manager@demo.invalid').exclude(password__startswith='!').exists() else 1)"; then
+  python manage.py panel_demo --output /tmp/panel-demo.json
+fi
+python manage.py set_flag full_site on --reason "local demo"
+exec daphne -b 0.0.0.0 -p 8000 jungle.asgi:application

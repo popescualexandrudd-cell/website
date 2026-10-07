@@ -4,6 +4,12 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Sistemul pe laptop și o reparație în panou — 07.10.2026
+#### Adăugat
+- Tot sistemul pe laptop, cu o singură comandă (`docker compose -f deploy/compose/dev/compose.yaml up --build`): site-ul complet, panoul de admin cu personalul demo, API-ul; pașii pentru proprietar în README; verificat în `scripts/test-deploy` (și CI).
+#### Reparat
+- Panoul de admin: la schimbarea zilei (sau a oricărui filtru), un răspuns mai vechi și mai lent putea înlocui datele noi, iar calendarul arăta rezervările zilei de dinainte sub data nouă. Acum contează doar ultimul răspuns, iar datele vechi dispar la schimbare (`useData`, testat).
+
 ### Deciziile confirmate — 07.10.2026
 #### Schimbat
 - 21 de setări trecute din DE_CONFIRMAT în confirmate, la confirmarea proprietarului (Q1, Q11, Q28, Q32, Q45, Q53, Q54, Q67, Q68, Q69, insignele, Meciul zilei). Rămân DE_CONFIRMAT doar datele firmei, domeniul, sezoanele de preț, grupele TVA și prețurile pe token ale AI-ului.

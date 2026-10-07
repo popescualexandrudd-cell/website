@@ -8,7 +8,8 @@
 #      builds the images, needs Docker, uv and the ports 80/443).
 #   5. the busiest evening, with k6 (tests/load/club.js), inside step 4: LOAD_VISITORS (default 50)
 #      visitors for LOAD_HOLD (default 30s); the report's run: LOAD_VISITORS=500 LOAD_HOLD=2m;
-#   6. no known vulnerability in the production dependencies (pnpm audit, pip-audit).
+#   6. no known vulnerability in the production dependencies (pnpm audit, pip-audit);
+#   7. the laptop demo (deploy/compose/dev, README): the site with the full site on, the panel.
 # Run by CI on every push (job `deploy`); by hand: scripts/test-deploy
 # Behind a filtering proxy, pass base images with its CA: SMOKE_BUILD_ARGS="--build-arg …".
 set -euo pipefail
@@ -50,7 +51,7 @@ CADDY="$CADDY" deploy/proxy/test-proxy
 echo "==> The server scripts (ShellCheck)"
 uvx --from shellcheck-py==0.11.0.1 shellcheck -S warning deploy/scripts/backup deploy/scripts/update \
   deploy/scripts/rollback deploy/scripts/install-server deploy/scripts/devices-ca deploy/scripts/manage \
-  deploy/scripts/test-install deploy/scripts/reset-before-launch deploy/backup/postgres/restore-check \
+  deploy/scripts/test-install deploy/scripts/reset-before-launch deploy/compose/dev/start-backend deploy/backup/postgres/restore-check \
   scripts/test-deploy
 
 echo "==> The server's installation, on a clean Ubuntu 24.04 (a container)"
@@ -67,3 +68,21 @@ if [ -z "${K6:-}" ]; then
   K6="$dir/k6"
 fi
 K6="$K6" deploy/scripts/smoke-stack
+
+echo "==> The laptop demo (deploy/compose/dev, the README's quick start)"
+dev=(docker compose -p jungle-dev-check -f deploy/compose/dev/compose.yaml)
+# shellcheck disable=SC2329  # called by the trap
+dev_down() { "${dev[@]}" down -v --remove-orphans >/dev/null 2>&1 || true; }
+trap dev_down EXIT
+"${dev[@]}" up -d --build
+answer() { curl -s --noproxy '*' -o /dev/null -w '%{http_code}' --max-time 10 "$1" || true; }
+for _ in $(seq 1 90); do [ "$(answer http://localhost:8000/api/v1/health)" = 200 ] && break; sleep 4; done
+failed=0
+for url in http://localhost:8000/api/v1/health http://localhost:3000/ro http://localhost:3000/ro/liga \
+  http://localhost:5179/ http://localhost:5179/api/v1/auth/session; do
+  code="$(answer "$url")"
+  for _ in $(seq 1 15); do [ "$code" = 200 ] && break; sleep 2; code="$(answer "$url")"; done
+  if [ "$code" = 200 ]; then echo "  ok   $url"; else echo "  FAIL $url ($code)"; failed=1; fi
+done
+if [ "$failed" = 1 ]; then "${dev[@]}" logs --tail 40; exit 1; fi
+echo "laptop demo: all checks passed"

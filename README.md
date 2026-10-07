@@ -26,5 +26,43 @@ Sistemul propriu al clubului **Jungle Padel** (Șoseaua Biruinței, lângă Selg
 | [`MEGA_PROMPT.md`](MEGA_PROMPT.md) | Documentul original al proiectului (nu se modifică) |
 | [`CLAUDE.md`](CLAUDE.md) | Memoria de lucru pentru sesiunile de dezvoltare |
 
-## Pornire rapidă
-Nu există încă nimic de pornit. Instrucțiunile de rulare apar aici în Etapa 1A.
+## Pornire rapidă: tot sistemul pe laptop
+Pentru a vedea și încerca totul, cu date demo, pe Windows, macOS sau Linux.
+
+**O singură dată:**
+1. Instalați [Docker Desktop](https://www.docker.com/products/docker-desktop/) și porniți-l. Are nevoie de cel puțin 8 GB RAM liberi.
+2. Instalați [Git](https://git-scm.com/downloads).
+3. Într-un terminal (Windows: „PowerShell”), luați codul:
+   ```
+   git clone https://github.com/popescualexandrudd-cell/website.git
+   cd website
+   ```
+   Depozitul e privat: Git vă cere să intrați cu contul GitHub care are acces (o fereastră de autentificare se deschide singură).
+
+**Pornirea** (prima dată durează 10–20 de minute, cât se construiesc aplicațiile; apoi un minut):
+```
+docker compose -f deploy/compose/dev/compose.yaml up --build
+```
+Când în terminal apare `Listening on TCP address 0.0.0.0:8000`, deschideți:
+
+| Ce | Adresa | Cum intrați |
+|---|---|---|
+| Site-ul complet | http://localhost:3000 | — |
+| Panoul de admin | http://localhost:5179 | `manager@demo.invalid` sau `receptie@demo.invalid`, parola `Jungle-Demo-2026`; la prima intrare, scanați codul QR cu o aplicație de autentificare (Google Authenticator, Microsoft Authenticator) |
+| API-ul (pentru programatori) | http://localhost:8000/api/v1/docs | — |
+
+**Oprirea:** `Ctrl+C` în terminal. Datele demo rămân pentru data viitoare. Pentru a o lua de la zero: `docker compose -f deploy/compose/dev/compose.yaml down -v`.
+
+**Bine de știut:**
+- Totul e demo: clienții, rezervările și prețurile (marcate DE_STABILIT) sunt de test.
+- Emailurile nu pleacă; apar în terminal.
+- Chioșcurile, ecranele terenurilor și afișajul cafenelei au nevoie de Hardware Bridge și de aparatele lor. Le vedeți funcționând în testele cap-coadă (`scripts/test-e2e`) și pe server, după instalare.
+- Dacă un port e ocupat (de exemplu 5432, de un PostgreSQL instalat pe laptop), opriți programul acela sau spuneți-ne.
+
+**Pentru programatori** (fără Docker pentru aplicații):
+- `scripts/setup` pregătește dependențele, baza de date și datele demo;
+- `scripts/dev` pornește backend-ul;
+- `pnpm --filter @jungle/web dev` și `pnpm --filter @jungle/admin dev` pornesc site-ul și panoul;
+- toate verificările: `scripts/test-all`.
+
+Detalii în [`CLAUDE.md`](CLAUDE.md) (secțiunea „Comenzi”). Instalarea pe serverul clubului: [`docs/08-deploy-si-mentenanta/06-instalarea-serverului.md`](docs/08-deploy-si-mentenanta/06-instalarea-serverului.md).

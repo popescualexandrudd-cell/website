@@ -1,20 +1,26 @@
 /** Small pieces every module uses: loading data with a reload, and an action that asks for a
  * reason first (every change by staff is recorded with its reason, R-013 / audit). */
-import { type FormEvent, type ReactNode, useCallback, useEffect, useState } from "react";
+import { type FormEvent, type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { unwrap } from "./api";
 import { usePanel, useT } from "./panel";
 
 export function useData<T>(load: () => Promise<T>, deps: unknown[]): { data: T | null; reload: () => Promise<void> } {
   const { fail } = usePanel();
   const [data, setData] = useState<T | null>(null);
+  // Only the latest request may answer: an older, slower one (the day before, the filter before)
+  // never replaces newer data on the screen.
+  const latest = useRef(0);
   const reload = useCallback(async () => {
+    const request = ++latest.current;
     try {
-      setData(await load());
+      const value = await load();
+      if (request === latest.current) setData(value);
     } catch (error) {
-      fail(error);
+      if (request === latest.current) fail(error);
     }
   }, deps);
   useEffect(() => {
+    setData(null); // new filters: nothing of the old answer stays shown under them
     void reload();
   }, [reload]);
   return { data, reload };

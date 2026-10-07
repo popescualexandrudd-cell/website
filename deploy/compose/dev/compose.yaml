@@ -1,6 +1,10 @@
-# Local development services (ADR-0015). From the repository root:
-#   docker compose -f deploy/compose/dev/compose.yaml up -d db redis   # only the databases
-#   docker compose -f deploy/compose/dev/compose.yaml up --build       # everything
+# The whole system on a laptop, with demo data (ADR-0015). From the repository root:
+#   docker compose -f deploy/compose/dev/compose.yaml up --build      # everything
+#   docker compose -f deploy/compose/dev/compose.yaml up -d db redis  # only the databases (scripts/setup)
+# Then: the website http://localhost:3000, the admin panel http://localhost:5179 (demo staff:
+# manager@demo.invalid / receptie@demo.invalid, password JUNGLE_DEMO_PASSWORD below), the API
+# http://localhost:8000/api/v1/docs. Development only: the passwords here are not secrets.
+# Behind a filtering proxy, base images with its CA: PYTHON_IMAGE=… NODE_IMAGE=… RUNTIME_IMAGE=…
 name: jungle-dev
 services:
   db:
@@ -22,18 +26,22 @@ services:
     build:
       context: ../../..
       dockerfile: apps/backend/Dockerfile
+      args:
+        PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.13-slim}
     environment:
       JUNGLE_ENV: dev
       DJANGO_DEBUG: "true"
-      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+      # `backend`: the website's server reads the API inside the stack (API_INTERNAL_URL below)
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,backend
+      CSRF_TRUSTED_ORIGINS: http://localhost:3000,http://localhost:5179
       DATABASE_URL: postgres://jungle:jungle@db:5432/jungle
       REDIS_URL: redis://redis:6379/0
-      EMAIL_BACKEND: django.core.mail.backends.console.EmailBackend
-    # ASGI (daphne): the API and the screens' WebSocket (/ws/screens/, ADR-0005) on one port.
-    # In production the proxy sends /ws/ to a separate ASGI process (deploy/proxy/README.md).
-    command: >
-      sh -c "python manage.py migrate && python manage.py seed_initial --demo &&
-             daphne -b 0.0.0.0 -p 8000 jungle.asgi:application"
+      EMAIL_BACKEND: django.core.mail.backends.console.EmailBackend  # the emails appear in the log
+      WEB_REVALIDATE_URL: http://web:3000/api/revalidate
+      WEB_REVALIDATE_SECRET: dev-local-only
+      JUNGLE_DEMO_PASSWORD: ${JUNGLE_DEMO_PASSWORD:-Jungle-Demo-2026}
+    volumes: ["./start-backend:/start-backend:ro", "../../../docs:/app/docs:ro"]  # docs: the demo legal texts
+    command: ["sh", "/start-backend"]
     ports: ["8000:8000"]
     depends_on:
       db: {condition: service_healthy}
@@ -43,9 +51,28 @@ services:
       context: ../../..
       dockerfile: apps/web/Dockerfile
       args:
-        NEXT_PUBLIC_API_URL: http://localhost:8000
+        NODE_IMAGE: ${NODE_IMAGE:-node:22-slim}
+        RUNTIME_IMAGE: ${RUNTIME_IMAGE:-node:22-slim}
+        NEXT_PUBLIC_API_URL: http://localhost:8000  # what the browser uses
         NEXT_PUBLIC_SITE_URL: http://localhost:3000
+    environment:
+      API_INTERNAL_URL: http://backend:8000  # what the website's server uses, inside the stack
+      REVALIDATE_SECRET: dev-local-only
     ports: ["3000:3000"]
+    depends_on: [backend]
+  # The admin panel: its production build, served by Vite, with /api passed to the backend.
+  admin:
+    build:
+      context: ../../..
+      dockerfile: deploy/proxy/Dockerfile
+      target: build
+      args:
+        NODE_IMAGE: ${NODE_IMAGE:-node:22-slim}
+    working_dir: /repo/apps/admin
+    environment:
+      VITE_API_ORIGIN: http://backend:8000
+    command: ["pnpm", "exec", "vite", "preview", "--host", "0.0.0.0", "--port", "5179", "--strictPort"]
+    ports: ["5179:5179"]
     depends_on: [backend]
 volumes:
   db-data:

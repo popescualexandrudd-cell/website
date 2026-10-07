@@ -233,6 +233,22 @@ describe("the bookings calendar", () => {
     expect(days).toEqual(expect.arrayContaining(["2027-03-16", "2027-03-17", "2027-03-15", "2027-04-02"]));
   });
 
+  it("never shows the day before under the new day, even when its answer comes last", async () => {
+    let late: (response: Response) => void = () => undefined;
+    answers["GET /api/v1/staff/bookings"] = (_body, url) =>
+      url.searchParams.get("day") === "2027-03-16"
+        ? (new Promise<Response>((resolve) => (late = resolve)) as unknown as Response)
+        : json([]);
+    mount(<Calendar />, ["bookings.view", "bookings.manage"]);
+    await settle();
+    fireEvent.click(screen.getByRole("button", { name: "Ziua următoare" }));
+    await settle();
+    await act(async () => late(json([booking("b1")])));
+    await settle();
+    expect(screen.queryByRole("button", { name: /Ana Pop/ })).toBeNull();
+    expect(screen.queryByRole("region", { name: "În afara programului zilei" })).toBeNull();
+  });
+
   it("lists a booking outside the day's hours under the grid, never over the 08:00 cells", async () => {
     // Yesterday 23:00–00:30 (club time): only its last half hour is on this day, before opening.
     const late = booking("b9", { starts_at: "2027-03-15T21:00:00Z", ends_at: "2027-03-15T22:30:00Z", organizer_name: "Dan Late" });
