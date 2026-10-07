@@ -38,7 +38,7 @@ Valorile reale stau doar în `.env` pe server, niciodată în git.
 | Fonturi reduse (după schimbarea fonturilor) | `cd apps/web && uvx --with brotli --from fonttools python scripts/subset_fonts.py` |
 | Imaginile statice ale scenelor 3D (după orice schimbare a scenelor) | cu site-ul pornit (`build` + `start`): `cd apps/web && node scripts/render-stills.mjs` → `public/renders/` |
 
-Variabile de mediu: [`.env.example`](.env.example) (`NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_SITE_URL`, `SITE_INDEXABLE=true` doar în producție, Umami opțional, `REVALIDATE_SECRET` = `WEB_REVALIDATE_SECRET` din backend). Imagine Docker: [`Dockerfile`](Dockerfile) (build din rădăcină; `.dockerignore` din rădăcină ține afară `.next`, `node_modules` și orice `.env`).
+Variabile de mediu: [`.env.example`](.env.example) (`NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_SITE_URL`, `SITE_INDEXABLE=true` doar în producție, Umami opțional, `REVALIDATE_SECRET` = `WEB_REVALIDATE_SECRET` din backend; `API_INTERNAL_URL`: de unde citește serverul site-ului API-ul, în producție `http://proxy:8080`, ascultătorul intern al proxy-ului, ca site-ul să nu depindă de propria adresă publică). Imagine Docker: [`Dockerfile`](Dockerfile) (build din rădăcină; `.dockerignore` din rădăcină ține afară `.next`, `node_modules` și orice `.env`).
 
 ### Site-ul complet și pagina de pre-lansare (Q57)
 - `src/lib/flags.ts` citește comutatorul `full_site` din `GET /api/v1/config/flags` (memorie de 5 minute, eticheta `flags`); doar un „pornit” clar dă site-ul complet, orice eroare lasă pagina de pre-lansare.

@@ -114,6 +114,8 @@ Trimiterile de tipul „secțiunea 6.9” din documente se găsesc cu tabelul de
 | ↳ 12.1 Securitate | [07-securitate-gdpr-legal/01-securitate.md](07-securitate-gdpr-legal/01-securitate.md) |
 | ↳ 12.2 GDPR | [07-securitate-gdpr-legal/02-gdpr.md](07-securitate-gdpr-legal/02-gdpr.md) |
 | ↳ 12.3 Fiscal și comercial | [07-securitate-gdpr-legal/03-fiscal-si-comercial.md](07-securitate-gdpr-legal/03-fiscal-si-comercial.md) |
+| ↳ Registrul prelucrărilor (art. 30) | [07-securitate-gdpr-legal/04-registrul-prelucrarilor.md](07-securitate-gdpr-legal/04-registrul-prelucrarilor.md) |
+| ↳ DPIA: liga și ecranele | [07-securitate-gdpr-legal/05-dpia-liga-si-ecrane.md](07-securitate-gdpr-legal/05-dpia-liga-si-ecrane.md) |
 | ↳ 12.4 Branding tehnic (design tokens) | [12-branding/01-branding-tehnic-design-tokens.md](12-branding/01-branding-tehnic-design-tokens.md) |
 | 13. TESTARE ȘI CALITATE (Definition of Done pentru orice livrare) | [00-management/DEFINITION_OF_DONE.md](00-management/DEFINITION_OF_DONE.md) |
 | 14. DEPLOY PE SERVERUL PROPRIU, BACKUP, MONITORIZARE, MENTENANȚĂ | [08-deploy-si-mentenanta/01-cerinte-deploy-backup-monitorizare.md](08-deploy-si-mentenanta/01-cerinte-deploy-backup-monitorizare.md) |

@@ -12,15 +12,15 @@ import uuid
 from typing import Any
 
 from django.core.management.base import BaseCommand
-from django.utils import timezone
 
 from jungle.accounts.models import User
 from jungle.cards import wallet_apple, wallet_google
 from jungle.cards.models import MemberCard
+from jungle.core import clock
 
 
 def _sample() -> MemberCard:
-    now = timezone.now()
+    now = clock.now()
     user = User(first_name="Test", last_name="Wallet", created_at=now)
     return MemberCard(
         id=uuid.uuid4(),
