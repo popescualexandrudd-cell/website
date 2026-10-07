@@ -17,6 +17,8 @@
 | Name, email, playing level (waitlist) | Opening announcements | your consent (a) |
 | Technical logs: IP address, date and time, actions in your account | Security, fraud prevention, proof of consent | legitimate interest (f); legal obligation (c) |
 | Messages sent to the AI assistant (once enabled) | Answers and bookings on request | contract (b); data minimised and pseudonymised |
+| Email address and, if you accept them, the browser's push notifications | Confirmations, reminders, account messages; the club's news only if you turn it on | contract (b); news: your consent (a) |
+| The 0–10 answer to "Would you recommend us to a friend?", after your first game | Service quality; staff see only the average, not who answered | legitimate interest (f); answering is optional |
 
 We never sell your data or use it for personalised advertising.
 
@@ -38,7 +40,9 @@ We also share data with authorities when the law requires it. The data stays in 
 - **Your account:** while it is active. When it is deleted, your personal data is erased. In other players' league history you remain shown as "Retired player", so that their results stay correct.
 - **Fiscal and accounting documents:** as long as the law requires. **[Exact periods — DE_CONFIRMAT with the accountant]**.
 - **Waitlist:** 7 days if you do not confirm; otherwise until 12 months after opening, or until you unsubscribe.
-- **Security and audit logs:** **[DE_CONFIRMAT]**.
+- **Notification texts:** 90 days.
+- **Security and audit logs:** 3 years **[DE_CONFIRMAT]**.
+- **Backups:** about 3 weeks; deleted data also leaves them after this period.
 
 ## 6. Your rights
 You can ask at any time:

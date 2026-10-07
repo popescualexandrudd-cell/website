@@ -86,7 +86,11 @@ def day(value: date) -> str:
 # ---------------------------------------------------------------- writing to the outbox
 def _channel_available(user: User, channel: Channel) -> bool:
     if channel == Channel.PUSH:
-        return webpush.enabled() and PushSubscription.objects.filter(user=user).exists()
+        return (
+            webpush.enabled()
+            and user.is_active
+            and PushSubscription.objects.filter(user=user).exists()
+        )
     # SMS (Q17) is prepared and off until the club chooses a provider: only email is left.
     return channel == Channel.EMAIL and bool(user.email) and user.is_active
 

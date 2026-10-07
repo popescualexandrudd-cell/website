@@ -7,9 +7,10 @@ Cerințele de securitate, GDPR și fiscale (§12.1–§12.3). **Toate textele le
 - [12.1 Securitate](01-securitate.md)
 - [12.2 GDPR](02-gdpr.md)
 - [12.3 Fiscal și comercial](03-fiscal-si-comercial.md)
+- [Registrul activităților de prelucrare (art. 30)](04-registrul-prelucrarilor.md)
+- [DPIA: liga și ecranele publice (art. 35)](05-dpia-liga-si-ecrane.md)
+- [`texte/`](texte/): textele legale publicate pe site (termeni, confidențialitate, cookie-uri, rambursări, nota listei de așteptare, formularul ligii), RO și EN; regulamentul în [`docs/14-regulament-public/`](../14-regulament-public/)
 
-## Urmează
-
-- Etapa 1B: nota de informare pentru lista de așteptare (ciornă pentru avocat).
-- Etapa 5: formularul GDPR al ligii, politica de confidențialitate, politica de cookies, registrul activităților de prelucrare, DPIA pentru ligă și afișajele publice.
-- Etapa 4 și 8: lista verificărilor fiscale de confirmat cu contabilul (bon fiscal, rapoarte Z, e-Factura, TVA).
+## Ce rămâne
+- Revizuirea de către un avocat/DPO (recomandată, Q41) și datele firmei (Q26).
+- Termenele fiscale, cu contabilul (registrul, rândul 4).

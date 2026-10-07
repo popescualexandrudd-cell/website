@@ -27,6 +27,8 @@ Ce nu poate face: să schimbe prețuri, să corecteze plăți sau să introducă
 
 - **Rezervare nouă:** apăsați pe o celulă liberă, alegeți **Clientul**, **Tipul** și **Durata** (minimum 60 de minute), apoi **Rezerv**. Panoul arată prețul.
 - **Mutare:** trageți rezervarea pe altă celulă, sau deschideți-o și apăsați **Mut rezervarea**.
+
+  ![Calendarul după mutarea unei rezervări](capturi/04-calendar-dupa-mutare.png)
 - **Anulare:** deschideți rezervarea, apoi **Anulez rezervarea**.
   - Cu cel puțin 24 de ore înainte, anularea e fără cost.
   - Cu mai puțin de 24 de ore, se plătește. Excepția **Fără taxă de anulare** o aprobă doar managerul.

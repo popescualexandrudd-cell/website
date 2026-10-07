@@ -26,6 +26,7 @@ from jungle.ledger import services as ledger
 from jungle.ledger.models import AccountKind, TransactionKind
 from jungle.legal.models import Consent, ConsentAction, DocumentKind
 from jungle.legal.services import publish_document
+from jungle.notifications.models import Notification, Preference, PushSubscription
 from jungle.privacy import league_consent, services
 from jungle.rewards.models import Referral, ReferralCode
 
@@ -196,6 +197,23 @@ def test_erase_leaves_a_retired_player(
     Scan.objects.create(user=person, location=club.location, kind="arrival", scanned_at=clock.now())
     ReferralCode.objects.create(user=person, code="ABCDEFGH", created_at=clock.now())
     Referral.objects.create(referrer=friend, referred=person, created_at=clock.now())
+    PushSubscription.objects.create(
+        user=person,
+        endpoint="https://push.example.test/p",
+        p256dh="k",
+        auth="a",
+        created_at=clock.now(),
+    )
+    Preference.objects.create(user=person, category="club", channel="email", enabled=True)
+    Notification.objects.create(
+        user=person,
+        event="booking.reminder",
+        channel="push",
+        key=f"booking.reminder:{past.pk}:{person.pk}:push",
+        context={"first_name": "Mara"},
+        send_after=clock.now(),
+        created_at=clock.now(),
+    )
     StaffNotice.objects.create(
         location=club.location,
         kind="no_show_block",
@@ -224,6 +242,10 @@ def test_erase_leaves_a_retired_player(
     assert not Scan.objects.filter(user=person).exists()
     assert not ReferralCode.objects.filter(user=person).exists() and not Referral.objects.exists()
     assert StaffNotice.objects.get().payload["name"] == "Jucător retras"
+    # §12.2: no message reaches an erased account, and the waiting texts are gone
+    assert not PushSubscription.objects.filter(user=person).exists()
+    assert not Notification.objects.filter(user=person).exists()
+    assert not Preference.objects.filter(user=person).exists()
     assert Booking.objects.filter(pk=past.pk).exists()  # history stays, pseudonymised
     assert Consent.objects.filter(user=person).exists()  # proof of consent is kept
     assert api.get("/cards/mine").status_code == 401  # logged out: the account is closed

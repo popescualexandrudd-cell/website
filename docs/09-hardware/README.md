@@ -11,6 +11,6 @@ Chioșcuri, scannere, numerar, fiscal, ecrane. Specificațiile funcționale ale 
 
 Interfețele aparatelor (`Scanner`, `CashDevice`, `FiscalPrinter`, `ReceiptPrinter`, `Health`) și simulatoarele lor: [`services/hardware-bridge`](../../services/hardware-bridge/README.md).
 
-## Urmează
+## Ce rămâne
 
-- Etapa 14 (după Q23): driverele reale, testate la club, și ghidul de instalare la club.
+- Driverele reale, după alegerea aparatelor (Q23); până atunci Hardware Bridge lucrează cu simulatoarele, cu același contract.

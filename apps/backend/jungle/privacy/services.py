@@ -43,6 +43,7 @@ from jungle.feedback.models import Feedback
 from jungle.ledger.models import AccountKind, LedgerEntry, Payment
 from jungle.ledger.services import customer_credit, customer_debt
 from jungle.legal.models import Consent
+from jungle.notifications.models import Notification, Preference, PushSubscription
 from jungle.rewards.models import Referral, ReferralCode, ReferralStatus, Voucher, VoucherStatus
 from jungle.subscriptions.models import CorporateMember, Subscription
 
@@ -231,6 +232,11 @@ def erase(actor: audit.Actor, user: User, *, forfeit_credit: bool = False) -> Us
             status=VoucherStatus.CANCELLED
         )
         MfaRecoveryCode.objects.filter(user=user).delete()
+        # No message reaches the person any more: the phones' push addresses, the messages still
+        # waiting (their texts hold personal details) and the channel choices go.
+        PushSubscription.objects.filter(user=user).delete()
+        Notification.objects.filter(user=user).delete()
+        Preference.objects.filter(user=user).delete()
         CorporateMember.objects.filter(user=user, removed_at__isnull=True).update(removed_at=now)
         EventRequest.objects.filter(requester=user).update(message="")
         ClassEnrollment.objects.filter(user=user, status=EnrollmentStatus.WAITLISTED).update(

@@ -4,6 +4,30 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Verificarea finală — 07.10.2026
+#### Reparat
+- Ștergerea contului (`privacy.erase`) șterge acum abonările push, mesajele încă netrimise și alegerile de notificări; canalul push nu mai trimite unui cont închis.
+- Jurnalele tuturor containerelor se rotesc (5 × 10 MB); verificat în `scripts/test-deploy`, împreună cu regula „doar proxy-ul e accesibil din afară”.
+#### Adăugat
+- Registrul activităților de prelucrare (`docs/07-securitate-gdpr-legal/04-registrul-prelucrarilor.md`) și DPIA pentru ligă și ecrane (`05-dpia-liga-si-ecrane.md`); politica de confidențialitate completată (notificări, NPS, termene); Q75.
+- ADR-0025: `packages/ui` scos (n-a fost construit), componentele comune ale aparatelor în `packages/kiosk-kit`.
+
+### Etapa 16: pregătirea lansării — 07.10.2026 (livrat)
+#### Adăugat
+- Planul zilei de lansare (`verificare/etapa-16/PLAN-LANSARE.md`) și procedura versiunilor (`docs/08-deploy-si-mentenanta/08-versiuni.md`).
+
+### Etapa 15: beta, încărcare, instruire — 07.10.2026 (livrat)
+#### Adăugat
+- `tests/load/club.js` (k6), rulat de `smoke-stack` pe stiva de producție (CI: 50 de vizitatori; raport: 500).
+- `pnpm audit --prod` și `pip-audit` în `scripts/test-deploy`; `overrides` pentru `sharp` și `source-map-js`.
+- `deploy/scripts/reset-before-launch`, testat cap-coadă.
+- Ghidurile personalului cu capturi (`docs/15-instruire-personal/`), planul beta, lista de lansare, Q74; indexurile testelor de securitate și cap-coadă.
+#### Reparat
+- Site-ul complet nu pornea în producție: serverul site-ului citea API-ul prin internet. Acum îl citește prin ascultătorul intern al proxy-ului (`API_INTERNAL_URL`, `http://proxy:8080`, nepublicat).
+- `rollback` așteaptă backend-ul și spune dacă nu răspunde.
+#### Schimbat
+- Backend-ul: `gunicorn.conf.py`, 2 × nucleele + 1 procese cu câte 4 fire (`GUNICORN_WORKERS`, `GUNICORN_THREADS`).
+
 ### Etapa 14, fazele 14D și 14E: serverul, aparatele, actualizarea, ghidurile — 06.10.2026 (livrat)
 #### Adăugat
 - `deploy/scripts/install-server`, `devices-ca`, `update`, `rollback` (cu readucerea bazei de date la un moment), `manage`, `test-install`; ShellCheck și testul instalării în `scripts/test-deploy`; actualizarea și revenirea testate cap-coadă în `smoke-stack`.

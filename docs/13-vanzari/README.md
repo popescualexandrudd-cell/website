@@ -10,6 +10,6 @@ Materialele de vânzări (§15.5).
 - [Secvențele de email](04-secvente-de-email.md) (Etapa 13E)
 - [Ofertele de lansare: variante de ales](05-oferte-de-lansare.md) (Etapa 13E)
 
-## Urmează
+## Ce rămâne
 
-- Deciziile proprietarului asupra ofertelor și a mesajelor propuse; apoi instruirea personalului (Etapa 15).
+- Deciziile proprietarului asupra ofertelor și a mesajelor propuse. Instruirea personalului: [`docs/15-instruire-personal/`](../15-instruire-personal/) (Etapa 15).

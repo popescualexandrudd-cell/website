@@ -95,6 +95,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q72](#q72) | Cât timp și câte date poate pierde clubul la o avarie (RPO / RTO) | MEDIE | Etapa 14B (backup) | REZOLVATĂ |
 | [Q73](#q73) | Stocarea backup-ului în afara clubului | MEDIE | Etapa 14B (copia off-site) | REZOLVATĂ (contul de deschis) |
 | [Q74](#q74) | Beta-ul și data inaugurării | MEDIE | Etapa 15 (beta), Etapa 16 (lansarea) | REZOLVATĂ (datele exacte, la proprietar) |
+| [Q75](#q75) | Cât se păstrează jurnalul de audit; numele minorilor pe ecrane | SCĂZUTĂ | registrul prelucrărilor, DPIA | REZOLVATĂ (implicit) |
 
 ### <a id="q74"></a>Q74 — Beta-ul și data inaugurării
 
@@ -103,6 +104,16 @@ Titlul și instrucțiunea din §17, preluate integral:
 - **Varianta implicită (DE_CONFIRMAT):** beta-ul în ultimele 2–3 săptămâni din februarie 2027, pe serverul clubului, cu 20–40 de invitați (membri ai Clubului Tenis Elite, personalul, câțiva începători); inaugurarea în martie 2027, după lista de lansare bifată; datele din beta se șterg înainte de inaugurare.
 - **Întrebare pentru proprietar:** ce zi alegeți pentru inaugurare și pe cine invitați în beta?
 - **Decizia (06.10.2026, delegată de proprietar: „orice întrebare mai ai alege răspunsul cel mai relevant”):** varianta implicită. Planul beta: `docs/00-management/verificare/etapa-15/01-plan-beta.md`; lista de lansare: `…/etapa-15/02-lista-de-lansare.md`; ziua lansării: `…/etapa-16/PLAN-LANSARE.md`. Ziua exactă a inaugurării și lista invitaților le alege proprietarul când serverul și aparatele sunt instalate; nimic din sistem nu depinde de ele.
+
+### <a id="q75"></a>Q75 — Cât se păstrează jurnalul de audit; numele minorilor pe ecrane
+
+- **Prioritate:** SCĂZUTĂ · **Blochează:** nimic tehnic; textele GDPR (`docs/07-securitate-gdpr-legal/04-registrul-prelucrarilor.md`, `05-dpia-liga-si-ecrane.md`)
+- **Stare:** DESCHISĂ (07.10.2026, verificarea finală)
+- **Varianta implicită (DE_CONFIRMAT):**
+  - jurnalul de audit (cine, ce, când, de ce) se păstrează 3 ani, apoi se șterge; până la confirmare, nu se șterge nimic automat;
+  - pe ecranele terenurilor, minorii dintr-o rezervare apar pe nume, ca toți jucătorii (Q55); părintele se poate opune la recepție și apare „Jucător”.
+- **Întrebare pentru proprietar:** vă convin? Contabilul poate cere ca dovezile legate de bani să stea mai mult.
+- **Decizia (07.10.2026, delegată de proprietar):** varianta implicită, trecută în registrul prelucrărilor și în DPIA. Ștergerea automată după 3 ani se construiește după confirmarea contabilului (prima ștergere ar avea loc abia în 2030).
 
 ## Întrebările din MEGA_PROMPT (Q1–Q38)
 

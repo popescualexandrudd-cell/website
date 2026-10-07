@@ -20,7 +20,15 @@ echo "==> The production compose file"
 JUNGLE_VERSION=check POSTGRES_PASSWORD=check DOMAIN=example.test ACME_EMAIL=check@example.test \
   WEB_REVALIDATE_SECRET=check JUNGLE_ENV_FILE="$PWD/deploy/compose/prod/.env.example" \
   BACKUP_ENV_FILE="$PWD/deploy/backup/backup.env.example" \
-  docker compose -f deploy/compose/prod/compose.yaml config -q
+  docker compose -f deploy/compose/prod/compose.yaml --profile monitoring config --format json |
+  python3 -c '
+import json, sys
+services = json.load(sys.stdin)["services"]
+bare = sorted(name for name, s in services.items() if "max-size" not in s.get("logging", {}).get("options", {}))
+published = sorted(name for name, s in services.items() if s.get("ports") and name != "proxy")
+assert not bare, f"services without log rotation: {bare}"
+assert not published, f"only the proxy may be reachable from outside: {published}"
+print(f"compose: {len(services)} services, logs rotated, only the proxy published")'
 
 echo "==> The dependencies (no known vulnerability in what runs in production)"
 pnpm audit --prod --audit-level low

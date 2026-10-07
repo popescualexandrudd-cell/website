@@ -88,6 +88,13 @@ def test_s11_a_booking_confirmed_by_email_once_and_push_needs_a_browser(
     assert len(mail.outbox) == 1
 
 
+def test_s12_2_a_closed_account_gets_no_push_even_with_a_browser(ana: User, keys: Any) -> None:
+    subscribe(ana)
+    ana.is_active = False
+    ana.save(update_fields=["is_active"])
+    assert services.notify(ana, "booking.confirmed", BOOKING, subject="b1") == []
+
+
 def test_q17_push_to_every_browser_and_a_dead_one_removed(
     ana: User, keys: Any, pushed: list[Any], django_capture_on_commit_callbacks: Any
 ) -> None:

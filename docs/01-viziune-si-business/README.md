@@ -9,6 +9,6 @@ Contextul proiectului, conceptul „Jungle Padel” și starea tuturor ideilor d
 - [18. ARHIVA IDEILOR DIN CONVERSAȚIE (starea fiecăreia)](03-arhiva-ideilor.md)
 - [`inspiratie/`](inspiratie/) — capturi de ecran folosite DOAR ca inspirație (§0.1, §9.1)
 
-## Urmează
+## Legături
 
-- Etapa 13: sinteze de business (KPI, oferte de lansare), după răspunsurile la Q36–Q38.
+- KPI-urile și ofertele de lansare (Etapa 13): [`docs/11-marketing/`](../11-marketing/), [`docs/13-vanzari/05-oferte-de-lansare.md`](../13-vanzari/05-oferte-de-lansare.md).

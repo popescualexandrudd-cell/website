@@ -1,6 +1,6 @@
 # Teste între aplicații
 
-> **Stare:** neînceput (schelet creat în Etapa 0, 26.09.2026). **Se construiește în Etapa:** vezi subfolderele.
+> **Stare:** construite (Etapele 1A–15). Harta lor: [`e2e/`](e2e/README.md), [`load/`](load/README.md), [`security/`](security/README.md). Toate rulează prin `scripts/test-all` și `scripts/test-deploy`.
 
 Testele care traversează mai multe aplicații. Testele fiecărei aplicații stau în folderul ei.
 

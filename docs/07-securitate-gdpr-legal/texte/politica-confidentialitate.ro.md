@@ -17,6 +17,8 @@
 | Nume, email, nivel de joc (lista de așteptare) | Anunțuri despre deschidere | acordul tău (lit. a) |
 | Jurnale tehnice: adresa IP, data și ora, acțiunile făcute în cont | Securitate, prevenirea fraudei, dovada acordurilor | interes legitim (lit. f); obligație legală (lit. c) |
 | Mesaje trimise asistentului AI (după activarea lui) | Răspunsuri și rezervări la cerere | contract (lit. b); datele sunt minimizate și pseudonimizate |
+| Adresa de email și, dacă le accepți, notificările push ale browserului | Confirmări, mementouri, mesajele contului; noutățile clubului doar dacă le pornești | contract (lit. b); noutățile: acordul tău (lit. a) |
+| Nota 0–10 la întrebarea „Ne-ai recomanda unui prieten?”, după primul meci | Calitatea serviciilor; personalul vede doar media, nu cine a răspuns | interes legitim (lit. f); răspunsul e opțional |
 
 Nu vindem datele nimănui și nu le folosim pentru publicitate personalizată.
 
@@ -38,7 +40,9 @@ Transmitem date și autorităților, când legea ne obligă. Datele rămân în 
 - **Contul:** cât timp este activ. După ștergerea lui, datele personale se șterg. În istoricul ligii al altor jucători rămâi afișat ca „Jucător retras”, ca rezultatele lor să rămână corecte.
 - **Documentele fiscale și contabile:** cât cere legea. **[Termenele exacte — DE_CONFIRMAT cu contabilul]**.
 - **Lista de așteptare:** 7 zile dacă nu confirmi; altfel, până la 12 luni după deschidere sau până te dezabonezi.
-- **Jurnalele de securitate și audit:** **[DE_CONFIRMAT]**.
+- **Textele notificărilor:** 90 de zile.
+- **Jurnalele de securitate și audit:** 3 ani **[DE_CONFIRMAT]**.
+- **Copiile de siguranță (backup):** circa 3 săptămâni; datele șterse dispar și din ele după acest interval.
 
 ## 6. Drepturile tale
 Poți cere oricând:

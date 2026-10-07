@@ -5,7 +5,13 @@
 # (docs/08-deploy-si-mentenanta/). Only Caddy is reachable from outside (ports 80 and 443).
 name: jungle-${JUNGLE_ENV:-prod}
 
+# Every service's log: at most 5 files of 10 MB, then the oldest goes (the disk never fills).
+x-logging: &logging
+  driver: json-file
+  options: {max-size: "10m", max-file: "5"}
+
 x-backend: &backend
+  logging: *logging
   image: jungle-backend:${JUNGLE_VERSION:?set JUNGLE_VERSION}
   build:
     context: ../../..
@@ -24,6 +30,7 @@ services:
   # PostgreSQL with pgBackRest (ADR-0016): the transaction log is archived continuously; the
   # backups and the restore test: deploy/scripts/backup (systemd timers, deploy/backup/README.md).
   db:
+    logging: *logging
     image: jungle-db:${JUNGLE_VERSION:?set JUNGLE_VERSION}
     build:
       context: ../../..
@@ -44,6 +51,7 @@ services:
       retries: 10
 
   redis:
+    logging: *logging
     image: redis:7
     command: ["redis-server", "--appendonly", "yes"]
     volumes: [redis-data:/data]
@@ -91,6 +99,7 @@ services:
       migrate: {condition: service_completed_successfully}
 
   web:
+    logging: *logging
     image: jungle-web:${JUNGLE_VERSION:?set JUNGLE_VERSION}
     build:
       context: ../../..
@@ -109,6 +118,7 @@ services:
     depends_on: [backend]
 
   proxy:
+    logging: *logging
     image: jungle-proxy:${JUNGLE_VERSION:?set JUNGLE_VERSION}
     build:
       context: ../../..
@@ -129,6 +139,7 @@ services:
   # ---- monitoring (ADR-0017), with `--profile monitoring`: the club's own, nothing at a third party
   # Uptime Kuma: is every address up; the heartbeats of the scheduler and of the backups.
   status:
+    logging: *logging
     image: louislam/uptime-kuma:1
     profiles: [monitoring]
     volumes: [status-data:/app/data]
@@ -137,6 +148,7 @@ services:
 
   # GlitchTip: the errors of the backend, the website, the panel and the devices.
   errors:
+    logging: *logging
     image: glitchtip/glitchtip:v5
     profiles: [monitoring]
     command: ["./bin/run-all-in-one.sh"]
@@ -156,6 +168,7 @@ services:
 
   # Umami: visits without cookies, only after the visitor's consent on the site.
   stats:
+    logging: *logging
     image: umamisoftware/umami:postgresql-v2
     profiles: [monitoring]
     environment:
@@ -168,6 +181,7 @@ services:
 
   # The monitoring's own database (GlitchTip and Umami), apart from the club's data.
   monitoring-db:
+    logging: *logging
     image: postgres:17
     profiles: [monitoring]
     environment:
