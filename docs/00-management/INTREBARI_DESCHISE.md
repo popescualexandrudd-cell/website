@@ -21,51 +21,51 @@ Titlul și instrucțiunea din §17, preluate integral:
 
 | ID | Subiect | Prioritate | Blochează | Stare |
 |---|---|---|---|---|
-| [Q1](#q1) | Cardul de Diamant | MEDIE | Etapa 5 (carduri), Etapa 6 (promovări) | DESCHISĂ |
+| [Q1](#q1) | Cardul de Diamant | MEDIE | Etapa 5 (carduri), Etapa 6 (promovări) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
 | [Q2](#q2) | Durata de 150 de minute | MEDIE | Etapa 3 (rezervări) | REZOLVATĂ |
 | [Q3](#q3) | Programul de funcționare | ÎNALTĂ | Etapa 3 (rezervări, prețuri); conținutul paginii de pre-lansare (1B) | REZOLVATĂ (semi-vârful rămâne implicit) |
-| [Q4](#q4) | Prioritatea abonaților | MEDIE | Etapa 3 (liste de așteptare), Etapa 6 (turnee) | DESCHISĂ |
-| [Q5](#q5) | Limita de diferență de nivel | MEDIE | Etapa 2 (parametru al motorului; nu blochează) | DESCHISĂ |
+| [Q4](#q4) | Prioritatea abonaților | MEDIE | Etapa 3 (liste de așteptare), Etapa 6 (turnee) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
+| [Q5](#q5) | Limita de diferență de nivel | MEDIE | Etapa 2 (parametru al motorului; nu blochează) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
 | [Q6](#q6) | Recompense | MEDIE | Etapa 6 (recompense de sezon) | REZOLVATĂ |
 | [Q7](#q7) | Copiii | ÎNALTĂ | Etapa 1A (modelul de conturi: legătura părinte–copil) | REZOLVATĂ |
 | [Q8](#q8) | Invitații fără cont | ÎNALTĂ | Etapa 1A (conturi rapide), Etapa 3 (scanarea la intrarea pe teren) | REZOLVATĂ |
 | [Q9](#q9) | Plata online cu card | MEDIE | Etapa 4 (plăți) | REZOLVATĂ |
-| [Q10](#q10) | Recepția | MEDIE | Etapa 4 (plăți, registru) | DESCHISĂ |
+| [Q10](#q10) | Recepția | MEDIE | Etapa 4 (plăți, registru) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
 | [Q11](#q11) | Termenul pentru plată | MEDIE | Etapa 6 (validarea scorului prin plată) | REZOLVATĂ |
 | [Q12](#q12) | Intensitățile „La cerere” | MEDIE | Etapa 4 (configuratorul de pachete) | REZOLVATĂ 30.09.2026 |
 | [Q13](#q13) | Start | MEDIE | Etapa 4 (regula Start/vârf) | REZOLVATĂ |
-| [Q14](#q14) | „Recuperare” | MEDIE | Etapa 3 (anulări), Etapa 4 (credit în cont) | DESCHISĂ |
+| [Q14](#q14) | „Recuperare” | MEDIE | Etapa 3 (anulări), Etapa 4 (credit în cont) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
 | [Q15](#q15) | Neprezentări | MEDIE | Etapa 3 (neprezentări și blocări) | REZOLVATĂ |
 | [Q16](#q16) | Lista de așteptare | MEDIE | Etapa 3 (liste de așteptare) | REZOLVATĂ |
-| [Q17](#q17) | „Telefon” | MEDIE | Etapa 12 (notificări); Etapa 1A (dacă telefonul trebuie verificat prin cod) | DESCHISĂ |
-| [Q18](#q18) | Pilates | SCĂZUTĂ | Etapa 12 (notificări pilates) | DESCHISĂ |
-| [Q19](#q19) | Grupul comunității | SCĂZUTĂ | Etapa 12 (mesaje pentru comunitate) | DESCHISĂ |
+| [Q17](#q17) | „Telefon” | MEDIE | Etapa 12 (notificări); Etapa 1A (dacă telefonul trebuie verificat prin cod) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
+| [Q18](#q18) | Pilates | SCĂZUTĂ | Etapa 12 (notificări pilates) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
+| [Q19](#q19) | Grupul comunității | SCĂZUTĂ | Etapa 12 (mesaje pentru comunitate) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
 | [Q20](#q20) | Tenis | ÎNALTĂ | Etapa 1A (modelul Locație → Resurse) | REZOLVATĂ |
 | [Q21](#q21) | Prețuri | MEDIE | Etapele 3–4 (valori demo); prețurile finale trebuie știute înainte de Etapa 15 (beta) | PARȚIAL (prețuri orientative) |
 | [Q22](#q22) | Serverul | URGENTĂ | Etapa 1B (unde publicăm pagina de pre-lansare) și Etapa 14 (deploy) | PARȚIAL |
 | [Q23](#q23) | Hardware | URGENTĂ | Etapele 7–9 (drivere reale); trebuie răspuns ÎNAINTE de a cumpăra aparatele | PARȚIAL |
 | [Q24](#q24) | Conturi externe | URGENTĂ | Etapa 1B (furnizorul de email pentru lista de așteptare), Etapa 5 (Apple/Google Wallet), Etapa 12 (cheia AI) | PARȚIAL |
-| [Q25](#q25) | Limbi suplimentare | SCĂZUTĂ | Etapa 11 (website complet) | DESCHISĂ |
+| [Q25](#q25) | Limbi suplimentare | SCĂZUTĂ | Etapa 11 (website complet) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
 | [Q26](#q26) | Datele firmei | URGENTĂ | Etapa 1B (operatorul de date din nota de informare a listei de așteptare), Etapa 4 (bonuri, facturi), Etapa 5 (GDPR) | DESCHISĂ |
 | [Q27](#q27) | Calendarul sezoanelor | MEDIE | Etapa 6 (sezoane) | REZOLVATĂ |
 | [Q28](#q28) | Turnee | MEDIE | Etapa 6 (turnee) | REZOLVATĂ |
-| [Q29](#q29) | Tipul meciului | MEDIE | Etapa 3 (tipul sesiunii la rezervare) | DESCHISĂ |
+| [Q29](#q29) | Tipul meciului | MEDIE | Etapa 3 (tipul sesiunii la rezervare) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
 | [Q30](#q30) | Afișarea publică a rezultatelor | MEDIE | Etapa 5 (textul formularului GDPR al ligii) | REZOLVATĂ |
-| [Q31](#q31) | Clasamentul pe perechi | SCĂZUTĂ | Etapa 2 (parametru al motorului; nu blochează) | DESCHISĂ |
-| [Q32](#q32) | Voucherul „Adu un prieten” | MEDIE | Etapa 4 (vouchere și recomandări) | DESCHISĂ |
+| [Q31](#q31) | Clasamentul pe perechi | SCĂZUTĂ | Etapa 2 (parametru al motorului; nu blochează) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
+| [Q32](#q32) | Voucherul „Adu un prieten” | MEDIE | Etapa 4 (vouchere și recomandări) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
 | [Q33](#q33) | Cafeneaua | MEDIE | Etapa 4 (produse de cafenea), Etapa 8 (afișajul cafenelei) | REZOLVATĂ 30.09.2026 |
 | [Q34](#q34) | Sala de evenimente | MEDIE | Etapa 3 (rezervarea sălii de evenimente) | REZOLVATĂ 30.09.2026 |
 | [Q35](#q35) | Pachetele corporate | MEDIE | Etapa 4 (conturi corporate) | REZOLVATĂ |
 | [Q36](#q36) | Membri fondatori | ÎNALTĂ | Etapa 1B (dacă pagina de pre-lansare oferă locuri de membru fondator) | REZOLVATĂ |
 | [Q37](#q37) | Personalul | ÎNALTĂ | Etapa 1A (roluri și permisiuni), Etapa 15 (instruirea personalului) | REZOLVATĂ |
-| [Q38](#q38) | Propunerile de concept | SCĂZUTĂ | Etapa 13 (branding, marketing); numele terenurilor se pot schimba oricând din admin | DESCHISĂ |
+| [Q38](#q38) | Propunerile de concept | SCĂZUTĂ | Etapa 13 (branding, marketing); numele terenurilor se pot schimba oricând din admin | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
 | [Q39](#q39) | Numele domeniului și marca „Jungle Padel” *(nouă)* | URGENTĂ | Etapa 1B (pagina de pre-lansare), Etapa 13 (branding) | DESCHISĂ |
 | [Q40](#q40) | Găzduirea paginii de pre-lansare dacă serverul propriu nu e gata *(nouă)* | URGENTĂ | Etapa 1B | REZOLVATĂ |
 | [Q41](#q41) | Avocat / DPO pentru revizuirea textelor legale *(nouă)* | URGENTĂ | Etapa 1B (nota de informare pentru lista de așteptare), Etapa 5 (formularul GDPR al ligii) | REZOLVATĂ |
 | [Q42](#q42) | Fluxul de aprobare pe GitHub *(nouă)* | SCĂZUTĂ | Etapa 0 (organizare) | REZOLVATĂ |
 | [Q43](#q43) | Vârsta minimă pentru a-ți crea singur cont *(nouă, Etapa 1A)* | MEDIE | Etapa 1B / 11 (înscrierea publică) | REZOLVATĂ |
 | [Q46](#q46) | Etichetele neclare din schița clubului *(nouă, Etapa 1B)* | SCĂZUTĂ | Etapa 1B (planul de pe site), Etapa 3 (resursele: săli, parcări) | PARȚIAL |
-| [Q45](#q45) | Valorile implicite ale ligii alese în Etapa 2 *(nouă, Etapa 2)* | SCĂZUTĂ | Etapa 6 (nu blochează; se schimbă din configurare) | DESCHISĂ |
+| [Q45](#q45) | Valorile implicite ale ligii alese în Etapa 2 *(nouă, Etapa 2)* | SCĂZUTĂ | Etapa 6 (nu blochează; se schimbă din configurare) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
 | [Q44](#q44) | Randări sau fotografii reale ale spațiilor (vestiare, pilates, sală de evenimente, cafenea, lounge) *(nouă, Etapa 1B)* | MEDIE | Etapa 1B (grila de facilități), Etapa 11 (website-ul complet), Etapa 13 (marketing) | DESCHISĂ |
 | [Q47](#q47) | Chestionarul de nivel: cum se estimează nivelul *(nouă, Etapa 6)* | SCĂZUTĂ | nimic (antrenorul stabilește nivelul final) | REZOLVATĂ |
 | [Q48](#q48) | Provocările: unde, cine răspunde, ce înseamnă lipsa răspunsului *(nouă, Etapa 6)* | MEDIE | nimic (varianta implicită e în lucru) | REZOLVATĂ |
@@ -73,23 +73,23 @@ Titlul și instrucțiunea din §17, preluate integral:
 | [Q50](#q50) | Insignele și „Meciul zilei”: praguri și ce se afișează *(nouă, Etapa 6)* | SCĂZUTĂ | nimic (se schimbă din setări) | REZOLVATĂ |
 | [Q51](#q51) | Un jucător nou care intră în ligă imediat după meci: meciul contează? *(nouă, Etapa 7)* | SCĂZUTĂ | nimic (varianta implicită e în lucru) | REZOLVATĂ |
 | [Q52](#q52) | Chioșcul Ligii: 30 de secunde până la ieșire, limbile ecranului *(nouă, Etapa 7)* | SCĂZUTĂ | nimic (se schimbă ușor) | REZOLVATĂ |
-| [Q53](#q53) | Chioșcul de Plăți: numerar, rest, credit, bon fiscal | MEDIE | Etapa 8 (nu blochează; lucrez cu varianta implicită) | DESCHISĂ |
-| [Q54](#q54) | Chioșcul de Plăți: modul personal (cine, PIN) | MEDIE | Etapa 8 (nu blochează) | DESCHISĂ |
+| [Q53](#q53) | Chioșcul de Plăți: numerar, rest, credit, bon fiscal | MEDIE | Etapa 8 (nu blochează; lucrez cu varianta implicită) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite; grupele TVA rămân de confirmat cu contabilul) |
+| [Q54](#q54) | Chioșcul de Plăți: modul personal (cine, PIN) | MEDIE | Etapa 8 (nu blochează) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
 | [Q55](#q55) | Ecranele: cine apare pe nume, echipele, anunțurile | MEDIE | Etapa 9 (nu blochează) | REZOLVATĂ 29.09.2026 |
-| [Q56](#q56) | Panoul de admin: cine vede rapoartele financiare *(nouă, Etapa 10)* | SCĂZUTĂ | nimic (se schimbă ușor) | DESCHISĂ |
+| [Q56](#q56) | Panoul de admin: cine vede rapoartele financiare *(nouă, Etapa 10)* | SCĂZUTĂ | nimic (se schimbă ușor) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
 | [Q57](#q57) | Site-ul complet: când înlocuiește pagina de pre-lansare *(nouă, Etapa 11)* | MEDIE | nimic (comutator în panou) | REZOLVATĂ 29.09.2026 |
 | [Q58](#q58) | Adresa site-ului Clubului Tenis Elite *(nouă, Etapa 11)* | SCĂZUTĂ | nimic (link din panou) | REZOLVATĂ 30.09.2026 |
-| [Q59](#q59) | Sunetul videoului | SCĂZUTĂ | nimic (efectele site-ului) | DESCHISĂ |
-| [Q60](#q60) | Videoul pe telefon | SCĂZUTĂ | nimic (efectele site-ului) | DESCHISĂ |
-| [Q61](#q61) | „Pop”-urile | SCĂZUTĂ | nimic (efectele site-ului) | DESCHISĂ |
-| [Q62](#q62) | Efectele opționale | SCĂZUTĂ | nimic (efectele site-ului) | DESCHISĂ |
-| [Q63](#q63) | Intensitatea efectelor | SCĂZUTĂ | nimic (efectele site-ului) | DESCHISĂ |
-| [Q64](#q64) | Pagina de pre-lansare și efectele | SCĂZUTĂ | nimic (efectele site-ului) | DESCHISĂ |
+| [Q59](#q59) | Sunetul videoului | SCĂZUTĂ | nimic (efectele site-ului) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
+| [Q60](#q60) | Videoul pe telefon | SCĂZUTĂ | nimic (efectele site-ului) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
+| [Q61](#q61) | „Pop”-urile | SCĂZUTĂ | nimic (efectele site-ului) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
+| [Q62](#q62) | Efectele opționale | SCĂZUTĂ | nimic (efectele site-ului) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
+| [Q63](#q63) | Intensitatea efectelor | SCĂZUTĂ | nimic (efectele site-ului) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
+| [Q64](#q64) | Pagina de pre-lansare și efectele | SCĂZUTĂ | nimic (efectele site-ului) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
 | [Q65](#q65) | Echipa pe site | SCĂZUTĂ | nimic (site-ul complet) | **REZOLVATĂ** (30.09.2026) |
 | [Q66](#q66) | Harta secțiunilor la lansare | SCĂZUTĂ | nimic (site-ul complet) | **REZOLVATĂ** (30.09.2026) |
-| [Q67](#q67) | Noutățile clubului și pragurile memento-urilor | SCĂZUTĂ | nimic (notificări) | DESCHISĂ |
-| [Q68](#q68) | Limita lunară și setările AI-ului | MEDIE | pornirea AI-ului | DESCHISĂ |
-| [Q69](#q69) | Pragurile semnalelor și ale sugestiilor de preț | SCĂZUTĂ | nimic (panoul) | DESCHISĂ |
+| [Q67](#q67) | Noutățile clubului și pragurile memento-urilor | SCĂZUTĂ | nimic (notificări) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
+| [Q68](#q68) | Limita lunară și setările AI-ului | MEDIE | pornirea AI-ului | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite; prețurile pe token ale furnizorului AI se verifică la instalarea cheii) |
+| [Q69](#q69) | Pragurile semnalelor și ale sugestiilor de preț | SCĂZUTĂ | nimic (panoul) | REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) |
 | [Q70](#q70) | Regulamentul clubului | MEDIE | publicarea definitivă a regulamentului | REZOLVATĂ |
 | [Q71](#q71) | Chestionarul NPS după primul meci | SCĂZUTĂ | măsurarea NPS (KPI) | REZOLVATĂ |
 | [Q72](#q72) | Cât timp și câte date poate pierde clubul la o avarie (RPO / RTO) | MEDIE | Etapa 14B (backup) | REZOLVATĂ |
@@ -120,7 +120,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q1"></a>Q1 — Cardul de Diamant
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 5 (carduri), Etapa 6 (promovări)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (din MEGA_PROMPT):** prima dată, emblemă din listă predefinită, fără design liber.
 - **Folosită în Etapa 5 (27.09.2026):** La prima promovare în Diamant (o singură dată), jucătorul alege o emblemă din `cards.diamond_emblems`: jaguar, panteră, tucan, gorilă, crocodil, papagal ara, anaconda, leopard. Fără design liber.
 - **Răspunsul proprietarului:** —
@@ -154,7 +154,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q4"></a>Q4 — Prioritatea abonaților
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 3 (liste de așteptare), Etapa 6 (turnee)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (din MEGA_PROMPT):** prioritate pe liste de așteptare și la turnee.
 - **Folosită în Etapa 3 (27.09.2026):** Câmpul `priority` pe lista de așteptare există; se leagă de abonamente în Etapa 4.
 - **Răspunsul proprietarului:** —
@@ -165,7 +165,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q5"></a>Q5 — Limita de diferență de nivel
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 2 (parametru al motorului; nu blochează)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (din MEGA_PROMPT):** contează (fără limită).
 - **Notă:** Explicație simplă: „Dacă doi jucători foarte buni joacă împotriva a doi începători, meciul să conteze pentru ligă sau să fie trecut automat ca antrenament?”. Formula oricum dă foarte puține puncte favoritului care câștigă (de exemplu +3 LP).
 - **Răspunsul proprietarului:** —
@@ -220,7 +220,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q10"></a>Q10 — Recepția
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 4 (plăți, registru)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (din MEGA_PROMPT):** doar chioșcul; admin-ul poate înregistra excepții cu motiv, auditat.
 - **Folosită în Etapa 4 (27.09.2026):** Plățile le ia chioșcul (Etapa 8); managerul înregistrează excepții (`POST /api/v1/staff/payments`), doar cu motiv, în jurnal.
 - **Răspunsul proprietarului:** —
@@ -264,7 +264,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q14"></a>Q14 — „Recuperare”
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 3 (anulări), Etapa 4 (credit în cont)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (din MEGA_PROMPT):** credit în cont; sesiunea recuperată e valabilă până la finalul perioadei abonamentului.
 - **Folosită în Etapa 3 (27.09.2026):** Anularea gratuită e marcată „eligibilă pentru recuperare”; creditul în cont vine în Etapa 4.
 - **Folosită în Etapa 4 (27.09.2026):** Plățile unei rezervări anulate la timp devin credit în cont pentru fiecare plătitor; sesiunea de abonament devine sesiune de recuperare, valabilă până la finalul abonamentului.
@@ -298,7 +298,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q17"></a>Q17 — „Telefon”
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 12 (notificări); Etapa 1A (dacă telefonul trebuie verificat prin cod)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (din MEGA_PROMPT):** push; SMS pregătit, dezactivat.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
@@ -308,7 +308,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q18"></a>Q18 — Pilates
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** Etapa 12 (notificări pilates)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (din MEGA_PROMPT):** email + push.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
@@ -318,7 +318,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q19"></a>Q19 — Grupul comunității
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** Etapa 12 (mesaje pentru comunitate)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (din MEGA_PROMPT):** generare + postare manuală.
 - **Notă (06.10.2026, 12E):** lucrez cu varianta implicită: AI-ul scrie mesajul ca ciornă în panou (Asistentul AI → Ciorne), echipa îl revizuiește și îl postează de mână, pe orice rețea.
 - **Răspunsul proprietarului:** —
@@ -386,7 +386,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q25"></a>Q25 — Limbi suplimentare
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** Etapa 11 (website complet)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (propusă în Etapa 0):** La lansare: română și engleză complete. Spaniolă, italiană și chineză se adaugă din cataloage, traduse cu AI și marcate „necesită revizuire” până la aprobare; franceză și germană doar dacă le confirmați. Revizuirea: o persoană numită de proprietar.
 - **Răspunsul proprietarului (27.09.2026):** să punem prețuri orientative. Sunt în sistem de la prima pornire (nu doar în datele demo), marcate `DE_STABILIT` cu nota „Preț orientativ”: padel 180 / 150 / 120 lei pe oră (vârf / semi-vârf / în afara vârfului); lecție de padel 220 / 200 lei pe oră; ședință privată Reformer 180 lei pe oră; clasă de pilates 80 lei pe oră; sala de evenimente 200 lei pe oră; abonamente pe lună: padel 400 / 720 / 960 lei, tenis 360 / 640 / 860 lei, pilates 320 / 560 / 780 lei (Start / Activ / Pro); cafenea: espresso 12, cappuccino 16, apă 8 lei. Prețurile finale le confirmă proprietarul din admin.
 - **Textul original (§17):**
@@ -428,7 +428,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q29"></a>Q29 — Tipul meciului
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 3 (tipul sesiunii la rezervare)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (din MEGA_PROMPT):** la rezervare, modificabil până la check-in.
 - **Folosită în Etapa 3 (27.09.2026):** Ales la rezervare, schimbabil până la prima scanare.
 - **Răspunsul proprietarului:** —
@@ -450,7 +450,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q31"></a>Q31 — Clasamentul pe perechi
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** Etapa 2 (parametru al motorului; nu blochează)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (din MEGA_PROMPT):** 6.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
@@ -460,7 +460,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q32"></a>Q32 — Voucherul „Adu un prieten”
 
 - **Prioritate:** MEDIE · **Blochează:** Etapa 4 (vouchere și recomandări)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (din MEGA_PROMPT):** în afara vârfului și semi-vârf.
 - **Folosită în Etapa 4 (27.09.2026):** Voucherul e valabil în afara vârfului și în semi-vârf (`referrals.voucher_bands`), 90 de zile.
 - **Răspunsul proprietarului:** —
@@ -525,7 +525,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q38"></a>Q38 — Propunerile de concept
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** Etapa 13 (branding, marketing); numele terenurilor se pot schimba oricând din admin
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (propusă în Etapa 0):** Nicio propunere nu e adoptată până la decizie. Terenurile se numesc implicit „Teren 1–4”, cu nume configurabile din admin.
 - **Răspunsul proprietarului:** —
 - **Textul original (§17):**
@@ -595,7 +595,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q45"></a>Q45 — Valorile implicite ale ligii alese în Etapa 2
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** nimic (toate se schimbă din configurarea versionată, fără cod)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Context:** acolo unde specificația nu spunea exact, am ales o variantă implicită, marcată DE_CONFIRMAT în [ID-URI-REGULI.md](../03-liga/ID-URI-REGULI.md).
 - **Întrebările, pe înțeles:**
   1. **Provocări:** se poate provoca și cineva de pe aceeași treaptă, nu doar de pe treapta de deasupra? *Implicit: da.*
@@ -685,7 +685,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q53"></a>Q53 — Chioșcul de Plăți: numerar, rest, credit, bon fiscal
 
 - **Prioritate:** MEDIE · **Blochează:** nimic (lucrez cu variantele implicite, configurabile în admin)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite; grupele TVA rămân de confirmat cu contabilul) („Le trec după pe această, confirm”).
 - **Variantele implicite (DE_CONFIRMAT, din 29.09.2026):**
   1. **Suma maximă a unei plăți la chioșc: 5.000 lei** (`checkout.max_amount`). Peste ea, plata se face la recepție.
   2. **Grupele de TVA pe bonul fiscal:** toate pe grupa „A” (`checkout.vat_groups`), până le confirmă contabilul (terenuri, pilates, abonamente, cafenea, taxe de turneu pot avea cote diferite).
@@ -699,7 +699,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q54"></a>Q54 — Chioșcul de Plăți: modul personal (cine, PIN)
 
 - **Prioritate:** MEDIE · **Blochează:** nimic
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Variantele implicite (DE_CONFIRMAT, din 29.09.2026):**
   1. **Cine are voie la casa chioșcului** (alimentare rest, golire casetă, numărare, raport Z): **managerul și recepția**.
   2. **PIN-ul:** 6 cifre, setat de fiecare angajat din contul lui (cu autentificare în doi pași); nu sunt permise PIN-uri ușoare (111111, 123456). După **5 greșeli** la rând, PIN-ul se blochează **15 minute** (`checkout.pin_max_failures`, `checkout.pin_lock_minutes`).
@@ -730,7 +730,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q56"></a>Q56 — Panoul de admin: cine vede rapoartele financiare
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** nimic (lucrez cu varianta implicită)
-- **Stare:** DESCHISĂ (din 29.09.2026)
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (DE_CONFIRMAT):** rapoartele pe perioade (venituri pe categorii, reduceri, ocuparea terenurilor) și exporturile CSV (registrul pentru contabil, rezervările) le văd **doar adminul și managerul** (permisiunea nouă `reports.view`). Recepția vede, ca până acum, registrul zilei, numerarul chioșcurilor și seiful (de care are nevoie la închiderea zilei), dar nu rapoartele pe perioade.
 - **Alternative:** rapoartele doar pentru admin (proprietar); sau și pentru recepție.
 
@@ -760,37 +760,37 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q59"></a>Q59 — Sunetul videoului de prezentare
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** nimic (lucrez cu varianta implicită)
-- **Stare:** DESCHISĂ (din 30.09.2026)
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (DE_CONFIRMAT):** videoul rulează fără sunet; un buton de sunet apare doar dacă videoul are muzică cu drepturi de folosire.
 
 ### <a id="q60"></a>Q60 — Videoul pe telefon
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
-- **Stare:** DESCHISĂ (din 30.09.2026)
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (DE_CONFIRMAT):** aceeași filmare ca pe calculator, încadrată pe telefon cu un punct de focalizare reglabil. Alternativa: o filmare verticală separată (9:16).
 
 ### <a id="q61"></a>Q61 — „Pop”-urile
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
-- **Stare:** DESCHISĂ (din 30.09.2026)
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (DE_CONFIRMAT):** „pop” înseamnă elemente care apar cu un efect elastic; nicio fereastră pop-up care acoperă pagina. O fereastră pop-up reală (de exemplu pentru lista de așteptare) se face doar cu aprobarea dumneavoastră.
 
 ### <a id="q62"></a>Q62 — Efectele opționale
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
-- **Stare:** DESCHISĂ (din 30.09.2026)
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (DE_CONFIRMAT):** intră doar efectele opționale aprobate după ce le vedeți ca demonstrații (frunze în parallax, lumina care urmărește cursorul, camera din hală la derulare, tranziții între pagini, celebrarea rezultatului la simulatoare).
 
 ### <a id="q63"></a>Q63 — Intensitatea efectelor
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
-- **Stare:** DESCHISĂ (din 30.09.2026)
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (DE_CONFIRMAT):** spectaculoasă în hero și în tur, medie în secțiunile de prezentare, discretă în formulare, cont și paginile legale.
 
 ### <a id="q64"></a>Q64 — Pagina de pre-lansare și efectele
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
-- **Stare:** DESCHISĂ (din 30.09.2026)
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (DE_CONFIRMAT):** pagina de pre-lansare (publică acum) nu primește videoul și efectele; rămâne cum a fost aprobată în Etapa 1B.
 
 ### <a id="q65"></a>Q65 — Echipa pe site
@@ -812,7 +812,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q67"></a>Q67 — Noutățile clubului și pragurile memento-urilor
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (DE_CONFIRMAT, vizibilă și modificabilă în panou, la Configurare):**
   - „Eveniment nou în calendar” e un mesaj de promovare: pleacă **doar la clienții care l-au pornit** din cont (Legea 506/2004, art. 12, și GDPR). Implicit e oprit.
   - „Abonamentul expiră” pleacă cu **7 zile** înainte de ultima zi (`notifications.subscription_expiring_days`).
@@ -825,7 +825,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q68"></a>Q68 — Limita lunară și setările AI-ului
 
 - **Prioritate:** MEDIE · **Blochează:** pornirea AI-ului (comutatorul `ai` rămâne oprit până la răspuns și până la cheia clubului, Q24)
-- **Stare:** DESCHISĂ
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite; prețurile pe token ale furnizorului AI se verifică la instalarea cheii) („Le trec după pe această, confirm”).
 - **Varianta implicită (DE_CONFIRMAT, în panou, la Configurare):**
   - limita lunară de cost: **50 de dolari** (`ai.monthly_budget_usd`); atinsă, AI-ul nu mai răspunde până luna viitoare, restul sistemului merge normal;
   - modelul: **Claude Opus 5.5** (`AI_MODEL=claude-opus-5-5` în `.env`), cu prețurile lui: 4 dolari pe milion de tokeni citiți și 20 pe milion de tokeni scriși (`ai.input_usd_per_mtok`, `ai.output_usd_per_mtok`); dacă schimbați modelul, se schimbă și prețurile;
@@ -837,7 +837,7 @@ Titlul și instrucțiunea din §17, preluate integral:
 ### <a id="q69"></a>Q69 — Pragurile semnalelor și ale sugestiilor de preț
 
 - **Prioritate:** SCĂZUTĂ · **Blochează:** nimic
-- **Stare:** DESCHISĂ (06.10.2026, faza 12F)
+- **Stare:** REZOLVATĂ (confirmate de proprietar pe 07.10.2026: variantele implicite) („Le trec după pe această, confirm”).
 - **Varianta implicită (DE_CONFIRMAT, în panou, la Configurare):**
   - semnalele (`panel.signals`) privesc ultimele **30** de zile. Apare un semnal pentru:
     - aceiași 4 jucători în cel puțin **4** meciuri de ligă în **7** zile;

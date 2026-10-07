@@ -4,6 +4,10 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Deciziile confirmate — 07.10.2026
+#### Schimbat
+- 21 de setări trecute din DE_CONFIRMAT în confirmate, la confirmarea proprietarului (Q1, Q11, Q28, Q32, Q45, Q53, Q54, Q67, Q68, Q69, insignele, Meciul zilei). Rămân DE_CONFIRMAT doar datele firmei, domeniul, sezoanele de preț, grupele TVA și prețurile pe token ale AI-ului.
+
 ### Verificarea finală — 07.10.2026
 #### Reparat
 - Ștergerea contului (`privacy.erase`) șterge acum abonările push, mesajele încă netrimise și alegerile de notificări; canalul push nu mai trimite unui cont închis.

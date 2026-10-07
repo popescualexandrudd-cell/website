@@ -586,7 +586,7 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "notifications.subscription_expiring_days",
             7,
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Cu câte zile înainte de final primește clientul „abonamentul expiră” (§11).",
             positive_int,
             question="Q67",
@@ -594,7 +594,7 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "ai.monthly_budget_usd",
             50,
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Limita lunară de cost a AI-ului, în dolari (ADR-0019): atinsă, AI-ul nu mai răspunde "
             "până luna viitoare.",
             positive_int,
@@ -621,7 +621,7 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "ai.questions_per_hour",
             30,
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Câte întrebări poate pune asistentului o persoană (sau o adresă IP) pe oră.",
             positive_int,
             question="Q68",
@@ -629,7 +629,7 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "ai.effort",
             "medium",
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Cât de mult „gândește” modelul la fiecare întrebare: low, medium, high, xhigh, max "
             "(mai mult = mai bine și mai scump).",
             ai_effort,
@@ -638,7 +638,7 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "notifications.inactive_days",
             21,
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "După câte zile fără meci de ligă primește jucătorul „n-ai mai jucat de X zile”, cu "
             "jucători de nivelul lui (§11).",
             positive_int,
@@ -647,7 +647,7 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "notifications.matches_needed_days",
             14,
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Cu câte zile înainte de finalul sezonului primește jucătorul „îți mai trebuie N "
             "meciuri pentru clasamentul final” (§11).",
             positive_int,
@@ -656,7 +656,7 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "notifications.absences_after",
             2,
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "După câte antrenamente lipsă la rând primește clientul „ne e dor de tine” (§11).",
             positive_int,
             question="Q67",
@@ -664,7 +664,7 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "notifications.sessions_left_at",
             2,
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "La câte sesiuni rămase în lună primește clientul „mai ai X sesiuni” (§11).",
             positive_int,
             question="Q67",
@@ -680,7 +680,7 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "referrals.voucher_bands",
             ["off_peak", "semi_peak"],
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Benzile orare în care e valabil voucherul „Adu un prieten” (R-120).",
             band_list,
             question="Q32",
@@ -702,7 +702,7 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "cards.diamond_emblems",
             ["jaguar", "panther", "toucan", "gorilla", "crocodile", "macaw", "anaconda", "leopard"],
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Emblemele de junglă dintre care alege jucătorul promovat în Diamant (R-024).",
             emblem_list,
             question="Q1",
@@ -710,7 +710,7 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "league.config",
             {},
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Valorile ligii care diferă de cele implicite (§6); se aplică de la sezonul următor.",
             league_config,
             question="Q45",
@@ -725,7 +725,7 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "league.payment_deadline_hours",
             24,
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Cât așteaptă un scor confirmat plata integrală a rezervării (LG-096).",
             positive_int,
             question="Q11",
@@ -802,7 +802,7 @@ CONFIG: dict[str, ConfigSpec] = {
                 "early_bird_matches": 5,
                 "weekly_streak_weeks": 4,
             },
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Pragurile insignelor (§6.15).",
             number_map(BADGE_KEYS),
         ),
@@ -817,7 +817,7 @@ CONFIG: dict[str, ConfigSpec] = {
                 "late_cancellations": 3,
                 "no_shows": 2,
             },
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Pragurile semnalelor din panou (§10, detecția de anomalii; semnalează, nu decide): "
             "perioada în zile, meciuri cu aceiași 4 jucători în câteva zile, corecturi de bani ale "
             "aceleiași persoane, diferența de numerar la o numărare (bani), anulări târzii și "
@@ -828,7 +828,7 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "panel.demand",
             {"weeks": 4, "high_percent": 85, "low_percent": 30, "step_percent": 10},
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Sugestiile de preț după ocupare (§10; doar propuneri, prețul îl schimbă un om): "
             "câte săptămâni se privesc, peste ce ocupare se propune o creștere, sub ce ocupare o "
             "scădere și cu cât la sută.",
@@ -838,7 +838,7 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "league.partners",
             {"level_gap_levels": 0.75, "recent_days": 30, "suggestions": 3},
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Potrivirea jucătorilor (§10, ADR-0019): diferența maximă de nivel, în câte zile "
             "trebuie să fi jucat cei propuși și câți sunt propuși.",
             number_map(PARTNER_KEYS),
@@ -858,14 +858,14 @@ CONFIG: dict[str, ConfigSpec] = {
                 "level_gap": 1,
                 "level_gap_levels": 1.0,
             },
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Scorul de miză pentru Meciul zilei (§6.15): puncte și praguri.",
             number_map(SPOTLIGHT_KEYS),
         ),
         ConfigSpec(
             "league.tournament_bonuses",
             {"winner": 30, "finalist": 20, "semifinal": 10, "quarterfinal": 5},
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Bonusul de LP pe fază la turnee (§6.14, LG-141), peste LP × 1,5.",
             number_map(("winner", "finalist", "semifinal", "quarterfinal")),
             question="Q28",
@@ -873,7 +873,7 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "checkout.max_amount",
             500_000,
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Suma maximă a unei plăți în numerar la Chioșcul de Plăți (bani; 5 000 lei).",
             positive_int,
             question="Q53",
@@ -890,7 +890,7 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "checkout.pin_max_failures",
             5,
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Câte încercări greșite de PIN la chioșc până la blocare (modul personal).",
             positive_int,
             question="Q54",
@@ -898,7 +898,7 @@ CONFIG: dict[str, ConfigSpec] = {
         ConfigSpec(
             "checkout.pin_lock_minutes",
             15,
-            Marker.TO_CONFIRM,
+            Marker.CONFIRMED,
             "Cât rămâne blocat PIN-ul după prea multe încercări greșite (minute).",
             positive_int,
             question="Q54",
