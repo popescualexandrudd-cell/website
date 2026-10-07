@@ -15,7 +15,7 @@ import uuid
 from collections.abc import Sequence
 from typing import Any
 
-from django.db import IntegrityError, transaction
+from django.db import IntegrityError, connection, transaction
 from django.db.models import Sum
 from django.http import HttpRequest
 
@@ -76,6 +76,17 @@ def _actor_data(actor: audit.Actor) -> dict[str, Any]:
     return {
         k: (str(v) if isinstance(v, uuid.UUID) else v) for k, v in dataclasses.asdict(actor).items()
     }
+
+
+def claim(idempotency_key: str) -> None:
+    """One request per key at a time (R-067): a copy of the same request sent at the same moment
+    (a kiosk retrying) waits here until the first one commits, then `existing` finds it. Inside a
+    transaction; the lock ends with it."""
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT pg_advisory_xact_lock(hashtextextended(%s, 0))",
+            [f"idempotency:{idempotency_key}"],
+        )
 
 
 def existing(idempotency_key: str, fingerprint: str) -> LedgerTransaction | None:

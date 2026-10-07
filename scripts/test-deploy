@@ -51,7 +51,7 @@ CADDY="$CADDY" deploy/proxy/test-proxy
 echo "==> The server scripts (ShellCheck)"
 uvx --from shellcheck-py==0.11.0.1 shellcheck -S warning deploy/scripts/backup deploy/scripts/update \
   deploy/scripts/rollback deploy/scripts/install-server deploy/scripts/devices-ca deploy/scripts/manage \
-  deploy/scripts/test-install deploy/scripts/reset-before-launch deploy/compose/dev/start-backend deploy/backup/postgres/restore-check \
+  deploy/scripts/test-install deploy/scripts/configure deploy/scripts/reset-before-launch deploy/compose/dev/start-backend deploy/backup/postgres/restore-check \
   scripts/test-deploy
 
 echo "==> The server's installation, on a clean Ubuntu 24.04 (a container)"

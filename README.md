@@ -34,10 +34,10 @@ Pentru a vedea și încerca totul, cu date demo, pe Windows, macOS sau Linux.
 2. Instalați [Git](https://git-scm.com/downloads).
 3. Într-un terminal (Windows: „PowerShell”), luați codul:
    ```
-   git clone https://github.com/popescualexandrudd-cell/website.git
+   git clone -b main https://github.com/popescualexandrudd-cell/website.git
    cd website
    ```
-   Depozitul e privat: Git vă cere să intrați cu contul GitHub care are acces (o fereastră de autentificare se deschide singură).
+   Dacă depozitul e privat, Git vă cere să intrați cu contul GitHub care are acces (o fereastră de autentificare se deschide singură).
 
 **Pornirea** (prima dată durează 10–20 de minute, cât se construiesc aplicațiile; apoi un minut):
 ```

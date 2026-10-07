@@ -3,7 +3,8 @@
 # with the system commands it cannot run there (apt, systemctl, ufw) replaced by recorders. Then
 # run again, as on a server where it ran before. Checked: the settings files and their rights,
 # the devices' authority, the SSH rule only with a key, the firewall, the timers, nothing
-# overwritten the second time. Run by scripts/test-deploy.
+# overwritten the second time; then configure: the domain, every key generated, nothing changed
+# when run again. Run by scripts/test-deploy.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 docker run --rm -v "$ROOT:/src:ro" ubuntu:24.04 bash -euo pipefail -c '
@@ -32,5 +33,16 @@ docker run --rm -v "$ROOT:/src:ro" ubuntu:24.04 bash -euo pipefail -c '
   grep -q "It exists: kept" /tmp/second.txt || fail "the authority made again"
   grep -q "PasswordAuthentication no" /etc/ssh/sshd_config.d/50-jungle.conf || fail "SSH keys-only rule"
   grep -q "Automatic-Reboot-Time \"05:15\"" /etc/apt/apt.conf.d/52jungle-unattended-upgrades || fail "updates"
+  printf "junglepadel.test\nowner@junglepadel.test\n\n" | /opt/jungle/deploy/scripts/configure > /tmp/configure.txt 2>&1 || fail "configure"
+  grep -q "^DOMAIN=junglepadel.test$" /etc/jungle/prod.env || fail "configure: the domain"
+  ! grep -q "example.invalid" /etc/jungle/prod.env || fail "configure: an address left on example.invalid"
+  for key in POSTGRES_PASSWORD DJANGO_SECRET_KEY FIELD_ENCRYPTION_KEY DEVICE_COMMAND_KEY WEB_REVALIDATE_SECRET; do
+    [ -n "$(grep -E "^$key=" /etc/jungle/prod.env | cut -d= -f2-)" ] || fail "configure: $key empty"
+  done
+  [ -n "$(grep -E "^PGBACKREST_REPO1_CIPHER_PASS=" /etc/jungle/backup.env | cut -d= -f2-)" ] || fail "configure: the backup key"
+  cp /etc/jungle/prod.env /tmp/prod.first
+  /opt/jungle/deploy/scripts/configure </dev/null > /tmp/configure2.txt 2>&1 || fail "configure, the second run"
+  cmp -s /tmp/prod.first /etc/jungle/prod.env || fail "configure changed values on the second run"
+  [ "$(stat -c %a /etc/jungle/prod.env)" = 600 ] || fail "prod.env is not 600 after configure"
   echo "test-install: all checks passed"
 '

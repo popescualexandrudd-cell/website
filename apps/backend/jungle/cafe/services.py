@@ -42,6 +42,7 @@ from jungle.ledger.models import (
 )
 from jungle.ledger.services import (
     account,
+    claim,
     customer_credit,
     existing,
     post,
@@ -182,6 +183,7 @@ def place_order(
         }
     )
     with transaction.atomic():
+        claim(data.idempotency_key)  # the same order sent twice at once is taken once
         earlier = existing(data.idempotency_key, fingerprint)
         if earlier is not None:
             return CafeOrder.objects.get(transaction=earlier)

@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+# Fills in the server's settings (/etc/jungle/prod.env and backup.env) after install-server, so
+# nothing has to be typed by hand but the club's domain and email (§14, Stage 14D). It asks:
+#   - the domain (e.g. junglepadel.ro) and the email for the HTTPS certificates;
+#   - optionally the email account the system sends from (can be added later in prod.env).
+# Every key and password is generated here, long and random. A value already filled in is never
+# changed, so it is safe to run again. Run as root from /opt/jungle:
+#   sudo deploy/scripts/configure
+# For a test: JUNGLE_ETC=<folder> and the answers on the standard input.
+set -euo pipefail
+ETC="${JUNGLE_ETC:-/etc/jungle}"
+PROD="$ETC/prod.env"
+BACKUP="$ETC/backup.env"
+[ -f "$PROD" ] && [ -f "$BACKUP" ] || { echo "Run deploy/scripts/install-server first ($PROD missing)." >&2; exit 1; }
+[ -w "$PROD" ] || { echo "Run as root: sudo $0" >&2; exit 1; }
+
+value() { grep -E "^$1=" "$PROD" | tail -n 1 | cut -d= -f2-; }
+put() {  # put <file> <key> <value>: sets the key, keeping the file's order and rights
+  local file="$1" key="$2" val="$3" tmp
+  tmp="$(mktemp "$file.XXXXXX")"
+  KEY="$key" VAL="$val" awk 'BEGIN { k = ENVIRON["KEY"]; v = ENVIRON["VAL"]; done = 0 }
+    index($0, k "=") == 1 { print k "=" v; done = 1; next } { print }
+    END { if (!done) print k "=" v }' "$file" >"$tmp"
+  chmod --reference="$file" "$tmp" 2>/dev/null || chmod 600 "$tmp"
+  mv "$tmp" "$file"
+}
+fill() {  # fill <key> <value>: only when it is still empty
+  if [ -z "$(value "$1")" ]; then put "$PROD" "$1" "$2"; echo "  $1: generated"; else echo "  $1: kept"; fi
+}
+random() { openssl rand -base64 48 | tr -d '\n=+/' | cut -c1-48; }
+
+domain="$(value DOMAIN)"
+if [ -z "$domain" ] || [ "$domain" = example.invalid ]; then
+  read -r -p "The club's domain, without www (e.g. junglepadel.ro): " domain
+  domain="${domain#www.}"; domain="${domain#https://}"; domain="${domain%/}"
+  [[ "$domain" =~ ^[a-z0-9-]+(\.[a-z0-9-]+)+$ ]] || { echo "That is not a domain: $domain" >&2; exit 1; }
+fi
+email="$(value ACME_EMAIL)"
+if [ -z "$email" ]; then
+  read -r -p "An email for the HTTPS certificates (Let's Encrypt writes there if a renewal fails): " email
+  [[ "$email" == *@*.* ]] || { echo "That is not an email: $email" >&2; exit 1; }
+fi
+
+echo "== The domain and the addresses"
+put "$PROD" DOMAIN "$domain"
+put "$PROD" ACME_EMAIL "$email"
+for key in DJANGO_ALLOWED_HOSTS SESSION_COOKIE_DOMAIN CSRF_COOKIE_DOMAIN CSRF_TRUSTED_ORIGINS \
+  CORS_ALLOWED_ORIGINS WEB_BASE_URL DEFAULT_FROM_EMAIL APPLE_WALLET_WEB_SERVICE_URL VAPID_SUBJECT; do
+  current="$(value "$key")"
+  [[ "$current" == *example.invalid* ]] && put "$PROD" "$key" "${current//example.invalid/$domain}"
+done
+echo "  $domain: www, api, admin, device, kiosk-liga, kiosk-plati, ecrane, cafe, status, erori, statistici"
+
+echo "== The keys and passwords (random)"
+fill POSTGRES_PASSWORD "$(random)"
+fill DJANGO_SECRET_KEY "$(random)"
+fill FIELD_ENCRYPTION_KEY "$(random)"
+fill DEVICE_COMMAND_KEY "$(openssl rand -base64 32)"
+fill WEB_REVALIDATE_SECRET "$(random)"
+fill MONITORING_DB_PASSWORD "$(random)"
+fill GLITCHTIP_SECRET_KEY "$(random)"
+fill UMAMI_APP_SECRET "$(random)"
+if [ -z "$(grep -E '^PGBACKREST_REPO1_CIPHER_PASS=' "$BACKUP" | cut -d= -f2-)" ]; then
+  put "$BACKUP" PGBACKREST_REPO1_CIPHER_PASS "$(random)"
+  echo "  PGBACKREST_REPO1_CIPHER_PASS (backup.env): generated"
+else
+  echo "  PGBACKREST_REPO1_CIPHER_PASS (backup.env): kept"
+fi
+
+echo "== The email the system sends from (confirmations, reminders)"
+if [ -z "$(value EMAIL_HOST)" ]; then
+  read -r -p "SMTP server (e.g. smtp.gmail.com; empty = later): " host || host=""
+  if [ -n "$host" ]; then
+    read -r -p "SMTP user (usually the email address): " user
+    read -r -s -p "SMTP password (not shown): " pass; echo
+    put "$PROD" EMAIL_HOST "$host"
+    put "$PROD" EMAIL_HOST_USER "$user"
+    put "$PROD" EMAIL_HOST_PASSWORD "$pass"
+    put "$PROD" DEFAULT_FROM_EMAIL "Jungle Padel <$user>"
+    echo "  email: set"
+  else
+    echo "  email: later (until then no email leaves; fill EMAIL_HOST… in $PROD, then deploy/scripts/update)"
+  fi
+else
+  echo "  email: kept"
+fi
+
+echo
+echo "Done. Keep a copy of $PROD, $BACKUP and the folder $ETC/devices-ca"
+echo "offline, in two safe places: without them the backups cannot be read."
+echo "Next: sudo deploy/scripts/update <version>   (docs/08-deploy-si-mentenanta/06-instalarea-serverului.md)"

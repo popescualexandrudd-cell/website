@@ -48,6 +48,7 @@ from jungle.ledger.models import (
 )
 from jungle.ledger.services import (
     account,
+    claim,
     customer_credit,
     existing,
     post,
@@ -251,6 +252,7 @@ def pay(
         }
     )
     with transaction.atomic():
+        claim(data.idempotency_key)  # the same payment sent twice at once is taken once
         earlier = existing(data.idempotency_key, fingerprint)
         if earlier is not None:
             return Payment.objects.get(transaction=earlier)

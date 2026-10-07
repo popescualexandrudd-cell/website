@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import threading
 from typing import Any
 
 import pytest
+from django.db import connection
 from django.test import Client
 
 from jungle.audit.services import SYSTEM
@@ -181,6 +183,36 @@ def test_service_guards(club: Any, menu: Any) -> None:
     ):
         with pytest.raises(DomainError):
             services.place_order(SYSTEM, club.location, data)
+
+
+@pytest.mark.django_db(transaction=True)
+def test_r067_the_same_order_sent_twice_at_once_is_taken_once(club: Any, menu: Any) -> None:
+    """Two copies of one order arrive together (a retry): one order, one receipt, one answer."""
+    data = services.OrderData(
+        lines=[services.OrderLine(menu["espresso"].id, 2)],
+        method="cash",
+        tendered=5000,
+        idempotency_key="twice",
+    )
+    barrier = threading.Barrier(2)
+    results: list[Any] = []
+
+    def attempt() -> None:
+        try:
+            barrier.wait()
+            results.append(services.place_order(SYSTEM, club.location, data).pk)
+        except Exception as exc:
+            results.append(repr(exc))
+        finally:
+            connection.close()
+
+    threads = [threading.Thread(target=attempt) for _ in range(2)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    assert len(set(results)) == 1, results
+    assert CafeOrder.objects.count() == 1 and results[0] == CafeOrder.objects.get().pk
 
 
 def test_paid_from_credit(club: Any, menu: Any, make_user: Any) -> None:

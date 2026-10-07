@@ -12,9 +12,21 @@ test.skip(!process.env.E2E_HERO_VIDEO, "no test clip (ffmpeg missing): scripts/t
 test.beforeEach(async ({ context, baseURL }) => chooseNecessaryCookies(context, baseURL));
 
 const layer = (page: Page) => page.locator(".hero-video");
+
+/** The device the page believes it runs on (cores, memory, connection), so the result never depends
+ * on the machine running the tests: a strong one plays the video by itself, a weak one does not. */
+async function device(page: Page, kind: "strong" | "weak") {
+  const profile = kind === "strong" ? { cores: 8, memory: 8, type: "4g" } : { cores: 2, memory: 2, type: "3g" };
+  await page.addInitScript((p) => {
+    Object.defineProperty(navigator, "hardwareConcurrency", { get: () => p.cores });
+    Object.defineProperty(navigator, "deviceMemory", { get: () => p.memory });
+    Object.defineProperty(navigator, "connection", { get: () => ({ saveData: false, effectiveType: p.type }) });
+  }, profile);
+}
 const opacity = (page: Page) => layer(page).evaluate((el) => Number(getComputedStyle(el).opacity));
 
 test("ADR-0023: the video comes after the render, plays, pauses and resumes", async ({ page }) => {
+  await device(page, "strong");
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/ro");
   // The render is the first image, painted before any video.
@@ -48,6 +60,18 @@ test("ADR-0023: with reduced motion the render stays, with a play button", async
   await page.waitForTimeout(1500);
   await expect(layer(page)).not.toHaveAttribute("data-shown");
   expect(await page.locator(".hero-video video").evaluate((v: HTMLVideoElement) => v.currentSrc)).toBe("");
+  await play.click();
+  await expect(layer(page)).toHaveAttribute("data-shown", "true", { timeout: 20_000 });
+});
+
+test("ADR-0023: on a weak phone or a slow connection the render stays, with a play button", async ({ page }) => {
+  await device(page, "weak");
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/ro");
+  const play = page.getByRole("button", { name: "Pornește videoul" });
+  await expect(play).toBeVisible();
+  await page.waitForTimeout(1500);
+  await expect(layer(page)).not.toHaveAttribute("data-shown");
   await play.click();
   await expect(layer(page)).toHaveAttribute("data-shown", "true", { timeout: 20_000 });
 });

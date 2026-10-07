@@ -91,6 +91,6 @@ run systemctl daemon-reload
 run systemctl enable --now jungle-backup-full.timer jungle-backup-diff.timer jungle-restore-test.timer
 
 say "Done. Next (docs/08-deploy-si-mentenanta/06-instalarea-serverului.md):"
-echo "  1. fill in $ETC/prod.env and $ETC/backup.env;"
+echo "  1. sudo deploy/scripts/configure   (the domain; every key generated; nothing typed by hand);"
 echo "  2. deploy/scripts/update <version>   (the first start);"
 echo "  3. the first administrator: deploy/scripts/manage bootstrap_admin …"

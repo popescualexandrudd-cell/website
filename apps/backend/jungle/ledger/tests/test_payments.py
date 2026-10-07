@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import threading
 from datetime import datetime, timedelta
 from typing import Any
 
 import pytest
+from django.db import connection
 from django.test import Client
 
 from jungle.attendance.models import Scan
@@ -90,6 +92,33 @@ def test_r067_a_retried_payment_is_taken_once(club: Any, make_user: Any) -> None
     with pytest.raises(DomainError) as exc:
         payments.pay(SYSTEM, due, cash(organizer, 1000, 1000, ""))
     assert exc.value.code.value == "payments.idempotency_required"
+
+
+@pytest.mark.django_db(transaction=True)
+def test_r067_the_same_payment_sent_twice_at_once_is_taken_once(club: Any, make_user: Any) -> None:
+    """A kiosk retries while its first request is still running: both arrive together. The second
+    gets the first payment back, never a second payment, an error or a refusal."""
+    organizer = make_user()
+    due = due_for_booking(make_booking(club, organizer))
+    barrier = threading.Barrier(2)
+    results: list[Any] = []
+
+    def attempt() -> None:
+        try:
+            barrier.wait()
+            results.append(payments.pay(SYSTEM, due, cash(organizer, 6000, 10000, "retry")).pk)
+        except Exception as exc:
+            results.append(repr(exc))
+        finally:
+            connection.close()
+
+    threads = [threading.Thread(target=attempt) for _ in range(2)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    assert len(set(results)) == 1, results
+    assert Payment.objects.count() == 1 and results[0] == Payment.objects.get().pk
 
 
 @pytest.mark.parametrize(

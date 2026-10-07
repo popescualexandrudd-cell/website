@@ -4,6 +4,14 @@ Formatul urmează [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); vers
 
 ## [Nelansat]
 
+### Reparațiile din auditul Codex și pregătirea serverului — 07.10.2026
+#### Reparat
+- **Plățile și comenzile de la cafenea trimise de două ori în același moment** (un chioșc care reîncearcă): a doua copie dădea o eroare de server, iar la bar se putea tipări un bon pentru o comandă neînregistrată. Acum fiecare cheie de idempotență are un lacăt în PostgreSQL (`ledger.services.claim`): copia a doua așteaptă și primește plata, respectiv comanda, deja făcută (R-067). Reprodus cu teste concurente, apoi reparat.
+- Testele videoului de pe pagina principală nu mai depind de calculatorul pe care rulează: un scenariu pentru un aparat puternic (videoul pornește singur) și unul pentru un telefon slab sau o conexiune lentă (rămâne imaginea, cu butonul de pornire).
+- Testul cheii Hardware Bridge verifică drepturile Unix doar pe Linux; pe Windows cheia e protejată de drepturile NTFS ale folderului (`docs/09-hardware/04-varianta-windows.md`).
+#### Adăugat
+- `deploy/scripts/configure`: completează setările serverului singur (domeniul, toate cheile și parolele generate, opțional emailul); nu schimbă nimic deja completat; testat pe un Ubuntu 24.04 curat (`test-install`).
+
 ### Sistemul pe laptop și o reparație în panou — 07.10.2026
 #### Adăugat
 - Tot sistemul pe laptop, cu o singură comandă (`docker compose -f deploy/compose/dev/compose.yaml up --build`): site-ul complet, panoul de admin cu personalul demo, API-ul; pașii pentru proprietar în README; verificat în `scripts/test-deploy` (și CI).

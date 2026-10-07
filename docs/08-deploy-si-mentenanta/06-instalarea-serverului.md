@@ -3,10 +3,10 @@
 > Etapa 14D, 06.10.2026 (ADR-0015, Q22, Q40). Pentru cine instalează serverul clubului; fiecare comandă se copiază ca atare. Durata: aproximativ o oră, plus așteptarea DNS-ului.
 
 ## Ce trebuie să existe înainte
-- **Un server** cu Ubuntu Server 24.04 LTS (Q22, recomandat):
-  - 8 nuclee, 32 GB RAM, 2 × 1 TB NVMe în oglindă;
-  - UPS;
-  - IP public fix.
+- **Un server** cu Ubuntu Server 24.04 LTS (Q22) și IP public fix:
+  - la club, la lansare (recomandat): 8 nuclee, 32 GB RAM, 2 × 1 TB NVMe în oglindă, UPS;
+  - **închiriat online** (VPS, pentru pre-lansare și beta): minimum 4 nuclee, 8 GB RAM, 80 GB SSD; sistemul se mută oricând pe alt server cu backup-ul (`04-runbook-backup-si-recuperare.md`).
+- **Codul se ia pe server cu `git clone`, nu ca arhivă ZIP**: actualizarea și revenirea (`update`, `rollback`) lucrează cu versiunile din Git.
 - **Domeniul clubului** (Q39). Din panoul firmei de domenii, înregistrările DNS de tip A, toate spre IP-ul serverului:
   - `<domeniu>`, `www`, `api`, `admin`, `device`;
   - `kiosk-liga`, `kiosk-plati`, `ecrane`, `cafe`;
@@ -18,7 +18,7 @@
 1. Intrați pe server cu SSH, cu **cheia** dumneavoastră (nu cu parola).
 2. Copiați sistemul și pregătiți serverul:
    ```bash
-   sudo git clone https://github.com/popescualexandrudd-cell/website /opt/jungle
+   sudo git clone -b main https://github.com/popescualexandrudd-cell/website /opt/jungle
    cd /opt/jungle
    sudo deploy/scripts/install-server
    ```
@@ -32,8 +32,11 @@
    - pune programul backup-urilor.
 
 ## 2. Setările (o dată)
-1. `sudo nano /etc/jungle/prod.env`: completați fiecare valoare goală. Explicațiile sunt chiar în fișier. Valorile lungi, aleatoare se fac cu `openssl rand -base64 48`.
-2. `sudo nano /etc/jungle/backup.env`: cheia backup-ului (și, când există, spațiul S3).
+1. ```bash
+   sudo deploy/scripts/configure
+   ```
+   Scriptul întreabă domeniul (de exemplu `junglepadel.ro`), un email pentru certificatele HTTPS și, opțional, contul de email din care trimite sistemul. Toate cheile și parolele le generează singur, lungi și aleatoare. Ce e deja completat nu schimbă niciodată, deci se poate rula din nou.
+2. Opțional, restul valorilor (Wallet, AI, monitorizare, copia S3): `sudo nano /etc/jungle/prod.env` și `/etc/jungle/backup.env`. Explicațiile sunt chiar în fișiere.
 3. **Păstrați offline**, în două locuri sigure:
    - copiile celor două fișiere;
    - folderul `/etc/jungle/devices-ca`.
@@ -43,7 +46,7 @@
 ## 3. Prima pornire
 ```bash
 cd /opt/jungle
-sudo deploy/scripts/update v1.0.0        # versiunea de lansare (eticheta din GitHub)
+sudo deploy/scripts/update v1.0.0        # versiunea din GitHub (pentru pre-lansare: cea mai nouă, de exemplu v0.9.0)
 sudo JUNGLE_ADMIN_PASSWORD='…' deploy/scripts/manage bootstrap_admin --email … --first-name … --last-name …
 ```
 Apoi:

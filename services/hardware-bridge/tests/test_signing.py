@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import base64
+import os
 import stat
 from pathlib import Path
 from typing import Any
@@ -28,7 +29,8 @@ from tests.conftest import DEVICE_ID, Clock, Server
 def test_the_key_is_created_once_readable_only_by_the_service(tmp_path: Path) -> None:
     path = tmp_path / "keys" / "bridge-key.pem"
     key = load_or_create_key(path)
-    assert stat.S_IMODE(path.stat().st_mode) == 0o600
+    if os.name == "posix":  # Windows keeps no Unix modes: there the folder's NTFS rights protect it
+        assert stat.S_IMODE(path.stat().st_mode) == 0o600
     assert public_key_b64(load_or_create_key(path)) == public_key_b64(key)
     assert len(base64.b64decode(public_key_b64(key))) == 32
 
